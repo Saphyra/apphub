@@ -10,6 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 //TODO unit test
+//TODO implement
 public abstract class GameDataPartLoader<Model extends GameItem, Type> {
     private static final int FIRST_PAGE = 1;
 

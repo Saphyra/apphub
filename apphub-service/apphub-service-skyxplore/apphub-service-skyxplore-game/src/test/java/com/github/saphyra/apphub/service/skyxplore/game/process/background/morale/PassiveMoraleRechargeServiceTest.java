@@ -2,15 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.background.mora
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.passive.PassiveMoraleRechargeProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.passive.PassiveMoraleRechargeProcessFactory;
@@ -20,7 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -42,19 +41,10 @@ class PassiveMoraleRechargeServiceTest {
     private PassiveMoraleRechargeService underTest;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private SyncCache syncCache;
-
-    @Mock
-    private Universe universe;
-
-    @Mock
-    private SolarSystem solarSystem;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private Citizen tiredCitizen;
@@ -80,12 +70,11 @@ class PassiveMoraleRechargeServiceTest {
     @Mock
     private CitizenMoraleProperties moraleProperties;
 
+    @Mock
+    private CitizenAllocation citizenAllocation;
+
     @Test
     void processGame() {
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.getSystems()).willReturn(Map.of(GameConstants.ORIGO, solarSystem));
-        given(solarSystem.getPlanets()).willReturn(Map.of(UUID.randomUUID(), planet));
-        given(planet.getPopulation()).willReturn(Map.of(UUID.randomUUID(), tiredCitizen, UUID.randomUUID(), relaxedCitizen, UUID.randomUUID(), assignedCitizen));
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMorale()).willReturn(moraleProperties);
         given(moraleProperties.getMax()).willReturn(MAX_MORALE);
@@ -97,12 +86,14 @@ class PassiveMoraleRechargeServiceTest {
         given(tiredCitizen.getCitizenId()).willReturn(TIRED_CITIZEN_ID);
         given(assignedCitizen.getCitizenId()).willReturn(ASSIGNED_CITIZEN_ID);
 
-        given(planet.getCitizenAllocations()).willReturn(CollectionUtils.singleValueMap(ASSIGNED_CITIZEN_ID, UUID.randomUUID(), new CitizenAllocations()));
-        given(passiveMoraleRechargeProcessFactory.create(game, planet, tiredCitizen)).willReturn(process);
-        given(process.toModel()).willReturn(processModel);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getCitizens()).willReturn(CollectionUtils.toList(new Citizens(), tiredCitizen, relaxedCitizen, assignedCitizen));
+        given(gameData.getCitizenAllocations().findByCitizenId(ASSIGNED_CITIZEN_ID)).willReturn(Optional.of(citizenAllocation));
+        given(gameData.getProcesses()).willReturn(processes);
 
-        underTest.processGame(game, syncCache);
+        given(passiveMoraleRechargeProcessFactory.create(gameData, tiredCitizen)).willReturn(process);
+        given(process.toModel()).willReturn(processModel);
+
+        underTest.processGame(gameData, syncCache);
 
         verify(syncCache).saveGameItem(processModel);
         verify(processes).add(process);

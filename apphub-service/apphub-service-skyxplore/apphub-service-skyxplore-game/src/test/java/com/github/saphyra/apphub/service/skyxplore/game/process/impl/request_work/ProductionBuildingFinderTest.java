@@ -40,7 +40,7 @@ public class ProductionBuildingFinderTest {
 
     @Test
     public void findSuitableProductionBuilding() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getBuilding()).willReturn(building);
         given(building.getDataId()).willReturn(DATA_ID);
         given(buildingCapacityCalculator.calculateCapacity(planet)).willReturn(1);

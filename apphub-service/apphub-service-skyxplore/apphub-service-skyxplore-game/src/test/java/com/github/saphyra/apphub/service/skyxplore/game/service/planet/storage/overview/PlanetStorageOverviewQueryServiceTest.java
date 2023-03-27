@@ -1,22 +1,21 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.UUID;
-
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class PlanetStorageOverviewQueryServiceTest {
@@ -36,10 +35,7 @@ public class PlanetStorageOverviewQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private StorageDetailsResponse energyStorageDetailsResponse;
@@ -54,12 +50,11 @@ public class PlanetStorageOverviewQueryServiceTest {
 
     public void getStorage() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(game.getData()).willReturn(gameData);
 
-        given(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.BULK)).willReturn(bulkStorageDetailsResponse);
-        given(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.ENERGY)).willReturn(energyStorageDetailsResponse);
-        given(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.LIQUID)).willReturn(liquidStorageDetailsResponse);
+        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.BULK)).willReturn(bulkStorageDetailsResponse);
+        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.ENERGY)).willReturn(energyStorageDetailsResponse);
+        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.LIQUID)).willReturn(liquidStorageDetailsResponse);
 
         PlanetStorageResponse result = underTest.getStorage(USER_ID, PLANET_ID);
 

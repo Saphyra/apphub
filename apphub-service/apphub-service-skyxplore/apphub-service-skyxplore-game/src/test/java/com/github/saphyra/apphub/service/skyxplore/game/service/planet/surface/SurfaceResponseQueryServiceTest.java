@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,10 +36,7 @@ public class SurfaceResponseQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -48,13 +44,17 @@ public class SurfaceResponseQueryServiceTest {
     @Mock
     private SurfaceResponse surfaceResponse;
 
+    @Mock
+    private Surfaces surfaces;
+
     @Test
     public void getSurfaceOfPlanet() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(new Coordinate(0, 0), surface)));
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));
+
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
 
         List<SurfaceResponse> result = underTest.getSurfaceOfPlanet(USER_ID, PLANET_ID);
 

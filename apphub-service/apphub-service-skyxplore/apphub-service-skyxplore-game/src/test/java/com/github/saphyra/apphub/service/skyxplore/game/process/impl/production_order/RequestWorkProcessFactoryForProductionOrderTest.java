@@ -77,7 +77,7 @@ public class RequestWorkProcessFactoryForProductionOrderTest {
     public void createWorkPointProcesses() {
         given(productionBuildingService.get(PRODUCER_BUILDING_DATA_ID)).willReturn(productionBuilding);
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
-        given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(DATA_ID, productionData));
+        given(productionBuilding.getGives()).willReturn(CollectionUtils.toMap(DATA_ID, productionData));
         given(reservedStorage.getAmount()).willReturn(RESERVED_AMOUNT);
         given(productionData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);

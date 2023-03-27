@@ -75,7 +75,7 @@ public class SkyXploreGameAccountDeletedEventControllerTest {
     @Test
     public void memberDeleted() {
         given(game.getHost()).willReturn(UUID.randomUUID());
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
 
         given(player.getPlayerName()).willReturn(USERNAME);
 

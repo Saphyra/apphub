@@ -6,9 +6,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,8 +25,9 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class ConstructionProcessFactoryTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -40,7 +43,7 @@ public class ConstructionProcessFactoryTest {
     private Game game;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Building building;
@@ -49,14 +52,16 @@ public class ConstructionProcessFactoryTest {
     private Construction construction;
 
     @Mock
-    private Universe universe;
+    private Buildings buildings;
+
+    @Mock
+    private Constructions constructions;
 
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
-        given(building.getConstruction()).willReturn(construction);
 
-        ConstructionProcess result = underTest.create(game, planet, building);
+        ConstructionProcess result = underTest.create(gameData, LOCATION, building, construction);
 
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
     }
@@ -71,13 +76,14 @@ public class ConstructionProcessFactoryTest {
         ProcessModel model = new ProcessModel();
         model.setId(PROCESS_ID);
         model.setStatus(ProcessStatus.IN_PROGRESS);
-        model.setLocation(PLANET_ID);
+        model.setLocation(LOCATION);
         model.setExternalReference(CONSTRUCTION_ID);
 
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.findBuildingByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(building);
-        given(building.getConstruction()).willReturn(construction);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(construction.getExternalReference()).willReturn(BUILDING_ID);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
 
         ConstructionProcess result = underTest.createFromModel(game, model);
 

@@ -37,7 +37,7 @@ public class ReservedStorageQueryService {
         return gameData.getReservedStorages()
             .getByLocation(location)
             .stream()
-            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
+            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId())) //TODO filter reserved storage for production - if needed
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }

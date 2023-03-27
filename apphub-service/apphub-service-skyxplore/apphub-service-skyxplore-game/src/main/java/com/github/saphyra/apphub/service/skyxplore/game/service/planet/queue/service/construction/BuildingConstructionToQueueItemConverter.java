@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
@@ -10,6 +8,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -25,9 +25,9 @@ public class BuildingConstructionToQueueItemConverter {
             .requiredWorkPoints(construction.getRequiredWorkPoints())
             .currentWorkPoints(construction.getCurrentWorkPoints())
             .priority(construction.getPriority())
-            .data(CollectionUtils.toMap(
-                new BiWrapper<>("dataId", building.getDataId()),
-                new BiWrapper<>("currentLevel", building.getLevel())
+            .data(Map.of(
+                "dataId", building.getDataId(),
+                "currentLevel", building.getLevel()
             ))
             .build();
     }

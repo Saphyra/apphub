@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class SolarSystemResponseExtractor {
     private final VisibilityFacade visibilityFacade;
 

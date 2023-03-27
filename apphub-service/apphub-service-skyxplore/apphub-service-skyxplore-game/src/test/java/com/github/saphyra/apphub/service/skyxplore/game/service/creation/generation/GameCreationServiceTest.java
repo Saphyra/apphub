@@ -73,7 +73,7 @@ public class GameCreationServiceTest {
     @Test
     public void create() throws InterruptedException {
         given(gameFactory.create(request)).willReturn(game);
-        given(request.getMembers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, null));
+        given(request.getMembers()).willReturn(CollectionUtils.toMap(PLAYER_ID, null));
 
         underTest.createGames();
 

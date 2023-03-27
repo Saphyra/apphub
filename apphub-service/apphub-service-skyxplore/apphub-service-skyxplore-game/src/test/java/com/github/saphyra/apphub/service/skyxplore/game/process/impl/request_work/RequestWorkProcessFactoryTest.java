@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.test.common.ReflectionUtils;
@@ -53,7 +54,7 @@ public class RequestWorkProcessFactoryTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -67,7 +68,7 @@ public class RequestWorkProcessFactoryTest {
     public void create() throws NoSuchFieldException, IllegalAccessException {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
 
-        List<RequestWorkProcess> result = underTest.create(game, EXTERNAL_REFERENCE, planet, TARGET_ID, RequestWorkProcessType.CONSTRUCTION, SkillType.DOCTORING, REQUIRED_WORK_POINTS, 1);
+        List<RequestWorkProcess> result = underTest.create(gameData, EXTERNAL_REFERENCE, PLANET_ID, TARGET_ID, RequestWorkProcessType.CONSTRUCTION, SkillType.DOCTORING, REQUIRED_WORK_POINTS, 1);
 
         assertThat(result).hasSize(1);
 
@@ -105,9 +106,7 @@ public class RequestWorkProcessFactoryTest {
             new BiWrapper<>(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(COMPLETED_WORK_POINTS))
         ));
 
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(uuidConverter.convertEntity(TARGET_ID_STRING)).willReturn(TARGET_ID);
+        given(game.getData()).willReturn(gameData);
 
         RequestWorkProcess result = underTest.createFromModel(game, model);
 

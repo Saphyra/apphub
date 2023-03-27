@@ -167,7 +167,7 @@ public class UpgradeBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(building);
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
@@ -184,7 +184,7 @@ public class UpgradeBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(building);
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
@@ -204,7 +204,7 @@ public class UpgradeBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(building);
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
@@ -212,7 +212,7 @@ public class UpgradeBuildingServiceTest {
         given(building.getLevel()).willReturn(LEVEL);
 
         given(allBuildingService.get(DATA_ID)).willReturn(buildingData);
-        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
+        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);

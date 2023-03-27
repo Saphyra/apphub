@@ -33,7 +33,7 @@ public class SolarSystemVisibilityServiceTest {
 
     @BeforeEach
     public void setUp() {
-        given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), planet));
+        given(solarSystem.getPlanets()).willReturn(CollectionUtils.toMap(UUID.randomUUID(), planet));
     }
 
     @Test

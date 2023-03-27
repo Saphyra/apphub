@@ -36,7 +36,7 @@ public class SoldierArmorPieceToModelConverterTest {
             .currentDurability(CURRENT_DURABILITY)
             .build();
 
-        List<DurabilityItemModel> result = underTest.convert(CITIZEN_ID, GAME_ID, CollectionUtils.singleValueMap(BodyPart.HEAD, armorPiece));
+        List<DurabilityItemModel> result = underTest.convert(CITIZEN_ID, GAME_ID, CollectionUtils.toMap(BodyPart.HEAD, armorPiece));
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(ENTITY_ID);

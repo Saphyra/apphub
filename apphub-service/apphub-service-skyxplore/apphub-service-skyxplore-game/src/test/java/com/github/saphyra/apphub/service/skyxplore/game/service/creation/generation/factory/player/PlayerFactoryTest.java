@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.RandomNameProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,20 +29,20 @@ public class PlayerFactoryTest {
     private IdGenerator idGenerator;
 
     @Mock
-    private RandomNameProvider randomNameProvider;
-
-    @Mock
     private CharacterProxy characterProxy;
 
     @InjectMocks
     private PlayerFactory underTest;
+
+    @Mock
+    private AiPlayer aiPlayer;
 
     @Test
     public void create() {
         given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
         given(idGenerator.randomUuid()).willReturn(PLAYER_ID);
 
-        Map<UUID, Player> result = underTest.create(CollectionUtils.singleValueMap(USER_ID, ALLIANCE_ID));
+        Map<UUID, Player> result = underTest.create(CollectionUtils.toMap(USER_ID, ALLIANCE_ID));
 
         assertThat(result).containsKey(USER_ID);
         Player player = result.get(USER_ID);
@@ -58,17 +57,17 @@ public class PlayerFactoryTest {
 
     @Test
     public void createAi() {
-        given(randomNameProvider.getRandomName(Arrays.asList(PLAYER_NAME))).willReturn(PLAYER_NAME);
-        given(idGenerator.randomUuid())
-            .willReturn(USER_ID)
-            .willReturn(PLAYER_ID);
+        given(aiPlayer.getUserId()).willReturn(USER_ID);
+        given(idGenerator.randomUuid()).willReturn(PLAYER_ID);
+        given(aiPlayer.getAllianceId()).willReturn(ALLIANCE_ID);
+        given(aiPlayer.getName()).willReturn(PLAYER_NAME);
 
-        Player result = underTest.createAi(CollectionUtils.asList(PLAYER_NAME));
+        Player result = underTest.createAi(aiPlayer);
 
         assertThat(result.getPlayerId()).isEqualTo(PLAYER_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getPlayerName()).isEqualTo(PLAYER_NAME);
-        assertThat(result.getAllianceId()).isNull();
+        assertThat(result.getAllianceId()).isEqualTo(ALLIANCE_ID);
         assertThat(result.getPlayerId()).isEqualTo(PLAYER_ID);
         assertThat(result.isAi()).isTrue();
         assertThat(result.isConnected()).isTrue();

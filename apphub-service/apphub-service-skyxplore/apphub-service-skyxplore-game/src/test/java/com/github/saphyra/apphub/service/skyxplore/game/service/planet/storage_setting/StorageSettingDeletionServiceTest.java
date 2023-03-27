@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
@@ -29,7 +29,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class StorageSettingDeletionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
 
     @Mock
@@ -45,10 +44,7 @@ public class StorageSettingDeletionServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private SyncCache syncCache;
@@ -74,15 +70,14 @@ public class StorageSettingDeletionServiceTest {
     @Test
     public void deleteStorageSetting() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
+        given(game.getData()).willReturn(gameData);
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
         given(eventLoop.process(any(Runnable.class), any())).willReturn(future);
         given(future.get()).willReturn(executionResult);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(process);
 
         underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);

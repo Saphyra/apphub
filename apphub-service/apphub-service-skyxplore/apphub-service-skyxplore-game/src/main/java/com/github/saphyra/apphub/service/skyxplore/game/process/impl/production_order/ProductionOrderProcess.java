@@ -112,7 +112,7 @@ public class ProductionOrderProcess implements Process {
                 log.info("RequestWorkProcess is not present. Resolving allocations...");
 
                 applicationContextProxy.getBean(UseAllocatedResourceService.class)
-                    .resolveAllocations(syncCache, gameData.getGameId(), gameData, location, ownerId, processId);
+                    .resolveAllocations(syncCache, gameData, location, ownerId, processId);
 
                 requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForProductionOrder.class)
                     .createWorkPointProcesses(processId, gameData, location, producerBuildingDataId, reservedStorage);

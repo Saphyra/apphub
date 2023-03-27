@@ -2,17 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.se
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
@@ -74,16 +71,7 @@ class DeconstructionQueueServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
-
-    @Mock
-    private Surface surface;
-
-    @Mock
-    private Building building;
+    private GameData gameData;
 
     @Mock
     private Deconstruction deconstruction;
@@ -103,6 +91,9 @@ class DeconstructionQueueServiceTest {
     @Mock
     private QueueResponse queueResponse;
 
+    @Mock
+    private Deconstructions deconstructions;
+
     @Test
     void getType() {
         assertThat(underTest.getType()).isEqualTo(QueueItemType.DECONSTRUCTION);
@@ -110,12 +101,12 @@ class DeconstructionQueueServiceTest {
 
     @Test
     public void getQueue() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getBuilding()).willReturn(building);
-        given(building.getDeconstruction()).willReturn(deconstruction);
-        given(buildingDeconstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.getByLocation(PLANET_ID)).willReturn(List.of(deconstruction));
 
-        List<QueueItem> result = underTest.getQueue(planet);
+        given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
+
+        List<QueueItem> result = underTest.getQueue(gameData, PLANET_ID);
 
         assertThat(result).containsExactly(queueItem);
     }
@@ -123,16 +114,16 @@ class DeconstructionQueueServiceTest {
     @Test
     void setPriority() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.findBuildingByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(building);
-        given(building.getDeconstruction()).willReturn(deconstruction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
         given(game.getGameId()).willReturn(GAME_ID);
-        given(deconstructionToModelConverter.convert(deconstruction, GAME_ID)).willReturn(deconstructionModel);
-        given(buildingDeconstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(deconstructionToModelConverter.convert(GAME_ID, deconstruction)).willReturn(deconstructionModel);
+        given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
         underTest.setPriority(USER_ID, PLANET_ID, DECONSTRUCTION_ID, PRIORITY);
 

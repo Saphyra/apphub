@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
@@ -29,6 +30,7 @@ public class StorageSettingsModelValidatorTest {
     private static final String DATA_ID = "data-id";
     private static final Integer TARGET_AMOUNT = 42362;
     private static final Integer BATCH_SIZE = 425;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ResourceDataService resourceDataService;
@@ -46,13 +48,13 @@ public class StorageSettingsModelValidatorTest {
     private Planet planet;
 
     @Mock
-    private StorageDetails storageDetails;
-
-    @Mock
     private StorageSettings storageSettings;
 
     @Mock
     private StorageSetting storageSetting;
+
+    @Mock
+    private GameData gameData;
 
     @AfterEach
     public void validate() {
@@ -65,7 +67,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(model.getDataId()).willReturn(" ");
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "dataId", "must not be null or blank");
     }
@@ -77,7 +79,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(resourceDataService.containsKey(DATA_ID)).willReturn(false);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "dataId", "unknown resource");
     }
@@ -90,7 +92,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(model.getTargetAmount()).willReturn(null);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "targetAmount", "must not be null");
     }
@@ -103,7 +105,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(model.getTargetAmount()).willReturn(-1);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "targetAmount", "too low");
     }
@@ -117,7 +119,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(model.getBatchSize()).willReturn(null);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "batchSize", "must not be null");
     }
@@ -131,7 +133,7 @@ public class StorageSettingsModelValidatorTest {
 
         given(model.getBatchSize()).willReturn(0);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateInvalidParam(ex, "batchSize", "too low");
     }
@@ -144,11 +146,10 @@ public class StorageSettingsModelValidatorTest {
         given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
         given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
-        given(storageSettings.findByDataId(DATA_ID)).willReturn(Optional.of(storageSetting));
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storageSetting));
 
-        Throwable ex = catchThrowable(() -> underTest.validate(model, planet));
+        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
     }
@@ -161,9 +162,9 @@ public class StorageSettingsModelValidatorTest {
         given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
         given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storageSetting));
 
-        underTest.validate(model, planet);
+        underTest.validate(gameData, LOCATION, model);
     }
 }

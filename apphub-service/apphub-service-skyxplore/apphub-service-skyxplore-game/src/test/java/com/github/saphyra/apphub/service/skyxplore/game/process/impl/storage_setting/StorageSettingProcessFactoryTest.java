@@ -6,10 +6,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +26,7 @@ public class StorageSettingProcessFactoryTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
 
+    @SuppressWarnings("unused")
     @Mock
     private ApplicationContextProxy applicationContextProxy;
 
@@ -40,19 +40,13 @@ public class StorageSettingProcessFactoryTest {
     private Game game;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private StorageSetting storageSetting;
 
     @Mock
-    private Universe universe;
-
-    @Mock
     private ProcessModel processModel;
-
-    @Mock
-    private StorageDetails storageDetails;
 
     @Mock
     private StorageSettings storageSettings;
@@ -62,7 +56,7 @@ public class StorageSettingProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
 
-        StorageSettingProcess result = underTest.create(game, planet, storageSetting);
+        StorageSettingProcess result = underTest.create(gameData, LOCATION, storageSetting);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(STORAGE_SETTING_ID);
@@ -75,10 +69,8 @@ public class StorageSettingProcessFactoryTest {
 
     @Test
     public void createFromModel() {
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(LOCATION)).willReturn(planet);
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
 
         given(processModel.getLocation()).willReturn(LOCATION);

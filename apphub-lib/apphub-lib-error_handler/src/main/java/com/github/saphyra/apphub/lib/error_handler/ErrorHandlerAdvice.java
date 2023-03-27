@@ -35,7 +35,7 @@ class ErrorHandlerAdvice {
         String content = exception.contentUTF8();
         HttpStatus status = HttpStatus.valueOf(exception.status());
         log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
-        Map<String, Collection<String>> headers = CollectionUtils.singleValueMap("content-type", exception.responseHeaders().get("content-type"));
+        Map<String, Collection<String>> headers = CollectionUtils.toMap("content-type", exception.responseHeaders().get("content-type"));
         log.debug("Headers: {}", headers);
         return new ResponseEntity<>(content, CollectionUtils.toMultiValueMap(headers), status);
     }

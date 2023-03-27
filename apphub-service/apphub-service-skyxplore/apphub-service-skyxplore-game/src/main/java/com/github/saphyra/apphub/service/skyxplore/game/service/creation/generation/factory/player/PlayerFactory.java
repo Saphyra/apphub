@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.RandomNameProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PlayerFactory {
     private final IdGenerator idGenerator;
-    private final RandomNameProvider randomNameProvider;
     private final CharacterProxy characterProxy;
 
     public Map<UUID, Player> create(Map<UUID, UUID> members) {

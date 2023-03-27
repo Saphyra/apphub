@@ -59,7 +59,7 @@ public class CitizenFinderTest {
         given(inefficientCitizen.getMorale()).willReturn(1);
         given(efficientCitizen.getMorale()).willReturn(1);
         given(allocatedCitizen.getMorale()).willReturn(1);
-        given(planet.getCitizenAllocations()).willReturn(new CitizenAllocations(CollectionUtils.singleValueMap(CITIZEN_ID_4, UUID.randomUUID())));
+        given(planet.getCitizenAllocations()).willReturn(new CitizenAllocations(CollectionUtils.toMap(CITIZEN_ID_4, UUID.randomUUID())));
 
         given(citizenEfficiencyCalculator.calculateEfficiency(inefficientCitizen, SkillType.DOCTORING)).willReturn(1d);
         given(citizenEfficiencyCalculator.calculateEfficiency(efficientCitizen, SkillType.DOCTORING)).willReturn(2d);

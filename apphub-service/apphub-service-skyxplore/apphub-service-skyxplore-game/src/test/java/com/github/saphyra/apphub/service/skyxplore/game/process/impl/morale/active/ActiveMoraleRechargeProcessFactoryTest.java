@@ -6,15 +6,15 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +39,7 @@ class ActiveMoraleRechargeProcessFactoryTest {
     private Game game;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Citizen citizen;
@@ -48,7 +48,7 @@ class ActiveMoraleRechargeProcessFactoryTest {
     private ProcessModel processModel;
 
     @Mock
-    private Universe universe;
+    private Citizens citizens;
 
     @Test
     void getType() {
@@ -59,7 +59,7 @@ class ActiveMoraleRechargeProcessFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
 
-        ActiveMoraleRechargeProcess result = underTest.create(game, planet, citizen);
+        ActiveMoraleRechargeProcess result = underTest.create(gameData, PLANET_ID, citizen);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
@@ -72,9 +72,9 @@ class ActiveMoraleRechargeProcessFactoryTest {
         given(processModel.getExternalReference()).willReturn(CITIZEN_ID);
         given(processModel.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
 
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getPopulation()).willReturn(Map.of(CITIZEN_ID, citizen));
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getCitizens()).willReturn(citizens);
+        given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
 
         ActiveMoraleRechargeProcess result = underTest.createFromModel(game, processModel);
 

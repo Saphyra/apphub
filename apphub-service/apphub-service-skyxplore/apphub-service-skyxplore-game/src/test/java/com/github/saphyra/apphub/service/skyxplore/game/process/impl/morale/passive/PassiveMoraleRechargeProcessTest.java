@@ -139,7 +139,7 @@ class PassiveMoraleRechargeProcessTest {
     @Test
     void work_citizenAllocated() {
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
-        given(planet.getCitizenAllocations()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, UUID.randomUUID(), new CitizenAllocations()));
+        given(planet.getCitizenAllocations()).willReturn(CollectionUtils.toMap(CITIZEN_ID, UUID.randomUUID(), new CitizenAllocations()));
 
         underTest.work(syncCache);
 

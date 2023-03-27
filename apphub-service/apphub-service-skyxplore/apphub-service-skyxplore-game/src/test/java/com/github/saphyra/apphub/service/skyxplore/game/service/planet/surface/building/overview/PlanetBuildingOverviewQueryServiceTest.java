@@ -58,7 +58,7 @@ public class PlanetBuildingOverviewQueryServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(coordinate, surface)));
 
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(overviewMapper.createOverview(Arrays.asList(surface))).willReturn(planetBuildingOverviewResponse);

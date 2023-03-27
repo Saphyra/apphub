@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
@@ -68,13 +68,13 @@ public class ProductionRequirementsAllocationServiceTest {
     private ProductionRequirementsAllocationService underTest;
 
     @Mock
+    private GameData gameData;
+
+    @Mock
     private SyncCache syncCache;
 
     @Mock
     private Planet planet;
-
-    @Mock
-    private StorageDetails storageDetails;
 
     @Mock
     private AllocatedResource allocatedResource;
@@ -99,20 +99,20 @@ public class ProductionRequirementsAllocationServiceTest {
 
     @Test
     public void allocate() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(availableResourceCounter.countAvailableAmount(storageDetails, DATA_ID)).willReturn(AVAILABLE_AMOUNT);
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
+        given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+
+        given(availableResourceCounter.countAvailableAmount(gameData, PLANET_ID, DATA_ID)).willReturn(AVAILABLE_AMOUNT);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(allocatedResourceFactory.create(PLANET_ID, LocationType.PRODUCTION, EXTERNAL_REFERENCE, DATA_ID, AVAILABLE_AMOUNT)).willReturn(allocatedResource);
-        given(reservedStorageFactory.create(PLANET_ID, LocationType.PRODUCTION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - AVAILABLE_AMOUNT)).willReturn(reservedStorage);
-        given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
-        given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
-        given(allocatedResourceToModelConverter.convert(allocatedResource, GAME_ID)).willReturn(allocatedResourceModel);
-        given(reservedStorageToModelConverter.convert(reservedStorage, GAME_ID)).willReturn(reservedStorageModel);
+        given(allocatedResourceFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AVAILABLE_AMOUNT)).willReturn(allocatedResource);
+        given(reservedStorageFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - AVAILABLE_AMOUNT)).willReturn(reservedStorage);
+        given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
+        given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
         given(planet.getOwner()).willReturn(USER_ID);
-        given(planetStorageOverviewQueryService.getStorage(planet)).willReturn(planetStorageResponse);
+        given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
-        UUID result = underTest.allocate(syncCache, GAME_ID, planet, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        UUID result = underTest.allocate(syncCache, GAME_ID, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         verify(allocatedResources).add(allocatedResource);
         verify(reservedStorages).add(reservedStorage);

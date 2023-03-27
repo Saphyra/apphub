@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
@@ -11,12 +10,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
@@ -41,10 +38,6 @@ class RenameCitizenService {
         Citizen citizen = game.getData()
             .getCitizens()
             .findByCitizenIdValidated(citizenId);
-
-        if (isNull(citizen)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "Citizen not found with id " + citizenId);
-        }
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {

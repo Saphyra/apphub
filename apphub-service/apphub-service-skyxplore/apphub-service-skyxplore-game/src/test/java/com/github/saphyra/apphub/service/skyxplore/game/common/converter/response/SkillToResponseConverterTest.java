@@ -33,7 +33,7 @@ public class SkillToResponseConverterTest {
         given(skill.getLevel()).willReturn(LEVEL);
         given(skill.getNextLevel()).willReturn(NEXT_LEVEL);
 
-        Map<String, SkillResponse> result = underTest.getSkills(CollectionUtils.singleValueMap(SkillType.AIMING, skill));
+        Map<String, SkillResponse> result = underTest.getSkills(CollectionUtils.toMap(SkillType.AIMING, skill));
 
         assertThat(result).containsEntry(SkillType.AIMING.name(), SkillResponse.builder().experience(EXPERIENCE).nextLevel(NEXT_LEVEL).level(LEVEL).build());
     }

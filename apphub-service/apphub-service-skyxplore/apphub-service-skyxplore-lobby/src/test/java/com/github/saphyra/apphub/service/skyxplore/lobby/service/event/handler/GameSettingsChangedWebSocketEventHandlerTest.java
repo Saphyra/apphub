@@ -80,7 +80,7 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
         given(lobby.getSettings()).willReturn(gameSettings);
         given(event.getPayload()).willReturn(PAYLOAD);
         given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(MEMBER_ID, null));
 
         given(gameSettings.getUniverseSize()).willReturn(UniverseSize.LARGE);
         given(gameSettings.getSystemAmount()).willReturn(SystemAmount.COMMON);
@@ -109,7 +109,7 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
         given(lobby.getSettings()).willReturn(gameSettings);
         given(event.getPayload()).willReturn(PAYLOAD);
         given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(MEMBER_ID, null));
 
         given(gameSettings.getUniverseSize()).willReturn(UniverseSize.LARGE);
         given(gameSettings.getSystemAmount()).willReturn(SystemAmount.COMMON);
@@ -139,7 +139,7 @@ public class GameSettingsChangedWebSocketEventHandlerTest {
         given(lobby.getSettings()).willReturn(gameSettings);
         given(event.getPayload()).willReturn(PAYLOAD);
         given(objectMapperWrapper.convertValue(PAYLOAD, GameSettingsChangedWebSocketEventHandler.GameSettingsChangedEvent.class)).willReturn(payload);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, null));
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(MEMBER_ID, null));
 
         given(payload.isFilled()).willReturn(true);
 

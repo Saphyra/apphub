@@ -108,7 +108,7 @@ public class PlanetOverviewControllerImplTest {
 
     @Test
     public void getBuildingOverview() {
-        given(planetBuildingOverviewQueryService.getBuildingOverview(USER_ID, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(SurfaceType.CONCRETE.name(), planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(USER_ID, PLANET_ID)).willReturn(CollectionUtils.toMap(SurfaceType.CONCRETE.name(), planetBuildingOverviewResponse));
 
         Map<String, PlanetBuildingOverviewResponse> result = underTest.getBuildingOverview(PLANET_ID, accessTokenHeader);
 

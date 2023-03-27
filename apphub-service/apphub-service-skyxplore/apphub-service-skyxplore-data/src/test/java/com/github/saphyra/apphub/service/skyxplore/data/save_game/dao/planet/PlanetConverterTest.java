@@ -29,7 +29,7 @@ public class PlanetConverterTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final UUID OWNER = UUID.randomUUID();
     private static final String DEFAULT_NAME = "default-name";
-    private static final UuidStringMap CUSTOM_NAMES = new UuidStringMap(CollectionUtils.singleValueMap(UUID.randomUUID(), "custom-name"));
+    private static final UuidStringMap CUSTOM_NAMES = new UuidStringMap(CollectionUtils.toMap(UUID.randomUUID(), "custom-name"));
     private static final Integer SIZE = 3456;
     private static final String PLANET_ID_STRING = "planet-id";
     private static final String GAME_ID_STRING = "game-id";
@@ -61,7 +61,7 @@ public class PlanetConverterTest {
         model.setSize(SIZE);
         model.setOwner(OWNER);
         model.setBuildingAllocations(Collections.emptyMap());
-        model.setCitizenAllocations(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID));
+        model.setCitizenAllocations(CollectionUtils.toMap(CITIZEN_ID, PROCESS_ID));
 
         given(uuidConverter.convertDomain(PLANET_ID)).willReturn(PLANET_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -69,7 +69,7 @@ public class PlanetConverterTest {
         given(uuidConverter.convertDomain(OWNER)).willReturn(OWNER_STRING);
 
         given(objectMapperWrapper.writeValueAsString(Collections.emptyMap())).willReturn(BUILDING_ALLOCATIONS);
-        given(objectMapperWrapper.writeValueAsString(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID))).willReturn(CITIZEN_ALLOCATIONS);
+        given(objectMapperWrapper.writeValueAsString(CollectionUtils.toMap(CITIZEN_ID, PROCESS_ID))).willReturn(CITIZEN_ALLOCATIONS);
         given(objectMapperWrapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
 
         PlanetEntity result = underTest.convertDomain(model);
@@ -106,7 +106,7 @@ public class PlanetConverterTest {
 
         //noinspection unchecked
         given(objectMapperWrapper.readValue(eq(BUILDING_ALLOCATIONS), any(TypeReference.class))).willReturn(Collections.emptyMap());
-        given(objectMapperWrapper.readValue(CITIZEN_ALLOCATIONS, UuidMap.class)).willReturn(new UuidMap(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID)));
+        given(objectMapperWrapper.readValue(CITIZEN_ALLOCATIONS, UuidMap.class)).willReturn(new UuidMap(CollectionUtils.toMap(CITIZEN_ID, PROCESS_ID)));
         given(objectMapperWrapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
 
         PlanetModel result = underTest.convertEntity(entity);

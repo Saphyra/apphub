@@ -38,7 +38,7 @@ public class QueueItemToResponseConverterTest {
 
     @Test
     public void convert() {
-        Map<String, Object> data = CollectionUtils.singleValueMap("asd", "dsa");
+        Map<String, Object> data = CollectionUtils.toMap("asd", "dsa");
 
         QueueItem queueItem = QueueItem.builder()
             .itemId(ITEM_ID)
@@ -49,7 +49,7 @@ public class QueueItemToResponseConverterTest {
             .data(data)
             .build();
 
-        given(planet.getPriorities()).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, GLOBAL_PRIORITY));
+        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, GLOBAL_PRIORITY));
 
         QueueResponse result = underTest.convert(queueItem, planet);
 

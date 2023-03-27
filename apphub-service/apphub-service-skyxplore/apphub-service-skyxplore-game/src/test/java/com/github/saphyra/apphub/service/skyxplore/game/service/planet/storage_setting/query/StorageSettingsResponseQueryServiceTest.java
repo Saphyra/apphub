@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.StorageSettingToApiModelMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,13 +43,7 @@ public class StorageSettingsResponseQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
-
-    @Mock
-    private StorageDetails storageDetails;
+    private GameData gameData;
 
     @Mock
     private StorageSettings storageSettings;
@@ -56,16 +51,18 @@ public class StorageSettingsResponseQueryServiceTest {
     @Mock
     private StorageSettingApiModel storageSettingModel;
 
+    @Mock
+    private StorageSetting storageSetting;
+
     @Test
     public void getStorageSettings() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        given(storageSettings.getByLocation(PLANET_ID)).willReturn(List.of(storageSetting));
 
-        given(storageSettingToApiModelMapper.convert(storageSettings)).willReturn(Arrays.asList(storageSettingModel));
-        given(availableResourcesMapper.getAvailableResources(storageSettings)).willReturn(Arrays.asList(AVAILABLE_RESOURCE_ID));
+        given(storageSettingToApiModelMapper.convert(List.of(storageSetting))).willReturn(Arrays.asList(storageSettingModel));
+        given(availableResourcesMapper.getAvailableResources(List.of(storageSetting))).willReturn(Arrays.asList(AVAILABLE_RESOURCE_ID));
 
         StorageSettingsResponse result = underTest.getStorageSettings(USER_ID, PLANET_ID);
 

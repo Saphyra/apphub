@@ -91,7 +91,7 @@ public class TerraformationUpdateServiceTest {
 
     @Test
     public void updateTerraformation_surfaceNotFound() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getTerraformation()).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(UUID.randomUUID());
 
@@ -102,7 +102,7 @@ public class TerraformationUpdateServiceTest {
 
     @Test
     public void updateTerraformation() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getTerraformation()).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
 

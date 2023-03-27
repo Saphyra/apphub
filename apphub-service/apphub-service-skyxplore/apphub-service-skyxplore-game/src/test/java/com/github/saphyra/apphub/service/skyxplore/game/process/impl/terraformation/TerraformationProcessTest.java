@@ -116,7 +116,7 @@ public class TerraformationProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, BASE_PRIORITY));
+        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, BASE_PRIORITY));
         given(terraformation.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         int result = underTest.getPriority();

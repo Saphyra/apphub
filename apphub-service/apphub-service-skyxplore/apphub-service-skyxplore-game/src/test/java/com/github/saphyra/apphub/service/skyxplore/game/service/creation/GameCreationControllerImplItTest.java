@@ -2,14 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.AiPresence;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.PlanetSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemAmount;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.SystemSize;
-import com.github.saphyra.apphub.api.skyxplore.model.game_setting.UniverseSize;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
@@ -87,9 +83,7 @@ public class GameCreationControllerImplItTest {
             .parallel()
             .forEach(s -> {
                 final UUID hostId = UUID.randomUUID();
-                Map<UUID, UUID> members = new HashMap<UUID, UUID>() {{
-                    put(hostId, null);
-                }};
+                Map<UUID, UUID> members = CollectionUtils.toMap(hostId, null);
 
                 SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
                     .host(hostId)
@@ -97,11 +91,10 @@ public class GameCreationControllerImplItTest {
                     .alliances(new HashMap<>())
                     .gameName(GAME_NAME)
                     .settings(SkyXploreGameCreationSettingsRequest.builder()
-                        .universeSize(UniverseSize.LARGE)
-                        .systemAmount(SystemAmount.COMMON)
-                        .systemSize(SystemSize.LARGE)
-                        .planetSize(PlanetSize.LARGE)
-                        .aiPresence(AiPresence.EVERYWHERE)
+                        .maxPlayersPerSolarSystem(5)
+                        .additionalSolarSystems(new Range<>(20, 30))
+                        .planetsPerSolarSystem(new Range<>(3, 5))
+                        .planetSize(new Range<>(10, 15))
                         .build()
                     )
                     .build();
@@ -141,13 +134,12 @@ public class GameCreationControllerImplItTest {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(host)
             .members(members)
-            .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
+            .alliances(CollectionUtils.toMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
-                .universeSize(UniverseSize.LARGE)
-                .systemAmount(SystemAmount.COMMON)
-                .systemSize(SystemSize.LARGE)
-                .planetSize(PlanetSize.LARGE)
-                .aiPresence(AiPresence.EVERYWHERE)
+                .maxPlayersPerSolarSystem(5)
+                .additionalSolarSystems(new Range<>(20, 30))
+                .planetsPerSolarSystem(new Range<>(3, 5))
+                .planetSize(new Range<>(10, 15))
                 .build()
             )
             .gameName(GAME_NAME)
@@ -185,13 +177,12 @@ public class GameCreationControllerImplItTest {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(playerId)
             .members(members)
-            .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
+            .alliances(CollectionUtils.toMap(allianceId, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
-                .universeSize(UniverseSize.SMALLEST)
-                .systemAmount(SystemAmount.SMALL)
-                .systemSize(SystemSize.SMALL)
-                .planetSize(PlanetSize.SMALL)
-                .aiPresence(AiPresence.NONE)
+                .maxPlayersPerSolarSystem(1)
+                .additionalSolarSystems(new Range<>(2, 3))
+                .planetsPerSolarSystem(new Range<>(0, 1))
+                .planetSize(new Range<>(5, 6))
                 .build()
             )
             .gameName(GAME_NAME)

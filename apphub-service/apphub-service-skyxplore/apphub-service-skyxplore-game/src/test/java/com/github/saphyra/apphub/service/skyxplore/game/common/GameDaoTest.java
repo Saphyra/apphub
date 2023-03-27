@@ -74,7 +74,7 @@ public class GameDaoTest {
 
         underTest.save(game);
 
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
 
         Optional<Game> result = underTest.findByUserId(USER_ID);
 

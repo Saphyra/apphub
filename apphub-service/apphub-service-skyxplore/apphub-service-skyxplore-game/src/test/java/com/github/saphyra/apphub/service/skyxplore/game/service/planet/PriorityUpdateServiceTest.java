@@ -5,7 +5,9 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -20,11 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -56,10 +55,13 @@ public class PriorityUpdateServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
-    private Planet planet;
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
 
     @Mock
     private PriorityModel model;
@@ -84,13 +86,13 @@ public class PriorityUpdateServiceTest {
 
     @Test
     public void setPriority() {
-        Map<PriorityType, Integer> priorities = new HashMap<>();
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getPriorities()).willReturn(priorities);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(PLANET_ID, PriorityType.CONSTRUCTION)).willReturn(priority);
+
         given(game.getGameId()).willReturn(GAME_ID);
-        given(priorityToModelConverter.convert(PriorityType.CONSTRUCTION, NEW_PRIORITY, PLANET_ID, LocationType.PLANET, GAME_ID)).willReturn(model);
+        given(priorityToModelConverter.convert(GAME_ID, priority)).willReturn(model);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
 
@@ -101,8 +103,7 @@ public class PriorityUpdateServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        assertThat(priorities).containsEntry(PriorityType.CONSTRUCTION, NEW_PRIORITY);
-
+        verify(priority).setValue(NEW_PRIORITY);
         verify(gameDataProxy).saveItem(model);
     }
 }

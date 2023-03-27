@@ -91,7 +91,7 @@ public class FinishTerraformationServiceTest {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
         given(surfaceToModelConverter.convert(surface, GAME_ID)).willReturn(surfaceModel);
 
         underTest.finishTerraformation(syncCache, game, planet, surface);
@@ -118,6 +118,6 @@ public class FinishTerraformationServiceTest {
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), buildingDetailsModifiedArgumentCaptor.capture());
         buildingDetailsModifiedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

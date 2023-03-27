@@ -3,12 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -32,7 +31,7 @@ public class AllocationRemovalServiceTest {
     private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private WsMessageSender messageSender;
@@ -44,22 +43,13 @@ public class AllocationRemovalServiceTest {
     private AllocationRemovalService underTest;
 
     @Mock
+    private GameData gameData;
+
+    @Mock
     private SyncCache syncCache;
 
     @Mock
-    private Planet planet;
-
-    @Mock
-    private StorageDetails storageDetails;
-
-    @Mock
-    private ReservedStorages reservedStorages;
-
-    @Mock
     private ReservedStorage reservedStorage;
-
-    @Mock
-    private AllocatedResources allocatedResources;
 
     @Mock
     private AllocatedResource allocatedResource;
@@ -67,11 +57,16 @@ public class AllocationRemovalServiceTest {
     @Mock
     private PlanetStorageResponse planetStorageResponse;
 
+    @Mock
+    private AllocatedResources allocatedResources;
+
+    @Mock
+    private ReservedStorages reservedStorages;
+
     @Test
     public void removeAllocationsAndReservations() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
-        given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
+        given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
 
         given(allocatedResources.getByExternalReference(EXTERNAL_REFERENCE)).willReturn(List.of(allocatedResource));
         given(reservedStorages.getByExternalReference(EXTERNAL_REFERENCE)).willReturn(List.of(reservedStorage));
@@ -79,12 +74,9 @@ public class AllocationRemovalServiceTest {
         given(allocatedResource.getAllocatedResourceId()).willReturn(ALLOCATED_RESOURCE_ID);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planetStorageOverviewQueryService.getStorage(gameData, LOCATION)).willReturn(planetStorageResponse);
 
-        given(planetStorageOverviewQueryService.getStorage(planet)).willReturn(planetStorageResponse);
-
-        underTest.removeAllocationsAndReservations(syncCache, planet, EXTERNAL_REFERENCE);
+        underTest.removeAllocationsAndReservations(syncCache, gameData, LOCATION, USER_ID, EXTERNAL_REFERENCE);
 
         verify(syncCache).deleteGameItem(ALLOCATED_RESOURCE_ID, GameItemType.ALLOCATED_RESOURCE);
         verify(syncCache).deleteGameItem(RESERVED_STORAGE_ID, GameItemType.RESERVED_STORAGE);
@@ -92,9 +84,9 @@ public class AllocationRemovalServiceTest {
         verify(reservedStorages).remove(reservedStorage);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED), eq(PLANET_ID), argumentCaptor.capture());
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED), eq(LOCATION), argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
-        verify(messageSender).planetStorageModified(USER_ID, PLANET_ID, planetStorageResponse);
+        verify(messageSender).planetStorageModified(USER_ID, LOCATION, planetStorageResponse);
     }
 }

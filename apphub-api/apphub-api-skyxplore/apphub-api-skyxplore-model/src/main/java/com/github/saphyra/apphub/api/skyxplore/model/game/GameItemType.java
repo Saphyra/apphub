@@ -28,7 +28,8 @@ public enum GameItemType {
     LINE(LineModel.class),
     PRODUCTION_ORDER(ProductionOrderModel.class),
     DURABILITY_ITEM_MODEL(DurabilityItemModel.class),
-    PROCESS(ProcessModel.class);
+    PROCESS(ProcessModel.class),
+    CITIZEN_ALLOCATION(CitizenAllocationModel.class);
 
     private final Class<? extends GameItem> modelType;
 }

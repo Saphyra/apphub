@@ -23,7 +23,7 @@ public class SolarSystemConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final Integer RADIUS = 356;
     private static final String DEFAULT_NAME = "default-name";
-    private static final UuidStringMap CUSTOM_NAMES = new UuidStringMap(CollectionUtils.singleValueMap(UUID.randomUUID(), "+af"));
+    private static final UuidStringMap CUSTOM_NAMES = new UuidStringMap(CollectionUtils.toMap(UUID.randomUUID(), "+af"));
     private static final String SOLAR_SYSTEM_ID_STRING = "solar-system-id";
     private static final String GAME_ID_STRING = "game-id";
     private static final String CUSTOM_NAMES_STRING = "custom-names";

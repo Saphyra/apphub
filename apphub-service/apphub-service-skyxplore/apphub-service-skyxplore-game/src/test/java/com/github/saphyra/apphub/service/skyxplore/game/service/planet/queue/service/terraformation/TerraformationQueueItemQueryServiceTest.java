@@ -39,7 +39,7 @@ public class TerraformationQueueItemQueryServiceTest {
 
     @Test
     public void getQueue() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getTerraformation()).willReturn(construction);
         given(surfaceToQueueItemConverter.convert(surface)).willReturn(queueItem);
 

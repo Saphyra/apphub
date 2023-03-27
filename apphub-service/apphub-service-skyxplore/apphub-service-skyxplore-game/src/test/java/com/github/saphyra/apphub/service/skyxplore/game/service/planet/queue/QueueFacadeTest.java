@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,10 +45,7 @@ public class QueueFacadeTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private QueueItem queueItem;
@@ -68,10 +65,9 @@ public class QueueFacadeTest {
     @Test
     public void getQueueOfPlanet() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(queueService.getQueue(planet)).willReturn(List.of(queueItem));
-        given(converter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(game.getData()).willReturn(gameData);
+        given(queueService.getQueue(gameData, PLANET_ID)).willReturn(List.of(queueItem));
+        given(converter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
         List<QueueResponse> result = underTest.getQueueOfPlanet(USER_ID, PLANET_ID);
 

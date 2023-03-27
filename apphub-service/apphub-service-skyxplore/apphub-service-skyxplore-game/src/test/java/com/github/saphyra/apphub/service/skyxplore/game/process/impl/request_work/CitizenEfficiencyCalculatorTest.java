@@ -58,7 +58,7 @@ public class CitizenEfficiencyCalculatorTest {
         given(moraleProperties.getMinEfficiency()).willReturn(MIN_MORALE_EFFICIENCY);
 
         given(citizen.getMorale()).willReturn(ACTUAL_MORALE);
-        given(citizen.getSkills()).willReturn(CollectionUtils.singleValueMap(SkillType.AIMING, skill));
+        given(citizen.getSkills()).willReturn(CollectionUtils.toMap(SkillType.AIMING, skill));
         given(skill.getLevel()).willReturn(SKILL_LEVEL);
 
 

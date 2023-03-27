@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
@@ -9,6 +7,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -22,9 +22,9 @@ public class SurfaceToQueueItemConverter {
             .requiredWorkPoints(terraformation.getRequiredWorkPoints())
             .currentWorkPoints(terraformation.getCurrentWorkPoints())
             .priority(terraformation.getPriority())
-            .data(CollectionUtils.toMap(
-                new BiWrapper<>("currentSurfaceType", surface.getSurfaceType().name()),
-                new BiWrapper<>("targetSurfaceType", terraformation.getData())
+            .data(Map.of(
+                "currentSurfaceType", surface.getSurfaceType().name(),
+                "targetSurfaceType", terraformation.getData()
             ))
             .build();
     }

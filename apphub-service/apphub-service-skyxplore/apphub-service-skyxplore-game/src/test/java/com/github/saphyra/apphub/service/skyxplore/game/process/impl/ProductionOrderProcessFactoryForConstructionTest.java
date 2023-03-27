@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ public class ProductionOrderProcessFactoryForConstructionTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ProductionOrderProcessFactory productionOrderProcessFactory;
@@ -33,18 +33,13 @@ public class ProductionOrderProcessFactoryForConstructionTest {
     private ProductionOrderProcessFactoryForConstruction underTest;
 
     @Mock
-    private Game game;
-
+    private GameData gameData;
 
     @Mock
-
     private Planet planet;
 
     @Mock
     private Construction construction;
-
-    @Mock
-    private StorageDetails storageDetails;
 
     @Mock
     private ReservedStorage reservedStorage;
@@ -52,16 +47,19 @@ public class ProductionOrderProcessFactoryForConstructionTest {
     @Mock
     private ProductionOrderProcess productionOrderProcess;
 
+    @Mock
+    private ReservedStorages reservedStorages;
+
     @Test
     public void createProductionOrderProcesses() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getReservedStorages()).willReturn(new ReservedStorages(List.of(reservedStorage)));
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
+        given(reservedStorages.getByExternalReference(CONSTRUCTION_ID)).willReturn(List.of(reservedStorage));
         given(reservedStorage.getExternalReference()).willReturn(CONSTRUCTION_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
-        given(productionOrderProcessFactory.create(PROCESS_ID, game, planet, RESERVED_STORAGE_ID)).willReturn(List.of(productionOrderProcess));
+        given(productionOrderProcessFactory.create(gameData, PROCESS_ID, LOCATION, RESERVED_STORAGE_ID)).willReturn(List.of(productionOrderProcess));
 
-        List<ProductionOrderProcess> result = underTest.createProductionOrderProcesses(PROCESS_ID, game, planet, construction);
+        List<ProductionOrderProcess> result = underTest.createProductionOrderProcesses(PROCESS_ID, gameData, LOCATION, construction);
 
         assertThat(result).containsExactly(productionOrderProcess);
     }

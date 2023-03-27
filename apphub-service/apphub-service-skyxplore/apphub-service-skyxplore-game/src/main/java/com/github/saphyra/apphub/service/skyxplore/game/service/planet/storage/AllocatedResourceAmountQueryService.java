@@ -42,6 +42,7 @@ public class AllocatedResourceAmountQueryService {
         return gameData.getAllocatedResources()
             .getByLocation(location)
             .stream()
+            .filter(allocatedResource -> dataIdsByStorageType.contains(allocatedResource.getDataId()))
             .mapToInt(AllocatedResource::getAmount)
             .sum();
     }

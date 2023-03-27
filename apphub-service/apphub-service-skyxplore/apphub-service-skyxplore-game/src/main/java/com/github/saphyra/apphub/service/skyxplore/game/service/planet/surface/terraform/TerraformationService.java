@@ -56,12 +56,6 @@ class TerraformationService {
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();
 
-        Planet planet = gameData.getPlanets()
-            .get(planetId);
-
-        Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(surfaceId);
-
         if (gameData.getConstructions().findByExternalReference(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Terraformation already in progress on surface " + surfaceId);
         }
@@ -69,6 +63,9 @@ class TerraformationService {
         if (gameData.getBuildings().findBySurfaceId(surfaceId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation("There is already a building on surface " + surfaceId);
         }
+
+        Surface surface = gameData.getSurfaces()
+            .findBySurfaceId(surfaceId);
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed."))
@@ -87,6 +84,9 @@ class TerraformationService {
             surfaceTypeString
         );
 
+        Planet planet = gameData.getPlanets()
+            .get(planetId);
+
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
                 resourceAllocationService.processResourceRequirements(gameData, planetId, planet.getOwner(), construction.getConstructionId(), constructionRequirements.getRequiredResources());
@@ -98,7 +98,7 @@ class TerraformationService {
                 messageSender.planetQueueItemModified(userId, planetId, queueResponse);
                 messageSender.planetBuildingDetailsModified(userId, planetId, planetBuildingOverviewQueryService.getBuildingOverview(gameData, planetId));
 
-                TerraformationProcess constructionProcess = terraformationProcessFactory.create(gameData, planetId, surface);
+                TerraformationProcess constructionProcess = terraformationProcessFactory.create(gameData, planetId, surface, construction);
 
                 gameData.getProcesses()
                     .add(constructionProcess);

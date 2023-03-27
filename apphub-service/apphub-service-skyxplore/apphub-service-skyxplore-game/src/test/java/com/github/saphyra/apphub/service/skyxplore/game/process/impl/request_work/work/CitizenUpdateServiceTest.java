@@ -89,8 +89,8 @@ public class CitizenUpdateServiceTest {
 
     @Test
     public void updateCitizen() {
-        given(planet.getPopulation()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, citizen));
-        given(citizen.getSkills()).willReturn(CollectionUtils.singleValueMap(SkillType.AIMING, skill));
+        given(planet.getPopulation()).willReturn(CollectionUtils.toMap(CITIZEN_ID, citizen));
+        given(citizen.getSkills()).willReturn(CollectionUtils.toMap(SkillType.AIMING, skill));
         given(skill.getExperience()).willReturn(EXPERIENCE);
         given(skill.getNextLevel()).willReturn(NEXT_LEVEL);
         given(gameProperties.getCitizen()).willReturn(citizenProperties);

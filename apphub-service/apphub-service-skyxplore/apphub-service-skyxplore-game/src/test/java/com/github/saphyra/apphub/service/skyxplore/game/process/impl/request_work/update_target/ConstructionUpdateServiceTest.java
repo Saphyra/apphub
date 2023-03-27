@@ -91,7 +91,7 @@ public class ConstructionUpdateServiceTest {
 
     @Test
     public void updateConstruction() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getBuilding()).willReturn(building);
         given(building.getConstruction()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);

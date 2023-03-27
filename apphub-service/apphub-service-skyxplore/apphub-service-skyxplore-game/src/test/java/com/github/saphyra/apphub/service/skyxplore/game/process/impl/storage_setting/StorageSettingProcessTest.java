@@ -7,22 +7,22 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcessFactory;
@@ -66,7 +66,7 @@ public class StorageSettingProcessTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -104,9 +104,6 @@ public class StorageSettingProcessTest {
     private SyncCache syncCache;
 
     @Mock
-    private StorageDetails storageDetails;
-
-    @Mock
     private StoredResources storedResources;
 
     @Mock
@@ -142,29 +139,33 @@ public class StorageSettingProcessTest {
     @Mock
     private ProcessModel processModel;
 
+    @Mock
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
+
     @BeforeEach
     public void setUp() {
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(storageSetting.getDataId()).willReturn(DATA_ID);
         given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
 
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(storedResources);
-        given(storedResources.get(DATA_ID)).willReturn(storedResource);
-        given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.getByExternalReference(PROCESS_ID)).willReturn(List.of(reservedReservedStorage));
         given(reservedReservedStorage.getAmount()).willReturn(0);
         given(reservedReservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(finishedProcess));
         given(finishedProcess.getStatus()).willReturn(ProcessStatus.DONE);
 
         underTest = StorageSettingProcess.builder()
             .processId(PROCESS_ID)
             .status(ProcessStatus.IN_PROGRESS)
-            .game(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(PLANET_ID)
             .storageSetting(storageSetting)
             .applicationContextProxy(applicationContextProxy)
             .build();
@@ -177,7 +178,9 @@ public class StorageSettingProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.singleValueMap(PriorityType.INDUSTRY, PLANET_PRIORITY));
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(PLANET_ID, PriorityType.INDUSTRY)).willReturn(priority);
+        given(priority.getValue()).willReturn(PLANET_PRIORITY);
         given(storageSetting.getPriority()).willReturn(STORAGE_SETTING_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * STORAGE_SETTING_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
@@ -216,7 +219,7 @@ public class StorageSettingProcessTest {
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.LIQUID);
         given(applicationContextProxy.getBean(FreeStorageQueryService.class)).willReturn(freeStorageQueryService);
-        given(freeStorageQueryService.getFreeStorage(planet, StorageType.LIQUID)).willReturn(0);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.LIQUID)).willReturn(0);
 
         underTest.work(syncCache);
 
@@ -226,7 +229,7 @@ public class StorageSettingProcessTest {
     @Test
     public void work_initiateProduction() {
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(planet.getOwner()).willReturn(USER_ID);
 
         given(storedResource.getAmount()).willReturn(TARGET_AMOUNT - MISSING_AMOUNT);
@@ -236,19 +239,19 @@ public class StorageSettingProcessTest {
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.LIQUID);
         given(applicationContextProxy.getBean(FreeStorageQueryService.class)).willReturn(freeStorageQueryService);
-        given(freeStorageQueryService.getFreeStorage(planet, StorageType.LIQUID)).willReturn(FREE_STORAGE);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.LIQUID)).willReturn(FREE_STORAGE);
 
         given(applicationContextProxy.getBean(ReservedStorageFactory.class)).willReturn(reservedStorageFactory);
-        given(reservedStorageFactory.create(PLANET_ID, LocationType.PLANET, PROCESS_ID, DATA_ID, FREE_STORAGE)).willReturn(createdReservedStorage);
+        given(reservedStorageFactory.create(PLANET_ID, PROCESS_ID, DATA_ID, FREE_STORAGE)).willReturn(createdReservedStorage);
         given(applicationContextProxy.getBean(ReservedStorageToModelConverter.class)).willReturn(reservedStorageToModelConverter);
-        given(reservedStorageToModelConverter.convert(createdReservedStorage, GAME_ID)).willReturn(reservedStorageModel);
+        given(reservedStorageToModelConverter.convert(GAME_ID, createdReservedStorage)).willReturn(reservedStorageModel);
 
         given(applicationContextProxy.getBean(WsMessageSender.class)).willReturn(wsMessageSender);
         given(applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class)).willReturn(planetStorageOverviewQueryService);
-        given(planetStorageOverviewQueryService.getStorage(planet)).willReturn(planetStorageResponse);
+        given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
 
         given(applicationContextProxy.getBean(ProductionOrderProcessFactory.class)).willReturn(productionOrderProcessFactory);
-        given(productionOrderProcessFactory.create(PROCESS_ID, game, planet, createdReservedStorage)).willReturn(List.of(productionOrderProcess));
+        given(productionOrderProcessFactory.create(gameData, PROCESS_ID, PLANET_ID, createdReservedStorage)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.toModel()).willReturn(processModel);
 
         underTest.work(syncCache);

@@ -20,7 +20,7 @@ public class StorageSettingsResponseQueryService {
     private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
 
     public StorageSettingsResponse getStorageSettings(UUID userId, UUID planetId) {
-        List<StorageSetting> storageSettings =gameDao.findByUserIdValidated(userId)
+        List<StorageSetting> storageSettings = gameDao.findByUserIdValidated(userId)
             .getData()
             .getStorageSettings()
             .getByLocation(planetId);

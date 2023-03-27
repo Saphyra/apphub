@@ -67,9 +67,9 @@ public class ResourceRequirementProcessFactoryTest {
     @Test
     public void createResourceRequirementProcesses() {
         given(productionBuildingService.get(PRODUCER_BUILDING_DATA_ID)).willReturn(productionBuilding);
-        given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(DATA_ID, productionData));
+        given(productionBuilding.getGives()).willReturn(CollectionUtils.toMap(DATA_ID, productionData));
         given(productionData.getConstructionRequirements()).willReturn(constructionRequirements);
-        given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.singleValueMap(REQUIRED_RESOURCE_DATA_ID, REQUIRED_RESOURCE_AMOUNT));
+        given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.toMap(REQUIRED_RESOURCE_DATA_ID, REQUIRED_RESOURCE_AMOUNT));
         given(game.getGameId()).willReturn(GAME_ID);
         given(productionRequirementsAllocationService.allocate(syncCache, GAME_ID, planet, PROCESS_ID, REQUIRED_RESOURCE_DATA_ID, AMOUNT * REQUIRED_RESOURCE_AMOUNT)).willReturn(RESERVED_STORAGE_ID);
         given(productionOrderProcessFactory.create(PROCESS_ID, game, planet, RESERVED_STORAGE_ID)).willReturn(List.of(productionOrderProcess));

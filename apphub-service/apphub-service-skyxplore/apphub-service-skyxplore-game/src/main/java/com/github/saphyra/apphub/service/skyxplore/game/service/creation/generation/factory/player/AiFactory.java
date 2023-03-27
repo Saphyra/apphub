@@ -11,6 +11,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class AiFactory {
     private final PlayerFactory playerFactory;
 

@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +31,7 @@ public class BuildingCapacityCalculatorTest {
     private BuildingCapacityCalculator underTest;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Building building;
@@ -40,17 +42,20 @@ public class BuildingCapacityCalculatorTest {
     @Mock
     private BuildingAllocations buildingAllocations;
 
+    @Mock
+    private BuildingAllocation buildingAllocation;
+
     @Test
     public void calculateCapacity() {
         given(building.getDataId()).willReturn(DATA_ID);
         given(building.getLevel()).willReturn(LEVEL);
         given(productionBuildingService.get(DATA_ID)).willReturn(productionBuilding);
         given(productionBuilding.getWorkers()).willReturn(1);
-        given(planet.getBuildingAllocations()).willReturn(buildingAllocations);
+        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
-        given(buildingAllocations.get(BUILDING_ID)).willReturn(List.of(UUID.randomUUID()));
+        given(buildingAllocations.getByBuildingId(BUILDING_ID)).willReturn(List.of(buildingAllocation));
 
-        int result = underTest.calculateCapacity(planet);
+        int result = underTest.calculateCapacity(gameData, building);
 
         assertThat(result).isEqualTo(1);
     }

@@ -106,7 +106,7 @@ public class TerraformationProcess implements Process {
             .getOwner();
 
         applicationContextProxy.getBean(UseAllocatedResourceService.class)
-            .resolveAllocations(syncCache, gameData.getGameId(), gameData, location, ownerId, terraformation.getConstructionId());
+            .resolveAllocations(syncCache, gameData, location, ownerId, terraformation.getConstructionId());
         List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)
             .createRequestWorkProcesses(gameData, location, processId, surface);
 

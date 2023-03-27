@@ -33,7 +33,7 @@ public class PriorityToModelConverterTest {
     public void convert() {
         given(game.getGameId()).willReturn(GAME_ID);
 
-        List<PriorityModel> result = underTest.convert(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION, PRIORITY), LOCATION, LocationType.PLANET, game);
+        List<PriorityModel> result = underTest.convert(CollectionUtils.toMap(PriorityType.CONSTRUCTION, PRIORITY), LOCATION, LocationType.PLANET, game);
 
         assertThat(result.get(0).getId()).isNull();
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);

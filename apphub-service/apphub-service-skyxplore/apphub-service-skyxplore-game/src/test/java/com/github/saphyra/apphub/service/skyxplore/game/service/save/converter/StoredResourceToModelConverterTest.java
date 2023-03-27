@@ -35,7 +35,7 @@ public class StoredResourceToModelConverterTest {
             .amount(AMOUNT)
             .build();
 
-        List<StoredResourceModel> result = underTest.convert(CollectionUtils.singleValueMap("", storedResource), GAME_ID);
+        List<StoredResourceModel> result = underTest.convert(CollectionUtils.toMap("", storedResource), GAME_ID);
 
         assertThat(result.get(0).getId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);

@@ -155,7 +155,7 @@ class DeconstructBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getBuilding()).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getConstruction()).willReturn(construction);
@@ -170,7 +170,7 @@ class DeconstructBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getBuilding()).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(deconstructionFactory.create(BUILDING_ID)).willReturn(deconstruction);

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,9 +28,6 @@ public class GameCreationRequestValidatorTest {
     private static final String GAME_NAME = "game-name";
 
     @Mock
-    private GameCreationSettingsValidator gameCreationSettingsValidator;
-
-    @Mock
     private AllianceNameValidator allianceNameValidator;
 
     @InjectMocks
@@ -39,11 +35,6 @@ public class GameCreationRequestValidatorTest {
 
     @Mock
     private SkyXploreGameCreationSettingsRequest settings;
-
-    @AfterEach
-    public void validate() {
-        verify(gameCreationSettingsValidator).validate(settings);
-    }
 
     @Test
     public void nullHost() {
@@ -73,7 +64,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownHost() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.singleValueMap(UUID.randomUUID(), null))
+            .members(CollectionUtils.toMap(UUID.randomUUID(), null))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -114,7 +105,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownAllianceId() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.singleValueMap(HOST, UUID.randomUUID()))
+            .members(CollectionUtils.toMap(HOST, UUID.randomUUID()))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -161,7 +152,7 @@ public class GameCreationRequestValidatorTest {
                     new BiWrapper<>(PLAYER_ID, ALLIANCE_ID)
                 )
             )
-            .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
+            .alliances(CollectionUtils.toMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(settings)
             .gameName(GAME_NAME)
             .build();

@@ -35,7 +35,7 @@ public class AllianceFactoryTest {
 
     @Test
     public void create() {
-        Map<UUID, String> alliances = CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME);
+        Map<UUID, String> alliances = CollectionUtils.toMap(ALLIANCE_ID, ALLIANCE_NAME);
         Map<UUID, UUID> members = CollectionUtils.toMap(
             new BiWrapper<>(PLAYER_ID_1, ALLIANCE_ID),
             new BiWrapper<>(PLAYER_ID_2, null)

@@ -67,7 +67,7 @@ public class UserSettingsControllerImplTest {
 
     @Test
     public void getUserSettings() {
-        given(properties.getSettings()).willReturn(CollectionUtils.singleValueMap(
+        given(properties.getSettings()).willReturn(CollectionUtils.toMap(
             CATEGORY,
             CollectionUtils.toMap(
                 new BiWrapper<>(KEY, "asd"),
@@ -120,7 +120,7 @@ public class UserSettingsControllerImplTest {
             .value(VALUE)
             .build();
 
-        given(properties.getSettings()).willReturn(CollectionUtils.singleValueMap(
+        given(properties.getSettings()).willReturn(CollectionUtils.toMap(
             CATEGORY,
             CollectionUtils.toMap(
                 new BiWrapper<>(KEY, "asd"),

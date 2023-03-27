@@ -166,8 +166,7 @@ public class StorageSettingProcess implements Process {
     }
 
     private void cleanUpReservedStorages(SyncCache syncCache) {
-        List<ReservedStorage> reservedStorages = gameData
-            .getReservedStorages()
+        List<ReservedStorage> reservedStorages = gameData.getReservedStorages()
             .getByExternalReference(processId)
             .stream()
             .filter(reservedStorage -> reservedStorage.getAmount() == 0)

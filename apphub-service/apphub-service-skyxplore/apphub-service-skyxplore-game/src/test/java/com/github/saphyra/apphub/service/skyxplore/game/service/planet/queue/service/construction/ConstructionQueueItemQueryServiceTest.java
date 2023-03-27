@@ -43,7 +43,7 @@ public class ConstructionQueueItemQueryServiceTest {
 
     @Test
     public void getQueue() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getBuilding()).willReturn(building);
         given(building.getConstruction()).willReturn(construction);
         given(converter.convert(building)).willReturn(queueItem);

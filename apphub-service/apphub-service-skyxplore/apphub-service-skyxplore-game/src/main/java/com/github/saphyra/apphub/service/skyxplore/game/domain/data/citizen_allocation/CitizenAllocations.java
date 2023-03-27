@@ -6,6 +6,11 @@ import java.util.Vector;
 
 //TODO unit test
 public class CitizenAllocations extends Vector<CitizenAllocation> {
+    public CitizenAllocation findByProcessIdValidated(UUID processId) {
+        return findByProcessId(processId)
+            .orElseThrow();
+    }
+
     public Optional<CitizenAllocation> findByProcessId(UUID processId) {
         return stream()
             .filter(citizenAllocation -> citizenAllocation.getProcessId().equals(processId))
@@ -14,6 +19,11 @@ public class CitizenAllocations extends Vector<CitizenAllocation> {
 
     public void deleteByProcessId(UUID processId) {
         removeIf(citizenAllocation -> citizenAllocation.getProcessId().equals(processId));
+    }
+
+    public CitizenAllocation findByCitizenIdValidated(UUID citizenId) {
+        return findByCitizenId(citizenId)
+            .orElseThrow();
     }
 
     public Optional<CitizenAllocation> findByCitizenId(UUID citizenId) {

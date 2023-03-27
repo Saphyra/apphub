@@ -53,14 +53,14 @@ public class ProcessConverterTest {
         model.setLocation(LOCATION);
         model.setLocationType(LOCATION_TYPE);
         model.setExternalReference(EXTERNAL_REFERENCE);
-        model.setData(CollectionUtils.singleValueMap(KEY, VALUE));
+        model.setData(CollectionUtils.toMap(KEY, VALUE));
 
         given(uuidConverter.convertDomain(PROCESS_ID)).willReturn(PROCESS_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(uuidConverter.convertDomain(LOCATION)).willReturn(LOCATION_STRING);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
-        given(objectMapperWrapper.writeValueAsString(CollectionUtils.singleValueMap(KEY, VALUE))).willReturn(DATA_STRING);
+        given(objectMapperWrapper.writeValueAsString(CollectionUtils.toMap(KEY, VALUE))).willReturn(DATA_STRING);
 
         ProcessEntity result = underTest.convertDomain(model);
 
@@ -91,7 +91,7 @@ public class ProcessConverterTest {
         given(uuidConverter.convertEntity(LOCATION_STRING)).willReturn(LOCATION);
         given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
 
-        given(objectMapperWrapper.readValue(DATA_STRING, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(KEY, VALUE, new StringStringMap()));
+        given(objectMapperWrapper.readValue(DATA_STRING, StringStringMap.class)).willReturn(CollectionUtils.toMap(KEY, VALUE, new StringStringMap()));
 
         ProcessModel result = underTest.convertEntity(entity);
 

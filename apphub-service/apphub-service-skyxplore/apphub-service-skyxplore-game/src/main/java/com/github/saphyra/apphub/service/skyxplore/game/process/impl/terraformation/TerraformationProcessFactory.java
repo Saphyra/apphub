@@ -23,10 +23,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
 
-    public TerraformationProcess create(GameData gameData, UUID location, Surface surface) {
-        Construction terraformation = gameData.getConstructions()
-            .findByExternalReferenceValidated(surface.getSurfaceId());
-
+    public TerraformationProcess create(GameData gameData, UUID location, Surface surface, Construction terraformation) {
         return TerraformationProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)

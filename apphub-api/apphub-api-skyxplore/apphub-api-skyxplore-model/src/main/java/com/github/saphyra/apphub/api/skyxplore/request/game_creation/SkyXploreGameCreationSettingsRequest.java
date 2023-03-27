@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder(toBuilder = true)
 public class SkyXploreGameCreationSettingsRequest {
-    private Range<Integer> planetsPerSolarSystems;
     private Integer maxPlayersPerSolarSystem;
     private Range<Integer> additionalSolarSystems;
     private Range<Integer> planetsPerSolarSystem;

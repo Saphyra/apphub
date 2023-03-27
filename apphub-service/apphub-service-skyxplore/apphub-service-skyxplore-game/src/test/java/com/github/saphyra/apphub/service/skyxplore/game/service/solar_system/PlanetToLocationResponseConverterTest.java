@@ -61,7 +61,7 @@ public class PlanetToLocationResponseConverterTest {
         given(planet.getCoordinate()).willReturn(coordinateModel);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
         given(planet.getOwner()).willReturn(USER_ID);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
         given(player.getPlayerName()).willReturn(OWNER_NAME);
         given(visibilityFacade.isVisible(USER_ID, planet)).willReturn(true);
         given(visibilityFacade.isVisible(USER_ID, filteredPlanet)).willReturn(false);

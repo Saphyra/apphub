@@ -56,7 +56,7 @@ public class StartGameServiceTest {
     @Test
     public void unreadyMember() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(USER_ID, member));
         given(member.getStatus()).willReturn(LobbyMemberStatus.NOT_READY);
         given(lobby.getHost()).willReturn(USER_ID);
 

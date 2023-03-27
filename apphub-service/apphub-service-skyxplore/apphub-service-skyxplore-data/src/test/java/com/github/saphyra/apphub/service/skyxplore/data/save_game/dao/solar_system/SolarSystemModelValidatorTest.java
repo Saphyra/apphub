@@ -70,7 +70,7 @@ public class SolarSystemModelValidatorTest {
     public void customNamesContainsNull() {
         given(model.getRadius()).willReturn(RADIUS);
         given(model.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(model.getCustomNames()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), null));
+        given(model.getCustomNames()).willReturn(CollectionUtils.toMap(UUID.randomUUID(), null));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
@@ -81,7 +81,7 @@ public class SolarSystemModelValidatorTest {
     public void valid() {
         given(model.getRadius()).willReturn(RADIUS);
         given(model.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(model.getCustomNames()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), "asd"));
+        given(model.getCustomNames()).willReturn(CollectionUtils.toMap(UUID.randomUUID(), "asd"));
 
         underTest.validate(model);
     }

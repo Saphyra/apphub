@@ -2,15 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.se
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
@@ -24,7 +23,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
@@ -40,6 +38,7 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 5;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -66,10 +65,7 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -92,6 +88,12 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Surfaces surfaces;
+
     @Test
     public void priorityTooLow() {
         Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, 0));
@@ -107,30 +109,20 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
     }
 
     @Test
-    public void surfaceNotFound() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getTerraformation()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, PLANET_ID, CONSTRUCTION_ID, PRIORITY));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
-    }
-
-    @Test
     public void updatePriority() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getGameId()).willReturn(GAME_ID);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getTerraformation()).willReturn(construction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(construction.getExternalReference()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
-        given(surfaceToQueueItemConverter.convert(surface)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
+        given(surfaceToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
 

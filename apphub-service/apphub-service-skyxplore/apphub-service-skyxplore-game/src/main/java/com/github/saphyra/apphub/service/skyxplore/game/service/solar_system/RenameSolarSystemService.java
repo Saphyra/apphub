@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
@@ -32,15 +33,19 @@ class RenameSolarSystemService {
             throw ExceptionFactory.invalidParam("newName", "too long");
         }
 
-        GameData gameData = gameDao.findByUserIdValidated(userId)
-            .getData();
+        Game game = gameDao.findByUserIdValidated(userId);
+        GameData gameData = game.getData();
         SolarSystem solarSystem = gameData.getSolarSystems()
             .findByIdValidated(solarSystemId);
 
-        solarSystem.getCustomNames()
-            .put(userId, newName);
+        game.getEventLoop()
+            .processWithWait(() -> {
+                solarSystem.getCustomNames()
+                    .put(userId, newName);
 
-        SolarSystemModel model = solarSystemToModelConverter.convert(gameData.getGameId(), solarSystem);
-        gameDataProxy.saveItem(model);
+                SolarSystemModel model = solarSystemToModelConverter.convert(gameData.getGameId(), solarSystem);
+                gameDataProxy.saveItem(model);
+            })
+            .getOrThrow();
     }
 }

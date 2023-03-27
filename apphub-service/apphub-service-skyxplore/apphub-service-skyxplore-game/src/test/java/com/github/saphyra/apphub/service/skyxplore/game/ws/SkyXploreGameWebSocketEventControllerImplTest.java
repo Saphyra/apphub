@@ -126,7 +126,7 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
         given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player1));
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player1));
         given(game.isGamePaused()).willReturn(true);
 
         given(webSocketMessageFactory.create(USER_ID, WebSocketEventName.SKYXPLORE_GAME_PAUSED, true)).willReturn(gamePausedMessage);

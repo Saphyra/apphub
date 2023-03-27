@@ -104,7 +104,6 @@ public class ConstructionProcess implements Process {
         applicationContextProxy.getBean(UseAllocatedResourceService.class)
             .resolveAllocations(
                 syncCache,
-                gameData.getGameId(),
                 gameData,
                 location,
                 gameData.getPlanets().get(location).getOwner(),

@@ -32,7 +32,7 @@ public class SolarSystemToModelConverterTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final int RADIUS = 235;
     private static final String DEFAULT_NAME = "default-name";
-    private static final OptionalMap<UUID, String> CUSTOM_NAMES = new OptionalHashMap<>(CollectionUtils.singleValueMap(UUID.randomUUID(), "custom-name"));
+    private static final OptionalMap<UUID, String> CUSTOM_NAMES = new OptionalHashMap<>(CollectionUtils.toMap(UUID.randomUUID(), "custom-name"));
 
     @Mock
     private PlanetToModelConverter planetToModelConverter;
@@ -62,7 +62,7 @@ public class SolarSystemToModelConverterTest {
             .defaultName(DEFAULT_NAME)
             .customNames(CUSTOM_NAMES)
             .coordinate(coordinateModel)
-            .planets(CollectionUtils.singleValueMap(UUID.randomUUID(), planet))
+            .planets(CollectionUtils.toMap(UUID.randomUUID(), planet))
             .build();
 
         given(planetToModelConverter.convertDeep(any(), eq(game))).willReturn(Arrays.asList(planetModel));

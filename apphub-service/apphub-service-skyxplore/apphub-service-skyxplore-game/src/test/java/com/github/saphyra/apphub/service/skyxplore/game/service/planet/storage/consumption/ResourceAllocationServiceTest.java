@@ -6,12 +6,12 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
@@ -75,7 +75,7 @@ public class ResourceAllocationServiceTest {
     private ResourceAllocationService underTest;
 
     @Mock
-    private StorageDetails storageDetails;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -106,16 +106,15 @@ public class ResourceAllocationServiceTest {
 
     @BeforeEach
     public void setUp() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(consumptionCalculator.calculate(planet, LocationType.PLANET, EXTERNAL_REFERENCE, DATA_ID, REQUIRED_AMOUNT)).willReturn(consumptionResult);
-        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.BULK, CollectionUtils.singleValueMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
+        given(consumptionCalculator.calculate(gameData, PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, REQUIRED_AMOUNT)).willReturn(consumptionResult);
+        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.BULK, CollectionUtils.toMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
     }
 
     @Test
     public void notEnoughStorage() {
-        given(freeStorageQueryService.getFreeStorage(planet, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
 
-        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(GAME_ID, planet, LocationType.PLANET, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
+        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.toMap(DATA_ID, REQUIRED_AMOUNT)));
 
         ExceptionValidator.validateNotLoggedException(
             ex,
@@ -128,19 +127,20 @@ public class ResourceAllocationServiceTest {
 
     @Test
     public void processResourceRequirements() {
-        given(freeStorageQueryService.getFreeStorage(planet, StorageType.BULK)).willReturn(REQUIRED_STORAGE);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE);
         given(consumptionResult.getAllocation()).willReturn(allocatedResource);
         given(consumptionResult.getReservation()).willReturn(reservedStorage);
-        given(storageDetails.getReservedStorages()).willReturn(reservedStorages);
-        given(storageDetails.getAllocatedResources()).willReturn(allocatedResources);
-        given(allocatedResourceToModelConverter.convert(allocatedResource, GAME_ID)).willReturn(allocatedResourceModel);
-        given(reservedStorageToModelConverter.convert(reservedStorage, GAME_ID)).willReturn(reservedStorageModel);
-        given(planetStorageOverviewQueryService.getStorage(planet)).willReturn(storageResponse);
+
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
+        given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+        given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
+        given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
+        given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(storageResponse);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        underTest.processResourceRequirements(GAME_ID, planet, LocationType.PLANET, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
+        underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.toMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.passive;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -16,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
@@ -98,7 +100,11 @@ public class PassiveMoraleRechargeProcess implements Process {
                     .create(citizen.getCitizenId(), processId);
 
                 gameData.getCitizenAllocations()
-                    .add(citizenAllocation); //TODO save to database
+                    .add(citizenAllocation);
+
+                CitizenAllocationModel citizenAllocationModel = applicationContextProxy.getBean(CitizenAllocationToModelConverter.class)
+                    .convert(gameData.getGameId(), citizenAllocation);
+                syncCache.saveGameItem(citizenAllocationModel);
             }
 
             if (restFuture.isDone()) {
@@ -129,8 +135,13 @@ public class PassiveMoraleRechargeProcess implements Process {
             .getOrThrow();
         citizen.setMorale(citizen.getMorale() + rest.getRestoredMorale());
 
+        CitizenAllocation citizenAllocation = gameData.getCitizenAllocations()
+            .findByCitizenIdValidated(citizen.getCitizenId());
+
         gameData.getCitizenAllocations()
-            .deleteByProcessId(processId);//TODO delete gameItem
+            .remove(citizenAllocation);
+
+        syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
 
         GameItem citizenModel = applicationContextProxy.getBean(CitizenToModelConverter.class)
             .convert(gameData.getGameId(), citizen);

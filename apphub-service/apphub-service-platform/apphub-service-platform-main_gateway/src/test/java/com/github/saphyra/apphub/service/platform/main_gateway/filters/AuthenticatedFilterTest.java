@@ -84,7 +84,7 @@ public class AuthenticatedFilterTest {
         given(request.getURI()).willReturn(URI.create(UrlFactory.create(1000, PATH)));
         given(request.getMethod()).willReturn(HttpMethod.POST);
         given(filterChain.filter(exchange)).willReturn(mono);
-        given(endpointProperties.getWhiteListedEndpoints()).willReturn(CollectionUtils.singleValueMap("asd", new WhiteListedEndpoint(PATTERN, METHOD)));
+        given(endpointProperties.getWhiteListedEndpoints()).willReturn(CollectionUtils.toMap("asd", new WhiteListedEndpoint(PATTERN, METHOD)));
         given(antPathMatcher.match(PATTERN, PATH)).willReturn(true);
 
         Mono<Void> result = underTest.filter(exchange, filterChain);

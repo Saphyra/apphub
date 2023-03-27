@@ -2,15 +2,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.populati
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
@@ -22,7 +20,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -62,10 +59,7 @@ public class RenameCitizenServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Citizen citizen;
@@ -82,49 +76,41 @@ public class RenameCitizenServiceTest {
     @Mock
     private CitizenResponse citizenResponse;
 
+    @Mock
+    private Citizens citizens;
+
     @Captor
     private ArgumentCaptor<Callable<CitizenResponse>> argumentCaptor;
 
     @Test
     public void blankCitizenName() {
-        Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, " "));
+        Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, CITIZEN_ID, " "));
 
         ExceptionValidator.validateInvalidParam(ex, "value", "must not be null or blank");
     }
 
     @Test
     public void citizenNameTooLong() {
-        Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
+        Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, CITIZEN_ID, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
         ExceptionValidator.validateInvalidParam(ex, "value", "too long");
     }
 
     @Test
-    public void citizenNotFound() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getPopulation()).willReturn(new OptionalHashMap<>());
-
-        Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, NEW_NAME));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR);
-    }
-
-    @Test
     public void renameCitizen() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getCitizens()).willReturn(citizens);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getPopulation()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(CITIZEN_ID, citizen)));
-        given(citizenToModelConverter.convert(citizen, GAME_ID)).willReturn(citizenModel);
         given(game.getGameId()).willReturn(GAME_ID);
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(citizenResponse);
-        given(citizenToResponseConverter.convert(citizen)).willReturn(citizenResponse);
+        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
+        given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
 
-        CitizenResponse result = underTest.renameCitizen(USER_ID, PLANET_ID, CITIZEN_ID, NEW_NAME);
+        CitizenResponse result = underTest.renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME);
 
         verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture());
         CitizenResponse mapperResult = argumentCaptor.getValue().call();

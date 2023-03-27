@@ -25,13 +25,13 @@ public class UseAllocatedResourceService {
     private final WsMessageSender messageSender;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
 
-    public void resolveAllocations(SyncCache syncCache, UUID gameId, GameData gameData, UUID location, UUID ownerId, UUID externalReference) {
+    public void resolveAllocations(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference) {
         gameData.getReservedStorages()
             .getByExternalReference(externalReference)
-            .forEach(rs -> resolveAllocation(syncCache, gameId, gameData, location, ownerId, externalReference, rs));
+            .forEach(rs -> resolveAllocation(syncCache,  gameData, location, ownerId, externalReference, rs));
     }
 
-    private void resolveAllocation(SyncCache syncCache, UUID gameId, GameData gameData, UUID location, UUID ownerId, UUID externalReference, ReservedStorage reservedStorage) {
+    private void resolveAllocation(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference, ReservedStorage reservedStorage) {
         log.info("Resolving allocation for {}", reservedStorage);
 
         AllocatedResource allocatedResource = gameData.getAllocatedResources()
@@ -43,8 +43,8 @@ public class UseAllocatedResourceService {
         log.info("{} left.", storedResource);
         allocatedResource.setAmount(0);
 
-        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(gameId, allocatedResource));
-        syncCache.saveGameItem(storedResourceToModelConverter.convert(gameId, storedResource));
+        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(gameData.getGameId(), allocatedResource));
+        syncCache.saveGameItem(storedResourceToModelConverter.convert(gameData.getGameId(), storedResource));
 
         syncCache.addMessage(
             ownerId,

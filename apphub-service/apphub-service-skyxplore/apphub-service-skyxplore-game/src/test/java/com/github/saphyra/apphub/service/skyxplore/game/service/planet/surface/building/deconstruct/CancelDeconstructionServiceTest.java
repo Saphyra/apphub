@@ -177,7 +177,7 @@ class CancelDeconstructionServiceTest {
 
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
         verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
     }
 
     @Test
@@ -225,6 +225,6 @@ class CancelDeconstructionServiceTest {
             .run();
 
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

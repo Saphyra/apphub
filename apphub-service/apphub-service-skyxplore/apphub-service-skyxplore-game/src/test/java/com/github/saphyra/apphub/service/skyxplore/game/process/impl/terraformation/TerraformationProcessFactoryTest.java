@@ -4,13 +4,13 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +27,7 @@ public class TerraformationProcessFactoryTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -42,7 +43,7 @@ public class TerraformationProcessFactoryTest {
     private Game game;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -51,14 +52,17 @@ public class TerraformationProcessFactoryTest {
     private Construction terraformation;
 
     @Mock
-    private Universe universe;
+    private Constructions constructions;
+
+    @Mock
+    private Surfaces surfaces;
 
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
-        given(surface.getTerraformation()).willReturn(terraformation);
 
-        TerraformationProcess result = underTest.create(game, planet, surface);
+
+        TerraformationProcess result = underTest.create(gameData, PLANET_ID, surface, terraformation);
 
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
     }
@@ -76,11 +80,12 @@ public class TerraformationProcessFactoryTest {
         model.setLocation(PLANET_ID);
         model.setExternalReference(CONSTRUCTION_ID);
 
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getTerraformation()).willReturn(terraformation);
-        given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID));
+        given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
 
         TerraformationProcess result = underTest.createFromModel(game, model);
 

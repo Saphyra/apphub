@@ -4,15 +4,15 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -57,13 +57,10 @@ public class SatietyDecreaseServiceTest {
     private Game game;
 
     @Mock
+    private GameData gameData;
+
+    @Mock
     private SyncCache syncCache;
-
-    @Mock
-    private Universe universe;
-
-    @Mock
-    private SolarSystem solarSystem;
 
     @Mock
     private Planet planet;
@@ -85,22 +82,19 @@ public class SatietyDecreaseServiceTest {
 
     @Test
     public void processGame() {
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, solarSystem));
-        given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet));
+        given(gameData.getCitizens()).willReturn(CollectionUtils.toList(new Citizens(), citizen));
         given(game.getGameId()).willReturn(GAME_ID);
-        given(planet.getPopulation()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, citizen));
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getSatiety()).willReturn(satietyProperties);
         given(satietyProperties.getSatietyDecreasedPerSecond()).willReturn(SATIETY_DECREASED_PER_SECONDS);
         given(citizen.getSatiety()).willReturn(CURRENT_SATIETY);
-        given(citizenToModelConverter.convert(citizen, GAME_ID)).willReturn(citizenModel);
+        given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(citizenToResponseConverter.convert(citizen)).willReturn(citizenResponse);
+        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
 
-        underTest.processGame(game, syncCache);
+        underTest.processGame(gameData, syncCache);
 
         verify(citizen).setSatiety(CURRENT_SATIETY - SATIETY_DECREASED_PER_SECONDS);
         verify(syncCache).saveGameItem(citizenModel);

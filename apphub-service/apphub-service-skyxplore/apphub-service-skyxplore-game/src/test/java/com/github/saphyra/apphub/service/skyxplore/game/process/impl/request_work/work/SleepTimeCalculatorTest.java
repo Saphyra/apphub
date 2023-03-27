@@ -46,7 +46,7 @@ public class SleepTimeCalculatorTest {
     public void calculateSleepTime() {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getWorkPointsPerSeconds()).willReturn(WORK_POINTS_PER_SECONDS);
-        given(planet.getPopulation()).willReturn(CollectionUtils.singleValueMap(CITIZEN_ID, citizen));
+        given(planet.getPopulation()).willReturn(CollectionUtils.toMap(CITIZEN_ID, citizen));
         given(citizenEfficiencyCalculator.calculateEfficiency(citizen, SkillType.AIMING)).willReturn(2d);
 
         long result = underTest.calculateSleepTime(planet, CITIZEN_ID, SkillType.AIMING, WORK_POINTS);

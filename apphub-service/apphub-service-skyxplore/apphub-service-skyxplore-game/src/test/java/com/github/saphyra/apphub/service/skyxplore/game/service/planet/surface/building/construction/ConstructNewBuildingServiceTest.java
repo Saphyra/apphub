@@ -190,7 +190,7 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getTerraformation()).willReturn(construction);
 
@@ -205,7 +205,7 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getBuilding()).willReturn(building);
 
@@ -220,7 +220,7 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(Collections.emptyList());
@@ -236,11 +236,11 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getUniverse()).willReturn(universe);
         given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(List.of(SurfaceType.CONCRETE));
-        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(1, constructionRequirements));
+        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(1, constructionRequirements));
         given(buildingFactory.create(DATA_ID, SURFACE_ID, 0)).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
@@ -254,7 +254,7 @@ public class ConstructNewBuildingServiceTest {
         given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
         given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
@@ -277,7 +277,7 @@ public class ConstructNewBuildingServiceTest {
         verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(constructionProcess);
     }
 }

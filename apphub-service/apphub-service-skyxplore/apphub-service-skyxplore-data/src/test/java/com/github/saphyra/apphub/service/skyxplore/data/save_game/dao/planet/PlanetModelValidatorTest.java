@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 public class PlanetModelValidatorTest {
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final String DEFAULT_NAME = "default-name";
-    private static final Map<UUID, String> CUSTOM_NAMES = CollectionUtils.singleValueMap(UUID.randomUUID(), "custom-name");
+    private static final Map<UUID, String> CUSTOM_NAMES = CollectionUtils.toMap(UUID.randomUUID(), "custom-name");
     private static final Integer SIZE = 345;
 
     @Mock
@@ -73,7 +73,7 @@ public class PlanetModelValidatorTest {
     public void customNamesContainsNull() {
         given(model.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(model.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(model.getCustomNames()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), null));
+        given(model.getCustomNames()).willReturn(CollectionUtils.toMap(UUID.randomUUID(), null));
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 

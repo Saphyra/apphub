@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,9 +37,6 @@ public class GameToGameItemListConverterTest {
     @Mock
     private PlayerToModelConverter playerConverter;
 
-    @Mock
-    private UniverseToModelConverter universeConverter;
-
     @InjectMocks
     private GameToGameItemListConverter underTest;
 
@@ -57,10 +53,7 @@ public class GameToGameItemListConverterTest {
     private AllianceModel allianceModel;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private UniverseModel universeModel;
+    private GameData gameData;
 
     @Test
     public void convertDeep() {
@@ -68,15 +61,14 @@ public class GameToGameItemListConverterTest {
             .gameId(GAME_ID)
             .host(HOST)
             .gameName(GAME_NAME)
-            .players(CollectionUtils.singleValueMap(UUID.randomUUID(), player))
-            .alliances(CollectionUtils.singleValueMap(UUID.randomUUID(), alliance))
-            .universe(universe)
+            .players(CollectionUtils.toMap(UUID.randomUUID(), player))
+            .alliances(CollectionUtils.toMap(UUID.randomUUID(), alliance))
+            .data(gameData)
             .lastPlayed(LAST_PLAYED)
             .markedForDeletion(true)
             .markedForDeletionAt(MARKED_FOR_DELETION_AT)
             .build();
 
-        given(universeConverter.convertDeep(universe, game)).willReturn(Arrays.asList(universeModel));
         given(allianceConverter.convert(alliance, game)).willReturn(allianceModel);
         given(playerConverter.convert(player, game)).willReturn(playerModel);
 
@@ -92,6 +84,6 @@ public class GameToGameItemListConverterTest {
         expected.setMarkedForDeletion(true);
         expected.setMarkedForDeletionAt(MARKED_FOR_DELETION_AT);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel, universeModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel);
     }
 }

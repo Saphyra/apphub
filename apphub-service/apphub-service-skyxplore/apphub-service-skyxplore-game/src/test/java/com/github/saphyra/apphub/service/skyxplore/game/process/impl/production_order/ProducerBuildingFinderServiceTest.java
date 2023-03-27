@@ -53,13 +53,13 @@ public class ProducerBuildingFinderServiceTest {
 
     @Test
     public void findProducerBuildingDataId() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
+        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
         given(surface.getSurfaceType()).willReturn(SurfaceType.LAKE);
         given(surface.getBuilding()).willReturn(building);
         given(building.getDataId()).willReturn(BUILDING_DATA_ID);
         given(productionBuildingService.containsKey(BUILDING_DATA_ID)).willReturn(true);
         given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuilding);
-        given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, productionData));
+        given(productionBuilding.getGives()).willReturn(CollectionUtils.toMap(RESOURCE_DATA_ID, productionData));
         given(productionData.getPlaced()).willReturn(List.of(SurfaceType.LAKE));
         given(buildingCapacityCalculator.calculateCapacity(planet)).willReturn(12);
 

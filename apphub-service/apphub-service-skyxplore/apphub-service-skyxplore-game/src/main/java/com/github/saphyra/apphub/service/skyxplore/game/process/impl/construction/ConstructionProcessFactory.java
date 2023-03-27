@@ -42,15 +42,13 @@ public class ConstructionProcessFactory implements ProcessFactory {
 
     @Override
     public ConstructionProcess createFromModel(Game game, ProcessModel model) {
+        Construction construction = game.getData()
+            .getConstructions()
+            .findByIdValidated(model.getExternalReference());
 
         Building building = game.getData()
             .getBuildings()
-            .findByBuildingId(model.getExternalReference());
-
-        Construction construction = game.getData()
-            .getConstructions()
-            .findByExternalReference(building.getBuildingId())
-            .orElseThrow();
+            .findByBuildingId(construction.getExternalReference());
 
         return ConstructionProcess.builder()
             .processId(model.getId())

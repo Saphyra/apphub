@@ -91,7 +91,7 @@ class DeconstructionUpdateServiceTest {
 
     @Test
     void updateDeconstruction() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
+        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
         given(surface.getBuilding()).willReturn(building);
         given(building.getDeconstruction()).willReturn(deconstruction);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);

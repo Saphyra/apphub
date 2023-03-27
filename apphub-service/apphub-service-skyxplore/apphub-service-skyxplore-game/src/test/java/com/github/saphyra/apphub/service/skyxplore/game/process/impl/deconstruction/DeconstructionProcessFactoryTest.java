@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,19 +39,16 @@ class DeconstructionProcessFactoryTest {
     private Game game;
 
     @Mock
+    private GameData gameData;
+
+    @Mock
     private ProcessModel model;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
-
-    @Mock
-    private Building building;
-
-    @Mock
     private Deconstruction deconstruction;
+
+    @Mock
+    private Deconstructions deconstructions;
 
     @Test
     void getType() {
@@ -65,10 +62,9 @@ class DeconstructionProcessFactoryTest {
         given(model.getLocation()).willReturn(PLANET_ID);
         given(model.getExternalReference()).willReturn(DECONSTRUCTION_ID);
 
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.findBuildingByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(building);
-        given(building.getDeconstruction()).willReturn(deconstruction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
 
         DeconstructionProcess result = underTest.createFromModel(game, model);
 
@@ -80,7 +76,7 @@ class DeconstructionProcessFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
 
-        DeconstructionProcess result = underTest.create(game, planet, deconstruction);
+        DeconstructionProcess result = underTest.create(gameData, PLANET_ID, deconstruction);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);

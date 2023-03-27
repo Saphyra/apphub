@@ -19,7 +19,8 @@ class ConsumptionCalculator {
     private final ReservedStorageFactory reservedStorageFactory;
 
     ConsumptionResult calculate(GameData gameData, UUID location, UUID externalReference, String dataId, Integer amount) {
-        int storedAmount = gameData.getStoredResources().findByLocationAndDataId(location, dataId)
+        int storedAmount = gameData.getStoredResources()
+            .findByLocationAndDataId(location, dataId)
             .map(StoredResource::getAmount)
             .orElse(0);
 
