@@ -7,7 +7,10 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -42,12 +45,13 @@ public class TerraformationProcessTest {
     private static final int BASE_PRIORITY = 10;
     private static final Integer CONSTRUCTION_PRIORITY = 20;
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     private TerraformationProcess underTest;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -88,6 +92,12 @@ public class TerraformationProcessTest {
     @Mock
     private FinishTerraformationService finishTerraformationService;
 
+    @Mock
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
+
     @BeforeEach
     public void setUp() {
         setUp(ProcessStatus.CREATED);
@@ -97,8 +107,8 @@ public class TerraformationProcessTest {
         underTest = TerraformationProcess.builder()
             .processId(PROCESS_ID)
             .status(status)
-            .gameData(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(LOCATION)
             .surface(surface)
             .terraformation(terraformation)
             .applicationContextProxy(applicationContextProxy)
@@ -116,7 +126,9 @@ public class TerraformationProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, BASE_PRIORITY));
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
+        given(priority.getValue()).willReturn(BASE_PRIORITY);
         given(terraformation.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         int result = underTest.getPriority();
@@ -132,11 +144,11 @@ public class TerraformationProcessTest {
     @Test
     public void work_createdStatus() {
         given(applicationContextProxy.getBean(ProductionOrderProcessFactoryForConstruction.class)).willReturn(productionOrderProcessFactoryForConstruction);
-        given(productionOrderProcessFactoryForConstruction.createProductionOrderProcesses(PROCESS_ID, game, planet, terraformation)).willReturn(List.of(productionOrderProcess));
+        given(productionOrderProcessFactoryForConstruction.createProductionOrderProcesses(PROCESS_ID, gameData, LOCATION, terraformation)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.toModel()).willReturn(processModel);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
 
         underTest.work(syncCache);
 
@@ -154,16 +166,18 @@ public class TerraformationProcessTest {
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(Collections.emptyList());
         given(applicationContextProxy.getBean(UseAllocatedResourceService.class)).willReturn(useAllocatedResourceService);
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)).willReturn(requestWorkProcessFactoryForTerraformation);
-        given(requestWorkProcessFactoryForTerraformation.createRequestWorkProcesses(PROCESS_ID, game, planet, surface)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactoryForTerraformation.createRequestWorkProcesses(gameData, LOCATION, PROCESS_ID, surface)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
 
         underTest.work(syncCache);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, GAME_ID, planet, CONSTRUCTION_ID);
+        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, USER_ID, CONSTRUCTION_ID);
+        //noinspection RedundantCollectionOperation
         verify(processes).addAll(List.of(requestWorkProcess));
         verify(syncCache).saveGameItem(processModel);
         verify(applicationContextProxy, times(0)).getBean(FinishTerraformationService.class);
@@ -174,7 +188,7 @@ public class TerraformationProcessTest {
     @Test
     public void work_waitingForRequestWorkProcesses() {
         setUp(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
@@ -190,7 +204,7 @@ public class TerraformationProcessTest {
     @Test
     public void work_finishConstruction() {
         setUp(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
@@ -199,7 +213,7 @@ public class TerraformationProcessTest {
 
         underTest.work(syncCache);
 
-        verify(finishTerraformationService).finishTerraformation(syncCache, game, planet, surface);
+        verify(finishTerraformationService).finishTerraformation(syncCache, gameData, LOCATION, terraformation);
         verify(productionOrderProcess).cleanup(syncCache);
         verify(requestWorkProcess).cleanup(syncCache);
 
@@ -208,7 +222,7 @@ public class TerraformationProcessTest {
 
     @Test
     public void cancel() {
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         underTest.cancel(syncCache);
@@ -226,8 +240,8 @@ public class TerraformationProcessTest {
 
     @Test
     public void toModel() {
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(planet.getPlanetId()).willReturn(LOCATION);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();
@@ -237,8 +251,7 @@ public class TerraformationProcessTest {
         assertThat(result.getType()).isEqualTo(GameItemType.PROCESS);
         assertThat(result.getProcessType()).isEqualTo(ProcessType.TERRAFORMATION);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
-        assertThat(result.getLocation()).isEqualTo(PLANET_ID);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET.name());
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(CONSTRUCTION_ID);
     }
 }

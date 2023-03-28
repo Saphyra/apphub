@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
@@ -33,6 +33,7 @@ public class RequestWorkProcessFactoryForTerraformationTest {
     private static final Integer REQUIRED_WORK_POINTS = 3124;
     private static final Integer PARALLEL_WORKERS = 234;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -44,10 +45,7 @@ public class RequestWorkProcessFactoryForTerraformationTest {
     private RequestWorkProcessFactoryForTerraformation underTest;
 
     @Mock
-    private Game game;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -64,9 +62,14 @@ public class RequestWorkProcessFactoryForTerraformationTest {
     @Mock
     private RequestWorkProcess requestWorkProcess;
 
+    @Mock
+    private Constructions constructions;
+
     @Test
     public void createRequestWorkProcess() {
-        given(surface.getTerraformation()).willReturn(terraformation);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReferenceValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+
         given(terraformation.getData()).willReturn(SurfaceType.DESERT.name());
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
@@ -77,10 +80,10 @@ public class RequestWorkProcessFactoryForTerraformationTest {
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
 
-        given(requestWorkProcessFactory.create(game, PROCESS_ID, planet, CONSTRUCTION_ID, RequestWorkProcessType.TERRAFORMATION, SkillType.BUILDING, REQUIRED_WORK_POINTS, PARALLEL_WORKERS))
+        given(requestWorkProcessFactory.create(gameData, PROCESS_ID, LOCATION, CONSTRUCTION_ID, RequestWorkProcessType.TERRAFORMATION, SkillType.BUILDING, REQUIRED_WORK_POINTS, PARALLEL_WORKERS))
             .willReturn(List.of(requestWorkProcess));
 
-        List<RequestWorkProcess> result = underTest.createRequestWorkProcesses(PROCESS_ID, game, planet, surface);
+        List<RequestWorkProcess> result = underTest.createRequestWorkProcesses(gameData, LOCATION, PROCESS_ID, surface);
 
         assertThat(result).containsExactly(requestWorkProcess);
     }

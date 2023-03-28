@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,7 @@ public class BuildingConstructionToQueueItemConverterTest {
     private static final Integer PRIORITY = 3245;
     private static final String DATA_ID = "data-id";
     private static final Integer LEVEL = 46;
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @InjectMocks
     private BuildingConstructionToQueueItemConverter underTest;
@@ -33,16 +36,18 @@ public class BuildingConstructionToQueueItemConverterTest {
     @Mock
     private Construction construction;
 
-    @Test
-    public void convertNull() {
-        given(building.getConstruction()).willReturn(null);
+    @Mock
+    private GameData gameData;
 
-        assertThat(underTest.convert(building)).isNull();
-    }
+    @Mock
+    private Buildings buildings;
 
     @Test
     public void convert() {
-        given(building.getConstruction()).willReturn(construction);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
+        given(construction.getExternalReference()).willReturn(BUILDING_ID);
+
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
@@ -50,7 +55,7 @@ public class BuildingConstructionToQueueItemConverterTest {
         given(building.getDataId()).willReturn(DATA_ID);
         given(building.getLevel()).willReturn(LEVEL);
 
-        QueueItem result = underTest.convert(building);
+        QueueItem result = underTest.convert(gameData, construction);
 
         assertThat(result.getItemId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getType()).isEqualTo(QueueItemType.CONSTRUCTION);

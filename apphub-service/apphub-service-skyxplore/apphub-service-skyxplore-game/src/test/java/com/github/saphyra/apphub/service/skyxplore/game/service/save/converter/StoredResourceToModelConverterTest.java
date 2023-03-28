@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,18 +29,16 @@ public class StoredResourceToModelConverterTest {
         StoredResource storedResource = StoredResource.builder()
             .storedResourceId(STORED_RESOURCE_ID)
             .location(LOCATION)
-            .locationType(LocationType.PLANET)
             .dataId(DATA_ID)
             .amount(AMOUNT)
             .build();
 
-        List<StoredResourceModel> result = underTest.convert(CollectionUtils.toMap("", storedResource), GAME_ID);
+        List<StoredResourceModel> result = underTest.convert(GAME_ID, List.of(storedResource));
 
         assertThat(result.get(0).getId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
         assertThat(result.get(0).getType()).isEqualTo(GameItemType.STORED_RESOURCE);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
-        assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
     }

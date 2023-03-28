@@ -31,11 +31,10 @@ public class ReservedStorageFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(RESERVED_STORAGE_ID);
 
-        ReservedStorage result = underTest.create(LOCATION, LocationType.PLANET, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        ReservedStorage result = underTest.create(LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result.getReservedStorageId()).isEqualTo(RESERVED_STORAGE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

@@ -39,19 +39,17 @@ public class AllocatedResourceToModelConverterTest {
         AllocatedResource allocatedResource = AllocatedResource.builder()
             .allocatedResourceId(ALLOCATED_RESOURCE_ID)
             .location(LOCATION)
-            .locationType(LocationType.PLANET)
             .externalReference(EXTERNAL_REFERENCE)
             .dataId(DATA_ID)
             .amount(AMOUNT)
             .build();
 
-        List<AllocatedResourceModel> result = underTest.convert(Arrays.asList(allocatedResource), game);
+        List<AllocatedResourceModel> result = underTest.convert(GAME_ID, Arrays.asList(allocatedResource));
 
         assertThat(result.get(0).getId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
         assertThat(result.get(0).getType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
-        assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);

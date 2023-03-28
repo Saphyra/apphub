@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,16 +26,23 @@ public class QueueItemToResponseConverterTest {
     private static final Integer CURRENT_WORK_POINTS = 467;
     private static final Integer PRIORITY = 578;
     private static final Integer GLOBAL_PRIORITY = 36;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private QueueItemToResponseConverter underTest;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
+
+    @Mock
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
 
     @Test
     public void convertNull() {
-        assertThat(underTest.convert(null, planet)).isNull();
+        assertThat(underTest.convert(null, gameData, LOCATION)).isNull();
     }
 
     @Test
@@ -49,9 +58,11 @@ public class QueueItemToResponseConverterTest {
             .data(data)
             .build();
 
-        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, GLOBAL_PRIORITY));
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
+        given(priority.getValue()).willReturn(GLOBAL_PRIORITY);
 
-        QueueResponse result = underTest.convert(queueItem, planet);
+        QueueResponse result = underTest.convert(queueItem, gameData, LOCATION);
 
         assertThat(result.getItemId()).isEqualTo(ITEM_ID);
         assertThat(result.getType()).isEqualTo(QueueItemType.CONSTRUCTION.name());

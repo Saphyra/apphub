@@ -30,11 +30,10 @@ public class StoredResourceFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(STORED_RESOURCE_ID);
 
-        StoredResource result = underTest.create(LOCATION, LocationType.PRODUCTION, DATA_ID, AMOUNT);
+        StoredResource result = underTest.create(LOCATION, DATA_ID, AMOUNT);
 
         assertThat(result.getStoredResourceId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PRODUCTION);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
     }

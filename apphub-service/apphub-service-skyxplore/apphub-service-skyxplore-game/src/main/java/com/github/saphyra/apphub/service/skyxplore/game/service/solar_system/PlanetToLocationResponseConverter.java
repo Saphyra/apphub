@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class PlanetToLocationResponseConverter {
     private final VisibilityFacade visibilityFacade;
 

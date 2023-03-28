@@ -27,7 +27,8 @@ class RequestWorkProcessFactoryForTerraformation {
 
     List<RequestWorkProcess> createRequestWorkProcesses(GameData gameData, UUID location, UUID processId, Surface surface) {
         log.info("Creating RequestWorkProcesses...");
-        Construction terraformation = gameData.getConstructions().findByExternalReferenceValidated(surface.getSurfaceId());
+        Construction terraformation = gameData.getConstructions()
+            .findByExternalReferenceValidated(surface.getSurfaceId());
         SurfaceType targetSurfaceType = SurfaceType.valueOf(terraformation.getData());
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())

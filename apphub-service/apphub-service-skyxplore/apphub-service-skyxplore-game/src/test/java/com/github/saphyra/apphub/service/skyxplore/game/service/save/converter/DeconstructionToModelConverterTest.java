@@ -32,7 +32,7 @@ class DeconstructionToModelConverterTest {
             .priority(PRIORITY)
             .build();
 
-        DeconstructionModel result = underTest.convert(deconstruction, GAME_ID);
+        DeconstructionModel result = underTest.convert(GAME_ID, deconstruction);
 
         assertThat(result.getId()).isEqualTo(DECONSTRUCTION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);

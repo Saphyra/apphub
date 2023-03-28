@@ -48,7 +48,15 @@ public class ChatRoomMemberFilterTest {
         given(player2.isConnected()).willReturn(false);
         given(player1.getUserId()).willReturn(PLAYER_ID_1);
 
-        List<UUID> result = underTest.getMembers(SENDER, GameConstants.CHAT_ROOM_GENERAL, Arrays.asList(chatRoom), CollectionUtils.toMap(new BiWrapper<>(PLAYER_ID_1, player1), new BiWrapper<>(PLAYER_ID_2, player2)));
+        List<UUID> result = underTest.getMembers(
+            SENDER,
+            GameConstants.CHAT_ROOM_GENERAL,
+            Arrays.asList(chatRoom),
+            Map.of(
+                PLAYER_ID_1, player1,
+                PLAYER_ID_2, player2
+            )
+        );
 
         assertThat(result).containsExactly(PLAYER_ID_1);
     }

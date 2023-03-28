@@ -7,9 +7,11 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildi
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
@@ -61,7 +63,7 @@ public class FinishTerraformationServiceTest {
     private SyncCache syncCache;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -81,24 +83,32 @@ public class FinishTerraformationServiceTest {
     @Mock
     private SurfaceModel surfaceModel;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Construction construction;
+
     @Test
     public void finishTerraformation() {
-        given(surface.getTerraformation()).willReturn(terraformation);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(terraformation.getData()).willReturn(SurfaceType.DESERT.name());
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
-        given(surfaceToModelConverter.convert(surface, GAME_ID)).willReturn(surfaceModel);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(surfaceToModelConverter.convert(GAME_ID, surface)).willReturn(surfaceModel);
 
-        underTest.finishTerraformation(syncCache, game, planet, surface);
+        underTest.finishTerraformation(syncCache, gameData, PLANET_ID, construction);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, CONSTRUCTION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(surface).setSurfaceType(SurfaceType.DESERT);
-        verify(surface).setTerraformation(null);
+        verify(constructions).deleteById(CONSTRUCTION_ID);
         verify(syncCache).deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(syncCache).saveGameItem(surfaceModel);
 

@@ -4,15 +4,17 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SkillToModelConverter;
@@ -87,10 +89,21 @@ public class CitizenUpdateServiceTest {
     @Mock
     private CitizenResponse citizenResponse;
 
+    @Mock
+    private GameData gameData;
+
+    @Mock
+    private Citizens citizens;
+
+    @Mock
+    private Skills skills;
+
     @Test
-    public void updateCitizen() {
-        given(planet.getPopulation()).willReturn(CollectionUtils.toMap(CITIZEN_ID, citizen));
-        given(citizen.getSkills()).willReturn(CollectionUtils.toMap(SkillType.AIMING, skill));
+    void updateCitizen() {
+        given(gameData.getCitizens()).willReturn(citizens);
+        given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
+        given(gameData.getSkills()).willReturn(skills);
+        given(skills.findByCitizenIdAndSkillType(CITIZEN_ID, SkillType.AIMING)).willReturn(skill);
         given(skill.getExperience()).willReturn(EXPERIENCE);
         given(skill.getNextLevel()).willReturn(NEXT_LEVEL);
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
@@ -98,15 +111,15 @@ public class CitizenUpdateServiceTest {
         given(skillProperties.getExperiencePerLevel()).willReturn(EXPERIENCE_PER_LEVEL);
         given(skill.getLevel()).willReturn(SKILL_LEVEL);
 
-        given(skillToModelConverter.convert(skill, GAME_ID)).willReturn(skillModel);
-        given(citizenToModelConverter.convert(citizen, GAME_ID)).willReturn(citizenModel);
-        given(citizenToResponseConverter.convert(citizen)).willReturn(citizenResponse);
+        given(skillToModelConverter.convert(GAME_ID, skill)).willReturn(skillModel);
+        given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
+        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        underTest.updateCitizen(syncCache, GAME_ID, planet, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
+        underTest.updateCitizen(syncCache, gameData, PLANET_ID, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
 
         verify(citizen).reduceMorale(WORK_POINTS);
         verify(skill).increaseExperience(WORK_POINTS);

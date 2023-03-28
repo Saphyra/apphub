@@ -25,6 +25,7 @@ public class PriorityToModelConverter {
 
     public PriorityModel convert(UUID gameId, Priority priority) {
         PriorityModel model = new PriorityModel();
+        model.setId(priority.getPriorityId());
         model.setGameId(gameId);
         model.setType(GameItemType.PRIORITY);
         model.setLocation(priority.getLocation());

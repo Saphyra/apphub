@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building;
 
+import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,9 @@ class AdjacentRandomEmptySurfaceProvider {
 
     Surface getRandomEmptySurfaceNextTo(List<Surface> surfacesWithMatchingType, Collection<Surface> surfaces, GameData gameData) {
         for (Surface surface : surfacesWithMatchingType) {
-            Optional<Surface> emptySurface = adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()), surfaces, gameData);
+            Coordinate coordinate = gameData.getCoordinates()
+                .findByReferenceId(surface.getSurfaceId());
+            Optional<Surface> emptySurface = adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, surfaces, gameData);
             if (emptySurface.isPresent()) {
                 return emptySurface.get();
             }

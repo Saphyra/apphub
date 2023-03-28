@@ -3,9 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,10 +47,14 @@ public class BuildingToResponseConverterTest {
     @Mock
     private DeconstructionResponse deconstructionResponse;
 
-    @Test
-    public void convertNull() {
-        assertThat(underTest.convert(null)).isNull();
-    }
+    @Mock
+    private GameData gameData;
+
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Deconstructions deconstructions;
 
     @Test
     public void convert() {
@@ -55,13 +62,16 @@ public class BuildingToResponseConverterTest {
             .buildingId(BUILDING_ID)
             .dataId(DATA_ID)
             .level(LEVEL)
-            .construction(construction)
-            .deconstruction(deconstruction)
             .build();
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(construction);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(deconstruction);
+
         given(constructionToResponseConverter.convert(construction)).willReturn(constructionResponse);
         given(deconstructionToResponseConverter.convert(deconstruction)).willReturn(deconstructionResponse);
 
-        SurfaceBuildingResponse result = underTest.convert(building);
+        SurfaceBuildingResponse result = underTest.convert(gameData, building);
 
         assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);

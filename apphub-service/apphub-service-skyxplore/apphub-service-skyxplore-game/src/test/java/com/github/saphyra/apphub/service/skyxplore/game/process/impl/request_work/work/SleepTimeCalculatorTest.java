@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.work;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.CitizenEfficiencyCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,22 +34,26 @@ public class SleepTimeCalculatorTest {
     private SleepTimeCalculator underTest;
 
     @Mock
-    private Planet planet;
-
-    @Mock
     private CitizenProperties citizenProperties;
 
     @Mock
     private Citizen citizen;
 
+    @Mock
+    private GameData gameData;
+
+    @Mock
+    private Citizens citizens;
+
     @Test
     public void calculateSleepTime() {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getWorkPointsPerSeconds()).willReturn(WORK_POINTS_PER_SECONDS);
-        given(planet.getPopulation()).willReturn(CollectionUtils.toMap(CITIZEN_ID, citizen));
-        given(citizenEfficiencyCalculator.calculateEfficiency(citizen, SkillType.AIMING)).willReturn(2d);
+        given(gameData.getCitizens()).willReturn(citizens);
+        given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
+        given(citizenEfficiencyCalculator.calculateEfficiency(gameData, citizen, SkillType.AIMING)).willReturn(2d);
 
-        long result = underTest.calculateSleepTime(planet, CITIZEN_ID, SkillType.AIMING, WORK_POINTS);
+        long result = underTest.calculateSleepTime(gameData, CITIZEN_ID, SkillType.AIMING, WORK_POINTS);
 
         assertThat(result).isEqualTo(2500);
     }

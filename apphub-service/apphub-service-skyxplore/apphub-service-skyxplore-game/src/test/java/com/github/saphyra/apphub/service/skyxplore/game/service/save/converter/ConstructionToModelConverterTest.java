@@ -38,7 +38,7 @@ public class ConstructionToModelConverterTest {
             .data(DATA)
             .build();
 
-        ConstructionModel result = underTest.convert(construction, GAME_ID);
+        ConstructionModel result = underTest.convert(GAME_ID, construction);
 
         assertThat(result.getId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);

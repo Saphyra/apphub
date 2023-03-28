@@ -31,11 +31,10 @@ public class AllocatedResourceFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(ALLOCATED_RESOURCE_ID);
 
-        AllocatedResource result = underTest.create(LOCATION, LocationType.BUILDING, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        AllocatedResource result = underTest.create(LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result.getAllocatedResourceId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.BUILDING);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

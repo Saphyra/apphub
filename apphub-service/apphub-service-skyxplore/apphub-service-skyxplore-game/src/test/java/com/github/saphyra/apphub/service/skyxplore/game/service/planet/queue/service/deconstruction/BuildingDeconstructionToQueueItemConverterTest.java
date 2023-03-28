@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.se
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,7 @@ class BuildingDeconstructionToQueueItemConverterTest {
     private static final Integer PRIORITY = 43;
     private static final int CURRENT_WORK_POINTS = 2;
     private static final String DATA_ID = "data-id";
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private GameProperties gameProperties;
@@ -40,16 +43,17 @@ class BuildingDeconstructionToQueueItemConverterTest {
     @Mock
     private DeconstructionProperties deconstructionProperties;
 
-    @Test
-    void convert_null() {
-        QueueItem result = underTest.convert(building);
+    @Mock
+    private Buildings buildings;
 
-        assertThat(result).isNull();
-    }
+    @Mock
+    private GameData gameData;
 
     @Test
     void convert() {
-        given(building.getDeconstruction()).willReturn(deconstruction);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
         given(building.getDataId()).willReturn(DATA_ID);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
@@ -57,7 +61,7 @@ class BuildingDeconstructionToQueueItemConverterTest {
         given(deconstruction.getPriority()).willReturn(PRIORITY);
         given(deconstruction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
 
-        QueueItem result = underTest.convert(building);
+        QueueItem result = underTest.convert(gameData, deconstruction);
 
         assertThat(result.getItemId()).isEqualTo(DECONSTRUCTION_ID);
         assertThat(result.getType()).isEqualTo(QueueItemType.DECONSTRUCTION);

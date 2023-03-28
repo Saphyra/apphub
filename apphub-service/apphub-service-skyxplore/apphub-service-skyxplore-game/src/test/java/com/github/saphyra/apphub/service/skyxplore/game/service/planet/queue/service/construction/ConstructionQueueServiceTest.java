@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class ConstructionQueueServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID ITEM_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 2354;
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ConstructionQueueItemQueryService constructionQueueItemQueryService;
@@ -40,13 +40,13 @@ public class ConstructionQueueServiceTest {
     private QueueItem queueItem;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Test
     public void getQueue() {
-        given(constructionQueueItemQueryService.getQueue(planet)).willReturn(List.of(queueItem));
+        given(constructionQueueItemQueryService.getQueue(gameData, LOCATION)).willReturn(List.of(queueItem));
 
-        List<QueueItem> result = underTest.getQueue(planet);
+        List<QueueItem> result = underTest.getQueue(gameData, LOCATION);
 
         assertThat(result).containsExactly(queueItem);
     }
@@ -58,15 +58,15 @@ public class ConstructionQueueServiceTest {
 
     @Test
     public void setPriority() {
-        underTest.setPriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
+        underTest.setPriority(USER_ID, LOCATION, ITEM_ID, PRIORITY);
 
-        verify(constructionQueueItemPriorityUpdateService).updatePriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
+        verify(constructionQueueItemPriorityUpdateService).updatePriority(USER_ID, LOCATION, ITEM_ID, PRIORITY);
     }
 
     @Test
     public void cancel() {
-        underTest.cancel(USER_ID, PLANET_ID, ITEM_ID);
+        underTest.cancel(USER_ID, LOCATION, ITEM_ID);
 
-        verify(cancelConstructionService).cancelConstructionOfConstruction(USER_ID, PLANET_ID, ITEM_ID);
+        verify(cancelConstructionService).cancelConstructionOfConstruction(USER_ID, LOCATION, ITEM_ID);
     }
 }

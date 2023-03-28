@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
@@ -33,6 +33,7 @@ public class WorkTest {
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final Long SLEEP_TIME = 264L;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
@@ -52,13 +53,13 @@ public class WorkTest {
     @Mock
     private SleepService sleepService;
 
+    @Mock
+    private GameData gameData;
+
     private Work underTest;
 
     @Mock
     private Game game;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private SyncCache syncCache;
@@ -70,11 +71,11 @@ public class WorkTest {
     private Future<ExecutionResult<Void>> future;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         underTest = Work.builder()
             .workPoints(WORK_POINTS)
             .game(game)
-            .planet(planet)
+            .location(LOCATION)
             .citizenId(CITIZEN_ID)
             .skillType(SkillType.AIMING)
             .applicationContextProxy(applicationContextProxy)
@@ -82,14 +83,16 @@ public class WorkTest {
     }
 
     @Test
-    public void call() {
+    void call() {
+        given(game.getData()).willReturn(gameData);
+
         given(applicationContextProxy.getBean(SleepTimeCalculator.class)).willReturn(sleepTimeCalculator);
         given(applicationContextProxy.getBean(GameSleepService.class)).willReturn(gameSleepService);
         given(applicationContextProxy.getBean(SyncCacheFactory.class)).willReturn(syncCacheFactory);
         given(applicationContextProxy.getBean(CitizenUpdateService.class)).willReturn(citizenUpdateService);
         given(applicationContextProxy.getBean(SleepService.class)).willReturn(sleepService);
 
-        given(sleepTimeCalculator.calculateSleepTime(planet, CITIZEN_ID, SkillType.AIMING, WORK_POINTS)).willReturn(SLEEP_TIME);
+        given(sleepTimeCalculator.calculateSleepTime(gameData, CITIZEN_ID, SkillType.AIMING, WORK_POINTS)).willReturn(SLEEP_TIME);
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.process(any(Runnable.class), eq(syncCache))).willReturn(future);
@@ -104,7 +107,7 @@ public class WorkTest {
         verify(eventLoop).process(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()
             .run();
-        verify(citizenUpdateService).updateCitizen(syncCache, GAME_ID, planet, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
+        verify(citizenUpdateService).updateCitizen(syncCache, gameData, LOCATION, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
 
         verify(gameSleepService).sleep(game, SLEEP_TIME);
         verify(sleepService, times(1)).sleep(100);

@@ -38,7 +38,7 @@ public class SkillToModelConverterTest {
             .nextLevel(NEXT_LEVEL)
             .build();
 
-        List<SkillModel> result = underTest.convert(Arrays.asList(skill), GAME_ID);
+        List<SkillModel> result = underTest.convert(GAME_ID, Arrays.asList(skill));
 
         assertThat(result.get(0).getId()).isEqualTo(SKILL_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);

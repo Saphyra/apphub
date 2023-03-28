@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.visibility;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +16,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class VisibilityFacadeTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private SolarSystemVisibilityService solarSystemVisibilityService;
@@ -30,13 +31,13 @@ public class VisibilityFacadeTest {
     private Planet planet;
 
     @Mock
-    private SolarSystem solarSystem;
+    private GameData gameData;
 
     @Test
     public void isSolarSystemVisible() {
-        given(solarSystemVisibilityService.isVisible(USER_ID, solarSystem)).willReturn(true);
+        given(solarSystemVisibilityService.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).willReturn(true);
 
-        assertThat(underTest.isVisible(USER_ID, solarSystem)).isTrue();
+        assertThat(underTest.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).isTrue();
     }
 
     @Test

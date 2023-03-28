@@ -19,6 +19,7 @@ public class BuildingToModelConverterTest {
     private static final String DATA_ID = "data-id";
     private static final int LEVEL = 3214;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private BuildingToModelConverter underTest;
@@ -27,12 +28,13 @@ public class BuildingToModelConverterTest {
     public void convert() {
         Building building = Building.builder()
             .buildingId(BUILDING_ID)
+            .location(LOCATION)
             .dataId(DATA_ID)
             .level(LEVEL)
             .surfaceId(SURFACE_ID)
             .build();
 
-        BuildingModel result = underTest.convert(building, GAME_ID);
+        BuildingModel result = underTest.convert(GAME_ID, building);
 
         assertThat(result.getId()).isEqualTo(BUILDING_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
@@ -40,5 +42,6 @@ public class BuildingToModelConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
     }
 }

@@ -40,20 +40,18 @@ public class StorageSettingToModelConverterTest {
         StorageSetting storageSetting = StorageSetting.builder()
             .storageSettingId(STORAGE_SETTING_ID)
             .location(LOCATION)
-            .locationType(LocationType.PLANET)
             .dataId(DATA_ID)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
             .batchSize(BATCH_SIZE)
             .build();
 
-        List<StorageSettingModel> result = underTest.convert(Arrays.asList(storageSetting), game);
+        List<StorageSettingModel> result = underTest.convert(GAME_ID, Arrays.asList(storageSetting));
 
         assertThat(result.get(0).getId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
         assertThat(result.get(0).getType()).isEqualTo(GameItemType.STORAGE_SETTING);
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
-        assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.get(0).getPriority()).isEqualTo(PRIORITY);

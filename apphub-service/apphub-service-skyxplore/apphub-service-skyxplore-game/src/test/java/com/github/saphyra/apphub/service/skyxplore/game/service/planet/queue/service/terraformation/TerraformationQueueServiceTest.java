@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform.CancelTerraformationService;
 import org.junit.jupiter.api.Test;
@@ -37,16 +37,16 @@ public class TerraformationQueueServiceTest {
     private TerraformationQueueService underTest;
 
     @Mock
-    private Planet planet;
+    private QueueItem queueItem;
 
     @Mock
-    private QueueItem queueItem;
+    private GameData gameData;
 
     @Test
     public void getQueue() {
-        given(terraformationQueueItemQueryService.getQueue(planet)).willReturn(List.of(queueItem));
+        given(terraformationQueueItemQueryService.getQueue(gameData, PLANET_ID)).willReturn(List.of(queueItem));
 
-        List<QueueItem> result = underTest.getQueue(planet);
+        List<QueueItem> result = underTest.getQueue(gameData, PLANET_ID);
 
         assertThat(result).containsExactly(queueItem);
     }

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class BuildingDetailsMapper {
     private final BuildingDetailMapper buildingDetailMapper;
 

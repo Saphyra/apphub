@@ -34,7 +34,6 @@ public class SurfaceToQueueItemConverterTest {
 
     @Test
     public void convert() {
-        given(surface.getTerraformation()).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
@@ -42,7 +41,7 @@ public class SurfaceToQueueItemConverterTest {
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(construction.getData()).willReturn(SurfaceType.DESERT.name());
 
-        QueueItem result = underTest.convert(surface);
+        QueueItem result = underTest.convert(construction, surface);
 
         assertThat(result.getItemId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getType()).isEqualTo(QueueItemType.TERRAFORMATION);

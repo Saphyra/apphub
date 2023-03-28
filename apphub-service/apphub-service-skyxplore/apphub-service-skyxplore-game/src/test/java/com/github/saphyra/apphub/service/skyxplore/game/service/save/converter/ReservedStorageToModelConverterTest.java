@@ -39,13 +39,12 @@ public class ReservedStorageToModelConverterTest {
         ReservedStorage reservedStorage = ReservedStorage.builder()
             .reservedStorageId(RESERVED_STORAGE_ID)
             .location(LOCATION)
-            .locationType(LocationType.PLANET)
             .externalReference(EXTERNAL_REFERENCE)
             .dataId(DATA_ID)
             .amount(AMOUNT)
             .build();
 
-        List<ReservedStorageModel> result = underTest.convert(Arrays.asList(reservedStorage), game);
+        List<ReservedStorageModel> result = underTest.convert(GAME_ID, Arrays.asList(reservedStorage));
 
         assertThat(result.get(0).getId()).isEqualTo(RESERVED_STORAGE_ID);
         assertThat(result.get(0).getGameId()).isEqualTo(GAME_ID);
@@ -53,7 +52,6 @@ public class ReservedStorageToModelConverterTest {
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
-        assertThat(result.get(0).getLocationType()).isEqualTo(LocationType.PLANET.name());
         assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
     }
 }

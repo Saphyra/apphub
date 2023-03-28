@@ -15,17 +15,19 @@ import java.util.UUID;
 class PlanetBuildingOverviewMapper {
     private final BuildingDetailsMapper buildingDetailsMapper;
 
-    PlanetBuildingOverviewResponse createOverview(GameData gameData, UUID location, SurfaceType surfaceType) {
+    PlanetBuildingOverviewResponse createOverview(GameData gameData, UUID planetId, SurfaceType surfaceType) {
         int usedSlots = gameData.getBuildings()
-            .getByLocation(location)
+            .getByLocation(planetId)
             .size();
 
-        int planetSize = gameData.getPlanets()
-            .get(location)
-            .getSize();
+        int planetSize = (int) gameData.getSurfaces()
+            .getByPlanetId(planetId)
+            .stream()
+            .filter(surface -> surface.getSurfaceType() == surfaceType)
+            .count();
 
         return PlanetBuildingOverviewResponse.builder()
-            .buildingDetails(buildingDetailsMapper.createBuildingDetails(gameData, location, surfaceType))
+            .buildingDetails(buildingDetailsMapper.createBuildingDetails(gameData, planetId, surfaceType))
             .slots(planetSize)
             .usedSlots(usedSlots)
             .build();

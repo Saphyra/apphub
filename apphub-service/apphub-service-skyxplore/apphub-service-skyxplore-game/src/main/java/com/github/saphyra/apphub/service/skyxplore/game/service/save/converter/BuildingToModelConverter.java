@@ -30,6 +30,7 @@ public class BuildingToModelConverter {
         model.setDataId(building.getDataId());
         model.setLevel(building.getLevel());
         model.setSurfaceId(building.getSurfaceId());
+        model.setLocation(building.getLocation());
         return model;
     }
 }

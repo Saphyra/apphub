@@ -6,15 +6,20 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuild
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,20 +56,36 @@ public class SurfaceToResponseConverterTest {
     @Mock
     private ConstructionResponse constructionResponse;
 
+    @Mock
+    private GameData gameData;
+
+    @Mock
+    private Surfaces surfaces;
+
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Buildings buildings;
+
     @Test
     public void convert() {
         Surface surface = Surface.builder()
             .surfaceId(SURFACE_ID)
-            .coordinate(coordinateModel)
             .surfaceType(SurfaceType.DESERT)
-            .building(building)
-            .terraformation(construction)
             .build();
-        given(buildingToResponseConverter.convert(building)).willReturn(surfaceBuildingResponse);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(construction));
+        given(gameData.getBuildings()).willReturn(buildings).willReturn(buildings);
+        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
+
+        given(buildingToResponseConverter.convert(gameData, building)).willReturn(surfaceBuildingResponse);
         given(constructionToResponseConverter.convert(construction)).willReturn(constructionResponse);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
-        SurfaceResponse result = underTest.convert(surface);
+        SurfaceResponse result = underTest.convert(gameData, SURFACE_ID);
 
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);

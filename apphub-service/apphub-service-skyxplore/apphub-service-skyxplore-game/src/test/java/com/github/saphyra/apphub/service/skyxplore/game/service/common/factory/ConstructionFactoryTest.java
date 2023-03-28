@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
@@ -20,6 +21,7 @@ public class ConstructionFactoryTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 4567;
     private static final int PARALLEL_WORKERS = 254;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -31,9 +33,11 @@ public class ConstructionFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(CONSTRUCTION_ID);
 
-        Construction result = underTest.create(EXTERNAL_REFERENCE, PARALLEL_WORKERS, REQUIRED_WORK_POINTS);
+        Construction result = underTest.create(EXTERNAL_REFERENCE, ConstructionType.CONSTRUCTION, LOCATION, PARALLEL_WORKERS, REQUIRED_WORK_POINTS);
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
+        assertThat(result.getType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
