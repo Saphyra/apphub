@@ -123,7 +123,7 @@ class DeconstructionUpdateServiceTest {
         given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.updateDeconstruction(syncCache, gameData, PLANET_ID, DECONSTRUCTION_ID, COMPLETED_WORK_POINTS);

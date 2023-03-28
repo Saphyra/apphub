@@ -107,7 +107,7 @@ public class GameFactoryTest {
         given(idGenerator.randomUuid()).willReturn(GAME_ID);
         given(aiPlayer.getUserId()).willReturn(AI_PLAYER_ID);
 
-        Map<UUID, Player> players = CollectionUtils.toMap(USER_ID, player);
+        Map<UUID, Player> players = CollectionUtils.singleValueMap(USER_ID, player);
         given(playerFactory.create(members)).willReturn(players);
         given(aiFactory.generateAis(request)).willReturn(Arrays.asList(aiPlayer));
         Map<UUID, Alliance> allianceMap = Map.of(ALLIANCE_ID, alliance);

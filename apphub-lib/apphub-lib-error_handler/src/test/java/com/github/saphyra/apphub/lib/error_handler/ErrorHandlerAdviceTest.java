@@ -59,7 +59,7 @@ public class ErrorHandlerAdviceTest {
         given(feignException.contentUTF8()).willReturn(CONTENT);
         given(feignException.status()).willReturn(400);
         given(feignException.request()).willReturn(request);
-        given(feignException.responseHeaders()).willReturn(CollectionUtils.toMap("content-type", Arrays.asList(HEADER_VALUE)));
+        given(feignException.responseHeaders()).willReturn(CollectionUtils.singleValueMap("content-type", Arrays.asList(HEADER_VALUE)));
 
         ResponseEntity<?> result = underTest.feignException(feignException);
 

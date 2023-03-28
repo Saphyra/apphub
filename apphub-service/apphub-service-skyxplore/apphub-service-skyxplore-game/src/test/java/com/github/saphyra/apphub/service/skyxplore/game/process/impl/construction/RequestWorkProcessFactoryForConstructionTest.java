@@ -66,7 +66,7 @@ public class RequestWorkProcessFactoryForConstructionTest {
         given(building.getDataId()).willReturn(BUILDING_DATA_ID);
         given(buildingDataService.get(BUILDING_DATA_ID)).willReturn(buildingData);
         given(building.getLevel()).willReturn(LEVEL);
-        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(LEVEL + 1, constructionRequirements));
+        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
 

@@ -231,14 +231,14 @@ public class UpgradeBuildingServiceTest {
         given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getDataId()).willReturn(DATA_ID);
         given(building.getLevel()).willReturn(LEVEL);
 
         given(allBuildingService.get(DATA_ID)).willReturn(buildingData);
-        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(LEVEL + 1, constructionRequirements));
+        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);

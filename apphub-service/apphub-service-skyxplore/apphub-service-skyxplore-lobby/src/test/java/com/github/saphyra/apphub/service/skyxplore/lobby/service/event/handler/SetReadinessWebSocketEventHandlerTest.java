@@ -53,7 +53,7 @@ public class SetReadinessWebSocketEventHandlerTest {
     @Test
     public void setReadiness() {
         given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(FROM, member));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FROM, member));
 
         underTest.handle(FROM, WebSocketEvent.builder().payload(String.valueOf(true)).build());
 

@@ -266,7 +266,7 @@ public class TerraformationServiceTest {
         given(surfaceToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         given(terraformationProcessFactory.create(gameData, PLANET_ID, surface, construction)).willReturn(terraformationProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformationProcess.toModel()).willReturn(processModel);
@@ -276,7 +276,7 @@ public class TerraformationServiceTest {
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
         SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
@@ -290,7 +290,7 @@ public class TerraformationServiceTest {
         verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(terraformationProcess);
     }
 }

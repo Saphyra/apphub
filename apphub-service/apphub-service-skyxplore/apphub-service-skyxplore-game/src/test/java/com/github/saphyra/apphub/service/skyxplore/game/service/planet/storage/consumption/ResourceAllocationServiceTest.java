@@ -107,14 +107,14 @@ public class ResourceAllocationServiceTest {
     @BeforeEach
     public void setUp() {
         given(consumptionCalculator.calculate(gameData, PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, REQUIRED_AMOUNT)).willReturn(consumptionResult);
-        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.BULK, CollectionUtils.toMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
+        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.BULK, CollectionUtils.singleValueMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
     }
 
     @Test
     public void notEnoughStorage() {
         given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
 
-        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.toMap(DATA_ID, REQUIRED_AMOUNT)));
+        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
 
         ExceptionValidator.validateNotLoggedException(
             ex,
@@ -140,7 +140,7 @@ public class ResourceAllocationServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.toMap(DATA_ID, REQUIRED_AMOUNT));
+        underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);

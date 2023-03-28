@@ -80,7 +80,7 @@ public class WsMessageSenderTest {
     @Test
     public void planetQueueItemModified() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
@@ -95,7 +95,7 @@ public class WsMessageSenderTest {
     @Test
     public void planetQueueItemDeleted() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
@@ -110,7 +110,7 @@ public class WsMessageSenderTest {
     @Test
     public void planetSurfaceModified() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
@@ -125,7 +125,7 @@ public class WsMessageSenderTest {
     @Test
     public void planetStorageModified() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
@@ -140,7 +140,7 @@ public class WsMessageSenderTest {
     @Test
     public void planetCitizenModified() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
@@ -155,12 +155,12 @@ public class WsMessageSenderTest {
     @Test
     public void planetBuildingDetailsModified() {
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(player.getOpenedPage()).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET_POPULATION_OVERVIEW);
         given(openedPage.getPageId()).willReturn(PLANET_ID);
 
-        Map<String, PlanetBuildingOverviewResponse> payload = CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse);
+        Map<String, PlanetBuildingOverviewResponse> payload = CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse);
 
         underTest.planetBuildingDetailsModified(USER_ID, PLANET_ID, payload);
 

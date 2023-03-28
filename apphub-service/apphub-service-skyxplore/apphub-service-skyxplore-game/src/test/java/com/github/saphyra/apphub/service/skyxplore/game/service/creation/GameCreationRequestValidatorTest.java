@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownHost() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.toMap(UUID.randomUUID(), null))
+            .members(CollectionUtils.singleValueMap(UUID.randomUUID(), null))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -105,7 +106,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownAllianceId() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.toMap(HOST, UUID.randomUUID()))
+            .members(CollectionUtils.singleValueMap(HOST, UUID.randomUUID()))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -147,12 +148,12 @@ public class GameCreationRequestValidatorTest {
         return SkyXploreGameCreationRequest.builder()
             .host(HOST)
             .members(
-                Map.of(
-                    HOST, null,
-                    PLAYER_ID, ALLIANCE_ID
+                CollectionUtils.toMap(
+                    new BiWrapper<>(HOST, null),
+                    new BiWrapper<>(PLAYER_ID, ALLIANCE_ID)
                 )
             )
-            .alliances(CollectionUtils.toMap(ALLIANCE_ID, ALLIANCE_NAME))
+            .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(settings)
             .gameName(GAME_NAME)
             .build();

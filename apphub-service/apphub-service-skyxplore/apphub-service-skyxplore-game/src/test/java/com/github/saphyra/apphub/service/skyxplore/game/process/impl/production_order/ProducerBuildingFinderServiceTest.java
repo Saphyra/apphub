@@ -71,7 +71,7 @@ public class ProducerBuildingFinderServiceTest {
         given(surface.getSurfaceType()).willReturn(SurfaceType.LAKE);
         given(building.getDataId()).willReturn(BUILDING_DATA_ID);
         given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuilding);
-        given(productionBuilding.getGives()).willReturn(CollectionUtils.toMap(RESOURCE_DATA_ID, productionData));
+        given(productionBuilding.getGives()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, productionData));
         given(productionData.getPlaced()).willReturn(List.of(SurfaceType.LAKE));
         given(buildingCapacityCalculator.calculateCapacity(gameData, building)).willReturn(12);
 

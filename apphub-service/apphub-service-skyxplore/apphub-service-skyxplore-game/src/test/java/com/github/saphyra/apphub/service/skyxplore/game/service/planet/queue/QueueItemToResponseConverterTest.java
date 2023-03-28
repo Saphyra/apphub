@@ -47,7 +47,7 @@ public class QueueItemToResponseConverterTest {
 
     @Test
     public void convert() {
-        Map<String, Object> data = CollectionUtils.toMap("asd", "dsa");
+        Map<String, Object> data = CollectionUtils.singleValueMap("asd", "dsa");
 
         QueueItem queueItem = QueueItem.builder()
             .itemId(ITEM_ID)

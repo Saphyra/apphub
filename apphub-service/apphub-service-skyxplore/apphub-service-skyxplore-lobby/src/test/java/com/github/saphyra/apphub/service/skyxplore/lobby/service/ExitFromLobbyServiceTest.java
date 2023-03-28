@@ -52,7 +52,7 @@ public class ExitFromLobbyServiceTest {
     @Test
     public void memberLeft() {
         given(lobbyDao.findByUserId(MEMBER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(
             new BiWrapper<>(USER_ID, null),
             new BiWrapper<>(MEMBER_ID, null)
         ));
@@ -95,7 +95,7 @@ public class ExitFromLobbyServiceTest {
     @Test
     public void hostLeft() {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(
             new BiWrapper<>(USER_ID, null),
             new BiWrapper<>(MEMBER_ID, null)
         ));

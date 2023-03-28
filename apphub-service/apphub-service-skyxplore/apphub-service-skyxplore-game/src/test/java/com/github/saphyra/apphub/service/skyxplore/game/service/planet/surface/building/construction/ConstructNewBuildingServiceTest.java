@@ -259,7 +259,7 @@ public class ConstructNewBuildingServiceTest {
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(List.of(SurfaceType.CONCRETE));
-        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(1, constructionRequirements));
+        given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(1, constructionRequirements));
         given(buildingFactory.create(DATA_ID, PLANET_ID, SURFACE_ID, 0)).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
@@ -273,7 +273,7 @@ public class ConstructNewBuildingServiceTest {
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
         given(buildingConstructionToQueueItemConverter.convert(gameData, construction)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         given(game.getEventLoop()).willReturn(eventLoop);
         //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
@@ -297,7 +297,7 @@ public class ConstructNewBuildingServiceTest {
         verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(constructionProcess);
     }
 }

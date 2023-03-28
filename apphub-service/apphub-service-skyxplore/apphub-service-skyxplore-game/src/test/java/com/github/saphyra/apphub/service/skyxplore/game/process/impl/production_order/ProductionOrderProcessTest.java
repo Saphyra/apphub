@@ -154,7 +154,7 @@ public class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProducerBuildingFinderService.class)).willReturn(producerBuildingFinderService);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
@@ -178,7 +178,7 @@ public class ProductionOrderProcessTest {
 
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
@@ -207,7 +207,7 @@ public class ProductionOrderProcessTest {
         given(requestWorkProcessFactoryForProductionOrder.createWorkPointProcesses(PROCESS_ID, gameData, LOCATION, BUILDING_DATA_ID, reservedStorage)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(requestWorkProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
@@ -233,7 +233,7 @@ public class ProductionOrderProcessTest {
         given(requestWorkProcess.getStatus()).willReturn(ProcessStatus.DONE);
 
         given(applicationContextProxy.getBean(StoreResourceService.class)).willReturn(storeResourceService);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
@@ -251,7 +251,7 @@ public class ProductionOrderProcessTest {
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.cancel(syncCache);
@@ -271,7 +271,7 @@ public class ProductionOrderProcessTest {
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.cleanup(syncCache);

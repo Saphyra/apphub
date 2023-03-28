@@ -45,7 +45,7 @@ public class PlanetOverviewQueryServiceTest {
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class PlanetOverviewQueryServiceTest {
 
     @Test
     public void getCustomName() {
-        given(planet.getCustomNames()).willReturn(new OptionalHashMap<>(CollectionUtils.toMap(USER_ID, PLANET_NAME)));
+        given(planet.getCustomNames()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(USER_ID, PLANET_NAME)));
 
         PlanetOverviewResponse result = underTest.getOverview(USER_ID, PLANET_ID);
 

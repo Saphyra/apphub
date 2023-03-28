@@ -67,7 +67,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     @Test
     public void handle() {
         given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(MEMBER_ID, member));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(MEMBER_ID, member));
         given(characterProxy.getCharacter(FROM)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(PLAYER_NAME);
         given(receivedEvent.getPayload()).willReturn(EVENT_PAYLOAD);

@@ -83,8 +83,8 @@ public class ChatMessageWebSocketEventHandlerTest {
         given(chat.getRooms()).willReturn(Arrays.asList(chatRoom));
         given(incomingChatMessage.getRoom()).willReturn(CHAT_ROOM);
         given(incomingChatMessage.getMessage()).willReturn(MESSAGE);
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
-        given(chatRoomMemberFilter.getMembers(SENDER, CHAT_ROOM, Arrays.asList(chatRoom), CollectionUtils.toMap(PLAYER_ID, player))).willReturn(Arrays.asList(PLAYER_ID));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
+        given(chatRoomMemberFilter.getMembers(SENDER, CHAT_ROOM, Arrays.asList(chatRoom), CollectionUtils.singleValueMap(PLAYER_ID, player))).willReturn(Arrays.asList(PLAYER_ID));
         given(characterProxy.getCharacterByUserId(SENDER)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(SENDER_NAME);
 

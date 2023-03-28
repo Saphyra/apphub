@@ -87,7 +87,7 @@ public class GameCreationControllerImplItTest {
             .parallel()
             .forEach(s -> {
                 final UUID hostId = UUID.randomUUID();
-                Map<UUID, UUID> members = CollectionUtils.toMap(hostId, null);
+                Map<UUID, UUID> members = CollectionUtils.singleValueMap(hostId, null);
 
                 SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
                     .host(hostId)
@@ -145,7 +145,7 @@ public class GameCreationControllerImplItTest {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(host)
             .members(members)
-            .alliances(CollectionUtils.toMap(ALLIANCE_ID, ALLIANCE_NAME))
+            .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
                 .maxPlayersPerSolarSystem(5)
                 .additionalSolarSystems(new Range<>(20, 30))
@@ -195,7 +195,7 @@ public class GameCreationControllerImplItTest {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(playerId)
             .members(members)
-            .alliances(CollectionUtils.toMap(allianceId, ALLIANCE_NAME))
+            .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
             .settings(SkyXploreGameCreationSettingsRequest.builder()
                 .maxPlayersPerSolarSystem(1)
                 .additionalSolarSystems(new Range<>(2, 3))

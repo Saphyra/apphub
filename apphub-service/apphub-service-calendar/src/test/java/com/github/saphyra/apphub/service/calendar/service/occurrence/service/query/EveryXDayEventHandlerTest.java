@@ -76,7 +76,7 @@ public class EveryXDayEventHandlerTest {
 
     @Test
     public void handleEveryXDayEvent() {
-        OptionalHashMap<LocalDate, Occurrence> occurrenceMapping = CollectionUtils.toMap(DATE_5, existingOccurrence, new OptionalHashMap<>());
+        OptionalHashMap<LocalDate, Occurrence> occurrenceMapping = CollectionUtils.singleValueMap(DATE_5, existingOccurrence, new OptionalHashMap<>());
 
         given(event.getStartDate()).willReturn(DATE_4);
         given(event.getRepetitionData()).willReturn(String.valueOf(2));

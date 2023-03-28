@@ -43,7 +43,7 @@ public class PriorityControllerImplTest {
 
     @Test
     public void getPriorities() {
-        given(priorityQueryService.getPriorities(USER_ID, PLANET_ID)).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION.name(), PRIORITY));
+        given(priorityQueryService.getPriorities(USER_ID, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(PriorityType.CONSTRUCTION.name(), PRIORITY));
 
         Map<String, Integer> result = underTest.getPriorities(PLANET_ID, accessTokenHeader);
 

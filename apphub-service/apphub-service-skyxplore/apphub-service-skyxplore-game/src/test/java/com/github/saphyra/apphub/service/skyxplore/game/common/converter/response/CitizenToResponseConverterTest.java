@@ -41,7 +41,7 @@ public class CitizenToResponseConverterTest {
 
     @Test
     public void convert() {
-        given(skillToResponseConverter.getSkills(gameData, CITIZEN_ID)).willReturn(CollectionUtils.toMap(SKILL_TYPE, skillResponse));
+        given(skillToResponseConverter.getSkills(gameData, CITIZEN_ID)).willReturn(CollectionUtils.singleValueMap(SKILL_TYPE, skillResponse));
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
         given(citizen.getName()).willReturn(CITIZEN_NAME);
         given(citizen.getMorale()).willReturn(MORALE);

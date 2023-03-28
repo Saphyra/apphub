@@ -211,7 +211,7 @@ public class SharedDataControllerImplItTest {
             .body(sharedData)
             .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
+        Map<String, Object> pathVariables = CollectionUtils.singleValueMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
             new BiWrapper<>("dataType", DataType.TEST)
         );
@@ -231,7 +231,7 @@ public class SharedDataControllerImplItTest {
             .dataType(DataType.TEST)
             .build();
 
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
+        Map<String, Object> pathVariables = CollectionUtils.singleValueMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
             new BiWrapper<>("dataType", DataType.TEST)
         );
@@ -250,7 +250,7 @@ public class SharedDataControllerImplItTest {
             .dataType(null)
             .build();
 
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
+        Map<String, Object> pathVariables = CollectionUtils.singleValueMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
             new BiWrapper<>("dataType", DataType.TEST)
         );
@@ -285,7 +285,7 @@ public class SharedDataControllerImplItTest {
             .body(sharedData)
             .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
+        Map<String, Object> pathVariables = CollectionUtils.singleValueMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
             new BiWrapper<>("dataType", DataType.TEST)
         );
@@ -362,7 +362,7 @@ public class SharedDataControllerImplItTest {
             .body(sharedData)
             .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
+        Map<String, Object> pathVariables = CollectionUtils.singleValueMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
             new BiWrapper<>("dataType", DataType.TEST)
         );

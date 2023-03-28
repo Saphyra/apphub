@@ -95,7 +95,7 @@ public class FinishConstructionServiceTest {
 
     @Test
     public void finishConstruction() {
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getConstructions()).willReturn(constructions);
@@ -106,7 +106,7 @@ public class FinishConstructionServiceTest {
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, LOCATION)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, LOCATION)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
 
         ////
 
@@ -134,6 +134,6 @@ public class FinishConstructionServiceTest {
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(LOCATION), buildingDetailsModifiedArgumentCaptor.capture());
         buildingDetailsModifiedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, LOCATION, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, LOCATION, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

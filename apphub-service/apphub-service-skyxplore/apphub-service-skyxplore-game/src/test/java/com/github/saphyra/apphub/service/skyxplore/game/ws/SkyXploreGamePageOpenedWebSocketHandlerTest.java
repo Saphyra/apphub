@@ -57,7 +57,7 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
     @Test
     public void updateOpenedPage() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(objectMapperWrapper.convertValue(PAYLOAD, OpenedPage.class)).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
 

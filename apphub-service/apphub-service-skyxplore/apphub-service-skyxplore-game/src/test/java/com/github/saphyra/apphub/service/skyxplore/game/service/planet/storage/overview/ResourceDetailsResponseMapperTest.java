@@ -73,7 +73,7 @@ public class ResourceDetailsResponseMapperTest {
         given(gameData.getAllocatedResources()).willReturn(allocatedResources);
 
         given(reservedStorageQueryService.getReservedAmount(DATA_ID, reservedStorages)).willReturn(RESERVED_STORAGE_AMOUNT);
-        given(actualResourceAmountQueryService.getActualAmount(DATA_ID, CollectionUtils.toMap(DATA_ID, storedResource))).willReturn(ACTUAL_AMOUNT);
+        given(actualResourceAmountQueryService.getActualAmount(DATA_ID, CollectionUtils.singleValueMap(DATA_ID, storedResource))).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(DATA_ID, Arrays.asList(allocatedResource))).willReturn(ALLOCATED_AMOUNT);
 
         ResourceDetailsResponse result = underTest.createResourceData(gameData, LOCATION, resourceData);

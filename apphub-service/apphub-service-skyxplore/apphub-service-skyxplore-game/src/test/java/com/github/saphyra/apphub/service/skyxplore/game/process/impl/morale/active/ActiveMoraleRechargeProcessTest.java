@@ -271,7 +271,7 @@ class ActiveMoraleRechargeProcessTest {
         given(applicationContextProxy.getBean(WsMessageSender.class)).willReturn(messageSender);
         given(applicationContextProxy.getBean(CitizenToResponseConverter.class)).willReturn(citizenToResponseConverter);
         given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
 
         underTest.work(syncCache);
 

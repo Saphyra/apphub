@@ -134,7 +134,7 @@ public class CancelTerraformationServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(construction.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
         //Common
         given(syncCacheFactory.create()).willReturn(syncCache);
@@ -189,7 +189,7 @@ public class CancelTerraformationServiceTest {
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(construction);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
         //Common
         given(syncCacheFactory.create()).willReturn(syncCache);

@@ -117,7 +117,7 @@ public class TerraformationUpdateServiceTest {
         given(surfaceToQueueItemConverter.convert(terraformation, surface)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.updateTerraformation(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);

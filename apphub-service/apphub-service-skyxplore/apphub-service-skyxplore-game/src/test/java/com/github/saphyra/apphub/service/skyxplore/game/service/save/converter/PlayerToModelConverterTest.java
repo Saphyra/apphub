@@ -43,8 +43,8 @@ public class PlayerToModelConverterTest {
             .ai(true)
             .build();
         given(game.getGameId()).willReturn(GAME_ID);
-        given(game.getAlliances()).willReturn(CollectionUtils.toMap(UUID.randomUUID(), alliance));
-        given(alliance.getMembers()).willReturn(CollectionUtils.toMap(USER_ID, player));
+        given(game.getAlliances()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), alliance));
+        given(alliance.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
 
         PlayerModel result = underTest.convert(player, game);

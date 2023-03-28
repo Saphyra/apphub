@@ -42,7 +42,7 @@ public class PlayerFactoryTest {
         given(characterProxy.getCharacterByUserId(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
         given(idGenerator.randomUuid()).willReturn(PLAYER_ID);
 
-        Map<UUID, Player> result = underTest.create(CollectionUtils.toMap(USER_ID, ALLIANCE_ID));
+        Map<UUID, Player> result = underTest.create(CollectionUtils.singleValueMap(USER_ID, ALLIANCE_ID));
 
         assertThat(result).containsKey(USER_ID);
         Player player = result.get(USER_ID);

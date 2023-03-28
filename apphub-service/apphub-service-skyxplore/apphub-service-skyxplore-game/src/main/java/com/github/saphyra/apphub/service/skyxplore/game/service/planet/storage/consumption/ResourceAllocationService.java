@@ -49,7 +49,7 @@ public class ResourceAllocationService {
         requiredStorageAmount.forEach((storageType, totalAmount) -> {
             int freeStorage = freeStorageQueryService.getFreeStorage(gameData, location, storageType);
             if (freeStorage < totalAmount) {
-                Map<String, String> params = CollectionUtils.toMap("storageType", storageType.name());
+                Map<String, String> params = CollectionUtils.singleValueMap("storageType", storageType.name());
                 throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_ENOUGH_STORAGE, params, "Not enough free " + storageType + " storage to store " + totalAmount + " of resources.");
             }
         });

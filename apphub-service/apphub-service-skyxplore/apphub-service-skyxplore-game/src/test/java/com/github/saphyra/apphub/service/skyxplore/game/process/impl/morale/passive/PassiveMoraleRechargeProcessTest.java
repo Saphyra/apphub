@@ -223,7 +223,7 @@ class PassiveMoraleRechargeProcessTest {
         given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
         given(citizenAllocations.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizenAllocation);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
 
         underTest.work(syncCache);
 

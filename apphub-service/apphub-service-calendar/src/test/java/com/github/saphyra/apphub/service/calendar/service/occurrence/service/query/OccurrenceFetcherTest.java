@@ -69,7 +69,7 @@ public class OccurrenceFetcherTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(occurrence.getDate()).willReturn(DATE);
 
-        given(daysOfWeekEventHandler.handleDaysOfWeekEvent(event, List.of(DATE), CollectionUtils.toMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
+        given(daysOfWeekEventHandler.handleDaysOfWeekEvent(event, List.of(DATE), CollectionUtils.singleValueMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
 
         List<Occurrence> result = underTest.fetchOccurrencesOfEvent(event, List.of(DATE));
 
@@ -83,7 +83,7 @@ public class OccurrenceFetcherTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(occurrence.getDate()).willReturn(DATE);
 
-        given(everyXDayEventHandler.handleEveryXDayEvent(event, List.of(DATE), CollectionUtils.toMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
+        given(everyXDayEventHandler.handleEveryXDayEvent(event, List.of(DATE), CollectionUtils.singleValueMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
 
         List<Occurrence> result = underTest.fetchOccurrencesOfEvent(event, List.of(DATE));
 
@@ -97,7 +97,7 @@ public class OccurrenceFetcherTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(occurrence.getDate()).willReturn(DATE);
 
-        given(daysOfMonthEventHandler.handleDaysOfMonthEvent(event, List.of(DATE), CollectionUtils.toMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
+        given(daysOfMonthEventHandler.handleDaysOfMonthEvent(event, List.of(DATE), CollectionUtils.singleValueMap(DATE, occurrence, new OptionalHashMap<>()))).willReturn(List.of(occurrence));
 
         List<Occurrence> result = underTest.fetchOccurrencesOfEvent(event, List.of(DATE));
 

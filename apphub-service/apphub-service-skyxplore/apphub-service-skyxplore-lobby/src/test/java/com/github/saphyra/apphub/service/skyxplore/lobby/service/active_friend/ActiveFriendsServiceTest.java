@@ -81,7 +81,7 @@ public class ActiveFriendsServiceTest {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(FRIEND_ID_1, null));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FRIEND_ID_1, null));
 
         given(skyXploreDataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
         given(activeFriend.getFriendId()).willReturn(FRIEND_ID_1);

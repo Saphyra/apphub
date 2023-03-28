@@ -121,7 +121,7 @@ public class CitizenUpdateServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
 
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.updateCitizen(syncCache, gameData, PLANET_ID, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);

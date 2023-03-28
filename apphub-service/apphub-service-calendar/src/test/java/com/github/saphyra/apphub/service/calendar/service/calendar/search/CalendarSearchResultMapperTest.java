@@ -74,7 +74,7 @@ public class CalendarSearchResultMapperTest {
         given(virtualOccurrence.getEventId()).willReturn(EVENT_ID);
         given(anotherOccurrence.getEventId()).willReturn(UUID.randomUUID());
 
-        List<EventSearchResponse> result = underTest.map(Set.of(EVENT_ID), CollectionUtils.toMap(EVENT_ID, event), List.of(occurrence, virtualOccurrence, anotherOccurrence));
+        List<EventSearchResponse> result = underTest.map(Set.of(EVENT_ID), CollectionUtils.singleValueMap(EVENT_ID, event), List.of(occurrence, virtualOccurrence, anotherOccurrence));
 
         assertThat(result).hasSize(1);
         EventSearchResponse eventSearchResponse = result.get(0);

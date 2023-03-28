@@ -79,7 +79,7 @@ public class RenamePlanetServiceTest {
     public void rename() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(game.getGameId()).willReturn(GAME_ID);
 
         OptionalMap<UUID, String> customNapes = new OptionalHashMap<>();

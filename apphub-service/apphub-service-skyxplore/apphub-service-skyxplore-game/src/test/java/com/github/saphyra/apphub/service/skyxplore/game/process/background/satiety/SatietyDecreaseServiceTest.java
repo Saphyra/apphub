@@ -79,7 +79,7 @@ public class SatietyDecreaseServiceTest {
 
     @Test
     public void processGame() {
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(gameData.getCitizens()).willReturn(CollectionUtils.toList(new Citizens(), citizen));
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getSatiety()).willReturn(satietyProperties);

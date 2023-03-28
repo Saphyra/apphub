@@ -91,7 +91,7 @@ public class JoinToLobbyServiceTest {
     @Test
     public void userJoinedToLobby() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(USER_ID, member));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(characterProxy.getCharacter(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));

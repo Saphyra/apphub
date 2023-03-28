@@ -45,7 +45,7 @@ public class LoadGameServiceTest {
     public void loadGame() {
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.getGameId()).willReturn(GAME_ID);
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(HOST, null));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(HOST, null));
 
         underTest.loadGame(lobby);
 

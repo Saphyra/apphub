@@ -171,7 +171,7 @@ public class TerraformationProcessTest {
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);

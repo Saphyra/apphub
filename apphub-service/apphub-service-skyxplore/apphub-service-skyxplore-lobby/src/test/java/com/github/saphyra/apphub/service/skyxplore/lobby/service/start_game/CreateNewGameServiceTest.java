@@ -63,7 +63,7 @@ public class CreateNewGameServiceTest {
 
     @Test
     public void startGame() {
-        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(USER_ID, member));
+        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
         given(lobby.getHost()).willReturn(USER_ID);
         given(member.getAlliance()).willReturn(ALLIANCE_ID);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));

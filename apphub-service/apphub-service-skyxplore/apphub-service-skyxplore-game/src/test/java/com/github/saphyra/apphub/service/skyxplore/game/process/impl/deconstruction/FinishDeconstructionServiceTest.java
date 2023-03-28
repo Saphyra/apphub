@@ -95,7 +95,7 @@ class FinishDeconstructionServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
 
         given(planet.getOwner()).willReturn(USER_ID);

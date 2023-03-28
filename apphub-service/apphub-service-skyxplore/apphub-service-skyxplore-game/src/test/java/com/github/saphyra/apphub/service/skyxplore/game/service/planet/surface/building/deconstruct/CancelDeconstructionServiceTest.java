@@ -128,7 +128,7 @@ class CancelDeconstructionServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
@@ -172,7 +172,7 @@ class CancelDeconstructionServiceTest {
 
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
         verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
     }
 
     @Test
@@ -225,6 +225,6 @@ class CancelDeconstructionServiceTest {
             .run();
 
         verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

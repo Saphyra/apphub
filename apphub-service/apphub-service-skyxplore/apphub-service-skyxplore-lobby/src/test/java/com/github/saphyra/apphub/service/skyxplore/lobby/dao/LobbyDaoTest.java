@@ -59,7 +59,7 @@ public class LobbyDaoTest {
 
     @Test
     public void findByUserId() {
-        given(lobby1.getMembers()).willReturn(CollectionUtils.toMap(USER_ID, member));
+        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
 
         Optional<Lobby> result = underTest.findByUserId(USER_ID);
 

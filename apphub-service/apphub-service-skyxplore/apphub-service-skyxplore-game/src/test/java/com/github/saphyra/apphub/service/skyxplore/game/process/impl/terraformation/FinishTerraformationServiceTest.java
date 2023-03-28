@@ -93,7 +93,7 @@ public class FinishTerraformationServiceTest {
     @Test
     public void finishTerraformation() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
@@ -104,7 +104,7 @@ public class FinishTerraformationServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         given(surfaceToModelConverter.convert(GAME_ID, surface)).willReturn(surfaceModel);
 
         underTest.finishTerraformation(syncCache, gameData, PLANET_ID, terraformation);
@@ -131,6 +131,6 @@ public class FinishTerraformationServiceTest {
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), buildingDetailsModifiedArgumentCaptor.capture());
         buildingDetailsModifiedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

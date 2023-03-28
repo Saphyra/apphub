@@ -61,7 +61,7 @@ public class CreateChatRoomRequestValidatorTest {
 
     @Test
     public void memberFromDifferentGame() {
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
 
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .members(Arrays.asList(UUID.randomUUID()))
@@ -75,7 +75,7 @@ public class CreateChatRoomRequestValidatorTest {
 
     @Test
     public void nullTitle() {
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
 
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .members(Arrays.asList(PLAYER_ID))
@@ -89,7 +89,7 @@ public class CreateChatRoomRequestValidatorTest {
 
     @Test
     public void titleTooShort() {
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
 
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .members(Arrays.asList(PLAYER_ID))
@@ -103,7 +103,7 @@ public class CreateChatRoomRequestValidatorTest {
 
     @Test
     public void titleTooLong() {
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
 
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .members(Arrays.asList(PLAYER_ID))
@@ -117,7 +117,7 @@ public class CreateChatRoomRequestValidatorTest {
 
     @Test
     public void valid() {
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(PLAYER_ID, player));
+        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
 
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .members(Arrays.asList(PLAYER_ID))
