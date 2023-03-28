@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
@@ -45,11 +46,11 @@ public class ProductionOrderProcessTest {
     private static final String RESOURCE_DATA_ID = "resource-data-id";
     private static final String BUILDING_DATA_ID = "building-data-id";
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
-    private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
     private static final String RESOURCE_DATA_ID_STRING = "reserved-storage-id";
     private static final String ALLOCATED_RESOURCE_ID_STRING = "allocated-resource-id";
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
@@ -79,6 +80,9 @@ public class ProductionOrderProcessTest {
 
     @Mock
     private Game game;
+
+    @Mock
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -117,8 +121,8 @@ public class ProductionOrderProcessTest {
             .processId(PROCESS_ID)
             .status(status)
             .externalReference(EXTERNAL_REFERENCE)
-            .gameData(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(LOCATION)
             .producerBuildingDataId(producerBuildingId)
             .allocatedResource(allocatedResource)
             .reservedStorage(reservedStorage)
@@ -129,7 +133,7 @@ public class ProductionOrderProcessTest {
 
     @Test
     public void getPriority() {
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PARENT_PRIORITY);
 
@@ -147,7 +151,7 @@ public class ProductionOrderProcessTest {
     public void work_created_noProducerBuilding() {
         given(applicationContextProxy.getBean(ProducerBuildingFinderService.class)).willReturn(producerBuildingFinderService);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
-        given(producerBuildingFinderService.findProducerBuildingDataId(planet, RESOURCE_DATA_ID)).willReturn(Optional.empty());
+        given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
 
         underTest.work(syncCache);
 
@@ -160,11 +164,12 @@ public class ProductionOrderProcessTest {
     public void work_createResourceRequirementProcesses() {
         given(applicationContextProxy.getBean(ProducerBuildingFinderService.class)).willReturn(producerBuildingFinderService);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
-        given(producerBuildingFinderService.findProducerBuildingDataId(planet, RESOURCE_DATA_ID)).willReturn(Optional.of(BUILDING_DATA_ID));
+        given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.of(BUILDING_DATA_ID));
 
         given(applicationContextProxy.getBean(ResourceRequirementProcessFactory.class)).willReturn(resourceRequirementProcessFactory);
-        given(resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, PROCESS_ID, game, planet, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID)).willReturn(List.of(productionOrderProcess));
-        given(game.getProcesses()).willReturn(processes);
+        given(resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, PROCESS_ID, gameData, LOCATION, USER_ID, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID))
+            .willReturn(List.of(productionOrderProcess));
+        given(gameData.getProcesses()).willReturn(processes);
         given(productionOrderProcess.toModel()).willReturn(processModel);
 
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
@@ -184,7 +189,7 @@ public class ProductionOrderProcessTest {
     public void work_createRequestWorkProcesses() {
         setUp(ProcessStatus.IN_PROGRESS, BUILDING_DATA_ID);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
 
@@ -194,7 +199,7 @@ public class ProductionOrderProcessTest {
         given(game.getGameId()).willReturn(GAME_ID);
 
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForProductionOrder.class)).willReturn(requestWorkProcessFactoryForProductionOrder);
-        given(requestWorkProcessFactoryForProductionOrder.createWorkPointProcesses(PROCESS_ID, game, planet, BUILDING_DATA_ID, reservedStorage)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactoryForProductionOrder.createWorkPointProcesses(PROCESS_ID, gameData, LOCATION, BUILDING_DATA_ID, reservedStorage)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(requestWorkProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
 
@@ -203,7 +208,8 @@ public class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, GAME_ID, planet, PROCESS_ID);
+        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, USER_ID, PROCESS_ID);
+        //noinspection RedundantCollectionOperation
         verify(processes).addAll(List.of(requestWorkProcess));
         verify(syncCache).saveGameItem(processModel);
         verify(applicationContextProxy, times(0)).getBean(StoreResourceService.class);
@@ -213,7 +219,7 @@ public class ProductionOrderProcessTest {
     public void work_finish() {
         setUp(ProcessStatus.IN_PROGRESS, BUILDING_DATA_ID);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
 
@@ -226,14 +232,14 @@ public class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
 
-        verify(storeResourceService).storeResource(syncCache, game, planet, reservedStorage, allocatedResource, AMOUNT);
+        verify(storeResourceService).storeResource(syncCache, gameData, LOCATION, USER_ID, reservedStorage, allocatedResource, AMOUNT);
     }
 
     @Test
     public void cancel() {
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
@@ -242,7 +248,7 @@ public class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, PROCESS_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, USER_ID, PROCESS_ID);
         verify(productionOrderProcess).cleanup(syncCache);
         verify(syncCache).saveGameItem(any(ProcessModel.class));
     }
@@ -251,7 +257,7 @@ public class ProductionOrderProcessTest {
     public void cleanup() {
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
@@ -260,7 +266,7 @@ public class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, PROCESS_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, USER_ID, PROCESS_ID);
         verify(productionOrderProcess).cleanup(syncCache);
         verify(syncCache).saveGameItem(any(ProcessModel.class));
     }
@@ -272,7 +278,7 @@ public class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
 
         given(game.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(planet.getPlanetId()).willReturn(LOCATION);
 
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
         given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESOURCE_DATA_ID_STRING);
@@ -285,8 +291,7 @@ public class ProductionOrderProcessTest {
         assertThat(result.getType()).isEqualTo(GameItemType.PROCESS);
         assertThat(result.getProcessType()).isEqualTo(ProcessType.PRODUCTION_ORDER);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
-        assertThat(result.getLocation()).isEqualTo(PLANET_ID);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET.name());
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID, BUILDING_DATA_ID);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.RESERVED_STORAGE_ID, RESOURCE_DATA_ID_STRING);

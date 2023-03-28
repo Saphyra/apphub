@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
@@ -62,10 +63,15 @@ public class SatietyDecreaseProcessTest {
     @Mock
     private SyncCache syncCache;
 
+    @Mock
+    private GameData gameData;
+
     @Test
     public void triggerSatietyDecrease() {
         given(game.isTerminated()).willReturn(false)
             .willReturn(true);
+
+        given(game.getData()).willReturn(gameData);
 
         given(processContext.getExecutorServiceBean()).willReturn(executorServiceBean);
         given(processContext.getSleepService()).willReturn(sleepService);
@@ -90,7 +96,7 @@ public class SatietyDecreaseProcessTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(satietyDecreaseService).processGame(game, syncCache);
+        verify(satietyDecreaseService).processGame(gameData, syncCache);
         verify(gameSleepService).sleepASecond(game);
     }
 }

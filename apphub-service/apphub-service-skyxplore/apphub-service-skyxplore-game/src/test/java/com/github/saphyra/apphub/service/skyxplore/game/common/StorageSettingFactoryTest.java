@@ -40,12 +40,11 @@ public class StorageSettingFactoryTest {
 
         given(idGenerator.randomUuid()).willReturn(STORAGE_SETTING_ID);
 
-        StorageSetting result = underTest.create(request, LOCATION, LocationType.PLANET);
+        StorageSetting result = underTest.create(request, LOCATION);
 
         assertThat(result.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);

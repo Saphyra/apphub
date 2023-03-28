@@ -3,9 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.common.converter.respon
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,21 +34,20 @@ public class CitizenToResponseConverterTest {
     private Citizen citizen;
 
     @Mock
-    private Skill skill;
+    private SkillResponse skillResponse;
 
     @Mock
-    private SkillResponse skillResponse;
+    private GameData gameData;
 
     @Test
     public void convert() {
-        given(citizen.getSkills()).willReturn(CollectionUtils.toMap(SkillType.AIMING, skill));
-        given(skillToResponseConverter.getSkills(CollectionUtils.toMap(SkillType.AIMING, skill))).willReturn(CollectionUtils.toMap(SKILL_TYPE, skillResponse));
+        given(skillToResponseConverter.getSkills(gameData, CITIZEN_ID)).willReturn(CollectionUtils.toMap(SKILL_TYPE, skillResponse));
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
         given(citizen.getName()).willReturn(CITIZEN_NAME);
         given(citizen.getMorale()).willReturn(MORALE);
         given(citizen.getSatiety()).willReturn(SATIETY);
 
-        CitizenResponse result = underTest.convert(citizen);
+        CitizenResponse result = underTest.convert(gameData, citizen);
 
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getName()).isEqualTo(CITIZEN_NAME);

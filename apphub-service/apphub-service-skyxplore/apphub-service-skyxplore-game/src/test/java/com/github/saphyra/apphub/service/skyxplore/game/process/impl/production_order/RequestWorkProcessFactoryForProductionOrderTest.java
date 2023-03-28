@@ -8,9 +8,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,7 @@ public class RequestWorkProcessFactoryForProductionOrderTest {
     private static final Integer RESERVED_AMOUNT = 3;
     private static final Integer REQUIRED_WORK_POINTS = 2;
     private static final Integer MAX_WORK_POINTS_BATCH = 5;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ProductionBuildingService productionBuildingService;
@@ -47,10 +47,7 @@ public class RequestWorkProcessFactoryForProductionOrderTest {
     private RequestWorkProcessFactoryForProductionOrder underTest;
 
     @Mock
-    private Game game;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private ReservedStorage reservedStorage;
@@ -84,10 +81,10 @@ public class RequestWorkProcessFactoryForProductionOrderTest {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMaxWorkPointsBatch()).willReturn(MAX_WORK_POINTS_BATCH);
         given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
-        given(requestWorkProcessFactory.create(PROCESS_ID, game, planet, PRODUCER_BUILDING_DATA_ID, SkillType.AIMING, 5)).willReturn(requestWorkProcess1);
-        given(requestWorkProcessFactory.create(PROCESS_ID, game, planet, PRODUCER_BUILDING_DATA_ID, SkillType.AIMING, 1)).willReturn(requestWorkProcess2);
+        given(requestWorkProcessFactory.create(PROCESS_ID, gameData, LOCATION, PRODUCER_BUILDING_DATA_ID, SkillType.AIMING, 5)).willReturn(requestWorkProcess1);
+        given(requestWorkProcessFactory.create(PROCESS_ID, gameData, LOCATION, PRODUCER_BUILDING_DATA_ID, SkillType.AIMING, 1)).willReturn(requestWorkProcess2);
 
-        List<RequestWorkProcess> result = underTest.createWorkPointProcesses(PROCESS_ID, game, planet, PRODUCER_BUILDING_DATA_ID, reservedStorage);
+        List<RequestWorkProcess> result = underTest.createWorkPointProcesses(PROCESS_ID, gameData, LOCATION, PRODUCER_BUILDING_DATA_ID, reservedStorage);
 
         assertThat(result).containsExactlyInAnyOrder(requestWorkProcess1, requestWorkProcess2);
     }

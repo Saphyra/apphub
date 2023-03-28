@@ -62,16 +62,8 @@ public class ConstructNewBuildingService {
 
         Game game = gameDao.findByUserIdValidated(userId);
 
-        Planet planet = game.getData()
-            .getPlanets()
-            .get(planetId);
-
-        Surface surface = game.getData()
-            .getSurfaces()
-            .findBySurfaceId(surfaceId);
-
         if (game.getData().getConstructions().findByExternalReference(surfaceId).isPresent()) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Cannot build on surface under terraformation on planet " + planet + " and surface " + surfaceId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Cannot build on surface under terraformation on planet " + planetId + " and surface " + surfaceId);
         }
 
         if (game.getData().getBuildings().findBySurfaceId(surfaceId).isPresent()) {
@@ -81,6 +73,10 @@ public class ConstructNewBuildingService {
         BuildingData buildingData = maybeBuildingData.get();
         ConstructionRequirements constructionRequirements = buildingData.getConstructionRequirements()
             .get(1);
+
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(surfaceId);
 
         if (!buildingData.getPlaceableSurfaceTypes().contains(surface.getSurfaceType())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, dataId + " cannot be built to surfaceType " + surface.getSurfaceType());
@@ -98,6 +94,10 @@ public class ConstructNewBuildingService {
         game.getData()
             .getConstructions()
             .add(construction);
+
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {

@@ -29,8 +29,12 @@ public class FinishDeconstructionService {
     public void finishDeconstruction(GameData gameData, UUID location, SyncCache syncCache, Deconstruction deconstruction) {
         log.info("Finishing deconstruction...");
 
+        UUID surfaceId = gameData.getBuildings()
+            .findByBuildingId(deconstruction.getExternalReference())
+            .getSurfaceId();
+
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(gameData.getBuildings().findByBuildingId(deconstruction.getExternalReference()).getSurfaceId());
+            .findBySurfaceId(surfaceId);
 
         gameData.getBuildings()
             .deleteByBuildingId(deconstruction.getExternalReference());

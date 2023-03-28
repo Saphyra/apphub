@@ -36,6 +36,7 @@ class ConstructionUpdateService {
 
         Building building = gameData.getBuildings()
             .findByBuildingId(construction.getExternalReference());
+
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
 

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class ResourceRequirementProcessFactory {
     private final ProductionBuildingService productionBuildingService;
     private final ProductionRequirementsAllocationService productionRequirementsAllocationService;
@@ -30,7 +31,7 @@ class ResourceRequirementProcessFactory {
             .stream()
             .map(entry -> new BiWrapper<>(entry.getKey(), entry.getValue() * amount))
             .peek(biWrapper -> log.info("Required {} of {}", biWrapper.getEntity2(), biWrapper.getEntity1()))
-            .map(entry -> productionRequirementsAllocationService.allocate(syncCache, gameData.getGameId(), gameData, location, ownerId, processId, entry.getEntity1(), entry.getEntity2()))
+            .map(entry -> productionRequirementsAllocationService.allocate(syncCache, gameData, location, ownerId, processId, entry.getEntity1(), entry.getEntity2()))
             .flatMap(reservedStorageId -> productionOrderProcessFactory.create(gameData, processId, location, reservedStorageId).stream())
             .collect(Collectors.toList());
     }

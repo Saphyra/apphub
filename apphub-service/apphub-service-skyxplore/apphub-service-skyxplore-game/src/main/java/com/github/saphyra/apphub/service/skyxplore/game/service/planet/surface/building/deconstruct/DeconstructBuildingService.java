@@ -44,6 +44,12 @@ public class DeconstructBuildingService {
     public SurfaceResponse deconstructBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
+        if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
+            throw ExceptionFactory.forbiddenOperation(buildingId + " is under construction");
+        }
+
+        Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
+
         Building building = game.getData()
             .getBuildings()
             .findByBuildingId(buildingId);
@@ -51,12 +57,6 @@ public class DeconstructBuildingService {
         Surface surface = game.getData()
             .getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
-
-        if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
-            throw ExceptionFactory.forbiddenOperation(buildingId + " is under construction");
-        }
-
-        Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {

@@ -6,11 +6,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
@@ -63,7 +66,7 @@ public class FinishConstructionServiceTest {
     private SyncCache syncCache;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -86,26 +89,35 @@ public class FinishConstructionServiceTest {
     @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
+    @Mock
+    private Surfaces surfaces;
+
+    @Mock
+    private Constructions constructions;
+
     @Test
     public void finishConstruction() {
-        given(building.getConstruction()).willReturn(construction);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(building.getLevel()).willReturn(LEVEL);
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
-        given(planet.findSurfaceByBuildingIdValidated(BUILDING_ID)).willReturn(surface);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(gameData.getConstructions()).willReturn(constructions);
 
-        underTest.finishConstruction(syncCache, game, planet, building);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, CONSTRUCTION_ID);
+        underTest.finishConstruction(syncCache, gameData, PLANET_ID, building, construction);
+
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(building).setLevel(LEVEL + 1);
-        verify(building).setConstruction(null);
+        verify(constructions).deleteById(CONSTRUCTION_ID);
         verify(syncCache).deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(syncCache).saveGameItem(buildingModel);
 

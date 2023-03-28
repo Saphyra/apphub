@@ -6,17 +6,19 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction.DeconstructionProcessFactory;
@@ -40,6 +42,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -56,6 +59,7 @@ class DeconstructBuildingServiceTest {
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -97,10 +101,7 @@ class DeconstructBuildingServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -147,18 +148,27 @@ class DeconstructBuildingServiceTest {
     @Mock
     private DeconstructionModel deconstructionModel;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Buildings buildings;
+
+    @Mock
+    private Surfaces surfaces;
+
+    @Mock
+    private Deconstructions deconstructions;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
     @Test
     void constructionInProgress() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getBuilding()).willReturn(building);
-        given(building.getBuildingId()).willReturn(BUILDING_ID);
-        given(building.getConstruction()).willReturn(construction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(construction));
 
         Throwable ex = catchThrowable(() -> underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID));
 
@@ -168,26 +178,30 @@ class DeconstructBuildingServiceTest {
     @Test
     void deconstructBuilding() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getBuilding()).willReturn(building);
-        given(building.getBuildingId()).willReturn(BUILDING_ID);
-        given(deconstructionFactory.create(BUILDING_ID)).willReturn(deconstruction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(deconstructionFactory.create(BUILDING_ID, PLANET_ID)).willReturn(deconstruction);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
 
         given(game.getEventLoop()).willReturn(eventLoop);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
-        given(buildingDeconstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(Map.of(DATA_ID, planetBuildingOverviewResponse));
-        given(deconstructionProcessFactory.create(game, planet, deconstruction)).willReturn(deconstructionProcess);
-        given(game.getProcesses()).willReturn(processes);
+        given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(Map.of(DATA_ID, planetBuildingOverviewResponse));
+        given(deconstructionProcessFactory.create(gameData, PLANET_ID, deconstruction)).willReturn(deconstructionProcess);
+        given(gameData.getProcesses()).willReturn(processes);
         given(game.getGameId()).willReturn(GAME_ID);
-        given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
-        given(deconstructionToModelConverter.convert(deconstruction, GAME_ID)).willReturn(deconstructionModel);
+        given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
+        given(deconstructionToModelConverter.convert(GAME_ID, deconstruction)).willReturn(deconstructionModel);
         given(deconstructionProcess.toModel()).willReturn(processModel);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
 
         SurfaceResponse result = underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
@@ -199,7 +213,7 @@ class DeconstructBuildingServiceTest {
 
         assertThat(returnedSurfaceResponse).isEqualTo(surfaceResponse);
 
-        verify(building).setDeconstruction(deconstruction);
+        verify(deconstructions).add(deconstruction);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, Map.of(DATA_ID, planetBuildingOverviewResponse));
         verify(processes).add(deconstructionProcess);

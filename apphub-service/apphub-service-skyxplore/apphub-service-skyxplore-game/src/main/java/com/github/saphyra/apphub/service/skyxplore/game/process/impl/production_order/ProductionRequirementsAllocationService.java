@@ -33,7 +33,7 @@ class ProductionRequirementsAllocationService {
     /**
      * @return reservedStorageId
      */
-    UUID allocate(SyncCache syncCache, UUID gameId, GameData gameData, UUID location, UUID ownerId, UUID externalReference, String dataId, Integer amount) {
+    UUID allocate(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference, String dataId, Integer amount) {
         log.info("Allocating {} of {}", amount, dataId);
         int availableAmount = availableResourceCounter.countAvailableAmount(gameData, location, dataId);
 
@@ -54,8 +54,8 @@ class ProductionRequirementsAllocationService {
             .add(reservedStorage);
 
 
-        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(gameId, allocatedResource));
-        syncCache.saveGameItem(reservedStorageToModelConverter.convert(gameId, reservedStorage));
+        syncCache.saveGameItem(allocatedResourceToModelConverter.convert(gameData.getGameId(), allocatedResource));
+        syncCache.saveGameItem(reservedStorageToModelConverter.convert(gameData.getGameId(), reservedStorage));
 
         syncCache.addMessage(
             ownerId,

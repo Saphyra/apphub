@@ -5,16 +5,18 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
@@ -24,7 +26,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,14 +34,12 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -82,7 +81,7 @@ public class CancelTerraformationServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -114,44 +113,43 @@ public class CancelTerraformationServiceTest {
     @Mock
     private ExecutionResult<SurfaceResponse> executionResult;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Construction construction;
+
+    @Mock
+    private Surfaces surfaces;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> callableArgumentCaptor;
 
     @Test
-    public void cancelTerraformationQueueItem_constructionNotFound() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getTerraformation()).willReturn(terraformation);
-        given(terraformation.getConstructionId()).willReturn(UUID.randomUUID());
-
-        Throwable ex = catchThrowable(() -> underTest.cancelTerraformationQueueItem(USER_ID, PLANET_ID, CONSTRUCTION_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
-    }
-
-    @Test
     public void cancelTerraformationQueueItem() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getTerraformation()).willReturn(terraformation);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(construction.getExternalReference()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
 
         //Common
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(buildingOverviewResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(buildingOverviewResponse);
 
         underTest.cancelTerraformationQueueItem(USER_ID, PLANET_ID, CONSTRUCTION_ID);
 
@@ -163,9 +161,9 @@ public class CancelTerraformationServiceTest {
         assertThat(surfaceResponseResult).isEqualTo(surfaceResponseResult);
 
         verify(process).cancel(syncCache);
-        verify(surface).setTerraformation(null);
+        verify(constructions).deleteById(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, CONSTRUCTION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> queueItemDeletedArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(PLANET_ID), queueItemDeletedArgumentCaptor.capture());
@@ -184,40 +182,29 @@ public class CancelTerraformationServiceTest {
     }
 
     @Test
-    public void cancelTerraformationOfSurface_terraformationNotFound() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getTerraformation()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
-    }
-
-    @Test
     public void cancelTerraformationOfSurface() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getTerraformation()).willReturn(terraformation);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(construction);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
 
+        //Common
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(buildingOverviewResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(buildingOverviewResponse);
 
         SurfaceResponse result = underTest.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
 
@@ -228,9 +215,9 @@ public class CancelTerraformationServiceTest {
         assertThat(surfaceResponseResult).isEqualTo(surfaceResponseResult);
 
         verify(process).cancel(syncCache);
-        verify(surface).setTerraformation(null);
+        verify(constructions).deleteById(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, planet, CONSTRUCTION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> queueItemDeletedArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(PLANET_ID), queueItemDeletedArgumentCaptor.capture());

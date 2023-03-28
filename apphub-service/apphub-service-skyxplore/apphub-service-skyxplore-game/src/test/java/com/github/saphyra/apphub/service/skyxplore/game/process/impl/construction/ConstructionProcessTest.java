@@ -4,15 +4,16 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.ProductionOrderProcessFactoryForConstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
@@ -42,12 +43,13 @@ public class ConstructionProcessTest {
     private static final int BASE_PRIORITY = 10;
     private static final Integer CONSTRUCTION_PRIORITY = 20;
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     private ConstructionProcess underTest;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -88,6 +90,12 @@ public class ConstructionProcessTest {
     @Mock
     private FinishConstructionService finishConstructionService;
 
+    @Mock
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
+
     @BeforeEach
     public void setUp() {
         setUp(ProcessStatus.CREATED);
@@ -97,8 +105,8 @@ public class ConstructionProcessTest {
         underTest = ConstructionProcess.builder()
             .processId(PROCESS_ID)
             .status(status)
-            .gameData(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(LOCATION)
             .building(building)
             .construction(construction)
             .applicationContextProxy(applicationContextProxy)
@@ -116,7 +124,10 @@ public class ConstructionProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, BASE_PRIORITY));
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
+        given(priority.getValue()).willReturn(BASE_PRIORITY);
+
         given(construction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         int result = underTest.getPriority();
@@ -132,11 +143,11 @@ public class ConstructionProcessTest {
     @Test
     public void work_createdStatus() {
         given(applicationContextProxy.getBean(ProductionOrderProcessFactoryForConstruction.class)).willReturn(productionOrderProcessFactoryForConstruction);
-        given(productionOrderProcessFactoryForConstruction.createProductionOrderProcesses(PROCESS_ID, game, planet, construction)).willReturn(List.of(productionOrderProcess));
+        given(productionOrderProcessFactoryForConstruction.createProductionOrderProcesses(PROCESS_ID, gameData, LOCATION, construction)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.toModel()).willReturn(processModel);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
 
         underTest.work(syncCache);
 
@@ -154,16 +165,17 @@ public class ConstructionProcessTest {
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(Collections.emptyList());
         given(applicationContextProxy.getBean(UseAllocatedResourceService.class)).willReturn(useAllocatedResourceService);
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForConstruction.class)).willReturn(requestWorkProcessFactoryForConstruction);
-        given(requestWorkProcessFactoryForConstruction.createRequestWorkProcesses(PROCESS_ID, game, planet, building)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactoryForConstruction.createRequestWorkProcesses(PROCESS_ID, gameData, LOCATION, building, construction)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         underTest.work(syncCache);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, GAME_ID, planet, CONSTRUCTION_ID);
+        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, USER_ID, CONSTRUCTION_ID);
+        //noinspection RedundantCollectionOperation
         verify(processes).addAll(List.of(requestWorkProcess));
         verify(syncCache).saveGameItem(processModel);
         verify(applicationContextProxy, times(0)).getBean(FinishConstructionService.class);
@@ -174,7 +186,7 @@ public class ConstructionProcessTest {
     @Test
     public void work_waitingForRequestWorkProcesses() {
         setUp(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
@@ -190,7 +202,7 @@ public class ConstructionProcessTest {
     @Test
     public void work_finishConstruction() {
         setUp(ProcessStatus.IN_PROGRESS);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(productionOrderProcess));
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
@@ -199,7 +211,7 @@ public class ConstructionProcessTest {
 
         underTest.work(syncCache);
 
-        verify(finishConstructionService).finishConstruction(syncCache, game, planet, building);
+        verify(finishConstructionService).finishConstruction(syncCache, gameData, LOCATION, building, construction);
         verify(productionOrderProcess).cleanup(syncCache);
         verify(requestWorkProcess).cleanup(syncCache);
 
@@ -208,7 +220,7 @@ public class ConstructionProcessTest {
 
     @Test
     public void cancel() {
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(productionOrderProcess));
 
         underTest.cancel(syncCache);
@@ -226,8 +238,8 @@ public class ConstructionProcessTest {
 
     @Test
     public void toModel() {
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(planet.getPlanetId()).willReturn(LOCATION);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();
@@ -237,8 +249,7 @@ public class ConstructionProcessTest {
         assertThat(result.getType()).isEqualTo(GameItemType.PROCESS);
         assertThat(result.getProcessType()).isEqualTo(ProcessType.CONSTRUCTION);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
-        assertThat(result.getLocation()).isEqualTo(PLANET_ID);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET.name());
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(CONSTRUCTION_ID);
     }
 }

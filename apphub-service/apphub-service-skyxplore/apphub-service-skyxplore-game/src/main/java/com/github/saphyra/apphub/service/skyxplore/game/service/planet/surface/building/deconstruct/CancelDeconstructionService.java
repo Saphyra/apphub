@@ -4,8 +4,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
@@ -19,12 +17,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.b
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
-import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -69,7 +64,7 @@ public class CancelDeconstructionService {
 
         Deconstruction deconstruction = game.getData()
             .getDeconstructions()
-            .findByExternalReferenceValidated(building.getBuildingId());
+            .findByExternalReferenceValidated(buildingId);
 
         return processCancellation(game, planet, building, deconstruction);
     }
@@ -79,10 +74,6 @@ public class CancelDeconstructionService {
             .getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
 
-        if (isNull(deconstruction)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
-        }
-
         SyncCache syncCache = syncCacheFactory.create();
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
@@ -91,6 +82,10 @@ public class CancelDeconstructionService {
                         .getProcesses()
                         .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCTION)
                         .cancel(syncCache);
+
+                    game.getData()
+                        .getDeconstructions()
+                        .remove(deconstruction);
 
                     syncCache.deleteGameItem(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
 

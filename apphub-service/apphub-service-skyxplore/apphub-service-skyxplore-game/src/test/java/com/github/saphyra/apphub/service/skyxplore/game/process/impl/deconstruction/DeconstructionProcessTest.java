@@ -4,14 +4,15 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ class DeconstructionProcessTest {
     private static final int BASE_PRIORITY = 425;
     private static final Integer DECONSTRUCTION_PRIORITY = 452;
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private RequestWorkProcessFactoryForDeconstruction requestWorkProcessFactoryForDeconstruction;
@@ -48,7 +49,7 @@ class DeconstructionProcessTest {
     private DeconstructionProcess underTest;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Deconstruction deconstruction;
@@ -68,6 +69,12 @@ class DeconstructionProcessTest {
     @Mock
     private ProcessModel requestWorkProcessModel;
 
+    @Mock
+    private Priorities priorities;
+
+    @Mock
+    private Priority priority;
+
     @BeforeEach
     public void setUp() {
         setUp(ProcessStatus.CREATED);
@@ -78,8 +85,8 @@ class DeconstructionProcessTest {
             .processId(PROCESS_ID)
             .status(status)
             .deconstruction(deconstruction)
-            .gameData(game)
-            .planet(planet)
+            .gameData(gameData)
+            .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -95,7 +102,8 @@ class DeconstructionProcessTest {
 
     @Test
     public void getPriority() {
-        given(planet.getPriorities()).willReturn(CollectionUtils.toMap(PriorityType.CONSTRUCTION, BASE_PRIORITY));
+        given(gameData.getPriorities()).willReturn(priorities);
+        given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
         given(deconstruction.getPriority()).willReturn(DECONSTRUCTION_PRIORITY);
 
         int result = underTest.getPriority();
@@ -111,17 +119,18 @@ class DeconstructionProcessTest {
     @Test
     void work_createdStatus() {
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(requestWorkProcess.toModel()).willReturn(requestWorkProcessModel);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.getStatus()).willReturn(ProcessStatus.CREATED);
 
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForDeconstruction.class)).willReturn(requestWorkProcessFactoryForDeconstruction);
 
-        given(requestWorkProcessFactoryForDeconstruction.createRequestWorkProcesses(game, PROCESS_ID, planet, DECONSTRUCTION_ID)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactoryForDeconstruction.createRequestWorkProcesses(gameData, LOCATION, PROCESS_ID, DECONSTRUCTION_ID)).willReturn(List.of(requestWorkProcess));
 
         underTest.work(syncCache);
 
+        //noinspection RedundantCollectionOperation
         verify(processes).addAll(List.of(requestWorkProcess));
         verify(syncCache).saveGameItem(requestWorkProcessModel);
 
@@ -132,7 +141,7 @@ class DeconstructionProcessTest {
     void work_finish() {
         setUp(ProcessStatus.IN_PROGRESS);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.getStatus()).willReturn(ProcessStatus.DONE);
 
@@ -140,7 +149,7 @@ class DeconstructionProcessTest {
 
         underTest.work(syncCache);
 
-        verify(finishDeconstructionService).finishDeconstruction(syncCache, planet, deconstruction);
+        verify(finishDeconstructionService).finishDeconstruction(gameData, LOCATION, syncCache, deconstruction);
         verify(requestWorkProcess).cleanup(syncCache);
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
@@ -148,7 +157,7 @@ class DeconstructionProcessTest {
 
     @Test
     void cancel() {
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(requestWorkProcess));
 
         underTest.cancel(syncCache);
@@ -161,8 +170,8 @@ class DeconstructionProcessTest {
 
     @Test
     void toModel() {
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(planet.getPlanetId()).willReturn(LOCATION);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();
@@ -172,8 +181,7 @@ class DeconstructionProcessTest {
         assertThat(result.getType()).isEqualTo(GameItemType.PROCESS);
         assertThat(result.getProcessType()).isEqualTo(ProcessType.DECONSTRUCTION);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
-        assertThat(result.getLocation()).isEqualTo(PLANET_ID);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET.name());
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(DECONSTRUCTION_ID);
     }
 }

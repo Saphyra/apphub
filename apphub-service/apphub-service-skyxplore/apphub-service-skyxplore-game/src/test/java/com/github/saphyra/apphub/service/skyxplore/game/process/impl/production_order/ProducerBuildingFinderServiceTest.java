@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.BuildingCapacityCalculator;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -26,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 public class ProducerBuildingFinderServiceTest {
     private static final String RESOURCE_DATA_ID = "resource-data-id";
     private static final String BUILDING_DATA_ID = "building-data-id";
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private ProductionBuildingService productionBuildingService;
@@ -37,7 +39,7 @@ public class ProducerBuildingFinderServiceTest {
     private ProducerBuildingFinderService underTest;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -51,19 +53,22 @@ public class ProducerBuildingFinderServiceTest {
     @Mock
     private ProductionData productionData;
 
+    @Mock
+    private Buildings buildings;
+
     @Test
     public void findProducerBuildingDataId() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.getByLocation(LOCATION)).willReturn(List.of(building));
         given(surface.getSurfaceType()).willReturn(SurfaceType.LAKE);
-        given(surface.getBuilding()).willReturn(building);
         given(building.getDataId()).willReturn(BUILDING_DATA_ID);
         given(productionBuildingService.containsKey(BUILDING_DATA_ID)).willReturn(true);
         given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuilding);
         given(productionBuilding.getGives()).willReturn(CollectionUtils.toMap(RESOURCE_DATA_ID, productionData));
         given(productionData.getPlaced()).willReturn(List.of(SurfaceType.LAKE));
-        given(buildingCapacityCalculator.calculateCapacity(planet)).willReturn(12);
+        given(buildingCapacityCalculator.calculateCapacity(gameData, building)).willReturn(12);
 
-        Optional<String> result = underTest.findProducerBuildingDataId(planet, RESOURCE_DATA_ID);
+        Optional<String> result = underTest.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID);
 
         assertThat(result).contains(BUILDING_DATA_ID);
     }

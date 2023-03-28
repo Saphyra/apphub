@@ -21,7 +21,7 @@ class RequestWorkProcessFactoryForDeconstruction {
     private final RequestWorkProcessFactory requestWorkProcessFactory;
     private final GameProperties gameProperties;
 
-    List<RequestWorkProcess> createRequestWorkProcesses(GameData gameData, UUID location ,UUID processId,  UUID deconstructionId) {
+    List<RequestWorkProcess> createRequestWorkProcesses(GameData gameData, UUID location, UUID processId, UUID deconstructionId) {
         DeconstructionProperties deconstructionProperties = gameProperties.getDeconstruction();
 
         return requestWorkProcessFactory.create(

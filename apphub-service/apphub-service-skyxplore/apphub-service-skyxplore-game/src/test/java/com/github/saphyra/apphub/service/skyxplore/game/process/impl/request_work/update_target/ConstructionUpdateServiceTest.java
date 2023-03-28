@@ -4,13 +4,14 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
@@ -40,6 +41,7 @@ public class ConstructionUpdateServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private ConstructionToModelConverter constructionToModelConverter;
@@ -63,7 +65,7 @@ public class ConstructionUpdateServiceTest {
     private SyncCache syncCache;
 
     @Mock
-    private Game game;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -89,26 +91,41 @@ public class ConstructionUpdateServiceTest {
     @Mock
     private QueueResponse queueResponse;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Buildings buildings;
+
+    @Mock
+    private Surfaces surfaces;
+
     @Test
     public void updateConstruction() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.toMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getBuilding()).willReturn(building);
-        given(building.getConstruction()).willReturn(construction);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(construction.getExternalReference()).willReturn(BUILDING_ID);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
 
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(buildingConstructionToQueueItemConverter.convert(gameData, construction)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
-        underTest.updateConstruction(syncCache, game, planet, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
+        underTest.updateConstruction(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 
         verify(construction).setCurrentWorkPoints(CURRENT_WORK_POINTS + COMPLETED_WORK_POINTS);
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);

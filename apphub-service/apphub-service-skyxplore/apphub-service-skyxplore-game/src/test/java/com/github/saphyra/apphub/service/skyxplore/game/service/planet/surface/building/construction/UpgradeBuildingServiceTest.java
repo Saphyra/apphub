@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
@@ -11,13 +12,17 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
@@ -44,6 +49,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -108,7 +114,7 @@ public class UpgradeBuildingServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
@@ -158,21 +164,38 @@ public class UpgradeBuildingServiceTest {
     @Mock
     private ExecutionResult<SurfaceResponse> executionResult;
 
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Deconstructions deconstructions;
+
+    @Mock
+    private Deconstruction deconstruction;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
+    @Test
+    void deconstructionAlreadyInProgress() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(deconstruction));
+
+        Throwable ex = catchThrowable(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS);
+    }
 
     @Test
     public void constructionAlreadyInProgress() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
-        given(surface.getBuilding()).willReturn(building);
-
-        given(building.getBuildingId()).willReturn(BUILDING_ID);
-
-        given(building.getConstruction()).willReturn(construction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(construction));
 
         Throwable ex = catchThrowable(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
 
@@ -182,10 +205,11 @@ public class UpgradeBuildingServiceTest {
     @Test
     public void buildingAtMaxLevel() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
-        given(surface.getBuilding()).willReturn(building);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getDataId()).willReturn(DATA_ID);
@@ -202,10 +226,12 @@ public class UpgradeBuildingServiceTest {
     @Test
     public void upgradeBuilding() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
-        given(surface.getBuilding()).willReturn(building);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
 
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getDataId()).willReturn(DATA_ID);
@@ -216,23 +242,24 @@ public class UpgradeBuildingServiceTest {
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(constructionFactory.create(BUILDING_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(game.getGameId()).willReturn(GAME_ID);
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
         given(game.getEventLoop()).willReturn(eventLoop);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
 
-        given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
-        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
+        given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
+        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
 
-        given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(buildingConstructionToQueueItemConverter.convert(gameData, construction)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
 
-        given(constructionProcessFactory.create(game, planet, building)).willReturn(constructionProcess);
+        given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
         given(constructionProcess.toModel()).willReturn(processModel);
 
         SurfaceResponse result = underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
@@ -245,8 +272,8 @@ public class UpgradeBuildingServiceTest {
 
         assertThat(executionResponse).isEqualTo(surfaceResponse);
 
-        verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
-        verify(building).setConstruction(construction);
+        verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(constructions).add(construction);
         verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
         verify(processes).add(constructionProcess);

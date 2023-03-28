@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
@@ -61,8 +62,12 @@ class MoraleRechargeBackgroundProcessTest {
     @Mock
     private ActiveMoraleRechargeService activeMoraleRechargeService;
 
+    @Mock
+    private GameData gameData;
+
     @Test
     void startProcess() {
+        given(game.getData()).willReturn(gameData);
         given(processContext.getExecutorServiceBean()).willReturn(executorServiceBean);
         given(processContext.getGameSleepService()).willReturn(gameSleepService);
         given(processContext.getSyncCacheFactory()).willReturn(syncCacheFactory);
@@ -95,7 +100,7 @@ class MoraleRechargeBackgroundProcessTest {
 
         verify(gameSleepService).sleepASecond(game);
         verify(sleepService).sleep(100);
-        verify(passiveMoraleRechargeService).processGame(game, syncCache);
-        verify(activeMoraleRechargeService).processGame(game, syncCache);
+        verify(passiveMoraleRechargeService).processGame(gameData, syncCache);
+        verify(activeMoraleRechargeService).processGame(gameData, syncCache);
     }
 }

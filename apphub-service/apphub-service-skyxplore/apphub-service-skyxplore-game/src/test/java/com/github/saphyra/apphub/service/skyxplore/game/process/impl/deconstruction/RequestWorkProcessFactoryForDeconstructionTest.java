@@ -3,8 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruc
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcessType;
@@ -26,6 +25,7 @@ class RequestWorkProcessFactoryForDeconstructionTest {
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final Integer PARALLEL_WORKERS = 234;
     private static final Integer REQUIRED_WORK_POINTS = 435;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private RequestWorkProcessFactory requestWorkProcessFactory;
@@ -37,10 +37,7 @@ class RequestWorkProcessFactoryForDeconstructionTest {
     private RequestWorkProcessFactoryForDeconstruction underTest;
 
     @Mock
-    private Game game;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private DeconstructionProperties deconstructionProperties;
@@ -54,9 +51,10 @@ class RequestWorkProcessFactoryForDeconstructionTest {
         given(deconstructionProperties.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
 
-        given(requestWorkProcessFactory.create(game, PROCESS_ID, planet, DECONSTRUCTION_ID, RequestWorkProcessType.DECONSTRUCTION, SkillType.BUILDING, REQUIRED_WORK_POINTS, PARALLEL_WORKERS)).willReturn(List.of(requestWorkProcess));
+        given(requestWorkProcessFactory.create(gameData, PROCESS_ID, LOCATION, DECONSTRUCTION_ID, RequestWorkProcessType.DECONSTRUCTION, SkillType.BUILDING, REQUIRED_WORK_POINTS, PARALLEL_WORKERS))
+            .willReturn(List.of(requestWorkProcess));
 
-        List<RequestWorkProcess> result = underTest.createRequestWorkProcesses(game, PROCESS_ID, planet, DECONSTRUCTION_ID);
+        List<RequestWorkProcess> result = underTest.createRequestWorkProcesses(gameData, LOCATION, PROCESS_ID, DECONSTRUCTION_ID);
 
         assertThat(result).containsExactly(requestWorkProcess);
     }

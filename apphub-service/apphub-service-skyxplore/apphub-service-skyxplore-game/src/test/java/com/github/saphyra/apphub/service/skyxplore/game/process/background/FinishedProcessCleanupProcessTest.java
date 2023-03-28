@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
@@ -66,6 +67,9 @@ public class FinishedProcessCleanupProcessTest {
     @Mock
     private SyncCache syncCache;
 
+    @Mock
+    private GameData gameData;
+
     @Test
     public void cleanUpFinishedProcesses() {
         given(game.isTerminated()).willReturn(false)
@@ -83,7 +87,8 @@ public class FinishedProcessCleanupProcessTest {
         given(future.isDone()).willReturn(false)
             .willReturn(true);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getProcesses()).willReturn(processes);
 
         given(process.getStatus()).willReturn(ProcessStatus.READY_TO_DELETE);
         given(process.getProcessId()).willReturn(PROCESS_ID);

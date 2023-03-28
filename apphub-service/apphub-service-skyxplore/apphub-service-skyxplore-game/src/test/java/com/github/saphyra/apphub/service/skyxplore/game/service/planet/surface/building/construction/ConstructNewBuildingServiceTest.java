@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
@@ -13,14 +14,16 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequire
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
@@ -122,10 +125,7 @@ public class ConstructNewBuildingServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
@@ -172,6 +172,15 @@ public class ConstructNewBuildingServiceTest {
     @Mock
     private ExecutionResult<SurfaceResponse> executionResult;
 
+    @Mock
+    private Surfaces surfaces;
+
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Buildings buildings;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
@@ -188,11 +197,11 @@ public class ConstructNewBuildingServiceTest {
     public void terraformationInProgress() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getTerraformation()).willReturn(construction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(construction));
 
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
 
@@ -203,11 +212,13 @@ public class ConstructNewBuildingServiceTest {
     public void surfaceAlreadyOccupied() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surface.getBuilding()).willReturn(building);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
 
         Throwable ex = catchThrowable(() -> underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID));
 
@@ -218,9 +229,13 @@ public class ConstructNewBuildingServiceTest {
     public void buildingCannotBeBuiltToGivenSurfaceType() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(Collections.emptyList());
@@ -234,33 +249,38 @@ public class ConstructNewBuildingServiceTest {
     public void constructNewBuilding() throws Exception {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.toMap(GameConstants.ORIGO, surface)));
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(List.of(SurfaceType.CONCRETE));
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.toMap(1, constructionRequirements));
-        given(buildingFactory.create(DATA_ID, SURFACE_ID, 0)).willReturn(building);
+        given(buildingFactory.create(DATA_ID, PLANET_ID, SURFACE_ID, 0)).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(constructionFactory.create(BUILDING_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(game.getGameId()).willReturn(GAME_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(buildingToModelConverter.convert(building, GAME_ID)).willReturn(buildingModel);
-        given(constructionToModelConverter.convert(construction, GAME_ID)).willReturn(constructionModel);
-        given(surfaceToResponseConverter.convert(surface)).willReturn(surfaceResponse);
-        given(buildingConstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(planet)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
+        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(buildingConstructionToQueueItemConverter.convert(gameData, construction)).willReturn(queueItem);
+        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
         given(game.getEventLoop()).willReturn(eventLoop);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
 
-        given(constructionProcessFactory.create(game, planet, building)).willReturn(constructionProcess);
-        given(game.getProcesses()).willReturn(processes);
+        given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
+        given(gameData.getProcesses()).willReturn(processes);
         given(constructionProcess.toModel()).willReturn(processModel);
 
         SurfaceResponse result = underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
@@ -272,9 +292,9 @@ public class ConstructNewBuildingServiceTest {
             .call();
         assertThat(executionResponse).isEqualTo(surfaceResponse);
 
-        verify(building).setConstruction(construction);
-        verify(surface).setBuilding(building);
-        verify(resourceAllocationService).processResourceRequirements(GAME_ID, planet, LocationType.PLANET, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(constructions).add(construction);
+        verify(buildings).add(building);
+        verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
         verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
         verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessContext;
@@ -66,10 +67,14 @@ public class ProcessSchedulerProcessTest {
     @Mock
     private SyncCache syncCache;
 
+    @Mock
+    private GameData gameData;
+
     @Test
     public void scheduleProcesses() {
         given(game.isTerminated()).willReturn(false)
             .willReturn(true);
+        given(game.getData()).willReturn(gameData);
 
         given(processContext.getExecutorServiceBean()).willReturn(executorServiceBean);
         given(processContext.getSleepService()).willReturn(sleepService);
@@ -84,7 +89,7 @@ public class ProcessSchedulerProcessTest {
         given(future.isDone()).willReturn(false)
             .willReturn(true);
 
-        given(game.getProcesses()).willReturn(processes);
+        given(gameData.getProcesses()).willReturn(processes);
 
         given(process.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
 

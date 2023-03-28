@@ -112,7 +112,7 @@ public class ProductionRequirementsAllocationServiceTest {
         given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
-        UUID result = underTest.allocate(syncCache, GAME_ID, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        UUID result = underTest.allocate(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         verify(allocatedResources).add(allocatedResource);
         verify(reservedStorages).add(reservedStorage);

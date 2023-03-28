@@ -53,19 +53,6 @@ public class UpgradeBuildingService {
     public SurfaceResponse upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
-        Building building = game.getData()
-            .getBuildings()
-            .findByBuildingId(buildingId);
-
-        Surface surface = game.getData()
-            .getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
-
-        UUID ownerId = game.getData()
-            .getPlanets()
-            .get(planetId)
-            .getOwner();
-
         if (game.getData().getDeconstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, buildingId + " on planet " + planetId + " is under deconstruction.");
         }
@@ -73,6 +60,10 @@ public class UpgradeBuildingService {
         if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Construction already in progress on planet " + planetId + " and building " + buildingId);
         }
+
+        Building building = game.getData()
+            .getBuildings()
+            .findByBuildingId(buildingId);
 
         BuildingData buildingData = allBuildingService.get(building.getDataId());
         ConstructionRequirements constructionRequirements = buildingData.getConstructionRequirements()
@@ -92,6 +83,15 @@ public class UpgradeBuildingService {
             constructionRequirements.getParallelWorkers(),
             constructionRequirements.getRequiredWorkPoints()
         );
+
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(building.getSurfaceId());
+
+        UUID ownerId = game.getData()
+            .getPlanets()
+            .get(planetId)
+            .getOwner();
 
         return game.getEventLoop()
             .processWithResponseAndWait(() -> {
