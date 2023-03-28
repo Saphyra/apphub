@@ -63,7 +63,7 @@ public class SolarSystemGenerationService {
         List<UUID[]> possibilities = new ArrayList<>(getSuitableSolarSystems(solarSystems, settings));
         possibilities.add(null);
 
-        return Optional.ofNullable(possibilities.get(random.randInt(0, possibilities.size())));
+        return Optional.ofNullable(possibilities.get(random.randInt(0, possibilities.size() - 1)));
     }
 
     private List<UUID[]> getSuitableSolarSystems(List<UUID[]> solarSystems, SkyXploreGameCreationSettingsRequest settings) {
@@ -84,7 +84,7 @@ public class SolarSystemGenerationService {
 
     private UUID[] newSolarSystem(SkyXploreGameCreationSettingsRequest settings, boolean atLeastOnePlanet) {
         Range<Integer> planetsPerSolarSystem = settings.getPlanetsPerSolarSystem();
-        int min = atLeastOnePlanet ? Math.min(1, planetsPerSolarSystem.getMin()) : planetsPerSolarSystem.getMin();
+        int min = atLeastOnePlanet ? Math.max(1, planetsPerSolarSystem.getMin()) : planetsPerSolarSystem.getMin();
 
         int planetCount = random.randInt(min, planetsPerSolarSystem.getMax());
 
@@ -97,6 +97,6 @@ public class SolarSystemGenerationService {
             .filter(integer -> isNull(solarSystem[integer]))
             .toList();
 
-        return availablePlanets.get(random.randInt(0, availablePlanets.size()));
+        return availablePlanets.get(random.randInt(0, availablePlanets.size() - 1));
     }
 }

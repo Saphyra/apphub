@@ -45,6 +45,7 @@ public class SkillToResponseConverterTest {
         given(skill.getExperience()).willReturn(EXPERIENCE);
         given(skill.getLevel()).willReturn(LEVEL);
         given(skill.getNextLevel()).willReturn(NEXT_LEVEL);
+        given(skill.getSkillType()).willReturn(SkillType.AIMING);
 
         Map<String, SkillResponse> result = underTest.getSkills(gameData, CITIZEN_ID);
 

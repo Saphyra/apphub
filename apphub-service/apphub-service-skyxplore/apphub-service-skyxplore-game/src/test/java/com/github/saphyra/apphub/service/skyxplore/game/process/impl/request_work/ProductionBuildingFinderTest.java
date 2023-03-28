@@ -41,8 +41,7 @@ public class ProductionBuildingFinderTest {
     @Test
     public void findSuitableProductionBuilding() {
         given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocation(LOCATION)).willReturn(List.of(building));
-        given(building.getDataId()).willReturn(DATA_ID);
+        given(buildings.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(building));
         given(buildingCapacityCalculator.calculateCapacity(gameData, building)).willReturn(1);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
 

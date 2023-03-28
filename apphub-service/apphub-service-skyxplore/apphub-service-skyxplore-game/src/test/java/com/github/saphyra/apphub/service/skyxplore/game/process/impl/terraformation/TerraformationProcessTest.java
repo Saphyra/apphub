@@ -166,13 +166,13 @@ public class TerraformationProcessTest {
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(Collections.emptyList());
         given(applicationContextProxy.getBean(UseAllocatedResourceService.class)).willReturn(useAllocatedResourceService);
-        given(gameData.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForTerraformation.class)).willReturn(requestWorkProcessFactoryForTerraformation);
         given(requestWorkProcessFactoryForTerraformation.createRequestWorkProcesses(gameData, LOCATION, PROCESS_ID, surface)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
 
@@ -241,7 +241,6 @@ public class TerraformationProcessTest {
     @Test
     public void toModel() {
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(LOCATION);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();

@@ -70,7 +70,7 @@ class SolarSystemPlacerService {
     private Coordinate getReferenceCoordinate(Map<Coordinate, UUID[]> placedSolarSystems) {
         List<Coordinate> coordinates = new ArrayList<>(placedSolarSystems.keySet());
 
-        return coordinates.get(random.randInt(0, coordinates.size()));
+        return coordinates.get(random.randInt(0, coordinates.size() - 1));
     }
 
     private boolean isFarEnough(Coordinate newCoordinate, Set<Coordinate> keySet) {

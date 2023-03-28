@@ -4,11 +4,13 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -95,29 +97,28 @@ public class TerraformationUpdateServiceTest {
     @Mock
     private Surfaces surfaces;
 
-    @Mock
-    private Construction construction;
-
     @Test
     public void updateTerraformation() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
-        given(construction.getExternalReference()).willReturn(SURFACE_ID);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(terraformation.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
-        given(game.getGameId()).willReturn(GAME_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(constructionToModelConverter.convert(GAME_ID, terraformation)).willReturn(constructionModel);
 
         given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
 
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
         given(surfaceToQueueItemConverter.convert(terraformation, surface)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
+
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.updateTerraformation(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -30,6 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -48,6 +50,8 @@ public class GameCreationControllerImplItTest {
     private static final String ALLIANCE_NAME = "alliance-name";
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
+    private static final UUID AI_USER_ID = UUID.randomUUID();
+    private static final String AI_NAME = "ai-name";
 
     @LocalServerPort
     private int serverPort;
@@ -97,6 +101,13 @@ public class GameCreationControllerImplItTest {
                         .planetSize(new Range<>(10, 15))
                         .build()
                     )
+                    .ais(List.of(
+                        AiPlayer.builder()
+                            .userId(AI_USER_ID)
+                            .allianceId(null)
+                            .name(AI_NAME)
+                            .build()
+                    ))
                     .build();
 
                 Response response = RequestFactory.createRequest()
@@ -142,6 +153,13 @@ public class GameCreationControllerImplItTest {
                 .planetSize(new Range<>(10, 15))
                 .build()
             )
+            .ais(List.of(
+                AiPlayer.builder()
+                    .userId(AI_USER_ID)
+                    .allianceId(null)
+                    .name(AI_NAME)
+                    .build()
+            ))
             .gameName(GAME_NAME)
             .build();
 
@@ -185,6 +203,13 @@ public class GameCreationControllerImplItTest {
                 .planetSize(new Range<>(5, 6))
                 .build()
             )
+            .ais(List.of(
+                AiPlayer.builder()
+                    .userId(AI_USER_ID)
+                    .allianceId(null)
+                    .name(AI_NAME)
+                    .build()
+            ))
             .gameName(GAME_NAME)
             .build();
 

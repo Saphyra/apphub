@@ -100,7 +100,7 @@ class MoraleRechargeBackgroundProcessTest {
 
         verify(gameSleepService).sleepASecond(game);
         verify(sleepService).sleep(100);
-        verify(passiveMoraleRechargeService).processGame(gameData, syncCache);
+        verify(passiveMoraleRechargeService).processGame(game, syncCache);
         verify(activeMoraleRechargeService).processGame(gameData, syncCache);
     }
 }

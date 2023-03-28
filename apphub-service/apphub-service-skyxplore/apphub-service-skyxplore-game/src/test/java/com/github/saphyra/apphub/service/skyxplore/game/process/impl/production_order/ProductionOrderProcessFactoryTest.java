@@ -95,6 +95,8 @@ public class ProductionOrderProcessFactoryTest {
     public void create() throws NoSuchFieldException, IllegalAccessException {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.findByReservedStorageId(RESERVED_STORAGE_ID)).willReturn(Optional.of(reservedStorage));
+        given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+        given(allocatedResources.findByExternalReferenceAndDataId(RESERVED_STORAGE_EXTERNAL_REFERENCE, DATA_ID)).willReturn(Optional.of(allocatedResource));
 
         given(reservedStorage.getExternalReference()).willReturn(RESERVED_STORAGE_EXTERNAL_REFERENCE);
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
@@ -120,6 +122,7 @@ public class ProductionOrderProcessFactoryTest {
 
     @Test
     public void createFromModel() throws NoSuchFieldException, IllegalAccessException {
+        given(game.getData()).willReturn(gameData);
         ProcessModel model = new ProcessModel();
         model.setId(PROCESS_ID_1);
         model.setStatus(ProcessStatus.IN_PROGRESS);
@@ -148,7 +151,6 @@ public class ProductionOrderProcessFactoryTest {
         assertThat((String) ReflectionUtils.getFieldValue(result, "producerBuildingDataId")).isEqualTo(DATA_ID);
         assertThat((UUID) ReflectionUtils.getFieldValue(result, "externalReference")).isEqualTo(EXTERNAL_REFERENCE);
         assertThat((GameData) ReflectionUtils.getFieldValue(result, "gameData")).isEqualTo(gameData);
-        assertThat((Planet) ReflectionUtils.getFieldValue(result, "planet")).isEqualTo(planet);
         assertThat((AllocatedResource) ReflectionUtils.getFieldValue(result, "allocatedResource")).isEqualTo(allocatedResource);
         assertThat((ReservedStorage) ReflectionUtils.getFieldValue(result, "reservedStorage")).isEqualTo(reservedStorage);
         assertThat((Integer) ReflectionUtils.getFieldValue(result, "amount")).isEqualTo(RESERVED_AMOUNT);

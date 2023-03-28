@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.GameSleepService;
@@ -24,7 +23,6 @@ import java.util.concurrent.Future;
 public class Work implements Callable<Work> {
     private final int workPoints;
     private final Game game;
-    private final GameData gameData;
     private final UUID location;
     private final UUID citizenId;
     private final SkillType skillType;
@@ -33,7 +31,7 @@ public class Work implements Callable<Work> {
     @Override
     public Work call() {
         long processTime = applicationContextProxy.getBean(SleepTimeCalculator.class)
-            .calculateSleepTime(gameData, citizenId, skillType, workPoints);
+            .calculateSleepTime(game.getData(), citizenId, skillType, workPoints);
         log.info("SleepTime for workPoints {}: {}", workPoints, processTime);
 
         applicationContextProxy.getBean(GameSleepService.class)
@@ -43,7 +41,7 @@ public class Work implements Callable<Work> {
             .create();
 
         Future<?> citizenUpdateProcess = game.getEventLoop()
-            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, gameData, location, citizenId, workPoints, skillType), syncCache);
+            .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, game.getData(), location, citizenId, workPoints, skillType), syncCache);
 
         while (!citizenUpdateProcess.isDone()) {
             applicationContextProxy.getBean(SleepService.class)

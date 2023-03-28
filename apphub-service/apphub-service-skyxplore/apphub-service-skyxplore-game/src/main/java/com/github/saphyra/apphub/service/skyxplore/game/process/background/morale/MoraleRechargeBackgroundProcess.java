@@ -28,7 +28,7 @@ public class MoraleRechargeBackgroundProcess {
 
                     Future<?> future = game.getEventLoop()
                         .process(() -> {
-                                processContext.getPassiveMoraleRechargeService().processGame(game.getData(), syncCache);
+                                processContext.getPassiveMoraleRechargeService().processGame(game, syncCache);
                                 processContext.getActiveMoraleRechargeService().processGame(game.getData(), syncCache);
                             },
                             syncCache

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
@@ -64,9 +63,6 @@ public class StoreResourceServiceTest {
     private GameData gameData;
 
     @Mock
-    private Planet planet;
-
-    @Mock
     private ReservedStorage reservedStorage;
 
     @Mock
@@ -103,8 +99,6 @@ public class StoreResourceServiceTest {
         given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
         given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
 
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
 
         underTest.storeResource(syncCache, gameData, PLANET_ID, USER_ID, reservedStorage, allocatedResource, AMOUNT);

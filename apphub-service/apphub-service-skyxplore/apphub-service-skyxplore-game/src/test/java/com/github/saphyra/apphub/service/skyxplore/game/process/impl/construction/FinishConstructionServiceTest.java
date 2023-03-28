@@ -36,12 +36,10 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class FinishConstructionServiceTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
-    private static final Integer LEVEL = 324;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
-    private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
 
     @Mock
@@ -97,26 +95,25 @@ public class FinishConstructionServiceTest {
 
     @Test
     public void finishConstruction() {
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(building.getLevel()).willReturn(LEVEL);
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(gameData.getConstructions()).willReturn(constructions);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(building.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(gameData.getSurfaces()).willReturn(surfaces);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
-        given(gameData.getConstructions()).willReturn(constructions);
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, LOCATION)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
 
+        ////
 
-        underTest.finishConstruction(syncCache, gameData, PLANET_ID, building, construction);
+        underTest.finishConstruction(syncCache, gameData, LOCATION, building, construction);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
-        verify(building).setLevel(LEVEL + 1);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, USER_ID, CONSTRUCTION_ID);
+        verify(building).increaseLevel();
         verify(constructions).deleteById(CONSTRUCTION_ID);
         verify(syncCache).deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(syncCache).saveGameItem(buildingModel);
@@ -125,18 +122,18 @@ public class FinishConstructionServiceTest {
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED), eq(CONSTRUCTION_ID), queueItemDeletedArgumentCaptor.capture());
         queueItemDeletedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetQueueItemDeleted(USER_ID, PLANET_ID, CONSTRUCTION_ID);
+        verify(messageSender).planetQueueItemDeleted(USER_ID, LOCATION, CONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> surfaceModifiedArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED), eq(SURFACE_ID), surfaceModifiedArgumentCaptor.capture());
         surfaceModifiedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetSurfaceModified(USER_ID, PLANET_ID, surfaceResponse);
+        verify(messageSender).planetSurfaceModified(USER_ID, LOCATION, surfaceResponse);
 
         ArgumentCaptor<Runnable> buildingDetailsModifiedArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(PLANET_ID), buildingDetailsModifiedArgumentCaptor.capture());
+        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED), eq(LOCATION), buildingDetailsModifiedArgumentCaptor.capture());
         buildingDetailsModifiedArgumentCaptor.getValue()
             .run();
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(messageSender).planetBuildingDetailsModified(USER_ID, LOCATION, CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
     }
 }

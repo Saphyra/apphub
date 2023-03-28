@@ -8,11 +8,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.converter.respons
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
@@ -54,9 +54,6 @@ public class SatietyDecreaseServiceTest {
     private SatietyDecreaseService underTest;
 
     @Mock
-    private Game game;
-
-    @Mock
     private GameData gameData;
 
     @Mock
@@ -82,17 +79,18 @@ public class SatietyDecreaseServiceTest {
 
     @Test
     public void processGame() {
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
         given(gameData.getCitizens()).willReturn(CollectionUtils.toList(new Citizens(), citizen));
-        given(game.getGameId()).willReturn(GAME_ID);
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getSatiety()).willReturn(satietyProperties);
         given(satietyProperties.getSatietyDecreasedPerSecond()).willReturn(SATIETY_DECREASED_PER_SECONDS);
         given(citizen.getSatiety()).willReturn(CURRENT_SATIETY);
         given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
         given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
+        given(citizen.getLocation()).willReturn(PLANET_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
 
         underTest.processGame(gameData, syncCache);
 

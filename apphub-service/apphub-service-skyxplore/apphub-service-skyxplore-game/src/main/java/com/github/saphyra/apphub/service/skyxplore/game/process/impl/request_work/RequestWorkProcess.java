@@ -159,7 +159,6 @@ public class RequestWorkProcess implements Process {
         Work work = Work.builder()
             .workPoints(Math.min(workPointsLeft, workPointsPerSeconds))
             .game(applicationContextProxy.getBean(GameDao.class).findById(gameData.getGameId()))
-            .gameData(gameData)
             .location(location)
             .citizenId(worker)
             .skillType(skillType)

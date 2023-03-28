@@ -96,7 +96,6 @@ public class WorkTest {
         given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.process(any(Runnable.class), eq(syncCache))).willReturn(future);
-        given(game.getGameId()).willReturn(GAME_ID);
         given(future.isDone())
             .willReturn(false)
             .willReturn(true);

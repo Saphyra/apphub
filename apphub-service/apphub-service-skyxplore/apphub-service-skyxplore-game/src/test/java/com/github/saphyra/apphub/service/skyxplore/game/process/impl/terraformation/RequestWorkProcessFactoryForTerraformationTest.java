@@ -34,6 +34,7 @@ public class RequestWorkProcessFactoryForTerraformationTest {
     private static final Integer PARALLEL_WORKERS = 234;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -67,8 +68,9 @@ public class RequestWorkProcessFactoryForTerraformationTest {
 
     @Test
     public void createRequestWorkProcess() {
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByExternalReferenceValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
 
         given(terraformation.getData()).willReturn(SurfaceType.DESERT.name());
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);

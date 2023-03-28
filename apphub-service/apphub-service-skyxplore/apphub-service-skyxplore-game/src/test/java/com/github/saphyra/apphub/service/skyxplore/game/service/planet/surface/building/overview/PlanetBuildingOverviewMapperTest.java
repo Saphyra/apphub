@@ -66,7 +66,7 @@ public class PlanetBuildingOverviewMapperTest {
         PlanetBuildingOverviewResponse result = underTest.createOverview(gameData, PLANET_ID, SurfaceType.CONCRETE);
 
         assertThat(result.getBuildingDetails()).containsExactly(overviewDetailedResponse);
-        assertThat(result.getSlots()).isEqualTo(3);
-        assertThat(result.getUsedSlots()).isEqualTo(4);
+        assertThat(result.getSlots()).isEqualTo(4);
+        assertThat(result.getUsedSlots()).isEqualTo(3);
     }
 }

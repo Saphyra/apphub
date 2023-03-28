@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
@@ -87,24 +88,26 @@ public class FinishTerraformationServiceTest {
     private Constructions constructions;
 
     @Mock
-    private Construction construction;
+    private Surfaces surfaces;
 
     @Test
     public void finishTerraformation() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
 
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(terraformation.getData()).willReturn(SurfaceType.DESERT.name());
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
         given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.toMap(DATA_ID, planetBuildingOverviewResponse));
         given(surfaceToModelConverter.convert(GAME_ID, surface)).willReturn(surfaceModel);
 
-        underTest.finishTerraformation(syncCache, gameData, PLANET_ID, construction);
+        underTest.finishTerraformation(syncCache, gameData, PLANET_ID, terraformation);
 
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(surface).setSurfaceType(SurfaceType.DESERT);

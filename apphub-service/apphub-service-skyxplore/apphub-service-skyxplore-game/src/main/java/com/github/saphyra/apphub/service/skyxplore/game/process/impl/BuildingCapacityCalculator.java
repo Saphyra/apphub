@@ -13,13 +13,17 @@ import org.springframework.stereotype.Component;
 public class BuildingCapacityCalculator {
     private final ProductionBuildingService productionBuildingService;
 
+    /**
+     * result = number of workplaces * level - allocated workplaces
+     */
     public int calculateCapacity(GameData gameData, Building building) {
-        int maxWorkers = building.getLevel() * productionBuildingService.get(building.getDataId())
+        Integer workers = productionBuildingService.get(building.getDataId())
             .getWorkers();
+        int maxWorkers = building.getLevel() * workers;
 
         int assignedWorkplaces = gameData.getBuildingAllocations()
             .getByBuildingId(building.getBuildingId())
-            .size() * building.getLevel();
+            .size();
 
         int result = maxWorkers - assignedWorkplaces;
         log.info("Workplaces on level {} {}: {}. Already assigned: {}. Remaining: {}", building.getLevel(), building.getDataId(), maxWorkers, assignedWorkplaces, result);

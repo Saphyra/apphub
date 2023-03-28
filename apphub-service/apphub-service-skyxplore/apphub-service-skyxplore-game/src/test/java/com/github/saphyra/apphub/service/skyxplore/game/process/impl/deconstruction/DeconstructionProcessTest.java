@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContex
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -53,9 +52,6 @@ class DeconstructionProcessTest {
 
     @Mock
     private Deconstruction deconstruction;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private SyncCache syncCache;
@@ -104,6 +100,7 @@ class DeconstructionProcessTest {
     public void getPriority() {
         given(gameData.getPriorities()).willReturn(priorities);
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
+        given(priority.getValue()).willReturn(BASE_PRIORITY);
         given(deconstruction.getPriority()).willReturn(DECONSTRUCTION_PRIORITY);
 
         int result = underTest.getPriority();
@@ -171,7 +168,6 @@ class DeconstructionProcessTest {
     @Test
     void toModel() {
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(LOCATION);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();

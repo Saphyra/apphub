@@ -25,7 +25,9 @@ class PassiveMoraleRechargeProcessFactoryTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
+    private static final UUID LOCATION = UUID.randomUUID();
 
+    @SuppressWarnings("unused")
     @Mock
     private ApplicationContextProxy applicationContextProxy;
 
@@ -58,8 +60,10 @@ class PassiveMoraleRechargeProcessFactoryTest {
     @Test
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(citizen.getLocation()).willReturn(LOCATION);
+        given(game.getData()).willReturn(gameData);
 
-        PassiveMoraleRechargeProcess result = underTest.create(gameData, citizen);
+        PassiveMoraleRechargeProcess result = underTest.create(game, citizen);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
@@ -68,13 +72,13 @@ class PassiveMoraleRechargeProcessFactoryTest {
     @Test
     void createFromModel() {
         given(processModel.getId()).willReturn(PROCESS_ID);
-        given(processModel.getLocation()).willReturn(PLANET_ID);
         given(processModel.getExternalReference()).willReturn(CITIZEN_ID);
         given(processModel.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
 
         given(game.getData()).willReturn(gameData);
         given(gameData.getCitizens()).willReturn(citizens);
         given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
+        given(citizen.getLocation()).willReturn(LOCATION);
 
         PassiveMoraleRechargeProcess result = underTest.createFromModel(game, processModel);
 

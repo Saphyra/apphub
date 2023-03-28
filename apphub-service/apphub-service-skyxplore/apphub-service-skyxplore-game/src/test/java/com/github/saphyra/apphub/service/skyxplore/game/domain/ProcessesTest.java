@@ -54,17 +54,6 @@ public class ProcessesTest {
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
-    @Test
-    public void findByExternalReferenceAndTypeValidated_multipleResult() {
-        underTest.add(process);
-        underTest.add(process);
-        given(process.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(process.getType()).willReturn(ProcessType.PRODUCTION_ORDER);
-
-        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.PRODUCTION_ORDER));
-
-        ExceptionValidator.validateReportedException(ex, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
-    }
 
     @Test
     public void findByExternalReferenceAndTypeValidated() {

@@ -79,6 +79,7 @@ public class ConstructionProcessFactoryTest {
         model.setLocation(LOCATION);
         model.setExternalReference(CONSTRUCTION_ID);
 
+        given(game.getData()).willReturn(gameData);
         given(gameData.getBuildings()).willReturn(buildings);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);

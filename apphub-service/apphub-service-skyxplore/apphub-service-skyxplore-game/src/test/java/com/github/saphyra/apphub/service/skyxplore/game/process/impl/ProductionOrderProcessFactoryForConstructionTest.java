@@ -54,7 +54,6 @@ public class ProductionOrderProcessFactoryForConstructionTest {
     public void createProductionOrderProcesses() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.getByExternalReference(CONSTRUCTION_ID)).willReturn(List.of(reservedStorage));
-        given(reservedStorage.getExternalReference()).willReturn(CONSTRUCTION_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
         given(productionOrderProcessFactory.create(gameData, PROCESS_ID, LOCATION, RESERVED_STORAGE_ID)).willReturn(List.of(productionOrderProcess));

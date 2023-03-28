@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +21,11 @@ public class PassiveMoraleRechargeProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
 
-    public PassiveMoraleRechargeProcess create(GameData gameData, Citizen citizen) {
+    public PassiveMoraleRechargeProcess create(Game game, Citizen citizen) {
         return create(
             idGenerator.randomUuid(),
             ProcessStatus.CREATED,
-            gameData,
+            game,
             citizen
         );
     }
@@ -45,16 +44,17 @@ public class PassiveMoraleRechargeProcessFactory implements ProcessFactory {
         return create(
             model.getId(),
             model.getStatus(),
-            game.getData(),
+            game,
             citizen
         );
     }
 
-    private PassiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, GameData gameData, Citizen citizen) {
+    private PassiveMoraleRechargeProcess create(UUID processId, ProcessStatus status, Game game, Citizen citizen) {
         return PassiveMoraleRechargeProcess.builder()
             .processId(processId)
             .status(status)
-            .gameData(gameData)
+            .game(game)
+            .gameData(game.getData())
             .location(citizen.getLocation())
             .citizen(citizen)
             .applicationContextProxy(applicationContextProxy)

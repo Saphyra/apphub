@@ -4,12 +4,14 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -106,7 +108,7 @@ class DeconstructionUpdateServiceTest {
         given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildings()).willReturn(buildings);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
-        given(buildings.findByBuildingId(BUILDING_ID));
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
         given(building.getSurfaceId()).willReturn(SURFACE_ID);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
@@ -118,9 +120,11 @@ class DeconstructionUpdateServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
+
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(PLANET_ID, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.updateDeconstruction(syncCache, gameData, PLANET_ID, DECONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 

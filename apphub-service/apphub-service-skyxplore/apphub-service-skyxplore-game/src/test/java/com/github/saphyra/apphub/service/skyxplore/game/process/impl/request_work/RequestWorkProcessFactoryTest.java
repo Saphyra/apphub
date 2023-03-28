@@ -77,8 +77,6 @@ public class RequestWorkProcessFactoryTest {
         assertThat(process.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(process.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(process.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat((Game) ReflectionUtils.getFieldValue(process, "game")).isEqualTo(game);
-        assertThat((Planet) ReflectionUtils.getFieldValue(process, "planet")).isEqualTo(planet);
         assertThat((String) ReflectionUtils.getFieldValue(process, "buildingDataId")).isNull();
         assertThat((SkillType) ReflectionUtils.getFieldValue(process, "skillType")).isEqualTo(SkillType.DOCTORING);
         assertThat((Integer) ReflectionUtils.getFieldValue(process, "requiredWorkPoints")).isEqualTo(REQUIRED_WORK_POINTS);
@@ -107,14 +105,13 @@ public class RequestWorkProcessFactoryTest {
         ));
 
         given(game.getData()).willReturn(gameData);
+        given(uuidConverter.convertEntity(TARGET_ID_STRING)).willReturn(TARGET_ID);
 
         RequestWorkProcess result = underTest.createFromModel(game, model);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat((Game) ReflectionUtils.getFieldValue(result, "game")).isEqualTo(game);
-        assertThat((Planet) ReflectionUtils.getFieldValue(result, "planet")).isEqualTo(planet);
         assertThat((String) ReflectionUtils.getFieldValue(result, "buildingDataId")).isEqualTo(BUILDING_DATA_ID);
         assertThat((SkillType) ReflectionUtils.getFieldValue(result, "skillType")).isEqualTo(SkillType.DOCTORING);
         assertThat((Integer) ReflectionUtils.getFieldValue(result, "requiredWorkPoints")).isEqualTo(REQUIRED_WORK_POINTS);

@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +31,7 @@ public class Processes extends Vector<Process> {
         return stream()
             .filter(process -> process.getProcessId().equals(processId))
             .findAny()
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found by processId " + processId));
     }
 
     public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
@@ -36,6 +39,6 @@ public class Processes extends Vector<Process> {
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == processType)
             .findAny()
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found with externalReference " + externalReference + " and processType " + processType));
     }
 }

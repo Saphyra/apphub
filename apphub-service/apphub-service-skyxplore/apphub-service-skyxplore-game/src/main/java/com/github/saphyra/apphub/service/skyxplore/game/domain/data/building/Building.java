@@ -10,10 +10,15 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+//TODO unit test
 public class Building {
     private final UUID buildingId;
     private final UUID location;
     private final UUID surfaceId;
     private final String dataId;
     private volatile int level;
+
+    public void increaseLevel() {
+        level += 1;
+    }
 }

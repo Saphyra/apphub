@@ -4,12 +4,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -52,9 +54,6 @@ public class ConstructionProcessTest {
     private GameData gameData;
 
     @Mock
-    private Planet planet;
-
-    @Mock
     private Building building;
 
     @Mock
@@ -95,6 +94,9 @@ public class ConstructionProcessTest {
 
     @Mock
     private Priority priority;
+
+    @Mock
+    private Planet planet;
 
     @BeforeEach
     public void setUp() {
@@ -165,12 +167,13 @@ public class ConstructionProcessTest {
         given(productionOrderProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.REQUEST_WORK)).willReturn(Collections.emptyList());
         given(applicationContextProxy.getBean(UseAllocatedResourceService.class)).willReturn(useAllocatedResourceService);
-        given(gameData.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(RequestWorkProcessFactoryForConstruction.class)).willReturn(requestWorkProcessFactoryForConstruction);
         given(requestWorkProcessFactoryForConstruction.createRequestWorkProcesses(PROCESS_ID, gameData, LOCATION, building, construction)).willReturn(List.of(requestWorkProcess));
         given(requestWorkProcess.toModel()).willReturn(processModel);
         given(gameData.getProcesses()).willReturn(processes);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(LOCATION, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.work(syncCache);
 
@@ -239,7 +242,6 @@ public class ConstructionProcessTest {
     @Test
     public void toModel() {
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(planet.getPlanetId()).willReturn(LOCATION);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         ProcessModel result = underTest.toModel();

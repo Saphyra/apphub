@@ -93,6 +93,7 @@ public class UseAllocatedResourceServiceTest {
 
     @Test
     public void resolveAllocations() {
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.getByExternalReference(EXTERNAL_REFERENCE)).willReturn(List.of(reservedStorage));
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
@@ -107,9 +108,6 @@ public class UseAllocatedResourceServiceTest {
         given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
         given(storedResourceToModelConverter.convert(GAME_ID, storedResource)).willReturn(storedResourceModel);
         given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
-
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         underTest.resolveAllocations(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE);
 

@@ -37,7 +37,7 @@ class FinishConstructionService {
 
         allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, location, ownerId, construction.getConstructionId());
 
-        building.setLevel(building.getLevel() + 1);
+        building.increaseLevel();
 
         gameData.getConstructions()
             .deleteById(construction.getConstructionId());

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorag
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -74,9 +73,6 @@ public class ProductionRequirementsAllocationServiceTest {
     private SyncCache syncCache;
 
     @Mock
-    private Planet planet;
-
-    @Mock
     private AllocatedResource allocatedResource;
 
     @Mock
@@ -101,14 +97,13 @@ public class ProductionRequirementsAllocationServiceTest {
     public void allocate() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+        given(gameData.getGameId()).willReturn(GAME_ID);
 
         given(availableResourceCounter.countAvailableAmount(gameData, PLANET_ID, DATA_ID)).willReturn(AVAILABLE_AMOUNT);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(allocatedResourceFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AVAILABLE_AMOUNT)).willReturn(allocatedResource);
         given(reservedStorageFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - AVAILABLE_AMOUNT)).willReturn(reservedStorage);
         given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
         given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
-        given(planet.getOwner()).willReturn(USER_ID);
         given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
 
