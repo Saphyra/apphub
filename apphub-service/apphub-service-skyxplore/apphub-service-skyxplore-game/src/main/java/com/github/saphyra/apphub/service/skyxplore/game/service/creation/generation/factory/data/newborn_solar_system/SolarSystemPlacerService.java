@@ -34,9 +34,7 @@ class SolarSystemPlacerService {
 
         solarSystems.forEach(solarSystem -> placedSolarSystems.put(place(placedSolarSystems), solarSystem));
 
-        Map<Coordinate, UUID[]> shiftedSolarSystems = shiftSolarSystems(placedSolarSystems);
-
-        return shiftedSolarSystems;
+        return shiftSolarSystems(placedSolarSystems);
     }
 
     private Coordinate place(Map<Coordinate, UUID[]> placedSolarSystems) {
@@ -75,7 +73,7 @@ class SolarSystemPlacerService {
 
     private boolean isFarEnough(Coordinate newCoordinate, Set<Coordinate> keySet) {
         return keySet.stream()
-            .allMatch(coordinate -> distanceCalculator.getDistance(newCoordinate, coordinate) > gameProperties.getSolarSystem().getSolarSystemDistance().getMax());
+            .allMatch(coordinate -> distanceCalculator.getDistance(newCoordinate, coordinate) > gameProperties.getSolarSystem().getSolarSystemDistance().getMin());
     }
 
     /**

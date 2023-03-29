@@ -22,7 +22,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-    //TODO split
+//TODO split
 public class SolarSystemGenerationService {
     private final Random random;
     private final SolarSystemPlacerService solarSystemPlacerService;
