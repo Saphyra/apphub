@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
@@ -68,12 +69,17 @@ public class SurfaceToResponseConverterTest {
     @Mock
     private Buildings buildings;
 
+    @Mock
+    private Coordinates coordinates;
+
     @Test
     public void convert() {
         Surface surface = Surface.builder()
             .surfaceId(SURFACE_ID)
             .surfaceType(SurfaceType.DESERT)
             .build();
+        given(gameData.getCoordinates()).willReturn(coordinates);
+        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
@@ -83,7 +89,6 @@ public class SurfaceToResponseConverterTest {
 
         given(buildingToResponseConverter.convert(gameData, building)).willReturn(surfaceBuildingResponse);
         given(constructionToResponseConverter.convert(construction)).willReturn(constructionResponse);
-        given(coordinateModel.getCoordinate()).willReturn(coordinate);
 
         SurfaceResponse result = underTest.convert(gameData, SURFACE_ID);
 

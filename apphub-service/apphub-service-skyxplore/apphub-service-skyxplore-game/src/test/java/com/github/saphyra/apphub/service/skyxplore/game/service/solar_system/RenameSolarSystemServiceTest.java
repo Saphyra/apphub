@@ -92,11 +92,11 @@ public class RenameSolarSystemServiceTest {
         given(solarSystems.findByIdValidated(SOLAR_SYSTEM_ID)).willReturn(solarSystem);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
-        given(game.getGameId()).willReturn(GAME_ID);
 
         OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
         given(solarSystem.getCustomNames()).willReturn(customNames);
         given(solarSystemToModelConverter.convert(GAME_ID, solarSystem)).willReturn(model);
+        given(gameData.getGameId()).willReturn(GAME_ID);
 
         underTest.rename(USER_ID, SOLAR_SYSTEM_ID, NEW_NAME);
 

@@ -117,9 +117,6 @@ public class CancelTerraformationServiceTest {
     private Constructions constructions;
 
     @Mock
-    private Construction construction;
-
-    @Mock
     private Surfaces surfaces;
 
     @Captor
@@ -130,9 +127,9 @@ public class CancelTerraformationServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(construction.getExternalReference()).willReturn(SURFACE_ID);
+        given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
@@ -188,7 +185,7 @@ public class CancelTerraformationServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(construction);
+        given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
 
         //Common

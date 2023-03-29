@@ -26,7 +26,10 @@ class StorageSettingsModelValidator {
     void validate(GameData gameData, UUID location, StorageSettingApiModel model) {
         validate(model);
 
-        if (gameData.getStorageSettings().findByLocationAndDataId(location, model.getDataId()).isPresent()) {
+        boolean storageSettingAlreadyExists = gameData.getStorageSettings()
+            .findByLocationAndDataId(location, model.getDataId())
+            .isPresent();
+        if (storageSettingAlreadyExists) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, String.format("StorageSetting with dataId %s alreaddy exists on planet %s", model.getDataId(), location));
         }
     }

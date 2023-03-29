@@ -57,8 +57,6 @@ public class AvailableResourceCounterTest {
 
         given(storedResource.getAmount()).willReturn(STORED_AMOUNT);
         given(allocatedResource1.getAmount()).willReturn(ALLOCATED_AMOUNT);
-        given(allocatedResource1.getDataId()).willReturn(DATA_ID_1);
-        given(allocatedResource2.getDataId()).willReturn(DATA_ID_2);
 
         int result = underTest.countAvailableAmount(gameData, LOCATION, DATA_ID_1);
 

@@ -108,7 +108,6 @@ public class ConstructionQueueItemPriorityUpdateServiceTest {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
 
-        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);

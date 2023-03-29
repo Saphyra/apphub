@@ -218,9 +218,10 @@ public class TerraformationServiceTest {
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.empty());
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -235,9 +236,10 @@ public class TerraformationServiceTest {
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities()));
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -252,7 +254,6 @@ public class TerraformationServiceTest {
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
@@ -277,6 +278,8 @@ public class TerraformationServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 

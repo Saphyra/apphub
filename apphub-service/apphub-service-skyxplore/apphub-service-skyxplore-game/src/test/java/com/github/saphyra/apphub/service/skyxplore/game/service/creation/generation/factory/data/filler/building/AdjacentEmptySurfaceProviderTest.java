@@ -71,12 +71,9 @@ public class AdjacentEmptySurfaceProviderTest {
 
     @Test
     public void hasBuilding() {
-        given(gameData.getCoordinates()).willReturn(coordinates);
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate2);
-        given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(1d);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface), gameData);
 

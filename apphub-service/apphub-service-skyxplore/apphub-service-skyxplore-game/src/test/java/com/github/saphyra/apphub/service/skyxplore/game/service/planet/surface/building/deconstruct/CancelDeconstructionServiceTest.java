@@ -201,6 +201,8 @@ class CancelDeconstructionServiceTest {
         //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class), eq(syncCache))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(surfaceResponse);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         SurfaceResponse result = underTest.cancelDeconstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 

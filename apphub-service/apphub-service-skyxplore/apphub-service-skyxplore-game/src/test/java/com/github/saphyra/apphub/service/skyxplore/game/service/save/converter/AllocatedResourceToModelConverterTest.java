@@ -2,12 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class AllocatedResourceToModelConverterTest {
@@ -29,13 +26,8 @@ public class AllocatedResourceToModelConverterTest {
     @InjectMocks
     private AllocatedResourceToModelConverter underTest;
 
-    @Mock
-    private Game game;
-
     @Test
     public void convert() {
-        given(game.getGameId()).willReturn(GAME_ID);
-
         AllocatedResource allocatedResource = AllocatedResource.builder()
             .allocatedResourceId(ALLOCATED_RESOURCE_ID)
             .location(LOCATION)

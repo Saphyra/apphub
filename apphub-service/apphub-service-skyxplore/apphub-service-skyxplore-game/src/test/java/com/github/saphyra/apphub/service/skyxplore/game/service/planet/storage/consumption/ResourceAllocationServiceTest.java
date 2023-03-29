@@ -127,6 +127,7 @@ public class ResourceAllocationServiceTest {
 
     @Test
     public void processResourceRequirements() {
+        given(gameData.getGameId()).willReturn(GAME_ID);
         given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE);
         given(consumptionResult.getAllocation()).willReturn(allocatedResource);
         given(consumptionResult.getReservation()).willReturn(reservedStorage);

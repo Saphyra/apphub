@@ -29,13 +29,13 @@ public class RandomEmptySurfaceProviderTest {
     private RandomEmptySurfaceProvider underTest;
 
     @Mock
-    public Surface surface1;
+    public Surface surfaceWithDifferentType;
 
     @Mock
-    public Surface surface2;
+    public Surface occupiedSurface;
 
     @Mock
-    public Surface surface3;
+    public Surface emptyDesert;
 
     @Mock
     private Building building;
@@ -48,17 +48,17 @@ public class RandomEmptySurfaceProviderTest {
 
     @Test
     public void getRandomEmptySurface() {
-        given(surface1.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
-        given(surface2.getSurfaceType()).willReturn(SurfaceType.DESERT);
-        given(surface3.getSurfaceType()).willReturn(SurfaceType.DESERT);
+        given(surfaceWithDifferentType.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
+        given(occupiedSurface.getSurfaceType()).willReturn(SurfaceType.DESERT);
+        given(emptyDesert.getSurfaceType()).willReturn(SurfaceType.DESERT);
 
         given(gameData.getBuildings()).willReturn(buildings);
-        given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
+        given(occupiedSurface.getSurfaceId()).willReturn(SURFACE_ID);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
 
-        Surface result = underTest.getRandomEmptySurface(Arrays.asList(surface1, surface2, surface3), gameData);
+        Surface result = underTest.getRandomEmptySurface(Arrays.asList(surfaceWithDifferentType, occupiedSurface, emptyDesert), gameData);
 
-        assertThat(result).isEqualTo(surface3);
+        assertThat(result).isEqualTo(emptyDesert);
     }
 
     @Test

@@ -119,7 +119,6 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
         given(construction.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
 
-        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
         given(surfaceToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
         given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);

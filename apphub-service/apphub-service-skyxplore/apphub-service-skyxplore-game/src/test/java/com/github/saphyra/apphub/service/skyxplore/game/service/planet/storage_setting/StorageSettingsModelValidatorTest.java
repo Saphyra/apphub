@@ -163,7 +163,7 @@ public class StorageSettingsModelValidatorTest {
         given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
         given(gameData.getStorageSettings()).willReturn(storageSettings);
-        given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storageSetting));
+        given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.empty());
 
         underTest.validate(gameData, LOCATION, model);
     }

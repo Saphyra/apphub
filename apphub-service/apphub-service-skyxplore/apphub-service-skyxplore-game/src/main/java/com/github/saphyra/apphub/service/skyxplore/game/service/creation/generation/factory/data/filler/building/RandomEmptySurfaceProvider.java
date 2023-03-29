@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static java.util.Objects.isNull;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j

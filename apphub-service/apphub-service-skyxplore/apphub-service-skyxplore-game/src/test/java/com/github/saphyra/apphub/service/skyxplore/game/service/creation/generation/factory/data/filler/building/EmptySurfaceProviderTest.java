@@ -23,6 +23,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class EmptySurfaceProviderTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID SURFACE_WITH_BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private MatchingSurfaceTypeFilter matchingSurfaceTypeFilter;
@@ -66,7 +67,9 @@ public class EmptySurfaceProviderTest {
     public void emptySurfaceWithMatchingType() {
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(buildings.findBySurfaceId(SURFACE_WITH_BUILDING_ID)).willReturn(Optional.of(building));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaceWithBuilding.getSurfaceId()).willReturn(SURFACE_WITH_BUILDING_ID);
         given(matchingSurfaceTypeFilter.getSurfacesWithMatchingType(Arrays.asList(surfaceWithBuilding, surface), SurfaceType.CONCRETE)).willReturn(Arrays.asList(surfaceWithBuilding, surface));
 
         Surface result = underTest.getEmptySurfaceForType(SurfaceType.CONCRETE, Arrays.asList(surfaceWithBuilding, surface), gameData);
@@ -78,8 +81,8 @@ public class EmptySurfaceProviderTest {
     public void randomEmptySurfaceNextToType() {
         given(matchingSurfaceTypeFilter.getSurfacesWithMatchingType(Arrays.asList(surfaceWithBuilding, surface), SurfaceType.CONCRETE)).willReturn(Arrays.asList(surfaceWithBuilding));
         given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(buildings.findBySurfaceId(SURFACE_WITH_BUILDING_ID)).willReturn(Optional.of(building));
+        given(surfaceWithBuilding.getSurfaceId()).willReturn(SURFACE_WITH_BUILDING_ID);
 
         given(adjacentRandomEmptySurfaceProvider.getRandomEmptySurfaceNextTo(Arrays.asList(surfaceWithBuilding), Arrays.asList(surfaceWithBuilding, surface), gameData)).willReturn(surface);
 

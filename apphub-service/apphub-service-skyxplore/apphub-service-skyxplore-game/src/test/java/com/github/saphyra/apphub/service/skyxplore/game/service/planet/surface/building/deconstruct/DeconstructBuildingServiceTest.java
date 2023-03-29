@@ -202,6 +202,7 @@ class DeconstructBuildingServiceTest {
         given(deconstructionToModelConverter.convert(GAME_ID, deconstruction)).willReturn(deconstructionModel);
         given(deconstructionProcess.toModel()).willReturn(processModel);
         given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
 
         SurfaceResponse result = underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.SolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,7 +66,6 @@ public class SolarSystemResponseQueryServiceTest {
         given(gameData.getSolarSystems()).willReturn(solarSystems);
         given(solarSystems.findByIdValidated(SOLAR_SYSTEM_ID)).willReturn(solarSystem);
 
-        given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
         given(visibilityFacade.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).willReturn(false);
 
         Throwable ex = catchThrowable(() -> underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID));
@@ -79,10 +80,12 @@ public class SolarSystemResponseQueryServiceTest {
         given(gameData.getSolarSystems()).willReturn(solarSystems);
         given(solarSystems.findByIdValidated(SOLAR_SYSTEM_ID)).willReturn(solarSystem);
 
-        given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
+        given(solarSystem.getCustomNames()).willReturn(new OptionalHashMap<>());
+        given(solarSystem.getDefaultName()).willReturn(DEFAULT_NAME);
+        given(solarSystem.getRadius()).willReturn(RADIUS);
         given(visibilityFacade.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).willReturn(true);
 
-        given(planetToLocationResponseConverter.mapPlanets(game, SOLAR_SYSTEM_ID, USER_ID));
+        given(planetToLocationResponseConverter.mapPlanets(game, SOLAR_SYSTEM_ID, USER_ID)).willReturn(List.of(planetLocationResponse));
 
         SolarSystemResponse result = underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID);
 

@@ -53,8 +53,6 @@ public class AllocatedResourceAmountQueryServiceTest {
         given(allocatedResources.getByLocationAndDataId(LOCATION, DATA_ID_1)).willReturn(List.of(allocatedResource1));
 
 
-        given(allocatedResource1.getDataId()).willReturn(DATA_ID_1);
-        given(allocatedResource2.getDataId()).willReturn(DATA_ID_2);
         given(allocatedResource1.getAmount()).willReturn(AMOUNT);
 
         int result = underTest.getAllocatedResourceAmount(gameData, LOCATION, DATA_ID_1);

@@ -74,9 +74,7 @@ public class ConsumptionCalculatorTest {
         given(allocatedResources.getByLocationAndDataId(PLANET_ID, DATA_ID)).willReturn(List.of(allocatedResource));
         given(allocatedResource.getAmount()).willReturn(ALLOCATED_AMOUNT);
 
-        given(allocatedResource.getDataId()).willReturn(DATA_ID);
         given(allocatedResource.getAmount()).willReturn(ALLOCATED_AMOUNT);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
 
         given(allocatedResourceFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, STORED_AMOUNT - ALLOCATED_AMOUNT)).willReturn(createdAllocatedResource);
         given(reservedStorageFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - (STORED_AMOUNT - ALLOCATED_AMOUNT))).willReturn(createdReservedStorage);

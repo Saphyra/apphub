@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
@@ -35,9 +36,9 @@ public class AllianceFactoryTest {
     @Test
     public void create() {
         Map<UUID, String> alliances = CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME);
-        Map<UUID, UUID> members = Map.of(
-            PLAYER_ID_1, ALLIANCE_ID,
-            PLAYER_ID_2, null
+        Map<UUID, UUID> members = CollectionUtils.toMap(
+            new BiWrapper<>(PLAYER_ID_1, ALLIANCE_ID),
+            new BiWrapper<>(PLAYER_ID_2, null)
         );
         Map<UUID, Player> players = Map.of(
             PLAYER_ID_1, player1,

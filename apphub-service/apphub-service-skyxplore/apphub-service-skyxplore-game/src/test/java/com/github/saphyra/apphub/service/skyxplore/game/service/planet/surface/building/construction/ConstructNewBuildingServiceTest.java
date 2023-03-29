@@ -21,6 +21,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
@@ -181,6 +183,9 @@ public class ConstructNewBuildingServiceTest {
     @Mock
     private Buildings buildings;
 
+    @Mock
+    private Planet planet;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
@@ -198,8 +203,6 @@ public class ConstructNewBuildingServiceTest {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(construction));
 
@@ -213,8 +216,6 @@ public class ConstructNewBuildingServiceTest {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -236,7 +237,6 @@ public class ConstructNewBuildingServiceTest {
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(Collections.emptyList());
 
@@ -256,7 +256,6 @@ public class ConstructNewBuildingServiceTest {
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
-        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(buildingData.getPlaceableSurfaceTypes()).willReturn(List.of(SurfaceType.CONCRETE));
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(1, constructionRequirements));
@@ -282,6 +281,9 @@ public class ConstructNewBuildingServiceTest {
         given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(constructionProcess.toModel()).willReturn(processModel);
+
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
+        given(planet.getOwner()).willReturn(USER_ID);
 
         SurfaceResponse result = underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
 

@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
@@ -24,6 +25,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
@@ -70,6 +72,7 @@ public class UpgradeBuildingServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int PARALLEL_WORKERS = 245;
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -173,6 +176,12 @@ public class UpgradeBuildingServiceTest {
     @Mock
     private Deconstruction deconstruction;
 
+    @Mock
+    private Buildings buildings;
+
+    @Mock
+    private Surfaces surfaces;
+
     @Captor
     private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
 
@@ -204,6 +213,9 @@ public class UpgradeBuildingServiceTest {
 
     @Test
     public void buildingAtMaxLevel() {
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
+        given(building.getDataId()).willReturn(DATA_ID);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
@@ -211,7 +223,6 @@ public class UpgradeBuildingServiceTest {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
 
-        given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(building.getDataId()).willReturn(DATA_ID);
         given(building.getLevel()).willReturn(LEVEL);
 
@@ -225,6 +236,12 @@ public class UpgradeBuildingServiceTest {
 
     @Test
     public void upgradeBuilding() throws Exception {
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
+        given(building.getDataId()).willReturn(DATA_ID);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
@@ -261,6 +278,7 @@ public class UpgradeBuildingServiceTest {
 
         given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
         given(constructionProcess.toModel()).willReturn(processModel);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         SurfaceResponse result = underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 

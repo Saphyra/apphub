@@ -101,10 +101,10 @@ public class RenameCitizenServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getCitizens()).willReturn(citizens);
-        given(gameData.getGameId()).willReturn(GAME_ID);
         given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(game.getGameId()).willReturn(GAME_ID);
+        //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(citizenResponse);
         given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);

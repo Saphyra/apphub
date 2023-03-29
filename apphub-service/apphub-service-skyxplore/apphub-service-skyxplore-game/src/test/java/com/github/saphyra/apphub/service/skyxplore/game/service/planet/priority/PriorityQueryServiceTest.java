@@ -46,6 +46,7 @@ public class PriorityQueryServiceTest {
     @Test
     public void getPriorities() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
         given(gameData.getPriorities()).willReturn(priorities);
         given(priorities.getByLocation(PLANET_ID)).willReturn(List.of(priority));
         given(priority.getValue()).willReturn(PRIORITY_VALUE);

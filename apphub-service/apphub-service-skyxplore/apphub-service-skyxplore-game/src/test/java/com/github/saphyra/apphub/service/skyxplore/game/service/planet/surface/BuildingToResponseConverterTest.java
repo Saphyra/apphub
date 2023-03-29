@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,9 +65,9 @@ public class BuildingToResponseConverterTest {
             .level(LEVEL)
             .build();
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(construction);
+        given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(construction));
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(deconstruction);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(deconstruction));
 
         given(constructionToResponseConverter.convert(construction)).willReturn(constructionResponse);
         given(deconstructionToResponseConverter.convert(deconstruction)).willReturn(deconstructionResponse);

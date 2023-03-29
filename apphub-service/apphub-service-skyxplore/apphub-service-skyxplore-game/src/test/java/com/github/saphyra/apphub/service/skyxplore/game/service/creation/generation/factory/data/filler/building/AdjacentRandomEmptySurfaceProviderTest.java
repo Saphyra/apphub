@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
@@ -36,9 +35,6 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     private Surface surface2;
 
     @Mock
-    private CoordinateModel coordinateModel;
-
-    @Mock
     private Coordinate coordinate;
 
     @Mock
@@ -51,8 +47,8 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     public void surfaceFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
-        given(coordinateModel.getCoordinate()).willReturn(coordinate);
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2), gameData)).willReturn(Optional.of(surface2));
+        given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
 
         Surface result = underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2), gameData);
 
@@ -63,7 +59,7 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     public void surfaceNotFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
-        given(coordinateModel.getCoordinate()).willReturn(coordinate);
+        given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
 
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2), gameData)).willReturn(Optional.empty());
 

@@ -30,12 +30,16 @@ public class GameToGameItemListConverterTest {
     private static final String GAME_NAME = "game-name";
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
     private static final LocalDateTime MARKED_FOR_DELETION_AT = LocalDateTime.now();
+    private static final Integer UNIVERSE_SIZE = 2345;
 
     @Mock
     private AllianceToModelConverter allianceConverter;
 
     @Mock
     private PlayerToModelConverter playerConverter;
+
+    @Mock
+    private GameDataConverter gameDataConverter;
 
     @InjectMocks
     private GameToGameItemListConverter underTest;
@@ -55,6 +59,9 @@ public class GameToGameItemListConverterTest {
     @Mock
     private GameData gameData;
 
+    @Mock
+    private GameItem gameDataModel;
+
     @Test
     public void convertDeep() {
         Game game = Game.builder()
@@ -71,6 +78,8 @@ public class GameToGameItemListConverterTest {
 
         given(allianceConverter.convert(alliance, game)).willReturn(allianceModel);
         given(playerConverter.convert(player, game)).willReturn(playerModel);
+        given(gameDataConverter.convert(GAME_ID, gameData)).willReturn(List.of(gameDataModel));
+        given(gameData.getUniverseSize()).willReturn(UNIVERSE_SIZE);
 
         List<GameItem> result = underTest.convertDeep(game);
 
@@ -83,7 +92,8 @@ public class GameToGameItemListConverterTest {
         expected.setLastPlayed(LAST_PLAYED);
         expected.setMarkedForDeletion(true);
         expected.setMarkedForDeletionAt(MARKED_FOR_DELETION_AT);
+        expected.setUniverseSize(UNIVERSE_SIZE);
 
-        assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel);
+        assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel, gameDataModel);
     }
 }

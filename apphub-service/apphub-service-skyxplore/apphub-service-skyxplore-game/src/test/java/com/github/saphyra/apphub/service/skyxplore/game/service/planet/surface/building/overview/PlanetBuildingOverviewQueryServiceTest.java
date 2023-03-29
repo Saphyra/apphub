@@ -6,12 +6,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,10 +44,15 @@ public class PlanetBuildingOverviewQueryServiceTest {
     private Surface surface;
 
     @Mock
+    private Surfaces surfaces;
+
+    @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
     @Test
     public void getBuildingOverview() {
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
 
