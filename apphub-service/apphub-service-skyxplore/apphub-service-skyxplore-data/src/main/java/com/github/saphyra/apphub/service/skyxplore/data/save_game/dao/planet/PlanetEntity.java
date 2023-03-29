@@ -24,6 +24,4 @@ class PlanetEntity {
     private String customNames;
     private int size;
     private String owner;
-    private String buildingAllocations;
-    private String citizenAllocations;
 }

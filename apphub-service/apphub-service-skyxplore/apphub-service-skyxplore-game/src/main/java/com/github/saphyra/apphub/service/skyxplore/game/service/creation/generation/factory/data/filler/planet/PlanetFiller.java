@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.RandomCoordinateProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -24,7 +24,7 @@ public class PlanetFiller {
     private final RandomCoordinateProvider randomCoordinateProvider;
     private final PlanetFactory planetFactory;
 
-    public void fillPlanets(SolarSystem solarSystem, Map<Double, UUID> planets, GameData gameData, SkyXploreGameCreationSettingsRequest settings) {
+    public void fillPlanets(SolarSystem solarSystem, Map<Double, UUID> planets, GameData gameData, SkyXploreGameSettings settings) {
         List<Double> sortedCoordinates = planets.keySet()
             .stream()
             .sorted(Comparator.comparingDouble(value -> value))

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.PriorityFillerService;
@@ -33,7 +33,7 @@ public class GameDataFactory {
     private final PopulationFillerService populationFillerService;
     private final PriorityFillerService priorityFillerService;
 
-    public GameData create(UUID gameId, Collection<Player> players, SkyXploreGameCreationSettingsRequest settings) {
+    public GameData create(UUID gameId, Collection<Player> players, SkyXploreGameSettings settings) {
         List<NewbornSolarSystem> newbornSolarSystems = solarSystemGenerationService.generateSolarSystems(players, settings);
 
         GameData gameData = GameData.builder()

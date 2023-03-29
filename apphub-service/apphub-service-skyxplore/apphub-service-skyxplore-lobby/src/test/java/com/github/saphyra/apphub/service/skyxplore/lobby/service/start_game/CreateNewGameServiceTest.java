@@ -5,11 +5,10 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
@@ -61,6 +60,9 @@ public class CreateNewGameServiceTest {
     @Mock
     private Alliance alliance;
 
+    @Mock
+    private SkyXploreGameSettings settings;
+
     @Test
     public void startGame() {
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
@@ -69,8 +71,7 @@ public class CreateNewGameServiceTest {
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
-        GameSettings gameSettings = new GameSettings();
-        given(lobby.getSettings()).willReturn(gameSettings);
+        given(lobby.getSettings()).willReturn(settings);
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
         given(member.getUserId()).willReturn(USER_ID);
@@ -84,13 +85,7 @@ public class CreateNewGameServiceTest {
         assertThat(gameCreationRequest.getMembers()).containsEntry(USER_ID, ALLIANCE_ID);
         assertThat(gameCreationRequest.getAlliances()).containsEntry(ALLIANCE_ID, ALLIANCE_NAME);
         assertThat(gameCreationRequest.getGameName()).isEqualTo(GAME_NAME);
-
-        SkyXploreGameCreationSettingsRequest settings = gameCreationRequest.getSettings();
-        assertThat(settings.getUniverseSize()).isEqualTo(gameSettings.getUniverseSize());
-        assertThat(settings.getSystemAmount()).isEqualTo(gameSettings.getSystemAmount());
-        assertThat(settings.getSystemSize()).isEqualTo(gameSettings.getSystemSize());
-        assertThat(settings.getPlanetSize()).isEqualTo(gameSettings.getPlanetSize());
-        assertThat(settings.getAiPresence()).isEqualTo(gameSettings.getAiPresence());
+        assertThat(gameCreationRequest.getSettings()).isEqualTo(settings);
 
         verify(lobby).setGameCreationStarted(true);
 

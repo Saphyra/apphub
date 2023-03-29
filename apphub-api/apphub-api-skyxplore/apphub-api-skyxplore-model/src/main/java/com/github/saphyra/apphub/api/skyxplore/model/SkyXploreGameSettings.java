@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.request.game_creation;
+package com.github.saphyra.apphub.api.skyxplore.model;
 
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder(toBuilder = true)
-public class SkyXploreGameCreationSettingsRequest {
+public class SkyXploreGameSettings {
     private Integer maxPlayersPerSolarSystem;
     private Range<Integer> additionalSolarSystems;
     private Range<Integer> planetsPerSolarSystem;

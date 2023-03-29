@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -92,7 +92,7 @@ public class GameFactoryTest {
 
     @Test
     public void create() {
-        SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
+        SkyXploreGameSettings settings = SkyXploreGameSettings.builder()
             .build();
         Map<UUID, UUID> members = Map.of(USER_ID, ALLIANCE_ID);
         Map<UUID, String> alliances = Map.of(ALLIANCE_ID, ALLIANCE_NAME);

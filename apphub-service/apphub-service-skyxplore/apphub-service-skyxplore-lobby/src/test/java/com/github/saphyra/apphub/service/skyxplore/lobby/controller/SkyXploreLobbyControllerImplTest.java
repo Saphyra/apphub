@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
@@ -166,22 +164,6 @@ public class SkyXploreLobbyControllerImplTest {
         LobbyMembersResponse result = underTest.getMembersOfLobby(accessTokenHeader);
 
         assertThat(result).isEqualTo(lobbyMembersResponse);
-    }
-
-    @Test
-    public void getGameSettings() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        GameSettings gameSettings = new GameSettings();
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getSettings()).willReturn(gameSettings);
-
-        GameSettingsResponse result = underTest.getGameSettings(accessTokenHeader);
-
-        assertThat(result.getUniverseSize()).isEqualTo(gameSettings.getUniverseSize().name());
-        assertThat(result.getSystemAmount()).isEqualTo(gameSettings.getSystemAmount().name());
-        assertThat(result.getSystemSize()).isEqualTo(gameSettings.getSystemSize().name());
-        assertThat(result.getPlanetSize()).isEqualTo(gameSettings.getPlanetSize().name());
-        assertThat(result.getAiPresence()).isEqualTo(gameSettings.getAiPresence().name());
     }
 
     @Test

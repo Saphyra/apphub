@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.ReferredCoordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
@@ -20,7 +20,7 @@ public class SolarSystemFiller {
     private final SolarSystemFactory solarSystemFactory;
     private final PlanetFiller planetFiller;
 
-    public void fillNewbornSolarSystems(List<NewbornSolarSystem> newbornSolarSystems, GameData gameData, SkyXploreGameCreationSettingsRequest settings) {
+    public void fillNewbornSolarSystems(List<NewbornSolarSystem> newbornSolarSystems, GameData gameData, SkyXploreGameSettings settings) {
         for (NewbornSolarSystem newbornSolarSystem : newbornSolarSystems) {
             SolarSystem solarSystem = solarSystemFactory.create(newbornSolarSystem, gameData.getSolarSystems());
             ReferredCoordinate solarSystemCoordinate = new ReferredCoordinate(solarSystem.getSolarSystemId(), newbornSolarSystem.getCoordinate());

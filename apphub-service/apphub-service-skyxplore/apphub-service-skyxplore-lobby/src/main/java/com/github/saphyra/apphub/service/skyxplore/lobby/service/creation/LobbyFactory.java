@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class LobbyFactory {
     private final DateTimeUtil dateTimeUtil;
     private final IdGenerator idGenerator;
+    private final GameSettingsFactory gameSettingsFactory;
 
     Lobby create(UUID userId, String lobbyName, LobbyType type) {
         Map<UUID, Member> members = new ConcurrentHashMap<>();
@@ -34,6 +35,7 @@ class LobbyFactory {
             .host(userId)
             .members(members)
             .lastAccess(dateTimeUtil.getCurrentDateTime())
+            .settings(gameSettingsFactory.createDefault())
             .build();
     }
 

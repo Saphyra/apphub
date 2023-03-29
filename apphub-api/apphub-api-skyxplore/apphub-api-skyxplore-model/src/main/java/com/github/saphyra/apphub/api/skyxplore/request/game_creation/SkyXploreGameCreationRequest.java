@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.request.game_creation;
 
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,6 @@ public class SkyXploreGameCreationRequest {
     private Map<UUID, UUID> members; //<UserId, AllianceId>
     private List<AiPlayer> ais;
     private Map<UUID, String> alliances; //<AllianceId, AllianceName>
-    private SkyXploreGameCreationSettingsRequest settings;
+    private SkyXploreGameSettings settings;
     private String gameName;
 }

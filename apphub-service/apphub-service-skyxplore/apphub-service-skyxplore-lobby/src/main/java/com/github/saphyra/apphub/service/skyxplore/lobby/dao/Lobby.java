@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,8 +46,7 @@ public class Lobby {
     @Builder.Default
     private final List<Invitation> invitations = new Vector<>();
 
-    @Builder.Default
-    private final GameSettings settings = new GameSettings();
+    private final SkyXploreGameSettings settings;
 
     private boolean gameCreationStarted;
 }

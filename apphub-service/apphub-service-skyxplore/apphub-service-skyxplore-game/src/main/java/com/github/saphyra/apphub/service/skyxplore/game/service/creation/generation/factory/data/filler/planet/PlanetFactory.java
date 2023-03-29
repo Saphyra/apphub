@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -23,7 +23,7 @@ public class PlanetFactory {
     private final Random random;
     private final GameProperties gameProperties;
 
-    public Planet create(SolarSystem solarSystem, int planetIndex, SkyXploreGameCreationSettingsRequest settings, UUID ownerId, double orbitRadius) {
+    public Planet create(SolarSystem solarSystem, int planetIndex, SkyXploreGameSettings settings, UUID ownerId, double orbitRadius) {
         return Planet.builder()
             .planetId(idGenerator.randomUuid())
             .solarSystemId(solarSystem.getSolarSystemId())

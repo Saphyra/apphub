@@ -6,3 +6,15 @@ lobby:
   expirationMinutes: 10
   invitation:
     floodingLimitSeconds: 10
+  creation:
+    settings:
+      maxPlayersPerSolarSystem: 2
+      additionalSolarSystems:
+        min: 1
+        max: 2
+      planetsPerSolarSystem:
+        min: 0
+        max: 3
+      planetSize:
+        min: 5
+        max: 10

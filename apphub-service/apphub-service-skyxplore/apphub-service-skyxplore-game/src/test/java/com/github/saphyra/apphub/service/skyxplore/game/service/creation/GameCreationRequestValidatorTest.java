@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -35,7 +35,7 @@ public class GameCreationRequestValidatorTest {
     private GameCreationRequestValidator underTest;
 
     @Mock
-    private SkyXploreGameCreationSettingsRequest settings;
+    private SkyXploreGameSettings settings;
 
     @Test
     public void nullHost() {

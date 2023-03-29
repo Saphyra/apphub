@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.newborn_solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
@@ -28,7 +28,7 @@ public class SolarSystemGenerationService {
     private final SolarSystemPlacerService solarSystemPlacerService;
     private final PlanetPlacerService planetPlacerService;
 
-    public List<NewbornSolarSystem> generateSolarSystems(Collection<Player> players, SkyXploreGameCreationSettingsRequest settings) {
+    public List<NewbornSolarSystem> generateSolarSystems(Collection<Player> players, SkyXploreGameSettings settings) {
         List<UUID[]> solarSystems = new ArrayList<>();
 
         players.forEach(player -> assignPlayer(player, solarSystems, settings));
@@ -45,7 +45,7 @@ public class SolarSystemGenerationService {
             .toList();
     }
 
-    private void assignPlayer(Player player, List<UUID[]> solarSystems, SkyXploreGameCreationSettingsRequest settings) {
+    private void assignPlayer(Player player, List<UUID[]> solarSystems, SkyXploreGameSettings settings) {
         Optional<UUID[]> maybeSolarSystem = selectSolarSystem(solarSystems, settings);
 
         UUID[] solarSystem;
@@ -59,20 +59,20 @@ public class SolarSystemGenerationService {
         solarSystem[selectEmptyPlanet(solarSystem)] = player.getUserId();
     }
 
-    private Optional<UUID[]> selectSolarSystem(List<UUID[]> solarSystems, SkyXploreGameCreationSettingsRequest settings) {
+    private Optional<UUID[]> selectSolarSystem(List<UUID[]> solarSystems, SkyXploreGameSettings settings) {
         List<UUID[]> possibilities = new ArrayList<>(getSuitableSolarSystems(solarSystems, settings));
         possibilities.add(null);
 
         return Optional.ofNullable(possibilities.get(random.randInt(0, possibilities.size() - 1)));
     }
 
-    private List<UUID[]> getSuitableSolarSystems(List<UUID[]> solarSystems, SkyXploreGameCreationSettingsRequest settings) {
+    private List<UUID[]> getSuitableSolarSystems(List<UUID[]> solarSystems, SkyXploreGameSettings settings) {
         return solarSystems.stream()
             .filter(solarSystem -> hasSuitablePlanet(solarSystem, settings))
             .toList();
     }
 
-    private boolean hasSuitablePlanet(UUID[] planet, SkyXploreGameCreationSettingsRequest settings) {
+    private boolean hasSuitablePlanet(UUID[] planet, SkyXploreGameSettings settings) {
         int maxNumberOfOccupiedPlanets = Math.min(planet.length, settings.getMaxPlayersPerSolarSystem());
 
         int occupiedPlanetsCount = (int) Arrays.stream(planet)
@@ -82,7 +82,7 @@ public class SolarSystemGenerationService {
         return occupiedPlanetsCount < maxNumberOfOccupiedPlanets;
     }
 
-    private UUID[] newSolarSystem(SkyXploreGameCreationSettingsRequest settings, boolean atLeastOnePlanet) {
+    private UUID[] newSolarSystem(SkyXploreGameSettings settings, boolean atLeastOnePlanet) {
         Range<Integer> planetsPerSolarSystem = settings.getPlanetsPerSolarSystem();
         int min = atLeastOnePlanet ? Math.max(1, planetsPerSolarSystem.getMin()) : planetsPerSolarSystem.getMin();
 

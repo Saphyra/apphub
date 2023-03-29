@@ -64,7 +64,7 @@ public class LobbyMemberQueryServiceTest {
     @Test
     public void getMembers() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(
+        given(lobby.getMembers()).willReturn(CollectionUtils.toMap(
             new BiWrapper<>(USER_ID, member),
             new BiWrapper<>(HOST_ID, hostMember)
         ));

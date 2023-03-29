@@ -84,7 +84,7 @@ public class CalendarSearchServiceTest {
                 MATCHING_EVENT_ID,
                 MATCHING_OCCURRENCE_EVENT_ID
             ),
-            CollectionUtils.singleValueMap(
+            CollectionUtils.toMap(
                 new BiWrapper<>(MATCHING_EVENT_ID, matchingEvent),
                 new BiWrapper<>(ANOTHER_EVENT_ID, anotherEvent)
             ),

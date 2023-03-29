@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameCli
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -94,7 +94,7 @@ public class GameCreationControllerImplItTest {
                     .members(members)
                     .alliances(new HashMap<>())
                     .gameName(GAME_NAME)
-                    .settings(SkyXploreGameCreationSettingsRequest.builder()
+                    .settings(SkyXploreGameSettings.builder()
                         .maxPlayersPerSolarSystem(5)
                         .additionalSolarSystems(new Range<>(20, 30))
                         .planetsPerSolarSystem(new Range<>(3, 5))
@@ -146,7 +146,7 @@ public class GameCreationControllerImplItTest {
             .host(host)
             .members(members)
             .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
-            .settings(SkyXploreGameCreationSettingsRequest.builder()
+            .settings(SkyXploreGameSettings.builder()
                 .maxPlayersPerSolarSystem(5)
                 .additionalSolarSystems(new Range<>(20, 30))
                 .planetsPerSolarSystem(new Range<>(3, 5))
@@ -196,7 +196,7 @@ public class GameCreationControllerImplItTest {
             .host(playerId)
             .members(members)
             .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
-            .settings(SkyXploreGameCreationSettingsRequest.builder()
+            .settings(SkyXploreGameSettings.builder()
                 .maxPlayersPerSolarSystem(1)
                 .additionalSolarSystems(new Range<>(2, 3))
                 .planetsPerSolarSystem(new Range<>(0, 1))

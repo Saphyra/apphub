@@ -28,7 +28,6 @@ public class ProcessConverter extends ConverterBase<ProcessEntity, ProcessModel>
         model.setProcessType(ProcessType.valueOf(entity.getProcessType()));
         model.setStatus(ProcessStatus.valueOf(entity.getStatus()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setData(objectMapperWrapper.readValue(entity.getData(), StringStringMap.class));
         return model;
@@ -42,7 +41,6 @@ public class ProcessConverter extends ConverterBase<ProcessEntity, ProcessModel>
             .processType(domain.getProcessType().name())
             .status(domain.getStatus().name())
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .data(objectMapperWrapper.writeValueAsString(domain.getData()))
             .build();

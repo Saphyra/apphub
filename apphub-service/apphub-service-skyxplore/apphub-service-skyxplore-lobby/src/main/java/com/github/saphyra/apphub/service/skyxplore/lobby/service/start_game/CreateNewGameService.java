@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -39,19 +38,11 @@ class CreateNewGameService {
             .stream()
             .collect(Collectors.toMap(Alliance::getAllianceId, Alliance::getAllianceName));
 
-        SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
-            .universeSize(lobby.getSettings().getUniverseSize())
-            .systemAmount(lobby.getSettings().getSystemAmount())
-            .systemSize(lobby.getSettings().getSystemSize())
-            .planetSize(lobby.getSettings().getPlanetSize())
-            .aiPresence(lobby.getSettings().getAiPresence())
-            .build();
-
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(lobby.getHost())
             .members(members)
             .alliances(alliances)
-            .settings(settings)
+            .settings(lobby.getSettings())
             .gameName(lobby.getLobbyName())
             .build();
 

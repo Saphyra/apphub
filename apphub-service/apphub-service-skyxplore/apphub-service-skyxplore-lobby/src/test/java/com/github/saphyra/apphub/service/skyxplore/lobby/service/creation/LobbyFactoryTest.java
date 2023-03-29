@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -36,16 +37,23 @@ public class LobbyFactoryTest {
     @Mock
     private IdGenerator idGenerator;
 
+    @Mock
+    private GameSettingsFactory gameSettingsFactory;
+
     @InjectMocks
     private LobbyFactory underTest;
 
     @Mock
     private Alliance alliance;
 
+    @Mock
+    private SkyXploreGameSettings settings;
+
     @Test
     public void create() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(idGenerator.randomUuid()).willReturn(LOBBY_ID);
+        given(gameSettingsFactory.createDefault()).willReturn(settings);
 
         Lobby result = underTest.create(USER_ID, LOBBY_NAME, LobbyType.LOAD_GAME);
 
@@ -56,6 +64,7 @@ public class LobbyFactoryTest {
         assertThat(result.getHost()).isEqualTo(USER_ID);
         assertThat(result.getMembers()).containsEntry(USER_ID, Member.builder().userId(USER_ID).status(LobbyMemberStatus.NOT_READY).build());
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);
+        assertThat(result.getSettings()).isEqualTo(settings);
     }
 
     @Test

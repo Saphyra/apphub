@@ -44,4 +44,25 @@
             <column name="citizen_allocations" type="text"/>
         </addColumn>
     </changeSet>
+
+
+    <changeSet id="remove-citizen_allocations-from-planet" author="saphyra">
+        <preConditions>
+            <columnExists schemaName="skyxplore_game" tableName="planet" columnName="citizen_allocations"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="citizen_allocations"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="remove-building_allocations-from-planet" author="saphyra">
+        <preConditions>
+            <columnExists schemaName="skyxplore_game" tableName="planet" columnName="building_allocations"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="building_allocations"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>
