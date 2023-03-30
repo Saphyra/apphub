@@ -28,7 +28,7 @@ public class Constructions extends Vector<Construction> {
     public List<Construction> getByLocationAndType(UUID location, ConstructionType type) {
         return stream()
             .filter(construction -> construction.getLocation().equals(location))
-            .filter(construction -> construction.getType() == type)
+            .filter(construction -> construction.getConstructionType() == type)
             .collect(Collectors.toList());
     }
 

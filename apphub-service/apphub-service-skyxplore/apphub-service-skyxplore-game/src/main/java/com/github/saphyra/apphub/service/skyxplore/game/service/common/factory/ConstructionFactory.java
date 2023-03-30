@@ -24,7 +24,7 @@ public class ConstructionFactory {
         return Construction.builder()
             .constructionId(idGenerator.randomUuid())
             .externalReference(externalReference)
-            .type(type)
+            .constructionType(type)
             .location(location)
             .parallelWorkers(parallelWorkers)
             .requiredWorkPoints(requiredWorkPoints)

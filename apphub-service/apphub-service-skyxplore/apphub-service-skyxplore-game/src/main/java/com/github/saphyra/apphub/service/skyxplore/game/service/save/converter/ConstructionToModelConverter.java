@@ -28,6 +28,7 @@ public class ConstructionToModelConverter {
         model.setGameId(gameId);
         model.setType(GameItemType.CONSTRUCTION);
         model.setExternalReference(construction.getExternalReference());
+        model.setLocation(construction.getLocation());
         model.setExternalReference(construction.getExternalReference());
         model.setParallelWorkers(construction.getParallelWorkers());
         model.setRequiredWorkPoints(construction.getRequiredWorkPoints());

@@ -14,8 +14,8 @@ import java.util.UUID;
 public class Construction {
     private final UUID constructionId;
     private final UUID externalReference;
-    private final ConstructionType type; //TODO map to model
-    private final UUID location; //TODO map to model
+    private final ConstructionType constructionType;
+    private final UUID location;
     private final int parallelWorkers;
     private final int requiredWorkPoints;
     private final String data;

@@ -4,17 +4,24 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-//TODO unit test
 public class Citizen {
+    @NonNull
     private final UUID citizenId;
+
+    @NonNull
     private UUID location;
+
+    @NonNull
     private String name;
+
+
     private int morale;
     private int satiety;
 

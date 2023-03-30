@@ -20,6 +20,7 @@ class ConstructionEntity {
     private String constructionId;
     private String gameId;
     private String externalReference;
+    private String location;
     private String constructionType;
     private Integer parallelWorkers;
     private Integer requiredWorkPoints;

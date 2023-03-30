@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CitizenAllocationToModelConverter {
     public CitizenAllocationModel convert(UUID gameId, CitizenAllocation citizenAllocation) {
         CitizenAllocationModel model = new CitizenAllocationModel();

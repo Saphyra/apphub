@@ -6,7 +6,6 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-//TODO unit test
 public class BuildingAllocations extends Vector<BuildingAllocation> {
     public Optional<BuildingAllocation> findByProcessId(UUID processId) {
         return stream()

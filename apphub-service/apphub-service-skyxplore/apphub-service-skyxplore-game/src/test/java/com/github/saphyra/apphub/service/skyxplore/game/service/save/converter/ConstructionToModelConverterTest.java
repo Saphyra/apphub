@@ -22,6 +22,7 @@ public class ConstructionToModelConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String DATA = "data";
     private static final int PARALLEL_WORKERS = 345;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private ConstructionToModelConverter underTest;
@@ -31,6 +32,7 @@ public class ConstructionToModelConverterTest {
         Construction construction = Construction.builder()
             .constructionId(CONSTRUCTION_ID)
             .externalReference(EXTERNAL_REFERENCE)
+            .location(LOCATION)
             .parallelWorkers(PARALLEL_WORKERS)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .currentWorkPoints(CURRENT_WORK_POINTS)
@@ -44,6 +46,7 @@ public class ConstructionToModelConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);

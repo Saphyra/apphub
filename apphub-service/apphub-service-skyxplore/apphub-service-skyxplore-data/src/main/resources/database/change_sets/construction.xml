@@ -55,4 +55,16 @@
             <column name="construction_type" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-location-to-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="construction" columnName="location"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="location" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

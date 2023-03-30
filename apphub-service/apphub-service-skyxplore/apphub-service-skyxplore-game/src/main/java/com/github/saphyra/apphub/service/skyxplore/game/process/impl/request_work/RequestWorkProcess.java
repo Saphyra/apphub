@@ -89,7 +89,9 @@ public class RequestWorkProcess implements Process {
         }
 
         if (!isNull(buildingDataId) && gameData.getBuildingAllocations().findByProcessId(processId).isEmpty()) {
-            if (allocateBuildingIfPossible(syncCache)) return;
+            if (allocateBuildingIfPossible(syncCache)) {
+                return;
+            }
         }
 
         if (!isNull(workFuture)) {

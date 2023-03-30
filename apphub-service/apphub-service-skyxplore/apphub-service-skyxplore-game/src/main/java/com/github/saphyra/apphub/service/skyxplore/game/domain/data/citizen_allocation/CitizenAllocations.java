@@ -1,16 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
+
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
 public class CitizenAllocations extends Vector<CitizenAllocation> {
-    public CitizenAllocation findByProcessIdValidated(UUID processId) {
-        return findByProcessId(processId)
-            .orElseThrow();
-    }
-
     public Optional<CitizenAllocation> findByProcessId(UUID processId) {
         return stream()
             .filter(citizenAllocation -> citizenAllocation.getProcessId().equals(processId))
@@ -23,7 +21,7 @@ public class CitizenAllocations extends Vector<CitizenAllocation> {
 
     public CitizenAllocation findByCitizenIdValidated(UUID citizenId) {
         return findByCitizenId(citizenId)
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Citizen not found by citizenId " + citizenId));
     }
 
     public Optional<CitizenAllocation> findByCitizenId(UUID citizenId) {

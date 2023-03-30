@@ -37,7 +37,7 @@ public class ConstructionFactoryTest {
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getType()).isEqualTo(ConstructionType.CONSTRUCTION);
+        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
