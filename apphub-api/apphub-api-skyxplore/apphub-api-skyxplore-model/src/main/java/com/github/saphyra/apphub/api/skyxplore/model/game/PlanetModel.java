@@ -12,7 +12,6 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-//TODO sync with database
 public class PlanetModel extends GameItem {
     private UUID solarSystemId;
     private String defaultName;

@@ -22,6 +22,8 @@ class PlanetEntity {
     private String solarSystemId;
     private String defaultName;
     private String customNames;
+    private double orbitRadius;
+    private double orbitSpeed;
     private int size;
     private String owner;
 }

@@ -31,6 +31,8 @@ public class PlanetConverterTest {
     private static final String SOLAR_SYSTEM_ID_STRING = "solar-system-id";
     private static final String OWNER_STRING = "owner";
     private static final String CUSTOM_NAMES_STRING = "custom-names";
+    private static final Double ORBIT_RADIUS = 2345D;
+    private static final Double ORBIT_SPEED = 25D;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -51,6 +53,8 @@ public class PlanetConverterTest {
         model.setCustomNames(CUSTOM_NAMES);
         model.setSize(SIZE);
         model.setOwner(OWNER);
+        model.setOrbitRadius(ORBIT_RADIUS);
+        model.setOrbitSpeed(ORBIT_SPEED);
 
         given(uuidConverter.convertDomain(PLANET_ID)).willReturn(PLANET_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -68,6 +72,8 @@ public class PlanetConverterTest {
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES_STRING);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER_STRING);
+        assertThat(result.getOrbitSpeed()).isEqualTo(ORBIT_SPEED);
+        assertThat(result.getOrbitRadius()).isEqualTo(ORBIT_RADIUS);
     }
 
     @Test
@@ -80,6 +86,8 @@ public class PlanetConverterTest {
             .customNames(CUSTOM_NAMES_STRING)
             .size(SIZE)
             .owner(OWNER_STRING)
+            .orbitSpeed(ORBIT_SPEED)
+            .orbitRadius(ORBIT_RADIUS)
             .build();
 
         given(uuidConverter.convertEntity(PLANET_ID_STRING)).willReturn(PLANET_ID);
@@ -99,5 +107,7 @@ public class PlanetConverterTest {
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER);
+        assertThat(result.getOrbitSpeed()).isEqualTo(ORBIT_SPEED);
+        assertThat(result.getOrbitRadius()).isEqualTo(ORBIT_RADIUS);
     }
 }

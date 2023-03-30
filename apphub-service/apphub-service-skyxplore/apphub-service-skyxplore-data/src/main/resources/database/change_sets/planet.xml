@@ -65,4 +65,28 @@
             <column name="building_allocations"/>
         </dropColumn>
     </changeSet>
+
+    <changeSet id="add-orbit_speed-to-planet" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="planet" columnName="orbit_speed"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="orbit_speed" type="double"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-orbit_radius-to-planet" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="planet" columnName="orbit_radius"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="planet">
+            <column name="orbit_radius" type="double"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

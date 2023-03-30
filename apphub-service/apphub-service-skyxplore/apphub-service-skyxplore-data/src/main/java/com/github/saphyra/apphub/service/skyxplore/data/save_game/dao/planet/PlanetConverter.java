@@ -28,6 +28,8 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
         model.setCustomNames(objectMapperWrapper.readValue(entity.getCustomNames(), UuidStringMap.class));
         model.setSize(entity.getSize());
         model.setOwner(uuidConverter.convertEntity(entity.getOwner()));
+        model.setOrbitSpeed(entity.getOrbitSpeed());
+        model.setOrbitRadius(entity.getOrbitRadius());
         return model;
     }
 
@@ -41,6 +43,8 @@ class PlanetConverter extends ConverterBase<PlanetEntity, PlanetModel> {
             .customNames(objectMapperWrapper.writeValueAsString(domain.getCustomNames()))
             .size(domain.getSize())
             .owner(uuidConverter.convertDomain(domain.getOwner()))
+            .orbitRadius(domain.getOrbitRadius())
+            .orbitSpeed(domain.getOrbitSpeed())
             .build();
         log.debug("Converted planet: {}", result);
         return result;
