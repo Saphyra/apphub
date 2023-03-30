@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +11,10 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-//TODO unit test
 public class Constructions extends Vector<Construction> {
     public Construction findByExternalReferenceValidated(UUID externalReference) {
         return findByExternalReference(externalReference)
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found by externalReference " + externalReference));
     }
 
     public Optional<Construction> findByExternalReference(UUID externalReference) {
@@ -21,7 +23,7 @@ public class Constructions extends Vector<Construction> {
             .findAny();
     }
 
-    public void deleteById(UUID constructionId) {
+    public void deleteByConstructionId(UUID constructionId) {
         removeIf(construction -> construction.getConstructionId().equals(constructionId));
     }
 
@@ -32,10 +34,10 @@ public class Constructions extends Vector<Construction> {
             .collect(Collectors.toList());
     }
 
-    public Construction findByIdValidated(UUID constructionId) {
+    public Construction findByConstructionIdValidated(UUID constructionId) {
         return stream()
             .filter(construction -> construction.getConstructionId().equals(constructionId))
             .findAny()
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found by constructionId " + constructionId));
     }
 }

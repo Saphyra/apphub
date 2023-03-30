@@ -105,7 +105,7 @@ public class ConstructionUpdateServiceTest {
     @Test
     public void updateConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(gameData.getBuildings()).willReturn(buildings);
         given(construction.getExternalReference()).willReturn(BUILDING_ID);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);

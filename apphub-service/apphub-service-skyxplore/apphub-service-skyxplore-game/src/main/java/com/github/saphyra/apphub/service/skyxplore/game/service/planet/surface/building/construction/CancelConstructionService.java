@@ -48,7 +48,7 @@ public class CancelConstructionService {
         GameData gameData = game.getData();
 
         Construction construction = gameData.getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         Building building = gameData.getBuildings()
             .findByBuildingId(construction.getExternalReference());
@@ -100,7 +100,7 @@ public class CancelConstructionService {
                         .cancel(syncCache);
 
                     gameData.getConstructions()
-                        .deleteById(construction.getConstructionId());
+                        .deleteByConstructionId(construction.getConstructionId());
                     syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
                     syncCache.saveGameItem(buildingToModelConverter.convert(game.getGameId(), building));
 

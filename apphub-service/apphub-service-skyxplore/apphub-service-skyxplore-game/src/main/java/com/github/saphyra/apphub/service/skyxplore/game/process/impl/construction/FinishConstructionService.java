@@ -40,7 +40,7 @@ class FinishConstructionService {
         building.increaseLevel();
 
         gameData.getConstructions()
-            .deleteById(construction.getConstructionId());
+            .deleteByConstructionId(construction.getConstructionId());
 
         log.info("Upgraded building: {}", building);
 

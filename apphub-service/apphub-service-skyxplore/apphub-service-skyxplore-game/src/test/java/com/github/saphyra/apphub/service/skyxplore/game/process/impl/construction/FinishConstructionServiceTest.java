@@ -114,7 +114,7 @@ public class FinishConstructionServiceTest {
 
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, USER_ID, CONSTRUCTION_ID);
         verify(building).increaseLevel();
-        verify(constructions).deleteById(CONSTRUCTION_ID);
+        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(syncCache).deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(syncCache).saveGameItem(buildingModel);
 

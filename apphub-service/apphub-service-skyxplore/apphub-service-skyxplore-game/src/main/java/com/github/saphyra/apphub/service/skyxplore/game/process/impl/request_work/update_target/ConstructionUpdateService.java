@@ -32,7 +32,7 @@ class ConstructionUpdateService {
 
         Construction construction = gameData
             .getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         Building building = gameData.getBuildings()
             .findByBuildingId(construction.getExternalReference());

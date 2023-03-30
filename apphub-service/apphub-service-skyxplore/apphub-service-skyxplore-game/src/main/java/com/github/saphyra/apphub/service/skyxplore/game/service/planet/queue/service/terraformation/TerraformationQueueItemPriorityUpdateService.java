@@ -35,7 +35,7 @@ class TerraformationQueueItemPriorityUpdateService {
 
         Construction construction = game.getData()
             .getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         Surface surface = game.getData()
             .getSurfaces()

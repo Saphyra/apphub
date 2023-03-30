@@ -111,7 +111,7 @@ public class FinishTerraformationServiceTest {
 
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(surface).setSurfaceType(SurfaceType.DESERT);
-        verify(constructions).deleteById(CONSTRUCTION_ID);
+        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(syncCache).deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(syncCache).saveGameItem(surfaceModel);
 

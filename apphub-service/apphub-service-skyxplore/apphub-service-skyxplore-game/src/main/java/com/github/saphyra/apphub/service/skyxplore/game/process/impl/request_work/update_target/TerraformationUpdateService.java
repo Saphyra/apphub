@@ -30,7 +30,7 @@ class TerraformationUpdateService {
         log.info("Adding {} workPoints to TERRAFORMATION {}", completedWorkPoints, constructionId);
 
         Construction construction = gameData.getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(construction.getExternalReference());

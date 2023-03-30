@@ -82,7 +82,7 @@ public class ConstructionProcessFactoryTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getBuildings()).willReturn(buildings);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getExternalReference()).willReturn(BUILDING_ID);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
 

@@ -44,7 +44,7 @@ public class ConstructionProcessFactory implements ProcessFactory {
     public ConstructionProcess createFromModel(Game game, ProcessModel model) {
         Construction construction = game.getData()
             .getConstructions()
-            .findByIdValidated(model.getExternalReference());
+            .findByConstructionIdValidated(model.getExternalReference());
 
         Building building = game.getData()
             .getBuildings()

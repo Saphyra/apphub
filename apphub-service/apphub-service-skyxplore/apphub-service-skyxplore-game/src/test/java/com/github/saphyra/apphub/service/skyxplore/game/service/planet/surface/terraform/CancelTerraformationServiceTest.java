@@ -127,7 +127,7 @@ public class CancelTerraformationServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
@@ -158,7 +158,7 @@ public class CancelTerraformationServiceTest {
         assertThat(surfaceResponseResult).isEqualTo(surfaceResponseResult);
 
         verify(process).cancel(syncCache);
-        verify(constructions).deleteById(CONSTRUCTION_ID);
+        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
 
@@ -212,7 +212,7 @@ public class CancelTerraformationServiceTest {
         assertThat(surfaceResponseResult).isEqualTo(surfaceResponseResult);
 
         verify(process).cancel(syncCache);
-        verify(constructions).deleteById(CONSTRUCTION_ID);
+        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
 

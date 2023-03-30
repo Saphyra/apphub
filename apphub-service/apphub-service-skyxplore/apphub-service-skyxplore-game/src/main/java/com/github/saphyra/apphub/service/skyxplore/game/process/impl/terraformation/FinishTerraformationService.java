@@ -43,7 +43,7 @@ class FinishTerraformationService {
         surface.setSurfaceType(SurfaceType.valueOf(terraformation.getData()));
 
         gameData.getConstructions()
-            .deleteById(terraformation.getConstructionId());
+            .deleteByConstructionId(terraformation.getConstructionId());
 
         log.info("Terraformed surface: {}", surface);
 

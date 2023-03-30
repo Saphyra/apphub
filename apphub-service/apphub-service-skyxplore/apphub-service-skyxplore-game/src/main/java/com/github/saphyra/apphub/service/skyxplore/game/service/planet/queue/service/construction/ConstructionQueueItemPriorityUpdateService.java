@@ -33,7 +33,7 @@ class ConstructionQueueItemPriorityUpdateService {
         Game game = gameDao.findByUserIdValidated(userId);
         Construction construction = game.getData()
             .getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         game.getEventLoop()
             .processWithWait(() -> {

@@ -44,7 +44,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
     public TerraformationProcess createFromModel(Game game, ProcessModel model) {
         Construction terraformation = game.getData()
             .getConstructions()
-            .findByIdValidated(model.getExternalReference());
+            .findByConstructionIdValidated(model.getExternalReference());
 
         Surface surface = game.getData()
             .getSurfaces()

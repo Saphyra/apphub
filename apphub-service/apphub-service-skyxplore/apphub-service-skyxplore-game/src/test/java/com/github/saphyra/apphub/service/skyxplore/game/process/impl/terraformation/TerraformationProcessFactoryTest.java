@@ -82,7 +82,7 @@ public class TerraformationProcessFactoryTest {
 
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);

@@ -41,7 +41,7 @@ public class CancelTerraformationService {
         GameData gameData = game.getData();
 
         Construction terraformation = gameData.getConstructions()
-            .findByIdValidated(constructionId);
+            .findByConstructionIdValidated(constructionId);
 
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(terraformation.getExternalReference());
@@ -82,7 +82,7 @@ public class CancelTerraformationService {
 
                     game.getData()
                         .getConstructions()
-                        .deleteById(terraformation.getConstructionId());
+                        .deleteByConstructionId(terraformation.getConstructionId());
 
                     gameDataProxy.deleteItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
 
