@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.citizen_allocation;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
@@ -13,23 +13,23 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class CitizenAllocationDaoTest {
+class BuildingAllocationDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_ID_STRING = "game-id";
-    private static final UUID CITIZEN_ALLOCATION_ID = UUID.randomUUID();
-    private static final String CITIZEN_ALLOCATION_ID_STRING = "citizen-allocation-id";
+    private static final UUID BUILDING_ALLOCATION_ID = UUID.randomUUID();
+    private static final String BUILDING_ALLOCATION_ID_STRING = "building-allocation-id";
 
     @Mock
     private UuidConverter uuidConverter;
 
     @Mock
-    private CitizenAllocationConverter converter;
+    private BuildingAllocationConverter converter;
 
     @Mock
-    private CitizenAllocationRepository repository;
+    private BuildingAllocationRepository repository;
 
     @InjectMocks
-    private CitizenAllocationDao underTest;
+    private BuildingAllocationDao underTest;
 
     @Test
     void deleteByGameId() {
@@ -42,11 +42,11 @@ class CitizenAllocationDaoTest {
 
     @Test
     void deleteById() {
-        given(uuidConverter.convertDomain(CITIZEN_ALLOCATION_ID)).willReturn(CITIZEN_ALLOCATION_ID_STRING);
-        given(repository.existsById(CITIZEN_ALLOCATION_ID_STRING)).willReturn(true);
+        given(uuidConverter.convertDomain(BUILDING_ALLOCATION_ID)).willReturn(BUILDING_ALLOCATION_ID_STRING);
+        given(repository.existsById(BUILDING_ALLOCATION_ID_STRING)).willReturn(true);
 
-        underTest.deleteById(CITIZEN_ALLOCATION_ID);
+        underTest.deleteById(BUILDING_ALLOCATION_ID);
 
-        verify(repository).deleteById(CITIZEN_ALLOCATION_ID_STRING);
+        verify(repository).deleteById(BUILDING_ALLOCATION_ID_STRING);
     }
 }

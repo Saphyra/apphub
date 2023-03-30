@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildingAllocation { // TODO create model and save to database
+public class BuildingAllocation {
     private final UUID buildingAllocationId;
     private final UUID buildingId;
     private final UUID processId;

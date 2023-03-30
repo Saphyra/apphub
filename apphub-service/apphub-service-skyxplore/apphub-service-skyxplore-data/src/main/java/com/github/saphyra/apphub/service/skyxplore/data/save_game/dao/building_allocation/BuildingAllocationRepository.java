@@ -1,12 +1,12 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.citizen_allocation;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-interface CitizenAllocationRepository extends CrudRepository<CitizenAllocationEntity, String> {
+interface BuildingAllocationRepository extends CrudRepository<BuildingAllocationEntity, String> {
     @Modifying
-    @Query("DELETE FROM CitizenAllocationEntity e WHERE e.gameId = :gameId")
+    @Query("DELETE FROM BuildingAllocationEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 }

@@ -27,7 +27,9 @@ public enum GameItemType {
     PRODUCTION_ORDER(ProductionOrderModel.class),
     DURABILITY_ITEM_MODEL(DurabilityItemModel.class),
     PROCESS(ProcessModel.class),
-    CITIZEN_ALLOCATION(CitizenAllocationModel.class);
+    CITIZEN_ALLOCATION(CitizenAllocationModel.class),
+    BUILDING_ALLOCATION(BuildingAllocationModel.class),
+    ;
 
     private final Class<? extends GameItem> modelType;
 }
