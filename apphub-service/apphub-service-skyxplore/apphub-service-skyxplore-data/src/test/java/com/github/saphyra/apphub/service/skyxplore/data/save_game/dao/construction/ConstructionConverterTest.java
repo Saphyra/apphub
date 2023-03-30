@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,7 @@ public class ConstructionConverterTest {
         model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
         model.setData(DATA);
+        model.setConstructionType(ConstructionType.CONSTRUCTION);
 
         given(uuidConverter.convertDomain(CONSTRUCTION_ID)).willReturn(CONSTRUCTION_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -54,6 +56,7 @@ public class ConstructionConverterTest {
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
+        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION.name());
         assertThat(result.getExternalReference()).isEqualTo(LOCATION_STRING);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
@@ -72,6 +75,7 @@ public class ConstructionConverterTest {
         entity.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
         entity.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         entity.setPriority(PRIORITY);
+        entity.setConstructionType(ConstructionType.CONSTRUCTION.name());
         entity.setData(DATA);
 
         given(uuidConverter.convertEntity(CONSTRUCTION_ID_STRING)).willReturn(CONSTRUCTION_ID);
@@ -84,6 +88,7 @@ public class ConstructionConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -21,6 +22,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.CONSTRUCTION);
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
+        model.setConstructionType(ConstructionType.valueOf(entity.getConstructionType()));
         model.setParallelWorkers(entity.getParallelWorkers());
         model.setRequiredWorkPoints(entity.getRequiredWorkPoints());
         model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
@@ -35,6 +37,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
             .constructionId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+            .constructionType(domain.getConstructionType().name())
             .parallelWorkers(domain.getParallelWorkers())
             .requiredWorkPoints(domain.getRequiredWorkPoints())
             .currentWorkPoints(domain.getCurrentWorkPoints())

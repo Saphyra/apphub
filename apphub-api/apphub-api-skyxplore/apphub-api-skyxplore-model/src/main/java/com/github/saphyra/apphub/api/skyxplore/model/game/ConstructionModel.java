@@ -13,7 +13,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ConstructionModel extends GameItem {
     private UUID externalReference;
-    private ConstructionType constructionType; //TODO save to database
+    private ConstructionType constructionType;
     private Integer parallelWorkers;
     private Integer requiredWorkPoints;
     private Integer currentWorkPoints;
