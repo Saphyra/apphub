@@ -14,8 +14,10 @@ public interface GameItemService {
 
     void save(List<GameItem> gameItems);
 
+    //TODO remove
     Optional<? extends GameItem> findById(UUID id);
 
+    //TODO remove
     List<? extends GameItem> getByParent(UUID parent);
 
     void deleteById(UUID id);

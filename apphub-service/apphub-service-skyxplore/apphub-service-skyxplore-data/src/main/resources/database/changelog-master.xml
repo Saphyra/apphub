@@ -45,4 +45,5 @@
     <include file="database/change_sets/construction.xml"/>
     <include file="database/change_sets/process.xml"/>
     <include file="database/change_sets/deconstruction.xml"/>
+    <include file="database/change_sets/citizen_allocation.xml"/>
 </databaseChangeLog>

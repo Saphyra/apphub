@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-//TODO save to database
 public class CitizenAllocationModel extends GameItem {
     private UUID citizenId;
     private UUID processId;
