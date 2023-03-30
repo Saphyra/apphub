@@ -9,7 +9,6 @@ public enum GameItemType {
     GAME(GameModel.class),
     PLAYER(PlayerModel.class),
     ALLIANCE(AllianceModel.class),
-    UNIVERSE(UniverseModel.class), //TODO remove model
     SOLAR_SYSTEM(SolarSystemModel.class),
     PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class),
