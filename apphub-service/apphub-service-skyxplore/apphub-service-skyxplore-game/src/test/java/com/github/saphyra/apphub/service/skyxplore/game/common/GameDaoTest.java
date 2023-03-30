@@ -111,4 +111,13 @@ public class GameDaoTest {
         result.clear();
         assertThat(underTest.getAll()).containsExactly(game);
     }
+
+    @Test
+    void findById() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
+        underTest.save(game);
+
+        assertThat(underTest.findById(GAME_ID)).isEqualTo(game);
+    }
 }

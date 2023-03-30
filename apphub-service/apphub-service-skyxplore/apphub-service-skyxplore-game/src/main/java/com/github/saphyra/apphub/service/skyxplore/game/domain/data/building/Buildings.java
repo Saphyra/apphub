@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
 public class Buildings extends Vector<Building> {
     public Optional<Building> findBySurfaceId(UUID surfaceId) {
         return stream()
@@ -30,7 +33,7 @@ public class Buildings extends Vector<Building> {
         return stream()
             .filter(building -> building.getBuildingId().equals(buildingId))
             .findAny()
-            .orElseThrow();
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Building not found by id " + buildingId));
     }
 
     public void deleteByBuildingId(UUID buildingId) {

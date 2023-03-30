@@ -61,6 +61,8 @@ public class BuildingToResponseConverterTest {
     public void convert() {
         Building building = Building.builder()
             .buildingId(BUILDING_ID)
+            .location(UUID.randomUUID())
+            .surfaceId(UUID.randomUUID())
             .dataId(DATA_ID)
             .level(LEVEL)
             .build();
