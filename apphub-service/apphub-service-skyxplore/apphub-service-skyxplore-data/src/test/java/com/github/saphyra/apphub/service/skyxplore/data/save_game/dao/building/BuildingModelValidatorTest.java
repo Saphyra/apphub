@@ -21,6 +21,7 @@ public class BuildingModelValidatorTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer LEVEL = 46;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private GameItemValidator gameItemValidator;
@@ -46,7 +47,18 @@ public class BuildingModelValidatorTest {
     }
 
     @Test
+    void nullLocation() {
+        given(model.getSurfaceId()).willReturn(SURFACE_ID);
+        given(model.getLocation()).willReturn(null);
+
+        Throwable ex = catchThrowable(() -> underTest.validate(model));
+
+        ExceptionValidator.validateInvalidParam(ex, "location", "must not be null");
+    }
+
+    @Test
     public void nullDataId() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getSurfaceId()).willReturn(SURFACE_ID);
         given(model.getDataId()).willReturn(null);
 
@@ -57,6 +69,7 @@ public class BuildingModelValidatorTest {
 
     @Test
     public void nullLevel() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getSurfaceId()).willReturn(SURFACE_ID);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getLevel()).willReturn(null);
@@ -68,6 +81,7 @@ public class BuildingModelValidatorTest {
 
     @Test
     public void valid() {
+        given(model.getLocation()).willReturn(LOCATION);
         given(model.getSurfaceId()).willReturn(SURFACE_ID);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getLevel()).willReturn(LEVEL);

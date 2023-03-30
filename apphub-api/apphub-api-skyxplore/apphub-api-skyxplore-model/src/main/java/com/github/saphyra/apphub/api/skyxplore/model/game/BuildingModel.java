@@ -12,7 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BuildingModel extends GameItem {
-    private UUID location; //TODO save to database
+    private UUID location;
     private UUID surfaceId;
     private String dataId;
     private Integer level;
