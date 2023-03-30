@@ -19,6 +19,7 @@ class DeconstructionToModelConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final int CURRENT_WORK_POINTS = 256;
     private static final int PRIORITY = 568;
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @InjectMocks
     private DeconstructionToModelConverter underTest;
@@ -29,6 +30,7 @@ class DeconstructionToModelConverterTest {
             .deconstructionId(DECONSTRUCTION_ID)
             .externalReference(EXTERNAL_REFERENCE)
             .currentWorkPoints(CURRENT_WORK_POINTS)
+            .location(LOCATION)
             .priority(PRIORITY)
             .build();
 
@@ -38,6 +40,7 @@ class DeconstructionToModelConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.DECONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }

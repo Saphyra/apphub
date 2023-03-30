@@ -30,12 +30,13 @@ class DeconstructionToResponseConverterTest {
     @Mock
     private DeconstructionProperties deconstructionProperties;
 
+    @Mock
+    private Deconstruction deconstruction;
+
     @Test
     void convert() {
-        Deconstruction deconstruction = Deconstruction.builder()
-            .deconstructionId(DECONSTRUCTION_ID)
-            .currentWorkPoints(CURRENT_WORK_POINTS)
-            .build();
+        given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
+        given(deconstruction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
 
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);

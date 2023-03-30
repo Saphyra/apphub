@@ -28,6 +28,7 @@ public class DeconstructionToModelConverter {
         model.setGameId(gameId);
         model.setType(GameItemType.DECONSTRUCTION);
         model.setExternalReference(deconstruction.getExternalReference());
+        model.setLocation(deconstruction.getLocation());
         model.setCurrentWorkPoints(deconstruction.getCurrentWorkPoints());
         model.setPriority(deconstruction.getPriority());
         return model;

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.UUID;
 
@@ -11,9 +12,16 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class Deconstruction {
+    @NonNull
     private final UUID deconstructionId;
+
+    @NonNull
     private final UUID externalReference;
-    private final UUID location; //TODO save to model
+
+    @NonNull
+    private final UUID location;
+
+
     private int currentWorkPoints;
     private int priority;
 }
