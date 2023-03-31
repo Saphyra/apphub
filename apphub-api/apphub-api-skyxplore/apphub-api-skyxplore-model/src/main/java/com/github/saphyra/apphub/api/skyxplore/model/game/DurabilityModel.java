@@ -11,10 +11,8 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DurabilityItemModel extends GameItem {
-    private UUID parent;
-    private String metadata;
-    private Integer maxDurability;
-    private Integer currentDurability;
-    private String dataId;
+public class DurabilityModel extends GameItem {
+    private UUID externalReference;
+    private Integer maxHitPoints;
+    private Integer currentHitPoints;
 }

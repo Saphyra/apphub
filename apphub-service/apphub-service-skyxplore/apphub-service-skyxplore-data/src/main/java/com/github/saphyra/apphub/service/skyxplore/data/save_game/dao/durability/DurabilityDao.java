@@ -1,19 +1,18 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability_item;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class DurabilityItemDao extends AbstractDao<DurabilityItemEntity, DurabilityItemModel, String, DurabilityItemRepository> {
+public class DurabilityDao extends AbstractDao<DurabilityEntity, DurabilityModel, String, DurabilityRepository> {
     private final UuidConverter uuidConverter;
 
-    public DurabilityItemDao(DurabilityItemConverter converter, DurabilityItemRepository repository, UuidConverter uuidConverter) {
+    public DurabilityDao(DurabilityItemConverter converter, DurabilityRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -22,12 +21,8 @@ public class DurabilityItemDao extends AbstractDao<DurabilityItemEntity, Durabil
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
     }
 
-    public Optional<DurabilityItemModel> findById(UUID durabilityItemId) {
+    public Optional<DurabilityModel> findById(UUID durabilityItemId) {
         return findById(uuidConverter.convertDomain(durabilityItemId));
-    }
-
-    public List<DurabilityItemModel> getByParent(UUID parent) {
-        return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
     public void deleteById(UUID durabilityItemId) {

@@ -16,6 +16,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO move to creation
 public class GameSaverService {
     private final GameToGameItemListConverter converter;
     private final GameProperties gameProperties;

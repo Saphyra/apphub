@@ -25,7 +25,7 @@ public enum GameItemType {
     COORDINATE(CoordinateModel.class),
     LINE(LineModel.class),
     PRODUCTION_ORDER(ProductionOrderModel.class),
-    DURABILITY_ITEM_MODEL(DurabilityItemModel.class),
+    DURABILITY(DurabilityModel.class),
     PROCESS(ProcessModel.class),
     CITIZEN_ALLOCATION(CitizenAllocationModel.class),
     BUILDING_ALLOCATION(BuildingAllocationModel.class),

@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability_item;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DurabilityItemDaoTest {
+public class DurabilityDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_ID_STRING = "game-id";
     private static final UUID DURABILITY_ITEM_ID = UUID.randomUUID();
@@ -33,16 +31,16 @@ public class DurabilityItemDaoTest {
     private DurabilityItemConverter converter;
 
     @Mock
-    private DurabilityItemRepository repository;
+    private DurabilityRepository repository;
 
     @InjectMocks
-    private DurabilityItemDao underTest;
+    private DurabilityDao underTest;
 
     @Mock
-    private DurabilityItemEntity entity;
+    private DurabilityEntity entity;
 
     @Mock
-    private DurabilityItemModel model;
+    private DurabilityModel model;
 
     @Test
     public void deleteByGameId() {
@@ -59,20 +57,9 @@ public class DurabilityItemDaoTest {
         given(repository.findById(DURABILITY_ITEM_ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(model));
 
-        Optional<DurabilityItemModel> result = underTest.findById(DURABILITY_ITEM_ID);
+        Optional<DurabilityModel> result = underTest.findById(DURABILITY_ITEM_ID);
 
         assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(repository.getByParent(PARENT_STRING)).willReturn(Arrays.asList(entity));
-        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(model));
-
-        List<DurabilityItemModel> result = underTest.getByParent(PARENT);
-
-        assertThat(result).containsExactly(model);
     }
 
     @Test

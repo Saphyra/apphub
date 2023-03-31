@@ -70,13 +70,13 @@ public class GameData {
     @Builder.Default
     private final Skills skills = new Skills(); //TODO create loader
     @Builder.Default
-    private final SoldierWeapons soldierWeapons = new SoldierWeapons(); //Unused
+    private final SoldierWeapons soldierWeapons = new SoldierWeapons(); //TODO create loader //TODO convert to model
     @Builder.Default
-    private final SoldierEnergyShields soldierEnergyShields = new SoldierEnergyShields(); //Unused
+    private final SoldierEnergyShields soldierEnergyShields = new SoldierEnergyShields(); //TODO create loader //TODO convert to model
     @Builder.Default
-    private final SoldierArmorPieces soldierArmorPieces = new SoldierArmorPieces(); //Unused
+    private final SoldierArmorPieces soldierArmorPieces = new SoldierArmorPieces(); //TODO create loader //TODO convert to model
     @Builder.Default
-    private final Durabilities durabilities = new Durabilities(); //Unused
+    private final Durabilities durabilities = new Durabilities(); //TODO create loader
 
     //PROCESS
     @Builder.Default

@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability_item;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durability;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityItemModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
@@ -17,43 +17,41 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class DurabilityItemService implements GameItemService {
-    private final DurabilityItemDao durabilityItemDao;
-    private final DurabilityItemValidator durabilityItemValidator;
+    private final DurabilityDao dao;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        durabilityItemDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
     public GameItemType getType() {
-        return GameItemType.DURABILITY_ITEM_MODEL;
+        return GameItemType.DURABILITY;
     }
 
     @Override
     public void save(List<GameItem> gameItems) {
-        List<DurabilityItemModel> models = gameItems.stream()
-            .filter(gameItem -> gameItem instanceof DurabilityItemModel)
-            .map(gameItem -> (DurabilityItemModel) gameItem)
-            .peek(durabilityItemValidator::validate)
+        List<DurabilityModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof DurabilityModel)
+            .map(gameItem -> (DurabilityModel) gameItem)
             .collect(Collectors.toList());
 
-        durabilityItemDao.saveAll(models);
+        dao.saveAll(models);
     }
 
     @Override
-    public Optional<DurabilityItemModel> findById(UUID id) {
-        return durabilityItemDao.findById(id);
+    public Optional<DurabilityModel> findById(UUID id) {
+        return dao.findById(id);
     }
 
     @Override
-    public List<DurabilityItemModel> getByParent(UUID parent) {
-        return durabilityItemDao.getByParent(parent);
+    public List<DurabilityModel> getByParent(UUID parent) {
+        throw new UnsupportedOperationException("Deprecated");
     }
 
     @Override
     public void deleteById(UUID id) {
-        durabilityItemDao.deleteById(id);
+        dao.deleteById(id);
     }
 }

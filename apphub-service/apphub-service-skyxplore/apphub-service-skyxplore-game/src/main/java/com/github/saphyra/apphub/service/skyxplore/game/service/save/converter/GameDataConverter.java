@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.DurabilityToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,24 +31,35 @@ class GameDataConverter {
     private final StoredResourceToModelConverter storedResourceToModelConverter;
     private final CitizenToModelConverter citizenToModelConverter;
     private final SkillToModelConverter skillToModelConverter;
+    private final DurabilityToModelConverter durabilityToModelConverter;
 
     public List<GameItem> convert(UUID gameId, GameData data) {
         List<GameItem> result = new ArrayList<>();
 
+        //Map
         result.addAll(coordinateToModelConverter.convert(gameId, data.getCoordinates()));
         result.addAll(solarSystemToModelConverter.convert(gameId, data.getSolarSystems()));
         result.addAll(planetToModelConverter.convert(gameId, data.getPlanets().values()));
+
+        //Planet
         result.addAll(surfaceToModelConverter.convert(gameId, data.getSurfaces()));
         result.addAll(buildingToModelConverter.convert(gameId, data.getBuildings()));
         result.addAll(constructionToModelConverter.convert(gameId, data.getConstructions()));
         result.addAll(priorityToModelConverter.convert(gameId, data.getPriorities()));
         result.addAll(deconstructionToModelConverter.convert(gameId, data.getDeconstructions()));
+
+        //Storage
         result.addAll(allocatedResourceToModelConverter.convert(gameId, data.getAllocatedResources()));
         result.addAll(reservedStorageToModelConverter.convert(gameId, data.getReservedStorages()));
         result.addAll(storageSettingToModelConverter.convert(gameId, data.getStorageSettings()));
         result.addAll(storedResourceToModelConverter.convert(gameId, data.getStoredResources()));
+
+        //Citizen
         result.addAll(citizenToModelConverter.convert(gameId, data.getCitizens()));
         result.addAll(skillToModelConverter.convert(gameId, data.getSkills()));
+        result.addAll(durabilityToModelConverter.convert(gameId, data.getDurabilities()));
+
+        //Process
         result.addAll(data.getProcesses().stream().map(Process::toModel).toList());
 
         return result;
