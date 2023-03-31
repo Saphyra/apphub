@@ -5,7 +5,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-//TODO unit test
 public class Planets extends ConcurrentHashMap<UUID, Planet> {
     public List<Planet> getBySolarSystemId(UUID solarSystemId) {
         return values()

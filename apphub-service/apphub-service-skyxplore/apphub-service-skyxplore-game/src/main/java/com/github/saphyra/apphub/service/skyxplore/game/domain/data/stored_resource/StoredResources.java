@@ -6,7 +6,6 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-//TODO unit test
 public class StoredResources extends Vector<StoredResource> {
     public StoredResource findByLocationAndDataIdOrDefault(UUID location, String dataId) {
         return findByLocationAndDataId(location, dataId)
