@@ -15,5 +15,5 @@ import java.util.UUID;
 public class LoadPageForGameRequest {
     private UUID gameId;
     private GameItemType type;
-    private int page;
+    private Integer page;
 }

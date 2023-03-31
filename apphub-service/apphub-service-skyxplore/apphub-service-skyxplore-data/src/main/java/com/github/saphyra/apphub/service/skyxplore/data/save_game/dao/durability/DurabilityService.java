@@ -9,14 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DurabilityItemService implements GameItemService {
+public class DurabilityService implements GameItemService {
     private final DurabilityDao dao;
 
     @Override
@@ -41,17 +40,12 @@ public class DurabilityItemService implements GameItemService {
     }
 
     @Override
-    public Optional<DurabilityModel> findById(UUID id) {
-        return dao.findById(id);
-    }
-
-    @Override
-    public List<DurabilityModel> getByParent(UUID parent) {
-        throw new UnsupportedOperationException("Deprecated");
-    }
-
-    @Override
     public void deleteById(UUID id) {
         dao.deleteById(id);
+    }
+
+    @Override
+    public List<DurabilityModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

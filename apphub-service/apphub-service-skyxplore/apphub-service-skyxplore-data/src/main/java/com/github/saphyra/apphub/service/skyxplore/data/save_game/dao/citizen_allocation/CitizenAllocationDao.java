@@ -4,8 +4,10 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.citizen_a
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -23,5 +25,9 @@ public class CitizenAllocationDao extends AbstractDao<CitizenAllocationEntity, C
 
     public void deleteById(UUID citizenAllocationId) {
         deleteById(uuidConverter.convertDomain(citizenAllocationId));
+    }
+
+    public List<CitizenAllocationModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

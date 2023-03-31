@@ -96,8 +96,8 @@ public class LoadGameWebSocketHandlerTest {
     public void handleTextMessage() {
         given(message.getPayload()).willReturn(PAYLOAD);
         given(objectMapperWrapper.readValue(PAYLOAD, SkyXploreWsEvent.class)).willReturn(event);
-        given(event.getEventName()).willReturn(SkyXploreWsEventName.LOAD_GAME_ITEM);
-        given(eventHandler.canHandle(SkyXploreWsEventName.LOAD_GAME_ITEM)).willReturn(true);
+        given(event.getEventName()).willReturn(SkyXploreWsEventName.LOAD_PAGE_FOR_GAME);
+        given(eventHandler.canHandle(SkyXploreWsEventName.LOAD_PAGE_FOR_GAME)).willReturn(true);
 
         underTest.handleTextMessage(webSocketSession, message);
 

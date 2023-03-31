@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class SurfaceService implements GameItemService {
-    private final SurfaceDao surfaceDao;
+    private final SurfaceDao dao;
     private final SurfaceModelValidator surfaceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        surfaceDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -39,21 +38,16 @@ public class SurfaceService implements GameItemService {
             .peek(surfaceModelValidator::validate)
             .collect(Collectors.toList());
 
-        surfaceDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<SurfaceModel> findById(UUID id) {
-        return surfaceDao.findById(id);
-    }
-
-    @Override
-    public List<SurfaceModel> getByParent(UUID parent) {
-        return surfaceDao.getByPlanetId(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        surfaceDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<SurfaceModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

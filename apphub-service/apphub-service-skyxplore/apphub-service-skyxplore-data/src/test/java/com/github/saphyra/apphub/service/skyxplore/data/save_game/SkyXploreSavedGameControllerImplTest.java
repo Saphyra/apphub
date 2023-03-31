@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -35,9 +33,6 @@ public class SkyXploreSavedGameControllerImplTest {
     private GameViewForLobbyCreationQueryService gameViewForLobbyCreationQueryService;
 
     @Mock
-    private LoadGameItemService loadGameItemService;
-
-    @Mock
     private DeleteGameItemService deleteGameItemService;
 
     @Mock
@@ -51,9 +46,6 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
-
-    @Mock
-    private GameModel gameModel;
 
     @Mock
     private GameViewForLobbyCreation gameViewForLobbyCreation;
@@ -78,26 +70,6 @@ public class SkyXploreSavedGameControllerImplTest {
         GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(gameViewForLobbyCreation);
-    }
-
-    @Test
-    public void loadGameItem() {
-        given(loadGameItemService.loadGameItem(ID, GameItemType.GAME)).willReturn(gameModel);
-
-        GameItem result = underTest.loadGameItem(ID, GameItemType.GAME);
-
-        assertThat(result).isEqualTo(gameModel);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Test
-    public void loadChildrenOfGameItem() {
-        List list = Arrays.asList(gameModel);
-        given(loadGameItemService.loadChildrenOfGameItem(ID, GameItemType.GAME)).willReturn(list);
-
-        List result = underTest.loadChildrenOfGameItem(ID, GameItemType.GAME);
-
-        assertThat(result).containsExactly(gameModel);
     }
 
     @Test

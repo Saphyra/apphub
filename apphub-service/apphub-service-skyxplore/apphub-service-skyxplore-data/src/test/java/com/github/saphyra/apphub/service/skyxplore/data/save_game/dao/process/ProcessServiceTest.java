@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class ProcessServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
+    private static final Integer PAGE = 245;
+    private static final Integer ITEMS_PER_PAGE = 346;
 
     @Mock
-    private ProcessDao processDao;
+    private ProcessDao dao;
 
     @Mock
     private ProcessModelValidator processModelValidator;
@@ -38,7 +39,7 @@ public class ProcessServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(processDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,20 @@ public class ProcessServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(processModelValidator).validate(model);
-        verify(processDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(processDao.findById(PROCESS_ID)).willReturn(Optional.of(model));
-
-        Optional<ProcessModel> result = underTest.findById(PROCESS_ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(processDao.getByGameId(GAME_ID)).willReturn(Arrays.asList(model));
-
-        List<ProcessModel> result = underTest.getByParent(GAME_ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(PROCESS_ID);
 
-        verify(processDao).deleteById(PROCESS_ID);
+        verify(dao).deleteById(PROCESS_ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

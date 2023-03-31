@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class GameService implements GameItemService {
-    private final GameDao gameDao;
+    private final GameDao dao;
     private final GameModelValidator gameModelValidator;
 
     @Override
@@ -40,21 +39,16 @@ public class GameService implements GameItemService {
             .collect(Collectors.toList());
 
 
-        gameDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<GameModel> findById(UUID id) {
-        return gameDao.findById(id);
-    }
-
-    @Override
-    public List<GameModel> getByParent(UUID parent) {
-        return gameDao.getByHost(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        gameDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<GameModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        throw new UnsupportedOperationException("Use API");
     }
 }

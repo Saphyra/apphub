@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.stored_resource;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,7 @@ interface StoredResourceRepository extends CrudRepository<StoredResourceEntity, 
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<StoredResourceEntity> getByLocation(String location);
+
+    //TODO unit test
+    List<StoredResourceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

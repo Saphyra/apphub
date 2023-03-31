@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,16 +17,18 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DurabilityItemServiceTest {
+public class DurabilityServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID DURABILITY_ITEM_ID = UUID.randomUUID();
     private static final UUID PARENT = UUID.randomUUID();
+    private static final Integer PAGE = 25;
+    private static final Integer ITEMS_PER_PAGE = 356;
 
     @Mock
-    private DurabilityDao durabilityDao;
+    private DurabilityDao dao;
 
     @InjectMocks
-    private DurabilityItemService underTest;
+    private DurabilityService underTest;
 
     @Mock
     private DurabilityModel model;
@@ -35,7 +37,7 @@ public class DurabilityItemServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(durabilityDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -47,22 +49,20 @@ public class DurabilityItemServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(durabilityDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(durabilityDao.findById(DURABILITY_ITEM_ID)).willReturn(Optional.of(model));
-
-        Optional<DurabilityModel> result = underTest.findById(DURABILITY_ITEM_ID);
-
-        assertThat(result).contains(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(DURABILITY_ITEM_ID);
 
-        verify(durabilityDao).deleteById(DURABILITY_ITEM_ID);
+        verify(dao).deleteById(DURABILITY_ITEM_ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

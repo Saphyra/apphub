@@ -2,14 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.priority;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PriorityModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,10 +20,11 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class PriorityServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 245;
+    private static final Integer ITEMS_PER_PAGE = 346;
 
     @Mock
-    private PriorityDao priorityDao;
+    private PriorityDao dao;
 
     @Mock
     private PriorityModelValidator priorityModelValidator;
@@ -41,7 +39,7 @@ public class PriorityServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(priorityDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -54,27 +52,18 @@ public class PriorityServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(priorityModelValidator).validate(model);
-        verify(priorityDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        Throwable ex = catchThrowable(() -> underTest.findById(ID));
-
-        ExceptionValidator.validateReportedException(ex, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
-    }
-
-    @Test
-    public void getByParent() {
-        given(priorityDao.getByLocation(ID)).willReturn(Arrays.asList(model));
-
-        List<PriorityModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         assertThat(catchThrowable(() -> underTest.deleteById(UUID.randomUUID()))).isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

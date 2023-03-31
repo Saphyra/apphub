@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.durabilit
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,5 +29,9 @@ public class DurabilityDao extends AbstractDao<DurabilityEntity, DurabilityModel
 
     public void deleteById(UUID durabilityItemId) {
         repository.deleteById(uuidConverter.convertDomain(durabilityItemId));
+    }
+
+    public List<DurabilityModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

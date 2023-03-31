@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class AllocatedResourceService implements GameItemService {
-    private final AllocatedResourceDao allocatedResourceDao;
+    private final AllocatedResourceDao dao;
     private final AllocatedResourceModelValidator allocatedResourceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        allocatedResourceDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -39,21 +38,16 @@ public class AllocatedResourceService implements GameItemService {
             .peek(allocatedResourceModelValidator::validate)
             .collect(Collectors.toList());
 
-        allocatedResourceDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<AllocatedResourceModel> findById(UUID id) {
-        return allocatedResourceDao.findById(id);
-    }
-
-    @Override
-    public List<AllocatedResourceModel> getByParent(UUID parent) {
-        return allocatedResourceDao.getByLocation(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        allocatedResourceDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<AllocatedResourceModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

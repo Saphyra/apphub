@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.ws.handler;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.skyxplore.ws.LoadGameItemRequest;
+import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.LoadGameItemService;
@@ -13,26 +13,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LoadGameItemWsHandler implements SkyXploreWsEventHandler {
+//TODO unit test
+public class LoadPageForGameHandler implements SkyXploreWsEventHandler {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final LoadGameItemService loadGameItemService;
 
     @Override
     public boolean canHandle(SkyXploreWsEventName eventName) {
-        return eventName == SkyXploreWsEventName.LOAD_GAME_ITEM;
+        return SkyXploreWsEventName.LOAD_PAGE_FOR_GAME == eventName;
     }
 
     @Override
     public void handle(LoadGameWebSocketHandler webSocketHandler, WebSocketSession session, SkyXploreWsEvent event) {
-        LoadGameItemRequest request = objectMapperWrapper.convertValue(event.getPayload(), LoadGameItemRequest.class);
+        log.info("LoadPageForGameRequest arrived: {}", event);
 
-        GameItem result = loadGameItemService.loadGameItem(request.getId(), request.getType());
+        LoadPageForGameRequest request = objectMapperWrapper.convertValue(event.getPayload(), LoadPageForGameRequest.class);
+
+        List<? extends GameItem> result = loadGameItemService.loadPageForGameItems(request.getGameId(), request.getPage(), request.getType());
 
         SkyXploreWsEvent response = SkyXploreWsEvent.builder()
-            .eventName(SkyXploreWsEventName.LOAD_GAME_ITEM)
+            .eventName(SkyXploreWsEventName.LOAD_PAGE_FOR_GAME)
             .id(event.getId())
             .payload(result)
             .build();

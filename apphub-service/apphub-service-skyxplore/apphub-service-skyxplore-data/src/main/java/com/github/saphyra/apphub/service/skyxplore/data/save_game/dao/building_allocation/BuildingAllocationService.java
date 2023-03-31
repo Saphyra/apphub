@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,17 +39,12 @@ public class BuildingAllocationService implements GameItemService {
     }
 
     @Override
-    public Optional<BuildingAllocationModel> findById(UUID id) {
-        throw new UnsupportedOperationException("Deprecated");
-    }
-
-    @Override
-    public List<? extends GameItem> getByParent(UUID parent) {
-        throw new UnsupportedOperationException("Deprecated");
-    }
-
-    @Override
     public void deleteById(UUID buildingAllocationId) {
         dao.deleteById(buildingAllocationId);
+    }
+
+    @Override
+    public List<BuildingAllocationModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }
