@@ -9,4 +9,10 @@ public class WebSocketClientCache extends GenericObjectPool<SkyXploreWsClient> {
     public WebSocketClientCache(PooledSkyXploreDataWsClientFactory factory, WebSocketClientCacheConfig config) {
         super(factory, config);
     }
+
+    @Override
+    public void returnObject(SkyXploreWsClient client) {
+        client.clearMessages();
+        super.returnObject(client);
+    }
 }

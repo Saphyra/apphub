@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.proxy;
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.verify;
 public class GameDataProxyTest {
     private static final String LOCALE = "locale";
     private static final UUID ID = UUID.randomUUID();
-    private static final String RESULT = "result";
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private SkyXploreSavedGameClient dataGameClient;
@@ -38,27 +39,12 @@ public class GameDataProxyTest {
     @Mock
     private GameItem gameItem;
 
+    @Mock
+    private GameModel gameModel;
+
     @BeforeEach
     public void setUp() {
         given(localeProvider.getOrDefault()).willReturn(LOCALE);
-    }
-
-    @Test
-    public void loadItem() {
-        given(dataGameClient.loadGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(RESULT);
-
-        String result = underTest.loadItem(ID, GameItemType.GAME);
-
-        assertThat(result).isEqualTo(RESULT);
-    }
-
-    @Test
-    public void loadChildren() {
-        given(dataGameClient.loadChildrenOfGameItem(ID, GameItemType.GAME, LOCALE)).willReturn(RESULT);
-
-        String result = underTest.loadChildren(ID, GameItemType.GAME);
-
-        assertThat(result).isEqualTo(RESULT);
     }
 
     @Test
@@ -80,5 +66,12 @@ public class GameDataProxyTest {
         underTest.deleteItems(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)));
 
         verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)), LOCALE);
+    }
+
+    @Test
+    void getGameModel() {
+        given(dataGameClient.getGameModel(GAME_ID, LOCALE)).willReturn(gameModel);
+
+        assertThat(underTest.getGameModel(GAME_ID)).isEqualTo(gameModel);
     }
 }

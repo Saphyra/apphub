@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 @Slf4j
 //TODO unit test
 class GameDataLoader {
-    private final List<GameDataPartLoader<?, ?>> loaders;
+    private final List<AutoLoader<?, ?>> loaders;
     private final SleepService sleepService;
     private final ExecutorServiceBean executorServiceBean;
 
@@ -28,7 +28,7 @@ class GameDataLoader {
             .build();
 
         List<Future<ExecutionResult<Void>>> futures = loaders.stream()
-            .map(loader -> executorServiceBean.execute(() -> loader.load(gameData)))
+            .map(loader -> executorServiceBean.execute(() -> loader.autoLoad(gameData)))
             .toList();
 
         while (futures.stream().anyMatch(future -> !future.isDone())) {

@@ -1,22 +1,29 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameDeletionService;
+import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -41,6 +48,9 @@ public class SkyXploreSavedGameControllerImplTest {
     @Mock
     private SavedGameQueryService savedGameQueryService;
 
+    @Mock
+    private GameDao gameDao;
+
     @InjectMocks
     private SkyXploreSavedGameControllerImpl underTest;
 
@@ -52,6 +62,9 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Mock
     private SavedGameResponse savedGameResponse;
+
+    @Mock
+    private GameModel gameModel;
 
     @Test
     public void deleteGame() {
@@ -94,5 +107,21 @@ public class SkyXploreSavedGameControllerImplTest {
         List<SavedGameResponse> result = underTest.getSavedGames(accessTokenHeader);
 
         assertThat(result).containsExactly(savedGameResponse);
+    }
+
+    @Test
+    void getGameModel_found() {
+        given(gameDao.findById(GAME_ID)).willReturn(Optional.of(gameModel));
+
+        assertThat(underTest.getGameModel(GAME_ID)).isEqualTo(gameModel);
+    }
+
+    @Test
+    void getGameModel_notFound() {
+        given(gameDao.findById(GAME_ID)).willReturn(Optional.empty());
+
+        Throwable ex = catchThrowable(() -> underTest.getGameModel(GAME_ID));
+
+        ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 }

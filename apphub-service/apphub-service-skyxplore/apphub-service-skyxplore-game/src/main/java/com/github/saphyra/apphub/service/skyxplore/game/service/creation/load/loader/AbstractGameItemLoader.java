@@ -2,42 +2,38 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 //TODO unit test
-//TODO implement
-public abstract class GameDataPartLoader<Model extends GameItem, Type> {
-    private static final int FIRST_PAGE = 1;
+public abstract class AbstractGameItemLoader<Model extends GameItem> {
+    private static final int FIRST_PAGE = 0;
 
     private final GameItemLoader gameItemLoader;
 
-    public void load(GameData gameData) {
+    public List<Model> getByGameId(UUID gameId) {
+        List<Model> result = new ArrayList<>();
+
         int currentPage = FIRST_PAGE;
         while (true) {
-            List<Model> items = gameItemLoader.loadPageForGame(gameData.getGameId(), currentPage, getGameItemType(), getClassArray());
+            List<Model> items = gameItemLoader.loadPageForGame(gameId, currentPage, getGameItemType(), getClassArray());
 
             if (items.isEmpty()) {
-                return;
+                return result;
             }
 
-            currentPage += 1;
+            result.addAll(items);
 
-            items.stream()
-                .map(this::convert)
-                .forEach(item -> addToData(gameData, item));
+            currentPage += 1;
         }
     }
 
     protected abstract GameItemType getGameItemType();
 
     protected abstract Class<Model[]> getClassArray();
-
-    protected abstract Type convert(Model model);
-
-    protected abstract void addToData(GameData gameData, Type item);
 }

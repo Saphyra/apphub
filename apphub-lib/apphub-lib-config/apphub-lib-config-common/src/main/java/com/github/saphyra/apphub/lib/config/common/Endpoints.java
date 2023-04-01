@@ -174,6 +174,7 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_CHARACTER_EXISTS = "/allowed-internal/skyxplore/data/character/{userId}/exists";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
     public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/data/game-item";
+    public static final String SKYXPLORE_INTERNAL_GET_GAME_MODEL = "/internal/skyxplore/game/{gameId}";
 
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";
     public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/data/saved-game";
