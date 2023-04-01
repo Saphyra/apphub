@@ -15,6 +15,5 @@ interface SkillRepository extends JpaRepository<SkillEntity, String> {
 
     List<SkillEntity> getByCitizenId(String citizenId);
 
-    //TODO unit test
     List<SkillEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

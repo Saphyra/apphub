@@ -15,6 +15,5 @@ interface SurfaceRepository extends CrudRepository<SurfaceEntity, String> {
 
     List<SurfaceEntity> getByPlanetId(String planetId);
 
-    //TODO unit test
     List<SurfaceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

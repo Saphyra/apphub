@@ -13,6 +13,5 @@ interface SolarSystemRepository extends CrudRepository<SolarSystemEntity, String
     @Query("DELETE FROM SolarSystemEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    //TODO unit test
     List<SolarSystemEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

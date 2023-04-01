@@ -13,6 +13,5 @@ interface BuildingAllocationRepository extends CrudRepository<BuildingAllocation
     @Query("DELETE FROM BuildingAllocationEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    //TODO unit test
     List<BuildingAllocationEntity> getByGameId(String gameId, PageRequest page);
 }

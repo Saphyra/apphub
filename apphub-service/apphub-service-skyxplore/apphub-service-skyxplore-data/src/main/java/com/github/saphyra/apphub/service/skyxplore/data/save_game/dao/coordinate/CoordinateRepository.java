@@ -15,6 +15,5 @@ interface CoordinateRepository extends JpaRepository<CoordinateEntity, String> {
 
     List<CoordinateEntity> getByReferenceId(String referenceId);
 
-    //TODO unit test
     List<CoordinateEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

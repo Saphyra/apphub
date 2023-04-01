@@ -18,7 +18,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LoadPageForGameHandler implements SkyXploreWsEventHandler {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final LoadGameItemService loadGameItemService;

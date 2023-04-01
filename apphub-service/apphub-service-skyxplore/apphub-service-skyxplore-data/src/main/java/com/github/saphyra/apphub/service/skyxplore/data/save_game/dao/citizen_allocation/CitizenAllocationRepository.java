@@ -13,6 +13,5 @@ interface CitizenAllocationRepository extends JpaRepository<CitizenAllocationEnt
     @Query("DELETE FROM CitizenAllocationEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    //TODO unit test
     List<CitizenAllocationEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

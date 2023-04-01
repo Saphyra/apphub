@@ -15,6 +15,5 @@ interface ReservedStorageRepository extends CrudRepository<ReservedStorageEntity
 
     List<ReservedStorageEntity> getByLocation(String location);
 
-    //TODO unit test
     List<ReservedStorageEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

@@ -15,6 +15,5 @@ interface StoredResourceRepository extends CrudRepository<StoredResourceEntity, 
 
     List<StoredResourceEntity> getByLocation(String location);
 
-    //TODO unit test
     List<StoredResourceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

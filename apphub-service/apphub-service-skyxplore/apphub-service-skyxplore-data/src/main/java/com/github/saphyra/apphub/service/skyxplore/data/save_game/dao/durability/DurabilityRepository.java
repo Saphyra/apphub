@@ -13,6 +13,5 @@ interface DurabilityRepository extends CrudRepository<DurabilityEntity, String> 
     @Query("DELETE FROM DurabilityEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    //TODO unit test
     List<DurabilityEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

@@ -15,6 +15,5 @@ interface StorageSettingRepository extends CrudRepository<StorageSettingEntity, 
 
     List<StorageSettingEntity> getByLocation(String location);
 
-    //TODO unit test
     List<StorageSettingEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

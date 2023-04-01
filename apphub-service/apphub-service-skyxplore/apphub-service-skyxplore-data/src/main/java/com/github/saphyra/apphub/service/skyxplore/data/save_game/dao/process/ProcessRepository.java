@@ -15,6 +15,5 @@ interface ProcessRepository extends JpaRepository<ProcessEntity, String> {
 
     List<ProcessEntity> getByGameId(String gameId);
 
-    //TODO unit test
     List<ProcessEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

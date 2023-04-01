@@ -13,7 +13,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PriorityModel extends GameItem {
     private UUID location;
-    private String locationType;
     private String priorityType;
     private Integer value;
 }

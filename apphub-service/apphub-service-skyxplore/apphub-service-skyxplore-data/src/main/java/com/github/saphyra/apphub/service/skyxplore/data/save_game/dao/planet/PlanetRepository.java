@@ -15,6 +15,5 @@ interface PlanetRepository extends JpaRepository<PlanetEntity, String> {
 
     List<PlanetEntity> getBySolarSystemId(String solarSystemId);
 
-    //TODO unit test
     List<PlanetEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

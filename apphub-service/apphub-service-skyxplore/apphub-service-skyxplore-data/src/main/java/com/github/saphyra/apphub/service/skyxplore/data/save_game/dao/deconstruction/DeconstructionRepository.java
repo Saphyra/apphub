@@ -10,6 +10,5 @@ interface DeconstructionRepository extends CrudRepository<DeconstructionEntity, 
 
     List<DeconstructionEntity> getByExternalReference(String externalReference);
 
-    //TODO unit test
     List<DeconstructionEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

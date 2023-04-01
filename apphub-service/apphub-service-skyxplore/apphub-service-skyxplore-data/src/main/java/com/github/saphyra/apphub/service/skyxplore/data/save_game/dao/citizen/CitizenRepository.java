@@ -15,6 +15,5 @@ interface CitizenRepository extends JpaRepository<CitizenEntity, String> {
 
     List<CitizenEntity> getByLocation(String location);
 
-    //TODO unit test
     List<CitizenEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

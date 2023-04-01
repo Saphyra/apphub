@@ -16,6 +16,5 @@ interface ConstructionRepository extends CrudRepository<ConstructionEntity, Stri
 
     List<ConstructionEntity> getByExternalReference(String location);
 
-    //TODO unit test
     List<ConstructionEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

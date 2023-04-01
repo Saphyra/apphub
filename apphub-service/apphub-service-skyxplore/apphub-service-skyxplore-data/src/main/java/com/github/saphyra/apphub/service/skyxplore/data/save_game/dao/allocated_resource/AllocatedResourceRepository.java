@@ -15,6 +15,5 @@ interface AllocatedResourceRepository extends CrudRepository<AllocatedResourceEn
 
     List<AllocatedResourceEntity> getByLocation(String location);
 
-    //TODO unit test
     List<AllocatedResourceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

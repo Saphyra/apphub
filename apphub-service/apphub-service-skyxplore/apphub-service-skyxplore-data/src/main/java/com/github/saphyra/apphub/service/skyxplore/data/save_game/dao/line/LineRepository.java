@@ -15,6 +15,5 @@ interface LineRepository extends CrudRepository<LineEntity, String> {
 
     List<LineEntity> getByReferenceId(String referenceId);
 
-    //TODO unit test
     List<LineEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

@@ -21,9 +21,6 @@ public class PriorityModelValidator {
         if (isNull(model.getLocation())) {
             throw ExceptionFactory.invalidParam("location", "must not be null");
         }
-        if (isNull(model.getLocationType())) {
-            throw ExceptionFactory.invalidParam("locationType", "must not be null");
-        }
 
         if (isNull(model.getPriorityType())) {
             throw ExceptionFactory.invalidParam("priorityType", "must not be null");

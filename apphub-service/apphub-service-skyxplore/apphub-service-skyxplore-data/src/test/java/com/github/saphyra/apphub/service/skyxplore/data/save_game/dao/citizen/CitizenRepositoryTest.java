@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,6 +24,8 @@ public class CitizenRepositoryTest {
     private static final String GAME_ID_2 = "game-id-2";
     private static final String CITIZEN_ID_1 = "citizen-id-1";
     private static final String CITIZEN_ID_2 = "citizen-id-2";
+    private static final String CITIZEN_ID_3 = "citizen-id-3";
+    private static final String CITIZEN_ID_4 = "citizen-id-4";
     private static final String LOCATION_1 = "location-1";
     private static final String LOCATION_2 = "location-2";
 
@@ -69,5 +72,30 @@ public class CitizenRepositoryTest {
         List<CitizenEntity> result = underTest.getByLocation(LOCATION_1);
 
         assertThat(result).containsExactly(entity1);
+    }
+
+    @Test
+    void getByGameId() {
+        CitizenEntity entity1 = CitizenEntity.builder()
+            .citizenId(CITIZEN_ID_1)
+            .gameId(GAME_ID_1)
+            .build();
+        CitizenEntity entity2 = CitizenEntity.builder()
+            .citizenId(CITIZEN_ID_2)
+            .gameId(GAME_ID_1)
+            .build();
+        CitizenEntity entity3 = CitizenEntity.builder()
+            .citizenId(CITIZEN_ID_3)
+            .gameId(GAME_ID_1)
+            .build();
+        CitizenEntity entity4 = CitizenEntity.builder()
+            .citizenId(CITIZEN_ID_4)
+            .gameId(GAME_ID_2)
+            .build();
+        underTest.saveAll(List.of(entity1, entity2, entity3, entity4));
+
+        assertThat(underTest.getByGameId(GAME_ID_1, PageRequest.of(0, 2))).containsExactly(entity1, entity2);
+        assertThat(underTest.getByGameId(GAME_ID_1, PageRequest.of(1, 2))).containsExactly(entity3);
+        assertThat(underTest.getByGameId(GAME_ID_1, PageRequest.of(2, 2))).isEmpty();
     }
 }

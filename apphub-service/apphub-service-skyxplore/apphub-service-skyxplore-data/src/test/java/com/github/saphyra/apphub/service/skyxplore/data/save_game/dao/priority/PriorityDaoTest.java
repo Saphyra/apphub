@@ -56,7 +56,7 @@ public class PriorityDaoTest {
     @Test
     public void getByLocation() {
         given(uuidConverter.convertDomain(LOCATION)).willReturn(LOCATION_STRING);
-        given(repository.getByPkLocation(LOCATION_STRING)).willReturn(Arrays.asList(entity));
+        given(repository.getByLocation(LOCATION_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(model));
 
         List<PriorityModel> result = underTest.getByLocation(LOCATION);

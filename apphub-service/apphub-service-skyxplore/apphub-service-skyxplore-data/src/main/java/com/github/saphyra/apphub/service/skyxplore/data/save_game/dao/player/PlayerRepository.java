@@ -17,6 +17,5 @@ public interface PlayerRepository extends JpaRepository<PlayerEntity, String> {
 
     List<PlayerEntity> getByGameId(String gameId);
 
-    //TODO unit test
     List<PlayerEntity> getByGameId(String gameId, PageRequest pageRequest);
 }
