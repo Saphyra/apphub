@@ -26,6 +26,7 @@ public class CoordinateToModelConverter {
     public CoordinateModel convert(UUID gameId, ReferredCoordinate coordinate) {
         CoordinateModel model = new CoordinateModel();
         model.setId(coordinate.getReferenceId());
+        model.setReferenceId(coordinate.getReferenceId());
         model.setGameId(gameId);
         model.setType(GameItemType.COORDINATE);
         model.setCoordinate(coordinate.getCoordinate());

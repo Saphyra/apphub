@@ -1,11 +1,13 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
+package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.AbstractGameItemLoader;
 
 import java.util.List;
 
+//TODO unit test
 public abstract class AutoLoader<Model extends GameItem, Type> extends AbstractGameItemLoader<Model> {
     public AutoLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

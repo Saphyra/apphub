@@ -60,7 +60,7 @@ public class PlayerLoader extends AbstractGameItemLoader<PlayerModel> {
     }
 
     @Override
-    protected Class<PlayerModel[]> getClassArray() {
+    protected Class<PlayerModel[]> getArrayClass() {
         return PlayerModel[].class;
     }
 }

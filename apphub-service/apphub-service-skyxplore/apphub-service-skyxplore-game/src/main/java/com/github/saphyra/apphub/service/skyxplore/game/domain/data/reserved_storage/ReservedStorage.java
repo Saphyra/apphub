@@ -15,7 +15,7 @@ public class ReservedStorage {
     private final UUID location;
     private final UUID externalReference;
     private final String dataId;
-    private int amount;
+    private Integer amount;
 
     @Override
     public String toString() {

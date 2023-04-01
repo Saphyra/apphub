@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.service.skyxplore.game.common.CoordinateModelFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.ReferredCoordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReferredCoordinateFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class SurfaceFiller {
     private final SurfaceFactory surfaceFactory;
     private final SurfaceMapFactory surfaceMapFactory;
-    private final CoordinateModelFactory coordinateModelFactory;
+    private final ReferredCoordinateFactory referredCoordinateFactory;
 
     public void fillSurfaces(GameData gameData) {
         gameData.getPlanets()
@@ -36,7 +36,7 @@ public class SurfaceFiller {
                 SurfaceType surfaceType = row[y];
                 Surface surface = surfaceFactory.create(planet.getPlanetId(), surfaceType);
 
-                ReferredCoordinate referredCoordinate = new ReferredCoordinate(surface.getSurfaceId(), coordinate);
+                ReferredCoordinate referredCoordinate = referredCoordinateFactory.create(surface.getSurfaceId(), coordinate);
 
                 gameData.getSurfaces()
                     .add(surface);

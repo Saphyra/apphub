@@ -49,7 +49,7 @@ class AllianceLoader extends AbstractGameItemLoader<AllianceModel> {
     }
 
     @Override
-    protected Class<AllianceModel[]> getClassArray() {
+    protected Class<AllianceModel[]> getArrayClass() {
         return AllianceModel[].class;
     }
 }

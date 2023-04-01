@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.ReferredCoordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReferredCoordinateFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class PlanetFiller {
     private final RandomCoordinateProvider randomCoordinateProvider;
     private final PlanetFactory planetFactory;
+    private final ReferredCoordinateFactory referredCoordinateFactory;
 
     public void fillPlanets(SolarSystem solarSystem, Map<Double, UUID> planets, GameData gameData, SkyXploreGameSettings settings) {
         List<Double> sortedCoordinates = planets.keySet()
@@ -40,7 +42,7 @@ public class PlanetFiller {
                 planets.get(orbitRadius),
                 orbitRadius
             );
-            ReferredCoordinate planetCoordinate = new ReferredCoordinate(planet.getPlanetId(), coordinate);
+            ReferredCoordinate planetCoordinate = referredCoordinateFactory.create(planet.getPlanetId(), coordinate);
 
             gameData.getPlanets()
                 .put(planet.getPlanetId(), planet);

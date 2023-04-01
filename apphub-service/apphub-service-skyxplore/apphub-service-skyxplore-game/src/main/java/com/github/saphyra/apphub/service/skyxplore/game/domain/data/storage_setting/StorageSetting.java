@@ -13,7 +13,7 @@ public class StorageSetting {
     private final UUID storageSettingId;
     private final UUID location;
     private final String dataId;
-    private int targetAmount;
-    private int priority;
-    private int batchSize;
+    private Integer targetAmount;
+    private Integer priority;
+    private Integer batchSize;
 }

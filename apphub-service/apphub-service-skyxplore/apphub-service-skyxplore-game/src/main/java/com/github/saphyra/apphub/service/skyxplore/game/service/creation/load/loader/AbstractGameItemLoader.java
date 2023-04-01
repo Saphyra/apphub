@@ -4,12 +4,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@Slf4j
 //TODO unit test
 public abstract class AbstractGameItemLoader<Model extends GameItem> {
     private static final int FIRST_PAGE = 0;
@@ -21,7 +23,8 @@ public abstract class AbstractGameItemLoader<Model extends GameItem> {
 
         int currentPage = FIRST_PAGE;
         while (true) {
-            List<Model> items = gameItemLoader.loadPageForGame(gameId, currentPage, getGameItemType(), getClassArray());
+            log.info("Loading page #{} of {} for gameId {}", currentPage, getGameItemType(), gameId);
+            List<Model> items = gameItemLoader.loadPageForGame(gameId, currentPage, getGameItemType(), getArrayClass());
 
             if (items.isEmpty()) {
                 return result;
@@ -35,5 +38,5 @@ public abstract class AbstractGameItemLoader<Model extends GameItem> {
 
     protected abstract GameItemType getGameItemType();
 
-    protected abstract Class<Model[]> getClassArray();
+    protected abstract Class<Model[]> getArrayClass();
 }

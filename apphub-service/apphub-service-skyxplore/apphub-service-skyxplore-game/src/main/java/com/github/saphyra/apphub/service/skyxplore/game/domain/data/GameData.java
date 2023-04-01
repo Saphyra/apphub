@@ -36,33 +36,33 @@ public class GameData {
     //MAP
     private final int universeSize;
     @Builder.Default
-    private final Coordinates coordinates = new Coordinates(); //TODO create loader
+    private final Coordinates coordinates = new Coordinates();
     @Builder.Default
-    private final SolarSystems solarSystems = new SolarSystems(); //TODO create loader
+    private final SolarSystems solarSystems = new SolarSystems();
     @Builder.Default
-    private final Planets planets = new Planets(); //TODO create loader
+    private final Planets planets = new Planets();
 
     //PLANET
     @Builder.Default
-    private final Surfaces surfaces = new Surfaces(); //TODO create loader
+    private final Surfaces surfaces = new Surfaces();
     @Builder.Default
-    private final Buildings buildings = new Buildings(); //TODO create loader
+    private final Buildings buildings = new Buildings();
     @Builder.Default
-    private final Constructions constructions = new Constructions(); //TODO create loader
+    private final Constructions constructions = new Constructions();
     @Builder.Default
-    private final Priorities priorities = new Priorities(); //TODO create loader
+    private final Priorities priorities = new Priorities();
     @Builder.Default
-    private final Deconstructions deconstructions = new Deconstructions(); //TODO create loader
+    private final Deconstructions deconstructions = new Deconstructions();
 
     //STORAGE
     @Builder.Default
-    private final AllocatedResources allocatedResources = new AllocatedResources(); //TODO create loader
+    private final AllocatedResources allocatedResources = new AllocatedResources();
     @Builder.Default
-    private final ReservedStorages reservedStorages = new ReservedStorages(); //TODO create loader
+    private final ReservedStorages reservedStorages = new ReservedStorages();
     @Builder.Default
-    private final StorageSettings storageSettings = new StorageSettings(); //TODO create loader
+    private final StorageSettings storageSettings = new StorageSettings();
     @Builder.Default
-    private final StoredResources storedResources = new StoredResources(); //TODO create loader
+    private final StoredResources storedResources = new StoredResources();
 
     //CITIZEN
     @Builder.Default
