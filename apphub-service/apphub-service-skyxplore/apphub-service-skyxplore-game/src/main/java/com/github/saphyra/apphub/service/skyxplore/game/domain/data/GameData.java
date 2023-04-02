@@ -67,13 +67,13 @@ public class GameData {
     @Builder.Default
     private final Skills skills = new Skills();
     @Builder.Default
-    private final Durabilities durabilities = new Durabilities(); //TODO create loader
+    private final Durabilities durabilities = new Durabilities();
 
     //PROCESS
     @Builder.Default
-    private final Processes processes = new Processes(); //TODO create loader
+    private final Processes processes = new Processes();
     @Builder.Default
-    private final BuildingAllocations buildingAllocations = new BuildingAllocations(); //TODO convert to model //TODO create loader
+    private final BuildingAllocations buildingAllocations = new BuildingAllocations();
     @Builder.Default
-    private final CitizenAllocations citizenAllocations = new CitizenAllocations(); //TODO convert to model //TODO create loader
+    private final CitizenAllocations citizenAllocations = new CitizenAllocations();
 }

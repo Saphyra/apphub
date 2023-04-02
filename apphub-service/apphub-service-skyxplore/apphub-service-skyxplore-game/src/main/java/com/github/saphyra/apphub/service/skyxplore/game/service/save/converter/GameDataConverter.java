@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.DurabilityToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ class GameDataConverter {
     private final CitizenToModelConverter citizenToModelConverter;
     private final SkillToModelConverter skillToModelConverter;
     private final DurabilityToModelConverter durabilityToModelConverter;
+    private final BuildingAllocationToModelConverter buildingAllocationToModelConverter;
+    private final CitizenAllocationToModelConverter citizenAllocationToModelConverter;
 
     public List<GameItem> convert(UUID gameId, GameData data) {
         List<GameItem> result = new ArrayList<>();
@@ -61,6 +65,8 @@ class GameDataConverter {
 
         //Process
         result.addAll(data.getProcesses().stream().map(Process::toModel).toList());
+        result.addAll(buildingAllocationToModelConverter.convert(gameId, data.getBuildingAllocations()));
+        result.addAll(citizenAllocationToModelConverter.convert(gameId, data.getCitizenAllocations()));
 
         return result;
     }

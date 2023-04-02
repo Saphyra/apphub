@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class GameLoader {
     private final DateTimeUtil dateTimeUtil;
     private final GameDao gameDao;
@@ -37,6 +38,7 @@ public class GameLoader {
     private final EventLoopFactory eventLoopFactory;
     private final BackgroundProcessStarterService backgroundProcessStarterService;
     private final GameDataLoader gameDataLoader;
+    private final ProcessLoader processLoader;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -55,6 +57,8 @@ public class GameLoader {
             .markedForDeletion(gameModel.getMarkedForDeletion())
             .markedForDeletionAt(gameModel.getMarkedForDeletionAt())
             .build();
+
+        processLoader.loadProcesses(game);
 
         backgroundProcessStarterService.startBackgroundProcesses(game);
 

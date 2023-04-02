@@ -6,12 +6,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class CitizenAllocationToModelConverter {
+    public List<CitizenAllocationModel> convert(UUID gameId, Collection<CitizenAllocation> citizenAllocations) {
+        return citizenAllocations.stream()
+            .map(citizenAllocation -> convert(gameId, citizenAllocation))
+            .collect(Collectors.toList());
+    }
+
     public CitizenAllocationModel convert(UUID gameId, CitizenAllocation citizenAllocation) {
         CitizenAllocationModel model = new CitizenAllocationModel();
 
