@@ -22,8 +22,8 @@ public class Citizen {
     private String name;
 
 
-    private int morale;
-    private int satiety;
+    private Integer morale;
+    private Integer satiety;
 
     public void reduceMorale(int morale) {
         this.morale -= morale;

@@ -15,9 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_armor_piece.SoldierArmorPieces;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_data.SoldierWeapons;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.soldier_energy_shield.SoldierEnergyShields;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
@@ -66,15 +63,9 @@ public class GameData {
 
     //CITIZEN
     @Builder.Default
-    private final Citizens citizens = new Citizens(); //TODO create loader
+    private final Citizens citizens = new Citizens();
     @Builder.Default
-    private final Skills skills = new Skills(); //TODO create loader
-    @Builder.Default
-    private final SoldierWeapons soldierWeapons = new SoldierWeapons(); //TODO create loader //TODO convert to model
-    @Builder.Default
-    private final SoldierEnergyShields soldierEnergyShields = new SoldierEnergyShields(); //TODO create loader //TODO convert to model
-    @Builder.Default
-    private final SoldierArmorPieces soldierArmorPieces = new SoldierArmorPieces(); //TODO create loader //TODO convert to model
+    private final Skills skills = new Skills();
     @Builder.Default
     private final Durabilities durabilities = new Durabilities(); //TODO create loader
 

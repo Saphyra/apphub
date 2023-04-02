@@ -15,9 +15,9 @@ public class Skill {
     private final UUID skillId;
     private final UUID citizenId;
     private final SkillType skillType;
-    private int level;
-    private int experience;
-    private int nextLevel;
+    private Integer level;
+    private Integer experience;
+    private Integer nextLevel;
 
     public void increaseExperience(int experience) {
         this.experience += experience;
