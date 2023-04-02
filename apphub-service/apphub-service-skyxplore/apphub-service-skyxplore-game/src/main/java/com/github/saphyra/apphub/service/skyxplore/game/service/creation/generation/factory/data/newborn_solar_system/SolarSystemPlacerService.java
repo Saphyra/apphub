@@ -11,14 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
@@ -28,13 +26,14 @@ class SolarSystemPlacerService {
     private final GameProperties gameProperties;
     private final Random random;
     private final DistanceCalculator distanceCalculator;
+    private final SolarSystemShifter solarSystemShifter;
 
-    public Map<Coordinate, UUID[]> place(List<UUID[]> solarSystems) {
+    Map<Coordinate, UUID[]> place(List<UUID[]> solarSystems) {
         Map<Coordinate, UUID[]> placedSolarSystems = new HashMap<>();
 
         solarSystems.forEach(solarSystem -> placedSolarSystems.put(place(placedSolarSystems), solarSystem));
 
-        return shiftSolarSystems(placedSolarSystems);
+        return solarSystemShifter.shiftSolarSystems(placedSolarSystems);
     }
 
     private Coordinate place(Map<Coordinate, UUID[]> placedSolarSystems) {
@@ -74,45 +73,5 @@ class SolarSystemPlacerService {
     private boolean isFarEnough(Coordinate newCoordinate, Set<Coordinate> keySet) {
         return keySet.stream()
             .allMatch(coordinate -> distanceCalculator.getDistance(newCoordinate, coordinate) > gameProperties.getSolarSystem().getSolarSystemDistance().getMin());
-    }
-
-    /**
-     * Shifting is necessary to have all the solar systems with positive-only coordinates, with a defined padding from the edge
-     */
-    private Map<Coordinate, UUID[]> shiftSolarSystems(Map<Coordinate, UUID[]> placedSolarSystems) {
-        int minX = getMin(placedSolarSystems.keySet(), Coordinate::getX);
-        int minY = getMin(placedSolarSystems.keySet(), Coordinate::getY);
-
-        int offsetX = getOffset(minX);
-        int offsetY = getOffset(minY);
-
-        Map<Coordinate, UUID[]> result = new HashMap<>();
-
-        placedSolarSystems.forEach((coordinate, solarSystem) -> result.put(new Coordinate(coordinate.getX() + offsetX, coordinate.getY() + offsetY), solarSystem));
-
-        return result;
-    }
-
-    private int getMin(Collection<Coordinate> coordinates, Function<Coordinate, Double> mapper) {
-        double min = Integer.MAX_VALUE;
-        for (Coordinate coordinate : coordinates) {
-            double value = mapper.apply(coordinate);
-            if (value < min) {
-                min = value;
-            }
-        }
-
-        return (int) min;
-    }
-
-    private int getOffset(int minY) {
-        int padding = gameProperties.getSolarSystem()
-            .getPadding();
-
-        if (minY - padding < 0) {
-            return Math.abs(minY - padding);
-        } else {
-            return 0;
-        }
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenHitPointsProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -19,20 +20,19 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CitizenFactory {
     private final IdGenerator idGenerator;
     private final RandomNameProvider randomNameProvider;
     private final SkillFactory skillFactory;
     private final GameProperties properties;
 
-    void addToGameData(UUID planetId, GameData gameData) {
+    void addToGameData(UUID location, GameData gameData) {
         CitizenProperties citizenProperties = properties.getCitizen();
 
         Citizen citizen = Citizen.builder()
             .citizenId(idGenerator.randomUuid())
             .name(randomNameProvider.getRandomName(Collections.emptyList()))
-            .location(planetId)
+            .location(location)
             .morale(citizenProperties.getMorale().getMax())
             .satiety(citizenProperties.getSatiety().getMax())
             .build();
@@ -45,9 +45,9 @@ class CitizenFactory {
     }
 
     private void addSoldierData(UUID citizenId, GameData gameData) {
-        int hitPoints = properties.getCitizen()
-            .getHitPoints()
-            .getPerStaminaLevel();
+        CitizenHitPointsProperties hitPointsProperties = properties.getCitizen()
+            .getHitPoints();
+        int hitPoints = hitPointsProperties.getPerLevel() + hitPointsProperties.getBase();
 
         Durability durability = Durability.builder()
             .durabilityId(idGenerator.randomUuid())

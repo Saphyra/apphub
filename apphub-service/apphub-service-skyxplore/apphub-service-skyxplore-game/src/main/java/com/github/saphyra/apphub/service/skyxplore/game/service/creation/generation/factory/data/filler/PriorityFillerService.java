@@ -15,7 +15,6 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PriorityFillerService {
     private final IdGenerator idGenerator;
 

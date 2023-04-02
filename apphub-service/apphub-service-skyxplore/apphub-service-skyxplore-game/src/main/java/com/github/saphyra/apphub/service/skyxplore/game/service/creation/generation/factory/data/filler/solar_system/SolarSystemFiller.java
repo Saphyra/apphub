@@ -16,7 +16,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SolarSystemFiller {
     private final SolarSystemFactory solarSystemFactory;
     private final PlanetFiller planetFiller;
@@ -24,7 +23,7 @@ public class SolarSystemFiller {
 
     public void fillNewbornSolarSystems(List<NewbornSolarSystem> newbornSolarSystems, GameData gameData, SkyXploreGameSettings settings) {
         for (NewbornSolarSystem newbornSolarSystem : newbornSolarSystems) {
-            SolarSystem solarSystem = solarSystemFactory.create(newbornSolarSystem, gameData.getSolarSystems());
+            SolarSystem solarSystem = solarSystemFactory.create(newbornSolarSystem.getRadius(), gameData.getSolarSystems());
             ReferredCoordinate solarSystemCoordinate = referredCoordinateFactory.create(solarSystem.getSolarSystemId(), newbornSolarSystem.getCoordinate());
 
             gameData.getSolarSystems()

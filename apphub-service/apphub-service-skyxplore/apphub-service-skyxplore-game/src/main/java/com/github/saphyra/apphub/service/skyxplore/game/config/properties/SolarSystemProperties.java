@@ -7,5 +7,5 @@ import lombok.Data;
 public class SolarSystemProperties {
     private Range<Integer> solarSystemDistance;
     private Integer padding; //Distance from the edge of the universe
-    private Range<Integer> planetOrbitDistance;
+    private Range<Integer> planetOrbitRadius;
 }

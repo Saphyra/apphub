@@ -16,7 +16,7 @@ game:
       min: 100
       max: 500
     padding: 50
-    planetOrbitDistance:
+    planetOrbitRadius:
       min: 100
       max: 300
   planet:
@@ -63,7 +63,8 @@ game:
       max: 10000
       satietyDecreasedPerSecond: 50
     hitPoints:
-      perStaminaLevel: 1000
+      perLevel: 1000
+      base: 9000
 
 logging:
   level:

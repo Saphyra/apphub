@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PopulationFillerService {
     private final CitizenFactory citizenFactory;
     private final StorageBuildingService storageBuildingService;

@@ -15,14 +15,13 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PlanetPlacerService {
     private final GameProperties gameProperties;
     private final Random random;
 
     NewbornSolarSystem placePlanets(Coordinate solarSystemCoordinate, UUID[] planets) {
         Range<Integer> distance = gameProperties.getSolarSystem()
-            .getPlanetOrbitDistance();
+            .getPlanetOrbitRadius();
 
         Map<Double, UUID> placedPlanets = new HashMap<>();
 

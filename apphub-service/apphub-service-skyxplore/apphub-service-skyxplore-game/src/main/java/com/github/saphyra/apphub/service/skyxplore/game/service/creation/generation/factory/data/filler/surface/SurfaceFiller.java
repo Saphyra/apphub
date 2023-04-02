@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SurfaceFiller {
     private final SurfaceFactory surfaceFactory;
     private final SurfaceMapFactory surfaceMapFactory;

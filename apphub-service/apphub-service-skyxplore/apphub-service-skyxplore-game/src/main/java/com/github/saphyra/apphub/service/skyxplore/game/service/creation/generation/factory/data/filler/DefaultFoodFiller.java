@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DefaultFoodFiller {
     private final StorageSettingFactory storageSettingFactory;
     private final StoredResourceFactory storedResourceFactory;
