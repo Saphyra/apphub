@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.active;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -23,6 +24,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
@@ -67,6 +69,7 @@ class ActiveMoraleRechargeProcessTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CITIZEN_ALLOCATION_ID = UUID.randomUUID();
 
     @Mock
     private GameData gameData;
@@ -150,6 +153,12 @@ class ActiveMoraleRechargeProcessTest {
 
     @Mock
     private GameDao gameDao;
+
+    @Mock
+    private CitizenAllocationModel citizenAllocationModel;
+
+    @Mock
+    private CitizenAllocationToModelConverter citizenAllocationToModelConverter;
 
     @BeforeEach
     void setUp() {
@@ -250,6 +259,8 @@ class ActiveMoraleRechargeProcessTest {
         given(gameDao.findById(GAME_ID)).willReturn(game);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(CitizenAllocationFactory.class)).willReturn(citizenAllocationFactory);
+        given(applicationContextProxy.getBean(CitizenAllocationToModelConverter.class)).willReturn(citizenAllocationToModelConverter);
+        given(citizenAllocationToModelConverter.convert(GAME_ID, citizenAllocation)).willReturn(citizenAllocationModel);
 
         given(future.isDone())
             .willReturn(false)
@@ -258,6 +269,7 @@ class ActiveMoraleRechargeProcessTest {
         underTest.work(syncCache);
 
         verify(citizenAllocations).add(citizenAllocation);
+        verify(syncCache).saveGameItem(citizenAllocationModel);
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
         //Finish resting
@@ -272,12 +284,15 @@ class ActiveMoraleRechargeProcessTest {
         given(applicationContextProxy.getBean(CitizenToResponseConverter.class)).willReturn(citizenToResponseConverter);
         given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
+        given(citizenAllocations.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizenAllocation);
+        given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
 
         underTest.work(syncCache);
 
         verify(citizen).setMorale(CITIZEN_MORALE + RESTORED_MORALE);
         verify(citizenAllocations).deleteByProcessId(PROCESS_ID);
         verify(syncCache).saveGameItem(citizenModel);
+        verify(syncCache).deleteGameItem(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);

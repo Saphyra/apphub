@@ -9,6 +9,11 @@ import java.util.UUID;
 import java.util.Vector;
 
 public class CitizenAllocations extends Vector<CitizenAllocation> {
+    public CitizenAllocation findByProcessIdValidated(UUID processId) {
+        return findByProcessId(processId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "CitizenAllocation not found by processId " + processId));
+    }
+
     public Optional<CitizenAllocation> findByProcessId(UUID processId) {
         return stream()
             .filter(citizenAllocation -> citizenAllocation.getProcessId().equals(processId))

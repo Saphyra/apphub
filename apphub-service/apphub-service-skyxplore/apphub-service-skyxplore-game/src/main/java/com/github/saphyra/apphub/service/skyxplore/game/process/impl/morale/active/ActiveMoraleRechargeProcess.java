@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.active;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -20,6 +21,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -108,10 +110,8 @@ public class ActiveMoraleRechargeProcess implements Process {
             if (isNull(restFuture)) {
                 log.info("Sending citizen {} to rest...", citizen);
 
-                startResting();
+                startResting(syncCache);
             }
-
-
         }
 
         if (status == ProcessStatus.IN_PROGRESS) {
@@ -123,7 +123,7 @@ public class ActiveMoraleRechargeProcess implements Process {
         }
     }
 
-    private void startResting() {
+    private void startResting(SyncCache syncCache) {
         StorageBuilding storageBuilding = applicationContextProxy.getBean(StorageBuildingService.class)
             .get(GameConstants.DATA_ID_HOUSE);
         double houseMoraleMultiplier = Double.parseDouble(storageBuilding.getData().get(GameConstants.DATA_KEY_MORALE_RECHARGE_MULTIPLIER).toString());
@@ -159,7 +159,11 @@ public class ActiveMoraleRechargeProcess implements Process {
         CitizenAllocation citizenAllocation = applicationContextProxy.getBean(CitizenAllocationFactory.class)
             .create(citizen.getCitizenId(), processId);
         gameData.getCitizenAllocations()
-            .add(citizenAllocation); //TODO save to database
+            .add(citizenAllocation);
+
+        CitizenAllocationModel citizenAllocationModel = applicationContextProxy.getBean(CitizenAllocationToModelConverter.class)
+            .convert(gameData.getGameId(), citizenAllocation);
+        syncCache.saveGameItem(citizenAllocationModel);
     }
 
     @SneakyThrows
@@ -170,8 +174,12 @@ public class ActiveMoraleRechargeProcess implements Process {
 
         log.info("Citizen {} morale increased by {}, current morale: {}", citizen.getCitizenId(), rest.getRestoredMorale(), citizen.getMorale());
 
+        CitizenAllocation citizenAllocation = gameData.getCitizenAllocations()
+            .findByCitizenIdValidated(citizen.getCitizenId());
+
         gameData.getCitizenAllocations()
-            .deleteByProcessId(processId);//TODO delete gameItem
+                .deleteByProcessId(processId);
+        syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
 
         GameItem citizenModel = applicationContextProxy.getBean(CitizenToModelConverter.class)
             .convert(gameData.getGameId(), citizen);

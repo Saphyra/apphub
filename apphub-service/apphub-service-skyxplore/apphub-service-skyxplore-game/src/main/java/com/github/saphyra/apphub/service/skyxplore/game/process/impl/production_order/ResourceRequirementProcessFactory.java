@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ResourceRequirementProcessFactory {
     private final ProductionBuildingService productionBuildingService;
     private final ProductionRequirementsAllocationService productionRequirementsAllocationService;

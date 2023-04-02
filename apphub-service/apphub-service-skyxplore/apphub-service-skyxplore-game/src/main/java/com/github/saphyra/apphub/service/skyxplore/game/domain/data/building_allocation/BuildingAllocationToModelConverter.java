@@ -21,7 +21,7 @@ public class BuildingAllocationToModelConverter {
             .collect(Collectors.toList());
     }
 
-    BuildingAllocationModel convert(UUID gameId, BuildingAllocation allocation) {
+    public BuildingAllocationModel convert(UUID gameId, BuildingAllocation allocation) {
         BuildingAllocationModel model = new BuildingAllocationModel();
 
         model.setId(allocation.getBuildingAllocationId());

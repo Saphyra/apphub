@@ -38,12 +38,14 @@ class CitizenAllocationsTest {
     }
 
     @Test
-    void findByProcessId_notFound() {
+    void findByProcessIdValidated_notFound() {
         given(citizenAllocation1.getProcessId()).willReturn(UUID.randomUUID());
 
         underTest.add(citizenAllocation1);
 
-        assertThat(underTest.findByProcessId(PROCESS_ID)).isEmpty();
+        Throwable ex = catchThrowable(() -> underTest.findByProcessIdValidated(PROCESS_ID));
+
+        ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test

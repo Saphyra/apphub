@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
@@ -16,7 +18,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
@@ -41,6 +45,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
+//TODO unit test
 public class RequestWorkProcess implements Process {
     @Getter
     @NonNull
@@ -153,7 +158,10 @@ public class RequestWorkProcess implements Process {
         CitizenAllocation citizenAllocation = applicationContextProxy.getBean(CitizenAllocationFactory.class)
             .create(worker, processId);
         gameData.getCitizenAllocations()
-            .add(citizenAllocation); //TODO save planet to sync the processes with database
+            .add(citizenAllocation);
+        CitizenAllocationModel citizenAllocationModel = applicationContextProxy.getBean(CitizenAllocationToModelConverter.class)
+            .convert(gameData.getGameId(), citizenAllocation);
+        syncCache.saveGameItem(citizenAllocationModel);
 
         int workPointsLeft = requiredWorkPoints - completedWorkPoints;
         int workPointsPerSeconds = applicationContextProxy.getBean(GameProperties.class).getCitizen().getWorkPointsPerSeconds();
@@ -197,7 +205,12 @@ public class RequestWorkProcess implements Process {
         BuildingAllocation buildingAllocation = applicationContextProxy.getBean(BuildingAllocationFactory.class)
             .create(buildingId, processId);
         gameData.getBuildingAllocations()
-            .add(buildingAllocation); //TODO save gameItem
+            .add(buildingAllocation);
+
+        BuildingAllocationModel buildingAllocationModel = applicationContextProxy.getBean(BuildingAllocationToModelConverter.class)
+            .convert(gameData.getGameId(), buildingAllocation);
+        syncCache.saveGameItem(buildingAllocationModel);
+
         return false;
     }
 
@@ -220,14 +233,27 @@ public class RequestWorkProcess implements Process {
 
     private void releaseCitizen(SyncCache syncCache) {
         log.info("Releasing citizen and building allocations...");
+
+        CitizenAllocation citizenAllocation = gameData.getCitizenAllocations()
+            .findByProcessIdValidated(processId);
+
         gameData.getCitizenAllocations()
-            .deleteByProcessId(processId); //TODO delete gameItem
+            .remove(citizenAllocation);
+
+        syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
     }
 
     private void releaseBuildingAndCitizen(SyncCache syncCache) {
         log.info("Releasing citizen and building allocations...");
         gameData.getBuildingAllocations()
-            .deleteByProcessId(processId); //TODO delete gameItem
+            .findByProcessId(processId)
+            .ifPresent(allocation -> {
+                gameData.getBuildingAllocations()
+                    .remove(allocation);
+
+                syncCache.deleteGameItem(allocation.getBuildingAllocationId(), GameItemType.BUILDING_ALLOCATION);
+            });
+
         releaseCitizen(syncCache);
     }
 
