@@ -7,6 +7,7 @@ lobby:
   invitation:
     floodingLimitSeconds: 10
   creation:
+    maxAiCount: 10
     settings:
       maxPlayersPerSolarSystem: 2
       additionalSolarSystems:

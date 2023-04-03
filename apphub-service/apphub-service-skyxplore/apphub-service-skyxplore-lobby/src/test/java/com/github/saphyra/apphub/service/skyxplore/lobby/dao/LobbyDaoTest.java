@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,19 +57,30 @@ public class LobbyDaoTest {
     }
 
     @Test
-    public void findByUserId() {
-        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+    void findByHostValidated_notFound() {
+        Throwable ex = catchThrowable(() -> underTest.findByHostValidated(USER_ID));
 
-        Optional<Lobby> result = underTest.findByUserId(USER_ID);
-
-        assertThat(result).contains(lobby1);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND);
     }
 
     @Test
-    public void findByUserIdValidated_notFound() {
-        Throwable ex = catchThrowable(() -> underTest.findByUserIdValidated(USER_ID));
+    void findByHostValidated_notHost() {
+        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(lobby1.getHost()).willReturn(UUID.randomUUID());
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND);
+        Throwable ex = catchThrowable(() -> underTest.findByHostValidated(USER_ID));
+
+        ExceptionValidator.validateForbiddenOperation(ex);
+    }
+
+    @Test
+    public void findByHostValidated() {
+        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, member));
+        given(lobby1.getHost()).willReturn(USER_ID);
+
+        Lobby result = underTest.findByHostValidated(USER_ID);
+
+        assertThat(result).isEqualTo(lobby1);
     }
 
     @Test

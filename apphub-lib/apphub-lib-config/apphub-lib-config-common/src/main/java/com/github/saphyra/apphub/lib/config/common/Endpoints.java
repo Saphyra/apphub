@@ -211,7 +211,7 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
     public static final String SKYXPLORE_LOBBY_EDIT_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
-    public static final String SKYXPLORE_LOBBY_ADD_AI = "/api/skyxplore/lobby/ai";
+    public static final String SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI = "/api/skyxplore/lobby/ai";
     public static final String SKYXPLORE_LOBBY_REMOVE_AI = "/api/skyxplore/lobby/ai/{userId}";
     public static final String SKYXPLORE_LOBBY_GET_AIS = "/api/skyxplore/lobby/ai";
 

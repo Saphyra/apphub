@@ -33,10 +33,13 @@ public class ExceptionFactory {
         return new ReportedException(status, errorCode, message, cause);
     }
 
+    public RestException notLoggedException(HttpStatus status, ErrorCode errorCode) {
+        return notLoggedException(status, errorCode, new HashMap<>(), null);
+    }
+
     public RestException notLoggedException(HttpStatus status, String message) {
         return notLoggedException(status, ErrorCode.GENERAL_ERROR, new HashMap<>(), message);
     }
-
 
     public RestException notLoggedException(HttpStatus status, ErrorCode errorCode, String message) {
         return notLoggedException(status, errorCode, new HashMap<>(), message);

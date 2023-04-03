@@ -12,10 +12,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ConfigurationProperties(prefix = "lobby.creation")
 @Data
-class GameSettingsFactory {
+public class GameSettingsProperties {
     private SkyXploreGameSettings settings;
+    private Integer maxAiCount;
 
-    SkyXploreGameSettings createDefault() {
+    SkyXploreGameSettings createDefaultSettings() {
         return settings.toBuilder()
             .build();
     }

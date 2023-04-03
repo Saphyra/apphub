@@ -28,9 +28,11 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),
     SKYXPLORE_LOBBY_SET_READINESS("set-readiness"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE("change-alliance"),
-    SKYXPLORE_LOBBY_GAME_SETTINGS_CHANGED("game-settings-changed"),
+    SKYXPLORE_LOBBY_GAME_SETTINGS_MODIFIED("skyxplore-lobby-game-settings-modified"),
     SKYXPLORE_LOBBY_USER_ONLINE("skyxplore-lobby-user-online"),
     SKYXPLORE_LOBBY_USER_OFFLINE("skyxplore-lobby-user-offline"),
+    SKYXPLORE_LOBBY_AI_REMOVED("skyxplore-lobby-ai-removed"),
+    SKYXPLORE_LOBBY_AI_MODIFIED("skyxplore-lobby-ai-modified"),
 
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("game-creation-initiated"),
     SKYXPLORE_LOBBY_GAME_LOADED("game-loaded"),

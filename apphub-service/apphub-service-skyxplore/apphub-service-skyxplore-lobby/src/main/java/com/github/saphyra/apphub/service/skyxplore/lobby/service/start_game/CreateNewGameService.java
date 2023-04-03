@@ -28,6 +28,7 @@ class CreateNewGameService {
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
 
+    //TODO validate at least 2 teams are present
     void createNewGame(Lobby lobby) {
         Map<UUID, UUID> members = new HashMap<>();
         lobby.getMembers()

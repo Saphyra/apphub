@@ -35,4 +35,5 @@ public enum ErrorCode {
     UNKNOWN_ERROR,
     USER_NOT_FOUND,
     USERNAME_ALREADY_EXISTS,
+    TOO_MANY_AIS
 }

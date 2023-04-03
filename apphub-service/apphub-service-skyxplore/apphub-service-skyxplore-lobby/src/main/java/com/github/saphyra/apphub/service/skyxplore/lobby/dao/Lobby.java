@@ -51,7 +51,7 @@ public class Lobby {
     @Builder.Default
     private final List<Invitation> invitations = new Vector<>();
 
-    private final SkyXploreGameSettings settings;
+    private SkyXploreGameSettings settings;
 
     private boolean gameCreationStarted;
 }

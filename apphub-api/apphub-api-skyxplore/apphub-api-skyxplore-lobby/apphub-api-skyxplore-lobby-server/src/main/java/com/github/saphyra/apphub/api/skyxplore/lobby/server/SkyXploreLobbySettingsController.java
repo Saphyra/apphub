@@ -26,8 +26,8 @@ public interface SkyXploreLobbySettingsController {
     SkyXploreGameSettings getGameSettings(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
-    @PutMapping(Endpoints.SKYXPLORE_LOBBY_ADD_AI)
-    void createAi(@RequestBody AiPlayer aiPlayer, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @PutMapping(Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI)
+    void createOrModifyAi(@RequestBody AiPlayer aiPlayer, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
     @DeleteMapping(Endpoints.SKYXPLORE_LOBBY_REMOVE_AI)
