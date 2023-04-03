@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.lo
 
 import java.util.List;
 
-//TODO unit test
 public abstract class AutoLoader<Model extends GameItem, Type> extends AbstractGameItemLoader<Model> {
     public AutoLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

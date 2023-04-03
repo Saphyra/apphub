@@ -14,7 +14,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SuitableSolarSystemFinder {
     List<UUID[]> getSuitableSolarSystems(List<UUID[]> solarSystems, SkyXploreGameSettings settings) {
         return solarSystems.stream()

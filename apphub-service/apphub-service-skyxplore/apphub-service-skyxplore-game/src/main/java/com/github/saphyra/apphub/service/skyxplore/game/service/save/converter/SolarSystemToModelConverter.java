@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class SolarSystemToModelConverter {
     public List<SolarSystemModel> convert(UUID gameId, List<SolarSystem> solarSystems) {
         return solarSystems.stream()

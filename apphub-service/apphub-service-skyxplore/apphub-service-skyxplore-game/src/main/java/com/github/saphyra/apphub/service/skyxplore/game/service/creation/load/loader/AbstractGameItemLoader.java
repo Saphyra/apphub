@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public abstract class AbstractGameItemLoader<Model extends GameItem> {
     private static final int FIRST_PAGE = 0;
 

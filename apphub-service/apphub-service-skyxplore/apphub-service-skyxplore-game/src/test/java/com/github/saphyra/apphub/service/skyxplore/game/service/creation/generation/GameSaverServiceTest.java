@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.save;
+package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;

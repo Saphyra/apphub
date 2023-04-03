@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ConfigurationProperties(prefix = "lobby.creation")
 @Data
-//TODO unit test
 class GameSettingsFactory {
     private SkyXploreGameSettings settings;
 

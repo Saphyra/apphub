@@ -27,7 +27,6 @@ public class GameItemLoader {
     private final IdGenerator idGenerator;
 
     @SneakyThrows
-    //TODO unit test
     public <T extends GameItem> List<T> loadPageForGame(UUID gameId, int page, GameItemType gameItemType, Class<T[]> clazz) {
         SkyXploreWsClient wsClient = wsClientCache.borrowObject();
 

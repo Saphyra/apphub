@@ -17,29 +17,23 @@ import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
-//TODO unit test
 public class LoadGameService {
     private final GameLoader gameLoader;
     private final ExecutorServiceBean executorServiceBean;
-    private final LoadGameRequestValidator loadGameRequestValidator;
     private final GameDataProxy gameDataProxy;
 
     @Builder
     public LoadGameService(
         GameLoader gameLoader,
         GameDataProxy gameDataProxy,
-        LoadGameRequestValidator loadGameRequestValidator,
         ExecutorServiceBeanFactory executorServiceBeanFactory
     ) {
         this.gameLoader = gameLoader;
         executorServiceBean = executorServiceBeanFactory.create(Executors.newSingleThreadExecutor());
         this.gameDataProxy = gameDataProxy;
-        this.loadGameRequestValidator = loadGameRequestValidator;
     }
 
     public void loadGame(SkyXploreLoadGameRequest request) {
-        loadGameRequestValidator.validate(request);
-
         GameModel game = gameDataProxy.getGameModel(request.getGameId());
 
         if (!game.getHost().equals(request.getHost())) {

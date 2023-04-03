@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class GameDataConverter {
     private final CoordinateToModelConverter coordinateToModelConverter;
     private final SolarSystemToModelConverter solarSystemToModelConverter;

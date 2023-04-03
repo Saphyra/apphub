@@ -22,7 +22,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GameDataFactory {
     private final SolarSystemGenerationService solarSystemGenerationService;
     private final UniverseSizeCalculator universeSizeCalculator;

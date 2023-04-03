@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CoordinateToModelConverter {
     public List<CoordinateModel> convert(UUID gameId, Collection<ReferredCoordinate> coordinates) {
         return coordinates.stream()
@@ -25,7 +24,7 @@ public class CoordinateToModelConverter {
 
     public CoordinateModel convert(UUID gameId, ReferredCoordinate coordinate) {
         CoordinateModel model = new CoordinateModel();
-        model.setId(coordinate.getReferenceId());
+        model.setId(coordinate.getReferredCoordinateId());
         model.setReferenceId(coordinate.getReferenceId());
         model.setGameId(gameId);
         model.setType(GameItemType.COORDINATE);

@@ -15,7 +15,6 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
  class SolarSystemShifter {
     private final GameProperties gameProperties;
 

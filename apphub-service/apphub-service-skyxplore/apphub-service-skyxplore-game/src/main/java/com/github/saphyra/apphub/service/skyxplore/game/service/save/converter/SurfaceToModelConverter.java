@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SurfaceToModelConverter {
     public List<SurfaceModel> convert(UUID gameId, Collection<Surface> surfaces) {
         return surfaces.stream()

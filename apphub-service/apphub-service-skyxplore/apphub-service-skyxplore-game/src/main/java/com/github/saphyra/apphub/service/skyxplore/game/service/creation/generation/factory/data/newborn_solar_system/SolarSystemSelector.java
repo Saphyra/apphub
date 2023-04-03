@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SolarSystemSelector {
     private final SuitableSolarSystemFinder suitableSolarSystemFinder;
     private final Random random;

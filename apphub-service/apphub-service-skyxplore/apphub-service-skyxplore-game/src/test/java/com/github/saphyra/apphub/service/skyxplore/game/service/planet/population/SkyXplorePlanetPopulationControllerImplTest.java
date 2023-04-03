@@ -57,7 +57,7 @@ public class SkyXplorePlanetPopulationControllerImplTest {
     public void renameCitizen() {
         given(renameCitizenService.renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME)).willReturn(citizenResponse);
 
-        CitizenResponse result = underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), PLANET_ID, CITIZEN_ID, accessTokenHeader);
+        CitizenResponse result = underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(citizenResponse);
     }

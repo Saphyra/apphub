@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SolarSystemPlacerService {
     private final GameProperties gameProperties;
     private final Random random;
@@ -58,7 +57,7 @@ class SolarSystemPlacerService {
         int dx = random.randInt(distance) * (random.randBoolean() ? 1 : -1);
         int dy = random.randInt(distance) * (random.randBoolean() ? 1 : -1);
 
-        Coordinate newCoordinate = new Coordinate(reference.getX() + dx, reference.getY() * dy);
+        Coordinate newCoordinate = new Coordinate(reference.getX() + dx, reference.getY() + dy);
 
         return Optional.of(newCoordinate)
             .filter(coordinate -> isFarEnough(newCoordinate, placedSolarSystems.keySet()));

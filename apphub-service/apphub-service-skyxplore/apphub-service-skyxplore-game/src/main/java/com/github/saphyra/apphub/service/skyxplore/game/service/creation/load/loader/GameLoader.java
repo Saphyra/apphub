@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class GameLoader {
     private final DateTimeUtil dateTimeUtil;
     private final GameDao gameDao;
@@ -42,8 +41,11 @@ public class GameLoader {
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
+
         gameModel.setLastPlayed(dateTimeUtil.getCurrentDateTime());
+
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
+
         Game game = Game.builder()
             .gameId(gameModel.getId())
             .gameName(gameModel.getName())

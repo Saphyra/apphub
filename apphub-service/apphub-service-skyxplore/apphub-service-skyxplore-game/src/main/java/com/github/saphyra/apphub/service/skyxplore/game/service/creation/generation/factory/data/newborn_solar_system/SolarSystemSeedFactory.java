@@ -12,15 +12,15 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SolarSystemSeedFactory {
     private final Random random;
 
     UUID[] newSolarSystem(SkyXploreGameSettings settings, boolean atLeastOnePlanet) {
         Range<Integer> planetsPerSolarSystem = settings.getPlanetsPerSolarSystem();
         int min = atLeastOnePlanet ? Math.max(1, planetsPerSolarSystem.getMin()) : planetsPerSolarSystem.getMin();
+        int max = Math.max(1, planetsPerSolarSystem.getMax());
 
-        int planetCount = random.randInt(min, planetsPerSolarSystem.getMax());
+        int planetCount = random.randInt(min, max);
 
         return new UUID[planetCount];
     }
