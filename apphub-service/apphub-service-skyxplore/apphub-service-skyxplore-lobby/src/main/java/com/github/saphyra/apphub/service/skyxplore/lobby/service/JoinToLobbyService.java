@@ -21,6 +21,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class JoinToLobbyService {
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;

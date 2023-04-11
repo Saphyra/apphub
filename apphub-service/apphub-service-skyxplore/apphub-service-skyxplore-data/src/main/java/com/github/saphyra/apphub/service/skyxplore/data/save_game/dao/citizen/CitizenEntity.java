@@ -20,7 +20,6 @@ class CitizenEntity {
     private String citizenId;
     private String gameId;
     private String location;
-    private String locationType;
     private String name;
     private int morale;
     private int satiety;

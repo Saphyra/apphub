@@ -226,10 +226,10 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_LOAD_GAME = "/internal/skyxplore/game";
     public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME = "/internal/skyxplore/game/user/{userId}";
     public static final String SKYXPLORE_INTERNAL_USER_LEFT_GAME = "/internal/skyxplore/game/user/{userId}";
-    public static final String SKYXPLORE_INTERNAL_IS_USER_IN_GAME = "/internal/skyxplore/game";
     public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
     public static final String SKYXPLORE_INTERNAL_DELETE_GAME = "/internal/skyxplore/game/{gameId}";
 
+    public static final String SKYXPLORE_IS_USER_IN_GAME = "/api/skyxplore/game";
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";

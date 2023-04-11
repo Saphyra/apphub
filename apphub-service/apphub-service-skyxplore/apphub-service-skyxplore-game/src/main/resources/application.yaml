@@ -53,7 +53,7 @@ game:
       workEfficiencyDropUnder: 800
       minEfficiency: 0.25
       moralePerWorkPoints: 1
-      regenPerSecond: 10
+      regenPerSecond: 50
       minRestSeconds: 15
       maxRestSeconds: 30
     skill:

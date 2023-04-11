@@ -16,6 +16,7 @@ import java.util.Optional;
 @Slf4j
 class AdjacentRandomEmptySurfaceProvider {
     private final AdjacentEmptySurfaceProvider adjacentEmptySurfaceProvider;
+    private final RandomEmptySurfaceProvider randomEmptySurfaceProvider;
 
     Surface getRandomEmptySurfaceNextTo(List<Surface> surfacesWithMatchingType, Collection<Surface> surfaces, GameData gameData) {
         for (Surface surface : surfacesWithMatchingType) {
@@ -27,6 +28,7 @@ class AdjacentRandomEmptySurfaceProvider {
             }
         }
 
-        throw new IllegalStateException("No empty surface found next to the surfaces with matching type.");
+        //If no empty surface left next to any surfaces, return a random empty surface
+        return randomEmptySurfaceProvider.getRandomEmptySurface(surfaces, gameData);
     }
 }

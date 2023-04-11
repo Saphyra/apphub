@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +34,13 @@ class ProducerBuildingFinderService {
     }
 
     private boolean canProduce(GameData gameData, String dataId, Building building) {
-        Map<String, ProductionData> gives = productionBuildingService.get(building.getDataId()).getGives();
+        String buildingDataId = building.getDataId();
+        log.debug("Checking if {} can produce {}", buildingDataId, dataId);
+        ProductionBuilding productionBuilding = productionBuildingService.get(buildingDataId);
+        if (isNull(productionBuilding)) {
+            return false;
+        }
+        Map<String, ProductionData> gives = productionBuilding.getGives();
         if (gives.containsKey(dataId)) {
             return gives.get(dataId)
                 .getPlaced()

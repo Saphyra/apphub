@@ -26,8 +26,8 @@ public class SkyXploreGameSettingsValidator {
         ValidationUtil.atLeast(settings.getPlanetsPerSolarSystem().getMax(), settings.getPlanetsPerSolarSystem().getMin(), "planetsPerSolarSystem.max");
 
         ValidationUtil.notNull(settings.getPlanetSize(), "planetSize");
-        ValidationUtil.atLeast(settings.getPlanetSize().getMin(), 5, "planetSize.min");
-        ValidationUtil.maximum(settings.getPlanetSize().getMax(), 15, "planetSize.max");
+        ValidationUtil.atLeast(settings.getPlanetSize().getMin(), 10, "planetSize.min");
+        ValidationUtil.maximum(settings.getPlanetSize().getMax(), 20, "planetSize.max");
         ValidationUtil.atLeast(settings.getPlanetSize().getMax(), settings.getPlanetSize().getMin(), "planetSize.max");
     }
 }

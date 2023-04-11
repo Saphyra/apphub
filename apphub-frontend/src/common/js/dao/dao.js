@@ -225,6 +225,7 @@ const Endpoints = {
     //SkyXplore platform
     SKYXPLORE_PLATFORM_HAS_CHARACTER: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/exists"),
     SKYXPLORE_GET_CHARACTER_NAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/name"),
+    SKYXPLORE_IS_USER_IN_GAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
 
     //SkyXplore Data
     SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/character"),

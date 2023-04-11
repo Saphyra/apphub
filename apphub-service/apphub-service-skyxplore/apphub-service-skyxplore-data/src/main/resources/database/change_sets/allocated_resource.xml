@@ -20,4 +20,14 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="allocated_resource" columnNames="allocated_resource_id" constraintName="allocated_resource_pk"/>
     </changeSet>
+
+    <changeSet id="remove-location_type-from-allocated_resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="allocated_resource" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="allocated_resource">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

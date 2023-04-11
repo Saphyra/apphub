@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
+//TODO remove
 public class LobbyMembersResponse {
     private LobbyMemberResponse host;
     private List<LobbyMemberResponse> members;

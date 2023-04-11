@@ -5,10 +5,12 @@ import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameSettingsResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMembersResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
 import io.restassured.response.Response;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,12 +61,12 @@ public class SkyXploreLobbyActions {
             .post(UrlFactory.create(Endpoints.SKYXPLORE_START_GAME));
     }
 
-    public static LobbyMembersResponse getLobbyMembers(Language language, UUID accessTokenId) {
+    public static List<LobbyMemberResponse> getLobbyMembers(Language language, UUID accessTokenId) {
         Response response = getLobbyMembersResponse(language, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return response.getBody().as(LobbyMembersResponse.class);
+        return Arrays.asList(response.getBody().as(LobbyMemberResponse[].class));
     }
 
     public static Response getLobbyMembersResponse(Language language, UUID accessTokenId) {
@@ -79,12 +81,12 @@ public class SkyXploreLobbyActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static GameSettingsResponse getGameSettings(Language language, UUID accessTokenId) {
+    public static SkyXploreGameSettings getGameSettings(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        return response.getBody().as(GameSettingsResponse.class);
+        return response.getBody().as(SkyXploreGameSettings.class);
     }
 
     public static Response getLoadGameResponse(Language language, UUID accessTokenId, UUID gameId) {

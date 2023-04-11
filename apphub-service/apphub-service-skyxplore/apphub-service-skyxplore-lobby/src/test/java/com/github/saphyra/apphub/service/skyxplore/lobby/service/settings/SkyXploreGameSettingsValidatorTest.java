@@ -139,7 +139,7 @@ class SkyXploreGameSettingsValidatorTest {
     @Test
     void tooLowPlanetSizeMin() {
         SkyXploreGameSettings settings = createValid()
-            .planetSize(new Range<>(-1, 10))
+            .planetSize(new Range<>(9, 10))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
@@ -150,7 +150,7 @@ class SkyXploreGameSettingsValidatorTest {
     @Test
     void tooHighPlanetSizeMax() {
         SkyXploreGameSettings settings = createValid()
-            .planetSize(new Range<>(5, 16))
+            .planetSize(new Range<>(15, 21))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
@@ -161,7 +161,7 @@ class SkyXploreGameSettingsValidatorTest {
     @Test
     void planetSizeMaxLowerThanMin() {
         SkyXploreGameSettings settings = createValid()
-            .planetSize(new Range<>(5, 4))
+            .planetSize(new Range<>(15, 14))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
@@ -174,6 +174,6 @@ class SkyXploreGameSettingsValidatorTest {
             .maxPlayersPerSolarSystem(4)
             .additionalSolarSystems(new Range<>(1, 2))
             .planetsPerSolarSystem(new Range<>(3, 4))
-            .planetSize(new Range<>(7, 8));
+            .planetSize(new Range<>(10, 15));
     }
 }

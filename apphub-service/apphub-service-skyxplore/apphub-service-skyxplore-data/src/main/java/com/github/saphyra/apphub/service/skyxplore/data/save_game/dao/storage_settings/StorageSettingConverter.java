@@ -21,7 +21,6 @@ class StorageSettingConverter extends ConverterBase<StorageSettingEntity, Storag
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.STORAGE_SETTING);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setDataId(entity.getDataId());
         model.setTargetAmount(entity.getTargetAmount());
         model.setPriority(entity.getPriority());
@@ -35,7 +34,6 @@ class StorageSettingConverter extends ConverterBase<StorageSettingEntity, Storag
             .storageSettingId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .dataId(domain.getDataId())
             .targetAmount(domain.getTargetAmount())
             .priority(domain.getPriority())

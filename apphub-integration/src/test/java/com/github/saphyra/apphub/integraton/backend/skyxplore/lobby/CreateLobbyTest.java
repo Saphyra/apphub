@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,8 +37,7 @@ public class CreateLobbyTest extends BackEndTest {
 
         //Create
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
-        LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
-        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).status(LobbyMemberStatus.NOT_READY).build());
-        assertThat(lobbyMembers.getMembers()).isEmpty();
+        List<LobbyMemberResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
+        assertThat(lobbyMembers).isEmpty();
     }
 }

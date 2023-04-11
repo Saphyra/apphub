@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ public class ConstructionToModelConverterTest {
             .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
             .data(DATA)
+            .constructionType(ConstructionType.CONSTRUCTION)
             .build();
 
         ConstructionModel result = underTest.convert(GAME_ID, construction);
@@ -52,5 +54,6 @@ public class ConstructionToModelConverterTest {
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getData()).isEqualTo(DATA);
+        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
     }
 }

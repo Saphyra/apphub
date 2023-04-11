@@ -18,15 +18,17 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.SurfaceResponse
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.WsActions;
+import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PassiveMoraleRecoveryTest extends BackEndTest {
-    @Test(groups = "skyxplore")
-    public void checkPassiveMoraleRecovery() {
+@Slf4j
+public class MoraleRecoveryTest extends BackEndTest {
+    @Test(groups = "skyxplore", priority = -1)
+    public void checkMoraleRecovery() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -56,8 +58,8 @@ public class PassiveMoraleRecoveryTest extends BackEndTest {
             .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().anyMatch(citizenResponse -> citizenResponse.getMorale() < Constants.MAX_CITIZEN_MORALE))
             .assertTrue("Morale is not decreased for citizens");
 
-        AwaitilityWrapper.create(180, 5)
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().allMatch(citizenResponse -> citizenResponse.getMorale() == Constants.MAX_CITIZEN_MORALE))
+        AwaitilityWrapper.create(180, 10)
+            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().peek(citizenResponse -> log.info("{}", citizenResponse.getMorale())).allMatch(citizenResponse -> citizenResponse.getMorale() == Constants.MAX_CITIZEN_MORALE))
             .assertTrue("Morale is not recharged for citizens");
     }
 }

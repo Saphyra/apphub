@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.verify;
 public class SkyXploreLobbyControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOBBY_NAME = "lobby-name";
-    private static final UUID HOST = UUID.randomUUID();
     private static final UUID FRIEND_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -53,9 +51,6 @@ public class SkyXploreLobbyControllerImplTest {
     private LobbyMemberQueryService lobbyMemberQueryService;
 
     @Mock
-    private LobbyDao lobbyDao;
-
-    @Mock
     private StartGameService startGameService;
 
     @InjectMocks
@@ -65,14 +60,10 @@ public class SkyXploreLobbyControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private Lobby lobby;
-
-    @Mock
-    private LobbyMembersResponse lobbyMembersResponse;
-
-    @Mock
     private ActiveFriendResponse activeFriendResponse;
 
+    @Mock
+    private LobbyMemberResponse lobbyMemberResponse;
 
     @Test
     public void createLobby() {
@@ -121,17 +112,17 @@ public class SkyXploreLobbyControllerImplTest {
     public void userLeftLobby() {
         underTest.userLeftLobby(USER_ID);
 
-        verify(exitFromLobbyService).exit(USER_ID);
+        verify(exitFromLobbyService).userDisconnected(USER_ID);
     }
 
     @Test
     public void getMembersOfLobby() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(lobbyMembersResponse);
+        given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(List.of(lobbyMemberResponse));
 
-        LobbyMembersResponse result = underTest.getMembersOfLobby(accessTokenHeader);
+        List<LobbyMemberResponse> result = underTest.getMembersOfLobby(accessTokenHeader);
 
-        assertThat(result).isEqualTo(lobbyMembersResponse);
+        assertThat(result).containsExactly(lobbyMemberResponse);
     }
 
     @Test

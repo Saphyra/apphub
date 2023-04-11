@@ -35,5 +35,5 @@ public interface SkyXploreSavedGameController {
     GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
-    GameModel getGameModel(@PathVariable("{gameId}") UUID gameId);
+    GameModel getGameModel(@PathVariable("gameId") UUID gameId);
 }

@@ -21,7 +21,6 @@ class StoredResourceConverter extends ConverterBase<StoredResourceEntity, Stored
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.STORED_RESOURCE);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setDataId(entity.getDataId());
         model.setAmount(entity.getAmount());
         return model;
@@ -33,7 +32,6 @@ class StoredResourceConverter extends ConverterBase<StoredResourceEntity, Stored
             .storedResourceId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .dataId(domain.getDataId())
             .amount(domain.getAmount())
             .build();

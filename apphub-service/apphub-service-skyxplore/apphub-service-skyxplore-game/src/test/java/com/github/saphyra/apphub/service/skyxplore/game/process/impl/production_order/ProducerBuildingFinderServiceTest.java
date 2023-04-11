@@ -79,4 +79,16 @@ public class ProducerBuildingFinderServiceTest {
 
         assertThat(result).contains(BUILDING_DATA_ID);
     }
+
+    @Test
+    public void findProducerBuildingDataId_notProducerBuilding() {
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(buildings.getByLocation(LOCATION)).willReturn(List.of(building));
+        given(building.getDataId()).willReturn(BUILDING_DATA_ID);
+        given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(null);
+
+        Optional<String> result = underTest.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID);
+
+        assertThat(result).isEmpty();
+    }
 }

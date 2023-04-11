@@ -33,6 +33,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
@@ -86,7 +87,9 @@ public class PassiveMoraleRechargeProcess implements Process {
     @Override
     public void work(SyncCache syncCache) {
         if (status == ProcessStatus.CREATED) {
-            if (gameData.getCitizenAllocations().findByCitizenId(citizen.getCitizenId()).isPresent()) {
+            Optional<CitizenAllocation> maybeAllocation = gameData.getCitizenAllocations().findByCitizenId(citizen.getCitizenId());
+            if (maybeAllocation.isPresent()) {
+                log.info("Citizen is allocated. {}", maybeAllocation.get());
                 status = ProcessStatus.READY_TO_DELETE;
             } else {
                 status = ProcessStatus.IN_PROGRESS;

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -33,6 +34,7 @@ public class ExitFromLobbyServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID MEMBER_ID = UUID.randomUUID();
     private static final String PLAYER_NAME = "player-name";
+    private static final long CREATED_AT = 32423L;
 
     @Mock
     private CharacterProxy characterProxy;
@@ -42,6 +44,9 @@ public class ExitFromLobbyServiceTest {
 
     @Mock
     private MessageSenderProxy messageSenderProxy;
+
+    @Mock
+    private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
     private ExitFromLobbyService underTest;
@@ -61,6 +66,7 @@ public class ExitFromLobbyServiceTest {
         given(lobby.getExpectedPlayers()).willReturn(Arrays.asList(MEMBER_ID));
 
         given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(MEMBER_ID);
 
@@ -79,6 +85,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isFalse();
         assertThat(payload.isExpectedPlayer()).isTrue();
+        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
 
         verify(lobbyDao, times(0)).delete(any());
 
@@ -106,6 +113,7 @@ public class ExitFromLobbyServiceTest {
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(MEMBER_ID).build(), remainingInvitation));
 
         given(characterProxy.getCharacter(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(USER_ID);
 
@@ -123,6 +131,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(payload.getUserId()).isEqualTo(USER_ID);
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isTrue();
+        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
 
         verify(lobbyDao).delete(lobby);
 

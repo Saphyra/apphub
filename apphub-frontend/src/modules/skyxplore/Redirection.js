@@ -29,7 +29,12 @@ const redirectToMainMenuIfNotInLobby = async () => {
 }
 
 const redirectToGameIfInOne = async () => {
-    //TODO
+    const response = await Endpoints.SKYXPLORE_IS_USER_IN_GAME.createRequest()
+        .send()
+
+    if (response.value) {
+        window.location.href = Constants.SKYXPLORE_GAME_PAGE;
+    }
 }
 
 const forMainMenu = () => {

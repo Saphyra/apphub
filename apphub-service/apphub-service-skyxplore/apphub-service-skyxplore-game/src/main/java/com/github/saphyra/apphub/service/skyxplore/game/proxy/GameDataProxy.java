@@ -49,6 +49,7 @@ public class GameDataProxy {
     }
 
     public GameModel getGameModel(UUID gameId) {
+        log.info("Loading GameModel with gameId {}", gameId);
         return dataGameClient.getGameModel(gameId, localeProvider.getOrDefault());
     }
 }

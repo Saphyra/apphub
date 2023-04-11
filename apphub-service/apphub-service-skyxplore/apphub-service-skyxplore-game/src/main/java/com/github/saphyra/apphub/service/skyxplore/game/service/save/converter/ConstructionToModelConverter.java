@@ -27,6 +27,7 @@ public class ConstructionToModelConverter {
         model.setId(construction.getConstructionId());
         model.setGameId(gameId);
         model.setType(GameItemType.CONSTRUCTION);
+        model.setConstructionType(construction.getConstructionType());
         model.setExternalReference(construction.getExternalReference());
         model.setLocation(construction.getLocation());
         model.setExternalReference(construction.getExternalReference());

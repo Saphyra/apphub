@@ -5,8 +5,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameSettingsResponse;
+import com.github.saphyra.apphub.integration.structure.Range;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
@@ -27,12 +28,11 @@ public class GetGameSettingsTest extends BackEndTest {
 
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
-        GameSettingsResponse response = SkyXploreLobbyActions.getGameSettings(language, accessTokenId1);
+        SkyXploreGameSettings response = SkyXploreLobbyActions.getGameSettings(language, accessTokenId1);
 
-        assertThat(response.getUniverseSize()).isEqualTo("SMALL");
-        assertThat(response.getSystemAmount()).isEqualTo("MEDIUM");
-        assertThat(response.getSystemSize()).isEqualTo("MEDIUM");
-        assertThat(response.getPlanetSize()).isEqualTo("MEDIUM");
-        assertThat(response.getAiPresence()).isEqualTo("EVERYWHERE");
+        assertThat(response.getMaxPlayersPerSolarSystem()).isEqualTo(2);
+        assertThat(response.getAdditionalSolarSystems()).isEqualTo(new Range<>(1, 2));
+        assertThat(response.getPlanetsPerSolarSystem()).isEqualTo(new Range<>(0, 3));
+        assertThat(response.getPlanetSize()).isEqualTo(new Range<>(10, 15));
     }
 }

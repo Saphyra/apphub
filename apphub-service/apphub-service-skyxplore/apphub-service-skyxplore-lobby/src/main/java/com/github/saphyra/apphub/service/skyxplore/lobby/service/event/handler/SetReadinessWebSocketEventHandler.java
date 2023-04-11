@@ -33,7 +33,8 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
         log.info("Setting {}'s readiness to {}", from, readiness);
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
-        Member member = lobby.getMembers().get(from);
+        Member member = lobby.getMembers()
+            .get(from);
         member.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
 
         messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(member), lobby.getMembers().keySet());

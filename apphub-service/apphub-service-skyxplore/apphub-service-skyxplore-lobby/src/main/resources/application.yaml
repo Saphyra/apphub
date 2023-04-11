@@ -17,5 +17,5 @@ lobby:
         min: 0
         max: 3
       planetSize:
-        min: 5
-        max: 10
+        min: 10
+        max: 15

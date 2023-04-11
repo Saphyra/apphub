@@ -234,13 +234,14 @@ public class RequestWorkProcess implements Process {
     private void releaseCitizen(SyncCache syncCache) {
         log.info("Releasing citizen and building allocations...");
 
-        CitizenAllocation citizenAllocation = gameData.getCitizenAllocations()
-            .findByProcessIdValidated(processId);
-
         gameData.getCitizenAllocations()
-            .remove(citizenAllocation);
+            .findByProcessId(processId)
+            .ifPresent(citizenAllocation -> {
+                gameData.getCitizenAllocations()
+                    .remove(citizenAllocation);
 
-        syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+                syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+            });
     }
 
     private void releaseBuildingAndCitizen(SyncCache syncCache) {

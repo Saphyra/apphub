@@ -138,7 +138,7 @@ public class ActiveMoraleRechargeProcess implements Process {
         int sleepTimeMilliseconds = (int) Math.round(1000d * moraleToRecharge / moralePerSecond);
 
         if (sleepTimeMilliseconds < moraleProperties.getMinRestSeconds() * 1000) {
-            log.info("Rest time {}ms is smaller than MinRestSeconds {}s", sleepTimeMilliseconds, moraleProperties.getMinRestSeconds());
+            log.debug("Rest time {}ms is smaller than MinRestSeconds {}s", sleepTimeMilliseconds, moraleProperties.getMinRestSeconds());
             status = ProcessStatus.READY_TO_DELETE;
             return;
         }

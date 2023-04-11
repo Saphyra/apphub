@@ -11,11 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +24,9 @@ public class AdjacentRandomEmptySurfaceProviderTest {
 
     @Mock
     private AdjacentEmptySurfaceProvider adjacentEmptySurfaceProvider;
+
+    @Mock
+    private RandomEmptySurfaceProvider randomEmptySurfaceProvider;
 
     @InjectMocks
     private AdjacentRandomEmptySurfaceProvider underTest;
@@ -60,9 +63,12 @@ public class AdjacentRandomEmptySurfaceProviderTest {
         given(gameData.getCoordinates()).willReturn(coordinates);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
         given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
+        given(randomEmptySurfaceProvider.getRandomEmptySurface(List.of(surface2), gameData)).willReturn(surface2);
 
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2), gameData)).willReturn(Optional.empty());
 
-        assertThat(catchThrowable(() -> underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2), gameData))).isInstanceOf(IllegalStateException.class);
+        Surface result = underTest.getRandomEmptySurfaceNextTo(Arrays.asList(surface1), Arrays.asList(surface2), gameData);
+
+        assertThat(result).isEqualTo(surface2);
     }
 }
