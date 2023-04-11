@@ -57,7 +57,7 @@
 
                     const lastPlayed = new Date(0);
                         lastPlayed.setUTCSeconds(game.lastPlayed);
-                    gameItem.title = localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + localization.getAdditionalContent("last-played") + ": " + formatDate(lastPlayed);
+                    gameItem.title = localization.getAdditionalContent("additional-players") + ": " + game.players + "\n" + localization.getAdditionalContent("last-played") + ": " + formatDate4(lastPlayed);
 
                     gameItem.innerText = game.gameName;
 

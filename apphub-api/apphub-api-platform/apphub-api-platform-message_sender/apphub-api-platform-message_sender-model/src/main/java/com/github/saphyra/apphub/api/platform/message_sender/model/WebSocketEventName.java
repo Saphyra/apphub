@@ -15,7 +15,7 @@ public enum WebSocketEventName {
     ADMIN_PANEL_ERROR_REPORT("admin-panel-error-report"),
 
     //SkyXplore MainMenu
-    SKYXPLORE_MAIN_MENU_INVITATION("invitation"),
+    SKYXPLORE_MAIN_MENU_INVITATION("skyxplore-main-menu-invitation"),
     SKYXPLORE_MAIN_MENU_CANCEL_INVITATION("skyxplore-main-menu-cancel-invitation"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED("skyxplore-main-menu-friend-request-accepted"),
     SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT("skyxplore-main-menu-friend-request-sent"),
@@ -23,19 +23,21 @@ public enum WebSocketEventName {
     SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED("skyxplore-main-menu-friendship-deleted"),
 
     //SkyXplore Lobby
-    SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("chat-send-message"),
-    SKYXPLORE_LOBBY_JOIN_TO_LOBBY("join-to-lobby"),
-    SKYXPLORE_LOBBY_EXIT_FROM_LOBBY("exit-from-lobby"),
-    SKYXPLORE_LOBBY_SET_READINESS("set-readiness"),
-    SKYXPLORE_LOBBY_CHANGE_ALLIANCE("change-alliance"),
-    SKYXPLORE_LOBBY_GAME_SETTINGS_MODIFIED("skyxplore-lobby-game-settings-modified"),
+    SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE("skyxplore-lobby-chat-message"),
+    SKYXPLORE_LOBBY_JOIN_TO_LOBBY("skyxplore-join-to-lobby"),
+    SKYXPLORE_LOBBY_EXIT("skyxplore-lobby-exit"),
+    SKYXPLORE_LOBBY_SET_READINESS("skyxplore-lobby-set-readiness"),
+    SKYXPLORE_LOBBY_SETTINGS_MODIFIED("skyxplore-lobby-settings-modified"),
     SKYXPLORE_LOBBY_USER_ONLINE("skyxplore-lobby-user-online"),
     SKYXPLORE_LOBBY_USER_OFFLINE("skyxplore-lobby-user-offline"),
     SKYXPLORE_LOBBY_AI_REMOVED("skyxplore-lobby-ai-removed"),
     SKYXPLORE_LOBBY_AI_MODIFIED("skyxplore-lobby-ai-modified"),
-
-    SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("game-creation-initiated"),
-    SKYXPLORE_LOBBY_GAME_LOADED("game-loaded"),
+    SKYXPLORE_LOBBY_PLAYER_MODIFIED("skyxplore-lobby-player-modified"),
+    SKYXPLORE_LOBBY_ALLIANCE_CREATED("skyxplore-lobby-alliance-created"),
+    SKYXPLORE_LOBBY_PLAYER_CONNECTED("skyxplore-lobby-player-connected"),
+    SKYXPLORE_LOBBY_PLAYER_DISCONNECTED("skyxplore-lobby-player-disconnected"),
+    SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("skyxplore-lobby-game-creation-initiated"),
+    SKYXPLORE_LOBBY_GAME_LOADED("skyxplore-lobby-game-loaded"),
 
     //SkyXplore GamePlatform
     SKYXPLORE_GAME_PAGE_OPENED("skyxplore-game-page-opened"),

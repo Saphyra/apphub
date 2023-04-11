@@ -27,6 +27,17 @@ class SkyXploreGameSettingsValidatorTest {
     }
 
     @Test
+    void tooLowMaxPlayersPerSolarSystem() {
+        SkyXploreGameSettings settings = createValid()
+            .maxPlayersPerSolarSystem(0)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validate(settings));
+
+        ExceptionValidator.validateInvalidParam(ex, "maxPlayersPerSolarSystem", "too low");
+    }
+
+    @Test
     void nullAdditionalSolarSystems() {
         SkyXploreGameSettings settings = createValid()
             .additionalSolarSystems(null)

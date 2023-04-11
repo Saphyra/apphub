@@ -5,6 +5,20 @@ const MapStream = class {
         this.items = items;
     }
 
+    add(key, value) {
+        this.items[key] = value;
+
+        return this;
+    }
+
+    clone() {
+        const result = {};
+
+        this.forEach((key, value) => result[key] = value);
+
+        return new MapStream(result);
+    }
+
     filter(predicate) {
         const result = {};
 
@@ -17,10 +31,10 @@ const MapStream = class {
         return new MapStream(result);
     }
 
-    findAny(){
+    findAny() {
         const keys = Object.keys(this.items);
 
-        if(keys.length === 0){
+        if (keys.length === 0) {
             return new Optional();
         }
 
@@ -39,6 +53,14 @@ const MapStream = class {
             .forEach((key) => result[key] = mapper(key, this.items[key]));
 
         return new MapStream(result);
+    }
+
+    toList(mapper = (key, value) => value) {
+        const result = [];
+
+        this.map((key, value) => result.push(mapper(key, value)));
+
+        return result;
     }
 
     toObject() {

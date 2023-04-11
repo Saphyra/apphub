@@ -19,6 +19,10 @@ const validateField = (field, value, fields, localizationHandler) => {
             return validatePassword(value, localizationHandler);
         case ValidatedField.CONFIRM_PASSWORD:
             return validateConfirmPassword(value, fields[ValidatedField.PASSWORD], localizationHandler);
+        case ValidatedField.CHARACTER_NAME:
+            return validateCharacterName(value, localizationHandler);
+            case ValidatedField.GAME_NAME:
+                return validateGameName(value, localizationHandler);
         default:
             Utils.throwException("IllegalArgument", field + " is not a validated field.");
     }
@@ -59,6 +63,30 @@ const validatePassword = (password, localizationHandler) => {
 const validateConfirmPassword = (confirmPassword, password, localizationHandler) => {
     if(confirmPassword !== password){
         return new ValidationResult(false, localizationHandler.get("incorrect-confirm-password"));
+    }
+
+    return new ValidationResult();
+}
+
+const validateCharacterName = (characterName, localizationHandler) => {
+    if (characterName.length < Constants.MIN_CHARACTER_NAME_LENGTH) {
+        return new ValidationResult(false, localizationHandler.get("character-name-too-short"));
+    }
+
+    if (characterName.length > Constants.MAX_CHARACTER_NAME_LENGTH) {
+        return new ValidationResult(false, localizationHandler.get("character-name-too-long"));
+    }
+
+    return new ValidationResult();
+}
+
+const validateGameName = (gameName, localizationHandler) => {
+    if (gameName.length < Constants.MIN_GAME_NAME_LENGTH) {
+        return new ValidationResult(false, localizationHandler.get("game-name-too-short"));
+    }
+
+    if (gameName.length > Constants.MAX_GAME_NAME_LENGTH) {
+        return new ValidationResult(false, localizationHandler.get("game-name-too-long"));
     }
 
     return new ValidationResult();

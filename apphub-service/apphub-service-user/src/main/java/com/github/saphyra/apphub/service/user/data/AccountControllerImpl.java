@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.api.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -69,10 +70,11 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    public String getUsernameByUserId(UUID userId) {
-        log.info("Querying name of user {}", userId);
-        return userDao.findByIdValidated(userId)
+    public OneParamResponse<String> getUsernameByUserId(AccessTokenHeader accessTokenHeader) {
+        log.info("Querying name of user {}", accessTokenHeader.getUserId());
+        String username = userDao.findByIdValidated(accessTokenHeader.getUserId())
             .getUsername();
+        return new OneParamResponse<>(username);
     }
 
     @Override

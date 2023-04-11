@@ -1,0 +1,22 @@
+.skyxplore-lobby-ai {
+    border: 2px ridge white;
+    border-radius: 5px;
+    position: relative;
+}
+
+#skyxplore-lobby-create-ai .skyxplore-lobby-ai-name{
+    margin: 5px;
+}
+
+.skyxplore-lobby-remove-ai-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-width: 1px;
+}
+
+#skyxplore-lobby-create-ai-button{
+    display: block;
+    margin: 5px auto;
+
+}

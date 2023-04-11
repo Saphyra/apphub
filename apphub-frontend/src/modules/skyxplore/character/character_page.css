@@ -1,0 +1,35 @@
+#skyxplore-character main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#skyxplore-character-details {
+    border: 3px ridge white;
+    border-radius: 10px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#skyxplore-character-details-title {
+    padding: 5px;
+    border-bottom: 3px ridge white;
+}
+
+#skyxplore-character-details-content-wrapper {
+    padding: 0 50px;
+}
+
+#skyxplore-character-details-content-wrapper>* {
+    display: block;
+    margin: 20px auto;
+}
+
+#skyxplore-character-details-content-wrapper label {
+    font-size: 24px;
+}
+
+#skyxplore-character-details-content-wrapper input,
+#skyxplore-character-details-content-wrapper button {
+    font-size: 16px;
+}

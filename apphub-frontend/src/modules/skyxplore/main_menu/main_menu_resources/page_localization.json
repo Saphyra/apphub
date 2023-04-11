@@ -1,0 +1,110 @@
+{
+    "title": {
+        "en": "SkyXplore - Apphub",
+        "hu": "SkyXplore - Apphub"
+    },
+    "page-title": {
+        "en": "Main Menu",
+        "hu": "Főmenü"
+    },
+    "new-game": {
+        "en": "New game",
+        "hu": "Új játék"
+    },
+    "load-game": {
+        "en": "Load game",
+        "hu": "Játék betöltése"
+    },
+    "edit-character": {
+        "en": "Edit character",
+        "hu": "Karakter szerkesztése"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "no-saved-games": {
+        "en": "No saved games.",
+        "hu": "Nincs mentett játék."
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "game-name-too-short": {
+        "en": "Game name too short. (Minimum 3 characters)",
+        "hu": "Játék név túl rövid. (Minimum 3 karakter)"
+    },
+    "game-name-too-long": {
+        "en": "Game name too long. (Maximum 30 characters)",
+        "hu": "Játék név túl hosszú. (Maximum 30 karakter)"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "game-name": {
+        "en": "Game name",
+        "hu": "Játék neve"
+    },
+    "contacts": {
+        "en": "Contacts",
+        "hu": "Kapcsolatok"
+    },
+    "search-friends": {
+        "en": "Search for friends",
+        "hu": "Barátok keresése"
+    },
+    "character-not-found": {
+        "en": "Character not found.",
+        "hu": "Karakter nem található."
+    },
+    "incoming-friend-requests": {
+        "en": "Friend requests",
+        "hu": "Barátkérelmek"
+    },
+    "sent-friend-requests": {
+        "en": "Sent friend requests",
+        "hu": "Elküldött barátkérelmek"
+    },
+    "friends": {
+        "en": "Friends",
+        "hu": "Barátok"
+    },
+    "empty": {
+        "en": "Empty",
+        "hu": "üres"
+    },
+    "accept": {
+        "en": "Accept",
+        "hu": "Elfogad"
+    },
+    "remove": {
+        "en": "Remove",
+        "hu": "Eltávolít"
+    },
+    "confirm-remove-friend": {
+        "en": "Confirm removing friend",
+        "hu": "Barát eltávolítása?"
+    },
+    "confirm-remove-friend-cotnent": {
+        "en": "Are you sure you want to remove {friendName} from your friend list?",
+        "hu": "Biztosan el szeretnéd távolítani {friendName}-t a barátlistádról?"
+    },
+    "decline": {
+        "en": "Decline",
+        "hu": "Elutasít"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "delete-game":{
+        "en": "Delete game",
+        "hu": "Játék törlése"
+    },
+    "confirm-delete-game": {
+        "en": "Are you sure you want to delete game {gameName}?",
+        "hu": "Biztosan törölni szeretnéd a {gameName} játékot?"
+    }
+}

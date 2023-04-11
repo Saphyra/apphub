@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
@@ -23,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,34 +81,6 @@ public class SkyXploreLobbyControllerImplTest {
         underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessTokenHeader);
 
         verify(lobbyCreationService).createNew(USER_ID, LOBBY_NAME);
-    }
-
-    @Test
-    public void lobbyForPage_inLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getHost()).willReturn(HOST);
-        given(lobby.isGameCreationStarted()).willReturn(true);
-        given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
-        given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
-
-        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
-
-        assertThat(result.isInLobby()).isTrue();
-        assertThat(result.isGameCreationStarted()).isTrue();
-        assertThat(result.getHost()).isEqualTo(HOST);
-        assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
-        assertThat(result.getType()).isEqualTo(LobbyType.NEW_GAME.name());
-    }
-
-    @Test
-    public void lobbyForPage_notInLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.empty());
-
-        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
-
-        assertThat(result.isInLobby()).isFalse();
     }
 
     @Test

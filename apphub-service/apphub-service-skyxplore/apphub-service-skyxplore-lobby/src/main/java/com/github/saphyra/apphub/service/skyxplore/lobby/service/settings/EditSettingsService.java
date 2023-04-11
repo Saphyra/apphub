@@ -28,7 +28,7 @@ class EditSettingsService {
         lobby.setSettings(settings);
 
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(
-            WebSocketEventName.SKYXPLORE_LOBBY_GAME_SETTINGS_MODIFIED,
+            WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED,
             lobby.getMembers().keySet(),
             settings
         );

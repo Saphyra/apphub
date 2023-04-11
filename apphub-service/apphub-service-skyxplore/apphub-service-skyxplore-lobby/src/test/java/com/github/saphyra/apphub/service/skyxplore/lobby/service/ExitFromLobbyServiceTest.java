@@ -72,7 +72,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(message.getRecipients()).containsExactly(USER_ID);
 
         WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY);
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
 
         ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
         assertThat(payload.getUserId()).isEqualTo(MEMBER_ID);
@@ -117,7 +117,7 @@ public class ExitFromLobbyServiceTest {
         assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
 
         WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY);
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
 
         ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
         assertThat(payload.getUserId()).isEqualTo(USER_ID);

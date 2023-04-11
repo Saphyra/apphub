@@ -93,6 +93,11 @@ h3 {
     font-size: 24px;
 }
 
+h4 {
+    font-weight: 700;
+    font-size: 20px;
+}
+
 /*================INPUT/NAVIGATION ELEMENTS==================*/
 .validated-input-field-wrapper {
     display: inline-block;
@@ -310,37 +315,35 @@ textarea {
 
 /*=======CONFIRMATION_DIALOG=======*/
 .confirmation-dialog {
-    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
 .confirmation-dialog-content-wrapper {
     background: black;
-    position: absolute;
-    top: 20vh;
-    left: 20vw;
-    right: 20vw;
-    bottom: 20vh;
-
     border: 3px ridge white;
     border-radius: 10px;
+
+    display: grid;
+    grid-template-rows: 40px auto 40px;
 }
 
 .confirmation-dialog-title {
     border-bottom: 2px ridge white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--confirmation-dialog-header-height);
     padding: 0 4px;
 }
 
 .confirmation-dialog-detail-container {
     padding: 16px;
-    position: absolute;
-    top: var(--confirmation-dialog-header-height);
-    left: 0;
-    right: 0;
     bottom: var(--confirmation-dialog-footer-height);
     font-size: 20px;
     overflow: auto;
@@ -348,11 +351,8 @@ textarea {
 
 .confirmation-dialog-button-container {
     border-top: 2px ridge white;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--confirmation-dialog-footer-height);
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .confirmation-dialog-confirm-button {

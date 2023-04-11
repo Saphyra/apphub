@@ -1,11 +1,12 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SkyXploreLobbyController {
+    //TODO API test
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY)
+    OneParamResponse<Boolean> isUserInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     /**
      * Creating a new lobby with the given game name
      */
@@ -29,7 +34,8 @@ public interface SkyXploreLobbyController {
      * Checking if the given user is already in a lobby, and returning the details of that lobby.
      * Used by WebUI to redirect the user, or display the lobby page.
      */
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE)
+    //TODO API test
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
@@ -57,18 +63,18 @@ public interface SkyXploreLobbyController {
 
     /**
      * Called by message-sender when a user disconnected from the lobby webSocket
-     * Logic is the same as #exitFromLobby
      */
     @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_USER_LEFT_LOBBY)
     void userLeftLobby(@PathVariable("userId") UUID userId);
 
+
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)
-    LobbyMembersResponse getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LobbyMemberResponse> getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Starting the game creation / loading depending on the lobby was created as brand-new, or from a saved game.
      */
-    @PostMapping(Endpoints.SKYXPLORE_START_GAME)
+    @PostMapping(Endpoints.SKYXPLORE_LOBBY_START_GAME)
     void startGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS)

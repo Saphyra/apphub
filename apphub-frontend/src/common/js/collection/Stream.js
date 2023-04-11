@@ -1,8 +1,15 @@
+import MapStream from "./MapStream";
 import Optional from "./Optional";
 
 const Stream = class {
     constructor(items) {
-        this.items = items || [];
+        this.items = items === null ? [] : items.slice();
+    }
+
+    add(item) {
+        this.items.push(item);
+
+        return this;
     }
 
     anyMatch(predicate) {
@@ -53,6 +60,18 @@ const Stream = class {
 
     toList() {
         return this.items;
+    }
+
+    toMap(keyMapper, valueMapper = (item) => item) {
+        const result = {};
+
+        this.forEach(item => result[keyMapper(item)] = valueMapper(item));
+
+        return result;
+    }
+
+    toMapStream(keyMapper, valueMapper = (item) => item) {
+        return new MapStream(this.toMap(keyMapper, valueMapper));
     }
 }
 

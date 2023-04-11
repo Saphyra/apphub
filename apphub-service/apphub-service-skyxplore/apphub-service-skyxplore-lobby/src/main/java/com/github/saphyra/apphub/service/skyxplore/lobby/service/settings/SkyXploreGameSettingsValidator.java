@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SkyXploreGameSettingsValidator {
     void validate(SkyXploreGameSettings settings) {
-        ValidationUtil.notNull(settings.getMaxPlayersPerSolarSystem(), "maxPlayersPerSolarSystem");
+        log.info("Validating {}", settings);
+
+        ValidationUtil.atLeast(settings.getMaxPlayersPerSolarSystem(), 1, "maxPlayersPerSolarSystem");
 
         ValidationUtil.notNull(settings.getAdditionalSolarSystems(), "additionalSolarSystems");
         ValidationUtil.atLeast(settings.getAdditionalSolarSystems().getMin(), 0, "additionalSolarSystems.min");

@@ -1,0 +1,71 @@
+#skyxplore-contacts {
+    position: relative;
+}
+
+#skyxplore-contacts-header {
+    text-align: center;
+    background-color: black;
+    padding-bottom: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+#skyxplore-contacts-search-input {
+    width: 90%;
+}
+
+#skyxplore-character-not-found {
+    font-size: 24px;
+    margin: 5px;
+}
+
+.skyxplore-friend-candidate {
+    width: 95%;
+}
+
+#skyxplore-contacts-list {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    bottom: 0;
+}
+
+.skyxplore-contacts-list-group {
+    margin: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.skyxplore-contacts-list-header {
+    font-size: 20px;
+}
+
+.skyxplore-contacts-list-empty-list {
+    text-align: center;
+    font-size: 20px;
+}
+
+.skyxplore-contacts-list-item {
+    border: 2px ridge white;
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.skyxplore-contacts-list-item-label {
+    padding: 4px;
+    display: inline-block;
+}
+
+.skyxplore-contacts-list-item-buttons {
+    float: right;
+}
+
+.skyxplore-contacts-list-item-buttons button {
+    border-width: 1px;
+    margin: 2px
+}

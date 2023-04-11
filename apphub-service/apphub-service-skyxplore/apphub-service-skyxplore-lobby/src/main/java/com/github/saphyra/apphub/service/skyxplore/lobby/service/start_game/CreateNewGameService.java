@@ -45,6 +45,7 @@ class CreateNewGameService {
             .alliances(alliances)
             .settings(lobby.getSettings())
             .gameName(lobby.getLobbyName())
+            .ais(lobby.getAis())
             .build();
 
         gameCreationClient.createGame(request, localeProvider.getLocaleValidated());

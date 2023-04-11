@@ -55,7 +55,7 @@ class EditSettingsServiceTest {
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
         WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_SETTINGS_MODIFIED);
+        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED);
         assertThat(message.getEvent().getPayload()).isEqualTo(settings);
         assertThat(message.getRecipients()).containsExactly(USER_ID);
     }

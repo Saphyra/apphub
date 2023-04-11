@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,11 +37,8 @@ public interface AccountController {
     @PostMapping(Endpoints.ACCOUNT_REGISTER)
     void register(@RequestBody RegistrationRequest registrationRequest, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    /**
-     * Used by Skyxplore to prefill the character name upon generation
-     */
-    @GetMapping(Endpoints.USER_DATA_INTERNAL_USER_GET_USERNAME)
-    String getUsernameByUserId(@PathVariable("userId") UUID userId);
+    @GetMapping(Endpoints.USER_DATA_GET_USERNAME)
+    OneParamResponse<String> getUsernameByUserId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Searching for users having their email or username contains the query string, filtering own account, and accounts marked for deletion based on query parameter

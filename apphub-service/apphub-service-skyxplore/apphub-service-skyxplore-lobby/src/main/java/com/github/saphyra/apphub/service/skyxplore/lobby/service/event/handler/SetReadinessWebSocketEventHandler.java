@@ -2,19 +2,16 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Component
@@ -23,6 +20,7 @@ import java.util.UUID;
 class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;
+    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
 
     @Override
     public boolean canHandle(WebSocketEventName eventName) {
@@ -38,23 +36,6 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
         Member member = lobby.getMembers().get(from);
         member.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
 
-        WebSocketEvent readyEvent = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
-            .payload(new ReadinessEvent(from, readiness))
-            .build();
-
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(new ArrayList<>(lobby.getMembers().keySet()))
-            .event(readyEvent)
-            .build();
-
-        messageSenderProxy.sendToLobby(message);
-    }
-
-    @AllArgsConstructor
-    @Data
-    static class ReadinessEvent {
-        private UUID userId;
-        private boolean ready;
+        messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(member), lobby.getMembers().keySet());
     }
 }

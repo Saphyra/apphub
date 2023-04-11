@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.member;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMemberStatus;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
@@ -35,7 +34,7 @@ public class LobbyMemberQueryServiceTest {
     private LobbyDao lobbyDao;
 
     @Mock
-    private LobbyMemberResponseConverter converter;
+    private LobbyMemberToResponseConverter converter;
 
     @Mock
     private CharacterProxy characterProxy;
@@ -68,8 +67,8 @@ public class LobbyMemberQueryServiceTest {
             new BiWrapper<>(USER_ID, member),
             new BiWrapper<>(HOST_ID, hostMember)
         ));
-        given(converter.convertMember(member, Arrays.asList(alliance))).willReturn(lobbyMemberResponse);
-        given(converter.convertMember(hostMember, Arrays.asList(alliance))).willReturn(hostMemberResponse);
+        given(converter.convertMember(member)).willReturn(lobbyMemberResponse);
+        given(converter.convertMember(hostMember)).willReturn(hostMemberResponse);
         given(lobby.getHost()).willReturn(HOST_ID);
         given(member.getUserId()).willReturn(USER_ID);
         given(hostMember.getUserId()).willReturn(HOST_ID);

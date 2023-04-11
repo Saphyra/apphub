@@ -1,0 +1,14 @@
+.skyxplore-saved-game {
+    width: 80%;
+    margin: 10px auto;
+    position: relative;
+    font-size: 20px;
+}
+
+.skyxplore-delete-game-button{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border-width: 1px;
+    margin: 0;
+}

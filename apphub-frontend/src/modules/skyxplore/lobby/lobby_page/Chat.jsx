@@ -1,0 +1,116 @@
+import React, { useEffect, useState } from "react";
+import PanelTitle from "./PanelTitle";
+import InputField from "../../../../common/component/input/InputField";
+import "./chat/chat.css";
+import Message from "./chat/Message";
+import Stream from "../../../../common/js/collection/Stream";
+import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
+import MessageType from "./chat/MessageType";
+
+const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => handleEvent(), [lastEvent]);
+
+    const handleEvent = () => {
+        if (lastEvent === null) {
+            return;
+        }
+
+        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE) {
+            const message = lastEvent.payload;
+            message.type = message.senderId === ownUserId ? MessageType.OWN_MESSAGE : MessageType.INCOMING_MESSAGE;
+            console.log(message);
+
+            const copy = new Stream(messages)
+                .add(message)
+                .toList();
+
+            setMessages(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
+            const message = {
+                type: MessageType.SYSTEM_MESSAGE,
+                message: localizationHandler.get("player-left-lobby", { name: lastEvent.payload.characterName }),
+                createdAt: lastEvent.payload.createdAt
+            }
+
+            const copy = new Stream(messages)
+                .add(message)
+                .toList();
+
+            setMessages(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED) {
+            const message = {
+                type: MessageType.SYSTEM_MESSAGE,
+                message: localizationHandler.get("player-connected", { name: lastEvent.payload.characterName }),
+                createdAt: lastEvent.payload.createdAt
+            }
+
+            const copy = new Stream(messages)
+                .add(message)
+                .toList();
+
+            setMessages(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_DISCONNECTED) {
+            const message = {
+                type: MessageType.SYSTEM_MESSAGE,
+                message: localizationHandler.get("player-disconnected", { name: lastEvent.payload.characterName }),
+                createdAt: lastEvent.payload.createdAt
+            }
+
+            const copy = new Stream(messages)
+                .add(message)
+                .toList();
+
+            setMessages(copy);
+        }
+    }
+
+    const onkeyup = (event) => {
+        if (event.which === 13) {
+            sendMessage(event.target.value);
+            event.target.value = "";
+        }
+    }
+
+    const sendMessage = (message) => {
+        const event = {
+            eventName: WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE,
+            payload: message
+        }
+
+        sendWsMessage(JSON.stringify(event));
+    }
+
+    const getMessages = () => {
+        return new Stream(messages)
+            .sorted((a, b) => b.createdAt - a.createdAt)
+            .map(message =>
+                <Message
+                    key={message.createdAt}
+                    message={message}
+                />
+            )
+            .toList();
+    }
+
+    return (
+        <div id="skyxplore-lobby-chat" className="skyxplore-lobby-panel">
+            <PanelTitle label={localizationHandler.get("chat")} />
+
+            <div id="skyxplore-lobby-chat-input-container">
+                <InputField
+                    id="skyxplore-lobby-chat-input"
+                    placeholder={localizationHandler.get("message")}
+                    onkeyupCallback={onkeyup}
+                />
+            </div>
+
+            <div className="skyxplore-lobby-chat-content">
+                {getMessages()}
+            </div>
+        </div>
+    );
+}
+
+export default Chat;

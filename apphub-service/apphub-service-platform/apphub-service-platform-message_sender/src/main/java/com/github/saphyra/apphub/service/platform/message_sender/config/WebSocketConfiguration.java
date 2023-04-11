@@ -30,6 +30,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
             .addHandler(skyXploreGameConnectionHandler, Endpoints.WS_CONNECTION_SKYXPLORE_GAME)
             .addHandler(adminPanelMonitoringWebSocketHandler, Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING)
             .addHandler(adminPanelErrorReportHandler, Endpoints.WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT)
-            .setHandshakeHandler(authenticationHandshakeHandler);
+            .setHandshakeHandler(authenticationHandshakeHandler)
+            .setAllowedOrigins("*");
     }
 }

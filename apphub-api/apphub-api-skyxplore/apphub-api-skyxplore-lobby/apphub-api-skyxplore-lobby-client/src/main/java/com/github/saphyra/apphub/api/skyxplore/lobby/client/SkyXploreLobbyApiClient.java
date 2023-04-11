@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.client;
 
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -14,7 +14,8 @@ import java.util.UUID;
 
 @FeignClient(name = "skyxplore-lobby", url = "${serviceUrls.skyxploreLobby}")
 public interface SkyXploreLobbyApiClient {
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE)
+    //TODO remove
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)

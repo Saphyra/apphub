@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,7 @@ public interface SkyXploreLobbySettingsController {
     void editSettings(@RequestBody SkyXploreGameSettings settings, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
-    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS)
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_SETTINGS)
     SkyXploreGameSettings getGameSettings(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
@@ -36,4 +38,16 @@ public interface SkyXploreLobbySettingsController {
     //TODO API test
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_AIS)
     List<AiPlayer> getAis(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO API test
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_ALLIANCES)
+    List<AllianceResponse> getAlliancesOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO api test
+    @PostMapping(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER)
+    void changeAllianceOfPlayer(@RequestBody OneParamRequest<String> alliance, @PathVariable("userId") UUID userId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO api test
+    @PostMapping(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI)
+    void changeAllianceOfAi(@RequestBody OneParamRequest<String> alliance, @PathVariable("userId") UUID userId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
