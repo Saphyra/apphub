@@ -4,14 +4,13 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class RenameCitizenServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final String NEW_NAME = "new-name";
     private static final UUID GAME_ID = UUID.randomUUID();
@@ -47,10 +45,7 @@ public class RenameCitizenServiceTest {
     private GameDataProxy gameDataProxy;
 
     @Mock
-    private CitizenToModelConverter citizenToModelConverter;
-
-    @Mock
-    private CitizenToResponseConverter citizenToResponseConverter;
+    private CitizenConverter citizenConverter;
 
     @InjectMocks
     private RenameCitizenService underTest;
@@ -107,8 +102,8 @@ public class RenameCitizenServiceTest {
         //noinspection unchecked
         given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(citizenResponse);
-        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
-        given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
+        given(citizenConverter.toResponse(gameData, citizen)).willReturn(citizenResponse);
+        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
 
         CitizenResponse result = underTest.renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME);
 

@@ -10,12 +10,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
@@ -23,7 +23,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -146,8 +145,8 @@ public class PassiveMoraleRechargeProcess implements Process {
 
         syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
 
-        GameItem citizenModel = applicationContextProxy.getBean(CitizenToModelConverter.class)
-            .convert(gameData.getGameId(), citizen);
+        GameItem citizenModel = applicationContextProxy.getBean(CitizenConverter.class)
+            .toModel(gameData.getGameId(), citizen);
         syncCache.saveGameItem(citizenModel);
 
         UUID ownerId = gameData.getPlanets()
@@ -161,7 +160,7 @@ public class PassiveMoraleRechargeProcess implements Process {
             () -> applicationContextProxy.getBean(WsMessageSender.class).planetCitizenModified(
                 ownerId,
                 location,
-                applicationContextProxy.getBean(CitizenToResponseConverter.class).convert(gameData, citizen)
+                applicationContextProxy.getBean(CitizenConverter.class).toResponse(gameData, citizen)
             )
         );
 

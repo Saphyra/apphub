@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
@@ -29,7 +28,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class GameFactoryTest {
@@ -62,9 +60,6 @@ public class GameFactoryTest {
 
     @Mock
     private AiFactory aiFactory;
-
-    @Mock
-    private BackgroundProcessStarterService backgroundProcessStarterService;
 
     @Mock
     private GameDataFactory gameDataFactory;
@@ -132,7 +127,5 @@ public class GameFactoryTest {
         assertThat(result.getLastPlayed()).isEqualTo(CURRENT_DATE);
         assertThat(result.getEventLoop()).isEqualTo(eventLoop);
         assertThat(result.getMarkedForDeletion()).isFalse();
-
-        verify(backgroundProcessStarterService).startBackgroundProcesses(result);
     }
 }

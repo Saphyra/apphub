@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.DurabilityToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +32,8 @@ class GameDataConverter {
     private final ReservedStorageToModelConverter reservedStorageToModelConverter;
     private final StorageSettingToModelConverter storageSettingToModelConverter;
     private final StoredResourceToModelConverter storedResourceToModelConverter;
-    private final CitizenToModelConverter citizenToModelConverter;
-    private final SkillToModelConverter skillToModelConverter;
+    private final CitizenConverter citizenConverter;
+    private final SkillConverter skillConverter;
     private final DurabilityToModelConverter durabilityToModelConverter;
     private final BuildingAllocationToModelConverter buildingAllocationToModelConverter;
     private final CitizenAllocationToModelConverter citizenAllocationToModelConverter;
@@ -58,8 +60,8 @@ class GameDataConverter {
         result.addAll(storedResourceToModelConverter.convert(gameId, data.getStoredResources()));
 
         //Citizen
-        result.addAll(citizenToModelConverter.convert(gameId, data.getCitizens()));
-        result.addAll(skillToModelConverter.convert(gameId, data.getSkills()));
+        result.addAll(citizenConverter.toModel(gameId, data.getCitizens()));
+        result.addAll(skillConverter.toModel(gameId, data.getSkills()));
         result.addAll(durabilityToModelConverter.convert(gameId, data.getDurabilities()));
 
         //Process

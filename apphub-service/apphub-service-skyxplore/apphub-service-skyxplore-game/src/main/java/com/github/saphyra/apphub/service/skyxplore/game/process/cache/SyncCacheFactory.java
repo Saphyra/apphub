@@ -11,7 +11,6 @@ public class SyncCacheFactory {
     private final GameItemCacheFactory gameItemCacheFactory;
     private final MessageCacheFactory messageCacheFactory;
 
-
     public SyncCache create() {
         return SyncCache.builder()
             .gameItemCache(gameItemCacheFactory.create())

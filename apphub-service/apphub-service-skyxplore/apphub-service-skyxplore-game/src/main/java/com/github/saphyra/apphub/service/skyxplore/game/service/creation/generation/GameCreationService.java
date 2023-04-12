@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.GameFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
@@ -32,6 +33,7 @@ public class GameCreationService {
     private final BlockingQueue<SkyXploreGameCreationRequest> requests;
     private final GameSaverService gameSaverService;
     private final ErrorReporterService errorReporterService;
+    private final TickSchedulerLauncher tickSchedulerLauncher;
 
     @Builder
     public GameCreationService(
@@ -41,8 +43,8 @@ public class GameCreationService {
         BlockingQueue<SkyXploreGameCreationRequest> requests,
         GameSaverService gameSaverService,
         ExecutorServiceBeanFactory executorServiceBeanFactory,
-        ErrorReporterService errorReporterService
-    ) {
+        ErrorReporterService errorReporterService,
+        TickSchedulerLauncher tickSchedulerLauncher) {
         this.messageSenderProxy = messageSenderProxy;
         this.gameFactory = gameFactory;
         this.gameDao = gameDao;
@@ -50,6 +52,7 @@ public class GameCreationService {
         this.gameSaverService = gameSaverService;
         executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
         this.errorReporterService = errorReporterService;
+        this.tickSchedulerLauncher = tickSchedulerLauncher;
     }
 
     private void create(SkyXploreGameCreationRequest request) {
@@ -59,6 +62,7 @@ public class GameCreationService {
         log.info("Game {} created in {}ms for host {}", game.getGameId(), stopWatch.getTime(TimeUnit.MILLISECONDS), game.getHost());
         gameDao.save(game);
         gameSaverService.save(game);
+        tickSchedulerLauncher.launch(game);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)

@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.populati
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ public class PopulationQueryServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private CitizenToResponseConverter citizenToResponseConverter;
+    private CitizenConverter citizenConverter;
 
     @InjectMocks
     private PopulationQueryService underTest;
@@ -54,7 +54,7 @@ public class PopulationQueryServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getCitizens()).willReturn(citizens);
         given(citizens.getByLocation(PLANET_ID)).willReturn(List.of(citizen));
-        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
+        given(citizenConverter.toResponse(gameData, citizen)).willReturn(citizenResponse);
 
         List<CitizenResponse> result = underTest.getPopulation(USER_ID, PLANET_ID);
 

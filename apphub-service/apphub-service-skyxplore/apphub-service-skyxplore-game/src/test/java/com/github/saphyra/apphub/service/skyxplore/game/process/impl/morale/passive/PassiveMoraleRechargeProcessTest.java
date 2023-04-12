@@ -12,13 +12,13 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
@@ -28,7 +28,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.CitizenToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,16 +100,13 @@ class PassiveMoraleRechargeProcessTest {
     private ExecutionResult<Rest> executionResult;
 
     @Mock
-    private CitizenToModelConverter citizenToModelConverter;
+    private CitizenConverter citizenConverter;
 
     @Mock
     private CitizenModel citizenModel;
 
     @Mock
     private WsMessageSender messageSender;
-
-    @Mock
-    private CitizenToResponseConverter citizenToResponseConverter;
 
     @Mock
     private CitizenResponse citizenResponse;
@@ -214,13 +210,12 @@ class PassiveMoraleRechargeProcessTest {
         given(future.get()).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(rest);
         given(rest.getRestoredMorale()).willReturn(RESTORED_MORALE);
-        given(applicationContextProxy.getBean(CitizenToModelConverter.class)).willReturn(citizenToModelConverter);
-        given(citizenToModelConverter.convert(GAME_ID, citizen)).willReturn(citizenModel);
+        given(applicationContextProxy.getBean(CitizenConverter.class)).willReturn(citizenConverter);
+        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(applicationContextProxy.getBean(WsMessageSender.class)).willReturn(messageSender);
-        given(applicationContextProxy.getBean(CitizenToResponseConverter.class)).willReturn(citizenToResponseConverter);
-        given(citizenToResponseConverter.convert(gameData, citizen)).willReturn(citizenResponse);
+        given(citizenConverter.toResponse(gameData, citizen)).willReturn(citizenResponse);
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
         given(citizenAllocations.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizenAllocation);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));

@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -28,17 +26,17 @@ public class SkyXplorePopulationActions {
             .collect(Collectors.toList());
     }
 
-    public static CitizenResponse renameCitizen(Language language, UUID accessTokenId, UUID planetId, UUID citizenId, String newName) {
-        Response response = getRenameCitizenResponse(language, accessTokenId, planetId, citizenId, newName);
+    public static CitizenResponse renameCitizen(Language language, UUID accessTokenId, UUID citizenId, String newName) {
+        Response response = getRenameCitizenResponse(language, accessTokenId, citizenId, newName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CitizenResponse.class);
     }
 
-    public static Response getRenameCitizenResponse(Language language, UUID accessTokenId, UUID planetId, UUID citizenId, String newName) {
+    public static Response getRenameCitizenResponse(Language language, UUID accessTokenId, UUID citizenId, String newName) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(newName))
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("citizenId", citizenId))));
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN, "citizenId", citizenId));
     }
 }

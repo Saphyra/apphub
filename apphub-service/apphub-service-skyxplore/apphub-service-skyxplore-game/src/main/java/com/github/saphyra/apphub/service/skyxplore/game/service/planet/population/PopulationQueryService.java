@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.populati
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PopulationQueryService {
     private final GameDao gameDao;
-    private final CitizenToResponseConverter citizenToResponseConverter;
+    private final CitizenConverter citizenToResponseConverter;
 
     public List<CitizenResponse> getPopulation(UUID userId, UUID planetId) {
         GameData gameData = gameDao.findByUserIdValidated(userId)
@@ -26,7 +26,7 @@ public class PopulationQueryService {
         return gameData.getCitizens()
             .getByLocation(planetId)
             .stream()
-            .map(citizen -> citizenToResponseConverter.convert(gameData, citizen))
+            .map(citizen -> citizenToResponseConverter.toResponse(gameData, citizen))
             .collect(Collectors.toList());
     }
 }

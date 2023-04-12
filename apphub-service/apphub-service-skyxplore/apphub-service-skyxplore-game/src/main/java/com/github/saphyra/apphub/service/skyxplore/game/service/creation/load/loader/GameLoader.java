@@ -8,11 +8,11 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,9 @@ public class GameLoader {
     private final GameDataProxy gameDataProxy;
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
-    private final BackgroundProcessStarterService backgroundProcessStarterService;
     private final GameDataLoader gameDataLoader;
     private final ProcessLoader processLoader;
+    private final TickSchedulerLauncher tickSchedulerLauncher;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -62,10 +62,9 @@ public class GameLoader {
 
         processLoader.loadProcesses(game);
 
-        backgroundProcessStarterService.startBackgroundProcesses(game);
-
         gameDataProxy.saveItem(gameModel);
         gameDao.save(game);
+        tickSchedulerLauncher.launch(game);
 
         stopwatch.stop();
         log.info("Game loaded in {}s", stopwatch.elapsed(TimeUnit.SECONDS));

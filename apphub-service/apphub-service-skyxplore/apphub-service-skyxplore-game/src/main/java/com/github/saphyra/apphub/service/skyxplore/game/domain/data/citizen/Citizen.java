@@ -28,4 +28,9 @@ public class Citizen {
     public void reduceMorale(int morale) {
         this.morale -= morale;
     }
+
+    //TODO unit test
+    public void decreaseSatiety(int change) {
+        this.satiety = Math.max(0, this.satiety - change);
+    }
 }

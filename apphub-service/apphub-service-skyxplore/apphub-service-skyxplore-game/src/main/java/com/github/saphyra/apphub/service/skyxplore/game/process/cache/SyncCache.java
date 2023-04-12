@@ -27,6 +27,8 @@ public class SyncCache {
         gameItemCache.delete(id, type);
     }
 
+    //TODO remove
+    @Deprecated
     public void addMessage(UUID recipient, WebSocketEventName eventName, Object id, Runnable method) {
         messageCache.add(recipient, eventName, id, method);
     }

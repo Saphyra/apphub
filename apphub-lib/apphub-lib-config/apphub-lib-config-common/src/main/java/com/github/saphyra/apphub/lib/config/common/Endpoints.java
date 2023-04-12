@@ -55,6 +55,7 @@ public class Endpoints {
 
     //WEB-SOCKET-MESSAGING
     public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";
+    public static final String WEB_SOCKET_BULK_SEND_MESSAGE = "/internal/message/{group}/bulk";
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
@@ -247,7 +248,7 @@ public class Endpoints {
     public static final String SKYXPLORE_PLANET_DELETE_STORAGE_SETTING = "/api/skyxplore/game/planet/storage-settings/{storageSettingId}";
     public static final String SKYXPLORE_PLANET_EDIT_STORAGE_SETTING = "/api/skyxplore/game/planet/storage-settings";
     public static final String SKYXPLORE_PLANET_GET_POPULATION = "/api/skyxplore/game/planet/{planetId}/citizen";
-    public static final String SKYXPLORE_PLANET_RENAME_CITIZEN = "/api/skyxplore/game/planet//citizen/{citizenId}/rename";
+    public static final String SKYXPLORE_PLANET_RENAME_CITIZEN = "/api/skyxplore/game/citizen/{citizenId}/rename";
     public static final String SKYXPLORE_PLANET_UPDATE_PRIORITY = "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}";
     public static final String SKYXPLORE_PLANET_RENAME = "/api/skyxplore/game/planet/{planetId}/name";
     public static final String SKYXPLORE_SOLAR_SYSTEM_RENAME = "/api/skyxplore/game/solar-system/{solarSystemId}/name";

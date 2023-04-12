@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.AiFactory;
@@ -30,7 +29,6 @@ public class GameFactory {
     private final PlayerFactory playerFactory;
     private final AiFactory aiFactory;
     private final EventLoopFactory eventLoopFactory;
-    private final BackgroundProcessStarterService backgroundProcessStarterService;
 
     public Game create(SkyXploreGameCreationRequest request) {
         UUID gameId = idGenerator.randomUuid();
@@ -52,8 +50,6 @@ public class GameFactory {
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(false)
             .build();
-
-        backgroundProcessStarterService.startBackgroundProcesses(result);
 
         log.info("Game generated.");
 

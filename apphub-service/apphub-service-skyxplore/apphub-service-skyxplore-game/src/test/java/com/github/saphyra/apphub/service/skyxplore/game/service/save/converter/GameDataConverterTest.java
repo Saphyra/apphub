@@ -25,6 +25,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_re
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
@@ -38,6 +39,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
@@ -97,10 +99,10 @@ class GameDataConverterTest {
     private StoredResourceToModelConverter storedResourceToModelConverter;
 
     @Mock
-    private CitizenToModelConverter citizenToModelConverter;
+    private CitizenConverter citizenConverter;
 
     @Mock
-    private SkillToModelConverter skillToModelConverter;
+    private SkillConverter skillConverter;
 
     @Mock
     private DurabilityToModelConverter durabilityToModelConverter;
@@ -265,10 +267,10 @@ class GameDataConverterTest {
         given(storedResourceToModelConverter.convert(GAME_ID, storedResources)).willReturn(List.of(storedResourceModel));
 
         given(gameData.getCitizens()).willReturn(citizens);
-        given(citizenToModelConverter.convert(GAME_ID, citizens)).willReturn(List.of(citizenModel));
+        given(citizenConverter.toModel(GAME_ID, citizens)).willReturn(List.of(citizenModel));
 
         given(gameData.getSkills()).willReturn(skills);
-        given(skillToModelConverter.convert(GAME_ID, skills)).willReturn(List.of(skillModel));
+        given(skillConverter.toModel(GAME_ID, skills)).willReturn(List.of(skillModel));
 
         given(gameData.getDurabilities()).willReturn(durabilities);
         given(durabilityToModelConverter.convert(GAME_ID, durabilities)).willReturn(List.of(durabilityModel));

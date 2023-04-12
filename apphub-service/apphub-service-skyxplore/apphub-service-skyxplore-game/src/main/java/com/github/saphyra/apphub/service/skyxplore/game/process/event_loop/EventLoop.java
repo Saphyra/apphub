@@ -64,6 +64,10 @@ public class EventLoop {
             .get(60, TimeUnit.SECONDS);
     }
 
+    public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable) {
+        return eventLoopThread.asyncProcess(callable);
+    }
+
     public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable, SyncCache syncCache) {
         return eventLoopThread.asyncProcess(() -> {
             T response = callable.call();

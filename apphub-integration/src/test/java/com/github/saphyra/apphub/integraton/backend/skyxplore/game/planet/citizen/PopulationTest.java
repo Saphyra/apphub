@@ -53,19 +53,19 @@ public class PopulationTest extends BackEndTest {
         CitizenResponse citizen = citizens.get(0);
 
         //Blank name
-        Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), " ");
+        Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, citizen.getCitizenId(), " ");
         verifyInvalidParam(language, blankNameResponse, "value", "must not be null or blank");
 
         //Too long name
-        Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         verifyInvalidParam(language, tooLongNameResponse, "value", "too long");
 
         //Not found
-        Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, planet.getPlanetId(), UUID.randomUUID(), NEW_NAME);
+        Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, UUID.randomUUID(), NEW_NAME);
         assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
 
         //Rename
-        CitizenResponse citizenResponse = SkyXplorePopulationActions.renameCitizen(language, accessTokenId1, planet.getPlanetId(), citizen.getCitizenId(), NEW_NAME);
+        CitizenResponse citizenResponse = SkyXplorePopulationActions.renameCitizen(language, accessTokenId1, citizen.getCitizenId(), NEW_NAME);
 
         assertThat(citizenResponse.getName()).isEqualTo(NEW_NAME);
 

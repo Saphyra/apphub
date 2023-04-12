@@ -10,12 +10,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -67,13 +67,13 @@ class GameLoaderTest {
     private EventLoopFactory eventLoopFactory;
 
     @Mock
-    private BackgroundProcessStarterService backgroundProcessStarterService;
-
-    @Mock
     private GameDataLoader gameDataLoader;
 
     @Mock
     private ProcessLoader processLoader;
+
+    @Mock
+    private TickSchedulerLauncher tickSchedulerLauncher;
 
     @InjectMocks
     private GameLoader underTest;
@@ -133,8 +133,8 @@ class GameLoaderTest {
         assertThat(game.getMarkedForDeletionAt()).isNull();
 
         verify(processLoader).loadProcesses(game);
-        verify(backgroundProcessStarterService).startBackgroundProcesses(game);
         verify(gameDataProxy).saveItem(gameModel);
+        verify(tickSchedulerLauncher).launch(game);
 
         ArgumentCaptor<WebSocketMessage> messageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(messageArgumentCaptor.capture());

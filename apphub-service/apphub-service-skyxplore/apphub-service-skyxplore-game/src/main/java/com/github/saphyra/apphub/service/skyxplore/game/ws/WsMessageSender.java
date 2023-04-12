@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -55,12 +56,20 @@ public class WsMessageSender {
         sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED, PLANET_PAGE_TYPE_GROUP, planetId, storage);
     }
 
+    public void planetCitizenModified(UUID userId, UUID planetId, List<CitizenResponse> citizens) {
+        bulkSendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED, OpenedPageType.PLANET_POPULATION_OVERVIEW, planetId, citizens);
+    }
+
     public void planetCitizenModified(UUID userId, UUID planetId, CitizenResponse citizen) {
         sendIfProperPageIsOpened(userId, WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED, OpenedPageType.PLANET_POPULATION_OVERVIEW, planetId, citizen);
     }
 
     private void sendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, OpenedPageType requiredPageType, UUID pageId, Object payload) {
         sendIfProperPageIsOpened(userId, eventName, List.of(requiredPageType), pageId, payload);
+    }
+
+    private void bulkSendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, OpenedPageType requiredPageType, UUID pageId, List<?> payload) {
+        bulkSendIfProperPageIsOpened(userId, eventName, List.of(requiredPageType), pageId, payload);
     }
 
     private void sendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, List<OpenedPageType> requiredPageTypes, UUID pageId, Object payload) {
@@ -79,8 +88,28 @@ public class WsMessageSender {
             });
     }
 
+    private void bulkSendIfProperPageIsOpened(UUID userId, WebSocketEventName eventName, List<OpenedPageType> requiredPageTypes, UUID pageId, List<?> payload) {
+        gameDao.findByUserId(userId)
+            .ifPresent(game -> {
+                OpenedPage openedPage = game.getPlayers()
+                    .get(userId)
+                    .getOpenedPage();
+                log.debug("{} - RequiredTypes: {}, pageId: {}", openedPage, requiredPageTypes, pageId);
+
+                if (requiredPageTypes.contains(openedPage.getPageType())) {
+                    if (isNull(pageId) || pageId.equals(openedPage.getPageId())) {
+                        bulkSendMessage(userId, eventName, payload);
+                    }
+                }
+            });
+    }
+
     private void sendMessage(UUID recipient, WebSocketEventName eventName, Object payload) {
         sendMessage(List.of(recipient), eventName, payload);
+    }
+
+    private void bulkSendMessage(UUID recipient, WebSocketEventName eventName, List<?> payload) {
+        bulkSendMessage(List.of(recipient), eventName, payload);
     }
 
     private void sendMessage(List<UUID> recipients, WebSocketEventName eventName, Object payload) {
@@ -93,5 +122,13 @@ public class WsMessageSender {
             .event(webSocketEvent)
             .build();
         messageSenderProxy.sendToGame(message);
+    }
+
+    private void bulkSendMessage(List<UUID> recipients, WebSocketEventName eventName, List<?> payload) {
+        List<WebSocketMessage> messages = payload.stream()
+            .map(o -> WebSocketMessage.forEventAndRecipients(eventName, recipients, o))
+            .collect(Collectors.toList());
+
+        messageSenderProxy.bulkSendToGame(messages);
     }
 }
