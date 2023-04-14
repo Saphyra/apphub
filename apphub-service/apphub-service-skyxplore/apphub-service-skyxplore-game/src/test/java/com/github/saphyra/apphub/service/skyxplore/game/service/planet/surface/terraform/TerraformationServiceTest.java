@@ -1,11 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -29,21 +24,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation.SurfaceToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -53,11 +41,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -67,10 +54,8 @@ public class TerraformationServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 436;
-    private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int PARALLEL_WORKERS = 254;
-    private static final String DATA_ID = "data-id";
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -85,28 +70,10 @@ public class TerraformationServiceTest {
     private ConstructionFactory constructionFactory;
 
     @Mock
-    private GameDataProxy gameDataProxy;
-
-    @Mock
-    private ConstructionToModelConverter constructionToModelConverter;
-
-    @Mock
-    private SurfaceToResponseConverter surfaceToResponseConverter;
-
-    @Mock
-    private SurfaceToQueueItemConverter surfaceToQueueItemConverter;
-
-    @Mock
-    private QueueItemToResponseConverter queueItemToResponseConverter;
-
-    @Mock
-    private WsMessageSender messageSender;
-
-    @Mock
-    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
-
-    @Mock
     private TerraformationProcessFactory terraformationProcessFactory;
+
+    @Mock
+    private SyncCacheFactory syncCacheFactory;
 
     @InjectMocks
     private TerraformationService underTest;
@@ -127,7 +94,7 @@ public class TerraformationServiceTest {
     private Building building;
 
     @Mock
-    private Construction construction;
+    private Construction terraformation;
 
     @Mock
     private TerraformingPossibility terraformingPossibility;
@@ -136,34 +103,16 @@ public class TerraformationServiceTest {
     private ConstructionRequirements constructionRequirements;
 
     @Mock
-    private ConstructionModel constructionModel;
-
-    @Mock
-    private QueueItem queueItem;
-
-    @Mock
-    private QueueResponse queueResponse;
-
-    @Mock
-    private SurfaceResponse surfaceResponse;
-
-    @Mock
-    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
-
-    @Mock
     private TerraformationProcess terraformationProcess;
 
     @Mock
     private Processes processes;
 
     @Mock
-    private ProcessModel processModel;
-
-    @Mock
     private EventLoop eventLoop;
 
     @Mock
-    private ExecutionResult<SurfaceResponse> executionResult;
+    private ExecutionResult<Void> executionResult;
 
     @Mock
     private Surfaces surfaces;
@@ -174,8 +123,8 @@ public class TerraformationServiceTest {
     @Mock
     private Buildings buildings;
 
-    @Captor
-    private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
+    @Mock
+    private SyncCache syncCache;
 
     @Test
     public void invalidSurfaceType() {
@@ -189,7 +138,7 @@ public class TerraformationServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(construction));
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(terraformation));
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -247,7 +196,7 @@ public class TerraformationServiceTest {
     }
 
     @Test
-    public void terraform() throws Exception {
+    public void terraform() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
@@ -259,41 +208,30 @@ public class TerraformationServiceTest {
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(construction);
-        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
+        given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
-        given(surfaceToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
-        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
-        given(terraformationProcessFactory.create(gameData, PLANET_ID, surface, construction)).willReturn(terraformationProcess);
+        given(terraformationProcessFactory.create(gameData, PLANET_ID, surface, terraformation)).willReturn(terraformationProcess);
         given(gameData.getProcesses()).willReturn(processes);
-        given(terraformationProcess.toModel()).willReturn(processModel);
         given(game.getEventLoop()).willReturn(eventLoop);
-        //noinspection unchecked
-        given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
-        given(executionResult.getOrThrow()).willReturn(surfaceResponse);
+        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
-        given(game.getGameId()).willReturn(GAME_ID);
         given(planet.getOwner()).willReturn(USER_ID);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
 
-        SurfaceResponse result = underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
+        underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
-        assertThat(result).isEqualTo(surfaceResponse);
+        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        argumentCaptor.getValue()
+            .run();
 
-        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture());
-        SurfaceResponse executionResponse = argumentCaptor.getValue()
-            .call();
-        assertThat(executionResponse).isEqualTo(surfaceResponse);
-
-        verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
-        verify(gameDataProxy).saveItem(constructionModel, processModel);
-        verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(syncCache).terraformationCreated(USER_ID, PLANET_ID, terraformation, surface, terraformationProcess);
         verify(processes).add(terraformationProcess);
+        verify(executionResult).getOrThrow();
     }
 }

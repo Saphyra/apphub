@@ -18,14 +18,14 @@ public class TerraformationController implements SkyXploreSurfaceTerraformationC
     private final CancelTerraformationService cancelTerraformationService;
 
     @Override
-    public SurfaceResponse terraformSurface(OneParamRequest<String> surfaceType, UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
+    public void terraformSurface(OneParamRequest<String> surfaceType, UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to terraform surface {} to {} on planet {}", accessTokenHeader.getUserId(), surfaceId, surfaceType.getValue(), planetId);
-        return terraformationService.terraform(accessTokenHeader.getUserId(), planetId, surfaceId, surfaceType.getValue());
+        terraformationService.terraform(accessTokenHeader.getUserId(), planetId, surfaceId, surfaceType.getValue());
     }
 
     @Override
-    public SurfaceResponse cancelTerraformation(UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
+    public void cancelTerraformation(UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel terraformation on planet {} and surface {}", accessTokenHeader.getUserId(), planetId, surfaceId);
-        return cancelTerraformationService.cancelTerraformationOfSurface(accessTokenHeader.getUserId(), planetId, surfaceId);
+        cancelTerraformationService.cancelTerraformationOfSurface(accessTokenHeader.getUserId(), planetId, surfaceId);
     }
 }

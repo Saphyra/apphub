@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.storage_setting;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
@@ -12,18 +11,16 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order.ProductionOrderProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -120,20 +117,12 @@ public class StorageSettingProcess implements Process {
                         .create(location, processId, storageSetting.getDataId(), reservedAmount);
                     gameData.getReservedStorages()
                         .add(reservedStorage);
-                    syncCache.saveGameItem(applicationContextProxy.getBean(ReservedStorageToModelConverter.class)
-                        .convert(gameData.getGameId(), reservedStorage));
+                    syncCache.saveGameItem(applicationContextProxy.getBean(ReservedStorageConverter.class)
+                        .toModel(gameData.getGameId(), reservedStorage));
 
                     UUID ownerId = gameData.getPlanets().get(location).getPlanetId();
-                    syncCache.addMessage(
-                        ownerId,
-                        WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-                        location,
-                        () -> applicationContextProxy.getBean(WsMessageSender.class).planetStorageModified(
-                            ownerId,
-                            location,
-                            applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(gameData, location)
-                        )
-                    );
+
+                    syncCache.storageModified(ownerId, location);
 
                     applicationContextProxy.getBean(ProductionOrderProcessFactory.class)
                         .create(gameData, processId, location, reservedStorage)
@@ -215,16 +204,7 @@ public class StorageSettingProcess implements Process {
 
         UUID ownerId = gameData.getPlanets().get(location).getPlanetId();
 
-        syncCache.addMessage(
-            ownerId,
-            WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-            location,
-            () -> applicationContextProxy.getBean(WsMessageSender.class).planetStorageModified(
-                ownerId,
-                location,
-                applicationContextProxy.getBean(PlanetStorageOverviewQueryService.class).getStorage(gameData, location)
-            )
-        );
+        syncCache.storageModified(ownerId, location);
     }
 
     @Override

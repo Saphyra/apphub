@@ -1,9 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.work;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
@@ -11,25 +7,20 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -46,16 +37,7 @@ public class CitizenUpdateServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
-    private SkillConverter skillConverter;
-
-    @Mock
     private GameProperties gameProperties;
-
-    @Mock
-    private CitizenConverter citizenConverter;
-
-    @Mock
-    private WsMessageSender messageSender;
 
     @InjectMocks
     private CitizenUpdateService underTest;
@@ -77,15 +59,6 @@ public class CitizenUpdateServiceTest {
 
     @Mock
     private CitizenSkillProperties skillProperties;
-
-    @Mock
-    private SkillModel skillModel;
-
-    @Mock
-    private CitizenModel citizenModel;
-
-    @Mock
-    private CitizenResponse citizenResponse;
 
     @Mock
     private GameData gameData;
@@ -110,10 +83,6 @@ public class CitizenUpdateServiceTest {
         given(skill.getLevel()).willReturn(SKILL_LEVEL);
         given(gameData.getGameId()).willReturn(GAME_ID);
 
-        given(skillConverter.toModel(GAME_ID, skill)).willReturn(skillModel);
-        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
-        given(citizenConverter.toResponse(gameData, citizen)).willReturn(citizenResponse);
-
         given(planet.getOwner()).willReturn(USER_ID);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
 
@@ -127,12 +96,7 @@ public class CitizenUpdateServiceTest {
         verify(skill).increaseLevel();
         verify(skill).setExperience(EXPERIENCE - NEXT_LEVEL);
         verify(skill).setNextLevel(SKILL_LEVEL * EXPERIENCE_PER_LEVEL);
-        verify(syncCache).saveGameItem(citizenModel);
-        verify(syncCache).saveGameItem(skillModel);
-        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED), eq(CITIZEN_ID), argumentCaptor.capture());
-        argumentCaptor.getValue()
-            .run();
-        verify(messageSender).planetCitizenModified(USER_ID, PLANET_ID, citizenResponse);
+
+        verify(syncCache).citizenModified(USER_ID, citizen, skill);
     }
 }

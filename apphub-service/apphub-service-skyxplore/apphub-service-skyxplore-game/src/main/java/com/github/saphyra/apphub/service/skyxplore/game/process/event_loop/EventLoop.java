@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.process.event_loop;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +32,14 @@ public class EventLoop {
                 queue
             )
         );
+    }
+
+    public ExecutionResult<Void> processWithWait(Runnable runnable, SyncCache syncCache) {
+        ExecutionResult<Void> result = processWithWait(runnable);
+
+        syncCache.process();
+
+        return result;
     }
 
     @SneakyThrows

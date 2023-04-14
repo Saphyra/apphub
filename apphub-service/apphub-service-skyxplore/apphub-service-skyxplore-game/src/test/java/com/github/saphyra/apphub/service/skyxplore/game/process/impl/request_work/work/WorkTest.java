@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.service.GameSleepService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,6 @@ public class WorkTest {
     private static final int WORK_POINTS = 234;
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final Long SLEEP_TIME = 264L;
-    private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
@@ -93,7 +92,7 @@ public class WorkTest {
         given(applicationContextProxy.getBean(SleepService.class)).willReturn(sleepService);
 
         given(sleepTimeCalculator.calculateSleepTime(gameData, CITIZEN_ID, SkillType.AIMING, WORK_POINTS)).willReturn(SLEEP_TIME);
-        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.process(any(Runnable.class), eq(syncCache))).willReturn(future);
         given(future.isDone())

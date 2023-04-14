@@ -1,8 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
@@ -12,12 +9,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_re
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -51,25 +43,10 @@ public class ResourceAllocationServiceTest {
     private FreeStorageQueryService freeStorageQueryService;
 
     @Mock
-    private AllocatedResourceToModelConverter allocatedResourceToModelConverter;
-
-    @Mock
-    private ReservedStorageToModelConverter reservedStorageToModelConverter;
-
-    @Mock
     private ConsumptionCalculator consumptionCalculator;
 
     @Mock
-    private GameDataProxy gameDataProxy;
-
-    @Mock
     private RequiredEmptyStorageCalculator requiredEmptyStorageCalculator;
-
-    @Mock
-    private PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
-
-    @Mock
-    private WsMessageSender messageSender;
 
     @InjectMocks
     private ResourceAllocationService underTest;
@@ -96,13 +73,7 @@ public class ResourceAllocationServiceTest {
     private AllocatedResources allocatedResources;
 
     @Mock
-    private AllocatedResourceModel allocatedResourceModel;
-
-    @Mock
-    private ReservedStorageModel reservedStorageModel;
-
-    @Mock
-    private PlanetStorageResponse storageResponse;
+    private SyncCache syncCache;
 
     @BeforeEach
     public void setUp() {
@@ -114,7 +85,7 @@ public class ResourceAllocationServiceTest {
     public void notEnoughStorage() {
         given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
 
-        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
+        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
 
         ExceptionValidator.validateNotLoggedException(
             ex,
@@ -134,18 +105,14 @@ public class ResourceAllocationServiceTest {
 
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(gameData.getAllocatedResources()).willReturn(allocatedResources);
-        given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
-        given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
-        given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(storageResponse);
 
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        underTest.processResourceRequirements(gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
+        underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);
-        verify(gameDataProxy).saveItems(List.of(allocatedResourceModel, reservedStorageModel));
-        verify(messageSender).planetStorageModified(USER_ID, PLANET_ID, storageResponse);
+        verify(syncCache).resourceAllocated(USER_ID, PLANET_ID, allocatedResource, reservedStorage);
     }
 }

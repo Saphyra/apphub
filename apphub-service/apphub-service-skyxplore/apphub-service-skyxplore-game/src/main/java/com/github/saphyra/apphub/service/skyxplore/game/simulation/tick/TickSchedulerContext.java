@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

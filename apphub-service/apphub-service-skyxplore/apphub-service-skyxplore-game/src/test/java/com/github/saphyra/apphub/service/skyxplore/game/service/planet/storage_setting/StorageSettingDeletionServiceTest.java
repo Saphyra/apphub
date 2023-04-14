@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +71,7 @@ public class StorageSettingDeletionServiceTest {
     public void deleteStorageSetting() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
-        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
         given(eventLoop.process(any(Runnable.class), any())).willReturn(future);

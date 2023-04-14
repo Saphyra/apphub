@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ class TickScheduler implements Runnable {
                 .getCurrentTimeEpochMillis();
 
             SyncCache syncCache = context.getSyncCacheFactory()
-                .create();
+                .create(game);
 
             game.getEventLoop()
                 .process(

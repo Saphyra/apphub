@@ -21,9 +21,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_all
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.update_target.UpdateTargetService;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.work.Work;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingAllocationFactory;

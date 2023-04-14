@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.GameSleepService;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class Work implements Callable<Work> {
             .sleep(game, processTime);
 
         SyncCache syncCache = applicationContextProxy.getBean(SyncCacheFactory.class)
-            .create();
+            .create(game);
 
         Future<?> citizenUpdateProcess = game.getEventLoop()
             .process(() -> applicationContextProxy.getBean(CitizenUpdateService.class).updateCitizen(syncCache, game.getData(), location, citizenId, workPoints, skillType), syncCache);

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ public class SurfaceResponseQueryServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
-    private SurfaceToResponseConverter surfaceToResponseConverter;
+    private SurfaceConverter surfaceConverter;
 
     @Mock
     private GameDao gameDao;
@@ -54,7 +55,7 @@ public class SurfaceResponseQueryServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));
 
-        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
+        given(surfaceConverter.toResponse(gameData, surface)).willReturn(surfaceResponse);
 
         List<SurfaceResponse> result = underTest.getSurfaceOfPlanet(USER_ID, PLANET_ID);
 

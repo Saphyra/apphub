@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.storage_setting.StorageSettingProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class StorageSettingCreationService {
         StorageSetting storageSetting = storageSettingFactory.create(request, planetId);
         log.debug("StorageSetting created: {}", storageSetting);
 
-        SyncCache syncCache = syncCacheFactory.create();
+        SyncCache syncCache = syncCacheFactory.create(game);
 
         return game.getEventLoop()
             .processWithResponse(() -> {

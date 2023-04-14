@@ -25,7 +25,7 @@ class TerraformationQueueItemQueryServiceTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
-    private SurfaceToQueueItemConverter surfaceToQueueItemConverter;
+    private TerraformationToQueueItemConverter terraformationToQueueItemConverter;
 
     @InjectMocks
     private TerraformationQueueItemQueryService underTest;
@@ -55,7 +55,7 @@ class TerraformationQueueItemQueryServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(construction.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(surfaceToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
+        given(terraformationToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
 
         List<QueueItem> result = underTest.getQueue(gameData, LOCATION);
 

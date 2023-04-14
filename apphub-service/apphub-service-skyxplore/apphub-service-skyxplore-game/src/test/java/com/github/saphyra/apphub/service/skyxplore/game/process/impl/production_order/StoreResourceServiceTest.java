@@ -1,24 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.production_order;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.AllocatedResourceToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ReservedStorageToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StoredResourceToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -39,19 +30,10 @@ public class StoreResourceServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
-    private ReservedStorageToModelConverter reservedStorageToModelConverter;
+    private AllocatedResourceConverter allocatedResourceConverter;
 
     @Mock
-    private AllocatedResourceToModelConverter allocatedResourceToModelConverter;
-
-    @Mock
-    private StoredResourceToModelConverter storedResourceToModelConverter;
-
-    @Mock
-    private WsMessageSender messageSender;
-
-    @Mock
-    private PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
+    private StoredResourceFactory storedResourceFactory;
 
     @InjectMocks
     private StoreResourceService underTest;
@@ -75,31 +57,15 @@ public class StoreResourceServiceTest {
     private StoredResource storedResource;
 
     @Mock
-    private StoredResourceModel storedResourceModel;
-
-    @Mock
-    private ReservedStorageModel reservedStorageModel;
-
-    @Mock
     private AllocatedResourceModel allocatedResourceModel;
-
-    @Mock
-    private PlanetStorageResponse planetStorageResponse;
 
     @Test
     public void storeResource() {
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(storedResources.findByLocationAndDataId(PLANET_ID, DATA_ID)).willReturn(Optional.of(storedResource));
-
-
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
-
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(storedResourceToModelConverter.convert(GAME_ID, storedResource)).willReturn(storedResourceModel);
-        given(allocatedResourceToModelConverter.convert(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
-        given(reservedStorageToModelConverter.convert(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
-
-        given(planetStorageOverviewQueryService.getStorage(gameData, PLANET_ID)).willReturn(planetStorageResponse);
+        given(allocatedResourceConverter.toModel(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
 
         underTest.storeResource(syncCache, gameData, PLANET_ID, USER_ID, reservedStorage, allocatedResource, AMOUNT);
 
@@ -107,14 +73,28 @@ public class StoreResourceServiceTest {
         verify(storedResource).increaseAmount(AMOUNT);
         verify(reservedStorage).decreaseAmount(AMOUNT);
 
-        verify(syncCache).saveGameItem(storedResourceModel);
         verify(syncCache).saveGameItem(allocatedResourceModel);
-        verify(syncCache).saveGameItem(reservedStorageModel);
 
-        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(syncCache).addMessage(eq(USER_ID), eq(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED), eq(PLANET_ID), argumentCaptor.capture());
-        argumentCaptor.getValue()
-            .run();
-        verify(messageSender).planetStorageModified(USER_ID, PLANET_ID, planetStorageResponse);
+        syncCache.resourceStored(USER_ID, PLANET_ID, storedResource, reservedStorage);
+    }
+
+    @Test
+    public void storeResource_noStoredResource() {
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.findByLocationAndDataId(PLANET_ID, DATA_ID)).willReturn(Optional.empty());
+        given(storedResourceFactory.create(PLANET_ID, DATA_ID)).willReturn(storedResource);
+        given(reservedStorage.getDataId()).willReturn(DATA_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(allocatedResourceConverter.toModel(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
+
+        underTest.storeResource(syncCache, gameData, PLANET_ID, USER_ID, reservedStorage, allocatedResource, AMOUNT);
+
+        verify(allocatedResource).increaseAmount(AMOUNT);
+        verify(storedResource).increaseAmount(AMOUNT);
+        verify(reservedStorage).decreaseAmount(AMOUNT);
+
+        verify(syncCache).saveGameItem(allocatedResourceModel);
+
+        syncCache.resourceStored(USER_ID, PLANET_ID, storedResource, reservedStorage);
     }
 }

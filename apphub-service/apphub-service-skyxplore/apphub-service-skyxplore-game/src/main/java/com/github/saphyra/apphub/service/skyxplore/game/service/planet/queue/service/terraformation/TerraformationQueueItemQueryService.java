@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class TerraformationQueueItemQueryService {
-    private final SurfaceToQueueItemConverter converter;
+    private final TerraformationToQueueItemConverter converter;
 
     List<QueueItem> getQueue(GameData gameData, UUID location) {
         return gameData.getConstructions()

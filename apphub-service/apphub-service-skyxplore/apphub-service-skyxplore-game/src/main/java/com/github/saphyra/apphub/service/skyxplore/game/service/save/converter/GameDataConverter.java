@@ -2,12 +2,19 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.DurabilityToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,15 +30,15 @@ class GameDataConverter {
     private final CoordinateToModelConverter coordinateToModelConverter;
     private final SolarSystemToModelConverter solarSystemToModelConverter;
     private final PlanetToModelConverter planetToModelConverter;
-    private final SurfaceToModelConverter surfaceToModelConverter;
-    private final BuildingToModelConverter buildingToModelConverter;
-    private final ConstructionToModelConverter constructionToModelConverter;
+    private final SurfaceConverter surfaceConverter;
+    private final BuildingConverter buildingConverter;
+    private final ConstructionConverter constructionConverter;
     private final PriorityToModelConverter priorityToModelConverter;
-    private final DeconstructionToModelConverter deconstructionToModelConverter;
-    private final AllocatedResourceToModelConverter allocatedResourceToModelConverter;
-    private final ReservedStorageToModelConverter reservedStorageToModelConverter;
+    private final DeconstructionConverter deconstructionConverter;
+    private final AllocatedResourceConverter allocatedResourceConverter;
+    private final ReservedStorageConverter reservedStorageConverter;
     private final StorageSettingToModelConverter storageSettingToModelConverter;
-    private final StoredResourceToModelConverter storedResourceToModelConverter;
+    private final StoredResourceConverter storedResourceConverter;
     private final CitizenConverter citizenConverter;
     private final SkillConverter skillConverter;
     private final DurabilityToModelConverter durabilityToModelConverter;
@@ -47,17 +54,17 @@ class GameDataConverter {
         result.addAll(planetToModelConverter.convert(gameId, data.getPlanets().values()));
 
         //Planet
-        result.addAll(surfaceToModelConverter.convert(gameId, data.getSurfaces()));
-        result.addAll(buildingToModelConverter.convert(gameId, data.getBuildings()));
-        result.addAll(constructionToModelConverter.convert(gameId, data.getConstructions()));
+        result.addAll(surfaceConverter.toModel(gameId, data.getSurfaces()));
+        result.addAll(buildingConverter.toModel(gameId, data.getBuildings()));
+        result.addAll(constructionConverter.toModel(gameId, data.getConstructions()));
         result.addAll(priorityToModelConverter.convert(gameId, data.getPriorities()));
-        result.addAll(deconstructionToModelConverter.convert(gameId, data.getDeconstructions()));
+        result.addAll(deconstructionConverter.toModel(gameId, data.getDeconstructions()));
 
         //Storage
-        result.addAll(allocatedResourceToModelConverter.convert(gameId, data.getAllocatedResources()));
-        result.addAll(reservedStorageToModelConverter.convert(gameId, data.getReservedStorages()));
+        result.addAll(allocatedResourceConverter.toModel(gameId, data.getAllocatedResources()));
+        result.addAll(reservedStorageConverter.toModel(gameId, data.getReservedStorages()));
         result.addAll(storageSettingToModelConverter.convert(gameId, data.getStorageSettings()));
-        result.addAll(storedResourceToModelConverter.convert(gameId, data.getStoredResources()));
+        result.addAll(storedResourceConverter.toModel(gameId, data.getStoredResources()));
 
         //Citizen
         result.addAll(citizenConverter.toModel(gameId, data.getCitizens()));

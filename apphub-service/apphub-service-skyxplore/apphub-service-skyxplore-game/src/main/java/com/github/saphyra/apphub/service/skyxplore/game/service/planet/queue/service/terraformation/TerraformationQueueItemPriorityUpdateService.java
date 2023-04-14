@@ -1,15 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,11 +18,7 @@ import java.util.UUID;
 @Slf4j
 class TerraformationQueueItemPriorityUpdateService {
     private final GameDao gameDao;
-    private final GameDataProxy gameDataProxy;
-    private final ConstructionToModelConverter constructionToModelConverter;
-    private final WsMessageSender messageSender;
-    private final SurfaceToQueueItemConverter surfaceToQueueItemConverter;
-    private final QueueItemToResponseConverter queueItemToResponseConverter;
+    private final SyncCacheFactory syncCacheFactory;
 
     public void updatePriority(UUID userId, UUID planetId, UUID constructionId, Integer priority) {
         ValidationUtil.atLeast(priority, 1, "priority");
@@ -33,21 +26,22 @@ class TerraformationQueueItemPriorityUpdateService {
 
         Game game = gameDao.findByUserIdValidated(userId);
 
-        Construction construction = game.getData()
+        Construction terraformation = game.getData()
             .getConstructions()
             .findByConstructionIdValidated(constructionId);
 
         Surface surface = game.getData()
             .getSurfaces()
-            .findBySurfaceId(construction.getExternalReference());
+            .findBySurfaceId(terraformation.getExternalReference());
+
+        SyncCache syncCache = syncCacheFactory.create(game);
 
         game.getEventLoop()
             .processWithWait(() -> {
-                construction.setPriority(priority);
-                gameDataProxy.saveItem(constructionToModelConverter.convert(game.getGameId(), construction));
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(surfaceToQueueItemConverter.convert(construction, surface), game.getData(), planetId);
-                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
-            })
+                terraformation.setPriority(priority);
+
+                syncCache.terraformationModified(userId, planetId, terraformation, surface);
+            }, syncCache)
             .getOrThrow();
     }
 }

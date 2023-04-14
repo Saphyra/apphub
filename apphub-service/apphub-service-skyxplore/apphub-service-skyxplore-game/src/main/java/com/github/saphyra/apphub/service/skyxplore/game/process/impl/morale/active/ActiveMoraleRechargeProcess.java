@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.active;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
@@ -23,12 +22,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -188,7 +186,7 @@ public class ActiveMoraleRechargeProcess implements Process {
             .get(location)
             .getOwner();
 
-        syncCache.addMessage(
+        /*syncCache.addMessage(
             ownerId,
             WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED,
             citizen.getCitizenId(),
@@ -197,7 +195,7 @@ public class ActiveMoraleRechargeProcess implements Process {
                 location,
                 applicationContextProxy.getBean(CitizenConverter.class).toResponse(gameData, citizen)
             )
-        );
+        );*/
 
         status = ProcessStatus.DONE;
     }

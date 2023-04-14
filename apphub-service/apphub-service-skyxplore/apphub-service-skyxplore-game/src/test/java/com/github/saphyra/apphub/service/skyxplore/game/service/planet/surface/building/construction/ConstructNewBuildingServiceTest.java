@@ -1,12 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -29,23 +23,15 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -55,11 +41,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -71,7 +56,6 @@ public class ConstructNewBuildingServiceTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 2314;
-    private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int PARALLEL_WORKERS = 42;
 
@@ -91,31 +75,10 @@ public class ConstructNewBuildingServiceTest {
     private ResourceAllocationService resourceAllocationService;
 
     @Mock
-    private GameDataProxy gameDataProxy;
-
-    @Mock
-    private BuildingToModelConverter buildingToModelConverter;
-
-    @Mock
-    private ConstructionToModelConverter constructionToModelConverter;
-
-    @Mock
-    private SurfaceToResponseConverter surfaceToResponseConverter;
-
-    @Mock
-    private BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
-
-    @Mock
-    private QueueItemToResponseConverter queueItemToResponseConverter;
-
-    @Mock
-    private WsMessageSender messageSender;
-
-    @Mock
     private ConstructionProcessFactory constructionProcessFactory;
 
     @Mock
-    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
+    private SyncCacheFactory syncCacheFactory;
 
     @InjectMocks
     private ConstructNewBuildingService underTest;
@@ -142,37 +105,16 @@ public class ConstructNewBuildingServiceTest {
     private ConstructionRequirements constructionRequirements;
 
     @Mock
-    private BuildingModel buildingModel;
-
-    @Mock
-    private ConstructionModel constructionModel;
-
-    @Mock
-    private SurfaceResponse surfaceResponse;
-
-    @Mock
-    private QueueItem queueItem;
-
-    @Mock
-    private QueueResponse queueResponse;
-
-    @Mock
     private ConstructionProcess constructionProcess;
 
     @Mock
     private Processes processes;
 
     @Mock
-    private ProcessModel processModel;
-
-    @Mock
-    private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
-
-    @Mock
     private EventLoop eventLoop;
 
     @Mock
-    private ExecutionResult<SurfaceResponse> executionResult;
+    private ExecutionResult<Void> executionResult;
 
     @Mock
     private Surfaces surfaces;
@@ -186,8 +128,8 @@ public class ConstructNewBuildingServiceTest {
     @Mock
     private Planet planet;
 
-    @Captor
-    private ArgumentCaptor<Callable<SurfaceResponse>> argumentCaptor;
+    @Mock
+    private SyncCache syncCache;
 
     @Test
     public void invalidDataId() {
@@ -264,42 +206,30 @@ public class ConstructNewBuildingServiceTest {
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
         given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
-        given(game.getGameId()).willReturn(GAME_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(buildingToModelConverter.convert(GAME_ID, building)).willReturn(buildingModel);
-        given(constructionToModelConverter.convert(GAME_ID, construction)).willReturn(constructionModel);
-        given(surfaceToResponseConverter.convert(gameData, surface)).willReturn(surfaceResponse);
-        given(buildingConstructionToQueueItemConverter.convert(gameData, construction)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(gameData, PLANET_ID)).willReturn(CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
         given(game.getEventLoop()).willReturn(eventLoop);
-        //noinspection unchecked
-        given(eventLoop.processWithResponseAndWait(any(Callable.class))).willReturn(executionResult);
-        given(executionResult.getOrThrow()).willReturn(surfaceResponse);
+        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
 
         given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
-        given(constructionProcess.toModel()).willReturn(processModel);
 
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(planet.getOwner()).willReturn(USER_ID);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
 
-        SurfaceResponse result = underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
+        underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
 
-        assertThat(result).isEqualTo(surfaceResponse);
-
-        verify(eventLoop).processWithResponseAndWait(argumentCaptor.capture());
-        SurfaceResponse executionResponse = argumentCaptor.getValue()
-            .call();
-        assertThat(executionResponse).isEqualTo(surfaceResponse);
+        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        argumentCaptor.getValue()
+            .run();
 
         verify(constructions).add(construction);
         verify(buildings).add(building);
-        verify(resourceAllocationService).processResourceRequirements(gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
-        verify(gameDataProxy).saveItem(buildingModel, constructionModel, processModel);
-        verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
-        verify(messageSender).planetBuildingDetailsModified(USER_ID, PLANET_ID, CollectionUtils.singleValueMap(DATA_ID, planetBuildingOverviewResponse));
+        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(processes).add(constructionProcess);
+        verify(syncCache).constructionCreated(USER_ID, PLANET_ID, construction, surface, constructionProcess);
+        verify(executionResult).getOrThrow();
     }
 }

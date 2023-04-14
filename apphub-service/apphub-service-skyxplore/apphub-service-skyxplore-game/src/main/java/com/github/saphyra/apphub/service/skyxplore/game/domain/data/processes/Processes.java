@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
