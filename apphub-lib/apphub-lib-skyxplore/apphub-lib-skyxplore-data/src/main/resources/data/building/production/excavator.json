@@ -45,9 +45,9 @@
       "placed": [
         "mountain"
       ],
-      "maxBatchSize": 1,
+      "maxBatchSize": 1000,
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
+        "requiredWorkPoints": 10,
         "requiredResources": {
           "energy": 1
         }

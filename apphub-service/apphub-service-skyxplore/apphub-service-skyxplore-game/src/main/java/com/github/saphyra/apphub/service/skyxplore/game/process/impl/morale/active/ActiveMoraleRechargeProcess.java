@@ -20,7 +20,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.Rest;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.morale.rest.RestFactory;
@@ -158,8 +158,8 @@ public class ActiveMoraleRechargeProcess implements Process {
         gameData.getCitizenAllocations()
             .add(citizenAllocation);
 
-        CitizenAllocationModel citizenAllocationModel = applicationContextProxy.getBean(CitizenAllocationToModelConverter.class)
-            .convert(gameData.getGameId(), citizenAllocation);
+        CitizenAllocationModel citizenAllocationModel = applicationContextProxy.getBean(CitizenAllocationConverter.class)
+            .toModel(gameData.getGameId(), citizenAllocation);
         syncCache.saveGameItem(citizenAllocationModel);
     }
 
@@ -175,7 +175,7 @@ public class ActiveMoraleRechargeProcess implements Process {
             .findByCitizenIdValidated(citizen.getCitizenId());
 
         gameData.getCitizenAllocations()
-                .deleteByProcessId(processId);
+                .remove(citizenAllocation);
         syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
 
         GameItem citizenModel = applicationContextProxy.getBean(CitizenConverter.class)

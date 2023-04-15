@@ -20,10 +20,6 @@ public class CitizenAllocations extends Vector<CitizenAllocation> {
             .findAny();
     }
 
-    public void deleteByProcessId(UUID processId) {
-        removeIf(citizenAllocation -> citizenAllocation.getProcessId().equals(processId));
-    }
-
     public CitizenAllocation findByCitizenIdValidated(UUID citizenId) {
         return findByCitizenId(citizenId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Citizen not found by citizenId " + citizenId));

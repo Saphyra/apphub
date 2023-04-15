@@ -12,8 +12,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
@@ -101,7 +101,7 @@ public class ConstructNewBuildingService {
                     .getBuildings()
                     .add(building);
 
-                ConstructionProcess constructionProcess = constructionProcessFactory.create(game.getData(), planetId, building, construction);
+                ConstructionProcess constructionProcess = constructionProcessFactory.create(game.getData(), planetId, construction.getConstructionId());
 
                 game.getData()
                     .getProcesses()

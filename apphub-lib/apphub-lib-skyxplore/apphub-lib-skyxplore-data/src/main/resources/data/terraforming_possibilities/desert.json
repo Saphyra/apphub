@@ -2,7 +2,7 @@
   {
     "surfaceType": "concrete",
     "constructionRequirements": {
-      "requiredWorkPoints": 1000,
+      "requiredWorkPoints": 10000,
       "parallelWorkers": 2,
       "requiredResources": {
         "stone": 200,

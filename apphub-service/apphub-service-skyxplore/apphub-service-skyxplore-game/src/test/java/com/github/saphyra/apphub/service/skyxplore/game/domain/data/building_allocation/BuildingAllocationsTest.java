@@ -43,18 +43,6 @@ class BuildingAllocationsTest {
     }
 
     @Test
-    void deleteByProcessId() {
-        given(buildingAllocation1.getProcessId()).willReturn(PROCESS_ID);
-        given(buildingAllocation2.getProcessId()).willReturn(UUID.randomUUID());
-
-        underTest.addAll(List.of(buildingAllocation1, buildingAllocation2));
-
-        underTest.deleteByProcessId(PROCESS_ID);
-
-        assertThat(underTest).containsExactly(buildingAllocation2);
-    }
-
-    @Test
     void getByBuildingId() {
         given(buildingAllocation1.getBuildingId()).willReturn(BUILDING_ID);
         given(buildingAllocation2.getBuildingId()).willReturn(UUID.randomUUID());

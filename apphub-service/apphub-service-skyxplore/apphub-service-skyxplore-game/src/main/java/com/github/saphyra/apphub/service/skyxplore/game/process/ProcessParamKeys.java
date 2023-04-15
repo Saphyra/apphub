@@ -8,7 +8,6 @@ public class ProcessParamKeys {
     public static final String REQUEST_WORK_PROCESS_TYPE = "requestWorkProcessType";
     public static final String TARGET_ID = "targetId";
     public static final String COMPLETED_WORK_POINTS = "completedWorkPoints";
-    public static final String CYCLE = "cycle";
     public static final String RESERVED_STORAGE_ID = "reservedStorageId";
     public static final String ALLOCATED_RESOURCE_ID = "allocatedResourceId";
     public static final String AMOUNT = "amount";

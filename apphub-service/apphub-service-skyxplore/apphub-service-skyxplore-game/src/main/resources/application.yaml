@@ -46,11 +46,11 @@ game:
         spawnRate: 2
         optional: true
   citizen:
-    workPointsPerSeconds: 100
+    workPointsPerTick: 100
     maxWorkPointsBatch: 1000
     morale:
-      max: 1600
-      workEfficiencyDropUnder: 800
+      max: 10000
+      workEfficiencyDropUnder: 5000
       minEfficiency: 0.25
       moralePerWorkPoints: 1
       regenPerSecond: 50

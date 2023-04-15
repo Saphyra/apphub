@@ -21,8 +21,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
@@ -211,7 +211,7 @@ public class ConstructNewBuildingServiceTest {
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
 
-        given(constructionProcessFactory.create(gameData, PLANET_ID, building, construction)).willReturn(constructionProcess);
+        given(constructionProcessFactory.create(gameData, PLANET_ID, CONSTRUCTION_ID)).willReturn(constructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
 
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));

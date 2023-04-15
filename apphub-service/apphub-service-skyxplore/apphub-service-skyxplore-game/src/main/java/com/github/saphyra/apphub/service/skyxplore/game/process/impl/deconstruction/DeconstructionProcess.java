@@ -11,7 +11,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.request_work.RequestWorkProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,7 +70,7 @@ public class DeconstructionProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        List<Process> workProcesses = gameData.getProcesses().getByExternalReferenceAndType(processId, ProcessType.REQUEST_WORK);
+        List<Process> workProcesses = gameData.getProcesses().getByExternalReferenceAndType(processId, ProcessType.WORK);
         if (workProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
             applicationContextProxy.getBean(FinishDeconstructionService.class)
                 .finishDeconstruction(gameData, location, syncCache, deconstruction);
@@ -87,13 +88,13 @@ public class DeconstructionProcess implements Process {
     }
 
     private void createRequestWorkProcesses(SyncCache syncCache) {
-        List<RequestWorkProcess> requestWorkProcesses = applicationContextProxy.getBean(RequestWorkProcessFactoryForDeconstruction.class)
-            .createRequestWorkProcesses(gameData, location, processId, deconstruction.getDeconstructionId());
+        List<WorkProcess> workProcesses = applicationContextProxy.getBean(WorkProcessFactory.class)
+            .createForDeconstruction(gameData, processId, deconstruction.getDeconstructionId(), location);
 
         gameData.getProcesses()
-            .addAll(requestWorkProcesses);
-        requestWorkProcesses.stream()
-            .map(RequestWorkProcess::toModel)
+            .addAll(workProcesses);
+        workProcesses.stream()
+            .map(WorkProcess::toModel)
             .forEach(syncCache::saveGameItem);
     }
 

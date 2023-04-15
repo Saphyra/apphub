@@ -13,10 +13,6 @@ public class BuildingAllocations extends Vector<BuildingAllocation> {
             .findAny();
     }
 
-    public void deleteByProcessId(UUID processId) {
-        removeIf(buildingAllocation -> buildingAllocation.getProcessId().equals(processId));
-    }
-
     public List<BuildingAllocation> getByBuildingId(UUID buildingId) {
         return stream()
             .filter(buildingAllocation -> buildingAllocation.getBuildingId().equals(buildingId))

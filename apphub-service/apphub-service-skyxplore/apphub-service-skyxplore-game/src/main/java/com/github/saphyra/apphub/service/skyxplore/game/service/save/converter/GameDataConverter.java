@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.DurabilityToModelConverter;
@@ -42,8 +42,8 @@ class GameDataConverter {
     private final CitizenConverter citizenConverter;
     private final SkillConverter skillConverter;
     private final DurabilityToModelConverter durabilityToModelConverter;
-    private final BuildingAllocationToModelConverter buildingAllocationToModelConverter;
-    private final CitizenAllocationToModelConverter citizenAllocationToModelConverter;
+    private final BuildingAllocationConverter buildingAllocationConverter;
+    private final CitizenAllocationConverter citizenAllocationConverter;
 
     public List<GameItem> convert(UUID gameId, GameData data) {
         List<GameItem> result = new ArrayList<>();
@@ -73,8 +73,8 @@ class GameDataConverter {
 
         //Process
         result.addAll(data.getProcesses().stream().map(Process::toModel).toList());
-        result.addAll(buildingAllocationToModelConverter.convert(gameId, data.getBuildingAllocations()));
-        result.addAll(citizenAllocationToModelConverter.convert(gameId, data.getCitizenAllocations()));
+        result.addAll(buildingAllocationConverter.toModel(gameId, data.getBuildingAllocations()));
+        result.addAll(citizenAllocationConverter.toModel(gameId, data.getCitizenAllocations()));
 
         return result;
     }

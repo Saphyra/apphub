@@ -16,7 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
@@ -60,6 +60,7 @@ public class SyncCache {
         gameItemCache.process();
     }
 
+    //Citizen
     public void citizenModified(UUID recipient, Citizen citizen, Skill skill) {
         saveGameItem(context.getSkillConverter().toModel(game.getGameId(), skill));
 
@@ -89,6 +90,7 @@ public class SyncCache {
         messageCache.put(key, () -> WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_GAME_PLANET_CITIZEN_MODIFIED, recipient, context.getCitizenConverter().toResponse(game.getData(), citizen)));
     }
 
+    //Terraformation
     public void terraformationFinished(UUID recipient, UUID location, Construction terraformation, Surface surface) {
         deleteGameItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
 
@@ -97,9 +99,38 @@ public class SyncCache {
         buildingDetailsModified(recipient, location);
     }
 
+    public void terraformationUpdated(UUID recipient, UUID location, Construction terraformation, Surface surface) {
+        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
+
+        surfaceModified(recipient, location, surface);
+        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
+    }
+
+    public void terraformationCancelled(UUID recipient, UUID location, UUID constructionId, Surface surface) {
+        planetQueueItemDeleted(recipient, location, constructionId);
+        buildingDetailsModified(recipient, location);
+        surfaceModified(recipient, location, surface);
+    }
+
+    public void terraformationCreated(UUID recipient, UUID location, Construction terraformation, Surface surface, TerraformationProcess process) {
+        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
+        saveGameItem(process.toModel());
+
+        surfaceModified(recipient, location, surface);
+        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
+        buildingDetailsModified(recipient, location);
+    }
+
+    public void terraformationModified(UUID recipient, UUID location, Construction terraformation, Surface surface) {
+        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
+
+        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
+    }
+
+    //Planet overview
     private void buildingDetailsModified(UUID recipient, UUID location) {
         WsMessageKey key = context.getMessageKeyFactory()
-            .create(recipient, WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED, null, PLANET_PAGE_TYPE_GROUP, location);
+            .create(recipient, WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED, location, PLANET_PAGE_TYPE_GROUP, location);
 
         messageCache.put(
             key,
@@ -122,18 +153,16 @@ public class SyncCache {
         messageCache.put(key, () -> WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, recipient, surfaceConverter.toResponse(game.getData(), surface)));
     }
 
+    //Queue item
     private void planetQueueItemDeleted(UUID recipient, UUID location, UUID queueItemId) {
         WsMessageKey key = context.getMessageKeyFactory()
             .create(recipient, WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED, queueItemId, PLANET_PAGE_TYPE_GROUP, location);
 
         messageCache.put(key, () -> WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED, recipient, queueItemId));
-    }
 
-    public void terraformationUpdated(UUID recipient, UUID location, Construction terraformation, Surface surface) {
-        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
-
-        surfaceModified(recipient, location, surface);
-        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
+        WsMessageKey modifiedKey = context.getMessageKeyFactory()
+            .create(recipient, WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED, queueItemId, PLANET_PAGE_TYPE_GROUP, location);
+        messageCache.remove(modifiedKey);
     }
 
     private void queueItemModified(UUID recipient, UUID location, QueueItem queueItem) {
@@ -150,6 +179,7 @@ public class SyncCache {
         );
     }
 
+    //Construction
     public void constructionFinished(UUID recipient, UUID location, Construction construction, Building building, Surface surface) {
         deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
         saveGameItem(context.getBuildingConverter().toModel(game.getGameId(), building));
@@ -163,30 +193,6 @@ public class SyncCache {
         saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), construction));
         surfaceModified(recipient, location, surface);
         queueItemModified(recipient, location, context.getBuildingConstructionToQueueItemConverter().convert(game.getData(), construction));
-    }
-
-    public void terraformationCancelled(UUID recipient, UUID location, UUID constructionId, Surface surface) {
-        planetQueueItemDeleted(recipient, location, constructionId);
-        buildingDetailsModified(recipient, location);
-        surfaceModified(recipient, location, surface);
-    }
-
-    public void deconstructionFinished(UUID recipient, UUID location, Deconstruction deconstruction, Building building, Surface surface) {
-        gameItemCache.delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
-        gameItemCache.delete(building.getBuildingId(), GameItemType.BUILDING);
-
-        planetQueueItemDeleted(recipient, location, deconstruction.getDeconstructionId());
-        surfaceModified(recipient, location, surface);
-        buildingDetailsModified(recipient, location);
-    }
-
-    public void terraformationCreated(UUID recipient, UUID location, Construction terraformation, Surface surface, TerraformationProcess process) {
-        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
-        saveGameItem(process.toModel());
-
-        surfaceModified(recipient, location, surface);
-        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
-        buildingDetailsModified(recipient, location);
     }
 
     public void constructionModified(UUID recipient, UUID location, Construction construction) {
@@ -203,19 +209,29 @@ public class SyncCache {
         surfaceModified(recipient, location, surface);
     }
 
-    public void deconstructionCancelled(UUID recipient, UUID location, UUID deconstructionId, Surface surface) {
-        deleteGameItem(deconstructionId, GameItemType.DECONSTRUCTION);
-
-        planetQueueItemDeleted(recipient, location, deconstructionId);
-        buildingDetailsModified(recipient, location);
-        surfaceModified(recipient, location, surface);
-    }
-
     public void constructionCreated(UUID recipient, UUID location, Construction construction, Surface surface, ConstructionProcess process) {
         saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), construction));
         saveGameItem(process.toModel());
 
         queueItemModified(recipient, location, context.getBuildingConstructionToQueueItemConverter().convert(game.getData(), construction));
+        buildingDetailsModified(recipient, location);
+        surfaceModified(recipient, location, surface);
+    }
+
+    //Deconstruction
+    public void deconstructionFinished(UUID recipient, UUID location, Deconstruction deconstruction, Building building, Surface surface) {
+        gameItemCache.delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
+        gameItemCache.delete(building.getBuildingId(), GameItemType.BUILDING);
+
+        planetQueueItemDeleted(recipient, location, deconstruction.getDeconstructionId());
+        surfaceModified(recipient, location, surface);
+        buildingDetailsModified(recipient, location);
+    }
+
+    public void deconstructionCancelled(UUID recipient, UUID location, UUID deconstructionId, Surface surface) {
+        deleteGameItem(deconstructionId, GameItemType.DECONSTRUCTION);
+
+        planetQueueItemDeleted(recipient, location, deconstructionId);
         buildingDetailsModified(recipient, location);
         surfaceModified(recipient, location, surface);
     }
@@ -233,12 +249,6 @@ public class SyncCache {
         queueItemModified(recipient, location, context.getBuildingDeconstructionToQueueItemConverter().convert(game.getData(), deconstruction));
     }
 
-    public void terraformationModified(UUID recipient, UUID location, Construction terraformation, Surface surface) {
-        saveGameItem(context.getConstructionConverter().toModel(game.getGameId(), terraformation));
-
-        queueItemModified(recipient, location, context.getTerraformationToQueueItemConverter().convert(terraformation, surface));
-    }
-
     public void deconstructionCreated(UUID recipient, UUID location, Deconstruction deconstruction, Surface surface, DeconstructionProcess process) {
         saveGameItem(context.getDeconstructionConverter().toModel(game.getGameId(), deconstruction));
         saveGameItem(process.toModel());
@@ -248,6 +258,7 @@ public class SyncCache {
         surfaceModified(recipient, location, surface);
     }
 
+    //Storage
     public void allocatedResourceResolved(UUID recipient, UUID location, AllocatedResource allocatedResource, StoredResource storedResource) {
         saveGameItem(context.getAllocatedResourceConverter().toModel(game.getGameId(), allocatedResource));
         saveGameItem(context.getStoredResourceConverter().toModel(game.getGameId(), storedResource));
@@ -260,7 +271,7 @@ public class SyncCache {
             .create(
                 recipient,
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED,
-                null,
+                location,
                 PLANET_PAGE_TYPE_GROUP,
                 location
             );

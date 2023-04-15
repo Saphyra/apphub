@@ -49,7 +49,7 @@ public class ProcessesTest {
 
     @Test
     public void findByExternalReferenceAndTypeValidated_notFound() {
-        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.REQUEST_WORK));
+        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.WORK));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
