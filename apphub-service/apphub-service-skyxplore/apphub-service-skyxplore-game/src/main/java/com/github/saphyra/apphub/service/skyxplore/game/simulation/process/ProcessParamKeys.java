@@ -11,4 +11,6 @@ public class ProcessParamKeys {
     public static final String RESERVED_STORAGE_ID = "reservedStorageId";
     public static final String ALLOCATED_RESOURCE_ID = "allocatedResourceId";
     public static final String AMOUNT = "amount";
+    public static final String REST_FOR_TICKS = "restForTicks";
+    public static final String RESTED_FOR_TICKS = "restedForTicks";
 }

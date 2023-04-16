@@ -8,7 +8,9 @@ public class CitizenMoraleProperties {
     private int workEfficiencyDropUnder;
     private double minEfficiency;
     private double moralePerWorkPoints;
-    private int regenPerSecond;
-    private int minRestSeconds;
-    private int maxRestSeconds;
+    private int regenPerTick;
+    private int minRestTicks;
+    private int restingMoraleLimit;
+    private int exhaustedMorale;
+    private int exhaustedRestTicks;
 }

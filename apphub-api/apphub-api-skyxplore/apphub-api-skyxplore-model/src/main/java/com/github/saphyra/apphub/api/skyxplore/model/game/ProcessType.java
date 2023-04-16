@@ -7,6 +7,5 @@ public enum ProcessType {
     PRODUCTION_ORDER,
     WORK,
     STORAGE_SETTING,
-    PASSIVE_MORALE_RECHARGE,
-    ACTIVE_MORALE_RECHARGE
+    REST,
 }

@@ -53,9 +53,11 @@ game:
       workEfficiencyDropUnder: 5000
       minEfficiency: 0.25
       moralePerWorkPoints: 1
-      regenPerSecond: 50
-      minRestSeconds: 15
-      maxRestSeconds: 30
+      regenPerTick: 50
+      minRestTicks: 10
+      restingMoraleLimit: 9000 #Citizens can go resting automatically below this value
+      exhaustedMorale: 1000
+      exhaustedRestTicks: 100
     skill:
       experiencePerLevel: 1000
       skillLevelMultiplier: 0.1
