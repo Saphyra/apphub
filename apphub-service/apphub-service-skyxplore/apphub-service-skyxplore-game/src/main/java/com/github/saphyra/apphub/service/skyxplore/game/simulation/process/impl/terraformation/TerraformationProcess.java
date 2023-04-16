@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -24,8 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
-public class ConstructionProcess implements Process {
+public class TerraformationProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
@@ -36,34 +35,33 @@ public class ConstructionProcess implements Process {
 
     @NonNull
     private final GameData gameData;
+    @NonNull
+    private final UUID location;
 
     @NonNull
-    private final UUID constructionId;
-
-    @NonNull
-    private UUID location;
+    private final UUID terraformationId; //constructionId
 
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
     public UUID getExternalReference() {
-        return constructionId;
+        return terraformationId;
     }
 
-    private Construction findConstruction() {
+    private Construction findTerraformation() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByConstructionIdValidated(terraformationId);
     }
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findConstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findTerraformation().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public ProcessType getType() {
-        return ProcessType.CONSTRUCTION;
+        return ProcessType.TERRAFORMATION;
     }
 
     @Override
@@ -72,22 +70,21 @@ public class ConstructionProcess implements Process {
 
         if (status == ProcessStatus.CREATED) {
             applicationContextProxy.getBean(ProductionOrderService.class)
-                .createProductionOrdersForReservedStorages(syncCache, gameData, processId, constructionId);
+                .createProductionOrdersForReservedStorages(syncCache, gameData, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        ConstructionProcessConditions conditions = applicationContextProxy.getBean(ConstructionProcessConditions.class);
+        TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
 
         if (!conditions.productionOrdersComplete(gameData, processId)) {
             log.info("Waiting for ProductionOrderProcesses to finish...");
             return;
         }
 
-        ConstructionProcessHelper helper = applicationContextProxy.getBean(ConstructionProcessHelper.class);
-
+        TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(syncCache, gameData, processId, constructionId);
+            helper.startWork(syncCache, gameData, processId, terraformationId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -95,7 +92,7 @@ public class ConstructionProcess implements Process {
             return;
         }
 
-        helper.finishConstruction(syncCache, gameData, constructionId);
+        helper.finishTerraformation(syncCache, gameData, terraformationId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 

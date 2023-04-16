@@ -76,11 +76,6 @@ public class CollectionUtils {
         return result;
     }
 
-    @SafeVarargs
-    public static <T> List<T> asList(T... items) {
-        return new ArrayList<>(Arrays.asList(items));
-    }
-
     public static <K, V, R> OptionalMap<K, V> mapToOptionalMap(List<R> list, Function<R, K> keyMapper, Function<R, V> valueMapper) {
         Map<K, V> map = list.stream()
             .collect(Collectors.toMap(keyMapper, valueMapper));

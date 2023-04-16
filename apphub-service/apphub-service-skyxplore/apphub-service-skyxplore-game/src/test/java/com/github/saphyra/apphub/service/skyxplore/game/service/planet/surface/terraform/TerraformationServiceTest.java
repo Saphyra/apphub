@@ -21,9 +21,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -212,7 +212,7 @@ public class TerraformationServiceTest {
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(terraformationProcessFactory.create(gameData, PLANET_ID, surface, terraformation)).willReturn(terraformationProcess);
+        given(terraformationProcessFactory.create(gameData, PLANET_ID, terraformation)).willReturn(terraformationProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);

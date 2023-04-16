@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class ConstructionProcessConditions {
+class TerraformationProcessConditions {
     boolean productionOrdersComplete(GameData gameData, UUID processId) {
         return gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER)
@@ -21,13 +21,13 @@ class ConstructionProcessConditions {
             .allMatch(process -> process.getStatus() == ProcessStatus.DONE);
     }
 
-    public boolean hasWorkProcesses(GameData gameData, UUID processId) {
+    boolean hasWorkProcesses(GameData gameData, UUID processId) {
         return !gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .isEmpty();
     }
 
-    public boolean workFinished(GameData gameData, UUID processId) {
+    boolean workFinished(GameData gameData, UUID processId) {
         return gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .stream()

@@ -13,8 +13,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.terraformation.TerraformationProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -90,7 +90,7 @@ class TerraformationService {
                 gameData.getConstructions()
                     .add(terraformation);
 
-                TerraformationProcess terraformationProcess = terraformationProcessFactory.create(gameData, planetId, surface, terraformation);
+                TerraformationProcess terraformationProcess = terraformationProcessFactory.create(gameData, planetId, terraformation);
 
                 gameData.getProcesses()
                     .add(terraformationProcess);

@@ -57,7 +57,7 @@ class AiServiceTest {
     @Test
     void removeAi() {
         given(lobbyDao.findByHostValidated(USER_ID)).willReturn(lobby);
-        List<AiPlayer> ais = CollectionUtils.asList(aiPlayer);
+        List<AiPlayer> ais = CollectionUtils.toList(aiPlayer);
         given(lobby.getAis()).willReturn(ais);
         given(aiPlayer.getUserId()).willReturn(AI_USER_ID);
         given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));

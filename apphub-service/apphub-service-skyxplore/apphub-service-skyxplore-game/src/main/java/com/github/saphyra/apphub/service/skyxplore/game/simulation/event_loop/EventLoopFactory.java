@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.event_loop;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import lombok.RequiredArgsConstructor;
