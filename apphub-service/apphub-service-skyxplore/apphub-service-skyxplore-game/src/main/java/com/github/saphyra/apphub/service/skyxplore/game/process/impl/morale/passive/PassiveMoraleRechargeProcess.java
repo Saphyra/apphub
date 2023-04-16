@@ -158,6 +158,11 @@ public class PassiveMoraleRechargeProcess implements Process {
     }
 
     @Override
+    public void cleanup(SyncCache syncCache) {
+
+    }
+
+    @Override
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);

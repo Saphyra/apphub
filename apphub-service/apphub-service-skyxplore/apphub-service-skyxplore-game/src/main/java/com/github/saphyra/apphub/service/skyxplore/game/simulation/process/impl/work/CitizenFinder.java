@@ -21,8 +21,11 @@ class CitizenFinder {
         return gameData.getCitizens()
             .getByLocation(location)
             .stream()
+            .peek(citizen -> log.debug("Citizen at {}: {}", location, citizen))
             .filter(citizen -> gameData.getCitizenAllocations().findByCitizenId(citizen.getCitizenId()).isEmpty())
+            .peek(citizen -> log.debug("Unallocated Citizen at {}: {}", location, citizen))
             .filter(citizen -> citizen.getMorale() >= citizenEfficiencyCalculator.calculateMoraleRequirement(gameData, citizen, requiredSkill, requestedWorkPoints)) //TODO fix condition - Citizen should have enough morale for the task, and the estimated work time must not exceed the maximum
+            .peek(citizen -> log.debug("Relaxed Citizen at {}: {}", location, citizen))
             .max(Comparator.comparingDouble(citizen -> citizenEfficiencyCalculator.calculateEfficiency(gameData, citizen, requiredSkill)))
             .map(Citizen::getCitizenId);
     }

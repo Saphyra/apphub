@@ -7,7 +7,7 @@ abandonedGameExpirationSeconds: 300
 game:
   tickTimeMillis: 100
   deconstruction:
-    requiredWorkPoints: 1000
+    requiredWorkPoints: 20000
     parallelWorkers: 1
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100

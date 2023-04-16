@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl.deconstruction;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -11,8 +11,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +18,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,7 +34,7 @@ public class DeconstructionProcess implements Process {
     private volatile ProcessStatus status = ProcessStatus.CREATED;
 
     @NonNull
-    private final Deconstruction deconstruction;
+    private final UUID deconstructionId;
     @NonNull
     private final GameData gameData;
     @NonNull
@@ -47,12 +44,17 @@ public class DeconstructionProcess implements Process {
 
     @Override
     public UUID getExternalReference() {
-        return deconstruction.getDeconstructionId();
+        return deconstructionId;
+    }
+
+    private Deconstruction findDeconstruction() {
+        return gameData.getDeconstructions()
+            .findByDeconstructionId(deconstructionId);
     }
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * deconstruction.getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findDeconstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -64,38 +66,27 @@ public class DeconstructionProcess implements Process {
     public void work(SyncCache syncCache) {
         log.info("Working on {}", this);
 
+        DeconstructionProcessConditions conditions = applicationContextProxy.getBean(DeconstructionProcessConditions.class);
+        DeconstructionProcessHelper helper = applicationContextProxy.getBean(DeconstructionProcessHelper.class);
+
         if (status == ProcessStatus.CREATED) {
-            createRequestWorkProcesses(syncCache);
+            if (conditions.buildingUtilized(gameData, deconstructionId)) {
+                log.info("Building is still utilized.");
+                return;
+            }
+
+            helper.startWork(syncCache, gameData, processId, location, deconstructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        List<Process> workProcesses = gameData.getProcesses().getByExternalReferenceAndType(processId, ProcessType.WORK);
-        if (workProcesses.stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
-            applicationContextProxy.getBean(FinishDeconstructionService.class)
-                .finishDeconstruction(gameData, location, syncCache, deconstruction);
-
-            status = ProcessStatus.DONE;
-        } else {
-            log.info("Waiting for RequestWorkProcesses to finish...");
+        if (!conditions.workFinished(gameData, processId)) {
+            log.info("Work in progress...");
+            return;
         }
 
-        if (status == ProcessStatus.DONE) {
-            workProcesses.forEach(process -> process.cleanup(syncCache));
-
-            status = ProcessStatus.READY_TO_DELETE;
-        }
-    }
-
-    private void createRequestWorkProcesses(SyncCache syncCache) {
-        List<WorkProcess> workProcesses = applicationContextProxy.getBean(WorkProcessFactory.class)
-            .createForDeconstruction(gameData, processId, deconstruction.getDeconstructionId(), location);
-
-        gameData.getProcesses()
-            .addAll(workProcesses);
-        workProcesses.stream()
-            .map(WorkProcess::toModel)
-            .forEach(syncCache::saveGameItem);
+        helper.finishDeconstruction(syncCache, gameData, deconstructionId);
+        status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override
@@ -107,6 +98,13 @@ public class DeconstructionProcess implements Process {
         status = ProcessStatus.READY_TO_DELETE;
 
         syncCache.saveGameItem(toModel());
+    }
+
+    @Override
+    public void cleanup(SyncCache syncCache) {
+        gameData.getProcesses()
+            .getByExternalReference(processId)
+            .forEach(process -> process.cleanup(syncCache));
     }
 
     @Override
