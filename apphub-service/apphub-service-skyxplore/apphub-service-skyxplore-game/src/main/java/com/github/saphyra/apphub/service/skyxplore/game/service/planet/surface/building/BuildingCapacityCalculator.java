@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

@@ -70,7 +70,7 @@ public class CancelDeconstructionService {
                     game.getData()
                         .getProcesses()
                         .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCTION)
-                        .cancel(syncCache);
+                        .cleanup(syncCache);
 
                     game.getData()
                         .getDeconstructions()

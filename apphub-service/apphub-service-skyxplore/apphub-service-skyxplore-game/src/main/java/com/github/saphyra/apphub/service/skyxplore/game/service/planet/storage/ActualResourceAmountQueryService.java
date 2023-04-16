@@ -37,11 +37,16 @@ public class ActualResourceAmountQueryService {
 
     public int getActualAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
+        log.info("DataIds for StorageType {}: {}", storageType, dataIdsByStorageType);
+
+        log.info("StoredResources: {}", gameData.getStoredResources());
 
         return gameData.getStoredResources()
             .getByLocation(location)
             .stream()
+            .peek(storedResource -> log.info("Found: {}", storedResource))
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
+            .peek(storedResource -> log.info("For StorageType {}: {}", storedResource, storedResource))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }

@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +85,7 @@ public class CancelConstructionService {
             .processWithWait(() -> {
                     gameData.getProcesses()
                         .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
-                        .cancel(syncCache);
+                        .cleanup(syncCache);
 
                     gameData.getConstructions()
                         .deleteByConstructionId(construction.getConstructionId());
@@ -98,6 +98,7 @@ public class CancelConstructionService {
                         gameData.getBuildings()
                             .deleteByBuildingId(building.getBuildingId());
                         syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
+                        syncCache.buildingDetailsModified(planet.getOwner(), planet.getPlanetId());
                     }
                 },
                 syncCache

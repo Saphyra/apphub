@@ -22,6 +22,14 @@ public class ReservedStorages extends Vector<ReservedStorage> {
             .findAny();
     }
 
+    //TODO unit test
+    public ReservedStorage findByExternalReferenceValidated(UUID externalReference) {
+        return getByExternalReference(externalReference)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found by externalReference " + externalReference));
+    }
+
     public List<ReservedStorage> getByExternalReference(UUID externalReference) {
         return stream()
             .filter(reservedStorage -> reservedStorage.getExternalReference().equals(externalReference))

@@ -30,9 +30,6 @@ public interface Process extends Comparable<Process> {
 
     void work(SyncCache syncCache);
 
-    void cancel(SyncCache syncCache);
-
-
     void cleanup(SyncCache syncCache);
 
     ProcessModel toModel();

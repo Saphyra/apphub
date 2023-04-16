@@ -11,8 +11,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
@@ -118,11 +118,6 @@ public class ProductionOrderProcess implements Process {
                 log.info("Waiting for RequestWorkProcesses to finish...");
             }
         }
-    }
-
-    @Override
-    public void cancel(SyncCache syncCache) {
-        cleanup(syncCache);
     }
 
     @Override

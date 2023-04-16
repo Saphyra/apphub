@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.springframework.stereotype.Component;
 

@@ -5,9 +5,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class StoredResourceLoader extends AutoLoader<StoredResourceModel, StoredResource> {
     public StoredResourceLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

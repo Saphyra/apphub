@@ -90,21 +90,14 @@ public class DeconstructionProcess implements Process {
     }
 
     @Override
-    public void cancel(SyncCache syncCache) {
-        gameData.getProcesses()
-            .getByExternalReference(processId)
-            .forEach(process -> process.cancel(syncCache));
-
-        status = ProcessStatus.READY_TO_DELETE;
-
-        syncCache.saveGameItem(toModel());
-    }
-
-    @Override
     public void cleanup(SyncCache syncCache) {
         gameData.getProcesses()
             .getByExternalReference(processId)
             .forEach(process -> process.cleanup(syncCache));
+
+        status = ProcessStatus.READY_TO_DELETE;
+
+        syncCache.saveGameItem(toModel());
     }
 
     @Override

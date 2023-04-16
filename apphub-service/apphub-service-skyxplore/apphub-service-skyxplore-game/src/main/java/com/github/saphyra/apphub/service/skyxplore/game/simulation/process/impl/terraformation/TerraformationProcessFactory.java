@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContex
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

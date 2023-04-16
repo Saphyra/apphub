@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

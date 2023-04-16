@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.BuildingCapacityCalculator;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.BuildingCapacityCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

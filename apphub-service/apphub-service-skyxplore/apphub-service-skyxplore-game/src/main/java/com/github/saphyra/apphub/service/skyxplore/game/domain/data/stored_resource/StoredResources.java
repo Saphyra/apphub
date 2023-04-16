@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,6 +19,15 @@ public class StoredResources extends Vector<StoredResource> {
                 .build());
     }
 
+    @Override
+    public boolean add(StoredResource storedResource) {
+        if (findByLocationAndDataId(storedResource.getLocation(), storedResource.getDataId()).isPresent()) {
+            throw new RuntimeException(String.format("StoredResource with dataId %s already exist at %s", storedResource.getDataId(), storedResource.getLocation()));
+        }
+
+        return super.add(storedResource);
+    }
+
     public Optional<StoredResource> findByLocationAndDataId(UUID location, String dataId) {
         return stream()
             .filter(storedResource -> storedResource.getLocation().equals(location))
@@ -28,5 +39,10 @@ public class StoredResources extends Vector<StoredResource> {
         return stream()
             .filter(storedResource -> storedResource.getLocation().equals(location))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

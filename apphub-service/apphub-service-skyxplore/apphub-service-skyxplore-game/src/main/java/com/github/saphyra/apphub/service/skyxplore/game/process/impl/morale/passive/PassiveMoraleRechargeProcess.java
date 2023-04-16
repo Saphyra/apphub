@@ -153,11 +153,6 @@ public class PassiveMoraleRechargeProcess implements Process {
     }
 
     @Override
-    public void cancel(SyncCache syncCache) {
-        throw new UnsupportedOperationException("PassiveMoraleRecharge process cannot be cancelled. (Or citizen will be very angry)");
-    }
-
-    @Override
     public void cleanup(SyncCache syncCache) {
 
     }

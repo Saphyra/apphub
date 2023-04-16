@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process.impl;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;

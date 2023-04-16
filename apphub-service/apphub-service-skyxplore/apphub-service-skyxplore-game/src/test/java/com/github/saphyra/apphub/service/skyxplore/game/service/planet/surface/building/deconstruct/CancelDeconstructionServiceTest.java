@@ -124,7 +124,7 @@ class CancelDeconstructionServiceTest {
             .run();
 
         verify(deconstructions).remove(deconstruction);
-        verify(process).cancel(syncCache);
+        verify(process).cleanup(syncCache);
         verify(executionResult).getOrThrow();
 
         verify(syncCache).deconstructionCancelled(USER_ID, PLANET_ID, DECONSTRUCTION_ID, surface);
@@ -163,7 +163,7 @@ class CancelDeconstructionServiceTest {
             .run();
 
         verify(deconstructions).remove(deconstruction);
-        verify(process).cancel(syncCache);
+        verify(process).cleanup(syncCache);
         verify(executionResult).getOrThrow();
 
         verify(syncCache).deconstructionCancelled(USER_ID, PLANET_ID, DECONSTRUCTION_ID, surface);

@@ -5,11 +5,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.storage_setting.StorageSettingProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -46,12 +45,6 @@ public class StorageSettingCreationService {
                         .getStorageSettings()
                         .add(storageSetting);
 
-                    Process process = storageSettingProcessFactory.create(game.getData(), planetId, storageSetting);
-                    syncCache.saveGameItem(process.toModel());
-
-                    game.getData()
-                        .getProcesses()
-                        .add(process);
                     syncCache.saveGameItem(storageSettingToModelConverter.convert(game.getGameId(), storageSetting));
 
                     return storageSettingToApiModelMapper.convert(storageSetting);

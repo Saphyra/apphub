@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.process;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.process;
 
 public class ProcessParamKeys {
     public static final String PRODUCER_BUILDING_DATA_ID = "producerBuildingDataId";

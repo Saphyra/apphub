@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -124,7 +124,7 @@ public class CancelTerraformationServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(process).cancel(syncCache);
+        verify(process).cleanup(syncCache);
         verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
@@ -160,7 +160,7 @@ public class CancelTerraformationServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(process).cancel(syncCache);
+        verify(process).cleanup(syncCache);
         verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);

@@ -128,7 +128,7 @@ public class SyncCache {
     }
 
     //Planet overview
-    private void buildingDetailsModified(UUID recipient, UUID location) {
+    public void buildingDetailsModified(UUID recipient, UUID location) {
         WsMessageKey key = context.getMessageKeyFactory()
             .create(recipient, WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED, location, PLANET_PAGE_TYPE_GROUP, location);
 

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_re
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.UseAllocatedResourceService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
@@ -69,7 +69,7 @@ class ProductionOrderProcessHelper {
 
         StoredResource storedResource = gameData.getStoredResources()
             .findByLocationAndDataId(location, reservedStorage.getDataId())
-            .orElseGet(() -> storedResourceFactory.create(location, reservedStorage.getDataId()));
+            .orElseGet(() -> storedResourceFactory.create(syncCache, gameData, location, reservedStorage.getDataId()));
 
         if (nonNull(allocatedResourceId)) {
             AllocatedResource allocatedResource = gameData.getAllocatedResources()

@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
@@ -106,11 +106,6 @@ public class WorkProcess implements Process {
             helper.releaseBuildingAndCitizen(syncCache, gameData, processId);
             status = ProcessStatus.DONE;
         }
-    }
-
-    @Override
-    public void cancel(SyncCache syncCache) {
-        cleanup(syncCache);
     }
 
     @Override

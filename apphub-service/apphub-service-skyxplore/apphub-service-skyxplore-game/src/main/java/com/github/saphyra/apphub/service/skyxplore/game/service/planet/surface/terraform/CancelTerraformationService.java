@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.AllocationRemovalService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
@@ -68,7 +68,7 @@ public class CancelTerraformationService {
                     game.getData()
                         .getProcesses()
                         .findByExternalReferenceAndTypeValidated(terraformation.getConstructionId(), ProcessType.TERRAFORMATION)
-                        .cancel(syncCache);
+                        .cleanup(syncCache);
 
                     game.getData()
                         .getConstructions()

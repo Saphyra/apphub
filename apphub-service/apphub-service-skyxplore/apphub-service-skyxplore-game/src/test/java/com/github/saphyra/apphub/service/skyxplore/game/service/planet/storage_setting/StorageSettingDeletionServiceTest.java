@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
@@ -64,6 +67,12 @@ public class StorageSettingDeletionServiceTest {
     @Mock
     private Process process;
 
+    @Mock
+    private StorageSettings storageSettings;
+
+    @Mock
+    private StorageSetting storageSetting;
+
     @Captor
     private ArgumentCaptor<Runnable> argumentCaptor;
 
@@ -71,6 +80,8 @@ public class StorageSettingDeletionServiceTest {
     public void deleteStorageSetting() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
         given(syncCacheFactory.create(game)).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
@@ -86,7 +97,9 @@ public class StorageSettingDeletionServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(process).cancel(syncCache);
+        verify(process).cleanup(syncCache);
         verify(executionResult).getOrThrow();
+        verify(storageSettings).remove(storageSetting);
+        verify(syncCache).deleteGameItem(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
     }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum TickTaskOrder {
     SATIETY_DECREASE(0),
+    STORAGE_SETTING(0),
     PROCESS_SCHEDULER(1000),
     PROCESS_DELETION(100000),
     ;

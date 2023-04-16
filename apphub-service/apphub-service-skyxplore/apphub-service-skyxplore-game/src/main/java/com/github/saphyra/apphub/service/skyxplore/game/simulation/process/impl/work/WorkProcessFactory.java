@@ -14,8 +14,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Decons
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.ProcessParamKeys;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
