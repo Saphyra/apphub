@@ -23,6 +23,6 @@ public class ReservedStorage {
     }
 
     public void decreaseAmount(int amount) {
-        this.amount += amount;
+        this.amount -= amount;
     }
 }
