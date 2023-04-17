@@ -46,7 +46,7 @@ public class Constants {
     //Etc
     public final int DEFAULT_PRIORITY = 5;
     public static final String DEFAULT_GAME_NAME = "game-name";
-    public static final int MAX_CITIZEN_MORALE = 1600;
+    public static final int MAX_CITIZEN_MORALE = 10000;
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";

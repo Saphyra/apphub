@@ -72,7 +72,7 @@ public class CancelTerraformationService {
 
                     game.getData()
                         .getConstructions()
-                        .deleteByConstructionId(terraformation.getConstructionId());
+                        .remove(terraformation);
 
                     gameDataProxy.deleteItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
 

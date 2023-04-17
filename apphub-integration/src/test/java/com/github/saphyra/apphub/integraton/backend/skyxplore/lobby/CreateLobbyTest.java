@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -38,6 +39,9 @@ public class CreateLobbyTest extends BackEndTest {
         //Create
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
         List<LobbyMemberResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
-        assertThat(lobbyMembers).isEmpty();
+        assertThat(lobbyMembers).hasSize(1);
+        assertThat(lobbyMembers.get(0).getUserId()).isEqualTo(userId1);
+        assertThat(lobbyMembers.get(0).getCharacterName()).isEqualTo(characterModel1.getName());
+        assertThat(lobbyMembers.get(0).getStatus()).isEqualTo(LobbyMemberStatus.NOT_READY);
     }
 }

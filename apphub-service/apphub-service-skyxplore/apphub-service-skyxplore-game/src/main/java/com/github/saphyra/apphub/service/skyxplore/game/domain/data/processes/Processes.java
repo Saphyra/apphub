@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
@@ -35,10 +36,14 @@ public class Processes extends Vector<Process> {
     }
 
     public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
+        return findByExternalReferenceAndType(externalReference, processType)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found with externalReference " + externalReference + " and processType " + processType));
+    }
+
+    public Optional<Process> findByExternalReferenceAndType(UUID externalReference, ProcessType processType) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == processType)
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found with externalReference " + externalReference + " and processType " + processType));
+            .findAny();
     }
 }

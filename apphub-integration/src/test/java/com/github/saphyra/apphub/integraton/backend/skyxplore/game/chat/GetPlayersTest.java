@@ -10,7 +10,8 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.InvitationMessage;
-import com.github.saphyra.apphub.integration.structure.skyxplore.ReadinessEvent;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
@@ -78,9 +79,9 @@ public class GetPlayersTest extends BackEndTest {
         lobbyWsClient2.send(readyEvent);
         lobbyWsClient3.send(readyEvent);
 
-        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId1, true)))).isPresent();
-        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId2, true)))).isPresent();
-        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId3, true)))).isPresent();
+        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, event -> isMemberReady(userId1, event))).isPresent();
+        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, event -> isMemberReady(userId2, event))).isPresent();
+        assertThat(lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, event -> isMemberReady(userId3, event))).isPresent();
 
         SkyXploreLobbyActions.startGame(language, accessTokenId1);
 
@@ -94,6 +95,12 @@ public class GetPlayersTest extends BackEndTest {
         assertThat(characters.get(0).getName()).isEqualTo(characterModel2.getName());
 
         ApphubWsClient.cleanUpConnections();
+    }
+
+    private boolean isMemberReady(UUID userId, WebSocketEvent event) {
+        LobbyMemberResponse response = event.getPayloadAs(LobbyMemberResponse.class);
+
+        return response.getUserId().equals(userId) && response.getStatus() == LobbyMemberStatus.READY;
     }
 
     private void acceptInvitation(Language language, UUID accessTokenId, ApphubWsClient wsClient) {

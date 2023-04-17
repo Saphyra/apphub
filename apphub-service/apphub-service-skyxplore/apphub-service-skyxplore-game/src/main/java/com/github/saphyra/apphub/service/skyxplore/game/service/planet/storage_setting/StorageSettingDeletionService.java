@@ -36,8 +36,10 @@ public class StorageSettingDeletionService {
                 () -> {
                     game.getData()
                         .getProcesses()
-                        .findByExternalReferenceAndTypeValidated(storageSettingId, ProcessType.STORAGE_SETTING)
-                        .cleanup(syncCache);
+                        .findByExternalReferenceAndType(storageSettingId, ProcessType.STORAGE_SETTING)
+                        .ifPresent(process -> {
+                            process.cleanup(syncCache);
+                        });
 
                     game.getData()
                         .getStorageSettings()

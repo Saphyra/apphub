@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum WebSocketEventName {
     //Platform
-    //Platform
     PING("ping"),
     REDIRECT("redirect"),
 

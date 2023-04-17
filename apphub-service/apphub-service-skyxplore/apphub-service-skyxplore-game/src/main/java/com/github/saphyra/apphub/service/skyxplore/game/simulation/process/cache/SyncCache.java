@@ -240,7 +240,7 @@ public class SyncCache {
         saveGameItem(context.getDeconstructionConverter().toModel(game.getGameId(), deconstruction));
 
         surfaceModified(recipient, location, surface);
-        buildingDetailsModified(recipient, location);
+        queueItemModified(recipient, location, context.getBuildingDeconstructionToQueueItemConverter().convert(game.getData(), deconstruction));
     }
 
     public void deconstructionModified(UUID recipient, UUID location, Deconstruction deconstruction) {

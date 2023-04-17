@@ -54,18 +54,6 @@ class ConstructionsTest {
     }
 
     @Test
-    void deleteByConstructionId() {
-        given(construction1.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(construction2.getConstructionId()).willReturn(UUID.randomUUID());
-
-        underTest.addAll(List.of(construction1, construction2));
-
-        underTest.deleteByConstructionId(CONSTRUCTION_ID);
-
-        assertThat(underTest).containsExactly(construction2);
-    }
-
-    @Test
     void getByLocationAndType() {
         given(construction1.getLocation()).willReturn(LOCATION);
         given(construction1.getConstructionType()).willReturn(ConstructionType.CONSTRUCTION);

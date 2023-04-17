@@ -125,7 +125,7 @@ public class CancelTerraformationServiceTest {
             .run();
 
         verify(process).cleanup(syncCache);
-        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
+        verify(constructions).remove(terraformation);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();
@@ -161,7 +161,7 @@ public class CancelTerraformationServiceTest {
             .run();
 
         verify(process).cleanup(syncCache);
-        verify(constructions).deleteByConstructionId(CONSTRUCTION_ID);
+        verify(constructions).remove(terraformation);
         verify(gameDataProxy).deleteItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
         verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();

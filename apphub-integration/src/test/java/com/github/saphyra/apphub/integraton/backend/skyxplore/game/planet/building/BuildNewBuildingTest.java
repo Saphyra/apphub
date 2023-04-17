@@ -73,7 +73,10 @@ public class BuildNewBuildingTest extends BackEndTest {
         ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
 
         //Build
-        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurface.getBuilding().getDataId()).isEqualTo(Constants.DATA_ID_SOLAR_PANEL);
         assertThat(modifiedSurface.getBuilding().getLevel()).isEqualTo(0);
@@ -106,7 +109,10 @@ public class BuildNewBuildingTest extends BackEndTest {
 
         //Cancel
         gameWsClient.clearMessages();
-        modifiedSurface = SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
+        SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
+        modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurface.getBuilding()).isNull();
 
@@ -153,8 +159,10 @@ public class BuildNewBuildingTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
 
-        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
-        assertThat(modifiedSurface.getBuilding()).isNotNull();
+        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         gameWsClient.clearMessages();
 

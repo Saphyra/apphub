@@ -23,10 +23,6 @@ public class Constructions extends Vector<Construction> {
             .findAny();
     }
 
-    public void deleteByConstructionId(UUID constructionId) {
-        removeIf(construction -> construction.getConstructionId().equals(constructionId));
-    }
-
     public List<Construction> getByLocationAndType(UUID location, ConstructionType type) {
         return stream()
             .filter(construction -> construction.getLocation().equals(location))

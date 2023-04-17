@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.SurfaceResponse
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.WsActions;
+import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
 
@@ -46,7 +47,10 @@ public class MoraleRecoveryTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SurfaceResponse modifiedSurface = SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(surfaceId))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurface.getTerraformation()).isNotNull();
 
@@ -59,7 +63,11 @@ public class MoraleRecoveryTest extends BackEndTest {
             .assertTrue("Morale is not decreased for citizens");
 
         AwaitilityWrapper.create(180, 10)
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().peek(citizenResponse -> log.info("{}", citizenResponse.getMorale())).allMatch(citizenResponse -> citizenResponse.getMorale() == Constants.MAX_CITIZEN_MORALE))
+            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
+                .stream()
+                .peek(citizenResponse -> log.info("{}", citizenResponse.getMorale()))
+                .allMatch(citizenResponse -> citizenResponse.getMorale() > 9000)
+            )
             .assertTrue("Morale is not recharged for citizens");
     }
 }

@@ -64,7 +64,7 @@ class ConstructionProcessHelper {
         log.info("Upgraded building: {}", building);
 
         gameData.getConstructions()
-            .deleteByConstructionId(construction.getConstructionId());
+            .remove(construction);
 
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(building.getSurfaceId());

@@ -34,9 +34,9 @@
       ],
       "maxBatchSize": 1,
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
+        "requiredWorkPoints": 5,
         "requiredResources": {
-          "energy": 1
+          "energy": 5
         }
       },
       "requiredSkill": "MINING"

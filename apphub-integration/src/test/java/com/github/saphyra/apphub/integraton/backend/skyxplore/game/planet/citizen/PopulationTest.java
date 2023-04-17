@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePopulationActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.CitizenResponse;
@@ -75,7 +76,7 @@ public class PopulationTest extends BackEndTest {
     private void validate(CitizenResponse citizenResponse) {
         assertThat(citizenResponse.getCitizenId()).isNotNull();
         assertThat(citizenResponse.getName()).isNotNull();
-        assertThat(citizenResponse.getMorale()).isEqualTo(1600);
+        assertThat(citizenResponse.getMorale()).isEqualTo(Constants.MAX_CITIZEN_MORALE);
         assertThat(citizenResponse.getSatiety()).isEqualTo(10000);
 
         assertThat(citizenResponse.getSkills()).hasSize(SkillType.values().length);

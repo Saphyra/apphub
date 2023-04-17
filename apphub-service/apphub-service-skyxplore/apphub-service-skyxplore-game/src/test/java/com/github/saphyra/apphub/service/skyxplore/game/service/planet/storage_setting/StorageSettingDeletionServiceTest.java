@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
@@ -89,7 +90,7 @@ public class StorageSettingDeletionServiceTest {
         given(future.get()).willReturn(executionResult);
 
         given(gameData.getProcesses()).willReturn(processes);
-        given(processes.findByExternalReferenceAndTypeValidated(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(process);
+        given(processes.findByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Optional.of(process));
 
         underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
 

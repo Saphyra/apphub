@@ -88,7 +88,7 @@ public class CancelConstructionService {
                         .cleanup(syncCache);
 
                     gameData.getConstructions()
-                        .deleteByConstructionId(construction.getConstructionId());
+                        .remove(construction);
 
                     allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, planet.getPlanetId(), planet.getOwner(), construction.getConstructionId());
 
