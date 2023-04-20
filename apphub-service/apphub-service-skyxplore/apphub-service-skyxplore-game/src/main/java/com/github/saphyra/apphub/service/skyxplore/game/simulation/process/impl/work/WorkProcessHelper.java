@@ -36,21 +36,33 @@ class WorkProcessHelper {
     private final CitizenUpdateService citizenUpdateService;
     private final UpdateTargetService updateTargetService;
 
+    public void allocateParentAsBuildingIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID externalReference) {
+        if (gameData.getBuildingAllocations().getByBuildingId(externalReference).isEmpty()) {
+            createAndSaveBuildingAllocation(syncCache, gameData, processId, externalReference);
+        } else {
+            log.debug("Someone is already working on {}", processId);
+        }
+    }
+
     void allocateBuildingIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String buildingDataId) {
         productionBuildingFinder.findSuitableProductionBuilding(gameData, location, buildingDataId)
             .ifPresentOrElse(
                 buildingId -> {
                     log.info("No suitable {} found at {}", buildingDataId, location);
 
-                    BuildingAllocation buildingAllocation = buildingAllocationFactory.create(buildingId, processId);
-
-                    gameData.getBuildingAllocations()
-                        .add(buildingAllocation);
-
-                    syncCache.saveGameItem(buildingAllocationConverter.toModel(gameData.getGameId(), buildingAllocation));
+                    createAndSaveBuildingAllocation(syncCache, gameData, processId, buildingId);
                 },
                 () -> log.info("No suitable {} found at {}", buildingDataId, location)
             );
+    }
+
+    private void createAndSaveBuildingAllocation(SyncCache syncCache, GameData gameData, UUID processId, UUID buildingId) {
+        BuildingAllocation buildingAllocation = buildingAllocationFactory.create(buildingId, processId);
+
+        gameData.getBuildingAllocations()
+            .add(buildingAllocation);
+
+        syncCache.saveGameItem(buildingAllocationConverter.toModel(gameData.getGameId(), buildingAllocation));
     }
 
     void allocateCitizenIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID location, SkillType requiredSkill, int requestedWorkPoints) {

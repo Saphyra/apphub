@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler.ChatSendMessageWebSocketEventHandler;
@@ -39,8 +39,8 @@ public class MessageSenderProxy {
     }
 
     //TODO unit test
-    public void allianceCreated(AllianceResponse alliance, Collection<UUID> recipients) {
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED, recipients, alliance);
+    public void allianceCreated(AllianceCreatedResponse payload, Collection<UUID> recipients) {
+        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED, recipients, payload);
         sendToLobby(message);
     }
 

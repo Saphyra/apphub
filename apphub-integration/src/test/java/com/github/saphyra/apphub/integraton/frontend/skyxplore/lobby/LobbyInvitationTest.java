@@ -1,23 +1,26 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
+import com.github.saphyra.apphub.integration.structure.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,13 +64,17 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver2, ModuleLocation.SKYXPLORE);
 
-        WebElement inviteFriendButton = SkyXploreLobbyActions.getOnlineFriend(driver1, userData2.getUsername());
+        OnlineFriend onlineFriend = SkyXploreLobbyActions.getOnlineFriend(driver1, userData2.getUsername());
 
-        inviteFriendButton.click();
-        NotificationUtil.verifySuccessNotification(driver1, "Barát meghívva.");
+        onlineFriend.invite();
 
-        inviteFriendButton.click();
-        NotificationUtil.verifyErrorNotification(driver1, "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!");
+        LobbyMember invitedMember = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findMember(driver1, userData2.getUsername()), Optional::isPresent)
+            .orElseThrow()
+            .orElseThrow();
+        assertThat(invitedMember.getStatus()).isEqualTo(LobbyMemberStatus.INVITED);
+
+        onlineFriend.invite();
+        ToastMessageUtil.verifyErrorToast(driver1, "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!");
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 
@@ -75,10 +82,8 @@ public class LobbyInvitationTest extends SeleniumTest {
             .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE))
             .assertTrue("Invited member was not redirected to lobby.");
 
-        AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMembers(driver1), lobbyMembers -> !lobbyMembers.isEmpty())
-            .stream()
-            .filter(member -> member.getName().equals(userData2.getUsername()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Lobby member not found."));
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData2.getUsername()).getStatus() == LobbyMemberStatus.NOT_READY)
+            .assertTrue("Lobby member status is not 'NOT_READY'");
     }
 }

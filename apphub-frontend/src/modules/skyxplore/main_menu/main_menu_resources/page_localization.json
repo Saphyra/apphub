@@ -73,7 +73,7 @@
     },
     "empty": {
         "en": "Empty",
-        "hu": "üres"
+        "hu": "Üres"
     },
     "accept": {
         "en": "Accept",
@@ -106,5 +106,9 @@
     "confirm-delete-game": {
         "en": "Are you sure you want to delete game {gameName}?",
         "hu": "Biztosan törölni szeretnéd a {gameName} játékot?"
+    },
+    "invited-you":{
+        "en": "invited you to a game",
+        "hu": "meghívott egy játékba"
     }
 }

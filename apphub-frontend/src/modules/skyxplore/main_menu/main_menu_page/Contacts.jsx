@@ -270,17 +270,26 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
             </div>
 
             <div id="skyxplore-contacts-list">
-                <fieldset className="skyxplore-contacts-list-group">
+                <fieldset
+                    id="skyxplore-main-menu-incoming-friend-requests"
+                    className="skyxplore-contacts-list-group"
+                >
                     <legend className="skyxplore-contacts-list-header">{localizationHandler.get("incoming-friend-requests")}</legend>
                     {getIncomingFriendRequests()}
                 </fieldset>
 
-                <fieldset className="skyxplore-contacts-list-group">
+                <fieldset
+                    id="skyxplore-main-menu-friends"
+                    className="skyxplore-contacts-list-group"
+                >
                     <legend className="skyxplore-contacts-list-header">{localizationHandler.get("friends")}</legend>
                     {getFriends()}
                 </fieldset>
 
-                <fieldset className="skyxplore-contacts-list-group">
+                <fieldset
+                    id="skyxplore-main-menu-sent-friend-requests"
+                    className="skyxplore-contacts-list-group"
+                >
                     <legend className="skyxplore-contacts-list-header">{localizationHandler.get("sent-friend-requests")}</legend>
                     {getSentFriendRequests()}
                 </fieldset>

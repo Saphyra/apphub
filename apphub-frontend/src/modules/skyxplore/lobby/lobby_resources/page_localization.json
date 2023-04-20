@@ -114,5 +114,21 @@
     "player-disconnected": {
         "en": "{name} disconnected.",
         "hu": "{name} lecsatlakozott."
+    },
+    "not-everyone-joined-title" : {
+        "en": "Not everyone joined",
+        "hu": "Nem mindenki csatlakozott"
+    },
+    "not-everyone-joined-content": {
+        "en": "Not all players of this game joined. The missing players will be replaced by AIs, and will not be able to join to this game anymore.",
+        "hu": "Még nem csatlakozott az összes játékos. A hiányzó játékosokat MI fogja helyettesíteni, és ők többé már nem csatlakozhatnak ehhez a játékhoz."
+    },
+    "start-game-anyways": {
+        "en": "Start the game anyways",
+        "hu": "Így is elindítom a játékot."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
     }
 }

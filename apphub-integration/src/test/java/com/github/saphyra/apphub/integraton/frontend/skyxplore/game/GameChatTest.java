@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.game;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -8,22 +7,20 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.GameChatMessage;
 import com.github.saphyra.apphub.integration.structure.skyxplore.GameChatRoom;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -60,11 +57,12 @@ public class GameChatTest extends SeleniumTest {
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
                 ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
-                new WebDriverWait(biWrapper.getEntity1(), Duration.ofSeconds(10))
-                    .until(ExpectedConditions.textToBe(By.id("main-title"), "Főmenü"));
+                AwaitilityWrapper.createDefault()
+                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .assertTrue();
                 return null;
             }))
-            .collect(Collectors.toList());
+            .toList();
 
         AwaitilityWrapper.create(120, 5)
             .until(() -> futures.stream().allMatch(Future::isDone))
@@ -72,8 +70,12 @@ public class GameChatTest extends SeleniumTest {
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
 
-        LobbyMember host = SkyXploreLobbyActions.getHostMember(driver1);
-        host.changeAllianceTo(Constants.NEW_ALLIANCE_VALUE);
+        LobbyMember host = SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername());
+        host.changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
+            .assertTrue("Alliance of host did not change.");
 
         SkyXploreLobbyActions.getMember(driver1, userData2.getUsername())
             .changeAllianceTo("1");
@@ -86,7 +88,7 @@ public class GameChatTest extends SeleniumTest {
             .assertTrue("Lobby members are not ready.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getHostMember(driver1).isReady())
+            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername()).isReady())
             .assertTrue("Host is not ready.");
 
         SkyXploreLobbyActions.startGameCreation(driver1);

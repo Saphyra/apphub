@@ -106,7 +106,7 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
                 />
             </div>
 
-            <div className="skyxplore-lobby-chat-content">
+            <div id="skyxplore-lobby-chat-content">
                 {getMessages()}
             </div>
         </div>

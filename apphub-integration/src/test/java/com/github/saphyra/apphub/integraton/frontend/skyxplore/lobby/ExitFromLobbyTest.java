@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -8,22 +7,18 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ExitFromLobbyTest extends SeleniumTest {
@@ -48,11 +43,12 @@ public class ExitFromLobbyTest extends SeleniumTest {
                 IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
                 ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(player.getEntity1());
-                new WebDriverWait(player.getEntity1(), Duration.ofSeconds(10))
-                    .until(ExpectedConditions.textToBe(By.id("main-title"), "Főmenü"));
+                AwaitilityWrapper.createDefault()
+                    .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .assertTrue();
                 return null;
             }))
-            .collect(Collectors.toList());
+            .toList();
 
 
         AwaitilityWrapper.create(120, 5)
@@ -68,10 +64,12 @@ public class ExitFromLobbyTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
             .assertTrue("Invitation did not arrive.");
+
         SkyXploreLobbyActions.exitLobby(driver3);
+
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
-            .assertTrue("Invitation is till present.");
+            .assertTrue("Invitation is still present.");
 
         //Host left
         SkyXploreLobbyActions.inviteFriend(driver2, userData4.getUsername());

@@ -22,6 +22,13 @@ const Invitations = ({ localizationHandler, lastEvent }) => {
                 .add(invitation.senderId, invitation.senderName)
                 .toObject();
             setInvitations(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION) {
+            const copy = new MapStream(invitations)
+                .clone()
+                .filter((senderId, senderName) => senderId !== lastEvent.payload)
+                .toObject();
+
+            setInvitations(copy);
         }
     }
 

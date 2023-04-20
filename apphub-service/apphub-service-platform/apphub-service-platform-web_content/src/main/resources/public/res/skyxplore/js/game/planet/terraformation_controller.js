@@ -78,9 +78,7 @@
 
     function startTerraformation(planetId, surfaceId, surfaceType){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_GAME_TERRAFORM_SURFACE", {planetId: planetId, surfaceId: surfaceId}), {value: surfaceType});
-            request.convertResponse = jsonConverter;
-            request.processValidResponse = function(surface){
-                surfaceViewController.updateSurface(surface);
+            request.processValidResponse = function(){
                 planetController.openPlanetWindow();
             }
         dao.sendRequestAsync(request);

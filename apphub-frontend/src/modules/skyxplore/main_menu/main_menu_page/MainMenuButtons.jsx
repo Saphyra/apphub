@@ -40,22 +40,30 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
     }
 
     const getSavedGames = () => {
-        if (savedGames.length === 0) {
-            return <div className="skyxplore-no-saved-games">
-                {localizationHandler.get("no-saved-games")}
-            </div>
+        const getContent = () => {
+            if (savedGames.length === 0) {
+                return <div className="skyxplore-no-saved-games">
+                    {localizationHandler.get("no-saved-games")}
+                </div>
+            }
+
+            return new Stream(savedGames)
+                .sorted((a, b) => -1 * (a.lastPlayed - b.lastPlayed))
+                .map(savedGame =>
+                    <SavedGame
+                        savedGame={savedGame}
+                        localizationHandler={localizationHandler}
+                        deleteGameCallback={askDeleteGame}
+                    />
+                )
+                .toList();
         }
 
-        return new Stream(savedGames)
-            .sorted((a, b) => -1 * (a.lastPlayed - b.lastPlayed))
-            .map(savedGame =>
-                <SavedGame
-                    savedGame={savedGame}
-                    localizationHandler={localizationHandler}
-                    deleteGameCallback={askDeleteGame}
-                />
-            )
-            .toList();
+        return (
+            <div id="skyxplore-main-menu-saved-games-wrapper">
+                {getContent()}
+            </div>
+        );
     }
 
     return (

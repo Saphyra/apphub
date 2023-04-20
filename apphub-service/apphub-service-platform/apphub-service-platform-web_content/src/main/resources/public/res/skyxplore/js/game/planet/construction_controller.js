@@ -60,9 +60,7 @@
 
     function constructNewBuilding(planetId, surfaceId, dataId){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CONSTRUCT_NEW", {planetId: planetId, surfaceId: surfaceId}), {value: dataId});
-            request.convertResponse = jsonConverter;
-            request.processValidResponse = function(surface){
-                surfaceViewController.updateSurface(surface);
+            request.processValidResponse = function(){
                 planetController.openPlanetWindow();
             }
         dao.sendRequestAsync(request);
@@ -98,9 +96,7 @@
 
     function upgradeBuilding(){
         const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_UPGRADE", {planetId: openedPlanetId, buildingId: openedBuildingId}));
-            request.convertResponse = jsonConverter;
-            request.processValidResponse = function(surface){
-                surfaceViewController.updateSurface(surface);
+            request.processValidResponse = function(){
                 planetController.openPlanetWindow();
             }
         dao.sendRequestAsync(request);

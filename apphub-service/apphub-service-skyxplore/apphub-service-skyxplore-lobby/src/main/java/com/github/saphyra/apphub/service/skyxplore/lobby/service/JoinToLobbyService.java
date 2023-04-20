@@ -43,7 +43,8 @@ public class JoinToLobbyService {
             .userId(userId)
             .status(LobbyMemberStatus.NOT_READY)
             .build();
-        lobby.getMembers().put(userId, member);
+        lobby.getMembers()
+            .put(userId, member);
     }
 
     public void userJoinedToLobby(UUID userId) {

@@ -19,6 +19,7 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
         }
 
         if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED) {
+            console.log("Lobby Member modified", lastEvent.payload);
             const newMember = lastEvent.payload;
 
             const copy = new MapStream(members)
@@ -26,11 +27,23 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
                 .add(newMember.userId, newMember)
                 .toObject();
 
-
             setMembers(copy);
         } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
             const copy = new MapStream(members)
                 .filter(userId => userId !== lastEvent.payload.userId)
+                .toObject();
+
+            setMembers(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
+            const newMember = lastEvent.payload.member;
+
+            if (newMember === null) {
+                return;
+            }
+
+            const copy = new MapStream(members)
+                .clone()
+                .add(newMember.userId, newMember)
                 .toObject();
 
             setMembers(copy);

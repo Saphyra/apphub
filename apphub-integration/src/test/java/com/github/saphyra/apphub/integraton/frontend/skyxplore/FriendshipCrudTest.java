@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Friend;
@@ -20,7 +19,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FriendshipCrudTest extends SeleniumTest {
@@ -34,7 +32,7 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
             .map(biWrapper -> headToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
+            .toList();
 
         for (int i = 0; i < 120; i++) {
             if (futures.stream().allMatch(Future::isDone)) {
@@ -48,7 +46,6 @@ public class FriendshipCrudTest extends SeleniumTest {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
-        NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem elküldve.");
 
         SentFriendRequest sentFriendRequest = AwaitilityWrapper.getListWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), t -> !t.isEmpty())
             .stream()
@@ -64,8 +61,6 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         //Cancel friend request by sender
         sentFriendRequest.cancel();
-
-        NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem visszavonva.");
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("SentFriendRequest still present."));
@@ -85,8 +80,6 @@ public class FriendshipCrudTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest not found."))
             .cancel();
 
-        NotificationUtil.verifySuccessNotification(driver2, "Barátkérelem visszavonva.");
-
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("SentFriendRequest still present."));
 
@@ -104,8 +97,6 @@ public class FriendshipCrudTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest not found."))
             .accept();
-
-        NotificationUtil.verifySuccessNotification(driver2, "Barátkérelem elfogadva.");
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("SentFriendRequest still present."));
@@ -127,9 +118,7 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         //Remove friendship by sender
         friend.remove();
-        CommonPageActions.confirmConfirmationDialog(driver1, "remove-friend-confirmation-dialog");
-
-        NotificationUtil.verifySuccessNotification(driver1, "Barát eltávolítva.");
+        SkyXploreMainMenuActions.confirmFriendDeletion(driver1);
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getFriends(driver1), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("Friend still present."));
@@ -155,9 +144,7 @@ public class FriendshipCrudTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Friend not found."))
             .remove();
 
-        CommonPageActions.confirmConfirmationDialog(driver2, "remove-friend-confirmation-dialog");
-
-        NotificationUtil.verifySuccessNotification(driver2, "Barát eltávolítva.");
+        SkyXploreMainMenuActions.confirmFriendDeletion(driver2);
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getFriends(driver1), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("Friend still present."));

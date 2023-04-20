@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -68,7 +69,13 @@ class AllianceService {
                     .build();
                 lobby.getAlliances().add(alliance);
                 aiPlayer.setAllianceId(alliance.getAllianceId());
-                messageSenderProxy.allianceCreated(convertToResponse(alliance), lobby.getMembers().keySet());
+                messageSenderProxy.allianceCreated(
+                    AllianceCreatedResponse.builder()
+                        .alliance(convertToResponse(alliance))
+                        .ai(aiPlayer)
+                        .build(),
+                    lobby.getMembers().keySet()
+                );
                 messageSenderProxy.aiModified(aiPlayer, lobby.getMembers().keySet());
             }
             default -> {
@@ -101,8 +108,13 @@ class AllianceService {
                     .build();
                 lobby.getAlliances().add(alliance);
                 member.setAlliance(alliance.getAllianceId());
-                messageSenderProxy.allianceCreated(convertToResponse(alliance), lobby.getMembers().keySet());
-                messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(member), lobby.getMembers().keySet());
+                messageSenderProxy.allianceCreated(
+                    AllianceCreatedResponse.builder()
+                        .alliance(convertToResponse(alliance))
+                        .member(lobbyMemberToResponseConverter.convertMember(member))
+                        .build(),
+                    lobby.getMembers().keySet()
+                );
             }
             default -> {
                 UUID allianceId = uuidConverter.convertEntity(allianceValue);

@@ -30,7 +30,7 @@ public class ActiveFriendsService {
         return skyXploreDataProxy.getFriends(accessTokenHeader)
             .stream()
             .filter(friendshipResponse -> activeUsersDao.isOnline(friendshipResponse.getFriendId()))
-            .filter(friendshipResponse -> LobbyType.NEW_GAME == lobby.getType() || lobby.getMembers().containsKey(friendshipResponse.getFriendId()))
+            .filter(friendshipResponse -> LobbyType.NEW_GAME == lobby.getType() || lobby.getExpectedPlayers().contains(friendshipResponse.getFriendId()))
             .map(friendshipResponse -> ActiveFriendResponse.builder()
                 .friendName(friendshipResponse.getFriendName())
                 .friendId(friendshipResponse.getFriendId())

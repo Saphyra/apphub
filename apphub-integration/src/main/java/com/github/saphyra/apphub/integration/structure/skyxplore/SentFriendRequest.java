@@ -9,7 +9,7 @@ public class SentFriendRequest {
     private final WebElement webElement;
 
     public String getFriendName() {
-        return webElement.findElement(By.cssSelector(":scope div:first-child"))
+        return webElement.findElement(By.cssSelector(":scope span:first-child"))
             .getText();
     }
 

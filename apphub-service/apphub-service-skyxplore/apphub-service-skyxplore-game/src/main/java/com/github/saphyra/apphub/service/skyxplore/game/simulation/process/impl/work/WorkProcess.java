@@ -77,13 +77,15 @@ public class WorkProcess implements Process {
         WorkProcessHelper helper = applicationContextProxy.getBean(WorkProcessHelper.class);
         WorkProcessConditions conditions = applicationContextProxy.getBean(WorkProcessConditions.class);
 
-        if (!isNull(buildingDataId)) {
+        if (isNull(buildingDataId)) {
+            helper.allocateParentAsBuildingIfPossible(syncCache, gameData, processId, externalReference);
+        } else {
             helper.allocateBuildingIfPossible(syncCache, gameData, processId, location, buildingDataId);
+        }
 
-            if (!conditions.buildingAllocated(gameData, processId)) {
-                log.info("No {} allocated.", buildingDataId);
-                return;
-            }
+        if (!conditions.buildingAllocated(gameData, processId)) {
+            log.info("No {} allocated.", buildingDataId);
+            return;
         }
 
         if (!conditions.hasCitizenAllocated(gameData, processId)) {

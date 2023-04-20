@@ -26,7 +26,6 @@
 }
 
 #skyxplore-lobby-settings {
-    min-height: 50%;
     border-bottom: 3px ridge white;
 }
 
@@ -38,7 +37,6 @@
 
 #skyxplore-lobby-friends {
     border-bottom: 3px ridge white;
-    min-height: 50%;
 }
 
 #skyxplore-lobby-members {}
@@ -50,6 +48,7 @@
     position: sticky;
     top: 0;
     background: black;
+    z-index: 1;
 }
 
 .skyxplore-lobby-panel-content {

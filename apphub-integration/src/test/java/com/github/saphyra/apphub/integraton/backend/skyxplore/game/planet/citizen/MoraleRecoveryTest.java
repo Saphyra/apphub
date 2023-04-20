@@ -65,7 +65,6 @@ public class MoraleRecoveryTest extends BackEndTest {
         AwaitilityWrapper.create(180, 10)
             .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
                 .stream()
-                .peek(citizenResponse -> log.info("{}", citizenResponse.getMorale()))
                 .allMatch(citizenResponse -> citizenResponse.getMorale() > 9000)
             )
             .assertTrue("Morale is not recharged for citizens");

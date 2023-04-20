@@ -56,6 +56,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
                 className="skyxplore-lobby-remove-ai-button"
                 label="X"
                 onclick={removeAi}
+                disabled={!isHost}
             />
 
             <PreLabeledInputField

@@ -60,6 +60,19 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
                 .toList();
 
             setAis(copy);
+        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
+            const newAi = lastEvent.payload.ai;
+
+            if (newAi === null) {
+                return;
+            }
+
+            const copy = new Stream(ais)
+                .filter(ai => ai.userId !== newAi.userId)
+                .add(newAi)
+                .toList();
+
+            setAis(copy);
         }
     }
 
@@ -92,15 +105,11 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
             <PanelTitle label={localizationHandler.get("ais")} />
             <div className="skyxplore-lobby-panel-content">
                 {getAis()}
-                {ais.length < 10 && lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW &&
-                    <div
-                        id="skyxplore-lobby-create-ai"
-                        className="skyxplore-lobby-ai"
-                    >
+                {ais.length < 10 && lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW && isHost &&
+                    <div id="skyxplore-lobby-create-ai" >
                         <h4 className="skyxplore-lobby-member-name">{localizationHandler.get("create-ai")}</h4>
 
                         <PreLabeledInputField
-                            className="skyxplore-lobby-ai-name"
                             label={localizationHandler.get("ai-name") + ":"}
                             input={
                                 <ValidatedInputField

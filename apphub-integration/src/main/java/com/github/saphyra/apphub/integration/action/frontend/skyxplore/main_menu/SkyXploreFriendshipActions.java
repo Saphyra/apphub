@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_men
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.skyxplore.IncomingFriendRequest;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SentFriendRequest;
@@ -32,7 +31,6 @@ public class SkyXploreFriendshipActions {
 
         findFriendCandidate(driver1, username2)
             .click();
-        NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem elküldve.");
 
         AwaitilityWrapper.getListWithWait(() -> getIncomingFriendRequests(driver2), incomingFriendRequests -> !incomingFriendRequests.isEmpty())
             .stream()
@@ -40,8 +38,6 @@ public class SkyXploreFriendshipActions {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Incoming friend request not found"))
             .accept();
-
-        NotificationUtil.verifySuccessNotification(driver2, "Barátkérelem elfogadva.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> !getFriends(driver1).isEmpty())

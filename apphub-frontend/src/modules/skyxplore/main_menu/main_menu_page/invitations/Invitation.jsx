@@ -13,7 +13,11 @@ const Invitaion = ({ senderId, senderName, localizationHandler, declineInvitatio
 
     return (
         <div className="skyxplore-main-menu-invitation">
-            <h4 className="skyxplore-main-menu-invitation-name">{senderName}</h4>
+            <h4 className="skyxplore-main-menu-invitation-name">
+                <span>{senderName}</span>
+                <span> </span>
+                <span>{localizationHandler.get("invited-you")}</span>
+            </h4>
             <div className="skyxplore-main-menu-invitation-buttons">
                 <Button
                     className="skyxplore-main-menu-invitation-accept-button"

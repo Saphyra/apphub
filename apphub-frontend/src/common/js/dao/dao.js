@@ -253,6 +253,7 @@ const Endpoints = {
     SKYXPLORE_LOBBY_ACCEPT_INVITATION: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/join/{invitorId}"),
     SKYXPLORE_LOBBY_GET_AIS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/ai"),
     SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI: new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby/ai"),
+    SKYXPLORE_LOBBY_REMOVE_AI: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby/ai/{userId}"),
     SKYXPLORE_LOBBY_GET_SETTINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/settings"),
     SKYXPLORE_LOBBY_EDIT_SETTINGS: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/settings"),
     SKYXPLORE_LOBBY_START_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start"),

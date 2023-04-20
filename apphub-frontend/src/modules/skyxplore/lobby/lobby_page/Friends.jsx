@@ -51,7 +51,7 @@ const Friends = ({ localizationHandler, lastEvent }) => {
                     key={friend.friendId}
                     className="skyxplore-lobby-active-friend"
                 >
-                    {friend.friendName}
+                    <span>{friend.friendName}</span>
                     <Button
                         className="skyxplore-lobby-active-friend-invite-button"
                         label="+"

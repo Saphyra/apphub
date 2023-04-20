@@ -21,8 +21,8 @@ public class Constants {
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
-    public final String NEW_ALLIANCE_VALUE = "new-alliance";
-    public final String NO_ALLIANCE_VALUE = "no-alliance";
+    public static final String NEW_ALLIANCE_LABEL = "Új szövetség";
+    public final String NO_ALLIANCE_LABEL = "Nincs szövetség";
 
     //SurfaceTypes
     public final String SURFACE_TYPE_DESERT = "DESERT";

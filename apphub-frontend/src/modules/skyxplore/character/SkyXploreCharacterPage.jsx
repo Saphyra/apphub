@@ -16,6 +16,7 @@ import ValidationInputField from "../../../common/component/input/ValidatedInput
 import ValidatedField from "../../../common/js/validation/ValidatedField";
 import validate from "../../../common/js/validation/Validator";
 import "../skyxplore.css";
+import NotificationKey from "../../../common/js/notification/NotificationKey";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -77,6 +78,8 @@ const SkyXploreCharacterPage = () => {
 
         await Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER.createRequest(request)
             .send();
+
+        sessionStorage.successCode = NotificationKey.SKYXPLORE_CHARACTER_SAVED;
 
         window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
     }
