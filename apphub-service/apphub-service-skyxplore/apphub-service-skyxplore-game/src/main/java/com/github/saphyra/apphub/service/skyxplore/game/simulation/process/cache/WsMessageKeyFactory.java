@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class WsMessageKeyFactory {
     WsMessageKey create(UUID recipient, WebSocketEventName eventName,  UUID objectId, OpenedPageType pageType, UUID pageId) {
         return create(recipient, eventName, objectId, List.of(pageType), pageId);

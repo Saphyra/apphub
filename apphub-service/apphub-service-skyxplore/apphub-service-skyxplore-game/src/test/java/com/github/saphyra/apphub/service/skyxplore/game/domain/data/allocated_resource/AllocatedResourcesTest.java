@@ -94,12 +94,14 @@ class AllocatedResourcesTest {
     }
 
     @Test
-    void findByAllocatedResourceId_notFound() {
+    void findByAllocatedResourceIdValidated_notFound() {
         given(allocatedResource1.getAllocatedResourceId()).willReturn(UUID.randomUUID());
 
         underTest.add(allocatedResource1);
 
-        assertThat(underTest.findByAllocatedResourceId(ALLOCATED_RESOURCE_ID)).isEmpty();
+        Throwable ex = catchThrowable(() -> underTest.findByAllocatedResourceIdValidated(ALLOCATED_RESOURCE_ID));
+
+        ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test

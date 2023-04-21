@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkillConverter {
     public List<SkillModel> toModel(UUID gameId, Collection<Skill> skills) {
         return skills.stream()

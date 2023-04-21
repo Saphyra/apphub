@@ -28,6 +28,7 @@ public class CharacterDataControllerImplTest {
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .userId(USER_ID)
         .build();
+    private static final String CHARACTER_NAME = "character-name";
 
     @Mock
     private CharacterCreationService characterCreationService;
@@ -52,6 +53,16 @@ public class CharacterDataControllerImplTest {
         underTest.createOrUpdateCharacter(model, ACCESS_TOKEN_HEADER);
 
         verify(characterCreationService).create(USER_ID, model);
+    }
+
+    @Test
+    void getCharacterName() {
+        given(characterDao.findByIdValidated(USER_ID)).willReturn(character);
+        given(character.getName()).willReturn(CHARACTER_NAME);
+
+        OneParamResponse<String> result = underTest.getCharacterName(ACCESS_TOKEN_HEADER);
+
+        assertThat(result.getValue()).isEqualTo(CHARACTER_NAME);
     }
 
     @Test

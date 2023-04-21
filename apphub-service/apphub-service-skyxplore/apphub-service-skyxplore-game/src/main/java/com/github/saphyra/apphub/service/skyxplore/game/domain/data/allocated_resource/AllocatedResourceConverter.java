@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AllocatedResourceConverter {
     public List<AllocatedResourceModel> toModel(UUID gameId, Collection<AllocatedResource> allocatedResources) {
         return allocatedResources.stream()

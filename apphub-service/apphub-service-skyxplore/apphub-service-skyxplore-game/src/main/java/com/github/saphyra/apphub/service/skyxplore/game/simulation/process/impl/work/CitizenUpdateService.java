@@ -43,6 +43,6 @@ class CitizenUpdateService {
             .get(citizen.getLocation())
             .getOwner();
 
-        syncCache.citizenModified(ownerId, citizen, skill);
+        syncCache.citizenExperienceEarned(ownerId, citizen, skill);
     }
 }

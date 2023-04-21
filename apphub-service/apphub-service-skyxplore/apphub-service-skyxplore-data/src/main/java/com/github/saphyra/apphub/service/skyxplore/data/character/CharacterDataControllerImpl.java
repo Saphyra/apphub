@@ -24,7 +24,6 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     private final SkyXploreCharacterModelConverter characterModelConverter;
 
     @Override
-    //TODO unit test
     public OneParamResponse<String> getCharacterName(AccessTokenHeader accessTokenHeader) {
         String result = characterDao.findByIdValidated(accessTokenHeader.getUserId())
             .getName();

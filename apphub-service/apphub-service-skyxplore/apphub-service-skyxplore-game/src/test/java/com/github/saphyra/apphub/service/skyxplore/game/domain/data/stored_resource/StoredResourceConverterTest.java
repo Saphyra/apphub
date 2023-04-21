@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;

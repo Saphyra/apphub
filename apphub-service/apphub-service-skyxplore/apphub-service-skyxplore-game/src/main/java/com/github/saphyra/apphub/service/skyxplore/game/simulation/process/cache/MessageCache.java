@@ -13,7 +13,6 @@ import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class MessageCache extends ConcurrentHashMap<WsMessageKey, Supplier<WebSocketMessage>> {
     @NonNull
     private final MessageSenderProxy messageSenderProxy;

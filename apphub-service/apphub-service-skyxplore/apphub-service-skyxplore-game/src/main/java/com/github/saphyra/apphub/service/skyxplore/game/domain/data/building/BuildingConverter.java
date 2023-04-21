@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingConverter {
-    private final ConstructionConverter constructionToResponseConverter;
+    private final ConstructionConverter constructionConverter;
     private final DeconstructionConverter deconstructionConverter;
 
     public List<BuildingModel> toModel(UUID gameId, Collection<Building> buildings) {
@@ -46,7 +45,7 @@ public class BuildingConverter {
     public SurfaceBuildingResponse toResponse(GameData gameData, Building building) {
         ConstructionResponse constructionResponse = gameData.getConstructions()
             .findByExternalReference(building.getBuildingId())
-            .map(constructionToResponseConverter::toResponse)
+            .map(constructionConverter::toResponse)
             .orElse(null);
 
         DeconstructionResponse deconstructionResponse = gameData.getDeconstructions()

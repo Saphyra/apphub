@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConstructionConverter {
     public List<ConstructionModel> toModel(UUID gameId, Collection<Construction> constructions) {
         return constructions.stream()

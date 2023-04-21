@@ -19,7 +19,6 @@ public class FreeStorageQueryService {
     private final ReservedStorageQueryService reservedStorageQueryService;
     private final ResourceDataService resourceDataService;
 
-    //TODO unit test
     public int getFreeStorage(GameData gameData, UUID location, String dataId) {
         return getFreeStorage(gameData, location, resourceDataService.get(dataId).getStorageType());
     }

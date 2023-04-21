@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingFactory;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,6 @@ import static java.util.Objects.isNull;
 
 @Component
 @Slf4j
-//TODO unit test
 public class BuildingFiller {
     private static final List<BuildingData> EXCAVATOR_BUILDINGS = Arrays.asList(
         new ExcavatorBuilding(SurfaceType.ORE_FIELD),
@@ -33,6 +33,7 @@ public class BuildingFiller {
     private final BuildingFactory buildingFactory;
     private final EmptySurfaceProvider emptySurfaceProvider;
 
+    @Builder
     public BuildingFiller(
         List<AbstractDataService<?, ? extends BuildingData>> buildingDataServices,
         BuildingFactory buildingFactory,

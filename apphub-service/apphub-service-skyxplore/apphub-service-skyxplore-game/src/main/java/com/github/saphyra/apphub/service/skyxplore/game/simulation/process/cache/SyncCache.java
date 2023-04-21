@@ -31,7 +31,6 @@ import java.util.UUID;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-//TODO unit test
 public class SyncCache {
     private static final List<OpenedPageType> PLANET_PAGE_TYPE_GROUP = ImmutableList.of(OpenedPageType.PLANET, OpenedPageType.PLANET_POPULATION_OVERVIEW);
 
@@ -61,7 +60,7 @@ public class SyncCache {
     }
 
     //Citizen
-    public void citizenModified(UUID recipient, Citizen citizen, Skill skill) {
+    public void citizenExperienceEarned(UUID recipient, Citizen citizen, Skill skill) {
         saveGameItem(context.getSkillConverter().toModel(game.getGameId(), skill));
 
         citizenModified(recipient, citizen);

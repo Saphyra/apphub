@@ -40,7 +40,6 @@ public class AllocatedResources extends Vector<AllocatedResource> {
             .collect(Collectors.toList());
     }
 
-    //TODO unit test
     public AllocatedResource findByAllocatedResourceIdValidated(UUID allocatedResourceId) {
         return findByAllocatedResourceId(allocatedResourceId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "AllocatedResource not found by allocatedResourceId " + allocatedResourceId));

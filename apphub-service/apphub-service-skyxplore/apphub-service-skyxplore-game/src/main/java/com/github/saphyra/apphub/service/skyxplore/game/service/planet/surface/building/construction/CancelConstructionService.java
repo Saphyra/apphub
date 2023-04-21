@@ -2,8 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -17,17 +15,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CancelConstructionService {
     private final GameDao gameDao;
     private final SyncCacheFactory syncCacheFactory;
@@ -49,7 +43,7 @@ public class CancelConstructionService {
         Planet planet = gameData.getPlanets()
             .get(planetId);
 
-        processCancellation(game, planet, surface, building);
+        processCancellation(game, planet, surface, building, construction);
     }
 
     public void cancelConstructionOfBuilding(UUID userId, UUID planetId, UUID buildingId) {
@@ -67,18 +61,16 @@ public class CancelConstructionService {
             .getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
 
-        processCancellation(game, planet, surface, building);
+        Construction construction = game.getData()
+            .getConstructions()
+            .findByExternalReferenceValidated(building.getBuildingId());
+
+        processCancellation(game, planet, surface, building, construction);
     }
 
     @SneakyThrows
-    private void processCancellation(Game game, Planet planet, Surface surface, Building building) {
+    private void processCancellation(Game game, Planet planet, Surface surface, Building building, Construction construction) {
         GameData gameData = game.getData();
-
-        Construction construction = gameData.getConstructions()
-            .findByExternalReferenceValidated(building.getBuildingId());
-        if (isNull(construction)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found on planet " + planet.getPlanetId() + " and building " + building.getBuildingId());
-        }
 
         SyncCache syncCache = syncCacheFactory.create(game);
         game.getEventLoop()

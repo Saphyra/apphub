@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Data
-//TODO unit test
 class WsMessageKey {
     @NonNull
     private final UUID recipient;
