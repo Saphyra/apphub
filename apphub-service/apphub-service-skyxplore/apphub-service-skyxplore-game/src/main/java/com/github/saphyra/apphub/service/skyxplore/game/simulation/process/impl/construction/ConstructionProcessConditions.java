@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructionProcessConditions {
     boolean productionOrdersComplete(GameData gameData, UUID processId) {
         return gameData.getProcesses()

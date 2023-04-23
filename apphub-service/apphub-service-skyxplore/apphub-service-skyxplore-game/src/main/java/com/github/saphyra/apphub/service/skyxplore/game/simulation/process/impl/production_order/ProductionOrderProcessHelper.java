@@ -20,7 +20,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderProcessHelper {
     private final ProducerBuildingFinderService producerBuildingFinderService;
     private final ResourceRequirementProcessFactory resourceRequirementProcessFactory;
@@ -34,15 +33,20 @@ class ProductionOrderProcessHelper {
             .orElse(null);
     }
 
-    public void processResourceRequirements(SyncCache syncCache, GameData gameData, UUID processId, UUID location, UUID ownerId, String dataId, int amount, String producerBuildingDataId) {
+    void processResourceRequirements(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
+        UUID ownerId = gameData.getPlanets()
+            .get(location)
+            .getOwner();
+
         resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, gameData, processId, location, ownerId, dataId, amount, producerBuildingDataId)
             .forEach(productionOrderProcess -> {
-                gameData.getProcesses().add(productionOrderProcess);
+                gameData.getProcesses()
+                    .add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());
             });
     }
 
-    public void startWork(SyncCache syncCache, GameData gameData, UUID processId, String producerBuildingDataId, UUID reservedStorageId) {
+    void startWork(SyncCache syncCache, GameData gameData, UUID processId, String producerBuildingDataId, UUID reservedStorageId) {
         log.info("RequestWorkProcess is not present. Resolving allocations...");
 
         ReservedStorage reservedStorage = gameData.getReservedStorages()

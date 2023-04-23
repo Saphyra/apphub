@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,15 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructionProcessHelper {
     private final UseAllocatedResourceService useAllocatedResourceService;
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
+    private final ProductionOrderService productionOrderService;
 
-    public void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
-        Construction construction = gameData.getConstructions().findByConstructionIdValidated(constructionId);
+    void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
+        Construction construction = gameData.getConstructions()
+            .findByConstructionIdValidated(constructionId);
         Planet planet = gameData.getPlanets()
             .get(construction.getLocation());
 
@@ -40,7 +42,7 @@ class ConstructionProcessHelper {
         workProcessFactory.createForConstruction(
             gameData,
             processId,
-            construction.getConstructionId(),
+            constructionId,
             construction.getLocation(),
             construction.getRequiredWorkPoints()
         ).forEach(requestWorkProcess -> {
@@ -50,7 +52,7 @@ class ConstructionProcessHelper {
         });
     }
 
-    public void finishConstruction(SyncCache syncCache, GameData gameData, UUID constructionId) {
+    void finishConstruction(SyncCache syncCache, GameData gameData, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
@@ -69,7 +71,11 @@ class ConstructionProcessHelper {
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, planet.getPlanetId(), planet.getOwner(), constructionId);
-        syncCache.constructionFinished(planet.getOwner(), planet.getPlanetId(), construction, building, surface);
+        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, construction.getLocation(), planet.getOwner(), constructionId);
+        syncCache.constructionFinished(planet.getOwner(), construction.getLocation(), construction, building, surface);
+    }
+
+    public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
+        productionOrderService.createProductionOrdersForReservedStorages(syncCache, gameData, processId, constructionId);
     }
 }

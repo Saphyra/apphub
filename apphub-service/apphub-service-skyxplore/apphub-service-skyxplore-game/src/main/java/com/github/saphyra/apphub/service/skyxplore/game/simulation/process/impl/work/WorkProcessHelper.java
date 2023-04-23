@@ -22,7 +22,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO split
 //TODO unit test
 class WorkProcessHelper {
     private final ProductionBuildingFinder productionBuildingFinder;

@@ -79,19 +79,18 @@ public class ProductionOrderProcess implements Process {
     public void work(SyncCache syncCache) {
         log.info("Working on {}", this);
 
-        UUID ownerId = gameData.getPlanets()
-            .get(location)
-            .getOwner();
-
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {
-            String dataId = findReservedStorage().getDataId();
+            String dataId = findReservedStorage()
+                .getDataId();
             producerBuildingDataId = helper.findProductionBuilding(gameData, location, dataId);
 
             if (!isNull(producerBuildingDataId)) {
                 log.info("Creating ResourceRequirementProcesses for {}", this);
-                helper.processResourceRequirements(syncCache, gameData, processId, location, ownerId, dataId, amount, producerBuildingDataId);
+
+
+                helper.processResourceRequirements(syncCache, gameData, processId, location, dataId, amount, producerBuildingDataId);
                 status = ProcessStatus.IN_PROGRESS;
             } else {
                 log.info("Available ProductionBuilding not found for {}", dataId);

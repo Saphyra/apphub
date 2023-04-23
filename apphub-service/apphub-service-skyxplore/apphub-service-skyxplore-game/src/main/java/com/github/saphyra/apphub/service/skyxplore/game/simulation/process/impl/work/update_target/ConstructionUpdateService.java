@@ -18,8 +18,7 @@ class ConstructionUpdateService {
     void updateConstruction(SyncCache syncCache, GameData gameData, UUID location, UUID constructionId, int completedWorkPoints) {
         log.info("Adding {} workPoints to CONSTRUCTION {}", completedWorkPoints, constructionId);
 
-        Construction construction = gameData
-            .getConstructions()
+        Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
         Building building = gameData.getBuildings()
@@ -29,7 +28,7 @@ class ConstructionUpdateService {
             .findBySurfaceId(building.getSurfaceId());
 
         log.info("Before update: {}", construction);
-        construction.setCurrentWorkPoints(construction.getCurrentWorkPoints() + completedWorkPoints);
+        construction.increaseCurrentWorkPoints(completedWorkPoints);
         log.info("After update: {}", construction);
 
         UUID ownerId = gameData.getPlanets()

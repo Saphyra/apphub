@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.GameDataItemValidator;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import org.junit.jupiter.api.AfterEach;
@@ -44,7 +44,7 @@ public class ResourceValidatorTest {
     private ProductionData productionData;
 
     @Mock
-    private ProductionBuilding productionBuilding;
+    private ProductionBuildingData productionBuildingData;
 
 
     @AfterEach
@@ -103,11 +103,11 @@ public class ResourceValidatorTest {
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
-        given(productionBuildingService.values()).willReturn(Arrays.asList(productionBuilding));
+        given(productionBuildingService.values()).willReturn(Arrays.asList(productionBuildingData));
 
         Map<String, ProductionData> productionDataMap = new HashMap<>();
         productionDataMap.put(ID, productionData);
-        given(productionBuilding.getGives()).willReturn(new OptionalHashMap<>(productionDataMap));
+        given(productionBuildingData.getGives()).willReturn(new OptionalHashMap<>(productionDataMap));
         given(resourceData.getId()).willReturn(ID);
 
         underTest.validate(map);

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -36,11 +36,11 @@ class ProducerBuildingFinderService {
     private boolean canProduce(GameData gameData, String dataId, Building building) {
         String buildingDataId = building.getDataId();
         log.debug("Checking if {} can produce {}", buildingDataId, dataId);
-        ProductionBuilding productionBuilding = productionBuildingService.get(buildingDataId);
-        if (isNull(productionBuilding)) {
+        ProductionBuildingData productionBuildingData = productionBuildingService.get(buildingDataId);
+        if (isNull(productionBuildingData)) {
             return false;
         }
-        Map<String, ProductionData> gives = productionBuilding.getGives();
+        Map<String, ProductionData> gives = productionBuildingData.getGives();
         if (gives.containsKey(dataId)) {
             return gives.get(dataId)
                 .getPlaced()

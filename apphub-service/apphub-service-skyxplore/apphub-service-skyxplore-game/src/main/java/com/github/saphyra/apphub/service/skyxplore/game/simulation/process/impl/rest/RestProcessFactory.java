@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RestProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;

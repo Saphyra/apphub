@@ -12,23 +12,21 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderProcessConditions {
-    public boolean requiredResourcesPresent(GameData gameData, UUID processId) {
-        return
-            gameData.getProcesses()
+    boolean requiredResourcesPresent(GameData gameData, UUID processId) {
+        return gameData.getProcesses()
                 .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER)
                 .stream()
                 .allMatch(process -> process.getStatus() == ProcessStatus.DONE);
     }
 
-    public boolean workStarted(GameData gameData, UUID processId) {
+    boolean workStarted(GameData gameData, UUID processId) {
         return !gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .isEmpty();
     }
 
-    public boolean workDone(GameData gameData, UUID processId) {
+    boolean workDone(GameData gameData, UUID processId) {
         return gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .stream()

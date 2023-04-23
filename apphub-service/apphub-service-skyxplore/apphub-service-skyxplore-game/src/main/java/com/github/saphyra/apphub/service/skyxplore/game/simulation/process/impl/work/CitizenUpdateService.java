@@ -17,18 +17,21 @@ import java.util.UUID;
 @Slf4j
 class CitizenUpdateService {
     private final GameProperties gameProperties;
+    private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
 
     void updateCitizen(SyncCache syncCache, GameData gameData, UUID citizenId, int workPoints, SkillType skillType) {
         Citizen citizen = gameData.getCitizens()
             .findByCitizenIdValidated(citizenId);
         log.info("Citizen {} in game {} used {} workPoints of skill {}", citizen, gameData.getGameId(), workPoints, skillType);
 
-        citizen.reduceMorale(workPoints); //TODO Extra workPoints get from experience should not decrease morale
+        int moraleToReduce = citizenEfficiencyCalculator.calculateMoraleRequirement(gameData, citizen, skillType, workPoints);
+
+        citizen.reduceMorale(moraleToReduce);
 
         Skill skill = gameData.getSkills()
             .findByCitizenIdAndSkillType(citizenId, skillType);
 
-        skill.increaseExperience(workPoints);
+        skill.increaseExperience(moraleToReduce);
         if (skill.getExperience() >= skill.getNextLevel()) {
             log.info("Skill {} level earned for citizen {} in game {}", skillType, citizen.getCitizenId(), gameData.getGameId());
             skill.increaseLevel();

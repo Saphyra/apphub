@@ -19,8 +19,7 @@ class DeconstructionProcessHelper {
     private final WorkProcessFactory workProcessFactory;
 
     void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID location, UUID deconstructionId) {
-        workProcessFactory
-            .createForDeconstruction(gameData, processId, deconstructionId, location)
+        workProcessFactory.createForDeconstruction(gameData, processId, deconstructionId, location)
             .forEach(workProcess -> {
                 gameData.getProcesses()
                     .add(workProcess);
@@ -28,7 +27,7 @@ class DeconstructionProcessHelper {
             });
     }
 
-    public void finishDeconstruction(SyncCache syncCache, GameData gameData, UUID deconstructionId) {
+    void finishDeconstruction(SyncCache syncCache, GameData gameData, UUID deconstructionId) {
         log.info("Finishing deconstruction...");
 
         Deconstruction deconstruction = gameData.getDeconstructions()
@@ -41,7 +40,7 @@ class DeconstructionProcessHelper {
             .findBySurfaceId(building.getSurfaceId());
 
         gameData.getBuildings()
-            .deleteByBuildingId(deconstruction.getExternalReference());
+            .remove(building);
 
         UUID ownerId = gameData.getPlanets()
             .get(deconstruction.getLocation())

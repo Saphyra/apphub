@@ -96,17 +96,4 @@ class BuildingsTest {
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
-
-    @Test
-    void deleteByBuildingId() {
-        given(building1.getBuildingId()).willReturn(BUILDING_ID);
-        given(building2.getBuildingId()).willReturn(BUILDING_ID);
-        given(building3.getBuildingId()).willReturn(UUID.randomUUID());
-
-        underTest.addAll(List.of(building1, building2, building3));
-
-        underTest.deleteByBuildingId(BUILDING_ID);
-
-        assertThat(underTest).containsExactly(building3);
-    }
 }

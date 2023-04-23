@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RestProcessConditions {
     boolean citizenAllocated(GameData gameData, UUID citizenId) {
         return gameData.getCitizenAllocations()

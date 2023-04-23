@@ -160,7 +160,7 @@ class CancelConstructionServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(buildings).deleteByBuildingId(BUILDING_ID);
+        verify(buildings).remove(building);
         verify(syncCache).deleteGameItem(BUILDING_ID, GameItemType.BUILDING);
         verify(syncCache).buildingDetailsModified(USER_ID, PLANET_ID);
     }

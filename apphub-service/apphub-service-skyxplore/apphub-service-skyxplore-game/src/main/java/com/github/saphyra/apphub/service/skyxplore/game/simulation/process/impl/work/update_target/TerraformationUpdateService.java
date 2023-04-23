@@ -24,9 +24,8 @@ class TerraformationUpdateService {
             .findBySurfaceId(terraformation.getExternalReference());
 
         log.info("Before update: {}", terraformation);
-        terraformation.setCurrentWorkPoints(terraformation.getCurrentWorkPoints() + completedWorkPoints);
+        terraformation.increaseCurrentWorkPoints(completedWorkPoints);
         log.info("After update: {}", terraformation);
-
 
         UUID ownerId = gameData.getPlanets()
             .get(location)

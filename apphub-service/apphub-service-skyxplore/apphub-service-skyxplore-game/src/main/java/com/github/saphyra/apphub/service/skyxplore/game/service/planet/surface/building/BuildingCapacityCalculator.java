@@ -17,6 +17,10 @@ public class BuildingCapacityCalculator {
      * result = number of workplaces * level - allocated workplaces
      */
     public int calculateCapacity(GameData gameData, Building building) {
+        if (gameData.getDeconstructions().findByExternalReference(building.getBuildingId()).isPresent()) {
+            log.info("Building is being deconstructed");
+            return 0;
+        }
         Integer workers = productionBuildingService.get(building.getDataId())
             .getWorkers();
         int maxWorkers = building.getLevel() * workers;

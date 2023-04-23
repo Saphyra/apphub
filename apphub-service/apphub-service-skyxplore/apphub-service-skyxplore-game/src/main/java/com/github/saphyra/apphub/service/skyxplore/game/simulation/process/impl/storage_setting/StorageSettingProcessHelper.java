@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StorageSettingProcessHelper {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
     private final ReservedStorageFactory reservedStorageFactory;

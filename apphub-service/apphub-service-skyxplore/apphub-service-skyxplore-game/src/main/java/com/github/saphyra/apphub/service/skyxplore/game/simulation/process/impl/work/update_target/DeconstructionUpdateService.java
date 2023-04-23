@@ -28,7 +28,7 @@ class DeconstructionUpdateService {
             .findBySurfaceId(building.getSurfaceId());
 
         log.info("Before update: {}", deconstruction);
-        deconstruction.setCurrentWorkPoints(deconstruction.getCurrentWorkPoints() + completedWorkPoints);
+        deconstruction.increaseWorkPoints(completedWorkPoints);
         log.info("After update: {}", deconstruction);
 
         UUID ownerId = gameData.getPlanets()

@@ -42,6 +42,7 @@ class DeconstructBuildingServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -127,10 +128,11 @@ class DeconstructBuildingServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(building.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
 
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
-        given(deconstructionProcessFactory.create(gameData, PLANET_ID, deconstruction)).willReturn(deconstructionProcess);
+        given(deconstructionProcessFactory.create(gameData, PLANET_ID, DECONSTRUCTION_ID)).willReturn(deconstructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(syncCacheFactory.create(game)).willReturn(syncCache);

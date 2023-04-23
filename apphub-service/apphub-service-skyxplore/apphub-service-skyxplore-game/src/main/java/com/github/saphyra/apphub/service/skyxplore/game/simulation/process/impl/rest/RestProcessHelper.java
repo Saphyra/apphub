@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RestProcessHelper {
     private final GameProperties gameProperties;
     private final CitizenAllocationFactory citizenAllocationFactory;
@@ -56,16 +55,16 @@ class RestProcessHelper {
             });
     }
 
-     void increaseMorale(SyncCache syncCache, GameData gameData, UUID citizenId) {
-         Citizen citizen = gameData.getCitizens()
-             .findByCitizenIdValidated(citizenId);
+    void increaseMorale(SyncCache syncCache, GameData gameData, UUID citizenId) {
+        Citizen citizen = gameData.getCitizens()
+            .findByCitizenIdValidated(citizenId);
 
-         int moraleRegen = gameProperties.getCitizen()
-                 .getMorale()
-                     .getRegenPerTick();
+        int moraleRegen = gameProperties.getCitizen()
+            .getMorale()
+            .getRegenPerTick();
 
-         citizen.increaseMorale(moraleRegen);
+        citizen.increaseMorale(moraleRegen);
 
-         syncCache.citizenModified(citizen);
+        syncCache.citizenModified(citizen);
     }
 }

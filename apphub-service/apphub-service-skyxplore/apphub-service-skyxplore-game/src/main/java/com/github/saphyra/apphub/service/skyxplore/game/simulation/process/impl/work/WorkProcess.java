@@ -47,10 +47,8 @@ public class WorkProcess implements Process {
     private volatile int completedWorkPoints;
     private final WorkProcessType workProcessType;
     private final UUID targetId;
-
     private final GameData gameData;
     private final UUID location;
-
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override

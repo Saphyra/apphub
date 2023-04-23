@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import lombok.RequiredArgsConstructor;
@@ -13,43 +11,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class CitizenEfficiencyCalculator {
-    private final GameProperties properties;
+    private final MoraleMultiplierCalculator moraleMultiplierCalculator;
+    private final SkillMultiplierCalculator skillMultiplierCalculator;
 
     public double calculateEfficiency(GameData gameData, Citizen citizen, SkillType skillType) {
-        double moraleMultiplier = calculateMoraleMultiplier(citizen.getMorale());
-        int skillLevel = gameData.getSkills()
-            .findByCitizenIdAndSkillType(citizen.getCitizenId(), skillType)
-            .getLevel();
-        double skillMultiplier = calculateSkillMultiplier(skillLevel);
+        double moraleMultiplier = moraleMultiplierCalculator.calculateMoraleMultiplier(citizen.getMorale());
+
+        double skillMultiplier = skillMultiplierCalculator.calculateSkillMultiplier(gameData, citizen.getCitizenId(), skillType);
         double result = moraleMultiplier * skillMultiplier;
         log.trace("Efficiency of citizen {} is: {}", citizen, result);
         return result;
     }
 
-    private double calculateSkillMultiplier(int skillLevel) {
-        return 1 + (skillLevel - 1) * properties.getCitizen()
-            .getSkill()
-            .getSkillLevelMultiplier();
-    }
-
-    private double calculateMoraleMultiplier(int morale) {
-        CitizenMoraleProperties moraleProperties = properties.getCitizen()
-            .getMorale();
-        if (morale > moraleProperties.getWorkEfficiencyDropUnder()) {
-            log.trace("Citizen has {} morale, what is enough for 100% work efficiency", morale);
-            return 1;
-        }
-
-        double result = Math.max(moraleProperties.getMinEfficiency(), (double) morale / moraleProperties.getWorkEfficiencyDropUnder());
-        log.trace("Citizen has {} morale, so the efficiency is {}", morale, result);
-        return result;
-    }
-
     public Integer calculateMoraleRequirement(GameData gameData, Citizen citizen, SkillType skillType, int requestedWorkPoints) {
-        int skillLevel = gameData.getSkills()
-            .findByCitizenIdAndSkillType(citizen.getCitizenId(), skillType)
-            .getLevel();
-        double skillMultiplier = calculateSkillMultiplier(skillLevel);
+        double skillMultiplier = skillMultiplierCalculator.calculateSkillMultiplier(gameData, citizen.getCitizenId(), skillType);
 
         return (int) Math.ceil(requestedWorkPoints / skillMultiplier);
     }

@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionOrderService {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
@@ -21,9 +20,10 @@ public class ProductionOrderService {
         gameData.getReservedStorages()
             .getByExternalReference(externalReference)
             .stream()
-            .flatMap(reservedStorage -> productionOrderProcessFactory.create(gameData, processId, reservedStorage.getLocation(), reservedStorage.getReservedStorageId()).stream())
+            .flatMap(reservedStorage -> productionOrderProcessFactory.create(gameData, processId, reservedStorage.getLocation(), reservedStorage).stream())
             .forEach(productionOrderProcess -> {
-                gameData.getProcesses().add(productionOrderProcess);
+                gameData.getProcesses()
+                    .add(productionOrderProcess);
                 syncCache.saveGameItem(productionOrderProcess.toModel());
             });
 

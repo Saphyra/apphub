@@ -88,7 +88,7 @@ public class CancelConstructionService {
 
                     if (building.getLevel() == 0) {
                         gameData.getBuildings()
-                            .deleteByBuildingId(building.getBuildingId());
+                            .remove(building);
                         syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
                         syncCache.buildingDetailsModified(planet.getOwner(), planet.getPlanetId());
                     }

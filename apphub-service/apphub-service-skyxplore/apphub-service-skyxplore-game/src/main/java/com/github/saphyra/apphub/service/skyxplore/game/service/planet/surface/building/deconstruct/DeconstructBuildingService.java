@@ -51,7 +51,7 @@ public class DeconstructBuildingService {
                     .getDeconstructions()
                     .add(deconstruction);
 
-                DeconstructionProcess process = deconstructionProcessFactory.create(game.getData(), planetId, deconstruction);
+                DeconstructionProcess process = deconstructionProcessFactory.create(game.getData(), planetId, deconstruction.getDeconstructionId());
 
                 syncCache.deconstructionCreated(userId, planetId, deconstruction, surface, process);
 

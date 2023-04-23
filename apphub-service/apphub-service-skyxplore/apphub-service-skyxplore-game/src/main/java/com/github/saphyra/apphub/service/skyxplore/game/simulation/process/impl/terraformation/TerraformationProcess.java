@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,9 +67,10 @@ public class TerraformationProcess implements Process {
     public void work(SyncCache syncCache) {
         log.info("Working on {}", this);
 
+        TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
+
         if (status == ProcessStatus.CREATED) {
-            applicationContextProxy.getBean(ProductionOrderService.class)
-                .createProductionOrdersForReservedStorages(syncCache, gameData, processId, terraformationId);
+            helper.createProductionOrders(syncCache, gameData, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -82,7 +82,6 @@ public class TerraformationProcess implements Process {
             return;
         }
 
-        TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
         if (!conditions.hasWorkProcesses(gameData, processId)) {
             helper.startWork(syncCache, gameData, processId, terraformationId);
         }

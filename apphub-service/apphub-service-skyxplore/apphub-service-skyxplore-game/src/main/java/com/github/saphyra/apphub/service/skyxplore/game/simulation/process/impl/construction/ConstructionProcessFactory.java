@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConstructionProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
@@ -46,7 +45,6 @@ public class ConstructionProcessFactory implements ProcessFactory {
             .gameData(game.getData())
             .location(model.getLocation())
             .constructionId(model.getExternalReference())
-            .location(model.getLocation())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }

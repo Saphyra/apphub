@@ -3,10 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -17,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Proce
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -35,8 +32,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
 
     public List<ProductionOrderProcess> create(GameData gameData, UUID externalReference, UUID location, UUID reservedStorageId) {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
-            .findByReservedStorageId(reservedStorageId)
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found with id " + reservedStorageId));
+            .findByReservedStorageIdValidated(reservedStorageId);
 
         return create(gameData, externalReference, location, reservedStorage);
     }
@@ -47,7 +43,8 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
             .map(AllocatedResource::getAllocatedResourceId)
             .orElse(null);
 
-        int maxBatchSize = resourceDataService.get(reservedStorage.getDataId()).getMaxProductionBatchSize();
+        int maxBatchSize = resourceDataService.get(reservedStorage.getDataId())
+            .getMaxProductionBatchSize();
         log.info("maxBatchSize: {}", maxBatchSize);
 
         List<ProductionOrderProcess> result = new ArrayList<>();

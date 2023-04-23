@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeconstructionProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
@@ -29,10 +27,6 @@ public class DeconstructionProcessFactory implements ProcessFactory {
 
     @Override
     public DeconstructionProcess createFromModel(Game game, ProcessModel model) {
-        Deconstruction deconstruction = game.getData()
-            .getDeconstructions()
-            .findByDeconstructionId(model.getExternalReference());
-
         return DeconstructionProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
@@ -43,10 +37,10 @@ public class DeconstructionProcessFactory implements ProcessFactory {
             .build();
     }
 
-    public DeconstructionProcess create(GameData gameData, UUID location, Deconstruction deconstruction) {
+    public DeconstructionProcess create(GameData gameData, UUID location, UUID deconstructionId) {
         return DeconstructionProcess.builder()
             .processId(idGenerator.randomUuid())
-            .deconstructionId(deconstruction.getDeconstructionId())
+            .deconstructionId(deconstructionId)
             .gameData(gameData)
             .location(location)
             .applicationContextProxy(applicationContextProxy)

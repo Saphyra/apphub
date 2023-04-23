@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConstructionProcess implements Process {
     @Getter
     @NonNull
@@ -70,9 +68,10 @@ public class ConstructionProcess implements Process {
     public void work(SyncCache syncCache) {
         log.info("Working on {}", this);
 
+        ConstructionProcessHelper helper = applicationContextProxy.getBean(ConstructionProcessHelper.class);
+
         if (status == ProcessStatus.CREATED) {
-            applicationContextProxy.getBean(ProductionOrderService.class)
-                .createProductionOrdersForReservedStorages(syncCache, gameData, processId, constructionId);
+            helper.createProductionOrders(syncCache, gameData, processId, constructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -83,8 +82,6 @@ public class ConstructionProcess implements Process {
             log.info("Waiting for ProductionOrderProcesses to finish...");
             return;
         }
-
-        ConstructionProcessHelper helper = applicationContextProxy.getBean(ConstructionProcessHelper.class);
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
             helper.startWork(syncCache, gameData, processId, constructionId);

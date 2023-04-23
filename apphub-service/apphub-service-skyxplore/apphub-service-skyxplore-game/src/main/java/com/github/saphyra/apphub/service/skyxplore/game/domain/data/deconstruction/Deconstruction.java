@@ -21,7 +21,10 @@ public class Deconstruction {
     @NonNull
     private final UUID location;
 
-
     private int currentWorkPoints;
     private int priority;
+
+    public void increaseWorkPoints(int completedWorkPoints) {
+        this.currentWorkPoints += completedWorkPoints;
+    }
 }

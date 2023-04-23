@@ -12,13 +12,15 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructionProcessConditions {
     boolean buildingUtilized(GameData gameData, UUID deconstructionId) {
-        UUID buildingId = gameData.getDeconstructions().findByDeconstructionId(deconstructionId).getExternalReference();
+        UUID buildingId = gameData.getDeconstructions()
+            .findByDeconstructionId(deconstructionId)
+            .getExternalReference();
 
         return !gameData.getBuildingAllocations()
-            .getByBuildingId(buildingId).isEmpty();
+            .getByBuildingId(buildingId)
+            .isEmpty();
     }
 
     boolean workFinished(GameData gameData, UUID processId) {

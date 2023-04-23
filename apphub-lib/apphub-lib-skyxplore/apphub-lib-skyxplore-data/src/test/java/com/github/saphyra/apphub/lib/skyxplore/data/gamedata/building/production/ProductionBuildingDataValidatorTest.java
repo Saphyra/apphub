@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductionBuildingValidatorTest {
+public class ProductionBuildingDataValidatorTest {
     private static final String KEY = "key";
 
     @Mock
@@ -33,66 +33,66 @@ public class ProductionBuildingValidatorTest {
     private ProductionBuildingValidator underTest;
 
     @Mock
-    private ProductionBuilding productionBuilding;
+    private ProductionBuildingData productionBuildingData;
 
     @Mock
     private ProductionData productionData;
 
     @AfterEach
     public void validate() {
-        verify(buildingDataValidator).validate(productionBuilding);
+        verify(buildingDataValidator).validate(productionBuildingData);
     }
 
     @Test
     public void nullWorkers() {
-        given(productionBuilding.getWorkers()).willReturn(null);
-        Map<String, ProductionBuilding> map = new HashMap<>();
-        map.put(KEY, productionBuilding);
+        given(productionBuildingData.getWorkers()).willReturn(null);
+        Map<String, ProductionBuildingData> map = new HashMap<>();
+        map.put(KEY, productionBuildingData);
 
         assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void tooLowWorkers() {
-        given(productionBuilding.getWorkers()).willReturn(0);
-        Map<String, ProductionBuilding> map = new HashMap<>();
-        map.put(KEY, productionBuilding);
+        given(productionBuildingData.getWorkers()).willReturn(0);
+        Map<String, ProductionBuildingData> map = new HashMap<>();
+        map.put(KEY, productionBuildingData);
 
         assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void nullPrimarySurfaceType() {
-        given(productionBuilding.getWorkers()).willReturn(1);
-        given(productionBuilding.getPrimarySurfaceType()).willReturn(null);
-        Map<String, ProductionBuilding> map = new HashMap<>();
-        map.put(KEY, productionBuilding);
+        given(productionBuildingData.getWorkers()).willReturn(1);
+        given(productionBuildingData.getPrimarySurfaceType()).willReturn(null);
+        Map<String, ProductionBuildingData> map = new HashMap<>();
+        map.put(KEY, productionBuildingData);
 
         assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void nullPlaceableSurfaceTypes() {
-        given(productionBuilding.getWorkers()).willReturn(1);
-        given(productionBuilding.getPrimarySurfaceType()).willReturn(SurfaceType.DESERT);
-        given(productionBuilding.getPlaceableSurfaceTypes()).willReturn(null);
-        Map<String, ProductionBuilding> map = new HashMap<>();
-        map.put(KEY, productionBuilding);
+        given(productionBuildingData.getWorkers()).willReturn(1);
+        given(productionBuildingData.getPrimarySurfaceType()).willReturn(SurfaceType.DESERT);
+        given(productionBuildingData.getPlaceableSurfaceTypes()).willReturn(null);
+        Map<String, ProductionBuildingData> map = new HashMap<>();
+        map.put(KEY, productionBuildingData);
 
         assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void valid() {
-        given(productionBuilding.getWorkers()).willReturn(1);
-        given(productionBuilding.getPrimarySurfaceType()).willReturn(SurfaceType.DESERT);
-        given(productionBuilding.getPlaceableSurfaceTypes()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
+        given(productionBuildingData.getWorkers()).willReturn(1);
+        given(productionBuildingData.getPrimarySurfaceType()).willReturn(SurfaceType.DESERT);
+        given(productionBuildingData.getPlaceableSurfaceTypes()).willReturn(Arrays.asList(SurfaceType.CONCRETE));
         OptionalHashMap<String, ProductionData> gives = new OptionalHashMap<>();
         gives.put(KEY, productionData);
-        given(productionBuilding.getGives()).willReturn(gives);
+        given(productionBuildingData.getGives()).willReturn(gives);
 
-        Map<String, ProductionBuilding> map = new HashMap<>();
-        map.put(KEY, productionBuilding);
+        Map<String, ProductionBuildingData> map = new HashMap<>();
+        map.put(KEY, productionBuildingData);
 
         underTest.validate(map);
 

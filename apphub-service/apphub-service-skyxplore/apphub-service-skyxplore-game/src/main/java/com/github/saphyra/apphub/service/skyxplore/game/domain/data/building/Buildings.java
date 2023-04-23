@@ -35,8 +35,4 @@ public class Buildings extends Vector<Building> {
             .findAny()
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Building not found by id " + buildingId));
     }
-
-    public void deleteByBuildingId(UUID buildingId) {
-        removeIf(building -> building.getBuildingId().equals(buildingId));
-    }
 }

@@ -15,7 +15,7 @@ import static java.util.Objects.isNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ProductionBuilding extends BuildingData {
+public class ProductionBuildingData extends BuildingData {
     private Map<String, ProductionData> gives;
     private Integer workers;
     private SurfaceType primarySurfaceType;

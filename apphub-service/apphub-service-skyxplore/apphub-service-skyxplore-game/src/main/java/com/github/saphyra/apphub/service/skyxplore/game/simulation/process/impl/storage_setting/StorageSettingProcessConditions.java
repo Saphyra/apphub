@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StorageSettingProcessConditions {
     boolean isFinished(GameData gameData, UUID processId) {
         return gameData.getProcesses()

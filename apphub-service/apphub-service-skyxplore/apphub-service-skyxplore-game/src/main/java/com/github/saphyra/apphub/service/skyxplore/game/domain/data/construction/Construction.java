@@ -21,4 +21,8 @@ public class Construction {
     private final String data;
     private Integer currentWorkPoints;
     private Integer priority;
+
+    public void increaseCurrentWorkPoints(int completedWorkPoints) {
+        this.currentWorkPoints += completedWorkPoints;
+    }
 }
