@@ -11,8 +11,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,26 +29,42 @@ import static java.util.Objects.isNull;
 @Slf4j
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
-//TODO unit test
 public class WorkProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
 
     @Getter
+    @NonNull
     private volatile ProcessStatus status;
 
     @Getter
+    @NonNull
     private final UUID externalReference;
 
     private final String buildingDataId;
+
+    @NonNull
     private final SkillType skillType;
-    private final int requiredWorkPoints;
-    private volatile int completedWorkPoints;
+
+    @NonNull
+    private final Integer requiredWorkPoints;
+
+    @NonNull
+    private volatile Integer completedWorkPoints;
+
+    @NonNull
     private final WorkProcessType workProcessType;
+
     private final UUID targetId;
+
+    @NonNull
     private final GameData gameData;
+
+    @NonNull
     private final UUID location;
+
+    @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -67,22 +83,23 @@ public class WorkProcess implements Process {
     @Override
     public void work(SyncCache syncCache) {
         log.info("Working on {}", this);
-
-        if (status == ProcessStatus.CREATED) {
-            status = ProcessStatus.IN_PROGRESS;
-        }
-
         WorkProcessHelper helper = applicationContextProxy.getBean(WorkProcessHelper.class);
         WorkProcessConditions conditions = applicationContextProxy.getBean(WorkProcessConditions.class);
 
-        if (isNull(buildingDataId)) {
-            helper.allocateParentAsBuildingIfPossible(syncCache, gameData, processId, externalReference);
-        } else {
-            helper.allocateBuildingIfPossible(syncCache, gameData, processId, location, buildingDataId);
+        if (status == ProcessStatus.CREATED) {
+            if (isNull(buildingDataId)) {
+                helper.allocateParentAsBuildingIfPossible(syncCache, gameData, processId, externalReference);
+            } else {
+                helper.allocateBuildingIfPossible(syncCache, gameData, processId, location, buildingDataId);
+            }
+
+            if (conditions.hasBuildingAllocated(gameData, processId)) {
+                status = ProcessStatus.IN_PROGRESS;
+            }
         }
 
-        if (!conditions.buildingAllocated(gameData, processId)) {
-            log.info("No {} allocated.", buildingDataId);
+        if (status != ProcessStatus.IN_PROGRESS) {
+            log.info("Waiting for initialization");
             return;
         }
 
@@ -133,7 +150,7 @@ public class WorkProcess implements Process {
                 new BiWrapper<>(ProcessParamKeys.BUILDING_DATA_ID, buildingDataId),
                 new BiWrapper<>(ProcessParamKeys.SKILL_TYPE, skillType.name()),
                 new BiWrapper<>(ProcessParamKeys.REQUIRED_WORK_POINTS, String.valueOf(requiredWorkPoints)),
-                new BiWrapper<>(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE, workProcessType.name()),
+                new BiWrapper<>(ProcessParamKeys.WORK_PROCESS_TYPE, workProcessType.name()),
                 new BiWrapper<>(ProcessParamKeys.TARGET_ID, applicationContextProxy.getBean(UuidConverter.class).convertDomain(targetId)),
                 new BiWrapper<>(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(completedWorkPoints))
             ))

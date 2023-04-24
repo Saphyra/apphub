@@ -15,7 +15,6 @@ import java.util.concurrent.Future;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 @Builder
-//TODO unit test
 class TickScheduler implements Runnable {
     private final Game game;
     private final TickSchedulerContext context;

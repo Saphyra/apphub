@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SatietyDecreaseTickTask implements TickTask {
     private final GameProperties gameProperties;
 

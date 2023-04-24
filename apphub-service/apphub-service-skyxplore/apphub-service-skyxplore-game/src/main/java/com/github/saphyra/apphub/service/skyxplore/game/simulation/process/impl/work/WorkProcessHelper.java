@@ -22,7 +22,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class WorkProcessHelper {
     private final ProductionBuildingFinder productionBuildingFinder;
     private final BuildingAllocationFactory buildingAllocationFactory;
@@ -91,11 +90,7 @@ class WorkProcessHelper {
 
         citizenUpdateService.updateCitizen(syncCache, gameData, citizenId, completedWorkPoints, skillType);
 
-        UUID location = gameData.getPlanets()
-            .get(citizen.getLocation())
-            .getPlanetId();
-
-        updateTargetService.updateTarget(syncCache, gameData, processType, location, targetId, completedWorkPoints);
+        updateTargetService.updateTarget(syncCache, gameData, processType, citizen.getLocation(), targetId, completedWorkPoints);
 
         return completedWorkPoints;
     }

@@ -17,7 +17,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProcessDeletionTickTask implements TickTask {
     @Override
     public TickTaskOrder getOrder() {

@@ -16,7 +16,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class WorkProcessFactory implements ProcessFactory {
     private final ProductionBuildingService productionBuildingService;
     private final GameProperties gameProperties;
@@ -42,7 +40,7 @@ public class WorkProcessFactory implements ProcessFactory {
     }
 
     @Override
-    public Process createFromModel(Game game, ProcessModel model) {
+    public WorkProcess createFromModel(Game game, ProcessModel model) {
         return create(
             model.getId(),
             model.getExternalReference(),
@@ -52,7 +50,7 @@ public class WorkProcessFactory implements ProcessFactory {
             model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
             SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
             Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)),
-            WorkProcessType.valueOf(model.getData().get(ProcessParamKeys.REQUEST_WORK_PROCESS_TYPE)),
+            WorkProcessType.valueOf(model.getData().get(ProcessParamKeys.WORK_PROCESS_TYPE)),
             uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.TARGET_ID)),
             Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS))
         );
@@ -67,82 +65,33 @@ public class WorkProcessFactory implements ProcessFactory {
         ConstructionRequirements constructionRequirements = productionData.getConstructionRequirements();
         int requiredWorkPoints = amount * constructionRequirements.getRequiredWorkPoints();
 
-        int maxWorkPointsBatch = gameProperties.getCitizen()
-            .getMaxWorkPointsBatch();
-
-        log.info("RequiredWorkPoints: {}, MaxWorkPointsBatch: {}", requiredWorkPoints, maxWorkPointsBatch);
-
-        List<WorkProcess> result = new ArrayList<>();
-
-        for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
-            WorkProcess workProcess = createNew(
-                gameData,
-                processId,
-                location,
-                producerBuildingDataId,
-                productionData.getRequiredSkill(),
-                Math.min(workPointsLeft, maxWorkPointsBatch),
-                WorkProcessType.OTHER,
-                null
-            );
-            log.info("{} created.", workProcess);
-            result.add(workProcess);
-        }
-
-        return result;
+        return createNews(gameData, processId, location, producerBuildingDataId, productionData.getRequiredSkill(), requiredWorkPoints, WorkProcessType.OTHER, null);
     }
 
     public List<WorkProcess> createForDeconstruction(GameData gameData, UUID processId, UUID deconstructionId, UUID location) {
         DeconstructionProperties deconstructionProperties = gameProperties.getDeconstruction();
 
-        int maxWorkPointsBatch = gameProperties.getCitizen()
-            .getMaxWorkPointsBatch();
-
-        List<WorkProcess> result = new ArrayList<>();
-
-        for (int workPointsLeft = deconstructionProperties.getRequiredWorkPoints(); workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
-            WorkProcess workProcess = createNew(
-                gameData,
-                processId,
-                location,
-                null,
-                SkillType.BUILDING,
-                Math.min(workPointsLeft, maxWorkPointsBatch),
-                WorkProcessType.DECONSTRUCTION,
-                deconstructionId
-            );
-            log.info("{} created.", workProcess);
-            result.add(workProcess);
-        }
-
-        return result;
+        return createNews(gameData, processId, location, null, SkillType.BUILDING, deconstructionProperties.getRequiredWorkPoints(), WorkProcessType.DECONSTRUCTION, deconstructionId);
     }
 
     public List<WorkProcess> createForTerraformation(GameData gameData, UUID processId, UUID constructionId, UUID location, int requiredWorkPoints) {
-        int maxWorkPointsBatch = gameProperties.getCitizen()
-            .getMaxWorkPointsBatch();
-
-        List<WorkProcess> result = new ArrayList<>();
-
-        for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
-            WorkProcess workProcess = createNew(
-                gameData,
-                processId,
-                location,
-                null,
-                SkillType.BUILDING,
-                Math.min(workPointsLeft, maxWorkPointsBatch),
-                WorkProcessType.TERRAFORMATION,
-                constructionId
-            );
-            log.info("{} created.", workProcess);
-            result.add(workProcess);
-        }
-
-        return result;
+        return createNews(gameData, processId, location, null, SkillType.BUILDING, requiredWorkPoints, WorkProcessType.TERRAFORMATION, constructionId);
     }
 
     public List<WorkProcess> createForConstruction(GameData gameData, UUID processId, UUID constructionId, UUID location, int requiredWorkPoints) {
+        return createNews(gameData, processId, location, null, SkillType.BUILDING, requiredWorkPoints, WorkProcessType.CONSTRUCTION, constructionId);
+    }
+
+    private List<WorkProcess> createNews(
+        GameData gameData,
+        UUID externalReference,
+        UUID location,
+        String buildingDataId,
+        SkillType skillType,
+        int requiredWorkPoints,
+        WorkProcessType processType,
+        UUID targetId
+    ) {
         int maxWorkPointsBatch = gameProperties.getCitizen()
             .getMaxWorkPointsBatch();
 
@@ -151,13 +100,13 @@ public class WorkProcessFactory implements ProcessFactory {
         for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
             WorkProcess workProcess = createNew(
                 gameData,
-                processId,
+                externalReference,
                 location,
-                null,
-                SkillType.BUILDING,
+                buildingDataId,
+                skillType,
                 Math.min(workPointsLeft, maxWorkPointsBatch),
-                WorkProcessType.CONSTRUCTION,
-                constructionId
+                processType,
+                targetId
             );
             log.info("{} created.", workProcess);
             result.add(workProcess);
@@ -166,7 +115,7 @@ public class WorkProcessFactory implements ProcessFactory {
         return result;
     }
 
-    public WorkProcess createNew(
+    private WorkProcess createNew(
         GameData gameData,
         UUID externalReference,
         UUID location,

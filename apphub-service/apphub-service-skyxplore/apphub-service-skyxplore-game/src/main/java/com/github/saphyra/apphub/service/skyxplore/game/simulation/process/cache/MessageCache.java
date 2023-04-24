@@ -24,6 +24,10 @@ class MessageCache extends ConcurrentHashMap<WsMessageKey, Supplier<WebSocketMes
             .map(entry -> entry.getValue().get())
             .toList();
 
+        if (messages.isEmpty()) {
+            return;
+        }
+
         messageSenderProxy.bulkSendToGame(messages);
     }
 }
