@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class JoinToLobbyService {
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;
@@ -39,21 +38,22 @@ public class JoinToLobbyService {
 
         invitations.remove(invitation);
 
-        Member member = Member.builder()
+        LobbyMember lobbyMember = LobbyMember.builder()
             .userId(userId)
-            .status(LobbyMemberStatus.NOT_READY)
+            .status(LobbyMemberStatus.DISCONNECTED)
             .build();
         lobby.getMembers()
-            .put(userId, member);
+            .put(userId, lobbyMember);
     }
 
     public void userJoinedToLobby(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
-        Member member = lobby.getMembers().get(userId);
-        member.setConnected(true);
-        member.setStatus(LobbyMemberStatus.NOT_READY);
+        LobbyMember lobbyMember = lobby.getMembers()
+            .get(userId);
+        lobbyMember.setConnected(true);
+        lobbyMember.setStatus(LobbyMemberStatus.NOT_READY);
 
-        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(member);
+        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
         messageSenderProxy.lobbyMemberModified(response, lobby.getMembers().keySet());
         messageSenderProxy.lobbyMemberConnected(response, lobby.getMembers().keySet());
     }

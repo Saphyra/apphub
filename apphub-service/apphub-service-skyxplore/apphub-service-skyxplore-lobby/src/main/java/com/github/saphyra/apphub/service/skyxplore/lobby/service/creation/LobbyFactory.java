@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,8 +29,8 @@ class LobbyFactory {
     private final GameSettingsProperties gameSettingsProperties;
 
     Lobby createForNewGame(UUID userId, String lobbyName) {
-        Map<UUID, Member> members = new ConcurrentHashMap<>();
-        members.put(userId, Member.builder().userId(userId).status(LobbyMemberStatus.NOT_READY).build());
+        Map<UUID, LobbyMember> members = new ConcurrentHashMap<>();
+        members.put(userId, LobbyMember.builder().userId(userId).status(LobbyMemberStatus.NOT_READY).build());
 
         return Lobby.builder()
             .lobbyId(idGenerator.randomUuid())
@@ -44,8 +44,8 @@ class LobbyFactory {
     }
 
     Lobby createForLoadGame(UUID host, UUID gameId, GameViewForLobbyCreation game) {
-        Map<UUID, Member> members = new ConcurrentHashMap<>();
-        members.put(host, Member.builder().userId(host).status(LobbyMemberStatus.NOT_READY).alliance(game.getHostAllianceId()).build());
+        Map<UUID, LobbyMember> members = new ConcurrentHashMap<>();
+        members.put(host, LobbyMember.builder().userId(host).status(LobbyMemberStatus.NOT_READY).allianceId(game.getHostAllianceId()).build());
 
         return Lobby.builder()
             .lobbyId(idGenerator.randomUuid())

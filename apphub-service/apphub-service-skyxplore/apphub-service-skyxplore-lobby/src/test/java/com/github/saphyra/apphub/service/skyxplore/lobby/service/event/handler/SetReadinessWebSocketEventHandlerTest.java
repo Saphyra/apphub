@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class SetReadinessWebSocketEventHandlerTest {
     private Lobby lobby;
 
     @Mock
-    private Member member;
+    private LobbyMember lobbyMember;
 
     @Mock
     private LobbyMemberResponse lobbyMemberResponse;
@@ -61,13 +61,13 @@ public class SetReadinessWebSocketEventHandlerTest {
     @Test
     public void setReadiness() {
         given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        Map<UUID, Member> lobbyMembers = CollectionUtils.singleValueMap(FROM, member);
+        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(FROM, lobbyMember);
         given(lobby.getMembers()).willReturn(lobbyMembers);
-        given(lobbyMemberToResponseConverter.convertMember(member)).willReturn(lobbyMemberResponse);
+        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
 
         underTest.handle(FROM, WebSocketEvent.builder().payload(String.valueOf(true)).build());
 
-        verify(member).setStatus(LobbyMemberStatus.READY);
+        verify(lobbyMember).setStatus(LobbyMemberStatus.READY);
         verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, lobbyMembers.keySet());
     }
 }

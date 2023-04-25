@@ -35,7 +35,7 @@ public class Lobby {
     private final UUID host;
 
     @NonNull
-    private final Map<UUID, Member> members;
+    private final Map<UUID, LobbyMember> members;
 
     @NonNull
     @Builder.Default

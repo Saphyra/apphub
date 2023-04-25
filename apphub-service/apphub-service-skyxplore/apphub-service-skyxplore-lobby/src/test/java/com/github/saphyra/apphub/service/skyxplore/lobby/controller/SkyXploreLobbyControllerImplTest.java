@@ -2,8 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
@@ -53,6 +57,9 @@ public class SkyXploreLobbyControllerImplTest {
     @Mock
     private StartGameService startGameService;
 
+    @Mock
+    private LobbyDao lobbyDao;
+
     @InjectMocks
     private SkyXploreLobbyControllerImpl underTest;
 
@@ -64,6 +71,25 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Mock
     private LobbyMemberResponse lobbyMemberResponse;
+
+    @Mock
+    private Lobby lobby;
+
+    @Test
+    void lobbyForPage(){
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
+        given(lobby.getHost()).willReturn(USER_ID);
+        given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
+
+        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
+
+        assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
+        assertThat(result.isHost()).isTrue();
+        assertThat(result.getLobbyType()).isEqualTo(LobbyType.LOAD_GAME.name());
+        assertThat(result.getOwnUserId()).isEqualTo(USER_ID);
+    }
 
     @Test
     public void createLobby() {

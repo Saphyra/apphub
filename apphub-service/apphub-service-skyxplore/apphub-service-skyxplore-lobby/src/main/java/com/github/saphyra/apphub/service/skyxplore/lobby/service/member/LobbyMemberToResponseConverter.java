@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberRespons
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +19,16 @@ public class LobbyMemberToResponseConverter {
     private final CharacterProxy characterProxy;
     private final DateTimeUtil dateTimeUtil;
 
-    public LobbyMemberResponse convertMember(Member member) {
+    public LobbyMemberResponse convertMember(LobbyMember lobbyMember) {
         return LobbyMemberResponse.builder()
-            .userId(member.getUserId())
-            .status(member.getStatus())
-            .characterName(characterProxy.getCharacter(member.getUserId()).getName())
-            .allianceId(member.getAlliance())
+            .userId(lobbyMember.getUserId())
+            .status(lobbyMember.getStatus())
+            .characterName(characterProxy.getCharacter(lobbyMember.getUserId()).getName())
+            .allianceId(lobbyMember.getAllianceId())
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .build();
     }
 
-    //TODO unit test
     public LobbyMemberResponse convertInvitation(Invitation invitation) {
         UUID userId = invitation.getCharacterId();
 

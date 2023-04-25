@@ -53,7 +53,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    //TODO unit test
     public LobbyViewForPage lobbyForPage(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
 

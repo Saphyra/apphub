@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     private Lobby lobby;
 
     @Mock
-    private Member member;
+    private LobbyMember lobbyMember;
 
     @Mock
     private SkyXploreCharacterModel characterModel;
@@ -73,7 +73,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     @Test
     public void handle() {
         given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        Map<UUID, Member> lobbyMembers = CollectionUtils.singleValueMap(MEMBER_ID, member);
+        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(MEMBER_ID, lobbyMember);
         given(lobby.getMembers()).willReturn(lobbyMembers);
         given(characterProxy.getCharacter(FROM)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(PLAYER_NAME);

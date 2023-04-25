@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.settings.alliance.AllianceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +35,9 @@ class SkyXploreLobbySettingsControllerImplTest {
     @Mock
     private AiService aiService;
 
+    @Mock
+    private AllianceService allianceService;
+
     @InjectMocks
     private SkyXploreLobbySettingsControllerImpl underTest;
 
@@ -48,9 +53,21 @@ class SkyXploreLobbySettingsControllerImplTest {
     @Mock
     private AiPlayer aiPlayer;
 
+    @Mock
+    private AllianceResponse allianceResponse;
+
     @BeforeEach
     void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+    }
+
+    @Test
+    void getAlliancesOfLobby() {
+        given(allianceService.getAlliances(USER_ID)).willReturn(List.of(allianceResponse));
+
+        List<AllianceResponse> result = underTest.getAlliancesOfLobby(accessTokenHeader);
+
+        assertThat(result).containsExactly(allianceResponse);
     }
 
     @Test

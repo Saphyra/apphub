@@ -11,9 +11,9 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-public class Member {
+public class LobbyMember {
     private final UUID userId;
     private LobbyMemberStatus status;
     private boolean connected;
-    private UUID alliance;
+    private UUID allianceId;
 }

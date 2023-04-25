@@ -4,14 +4,18 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -20,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,11 +53,20 @@ public class ExitFromLobbyServiceTest {
     @Mock
     private DateTimeUtil dateTimeUtil;
 
+    @Mock
+    private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+
     @InjectMocks
     private ExitFromLobbyService underTest;
 
     @Mock
     private Lobby lobby;
+
+    @Mock
+    private LobbyMember lobbyMember;
+
+    @Mock
+    private LobbyMemberResponse lobbyMemberResponse;
 
     @Test
     public void memberLeft() {
@@ -143,5 +157,19 @@ public class ExitFromLobbyServiceTest {
         assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
         assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(USER_ID);
         assertThat(lobby.getInvitations()).containsExactly(remainingInvitation);
+    }
+
+    @Test
+    void userDisconnected() {
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        Map<UUID, LobbyMember> members = Map.of(USER_ID, lobbyMember);
+        given(lobby.getMembers()).willReturn(members);
+        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+
+        underTest.userDisconnected(USER_ID);
+
+        verify(lobbyMember).setStatus(LobbyMemberStatus.DISCONNECTED);
+        verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, members.keySet());
+        verify(messageSenderProxy).lobbyMemberDisconnected(lobbyMemberResponse, members.keySet());
     }
 }

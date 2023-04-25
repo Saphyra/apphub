@@ -27,13 +27,13 @@ class CreateNewGameService {
     private final MessageSenderProxy messageSenderProxy;
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
+    private final AllianceSetupValidator allianceSetupValidator;
 
-    //TODO validate at least 2 teams are present
     void createNewGame(Lobby lobby) {
         Map<UUID, UUID> members = new HashMap<>();
         lobby.getMembers()
             .values()
-            .forEach(member -> members.put(member.getUserId(), member.getAlliance()));
+            .forEach(member -> members.put(member.getUserId(), member.getAllianceId()));
 
         Map<UUID, String> alliances = lobby.getAlliances()
             .stream()
@@ -47,6 +47,8 @@ class CreateNewGameService {
             .gameName(lobby.getLobbyName())
             .ais(lobby.getAis())
             .build();
+
+        allianceSetupValidator.check(request);
 
         gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
         lobby.setGameCreationStarted(true);

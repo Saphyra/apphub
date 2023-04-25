@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +33,10 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
         log.info("Setting {}'s readiness to {}", from, readiness);
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
-        Member member = lobby.getMembers()
+        LobbyMember lobbyMember = lobby.getMembers()
             .get(from);
-        member.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
+        lobbyMember.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
 
-        messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(member), lobby.getMembers().keySet());
+        messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(lobbyMember), lobby.getMembers().keySet());
     }
 }

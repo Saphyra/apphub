@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -32,38 +31,32 @@ public class MessageSenderProxy {
         messageSenderApiClient.sendMessage(MessageGroup.SKYXPLORE_LOBBY, message, localeProvider.getLocaleValidated());
     }
 
-    //TODO unit test
     public void lobbyMemberModified(LobbyMemberResponse member, Collection<UUID> recipients) {
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, recipients, member);
         sendToLobby(message);
     }
 
-    //TODO unit test
     public void allianceCreated(AllianceCreatedResponse payload, Collection<UUID> recipients) {
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED, recipients, payload);
         sendToLobby(message);
     }
 
-    //TODO unit test
     public void aiModified(AiPlayer aiPlayer, Collection<UUID> recipients) {
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, recipients, aiPlayer);
         sendToLobby(message);
     }
 
-    //TODO unit test
     public void sendLobbyChatMessage(ChatSendMessageWebSocketEventHandler.Message message, Collection<UUID> recipients) {
         WebSocketMessage webSocketMessage = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE, recipients, message);
         sendToLobby(webSocketMessage);
     }
 
-    //TODO unit test
     public void lobbyMemberConnected(LobbyMemberResponse member, Collection<UUID> recipients) {
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, recipients, member);
         sendToLobby(message);
     }
 
-    //TODO unit test
-    public void lobbyMemberDisconnected(LobbyMemberResponse member, Set<UUID> recipients) {
+    public void lobbyMemberDisconnected(LobbyMemberResponse member, Collection<UUID> recipients) {
         WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_DISCONNECTED, recipients, member);
         sendToLobby(message);
     }

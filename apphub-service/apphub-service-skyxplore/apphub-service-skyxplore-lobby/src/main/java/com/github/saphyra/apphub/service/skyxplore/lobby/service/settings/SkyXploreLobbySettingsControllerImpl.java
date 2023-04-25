@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.settings.alliance.AllianceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,6 @@ public class SkyXploreLobbySettingsControllerImpl implements SkyXploreLobbySetti
     }
 
     @Override
-    //TODO unit test
     public List<AllianceResponse> getAlliancesOfLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the alliances of his lobby.", accessTokenHeader.getUserId());
         return allianceService.getAlliances(accessTokenHeader.getUserId());

@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Member;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
@@ -91,15 +91,14 @@ public class ExitFromLobbyService {
         messageSenderProxy.sendToLobby(message);
     }
 
-    //TODO unit test
     public void userDisconnected(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
 
-        Member member = lobby.getMembers()
+        LobbyMember lobbyMember = lobby.getMembers()
             .get(userId);
-        member.setStatus(LobbyMemberStatus.DISCONNECTED);
+        lobbyMember.setStatus(LobbyMemberStatus.DISCONNECTED);
 
-        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(member);
+        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
         messageSenderProxy.lobbyMemberModified(response, lobby.getMembers().keySet());
         messageSenderProxy.lobbyMemberDisconnected(response, lobby.getMembers().keySet());
     }
