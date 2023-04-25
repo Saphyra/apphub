@@ -36,7 +36,7 @@ public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
 
-    private static final int AVAILABLE_PERMITS = 30;
+    private static final int AVAILABLE_PERMITS = 20;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     public static int SERVER_PORT;

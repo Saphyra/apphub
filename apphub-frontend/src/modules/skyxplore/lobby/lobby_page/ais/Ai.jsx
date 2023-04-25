@@ -51,7 +51,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
 
     return (
         <div className="skyxplore-lobby-ai">
-            <h4 className="skyxplore-lobby-lobbyMember-name">{ai.name}</h4>
+            <h4 className="skyxplore-lobby-member-name">{ai.name}</h4>
             <Button
                 className="skyxplore-lobby-remove-ai-button"
                 label="X"
@@ -60,7 +60,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
             />
 
             <PreLabeledInputField
-                className="skyxplore-lobby-lobbyMember-alliance"
+                className="skyxplore-lobby-member-alliance"
                 label={localizationHandler.get("alliance") + ":"}
                 input={getAllianceSelectMenu()}
             />

@@ -107,7 +107,7 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
                 {getAis()}
                 {ais.length < 10 && lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW && isHost &&
                     <div id="skyxplore-lobby-create-ai" >
-                        <h4 className="skyxplore-lobby-lobbyMember-name">{localizationHandler.get("create-ai")}</h4>
+                        <h4 className="skyxplore-lobby-member-name">{localizationHandler.get("create-ai")}</h4>
 
                         <PreLabeledInputField
                             label={localizationHandler.get("ai-name") + ":"}

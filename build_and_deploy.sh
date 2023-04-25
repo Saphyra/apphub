@@ -8,6 +8,8 @@ echo "Namespace: $NAMESPACE_NAME"
 
 ./infra/deployment/script/deploy.sh "$NAMESPACE_NAME"
 
+sleep 10
+
 start ./port_forward.sh "$NAMESPACE_NAME"
 if [ "$1" != "skipTests" ]; then
   if [ "$1" != "skipIntegrationTests" ]; then

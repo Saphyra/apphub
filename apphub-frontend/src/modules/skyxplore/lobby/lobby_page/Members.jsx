@@ -35,7 +35,7 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
 
             setMembers(copy);
         } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
-            const newMember = lastEvent.payload.lobbyMember;
+            const newMember = lastEvent.payload.member;
 
             if (newMember === null) {
                 return;
@@ -56,7 +56,7 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
             const result = await Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS.createRequest()
                 .send();
             const memberMap = new Stream(result)
-                .toMap((lobbyMember) => lobbyMember.userId);
+                .toMap((member) => member.userId);
 
             setMembers(memberMap);
         }
@@ -65,10 +65,10 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
 
     const getMembers = () => {
         return new MapStream(members)
-            .map((userId, lobbyMember) =>
+            .map((userId, member) =>
                 <Member
-                    key={lobbyMember.userId}
-                    lobbyMember={lobbyMember}
+                    key={member.userId}
+                    member={member}
                     localizationHandler={localizationHandler}
                     alliances={alliances}
                     isHost={isHost}

@@ -71,6 +71,7 @@ class WorkProcessTest {
             .externalReference(EXTERNAL_REFERENCE)
             .skillType(SkillType.AIMING)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
+            .completedWorkPoints(0)
             .workProcessType(WorkProcessType.TERRAFORMATION)
             .targetId(TARGET_ID)
             .gameData(gameData)
