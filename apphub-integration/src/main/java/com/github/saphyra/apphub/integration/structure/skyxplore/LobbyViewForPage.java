@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Data
-public class AiPlayer {
-    private UUID userId;
-    private String name;
-    private UUID allianceId;
+@Builder
+public class LobbyViewForPage {
+    private String lobbyName;
+    private boolean isHost;
+    private String lobbyType;
+    private UUID ownUserId;
 }

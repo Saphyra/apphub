@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SkyXploreLobbyController {
-    //TODO API test
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY)
     OneParamResponse<Boolean> isUserInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
@@ -34,7 +33,6 @@ public interface SkyXploreLobbyController {
      * Checking if the given user is already in a lobby, and returning the details of that lobby.
      * Used by WebUI to redirect the user, or display the lobby page.
      */
-    //TODO API test
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
     LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

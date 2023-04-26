@@ -36,6 +36,8 @@ public class CreateLobbyTest extends BackEndTest {
         verifyInvalidParam(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, "aa"), "lobbyName", "too short");
         verifyInvalidParam(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", "too long");
 
+        assertThat(SkyXploreLobbyActions.isUserInLobby(language, accessTokenId1)).isFalse();
+
         //Create
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
         List<LobbyMemberResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
@@ -43,5 +45,7 @@ public class CreateLobbyTest extends BackEndTest {
         assertThat(lobbyMembers.get(0).getUserId()).isEqualTo(userId1);
         assertThat(lobbyMembers.get(0).getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(lobbyMembers.get(0).getStatus()).isEqualTo(LobbyMemberStatus.NOT_READY);
+
+        assertThat(SkyXploreLobbyActions.isUserInLobby(language, accessTokenId1)).isTrue();
     }
 }

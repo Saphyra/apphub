@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
@@ -44,7 +45,22 @@ class AiService {
     }
 
     public void createOrModifyAi(UUID userId, AiPlayer aiPlayer) {
+        if (isNull(aiPlayer.getName())) {
+            throw ExceptionFactory.invalidParam("name", "must not be null");
+        }
+
+        if (aiPlayer.getName().length() < 3) {
+            throw ExceptionFactory.invalidParam("name", "too short");
+        }
+
+        if (aiPlayer.getName().length() > 30) {
+            throw ExceptionFactory.invalidParam("name", "too long");
+        }
+
         Lobby lobby = lobbyDao.findByHostValidated(userId);
+        if (!isNull(aiPlayer.getAllianceId()) && !lobby.getAlliances().stream().map(Alliance::getAllianceId).toList().contains(aiPlayer.getAllianceId())) {
+            throw ExceptionFactory.invalidParam("allianceId", "does not exist");
+        }
 
         if (!isNull(aiPlayer.getUserId())) {
             lobby.getAis()

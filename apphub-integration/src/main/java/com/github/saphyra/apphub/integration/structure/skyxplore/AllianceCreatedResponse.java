@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
-public class AiPlayer {
-    private UUID userId;
-    private String name;
-    private UUID allianceId;
+public class AllianceCreatedResponse {
+    private AllianceResponse alliance;
+    private LobbyMemberResponse member;
+    private AiPlayer ai;
 }

@@ -8,55 +8,21 @@ public class Endpoints {
     public static final String CALENDAR_PAGE = "/web/calendar";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
-    public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
     public static final String ADMIN_PANEL_MEMORY_MONITORING_PAGE = "/web/admin-panel/memory-monitoring";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
-    public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE = "/web/admin-panel/roles-for-all";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
     public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
-    public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
-    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
-    public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
     public static final String COMMUNITY_PAGE = "/web/community";
 
     //Training
-    public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";
     public static final String TRAINING_HTML_PAGE = "/web/training/html/001_introduction";
     public static final String TRAINING_CSS_PAGE = "/web/training/css/001_introduction";
     public static final String TRAINING_BASICS_OF_PROGRAMMING_PAGE = "/web/training/basics_of_programming/001_introduction";
     public static final String TRAINING_JAVASCRIPT_PAGE = "/web/training/javascript/001_introduction";
-    public static final String TRAINING_SAMPLE_PAGE = "/web/training/{book}/sample/{sample}";
-    public static final String TRAINING_SAMPLE_ENDPOINT = "/web/training/sample";
-    public static final String TRAINING_SAMPLE_REST_ENDPOINT = "/api/training/sample";
-
-    //PLATFORM
-    public static final String HEALTH = "/platform/health";
-    public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
-    public static final String TRANSLATE_KEY = "/internal/localization/key";
-
-    public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
-    public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
-    public static final String SEND_EVENT = "/internal/event-gateway";
-
-    //EVENTS
-    public static final String EVENT_TRIGGER_MEMORY_STATUS_UPDATE = "/event/trigger-memory-monitoring";
-    public static final String EVENT_MEMORY_MONITORING = "/event/memory-monitoring";
-    public static final String EVENT_DELETE_EXPIRED_ACCESS_TOKENS = "/event/delete-expired-access-tokens";
-    public static final String EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION = "/event/refresh-access-token-expiration";
-    public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
-    public static final String EVENT_SKYXPLORE_LOBBY_CLEANUP = "/event/skyxplore/lobby/cleanup";
-    public static final String EVENT_SKYXPLORE_GAME_CLEANUP = "/event/skyxplore/game/cleanup";
-    public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
-    public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
-    public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
-    public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
-
-    //WEB-SOCKET-MESSAGING
-    public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
@@ -64,28 +30,10 @@ public class Endpoints {
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
 
-    //ADMIN-PANEL WEB-SOCKET MESSAGING
-    public static final String ADMIN_PANEL_WEB_SOCKET_USER_CONNECTED = "/internal/api/admin-panel/ws/{userId}";
-    public static final String ADMIN_PANEL_WEB_SOCKET_USER_DISCONNECTED = "/internal/api/admin-panel/ws/{userId}";
-    public static final String ADMIN_PANEL_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/admin-panel/{userId}";
-
-    //ERROR REPORTING
-    public static final String ADMIN_PANEL_INTERNAL_REPORT_ERROR = "/internal/admin-panel/report-error";
-
-    public static final String ADMIN_PANEL_GET_ERROR_REPORTS = "/api/admin-panel/error-report";
-    public static final String ADMIN_PANEL_GET_ERROR_REPORT = "/api/admin-panel/error-report/{id}";
-    public static final String ADMIN_PANEL_DELETE_ERROR_REPORTS = "/api/admin-panel/error-report";
-    public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
-    public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
-
-    //MONITORING
-    public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
-
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
-    public static final String EXTEND_SESSION = "/api/user/authentication/session";
 
     //ACCOUNT
     public static final String ACCOUNT_REGISTER = "/api/user";
@@ -95,7 +43,6 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
-    public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
 
     //SETTINGS
     public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";
@@ -108,22 +55,11 @@ public class Endpoints {
     public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
     public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
 
-    //USER-DATA
-    public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
-    public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
-    public static final String USER_DATA_INTERNAL_USER_GET_USERNAME = "/internal/user/{userId}/data/name";
-    public static final String USER_DATA_INTERNAL_GET_ACCOUNT = "/internal/api/user/data/{userId}";
-    public static final String USER_DATA_INTERNAL_USER_EXISTS = "/internal/api/user/data/{userId}/exists";
-
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
-    public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
-    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
-    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
-    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";
@@ -166,12 +102,6 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
-    public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/data/character/{userId}";
-    public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
-    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM = "/internal/skyxplore/data/game/data/item/{id}/{type}";
-    public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/data/game-item/{id}/{type}";
-    public static final String SKYXPLORE_INTERNAL_LOAD_GAME_ITEM_CHILDREN = "/internal/skyxplore/data/game-item/children/{parent}/{type}";
-
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";
     public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/data/saved-game";
     public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/data/saved-game/{gameId}";
@@ -183,20 +113,10 @@ public class Endpoints {
     public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/{friendRequestId}";
     public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/data/friend";
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/data/friend/{friendshipId}";
-    public static final String SKYXPLORE_GET_CHARACTER = "/api/skyxplore/data/character";
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
-    public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
 
     //SKYXPLORE-LOBBY
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_ONLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_OFFLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-
-    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_LEFT_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_VIEW_FOR_PAGE = "/internal/skyxplore/lobby/page";
-
-
+    public static final String SKYXPLORE_LOBBY_IS_IN_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
@@ -206,17 +126,13 @@ public class Endpoints {
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
     public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/lobby/friends/active";
     public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
+    public static final String SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI = "/api/skyxplore/lobby/ai";
+    public static final String SKYXPLORE_LOBBY_GET_AIS = "/api/skyxplore/lobby/ai";
+    public static final String SKYXPLORE_LOBBY_REMOVE_AI = "/api/skyxplore/lobby/ai/{userId}";
+    public static final String SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER = "/api/skyxplore/lobby/alliance/player/{userId}";
+    public static final String SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI = "/api/skyxplore/lobby/alliance/ai/{userId}";
 
     //SKYXPLORE-GAME
-    public static final String SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
-
-    public static final String SKYXPLORE_INTERNAL_CREATE_GAME = "/internal/skyxplore/game";
-    public static final String SKYXPLORE_INTERNAL_LOAD_GAME = "/internal/skyxplore/game";
-    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME = "/internal/skyxplore/game/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_LEFT_GAME = "/internal/skyxplore/game/{userId}";
-    public static final String SKYXPLORE_INTERNAL_IS_USER_IN_GAME = "/internal/skyxplore/game";
-    public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
-
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
@@ -225,9 +141,6 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
     public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
     public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";
-    public static final String SKYXPLORE_PLANET_GET_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/overview";
-    public static final String SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/population";
-    public static final String SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/building";
     public static final String SKYXPLORE_PLANET_GET_PRIORITIES = "/api/skyxplore/game/planet/{planetId}/priority";
     public static final String SKYXPLORE_PLANET_GET_STORAGE_SETTINGS = "/api/skyxplore/game/planet/{planetId}/storage-settings";
     public static final String SKYXPLORE_PLANET_CREATE_STORAGE_SETTING = "/api/skyxplore/game/planet/{planetId}/storage-settings";
@@ -238,7 +151,6 @@ public class Endpoints {
     public static final String SKYXPLORE_PLANET_UPDATE_PRIORITY = "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}";
     public static final String SKYXPLORE_PLANET_RENAME = "/api/skyxplore/game/planet/{planetId}/name";
     public static final String SKYXPLORE_SOLAR_SYSTEM_RENAME = "/api/skyxplore/game/solar-system/{solarSystemId}/name";
-    public static final String SKYXPLORE_EXIT_GAME = "/api/skyxplore/game";
 
     public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
     public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";
@@ -248,7 +160,6 @@ public class Endpoints {
 
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
-    public static final String SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES = "/api/skyxplore/data/{surfaceType}/terraforming-possibilities";
 
     public static final String SKYXPLORE_PLANET_GET_QUEUE = "/api/skyxplore/game/{planetId}/queue";
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";

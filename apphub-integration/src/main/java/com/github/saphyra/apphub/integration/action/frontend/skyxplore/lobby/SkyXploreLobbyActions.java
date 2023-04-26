@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayer;
+import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayerElement;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyChatMessage;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.skyxplore.OnlineFriend;
@@ -151,22 +151,22 @@ public class SkyXploreLobbyActions {
         assertThat(LobbyPage.createAiButton(driver).isEnabled()).isFalse();
     }
 
-    public static AiPlayer findAiByNameValidated(WebDriver driver, String aiName) {
+    public static AiPlayerElement findAiByNameValidated(WebDriver driver, String aiName) {
         return findAiByName(driver, aiName)
             .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + aiName));
     }
 
-    public static Optional<AiPlayer> findAiByName(WebDriver driver, String aiName) {
+    public static Optional<AiPlayerElement> findAiByName(WebDriver driver, String aiName) {
         return getAis(driver)
             .stream()
             .filter(aiPlayer -> aiPlayer.getName().equals(aiName))
             .findFirst();
     }
 
-    public static List<AiPlayer> getAis(WebDriver driver) {
+    public static List<AiPlayerElement> getAis(WebDriver driver) {
         return LobbyPage.getAis(driver)
             .stream()
-            .map(AiPlayer::new)
+            .map(AiPlayerElement::new)
             .collect(Collectors.toList());
     }
 

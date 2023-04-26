@@ -14,7 +14,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.Range;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayer;
+import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayerElement;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -295,7 +295,7 @@ public class LobbySettingsTest extends SeleniumTest {
         //Set alliance
         SkyXploreLobbyActions.createAi(driver1, AI_NAME);
 
-        AiPlayer aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findAiByName(driver1, AI_NAME), Optional::isPresent)
+        AiPlayerElement aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findAiByName(driver1, AI_NAME), Optional::isPresent)
             .map(Optional::get)
             .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + AI_NAME));
 

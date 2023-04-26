@@ -5,8 +5,11 @@ import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.OneParamResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayer;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 
 import java.util.Arrays;
@@ -98,5 +101,70 @@ public class SkyXploreLobbyActions {
         Response response = getLoadGameResponse(language, accessTokenId, gameId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static boolean isUserInLobby(Language language, UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        TypeRef<OneParamResponse<Boolean>> typeRef = new TypeRef<OneParamResponse<Boolean>>() {
+        };
+
+        return response.getBody().as(typeRef)
+            .getValue();
+    }
+
+    public static void createOrModifyAi(Language language, UUID accessTokenId, AiPlayer aiPlayer) {
+        Response response = getCreateOrModifyAiResponse(language, accessTokenId, aiPlayer);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCreateOrModifyAiResponse(Language language, UUID accessTokenId, AiPlayer aiPlayer) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(aiPlayer)
+            .put(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI));
+    }
+
+    public static List<AiPlayer> getAis(Language language, UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_AIS));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(AiPlayer[].class));
+    }
+
+    public static void removeAi(Language language, UUID accessTokenId1, UUID aiId) {
+        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId1)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_REMOVE_AI, "userId", aiId));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static void changeAllianceOfPlayer(Language language, UUID accessTokenId, UUID userId, Object alliance) {
+        Response response = getChangeAllianceOfPlayerResponse(language, accessTokenId, userId, alliance);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getChangeAllianceOfPlayerResponse(Language language, UUID accessTokenId, UUID userId, Object alliance) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(alliance))
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER, "userId", userId));
+    }
+
+    public static void changeAllianceOfAI(Language language, UUID accessTokenId, UUID aiId, Object alliance) {
+        Response response = getChangeAllianceOfAiResponse(language, accessTokenId, aiId, alliance);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getChangeAllianceOfAiResponse(Language language, UUID accessTokenId, UUID aiId, Object alliance) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(new OneParamRequest<>(alliance))
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, "userId", aiId));
     }
 }

@@ -9,10 +9,9 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class AiPlayer {
-    private UUID userId;
-    private String name;
+@Builder
+public class AllianceResponse {
     private UUID allianceId;
+    private String allianceName;
 }
