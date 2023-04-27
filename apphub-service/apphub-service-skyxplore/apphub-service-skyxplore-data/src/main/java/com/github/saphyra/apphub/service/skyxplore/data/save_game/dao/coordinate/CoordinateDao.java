@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,5 +35,9 @@ public class CoordinateDao extends AbstractDao<CoordinateEntity, CoordinateModel
 
     public void deleteById(UUID coordinateId) {
         deleteById(uuidConverter.convertDomain(coordinateId));
+    }
+
+    public List<CoordinateModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

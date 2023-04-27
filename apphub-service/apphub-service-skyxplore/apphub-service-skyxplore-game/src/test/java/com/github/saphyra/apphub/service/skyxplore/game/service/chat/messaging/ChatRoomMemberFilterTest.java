@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,7 +48,15 @@ public class ChatRoomMemberFilterTest {
         given(player2.isConnected()).willReturn(false);
         given(player1.getUserId()).willReturn(PLAYER_ID_1);
 
-        List<UUID> result = underTest.getMembers(SENDER, GameConstants.CHAT_ROOM_GENERAL, Arrays.asList(chatRoom), CollectionUtils.toMap(new BiWrapper<>(PLAYER_ID_1, player1), new BiWrapper<>(PLAYER_ID_2, player2)));
+        List<UUID> result = underTest.getMembers(
+            SENDER,
+            GameConstants.CHAT_ROOM_GENERAL,
+            Arrays.asList(chatRoom),
+            Map.of(
+                PLAYER_ID_1, player1,
+                PLAYER_ID_2, player2
+            )
+        );
 
         assertThat(result).containsExactly(PLAYER_ID_1);
     }

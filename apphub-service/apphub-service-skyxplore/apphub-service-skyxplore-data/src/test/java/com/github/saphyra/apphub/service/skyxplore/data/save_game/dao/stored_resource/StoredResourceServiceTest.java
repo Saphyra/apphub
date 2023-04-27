@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class StoredResourceServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 23;
+    private static final Integer ITEMS_PER_PAGE = 435;
 
     @Mock
-    private StoredResourceDao storedResourceDao;
+    private StoredResourceDao dao;
 
     @Mock
     private StoredResourceModelValidator storedResourceModelValidator;
@@ -38,7 +39,7 @@ public class StoredResourceServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(storedResourceDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,20 @@ public class StoredResourceServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(storedResourceModelValidator).validate(model);
-        verify(storedResourceDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(storedResourceDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<StoredResourceModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(storedResourceDao.getByLocation(ID)).willReturn(Arrays.asList(model));
-
-        List<StoredResourceModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(storedResourceDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

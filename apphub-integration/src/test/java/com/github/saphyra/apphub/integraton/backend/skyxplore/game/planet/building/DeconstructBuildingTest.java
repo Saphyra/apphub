@@ -53,7 +53,10 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         //Building under construction
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
-        UUID buildingId = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP)
+        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
+        UUID buildingId = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class)
             .getBuilding()
             .getBuildingId();
 
@@ -66,9 +69,13 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
-        SurfaceResponse surfaceResponse = SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
-        DeconstructionResponse deconstruction = surfaceResponse.getBuilding().getDeconstruction();
+        DeconstructionResponse deconstruction = surfaceResponse.getBuilding()
+            .getDeconstruction();
         assertThat(deconstruction).isNotNull();
 
         QueueResponse queueItemModifiedEvent = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED)
@@ -88,7 +95,10 @@ public class DeconstructBuildingTest extends BackEndTest {
         //Cancel deconstruction
         gameWsClient.clearMessages();
 
-        surfaceResponse = SkyXploreBuildingActions.cancelDeconstruction(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.cancelDeconstruction(language, accessTokenId, planetId, buildingId);
+        surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(surfaceResponse.getBuilding().getDeconstruction()).isNull();
 
@@ -123,7 +133,10 @@ public class DeconstructBuildingTest extends BackEndTest {
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
-        SurfaceResponse surfaceResponse = SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         gameWsClient.clearMessages();
         SkyXploreGameActions.setPaused(language, accessTokenId, false);

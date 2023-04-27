@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +35,11 @@ public class Lobby {
     private final UUID host;
 
     @NonNull
-    private final Map<UUID, Member> members;
+    private final Map<UUID, LobbyMember> members;
+
+    @NonNull
+    @Builder.Default
+    private final List<AiPlayer> ais = new Vector<>();
 
     @NonNull
     @Builder.Default
@@ -45,8 +51,7 @@ public class Lobby {
     @Builder.Default
     private final List<Invitation> invitations = new Vector<>();
 
-    @Builder.Default
-    private final GameSettings settings = new GameSettings();
+    private SkyXploreGameSettings settings;
 
     private boolean gameCreationStarted;
 }

@@ -4,6 +4,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.allocated
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,5 +34,9 @@ public class AllocatedResourceDao extends AbstractDao<AllocatedResourceEntity, A
 
     public void deleteById(UUID allocatedResourceId) {
         deleteById(uuidConverter.convertDomain(allocatedResourceId));
+    }
+
+    public List<AllocatedResourceModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

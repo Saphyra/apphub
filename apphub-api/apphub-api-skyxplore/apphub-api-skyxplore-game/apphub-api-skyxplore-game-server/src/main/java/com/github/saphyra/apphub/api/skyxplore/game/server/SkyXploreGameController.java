@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.api.skyxplore.game.server;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,8 @@ public interface SkyXploreGameController {
     /**
      * Used by page controllers to redirect the user to the proper page
      */
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_IS_USER_IN_GAME)
-    boolean isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @GetMapping(Endpoints.SKYXPLORE_IS_USER_IN_GAME)
+    OneParamResponse<Boolean> isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * If the game is abandoned by the users, it will be shut down and removed from the memory eventually

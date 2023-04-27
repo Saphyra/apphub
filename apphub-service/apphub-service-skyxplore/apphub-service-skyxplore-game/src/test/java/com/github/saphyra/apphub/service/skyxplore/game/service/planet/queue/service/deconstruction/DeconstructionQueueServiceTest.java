@@ -1,27 +1,18 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.deconstruction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.DeconstructionToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -34,6 +25,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -43,31 +35,21 @@ class DeconstructionQueueServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 6345;
-    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
 
     @Mock
-    private GameDataProxy gameDataProxy;
-
-    @Mock
-    private DeconstructionToModelConverter deconstructionToModelConverter;
-
-    @Mock
-    private QueueItemToResponseConverter queueItemToResponseConverter;
-
-    @Mock
     private BuildingDeconstructionToQueueItemConverter buildingDeconstructionToQueueItemConverter;
-
-    @Mock
-    private WsMessageSender messageSender;
 
     @Mock
     private CancelDeconstructionService cancelDeconstructionService;
 
     @Mock
     private PriorityValidator priorityValidator;
+
+    @Mock
+    private SyncCacheFactory syncCacheFactory;
 
     @InjectMocks
     private DeconstructionQueueService underTest;
@@ -76,16 +58,7 @@ class DeconstructionQueueServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
-
-    @Mock
-    private Surface surface;
-
-    @Mock
-    private Building building;
+    private GameData gameData;
 
     @Mock
     private Deconstruction deconstruction;
@@ -100,10 +73,10 @@ class DeconstructionQueueServiceTest {
     private ExecutionResult<Void> executionResult;
 
     @Mock
-    private DeconstructionModel deconstructionModel;
+    private Deconstructions deconstructions;
 
     @Mock
-    private QueueResponse queueResponse;
+    private SyncCache syncCache;
 
     @Test
     void getType() {
@@ -112,12 +85,12 @@ class DeconstructionQueueServiceTest {
 
     @Test
     public void getQueue() {
-        given(planet.getSurfaces()).willReturn(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface, new SurfaceMap()));
-        given(surface.getBuilding()).willReturn(building);
-        given(building.getDeconstruction()).willReturn(deconstruction);
-        given(buildingDeconstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.getByLocation(PLANET_ID)).willReturn(List.of(deconstruction));
 
-        List<QueueItem> result = underTest.getQueue(planet);
+        given(buildingDeconstructionToQueueItemConverter.convert(gameData, deconstruction)).willReturn(queueItem);
+
+        List<QueueItem> result = underTest.getQueue(gameData, PLANET_ID);
 
         assertThat(result).containsExactly(queueItem);
     }
@@ -125,31 +98,27 @@ class DeconstructionQueueServiceTest {
     @Test
     void setPriority() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.findBuildingByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(building);
-        given(building.getDeconstruction()).willReturn(deconstruction);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any())).willReturn(executionResult);
-        given(game.getGameId()).willReturn(GAME_ID);
-        given(deconstructionToModelConverter.convert(deconstruction, GAME_ID)).willReturn(deconstructionModel);
-        given(buildingDeconstructionToQueueItemConverter.convert(building)).willReturn(queueItem);
-        given(queueItemToResponseConverter.convert(queueItem, planet)).willReturn(queueResponse);
+        given(eventLoop.processWithWait(any(), eq(syncCache))).willReturn(executionResult);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
 
         underTest.setPriority(USER_ID, PLANET_ID, DECONSTRUCTION_ID, PRIORITY);
 
         verify(priorityValidator).validate(PRIORITY);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()
             .run();
 
         verify(deconstruction).setPriority(PRIORITY);
-        verify(gameDataProxy).saveItem(deconstructionModel);
-        verify(messageSender).planetQueueItemModified(USER_ID, PLANET_ID, queueResponse);
 
         verify(executionResult).getOrThrow();
+        verify(syncCache).deconstructionModified(USER_ID, PLANET_ID, deconstruction);
     }
 
     @Test

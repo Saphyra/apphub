@@ -13,7 +13,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class AllocatedResourceModel extends GameItem {
     private UUID location;
-    private String locationType;
     private UUID externalReference;
     private String dataId;
     private Integer amount;

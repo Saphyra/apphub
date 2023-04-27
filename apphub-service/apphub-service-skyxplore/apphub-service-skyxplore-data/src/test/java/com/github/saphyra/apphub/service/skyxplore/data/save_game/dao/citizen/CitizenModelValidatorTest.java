@@ -19,7 +19,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CitizenModelValidatorTest {
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String LOCATION_TYPE = "location-type";
     private static final String NAME = "name";
     private static final Integer MORALE = 234;
     private static final Integer SATIETY = 3223;
@@ -49,19 +48,8 @@ public class CitizenModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void nullName() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getName()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -72,7 +60,6 @@ public class CitizenModelValidatorTest {
     @Test
     public void nullMorale() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getName()).willReturn(NAME);
         given(model.getMorale()).willReturn(null);
 
@@ -84,7 +71,6 @@ public class CitizenModelValidatorTest {
     @Test
     public void nullSatiety() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getName()).willReturn(NAME);
         given(model.getMorale()).willReturn(MORALE);
         given(model.getSatiety()).willReturn(null);
@@ -97,7 +83,6 @@ public class CitizenModelValidatorTest {
     @Test
     public void valid() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getName()).willReturn(NAME);
         given(model.getMorale()).willReturn(MORALE);
         given(model.getSatiety()).willReturn(SATIETY);

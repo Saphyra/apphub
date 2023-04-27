@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class CoordinateServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 4235;
+    private static final Integer ITEMS_PER_PAGE = 36;
 
     @Mock
-    private CoordinateDao coordinateDao;
+    private CoordinateDao dao;
 
     @Mock
     private CoordinateModelValidator coordinateModelValidator;
@@ -38,7 +39,7 @@ public class CoordinateServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(coordinateDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,21 @@ public class CoordinateServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(coordinateModelValidator).validate(model);
-        verify(coordinateDao).saveAll(Arrays.asList(model));
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
-    @Test
-    public void findById() {
-        given(coordinateDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<CoordinateModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(coordinateDao.getByReferenceId(ID)).willReturn(Arrays.asList(model));
-
-        List<CoordinateModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
-    }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(coordinateDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

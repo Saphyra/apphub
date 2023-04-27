@@ -20,7 +20,6 @@ class StorageSettingEntity {
     private String storageSettingId;
     private String gameId;
     private String location;
-    private String locationType;
     private String dataId;
     private int targetAmount;
     private int priority;

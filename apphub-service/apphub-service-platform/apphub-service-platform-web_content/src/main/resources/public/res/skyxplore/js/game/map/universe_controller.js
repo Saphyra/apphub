@@ -24,10 +24,6 @@
             svgContainer.style.width = mapWidth;
             svgContainer.setAttribute("viewBox", "0 0 " + mapWidth + " " + mapHeight);
 
-        new Stream(universe.connections)
-            .map(createConnection)
-            .forEach(function(node){svgContainer.appendChild(node)});
-
         new Stream(universe.solarSystems)
             .map(createSolarSystem)
             .forEach(function(node){svgContainer.appendChild(node)});
@@ -35,17 +31,6 @@
         new Stream(universe.solarSystems)
             .map(createSolarSystemName)
             .forEach(function(node){svgContainer.appendChild(node)});
-
-        function createConnection(connection){
-            const element = createSvgElement("line");
-                element.setAttribute("x1", connection.a.x + mapConstants.X_OFFSET);
-                element.setAttribute("y1", connection.a.y + mapConstants.Y_OFFSET);
-                element.setAttribute("x2", connection.b.x + mapConstants.X_OFFSET);
-                element.setAttribute("y2", connection.b.y + mapConstants.Y_OFFSET);
-                element.setAttribute("stroke", "white");
-                element.setAttribute("stroke-width", 1);
-            return element;
-        }
 
         function createSolarSystem(solarSystem){
             const element = createSvgElement("circle");

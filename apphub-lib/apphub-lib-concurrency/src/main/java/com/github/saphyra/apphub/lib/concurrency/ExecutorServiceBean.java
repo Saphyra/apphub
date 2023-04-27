@@ -49,7 +49,7 @@ public class ExecutorServiceBean {
                 return new ExecutionResult<>(command.call(), null, true);
             } catch (Exception e) {
                 log.error("Unexpected error during processing:", e);
-                errorReporterService.report("Unexpected error during processing", e);
+                errorReporterService.report("Unexpected error during processing: " + e.getMessage(), e);
                 return new ExecutionResult<>(null, e, false);
             }
         };

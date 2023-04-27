@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.UniverseModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
@@ -33,11 +33,11 @@ public class SaveGameItemServiceTest {
     private SaveGameItemService underTest;
 
     @Mock
-    private UniverseModel universeModel;
+    private GameModel gameModel;
 
     @BeforeEach
     public void setUp() {
-        given(gameItemService.getType()).willReturn(GameItemType.UNIVERSE);
+        given(gameItemService.getType()).willReturn(GameItemType.GAME);
 
         underTest = new SaveGameItemService(
             Arrays.asList(gameItemService),
@@ -48,11 +48,11 @@ public class SaveGameItemServiceTest {
 
     @Test
     public void error() {
-        given(objectMapperWrapper.convertValue(universeModel, GameItem.class)).willReturn(universeModel);
-        given(universeModel.getType()).willReturn(GameItemType.UNIVERSE);
-        given(objectMapperWrapper.convertValue(universeModel, UniverseModel.class)).willThrow(new RuntimeException());
+        given(objectMapperWrapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
+        given(gameModel.getType()).willReturn(GameItemType.GAME);
+        given(objectMapperWrapper.convertValue(gameModel, GameModel.class)).willThrow(new RuntimeException());
 
-        underTest.save(Arrays.asList(universeModel));
+        underTest.save(Arrays.asList(gameModel));
 
         verify(errorReporterService).report(any(), any());
     }
@@ -60,12 +60,12 @@ public class SaveGameItemServiceTest {
 
     @Test
     public void saveGameData() {
-        given(objectMapperWrapper.convertValue(universeModel, GameItem.class)).willReturn(universeModel);
-        given(universeModel.getType()).willReturn(GameItemType.UNIVERSE);
-        given(objectMapperWrapper.convertValue(universeModel, UniverseModel.class)).willReturn(universeModel);
+        given(objectMapperWrapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
+        given(gameModel.getType()).willReturn(GameItemType.GAME);
+        given(objectMapperWrapper.convertValue(gameModel, GameModel.class)).willReturn(gameModel);
 
-        underTest.save(Arrays.asList(universeModel));
+        underTest.save(Arrays.asList(gameModel));
 
-        verify(gameItemService).save(Arrays.asList(universeModel));
+        verify(gameItemService).save(Arrays.asList(gameModel));
     }
 }

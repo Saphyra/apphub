@@ -21,4 +21,14 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="process" columnNames="process_id" constraintName="process_pk"/>
     </changeSet>
+
+    <changeSet id="remove-location_type-from-process" author="saphrya">
+        <preConditions>
+            <columnExists schemaName="skyxplore_game" tableName="process" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="process">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

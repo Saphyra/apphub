@@ -1,0 +1,19 @@
+.skyxplore-lobby-setting{
+    border: 3px ridge white;
+    border-radius: 5px;
+}
+
+.skyxplore-lobby-setting-name{
+    border-bottom: 3px ridge white;
+    text-align: center;
+    padding: 5px;
+}
+
+.skyxplore-lobby-setting-content{
+    text-align: center;
+    padding: 5px;
+}
+
+.skyxplore-lobby-settings-input{
+    width: 45px;
+}

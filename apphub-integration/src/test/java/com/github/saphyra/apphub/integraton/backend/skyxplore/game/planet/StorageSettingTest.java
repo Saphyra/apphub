@@ -95,15 +95,15 @@ public class StorageSettingTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("StorageSetting not found."))
             .getStorageSettingId();
 
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().priority(null).build(), "priority", "must not be null");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().priority(0).build(), "priority", "too low");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().priority(11).build(), "priority", "too high");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().dataId(" ").build(), "dataId", "must not be null or blank");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().dataId("asd").build(), "dataId", "unknown resource");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(null).build(), "batchSize", "must not be null");
-        edit_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(0).build(), "batchSize", "too low");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(null).build(), "priority", "must not be null");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(0).build(), "priority", "too low");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(11).build(), "priority", "too high");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId(" ").build(), "dataId", "must not be null or blank");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId("asd").build(), "dataId", "unknown resource");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(null).build(), "batchSize", "must not be null");
+        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(0).build(), "batchSize", "too low");
 
         //Edit
         StorageSettingModel editModel = StorageSettingModel.builder()
@@ -113,7 +113,7 @@ public class StorageSettingTest extends BackEndTest {
             .priority(2)
             .dataId(createModel.getDataId())
             .build();
-        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, planet.getPlanetId(), editModel);
+        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, editModel);
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
         assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
         assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());
@@ -134,7 +134,7 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
 
         //Delete
-        SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, planet.getPlanetId(), storageSettingId);
+        SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, storageSettingId);
         StorageSettingsResponse storageSettingsResponse = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId());
         assertThat(storageSettingsResponse.getCurrentSettings()).hasSize(1);
 
@@ -161,11 +161,11 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
 
         //Check storage reserved
+        wsClient.clearMessages();
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
 
         wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
-
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getReservedStorageAmount() > 0)
@@ -195,8 +195,8 @@ public class StorageSettingTest extends BackEndTest {
         return errorResponse;
     }
 
-    private void edit_runValidationTest(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model, String key, String value) {
-        Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(language, accessTokenId, planetId, model);
+    private void edit_runValidationTest(Language language, UUID accessTokenId, StorageSettingModel model, String key, String value) {
+        Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(language, accessTokenId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
 

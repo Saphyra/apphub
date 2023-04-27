@@ -4,13 +4,18 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +39,7 @@ public class ExitFromLobbyServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID MEMBER_ID = UUID.randomUUID();
     private static final String PLAYER_NAME = "player-name";
+    private static final long CREATED_AT = 32423L;
 
     @Mock
     private CharacterProxy characterProxy;
@@ -43,11 +50,23 @@ public class ExitFromLobbyServiceTest {
     @Mock
     private MessageSenderProxy messageSenderProxy;
 
+    @Mock
+    private DateTimeUtil dateTimeUtil;
+
+    @Mock
+    private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+
     @InjectMocks
     private ExitFromLobbyService underTest;
 
     @Mock
     private Lobby lobby;
+
+    @Mock
+    private LobbyMember lobbyMember;
+
+    @Mock
+    private LobbyMemberResponse lobbyMemberResponse;
 
     @Test
     public void memberLeft() {
@@ -61,6 +80,7 @@ public class ExitFromLobbyServiceTest {
         given(lobby.getExpectedPlayers()).willReturn(Arrays.asList(MEMBER_ID));
 
         given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(MEMBER_ID);
 
@@ -72,13 +92,14 @@ public class ExitFromLobbyServiceTest {
         assertThat(message.getRecipients()).containsExactly(USER_ID);
 
         WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY);
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
 
         ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
         assertThat(payload.getUserId()).isEqualTo(MEMBER_ID);
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isFalse();
         assertThat(payload.isExpectedPlayer()).isTrue();
+        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
 
         verify(lobbyDao, times(0)).delete(any());
 
@@ -106,6 +127,7 @@ public class ExitFromLobbyServiceTest {
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(MEMBER_ID).build(), remainingInvitation));
 
         given(characterProxy.getCharacter(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(USER_ID);
 
@@ -117,12 +139,13 @@ public class ExitFromLobbyServiceTest {
         assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
 
         WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY);
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
 
         ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
         assertThat(payload.getUserId()).isEqualTo(USER_ID);
         assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
         assertThat(payload.isHost()).isTrue();
+        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
 
         verify(lobbyDao).delete(lobby);
 
@@ -134,5 +157,19 @@ public class ExitFromLobbyServiceTest {
         assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
         assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(USER_ID);
         assertThat(lobby.getInvitations()).containsExactly(remainingInvitation);
+    }
+
+    @Test
+    void userDisconnected() {
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        Map<UUID, LobbyMember> members = Map.of(USER_ID, lobbyMember);
+        given(lobby.getMembers()).willReturn(members);
+        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+
+        underTest.userDisconnected(USER_ID);
+
+        verify(lobbyMember).setStatus(LobbyMemberStatus.DISCONNECTED);
+        verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, members.keySet());
+        verify(messageSenderProxy).lobbyMemberDisconnected(lobbyMemberResponse, members.keySet());
     }
 }

@@ -9,10 +9,12 @@ public class Invitation {
     private final WebElement webElement;
 
     public String getInvitor() {
-        return webElement.findElement(By.cssSelector(":scope .invitation-sender-name")).getText();
+        return webElement.findElement(By.cssSelector(":scope .skyxplore-main-menu-invitation-name span:first-child"))
+            .getText();
     }
 
     public void accept() {
-        webElement.findElement(By.cssSelector(":scope div.invitation-buttons button:first-child")).click();
+        webElement.findElement(By.cssSelector(":scope .skyxplore-main-menu-invitation-accept-button"))
+            .click();
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.character;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.service.skyxplore.data.character.service.creation.CharacterCreationService;
@@ -27,6 +28,7 @@ public class CharacterDataControllerImplTest {
     private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
         .userId(USER_ID)
         .build();
+    private static final String CHARACTER_NAME = "character-name";
 
     @Mock
     private CharacterCreationService characterCreationService;
@@ -54,6 +56,16 @@ public class CharacterDataControllerImplTest {
     }
 
     @Test
+    void getCharacterName() {
+        given(characterDao.findByIdValidated(USER_ID)).willReturn(character);
+        given(character.getName()).willReturn(CHARACTER_NAME);
+
+        OneParamResponse<String> result = underTest.getCharacterName(ACCESS_TOKEN_HEADER);
+
+        assertThat(result.getValue()).isEqualTo(CHARACTER_NAME);
+    }
+
+    @Test
     public void internalGetCharacterByUserId_found() {
         given(characterDao.findById(USER_ID)).willReturn(Optional.of(character));
         given(characterModelConverter.convertEntity(Optional.of(character))).willReturn(Optional.of(model));
@@ -77,8 +89,8 @@ public class CharacterDataControllerImplTest {
     public void exists() {
         given(characterDao.exists(USER_ID)).willReturn(true);
 
-        boolean result = underTest.exists(USER_ID);
+        OneParamResponse<Boolean> result = underTest.exists(ACCESS_TOKEN_HEADER);
 
-        assertThat(result).isTrue();
+        assertThat(result.getValue()).isTrue();
     }
 }

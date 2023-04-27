@@ -15,4 +15,12 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="universe" columnNames="game_id" constraintName="universe_pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-universe" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="universe"/>
+        </preConditions>
+
+        <dropTable schemaName="skyxplore_game" tableName="universe"/>
+    </changeSet>
 </databaseChangeLog>

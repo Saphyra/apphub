@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ReservedStorageService implements GameItemService {
-    private final ReservedStorageDao reservedStorageDao;
+    private final ReservedStorageDao dao;
     private final ReservedStorageModelValidator reservedStorageModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        reservedStorageDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -39,21 +38,16 @@ public class ReservedStorageService implements GameItemService {
             .peek(reservedStorageModelValidator::validate)
             .collect(Collectors.toList());
 
-        reservedStorageDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<ReservedStorageModel> findById(UUID id) {
-        return reservedStorageDao.findById(id);
-    }
-
-    @Override
-    public List<ReservedStorageModel> getByParent(UUID parent) {
-        return reservedStorageDao.getByLocation(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        reservedStorageDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<ReservedStorageModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

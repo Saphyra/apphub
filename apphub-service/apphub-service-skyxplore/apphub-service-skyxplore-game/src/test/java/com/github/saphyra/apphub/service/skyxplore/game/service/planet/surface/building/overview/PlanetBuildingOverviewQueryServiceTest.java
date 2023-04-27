@@ -1,22 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,29 +38,26 @@ public class PlanetBuildingOverviewQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Surface surface;
 
     @Mock
-    private Coordinate coordinate;
+    private Surfaces surfaces;
 
     @Mock
     private PlanetBuildingOverviewResponse planetBuildingOverviewResponse;
 
     @Test
     public void getBuildingOverview() {
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(coordinate, surface)));
+        given(game.getData()).willReturn(gameData);
 
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
-        given(overviewMapper.createOverview(Arrays.asList(surface))).willReturn(planetBuildingOverviewResponse);
+        given(overviewMapper.createOverview(gameData, PLANET_ID, SurfaceType.CONCRETE)).willReturn(planetBuildingOverviewResponse);
 
         Map<String, PlanetBuildingOverviewResponse> result = underTest.getBuildingOverview(USER_ID, PLANET_ID);
 

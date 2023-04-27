@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
+import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,21 +29,13 @@ public class GameCreationRequestValidatorTest {
     private static final String GAME_NAME = "game-name";
 
     @Mock
-    private GameCreationSettingsValidator gameCreationSettingsValidator;
-
-    @Mock
     private AllianceNameValidator allianceNameValidator;
 
     @InjectMocks
     private GameCreationRequestValidator underTest;
 
     @Mock
-    private SkyXploreGameCreationSettingsRequest settings;
-
-    @AfterEach
-    public void validate() {
-        verify(gameCreationSettingsValidator).validate(settings);
-    }
+    private SkyXploreGameSettings settings;
 
     @Test
     public void nullHost() {
@@ -97,9 +89,9 @@ public class GameCreationRequestValidatorTest {
     public void notUniqueAllianceName() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .alliances(CollectionUtils.toMap(
-                new BiWrapper<>(ALLIANCE_ID, ALLIANCE_NAME),
-                new BiWrapper<>(UUID.randomUUID(), ALLIANCE_NAME)
+            .alliances(Map.of(
+                ALLIANCE_ID, ALLIANCE_NAME,
+                UUID.randomUUID(), ALLIANCE_NAME
             ))
             .build();
 

@@ -94,4 +94,8 @@ public class SkyXploreWsClient extends WebSocketClient {
             sleepService.sleep(1);
         }
     }
+
+    public void clearMessages(){
+        messages.clear();
+    }
 }

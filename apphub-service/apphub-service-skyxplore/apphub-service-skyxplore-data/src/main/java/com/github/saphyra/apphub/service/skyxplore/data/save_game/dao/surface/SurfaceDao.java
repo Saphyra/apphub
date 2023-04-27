@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.surface;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,5 +33,9 @@ public class SurfaceDao extends AbstractDao<SurfaceEntity, SurfaceModel, String,
 
     public void deleteById(UUID surfaceId) {
         deleteById(uuidConverter.convertDomain(surfaceId));
+    }
+
+    public List<SurfaceModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

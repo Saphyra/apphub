@@ -3,14 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.SolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
 import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -20,13 +18,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,36 +48,25 @@ public class SolarSystemResponseQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private SolarSystem solarSystem;
 
     @Mock
-    private Planet planet;
-
-    @Mock
     private PlanetLocationResponse planetLocationResponse;
 
-    @Test
-    public void getSolarSystem_notFound() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(new Coordinate(0, 0), solarSystem));
-        given(solarSystem.getSolarSystemId()).willReturn(UUID.randomUUID());
-
-        Throwable ex = catchThrowable(() -> underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR);
-    }
+    @Mock
+    private SolarSystems solarSystems;
 
     @Test
     public void getSolarSystem_notVisible() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(new Coordinate(0, 0), solarSystem));
-        given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
-        given(visibilityFacade.isVisible(USER_ID, solarSystem)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSolarSystems()).willReturn(solarSystems);
+        given(solarSystems.findByIdValidated(SOLAR_SYSTEM_ID)).willReturn(solarSystem);
+
+        given(visibilityFacade.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).willReturn(false);
 
         Throwable ex = catchThrowable(() -> underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID));
 
@@ -91,15 +76,16 @@ public class SolarSystemResponseQueryServiceTest {
     @Test
     public void getSolarSystem() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.getSystems()).willReturn(CollectionUtils.singleValueMap(new Coordinate(0, 0), solarSystem));
-        given(solarSystem.getSolarSystemId()).willReturn(SOLAR_SYSTEM_ID);
-        given(solarSystem.getDefaultName()).willReturn(DEFAULT_NAME);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSolarSystems()).willReturn(solarSystems);
+        given(solarSystems.findByIdValidated(SOLAR_SYSTEM_ID)).willReturn(solarSystem);
+
         given(solarSystem.getCustomNames()).willReturn(new OptionalHashMap<>());
+        given(solarSystem.getDefaultName()).willReturn(DEFAULT_NAME);
         given(solarSystem.getRadius()).willReturn(RADIUS);
-        given(solarSystem.getPlanets()).willReturn(CollectionUtils.singleValueMap(UUID.randomUUID(), planet));
-        given(planetToLocationResponseConverter.mapPlanets(eq(USER_ID), any(), eq(game))).willReturn(Arrays.asList(planetLocationResponse));
-        given(visibilityFacade.isVisible(USER_ID, solarSystem)).willReturn(true);
+        given(visibilityFacade.isVisible(gameData, USER_ID, SOLAR_SYSTEM_ID)).willReturn(true);
+
+        given(planetToLocationResponseConverter.mapPlanets(game, SOLAR_SYSTEM_ID, USER_ID)).willReturn(List.of(planetLocationResponse));
 
         SolarSystemResponse result = underTest.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID);
 

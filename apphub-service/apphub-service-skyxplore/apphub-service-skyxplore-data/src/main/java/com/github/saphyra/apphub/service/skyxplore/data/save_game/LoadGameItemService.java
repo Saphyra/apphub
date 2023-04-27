@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -15,32 +15,29 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-@Builder
 public class LoadGameItemService {
     private final List<GameItemService> gameItemServices;
     private final ErrorReporterService errorReporterService;
+    private final Integer itemsPerPage;
 
-    public GameItem loadGameItem(UUID id, GameItemType type) {
-        Optional<GameItemService> gameItemService = findService(type);
-
-        if (gameItemService.isPresent()) {
-            return gameItemService.get()
-                .findById(id)
-                .orElse(null);
-        } else {
-            errorReporterService.report("No gameItemService found for type " + type);
-            return null;
-        }
+    @Builder
+    public LoadGameItemService(
+        List<GameItemService> gameItemServices,
+        ErrorReporterService errorReporterService,
+        @Value("${game.load.itemsPerPage}") Integer itemsPerPage
+    ) {
+        this.gameItemServices = gameItemServices;
+        this.errorReporterService = errorReporterService;
+        this.itemsPerPage = itemsPerPage;
     }
 
-    public List<? extends GameItem> loadChildrenOfGameItem(UUID parent, GameItemType type) {
+    public List<? extends GameItem> loadPageForGameItems(UUID gameId, Integer page, GameItemType type) {
         Optional<GameItemService> gameItemService = findService(type);
 
         if (gameItemService.isPresent()) {
             return gameItemService.get()
-                .getByParent(parent);
+                .loadPage(gameId, page, itemsPerPage);
         } else {
             errorReporterService.report("No gameItemService found for type " + type);
             return Collections.emptyList();

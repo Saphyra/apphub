@@ -40,7 +40,6 @@ public class StorageSettingConverterTest {
         model.setId(STORAGE_SETTING_ID);
         model.setGameId(GAME_ID);
         model.setLocation(LOCATION);
-        model.setLocationType(LOCATION_TYPE);
         model.setDataId(DATA_ID);
         model.setTargetAmount(TARGET_AMOUNT);
         model.setPriority(PRIORITY);
@@ -55,7 +54,6 @@ public class StorageSettingConverterTest {
         assertThat(result.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
@@ -68,7 +66,6 @@ public class StorageSettingConverterTest {
             .storageSettingId(STORAGE_SETTING_ID_STRING)
             .gameId(GAME_ID_STRING)
             .location(LOCATION_STRING)
-            .locationType(LOCATION_TYPE)
             .dataId(DATA_ID)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
@@ -85,7 +82,6 @@ public class StorageSettingConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.STORAGE_SETTING);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);

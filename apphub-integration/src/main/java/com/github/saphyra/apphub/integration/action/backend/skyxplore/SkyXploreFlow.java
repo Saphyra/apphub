@@ -2,8 +2,9 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Player;
-import com.github.saphyra.apphub.integration.structure.skyxplore.ReadinessEvent;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
@@ -35,7 +36,7 @@ public class SkyXploreFlow {
 
         List<ApphubWsClient> memberLobbyWsClients = Arrays.stream(members)
             .map(player -> ApphubWsClient.createSkyXploreLobby(language, player.getAccessTokenId()))
-            .collect(Collectors.toList());
+            .toList();
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
@@ -47,11 +48,14 @@ public class SkyXploreFlow {
         memberLobbyWsClients.forEach(skyXploreLobbyWsClient -> skyXploreLobbyWsClient.send(readyEvent));
 
         boolean allPlayersReady = Stream.concat(
-            Stream.of(host),
-            Arrays.stream(members)
-        )
+                Stream.of(host),
+                Arrays.stream(members)
+            )
             .map(Player::getUserId)
-            .allMatch(userId -> hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, event -> event.getPayloadAs(ReadinessEvent.class).equals(new ReadinessEvent(userId, true))).isPresent());
+            .allMatch(userId -> hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, event -> {
+                LobbyMemberResponse response = event.getPayloadAs(LobbyMemberResponse.class);
+                return response.getStatus() == LobbyMemberStatus.READY && response.getUserId().equals(userId);
+            }).isPresent());
         assertThat(allPlayersReady).isTrue();
 
         SkyXploreLobbyActions.startGame(language, host.getAccessTokenId());

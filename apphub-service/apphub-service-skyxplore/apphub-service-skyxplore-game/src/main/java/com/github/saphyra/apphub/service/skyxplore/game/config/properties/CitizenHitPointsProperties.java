@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class CitizenHitPointsProperties {
-    private int perStaminaLevel;
+    private int perLevel;
+    private int base;
 }

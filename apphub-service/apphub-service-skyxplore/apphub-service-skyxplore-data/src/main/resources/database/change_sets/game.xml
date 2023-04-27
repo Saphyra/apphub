@@ -41,7 +41,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="add-column-marked-for-deletion_at-tp-game" author="saphyra">
+    <changeSet id="add-column-marked-for-deletion_at-to-game" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists schemaName="skyxplore_game" tableName="game" columnName="marked_for_deletion_at"/>
@@ -50,6 +50,18 @@
 
         <addColumn schemaName="skyxplore_game" tableName="game">
             <column name="marked_for_deletion_at" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-universe_size-to-game" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="game" columnName="universe_size"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="game">
+            <column name="universe_size" type="integer"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

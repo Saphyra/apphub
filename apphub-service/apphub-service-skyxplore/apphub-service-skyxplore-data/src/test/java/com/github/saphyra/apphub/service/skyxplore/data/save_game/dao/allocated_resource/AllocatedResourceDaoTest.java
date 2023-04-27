@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,8 @@ public class AllocatedResourceDaoTest {
     private static final String ALLOCATED_RESOURCE_ID_STRING = "allocated-resource-id";
     private static final UUID LOCATION = UUID.randomUUID();
     private static final String LOCATION_STRING = "location";
+    private static final Integer PAGE = 3215;
+    private static final Integer ITEMS_PER_PAGE = 457;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -83,5 +86,14 @@ public class AllocatedResourceDaoTest {
         underTest.deleteById(ALLOCATED_RESOURCE_ID);
 
         verify(repository).deleteById(ALLOCATED_RESOURCE_ID_STRING);
+    }
+
+    @Test
+    void getPageByGameId() {
+        given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
+        given(repository.getByGameId(GAME_ID_STRING, PageRequest.of(PAGE, ITEMS_PER_PAGE))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(model));
+
+        assertThat(underTest.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

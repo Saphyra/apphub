@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
@@ -25,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +33,6 @@ import static org.mockito.Mockito.verify;
 public class SkyXploreLobbyControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOBBY_NAME = "lobby-name";
-    private static final UUID HOST = UUID.randomUUID();
     private static final UUID FRIEND_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -59,10 +55,10 @@ public class SkyXploreLobbyControllerImplTest {
     private LobbyMemberQueryService lobbyMemberQueryService;
 
     @Mock
-    private LobbyDao lobbyDao;
+    private StartGameService startGameService;
 
     @Mock
-    private StartGameService startGameService;
+    private LobbyDao lobbyDao;
 
     @InjectMocks
     private SkyXploreLobbyControllerImpl underTest;
@@ -71,14 +67,29 @@ public class SkyXploreLobbyControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private Lobby lobby;
-
-    @Mock
-    private LobbyMembersResponse lobbyMembersResponse;
-
-    @Mock
     private ActiveFriendResponse activeFriendResponse;
 
+    @Mock
+    private LobbyMemberResponse lobbyMemberResponse;
+
+    @Mock
+    private Lobby lobby;
+
+    @Test
+    void lobbyForPage(){
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
+        given(lobby.getHost()).willReturn(USER_ID);
+        given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
+
+        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
+
+        assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
+        assertThat(result.isHost()).isTrue();
+        assertThat(result.getLobbyType()).isEqualTo(LobbyType.LOAD_GAME.name());
+        assertThat(result.getOwnUserId()).isEqualTo(USER_ID);
+    }
 
     @Test
     public void createLobby() {
@@ -87,34 +98,6 @@ public class SkyXploreLobbyControllerImplTest {
         underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessTokenHeader);
 
         verify(lobbyCreationService).createNew(USER_ID, LOBBY_NAME);
-    }
-
-    @Test
-    public void lobbyForPage_inLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getHost()).willReturn(HOST);
-        given(lobby.isGameCreationStarted()).willReturn(true);
-        given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
-        given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
-
-        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
-
-        assertThat(result.isInLobby()).isTrue();
-        assertThat(result.isGameCreationStarted()).isTrue();
-        assertThat(result.getHost()).isEqualTo(HOST);
-        assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
-        assertThat(result.getType()).isEqualTo(LobbyType.NEW_GAME.name());
-    }
-
-    @Test
-    public void lobbyForPage_notInLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.empty());
-
-        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
-
-        assertThat(result.isInLobby()).isFalse();
     }
 
     @Test
@@ -155,33 +138,17 @@ public class SkyXploreLobbyControllerImplTest {
     public void userLeftLobby() {
         underTest.userLeftLobby(USER_ID);
 
-        verify(exitFromLobbyService).exit(USER_ID);
+        verify(exitFromLobbyService).userDisconnected(USER_ID);
     }
 
     @Test
     public void getMembersOfLobby() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(lobbyMembersResponse);
+        given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(List.of(lobbyMemberResponse));
 
-        LobbyMembersResponse result = underTest.getMembersOfLobby(accessTokenHeader);
+        List<LobbyMemberResponse> result = underTest.getMembersOfLobby(accessTokenHeader);
 
-        assertThat(result).isEqualTo(lobbyMembersResponse);
-    }
-
-    @Test
-    public void getGameSettings() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        GameSettings gameSettings = new GameSettings();
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getSettings()).willReturn(gameSettings);
-
-        GameSettingsResponse result = underTest.getGameSettings(accessTokenHeader);
-
-        assertThat(result.getUniverseSize()).isEqualTo(gameSettings.getUniverseSize().name());
-        assertThat(result.getSystemAmount()).isEqualTo(gameSettings.getSystemAmount().name());
-        assertThat(result.getSystemSize()).isEqualTo(gameSettings.getSystemSize().name());
-        assertThat(result.getPlanetSize()).isEqualTo(gameSettings.getPlanetSize().name());
-        assertThat(result.getAiPresence()).isEqualTo(gameSettings.getAiPresence().name());
+        assertThat(result).containsExactly(lobbyMemberResponse);
     }
 
     @Test

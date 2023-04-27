@@ -19,6 +19,7 @@ class BuildingEntity {
     @Id
     private String buildingId;
     private String gameId;
+    private String location;
     private String surfaceId;
     private String dataId;
     private int level;

@@ -21,8 +21,10 @@ public class Constants {
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
-    public final String NEW_ALLIANCE_VALUE = "new-alliance";
-    public final String NO_ALLIANCE_VALUE = "no-alliance";
+    public static final String NEW_ALLIANCE_LABEL = "Új szövetség";
+    public static final String NEW_ALLIANCE_VALUE = "new-alliance";
+    public final String NO_ALLIANCE_LABEL = "Nincs szövetség";
+    public static final String NO_ALLIANCE_VALUE = "no-alliance";
 
     //SurfaceTypes
     public final String SURFACE_TYPE_DESERT = "DESERT";
@@ -46,7 +48,7 @@ public class Constants {
     //Etc
     public final int DEFAULT_PRIORITY = 5;
     public static final String DEFAULT_GAME_NAME = "game-name";
-    public static final int MAX_CITIZEN_MORALE = 1600;
+    public static final int MAX_CITIZEN_MORALE = 10000;
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";

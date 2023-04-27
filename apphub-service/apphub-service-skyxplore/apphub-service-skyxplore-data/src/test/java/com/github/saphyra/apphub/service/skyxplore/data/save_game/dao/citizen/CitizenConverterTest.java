@@ -19,7 +19,6 @@ public class CitizenConverterTest {
     private static final UUID CITIZEN_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String LOCATION_TYPE = "location-type";
     private static final String NAME = "name";
     private static final Integer MORALE = 42352;
     private static final Integer SATIETY = 398214;
@@ -41,7 +40,6 @@ public class CitizenConverterTest {
         model.setId(CITIZEN_ID);
         model.setGameId(GAME_ID);
         model.setLocation(LOCATION);
-        model.setLocationType(LOCATION_TYPE);
         model.setName(NAME);
         model.setMorale(MORALE);
         model.setSatiety(SATIETY);
@@ -57,7 +55,6 @@ public class CitizenConverterTest {
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getMorale()).isEqualTo(MORALE);
         assertThat(result.getSatiety()).isEqualTo(SATIETY);
@@ -71,7 +68,6 @@ public class CitizenConverterTest {
             .citizenId(CITIZEN_ID_STRING)
             .gameId(GAME_ID_STRING)
             .location(LOCATION_STRING)
-            .locationType(LOCATION_TYPE)
             .name(NAME)
             .satiety(SATIETY)
             .morale(MORALE)
@@ -89,7 +85,6 @@ public class CitizenConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CITIZEN);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getMorale()).isEqualTo(MORALE);
         assertThat(result.getSatiety()).isEqualTo(SATIETY);

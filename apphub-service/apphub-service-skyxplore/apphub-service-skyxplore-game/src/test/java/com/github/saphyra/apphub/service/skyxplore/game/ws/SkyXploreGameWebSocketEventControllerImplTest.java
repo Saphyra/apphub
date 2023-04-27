@@ -13,7 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -151,7 +152,10 @@ public class SkyXploreGameWebSocketEventControllerImplTest {
         given(otherChatRoom.getMembers()).willReturn(Collections.emptyList());
         given(game.filterConnectedPlayersFrom(any())).willReturn(Arrays.asList(USER_ID));
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
-        given(game.getPlayers()).willReturn(CollectionUtils.toMap(new BiWrapper<>(USER_ID, player1), new BiWrapper<>(FROM, player2)));
+        given(game.getPlayers()).willReturn(Map.of(
+            USER_ID, player1,
+            FROM, player2
+        ));
         given(game.getConnectedPlayers()).willReturn(Arrays.asList(UUID.randomUUID()));
         given(game.isGamePaused()).willReturn(true);
 

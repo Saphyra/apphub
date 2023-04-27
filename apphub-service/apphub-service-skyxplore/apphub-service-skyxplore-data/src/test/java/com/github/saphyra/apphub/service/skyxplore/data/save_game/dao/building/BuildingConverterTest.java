@@ -24,6 +24,8 @@ public class BuildingConverterTest {
     private static final String BUILDING_ID_STRING = "building-id";
     private static final String GAME_ID_STRING = "game-id";
     private static final String SURFACE_ID_STRING = "surface-id";
+    private static final String LOCATION_STRING = "location";
+    private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
     private UuidConverter uuidConverter;
@@ -39,16 +41,19 @@ public class BuildingConverterTest {
         model.setSurfaceId(SURFACE_ID);
         model.setDataId(DATA_ID);
         model.setLevel(LEVEL);
+        model.setLocation(LOCATION);
 
         given(uuidConverter.convertDomain(BUILDING_ID)).willReturn(BUILDING_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(uuidConverter.convertDomain(SURFACE_ID)).willReturn(SURFACE_ID_STRING);
+        given(uuidConverter.convertDomain(LOCATION)).willReturn(LOCATION_STRING);
 
         BuildingEntity result = underTest.convertDomain(model);
 
         assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID_STRING);
+        assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
     }
@@ -59,6 +64,7 @@ public class BuildingConverterTest {
             .buildingId(BUILDING_ID_STRING)
             .gameId(GAME_ID_STRING)
             .surfaceId(SURFACE_ID_STRING)
+            .location(LOCATION_STRING)
             .dataId(DATA_ID)
             .level(LEVEL)
             .build();
@@ -66,6 +72,7 @@ public class BuildingConverterTest {
         given(uuidConverter.convertEntity(BUILDING_ID_STRING)).willReturn(BUILDING_ID);
         given(uuidConverter.convertEntity(GAME_ID_STRING)).willReturn(GAME_ID);
         given(uuidConverter.convertEntity(SURFACE_ID_STRING)).willReturn(SURFACE_ID);
+        given(uuidConverter.convertEntity(LOCATION_STRING)).willReturn(LOCATION);
 
         BuildingModel result = underTest.convertEntity(entity);
 
@@ -73,6 +80,7 @@ public class BuildingConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.BUILDING);
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);
+        assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLevel()).isEqualTo(LEVEL);
     }

@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,11 +31,10 @@ public class AllocatedResourceFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(ALLOCATED_RESOURCE_ID);
 
-        AllocatedResource result = underTest.create(LOCATION, LocationType.BUILDING, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        AllocatedResource result = underTest.create(LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result.getAllocatedResourceId()).isEqualTo(ALLOCATED_RESOURCE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.BUILDING);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

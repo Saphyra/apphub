@@ -11,6 +11,8 @@ liquibase:
 game:
   deletion:
     expirationMinutes: 10
+  load:
+    itemsPerPage: 1000
 
 logging:
   level:

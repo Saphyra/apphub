@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.api.skyxplore.data.server;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.IncomingFriendRequestResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.Constants;

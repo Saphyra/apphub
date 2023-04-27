@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,9 +49,9 @@ public class RequiredEmptyStorageCalculatorTest {
 
     @Test
     public void getRequiredStorageAmount() {
-        Map<String, ConsumptionResult> consumptions = CollectionUtils.toMap(
-            new BiWrapper<>(DATA_ID_1, consumptionResult1),
-            new BiWrapper<>(DATA_ID_2, consumptionResult2)
+        Map<String, ConsumptionResult> consumptions = Map.of(
+            DATA_ID_1, consumptionResult1,
+            DATA_ID_2, consumptionResult2
         );
 
         given(consumptionResult1.getReservation()).willReturn(reservedStorage1);

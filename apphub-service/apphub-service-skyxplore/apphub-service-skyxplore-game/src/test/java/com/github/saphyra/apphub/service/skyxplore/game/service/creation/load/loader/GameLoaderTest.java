@@ -5,18 +5,17 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMess
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -25,25 +24,23 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class GameLoaderTest {
-    private static final UUID MEMBER_ID = UUID.randomUUID();
-    private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
-    private static final UUID GAME_ID = UUID.randomUUID();
+class GameLoaderTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
+    private static final UUID GAME_ID = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
     private static final UUID HOST = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
+    private static final Integer UNIVERSE_SIZE = 324;
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -61,9 +58,6 @@ public class GameLoaderTest {
     private ChatFactory chatFactory;
 
     @Mock
-    private UniverseLoader universeLoader;
-
-    @Mock
     private GameDataProxy gameDataProxy;
 
     @Mock
@@ -73,10 +67,13 @@ public class GameLoaderTest {
     private EventLoopFactory eventLoopFactory;
 
     @Mock
-    private BackgroundProcessStarterService backgroundProcessStarterService;
+    private GameDataLoader gameDataLoader;
 
     @Mock
     private ProcessLoader processLoader;
+
+    @Mock
+    private TickSchedulerLauncher tickSchedulerLauncher;
 
     @InjectMocks
     private GameLoader underTest;
@@ -91,7 +88,7 @@ public class GameLoaderTest {
     private Alliance alliance;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private Chat chat;
@@ -99,33 +96,26 @@ public class GameLoaderTest {
     @Mock
     private EventLoop eventLoop;
 
-    @Mock
-    private Process process;
-
     @Test
-    public void load() {
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
-
+    void loadGame() {
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(gameModel.getId()).willReturn(GAME_ID);
+        Map<UUID, Player> players = Map.of(USER_ID, player);
+        given(playerLoader.load(GAME_ID, List.of(USER_ID))).willReturn(players);
         given(gameModel.getName()).willReturn(GAME_NAME);
         given(gameModel.getHost()).willReturn(HOST);
-        given(gameModel.getLastPlayed()).willReturn(CURRENT_DATE);
-        given(gameModel.getMarkedForDeletion()).willReturn(true);
-        given(gameModel.getMarkedForDeletionAt()).willReturn(CURRENT_DATE);
-
-        Map<UUID, Player> players = Map.of(USER_ID, player);
-        given(playerLoader.load(GAME_ID, Arrays.asList(MEMBER_ID))).willReturn(players);
         given(allianceLoader.load(GAME_ID, players)).willReturn(Map.of(ALLIANCE_ID, alliance));
-        given(universeLoader.load(GAME_ID)).willReturn(universe);
+        given(gameModel.getUniverseSize()).willReturn(UNIVERSE_SIZE);
+        given(gameDataLoader.load(GAME_ID, UNIVERSE_SIZE)).willReturn(gameData);
         given(chatFactory.create(players.values())).willReturn(chat);
-
         given(eventLoopFactory.create()).willReturn(eventLoop);
-        given(processLoader.load(any(Game.class))).willReturn(List.of(process));
+        given(gameModel.getMarkedForDeletion()).willReturn(false);
+        given(gameModel.getMarkedForDeletionAt()).willReturn(null);
+        given(gameModel.getLastPlayed()).willReturn(CURRENT_TIME);
 
-        underTest.loadGame(gameModel, Arrays.asList(MEMBER_ID));
+        underTest.loadGame(gameModel, List.of(USER_ID));
 
-        verify(gameModel).setLastPlayed(CURRENT_DATE);
-        verify(gameDataProxy).saveItem(gameModel);
+        verify(gameModel).setLastPlayed(CURRENT_TIME);
 
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
         verify(gameDao).save(gameArgumentCaptor.capture());
@@ -133,23 +123,23 @@ public class GameLoaderTest {
         assertThat(game.getGameId()).isEqualTo(GAME_ID);
         assertThat(game.getGameName()).isEqualTo(GAME_NAME);
         assertThat(game.getHost()).isEqualTo(HOST);
-        assertThat(game.getLastPlayed()).isEqualTo(CURRENT_DATE);
+        assertThat(game.getLastPlayed()).isEqualTo(CURRENT_TIME);
         assertThat(game.getPlayers()).containsEntry(USER_ID, player);
         assertThat(game.getAlliances()).containsEntry(ALLIANCE_ID, alliance);
-        assertThat(game.getUniverse()).isEqualTo(universe);
+        assertThat(game.getData()).isEqualTo(gameData);
         assertThat(game.getChat()).isEqualTo(chat);
         assertThat(game.getEventLoop()).isEqualTo(eventLoop);
-        assertThat(game.getProcesses()).containsExactly(process);
-        assertThat(game.getMarkedForDeletion()).isTrue();
-        assertThat(game.getMarkedForDeletionAt()).isEqualTo(CURRENT_DATE);
-        assertThat(game.getProcesses()).containsExactly(process);
+        assertThat(game.getMarkedForDeletion()).isFalse();
+        assertThat(game.getMarkedForDeletionAt()).isNull();
+
+        verify(processLoader).loadProcesses(game);
+        verify(gameDataProxy).saveItem(gameModel);
+        verify(tickSchedulerLauncher).launch(game);
 
         ArgumentCaptor<WebSocketMessage> messageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToLobby(messageArgumentCaptor.capture());
         WebSocketMessage message = messageArgumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
+        assertThat(message.getRecipients()).containsExactly(USER_ID);
         assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
-
-        verify(backgroundProcessStarterService).startBackgroundProcesses(game);
     }
 }

@@ -12,13 +12,12 @@ import jakarta.annotation.PostConstruct;
 @Configuration
 @Slf4j
 public class GameProperties {
-    private int eventQueueSize;
     private int itemSaverMaxChunkSize;
     private int creationQueueSize;
+    private int tickTimeMillis;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;
-    private PlayerProperties player;
     private CitizenProperties citizen;
     private DeconstructionProperties deconstruction;
 

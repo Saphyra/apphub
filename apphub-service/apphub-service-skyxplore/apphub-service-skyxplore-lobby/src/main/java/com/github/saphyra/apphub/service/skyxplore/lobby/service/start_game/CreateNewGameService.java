@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationSettingsRequest;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
@@ -28,32 +27,28 @@ class CreateNewGameService {
     private final MessageSenderProxy messageSenderProxy;
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
+    private final AllianceSetupValidator allianceSetupValidator;
 
     void createNewGame(Lobby lobby) {
         Map<UUID, UUID> members = new HashMap<>();
         lobby.getMembers()
             .values()
-            .forEach(member -> members.put(member.getUserId(), member.getAlliance()));
+            .forEach(member -> members.put(member.getUserId(), member.getAllianceId()));
 
         Map<UUID, String> alliances = lobby.getAlliances()
             .stream()
             .collect(Collectors.toMap(Alliance::getAllianceId, Alliance::getAllianceName));
 
-        SkyXploreGameCreationSettingsRequest settings = SkyXploreGameCreationSettingsRequest.builder()
-            .universeSize(lobby.getSettings().getUniverseSize())
-            .systemAmount(lobby.getSettings().getSystemAmount())
-            .systemSize(lobby.getSettings().getSystemSize())
-            .planetSize(lobby.getSettings().getPlanetSize())
-            .aiPresence(lobby.getSettings().getAiPresence())
-            .build();
-
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(lobby.getHost())
             .members(members)
             .alliances(alliances)
-            .settings(settings)
+            .settings(lobby.getSettings())
             .gameName(lobby.getLobbyName())
+            .ais(lobby.getAis())
             .build();
+
+        allianceSetupValidator.check(request);
 
         gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
         lobby.setGameCreationStarted(true);

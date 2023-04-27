@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -9,7 +9,7 @@
       ],
       "maxBatchSize": 1000,
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
+        "requiredWorkPoints": 5,
         "requiredResources": {
         }
       },

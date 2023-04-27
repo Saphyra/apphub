@@ -33,7 +33,7 @@
   "defaultBuilding": true,
   "constructionRequirements": {
     "1": {
-      "requiredWorkPoints": 1000,
+      "requiredWorkPoints": 10000,
       "requiredResources": {
         "energy": 200,
         "wood": 500

@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +22,30 @@ public class StorageSettingDeletionService {
     private final SyncCacheFactory syncCacheFactory;
 
     @SneakyThrows
-    public void deleteStorageSetting(UUID userId, UUID planetId, UUID storageSettingId) {
+    public void deleteStorageSetting(UUID userId, UUID storageSettingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
-        game.getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
+        SyncCache syncCache = syncCacheFactory.create(game);
 
-        SyncCache syncCache = syncCacheFactory.create();
+        StorageSetting storageSetting = game.getData()
+            .getStorageSettings()
+            .findByStorageSettingIdValidated(storageSettingId);
 
         game.getEventLoop()
             .process(
-                () -> game.getProcesses()
-                    .findByExternalReferenceAndTypeValidated(storageSettingId, ProcessType.STORAGE_SETTING)
-                    .cancel(syncCache),
+                () -> {
+                    game.getData()
+                        .getProcesses()
+                        .findByExternalReferenceAndType(storageSettingId, ProcessType.STORAGE_SETTING)
+                        .ifPresent(process -> {
+                            process.cleanup(syncCache);
+                        });
+
+                    game.getData()
+                        .getStorageSettings()
+                        .remove(storageSetting);
+                    syncCache.deleteGameItem(storageSettingId, GameItemType.STORAGE_SETTING);
+                },
                 syncCache
             )
             .get()

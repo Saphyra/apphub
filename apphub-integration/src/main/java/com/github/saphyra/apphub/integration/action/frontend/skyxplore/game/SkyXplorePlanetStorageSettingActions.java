@@ -19,7 +19,7 @@ public class SkyXplorePlanetStorageSettingActions {
 
     public static void create(WebDriver driver, String resourceId, int amount, int batchSize, int priority) {
         createStorageSettingResourceSelectMenu(driver)
-            .selectOption(resourceId);
+            .selectOptionByValue(resourceId);
 
         clearAndFill(GamePage.createStorageSettingResourceAmountInput(driver), String.valueOf(amount));
         clearAndFill(GamePage.createStorageSettingBatchSizeInput(driver), String.valueOf(batchSize));

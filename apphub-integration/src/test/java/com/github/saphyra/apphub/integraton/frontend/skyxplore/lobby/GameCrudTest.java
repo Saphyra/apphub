@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
@@ -9,15 +7,17 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class GameCrudTest extends SeleniumTest {
     @Test(groups = "skyxplore")
     public void gameCrud() {
@@ -44,8 +45,9 @@ public class GameCrudTest extends SeleniumTest {
             .map(this::registerAndNavigateToSkyXplore)
             .collect(Collectors.toList());
 
-        AwaitilityWrapper.create(60, 5)
-            .until(() -> futures.stream().allMatch(Future::isDone));
+        AwaitilityWrapper.create(60, 1)
+            .until(() -> futures.stream().allMatch(Future::isDone))
+            .assertTrue();
 
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver3, userData1.getUsername(), userData3.getUsername());
@@ -54,17 +56,14 @@ public class GameCrudTest extends SeleniumTest {
 
         //Create lobby - Game name too short
         SkyXploreMainMenuActions.fillGameName(driver1, "aa");
-        SleepUtil.sleep(2000);
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "A játék neve túl rövid (3 karakter minimum).");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl rövid. (Minimum 3 karakter)");
 
         //Create lobby - Game name too long
         SkyXploreMainMenuActions.fillGameName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SleepUtil.sleep(2000);
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "A játék neve túl hosszú (30 karakter maximum).");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl hosszú. (Maximum 30 karakter)");
 
         //Create lobby
         SkyXploreMainMenuActions.fillGameName(driver1, "game-name");
-        SleepUtil.sleep(2000);
         SkyXploreMainMenuActions.verifyValidGameName(driver1);
 
         SkyXploreMainMenuActions.submitGameCreationForm(driver1);
@@ -76,7 +75,7 @@ public class GameCrudTest extends SeleniumTest {
         //Start game - not ready
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        NotificationUtil.verifyErrorNotification(driver1, "Várd meg, amíg mindenki kész van!");
+        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
 
         //Start game
         SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
@@ -85,7 +84,7 @@ public class GameCrudTest extends SeleniumTest {
         SkyXploreLobbyActions.setReady(driver1);
         SkyXploreLobbyActions.setReady(driver2);
 
-        LobbyMember lobbyMember = SkyXploreLobbyActions.getHostMember(driver1);
+        LobbyMember lobbyMember = SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername());
         AwaitilityWrapper.createDefault()
             .until(lobbyMember::isReady)
             .assertTrue();
@@ -113,7 +112,7 @@ public class GameCrudTest extends SeleniumTest {
         //Start game - Not all members ready
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        NotificationUtil.verifyErrorNotification(driver1, "Várd meg, amíg mindenki kész van!");
+        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
 
         //Check if not-member friend is not available to invite
         assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
@@ -128,7 +127,8 @@ public class GameCrudTest extends SeleniumTest {
         SkyXploreLobbyActions.setReady(driver1);
 
         SkyXploreLobbyActions.startGameCreation(driver1);
-        CommonPageActions.confirmConfirmationDialog(driver1, "start-game-confirmation-dialog");
+        SleepUtil.sleep(1000);
+        SkyXploreLobbyActions.startGameWithMissingPlayers(driver1);
 
         AwaitilityWrapper.create(120, 5)
             .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE));
@@ -143,7 +143,9 @@ public class GameCrudTest extends SeleniumTest {
             ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
             SkyXploreCharacterActions.submitForm(driver);
 
-            SkyXploreMainMenuActions.waitForPageLoads(driver);
+            AwaitilityWrapper.createDefault()
+                .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                .assertTrue("MainMenu is not loaded.");
         });
     }
 }

@@ -19,4 +19,14 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="stored_resource" columnNames="stored_resource_id" constraintName="stored_resource_pk"/>
     </changeSet>
+
+    <changeSet id="remove-location_type-from-stored_resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="stored_resource" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="stored_resource">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

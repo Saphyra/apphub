@@ -2,8 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.map.query;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapSolarSystemResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.map.SolarSystemConnectionResponse;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,31 +23,23 @@ public class UniverseToMapConverterTest {
     @Mock
     private SolarSystemResponseExtractor solarSystemResponseExtractor;
 
-    @Mock
-    private SolarSystemConnectionResponseExtractor solarSystemConnectionResponseExtractor;
-
     @InjectMocks
     private UniverseToMapConverter underTest;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private MapSolarSystemResponse solarSystemResponse;
 
-    @Mock
-    private SolarSystemConnectionResponse connectionResponse;
-
     @Test
     public void convert() {
-        given(solarSystemResponseExtractor.getSolarSystems(USER_ID, universe)).willReturn(Arrays.asList(solarSystemResponse));
-        given(solarSystemConnectionResponseExtractor.getConnections(universe)).willReturn(Arrays.asList(connectionResponse));
-        given(universe.getSize()).willReturn(UNIVERSE_SIZE);
+        given(solarSystemResponseExtractor.getSolarSystems(USER_ID, gameData)).willReturn(Arrays.asList(solarSystemResponse));
+        given(gameData.getUniverseSize()).willReturn(UNIVERSE_SIZE);
 
-        MapResponse result = underTest.convert(USER_ID, universe);
+        MapResponse result = underTest.convert(USER_ID, gameData);
 
         assertThat(result.getUniverseSize()).isEqualTo(UNIVERSE_SIZE);
-        assertThat(result.getConnections()).containsExactly(connectionResponse);
         assertThat(result.getSolarSystems()).containsExactly(solarSystemResponse);
     }
 }

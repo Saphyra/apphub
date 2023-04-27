@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
@@ -17,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BuildingControllerTest {
@@ -49,9 +48,6 @@ public class BuildingControllerTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Mock
-    private SurfaceResponse surfaceResponse;
-
     @BeforeEach
     void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -59,46 +55,36 @@ public class BuildingControllerTest {
 
     @Test
     void constructNewBuilding() {
-        given(constructNewBuildingService.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID)).willReturn(surfaceResponse);
+        underTest.constructNewBuilding(new OneParamRequest<>(DATA_ID), PLANET_ID, SURFACE_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.constructNewBuilding(new OneParamRequest<>(DATA_ID), PLANET_ID, SURFACE_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(constructNewBuildingService).constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
     }
 
     @Test
     void upgradeBuilding() {
-        given(upgradeBuildingService.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+        underTest.upgradeBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.upgradeBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(upgradeBuildingService).upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 
     @Test
     void cancelConstruction() {
-        given(cancelConstructionService.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+        underTest.cancelConstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.cancelConstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(cancelConstructionService).cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 
     @Test
     void deconstructBuilding() {
-        given(deconstructBuildingService.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+        underTest.deconstructBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.deconstructBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(deconstructBuildingService).deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 
     @Test
     void cancelDeconstruction() {
-        given(cancelDeconstructionService.cancelDeconstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+        underTest.cancelDeconstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.cancelDeconstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(cancelDeconstructionService).cancelDeconstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 }

@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -30,6 +32,7 @@ public class RenamePlanetServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final String NEW_NAME = "new-name";
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -47,13 +50,16 @@ public class RenamePlanetServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
+    private GameData gameData;
 
     @Mock
     private Planet planet;
 
     @Mock
     private PlanetModel model;
+
+    @Mock
+    private Planets planets;
 
     @Test
     public void blankName() {
@@ -72,12 +78,13 @@ public class RenamePlanetServiceTest {
     @Test
     public void rename() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
+        given(game.getGameId()).willReturn(GAME_ID);
 
         OptionalMap<UUID, String> customNapes = new OptionalHashMap<>();
         given(planet.getCustomNames()).willReturn(customNapes);
-        given(planetToModelConverter.convert(planet, game)).willReturn(model);
+        given(planetToModelConverter.convert(GAME_ID, planet)).willReturn(model);
 
         underTest.rename(USER_ID, PLANET_ID, NEW_NAME);
 

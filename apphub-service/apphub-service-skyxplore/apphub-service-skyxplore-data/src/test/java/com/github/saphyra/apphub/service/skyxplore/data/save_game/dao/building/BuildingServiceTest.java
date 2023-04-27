@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class BuildingServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 25;
+    private static final Integer ITEMS_PER_PAGE = 364;
 
     @Mock
-    private BuildingDao buildingDao;
+    private BuildingDao dao;
 
     @Mock
     private BuildingModelValidator buildingModelValidator;
@@ -38,7 +39,7 @@ public class BuildingServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(buildingDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,40 +52,20 @@ public class BuildingServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(buildingModelValidator).validate(model);
-        buildingDao.saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(buildingDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<BuildingModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent_notFound() {
-        given(buildingDao.findBySurfaceId(ID)).willReturn(Optional.empty());
-
-        List<BuildingModel> result = underTest.getByParent(ID);
-
-        assertThat(result).isEmpty();
-    }
-
-    @Test
-    public void getByParent() {
-        given(buildingDao.findBySurfaceId(ID)).willReturn(Optional.of(model));
-
-        List<BuildingModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        dao.saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(buildingDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

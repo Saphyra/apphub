@@ -20,4 +20,12 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="durability_item" columnNames="durability_item_id" constraintName="durability_item_pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-durability_item" author="saphrya">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="durability_item"/>
+        </preConditions>
+
+        <dropTable schemaName="skyxplore_game" tableName="durability_item"/>
+    </changeSet>
 </databaseChangeLog>
