@@ -21,7 +21,6 @@ class AllocatedResourceConverter extends ConverterBase<AllocatedResourceEntity, 
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.ALLOCATED_RESOURCE);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setDataId(entity.getDataId());
         model.setAmount(entity.getAmount());
@@ -34,7 +33,6 @@ class AllocatedResourceConverter extends ConverterBase<AllocatedResourceEntity, 
             .allocatedResourceId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .dataId(domain.getDataId())
             .amount(domain.getAmount())

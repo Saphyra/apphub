@@ -4,7 +4,8 @@ import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEven
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -16,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +62,9 @@ public class InvitationServiceTest {
     @Mock
     private SkyXploreDataProxy dataProxy;
 
+    @Mock
+    private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+
     private InvitationService underTest;
 
     @Mock
@@ -77,6 +82,9 @@ public class InvitationServiceTest {
     @Mock
     private Invitation newInvitation;
 
+    @Mock
+    private LobbyMemberResponse lobbyMemberResponse;
+
     @BeforeEach
     public void setUp() {
         underTest = InvitationService.builder()
@@ -87,6 +95,7 @@ public class InvitationServiceTest {
             .messageSenderProxy(messageSenderProxy)
             .dataProxy(dataProxy)
             .floodingLimitSeconds(FLOODING_LIMIT_SECONDS)
+            .lobbyMemberToResponseConverter(lobbyMemberToResponseConverter)
             .build();
     }
 
@@ -159,12 +168,11 @@ public class InvitationServiceTest {
         given(invitation.getInvitorId()).willReturn(USER_ID);
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE.minusSeconds(FLOODING_LIMIT_SECONDS));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
-        given(invitationFactory.create(USER_ID, FRIEND_ID)).willReturn(newInvitation);
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
 
         underTest.invite(accessTokenHeader, FRIEND_ID);
 
-        assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation, newInvitation);
+        assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation);
 
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
         verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());

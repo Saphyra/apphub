@@ -22,10 +22,6 @@ public class StoredResourceModelValidator {
             throw ExceptionFactory.invalidParam("location", "must not be null");
         }
 
-        if (isNull(model.getLocationType())) {
-            throw ExceptionFactory.invalidParam("locationType", "must not be null");
-        }
-
         if (isNull(model.getDataId())) {
             throw ExceptionFactory.invalidParam("dataId", "must not be null");
         }

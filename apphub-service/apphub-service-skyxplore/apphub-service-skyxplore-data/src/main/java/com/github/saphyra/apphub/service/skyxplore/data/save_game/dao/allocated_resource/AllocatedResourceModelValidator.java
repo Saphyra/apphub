@@ -22,10 +22,6 @@ public class AllocatedResourceModelValidator {
             throw ExceptionFactory.invalidParam("location", "must not be null");
         }
 
-        if (isNull(model.getLocationType())) {
-            throw ExceptionFactory.invalidParam("locationType", "must not be null");
-        }
-
         if (isNull(model.getExternalReference())) {
             throw ExceptionFactory.invalidParam("externalReference", "must not be null");
         }

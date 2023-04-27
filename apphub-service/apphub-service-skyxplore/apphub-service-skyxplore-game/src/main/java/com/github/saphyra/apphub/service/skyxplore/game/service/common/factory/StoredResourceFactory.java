@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.common.factory;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,12 +16,26 @@ import java.util.UUID;
 @Slf4j
 public class StoredResourceFactory {
     private final IdGenerator idGenerator;
+    private final StoredResourceConverter storedResourceConverter;
 
-    public StoredResource create(UUID location, LocationType locationType, String dataId, int amount) {
+    public StoredResource create(SyncCache syncCache, GameData gameData, UUID location, String dataId) {
+        return create(syncCache, gameData, location, dataId, 0);
+    }
+
+    public StoredResource create(SyncCache syncCache, GameData gameData, UUID location, String dataId, int amount) {
+        StoredResource result = create(location, dataId, amount);
+
+        gameData.getStoredResources()
+            .add(result);
+        syncCache.saveGameItem(storedResourceConverter.toModel(gameData.getGameId(), result));
+
+        return result;
+    }
+
+    public StoredResource create(UUID location, String dataId, int amount) {
         return StoredResource.builder()
             .storedResourceId(idGenerator.randomUuid())
             .location(location)
-            .locationType(locationType)
             .dataId(dataId)
             .amount(amount)
             .build();

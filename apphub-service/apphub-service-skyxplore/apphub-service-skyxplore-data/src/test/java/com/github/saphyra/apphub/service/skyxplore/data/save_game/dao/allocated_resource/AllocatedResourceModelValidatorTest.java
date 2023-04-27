@@ -48,19 +48,8 @@ public class AllocatedResourceModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void nullExternalReference() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getExternalReference()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -71,7 +60,6 @@ public class AllocatedResourceModelValidatorTest {
     @Test
     public void nullDataId() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(null);
 
@@ -83,7 +71,6 @@ public class AllocatedResourceModelValidatorTest {
     @Test
     public void nullAmount() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);
@@ -97,7 +84,6 @@ public class AllocatedResourceModelValidatorTest {
     @Test
     public void valid() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);

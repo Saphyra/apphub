@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.background.BackgroundProcessStarterService;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.service.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,17 +32,20 @@ public class GameLoader {
     private final PlayerLoader playerLoader;
     private final AllianceLoader allianceLoader;
     private final ChatFactory chatFactory;
-    private final UniverseLoader universeLoader;
     private final GameDataProxy gameDataProxy;
     private final MessageSenderProxy messageSenderProxy;
     private final EventLoopFactory eventLoopFactory;
+    private final GameDataLoader gameDataLoader;
     private final ProcessLoader processLoader;
-    private final BackgroundProcessStarterService backgroundProcessStarterService;
+    private final TickSchedulerLauncher tickSchedulerLauncher;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
+
         gameModel.setLastPlayed(dateTimeUtil.getCurrentDateTime());
+
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
+
         Game game = Game.builder()
             .gameId(gameModel.getId())
             .gameName(gameModel.getName())
@@ -50,20 +53,18 @@ public class GameLoader {
             .lastPlayed(gameModel.getLastPlayed())
             .players(players)
             .alliances(allianceLoader.load(gameModel.getId(), players))
-            .universe(universeLoader.load(gameModel.getId()))
+            .data(gameDataLoader.load(gameModel.getId(), gameModel.getUniverseSize()))
             .chat(chatFactory.create(players.values()))
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(gameModel.getMarkedForDeletion())
             .markedForDeletionAt(gameModel.getMarkedForDeletionAt())
             .build();
 
-        backgroundProcessStarterService.startBackgroundProcesses(game);
-
-        game.getProcesses()
-            .addAll(processLoader.load(game));
+        processLoader.loadProcesses(game);
 
         gameDataProxy.saveItem(gameModel);
         gameDao.save(game);
+        tickSchedulerLauncher.launch(game);
 
         stopwatch.stop();
         log.info("Game loaded in {}s", stopwatch.elapsed(TimeUnit.SECONDS));

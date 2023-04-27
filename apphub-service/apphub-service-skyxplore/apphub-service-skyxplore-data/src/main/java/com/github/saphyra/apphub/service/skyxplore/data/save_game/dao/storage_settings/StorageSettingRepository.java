@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.storage_settings;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,6 @@ interface StorageSettingRepository extends CrudRepository<StorageSettingEntity, 
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<StorageSettingEntity> getByLocation(String location);
+
+    List<StorageSettingEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

@@ -19,6 +19,7 @@ class DeconstructionEntity {
     private String deconstructionId;
     private String gameId;
     private String externalReference;
+    private String location;
     private Integer currentWorkPoints;
     private Integer priority;
 }

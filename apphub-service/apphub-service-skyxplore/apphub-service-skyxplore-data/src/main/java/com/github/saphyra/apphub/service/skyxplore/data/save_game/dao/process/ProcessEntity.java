@@ -22,7 +22,6 @@ public class ProcessEntity {
     private String processType;
     private String status;
     private String location;
-    private String locationType;
     private String externalReference;
     private String data;
 }

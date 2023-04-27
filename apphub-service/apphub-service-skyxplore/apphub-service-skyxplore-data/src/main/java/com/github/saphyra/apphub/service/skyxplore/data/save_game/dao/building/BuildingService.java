@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class BuildingService implements GameItemService {
-    private final BuildingDao buildingDao;
+    private final BuildingDao dao;
     private final BuildingModelValidator buildingModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        buildingDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -41,23 +38,16 @@ public class BuildingService implements GameItemService {
             .peek(buildingModelValidator::validate)
             .collect(Collectors.toList());
 
-        buildingDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<BuildingModel> findById(UUID id) {
-        return buildingDao.findById(id);
-    }
-
-    @Override
-    public List<BuildingModel> getByParent(UUID parent) {
-        return buildingDao.findBySurfaceId(parent)
-            .map(Arrays::asList)
-            .orElse(Collections.emptyList());
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        buildingDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<BuildingModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

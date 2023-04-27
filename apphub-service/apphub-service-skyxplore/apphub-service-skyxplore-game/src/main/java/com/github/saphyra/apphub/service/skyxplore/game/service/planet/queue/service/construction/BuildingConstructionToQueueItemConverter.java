@@ -1,27 +1,23 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class BuildingConstructionToQueueItemConverter {
-    public QueueItem convert(Building building) {
-        Construction construction = building.getConstruction();
-        if (isNull(construction)) {
-            return null;
-        }
-        log.info("After update: {}", construction);
+    public QueueItem convert(GameData gameData, Construction construction) {
+        Building building = gameData.getBuildings()
+            .findByBuildingId(construction.getExternalReference());
 
         return QueueItem.builder()
             .itemId(construction.getConstructionId())
@@ -29,9 +25,9 @@ public class BuildingConstructionToQueueItemConverter {
             .requiredWorkPoints(construction.getRequiredWorkPoints())
             .currentWorkPoints(construction.getCurrentWorkPoints())
             .priority(construction.getPriority())
-            .data(CollectionUtils.toMap(
-                new BiWrapper<>("dataId", building.getDataId()),
-                new BiWrapper<>("currentLevel", building.getLevel())
+            .data(Map.of(
+                "dataId", building.getDataId(),
+                "currentLevel", building.getLevel()
             ))
             .build();
     }

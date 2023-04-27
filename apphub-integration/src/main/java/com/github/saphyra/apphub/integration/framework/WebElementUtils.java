@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +26,17 @@ public class WebElementUtils {
     public static void clearAndFill(WebElement webElement, String text) {
         webElement.clear();
         webElement.sendKeys(text);
+    }
+
+    public static void setNumberSlow(WebElement webElement, Integer value) {
+        Integer currentValue = WebElementUtils.getValueOfInputAs(webElement, Integer::parseInt);
+
+        int diff = currentValue - value;
+
+        for (int i = 0; i < Math.abs(diff); i++) {
+            webElement.sendKeys(diff > 0 ? Keys.DOWN : Keys.UP);
+            SleepUtil.sleep(100);
+        }
     }
 
     public static void clearAndFillContentEditable(WebDriver driver, WebElement webElement, String text) {
@@ -115,5 +127,9 @@ public class WebElementUtils {
     public static void clearAndFillTime(WebElement webElement, Integer hours, Integer minutes) {
         webElement.sendKeys(CommonUtils.withLeadingZeros(hours, 2));
         webElement.sendKeys(CommonUtils.withLeadingZeros(minutes, 2));
+    }
+
+    public static <T> T getValueOfInputAs(WebElement webElement, Function<String, T> mapper) {
+        return mapper.apply(webElement.getAttribute("value"));
     }
 }

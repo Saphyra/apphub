@@ -32,6 +32,16 @@ public class LobbyDao {
         repository.put(lobby.getLobbyId(), lobby);
     }
 
+    public Lobby findByHostValidated(UUID userId) {
+        Lobby result = findByUserIdValidated(userId);
+
+        if (!result.getHost().equals(userId)) {
+            throw ExceptionFactory.forbiddenOperation(userId + " has not host access to lobby " + result.getLobbyId());
+        }
+
+        return result;
+    }
+
     public Optional<Lobby> findByUserId(UUID userId) {
         return repository.values()
             .stream()

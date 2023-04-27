@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputField = ({ id, className, type, placeholder, onchangeCallback, value }) => {
+const InputField = ({ id, className, type, placeholder, onchangeCallback, value, onkeyupCallback }) => {
     const onchange = (e) => {
         if (onchangeCallback) {
             switch (type.toLowerCase()) {
@@ -22,6 +22,7 @@ const InputField = ({ id, className, type, placeholder, onchangeCallback, value 
             value={value}
             placeholder={placeholder}
             onChange={onchange}
+            onKeyUp={onkeyupCallback}
         />
     )
 }

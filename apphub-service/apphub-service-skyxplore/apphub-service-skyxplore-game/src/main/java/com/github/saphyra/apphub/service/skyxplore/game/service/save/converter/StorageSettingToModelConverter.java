@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,19 +16,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StorageSettingToModelConverter {
-    public List<StorageSettingModel> convert(List<StorageSetting> storageSettings, Game game) {
+    public List<StorageSettingModel> convert(UUID gameId, Collection<StorageSetting> storageSettings) {
         return storageSettings.stream()
-            .map(storageSetting -> convert(storageSetting, game.getGameId()))
+            .map(storageSetting -> convert(gameId, storageSetting))
             .collect(Collectors.toList());
     }
 
-    public StorageSettingModel convert(StorageSetting storageSetting, UUID gameId) {
+    public StorageSettingModel convert(UUID gameId, StorageSetting storageSetting) {
         StorageSettingModel model = new StorageSettingModel();
         model.setId(storageSetting.getStorageSettingId());
         model.setGameId(gameId);
         model.setType(GameItemType.STORAGE_SETTING);
         model.setLocation(storageSetting.getLocation());
-        model.setLocationType(storageSetting.getLocationType().name());
         model.setDataId(storageSetting.getDataId());
         model.setTargetAmount(storageSetting.getTargetAmount());
         model.setPriority(storageSetting.getPriority());

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority;
 
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,10 @@ public class PriorityQueryService {
 
     public Map<String, Integer> getPriorities(UUID userId, UUID planetId) {
         return gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findPlanetByIdValidated(planetId)
+            .getData()
             .getPriorities()
-            .entrySet()
+            .getByLocation(planetId)
             .stream()
-            .collect(Collectors.toMap(entry -> entry.getKey().name().toLowerCase(), Map.Entry::getValue));
+            .collect(Collectors.toMap(priority -> priority.getType().name().toLowerCase(), Priority::getValue));
     }
 }

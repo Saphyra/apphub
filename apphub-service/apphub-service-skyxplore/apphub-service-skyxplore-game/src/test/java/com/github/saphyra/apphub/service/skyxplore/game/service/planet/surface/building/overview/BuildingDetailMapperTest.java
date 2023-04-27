@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewDetailedResponse;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -22,10 +22,6 @@ public class CitizenModelValidator {
             throw ExceptionFactory.invalidParam("location", "must not be null");
         }
 
-        if (isNull(citizenModel.getLocationType())) {
-            throw ExceptionFactory.invalidParam("locationType", "must not be null");
-        }
-
         if (isNull(citizenModel.getName())) {
             throw ExceptionFactory.invalidParam("name", "must not be null");
         }

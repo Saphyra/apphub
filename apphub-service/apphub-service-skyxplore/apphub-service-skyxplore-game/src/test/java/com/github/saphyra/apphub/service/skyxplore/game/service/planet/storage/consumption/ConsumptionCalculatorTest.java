@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ReservedStorageFactory;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +44,7 @@ public class ConsumptionCalculatorTest {
     private Planet planet;
 
     @Mock
-    private StorageDetails storageDetails;
+    private GameData gameData;
 
     @Mock
     private StoredResource storedResource;
@@ -61,21 +61,25 @@ public class ConsumptionCalculatorTest {
     @Mock
     private StoredResources storedResources;
 
+    @Mock
+    private AllocatedResources allocatedResources;
+
     @Test
     public void calculate() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(storedResources);
-        given(storedResources.get(DATA_ID)).willReturn(storedResource);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.findByLocationAndDataId(PLANET_ID, DATA_ID)).willReturn(Optional.of(storedResource));
         given(storedResource.getAmount()).willReturn(STORED_AMOUNT);
-        given(storageDetails.getAllocatedResources()).willReturn(new AllocatedResources(List.of(allocatedResource)));
-        given(allocatedResource.getDataId()).willReturn(DATA_ID);
+
+        given(gameData.getAllocatedResources()).willReturn(allocatedResources);
+        given(allocatedResources.getByLocationAndDataId(PLANET_ID, DATA_ID)).willReturn(List.of(allocatedResource));
         given(allocatedResource.getAmount()).willReturn(ALLOCATED_AMOUNT);
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        given(allocatedResourceFactory.create(PLANET_ID, LocationType.PLANET, EXTERNAL_REFERENCE, DATA_ID, STORED_AMOUNT - ALLOCATED_AMOUNT)).willReturn(createdAllocatedResource);
-        given(reservedStorageFactory.create(PLANET_ID, LocationType.PLANET, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - (STORED_AMOUNT - ALLOCATED_AMOUNT))).willReturn(createdReservedStorage);
+        given(allocatedResource.getAmount()).willReturn(ALLOCATED_AMOUNT);
 
-        ConsumptionResult result = underTest.calculate(planet, LocationType.PLANET, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        given(allocatedResourceFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, STORED_AMOUNT - ALLOCATED_AMOUNT)).willReturn(createdAllocatedResource);
+        given(reservedStorageFactory.create(PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT - (STORED_AMOUNT - ALLOCATED_AMOUNT))).willReturn(createdReservedStorage);
+
+        ConsumptionResult result = underTest.calculate(gameData, PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result.getReservation()).isEqualTo(createdReservedStorage);
         assertThat(result.getAllocation()).isEqualTo(createdAllocatedResource);

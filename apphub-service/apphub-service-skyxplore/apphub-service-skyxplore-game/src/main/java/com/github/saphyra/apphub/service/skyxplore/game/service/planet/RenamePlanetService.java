@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +33,14 @@ class RenamePlanetService {
         }
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
+        Planet planet = game.getData()
+            .getPlanets()
+            .get(planetId);
 
         planet.getCustomNames()
             .put(userId, newName);
 
-        PlanetModel model = planetToModelConverter.convert(planet, game);
+        PlanetModel model = planetToModelConverter.convert(game.getGameId(), planet);
         gameDataProxy.saveItem(model);
     }
 }

@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-durability" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="durability "/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="durability">
+            <column name="durability_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="external_reference" type="varchar(37)"/>
+            <column name="max_hit_points" type="integer"/>
+            <column name="current_hit_points" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="durability" columnNames="durability_id" constraintName="durability-pk"/>
+    </changeSet>
+</databaseChangeLog>

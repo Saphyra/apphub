@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class SolarSystemService implements GameItemService {
-    private final SolarSystemDao solarSystemDao;
+    private final SolarSystemDao dao;
     private final SolarSystemModelValidator solarSystemModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        solarSystemDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -39,21 +38,16 @@ public class SolarSystemService implements GameItemService {
             .peek(solarSystemModelValidator::validate)
             .collect(Collectors.toList());
 
-        solarSystemDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<SolarSystemModel> findById(UUID id) {
-        return solarSystemDao.findById(id);
-    }
-
-    @Override
-    public List<SolarSystemModel> getByParent(UUID parent) {
-        return solarSystemDao.getByGameId(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        solarSystemDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<SolarSystemModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getByGameId(gameId, page, itemsPerPage);
     }
 }

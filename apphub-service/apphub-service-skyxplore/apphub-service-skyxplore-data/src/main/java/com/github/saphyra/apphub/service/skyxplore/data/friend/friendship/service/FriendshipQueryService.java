@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
 
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.converter.FriendshipToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.save.converter;
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

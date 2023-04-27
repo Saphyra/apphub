@@ -1,0 +1,134 @@
+{
+    "title": {
+        "en": "Lobby - SkyXplore - Apphub",
+        "hu": "Előszoba - SkyXplore - Apphub"
+    },
+    "page-title": {
+        "en": "Lobby ({lobbyName})",
+        "hu": "Előszoba ({lobbyName})"
+    },
+    "start-game": {
+        "en": "Start game",
+        "hu": "Játék indítása"
+    },
+    "ready": {
+        "en": "I am ready",
+        "hu": "Kész vagyok"
+    },
+    "unready": {
+        "en": "I am not ready",
+        "hu": "Nem vagyok kész"
+    },
+    "exit": {
+        "en": "Exit",
+        "hu": "Kilépés"
+    },
+    "chat": {
+        "en": "Chat",
+        "hu": "Csevegés"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "members": {
+        "en": "Members",
+        "hu": "Játékosok"
+    },
+    "ais": {
+        "en": "AIs",
+        "hu": "MI-k"
+    },
+    "friends": {
+        "en": "Friends",
+        "hu": "Barátok"
+    },
+    "alliance": {
+        "en": "Alliance",
+        "hu": "Szövetség"
+    },
+    "no-alliance": {
+        "en": "No alliance",
+        "hu": "Nincs szövetség"
+    },
+    "new-alliance": {
+        "en": "New alliance",
+        "hu": "Új szövetség"
+    },
+    "create-ai": {
+        "en": "Create AI",
+        "hu": "Új MI"
+    },
+    "ai-name": {
+        "en": "AI name",
+        "hu": "MI neve"
+    },
+    "character-name-too-short": {
+        "en": "Character name too short. (Minimum 3 characters)",
+        "hu": "Karakter név túl rövid. (Minimum 3 karakter)"
+    },
+    "character-name-too-long": {
+        "en": "Character name too long. (Maximum 30 characters)",
+        "hu": "Karakter név túl hosszú. (Maximum 30 karakter)"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "max-players-per-solar-system": {
+        "en": "Max players per solar system",
+        "hu": "Max játékosok rendszerenként"
+    },
+    "additional-solar-systems": {
+        "en": "Additional solar systems",
+        "hu": "Extra rendszerek"
+    },
+    "min": {
+        "en": "Minimum",
+        "hu": "Minimum"
+    },
+    "max": {
+        "en": "Maximum",
+        "hu": "Maximum"
+    },
+    "planets-per-solar-system": {
+        "en": "Planets per solar system",
+        "hu": "Bolygók száma rendszerenként"
+    },
+    "planet-size": {
+        "en": "Planet size",
+        "hu": "Bolygók mérete"
+    },
+    "message": {
+        "en": "Message",
+        "hu": "Üzenet"
+    },
+    "player-left-lobby": {
+        "en": "{name} left the lobby.",
+        "hu": "{name} elhagyta az előszobát."
+    },
+    "player-connected": {
+        "en": "{name} connected.",
+        "hu": "{name} csatlakozott."
+    },
+    "player-disconnected": {
+        "en": "{name} disconnected.",
+        "hu": "{name} lecsatlakozott."
+    },
+    "not-everyone-joined-title" : {
+        "en": "Not everyone joined",
+        "hu": "Nem mindenki csatlakozott"
+    },
+    "not-everyone-joined-content": {
+        "en": "Not all players of this game joined. The missing players will be replaced by AIs, and will not be able to join to this game anymore.",
+        "hu": "Még nem csatlakozott az összes játékos. A hiányzó játékosokat MI fogja helyettesíteni, és ők többé már nem csatlakozhatnak ehhez a játékhoz."
+    },
+    "start-game-anyways": {
+        "en": "Start the game anyways",
+        "hu": "Így is elindítom a játékot."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

@@ -2,8 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,12 +40,11 @@ public class StorageSettingFactoryTest {
 
         given(idGenerator.randomUuid()).willReturn(STORAGE_SETTING_ID);
 
-        StorageSetting result = underTest.create(request, LOCATION, LocationType.PLANET);
+        StorageSetting result = underTest.create(request, LOCATION);
 
         assertThat(result.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LocationType.PLANET);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);

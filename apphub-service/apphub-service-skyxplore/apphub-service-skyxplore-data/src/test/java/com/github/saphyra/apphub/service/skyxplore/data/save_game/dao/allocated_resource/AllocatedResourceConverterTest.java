@@ -40,7 +40,6 @@ public class AllocatedResourceConverterTest {
             .allocatedResourceId(ALLOCATED_RESOURCE_ID_STRING)
             .gameId(GAME_ID_STRING)
             .location(LOCATION_STRING)
-            .locationType(LOCATION_TYPE)
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .dataId(DATA_ID)
             .amount(AMOUNT)
@@ -57,7 +56,6 @@ public class AllocatedResourceConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.ALLOCATED_RESOURCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
@@ -69,7 +67,6 @@ public class AllocatedResourceConverterTest {
         model.setId(ALLOCATED_RESOURCE_ID);
         model.setGameId(GAME_ID);
         model.setLocation(LOCATION);
-        model.setLocationType(LOCATION_TYPE);
         model.setExternalReference(EXTERNAL_REFERENCE);
         model.setDataId(DATA_ID);
         model.setAmount(AMOUNT);
@@ -84,7 +81,6 @@ public class AllocatedResourceConverterTest {
         assertThat(result.getAllocatedResourceId()).isEqualTo(ALLOCATED_RESOURCE_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE_STRING);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

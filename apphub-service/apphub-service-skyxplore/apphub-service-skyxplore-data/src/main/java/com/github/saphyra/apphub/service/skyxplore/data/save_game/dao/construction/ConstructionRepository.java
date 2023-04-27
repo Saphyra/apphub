@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction;
 
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,4 +15,6 @@ interface ConstructionRepository extends CrudRepository<ConstructionEntity, Stri
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<ConstructionEntity> getByExternalReference(String location);
+
+    List<ConstructionEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

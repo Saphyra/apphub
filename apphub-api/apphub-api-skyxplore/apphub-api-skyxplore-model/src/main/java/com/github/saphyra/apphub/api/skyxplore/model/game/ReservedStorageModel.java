@@ -14,7 +14,6 @@ import java.util.UUID;
 public class ReservedStorageModel extends GameItem {
     private UUID externalReference;
     private UUID location;
-    private String locationType;
     private String dataId;
     private Integer amount;
 }

@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.integraton.backend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMembersResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,10 +36,16 @@ public class CreateLobbyTest extends BackEndTest {
         verifyInvalidParam(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, "aa"), "lobbyName", "too short");
         verifyInvalidParam(language, SkyXploreLobbyActions.getCreateLobbyResponse(language, accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", "too long");
 
+        assertThat(SkyXploreLobbyActions.isUserInLobby(language, accessTokenId1)).isFalse();
+
         //Create
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
-        LobbyMembersResponse lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
-        assertThat(lobbyMembers.getHost()).isEqualTo(LobbyMemberResponse.builder().userId(userId1).characterName(characterModel1.getName()).status(LobbyMemberStatus.NOT_READY).build());
-        assertThat(lobbyMembers.getMembers()).isEmpty();
+        List<LobbyMemberResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId1);
+        assertThat(lobbyMembers).hasSize(1);
+        assertThat(lobbyMembers.get(0).getUserId()).isEqualTo(userId1);
+        assertThat(lobbyMembers.get(0).getCharacterName()).isEqualTo(characterModel1.getName());
+        assertThat(lobbyMembers.get(0).getStatus()).isEqualTo(LobbyMemberStatus.NOT_READY);
+
+        assertThat(SkyXploreLobbyActions.isUserInLobby(language, accessTokenId1)).isTrue();
     }
 }

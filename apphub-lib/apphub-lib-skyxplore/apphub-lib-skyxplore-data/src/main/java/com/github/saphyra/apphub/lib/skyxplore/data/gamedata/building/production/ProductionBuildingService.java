@@ -9,7 +9,7 @@ import jakarta.annotation.PostConstruct;
 
 @Component
 @Slf4j
-public class ProductionBuildingService extends ValidationAbstractDataService<String, ProductionBuilding> {
+public class ProductionBuildingService extends ValidationAbstractDataService<String, ProductionBuildingData> {
     public ProductionBuildingService(ContentLoaderFactory contentLoaderFactory, ProductionBuildingValidator productionBuildingValidator) {
         super("/data/building/production", contentLoaderFactory, productionBuildingValidator);
     }
@@ -17,12 +17,12 @@ public class ProductionBuildingService extends ValidationAbstractDataService<Str
     @Override
     @PostConstruct
     public void init() {
-        super.load(ProductionBuilding.class);
+        super.load(ProductionBuildingData.class);
         log.debug("ProductionBuildingService: {}", this);
     }
 
     @Override
-    public void addItem(ProductionBuilding content, String fileName) {
+    public void addItem(ProductionBuildingData content, String fileName) {
         put(content.getId(), content);
     }
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.data.client;
 
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;

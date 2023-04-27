@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
-import com.github.saphyra.apphub.api.skyxplore.response.IncomingFriendRequestResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.SentFriendRequestResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.IncomingFriendRequestResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;

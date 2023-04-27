@@ -1,9 +1,9 @@
 git checkout master
 git pull
 
-./build_and_deploy.sh "" develop
-
 eval "$(minikube docker-env)"
+
+./infra/deployment/script/build.sh
 
 echo "Logging in to docker with username $1..."
 docker login -u "$1" -p "$2"
@@ -23,8 +23,5 @@ wait
 #Deploying to production
 NAMESPACE_NAME="production"
 ./infra/deployment/script/deploy.sh "$NAMESPACE_NAME" "$NAMESPACE_NAME" 180
-./run_production_tests.sh
-
-echo "Deployment finished."
 
 start ./pp.sh

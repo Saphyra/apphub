@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -38,18 +40,31 @@ public class GameViewForLobbyCreationQueryService {
             throw ExceptionFactory.notLoggedException(HttpStatus.LOCKED, ErrorCode.GAME_DELETED, gameId + " is marked for deletion.");
         }
 
-        Map<UUID, PlayerModel> players = fetchPlayers(gameId);
+        List<PlayerModel> allPlayers = playerDao.getByGameId(gameId);
+        Map<UUID, PlayerModel> players = fetchPlayers(allPlayers);
 
         return GameViewForLobbyCreation.builder()
             .hostAllianceId(players.get(host).getAllianceId())
             .name(gameModel.getName())
             .alliances(allianceDao.getByGameId(gameId))
             .players(new ArrayList<>(players.values()))
+            .ais(fetchAis(allPlayers))
             .build();
     }
 
-    private Map<UUID, PlayerModel> fetchPlayers(UUID gameId) {
-        return playerDao.getByGameId(gameId)
+    private List<AiPlayer> fetchAis(List<PlayerModel> allPlayers) {
+        return allPlayers.stream()
+            .filter(PlayerModel::getAi)
+            .map(playerModel -> AiPlayer.builder()
+                .userId(playerModel.getUserId())
+                .name(playerModel.getUsername())
+                .allianceId(playerModel.getAllianceId())
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    private Map<UUID, PlayerModel> fetchPlayers(List<PlayerModel> allPlayers) {
+        return allPlayers
             .stream()
             .filter(playerModel -> !playerModel.getAi())
             .collect(Collectors.toMap(PlayerModel::getUserId, Function.identity()));

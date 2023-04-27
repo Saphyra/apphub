@@ -5,11 +5,13 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -21,11 +23,14 @@ class StorageSettingsModelValidator {
     private final ResourceDataService resourceDataService;
     private final PriorityValidator priorityValidator;
 
-    void validate(StorageSettingApiModel model, Planet planet) {
+    void validate(GameData gameData, UUID location, StorageSettingApiModel model) {
         validate(model);
 
-        if (planet.getStorageDetails().getStorageSettings().findByDataId(model.getDataId()).isPresent()) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, String.format("StorageSetting with dataId %s alreaddy exists on planet %s", model.getDataId(), planet.getPlanetId()));
+        boolean storageSettingAlreadyExists = gameData.getStorageSettings()
+            .findByLocationAndDataId(location, model.getDataId())
+            .isPresent();
+        if (storageSettingAlreadyExists) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, String.format("StorageSetting with dataId %s alreaddy exists on planet %s", model.getDataId(), location));
         }
     }
 

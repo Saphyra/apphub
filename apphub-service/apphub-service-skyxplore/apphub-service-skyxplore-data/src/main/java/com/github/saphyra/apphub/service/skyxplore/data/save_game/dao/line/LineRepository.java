@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.line;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,6 @@ interface LineRepository extends CrudRepository<LineEntity, String> {
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<LineEntity> getByReferenceId(String referenceId);
+
+    List<LineEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

@@ -22,6 +22,10 @@ public class BuildingModelValidator {
             throw ExceptionFactory.invalidParam("surfaceId", "must not be null");
         }
 
+        if (isNull(model.getLocation())) {
+            throw ExceptionFactory.invalidParam("location", "must not be null");
+        }
+
         if (isNull(model.getDataId())) {
             throw ExceptionFactory.invalidParam("dataId", "must not be null");
         }

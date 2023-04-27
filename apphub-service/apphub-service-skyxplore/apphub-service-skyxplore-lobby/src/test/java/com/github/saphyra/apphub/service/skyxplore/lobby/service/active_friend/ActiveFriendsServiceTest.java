@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
@@ -81,7 +80,7 @@ public class ActiveFriendsServiceTest {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(FRIEND_ID_1, null));
+        given(lobby.getExpectedPlayers()).willReturn(List.of(FRIEND_ID_1));
 
         given(skyXploreDataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
         given(activeFriend.getFriendId()).willReturn(FRIEND_ID_1);

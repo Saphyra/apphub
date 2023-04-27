@@ -11,15 +11,15 @@ public class IncomingFriendRequest {
     private final WebElement webElement;
 
     public String getSenderName() {
-        return webElement.findElement(By.cssSelector(":scope div:first-child"))
+        return webElement.findElement(By.cssSelector(":scope span:first-child"))
             .getText();
     }
 
     public void accept() {
-        webElement.findElement(By.cssSelector(":scope .friend-list-button button:first-child")).click();
+        webElement.findElement(By.cssSelector(":scope .skyxplore-accept-friend-request-button")).click();
     }
 
     public void cancel() {
-        webElement.findElement(By.cssSelector(":scope .friend-list-button:nth-child(2)")).click();
+        webElement.findElement(By.cssSelector(":scope .skyxplore-cancel-friend-request-button")).click();
     }
 }

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.priority;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(schema = "skyxplore_game", name = "priority")
 public class PriorityEntity {
-    @EmbeddedId
-    private PriorityPk pk;
+    @Id
+    private String priorityId;
     private String gameId;
-    private String locationType;
+    private String location;
+    private String priorityType;
     @Column(name = "priority_value")
     private int value;
 }

@@ -15,4 +15,12 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="system_connection" columnNames="system_connection_id" constraintName="system_connection_pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-system_connection" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="system_connection"/>
+        </preConditions>
+
+        <dropTable schemaName="skyxplore_game" tableName="system_connection"/>
+    </changeSet>
 </databaseChangeLog>

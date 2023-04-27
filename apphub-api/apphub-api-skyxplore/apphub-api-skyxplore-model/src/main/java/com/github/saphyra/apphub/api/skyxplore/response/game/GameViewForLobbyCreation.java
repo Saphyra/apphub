@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.api.skyxplore.response.game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class GameViewForLobbyCreation {
     private String name;
     private List<AllianceModel> alliances;
     private List<PlayerModel> players;
+    private List<AiPlayer> ais;
 }

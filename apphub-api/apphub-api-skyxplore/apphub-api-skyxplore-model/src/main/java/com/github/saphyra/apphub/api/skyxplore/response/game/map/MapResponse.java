@@ -14,5 +14,4 @@ import java.util.List;
 public class MapResponse {
     private int universeSize;
     private List<MapSolarSystemResponse> solarSystems;
-    private List<SolarSystemConnectionResponse> connections;
 }

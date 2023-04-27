@@ -22,7 +22,6 @@ class ReservedStorageConverter extends ConverterBase<ReservedStorageEntity, Rese
         model.setType(GameItemType.RESERVED_STORAGE);
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setDataId(entity.getDataId());
         model.setAmount(entity.getAmount());
         return model;
@@ -35,7 +34,6 @@ class ReservedStorageConverter extends ConverterBase<ReservedStorageEntity, Rese
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .dataId(domain.getDataId())
             .amount(domain.getAmount())
             .build();

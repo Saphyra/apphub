@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,8 @@ public class SolarSystemDaoTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final String SOLAR_SYSTEM_ID_STRING = "solar-system-id";
+    private static final int PAGE = 235;
+    private static final int ITEMS_PER_PAGE = 4236;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -65,10 +68,10 @@ public class SolarSystemDaoTest {
     @Test
     public void getByGameId() {
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
-        given(repository.getByGameId(GAME_ID_STRING)).willReturn(Arrays.asList(entity));
+        given(repository.getByGameId(GAME_ID_STRING, PageRequest.of(PAGE, ITEMS_PER_PAGE))).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(model));
 
-        List<SolarSystemModel> result = underTest.getByGameId(GAME_ID);
+        List<SolarSystemModel> result = underTest.getByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE);
 
         assertThat(result).containsExactly(model);
     }

@@ -21,7 +21,7 @@ public class SkyXploreGameApplicationTest {
     private int serverPort;
 
     @Test
-    public void startup() {
+    void startup() {
         int statusCode = RequestFactory.createRequest()
             .get(UrlFactory.create(serverPort, Endpoints.HEALTH))
             .getStatusCode();

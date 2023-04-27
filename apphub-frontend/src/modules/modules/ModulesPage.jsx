@@ -11,7 +11,7 @@ import Button from "../../common/component/input/Button";
 import logout from "./controller/LogoutController";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const ModulesPage = () => {
@@ -47,7 +47,7 @@ const ModulesPage = () => {
             <Header label={localizationHandler.get("title")} />
 
             <main>
-                <Favorites 
+                <Favorites
                     pageLocalizationHandler={localizationHandler}
                     modules={modules}
                     updateModules={setModules}

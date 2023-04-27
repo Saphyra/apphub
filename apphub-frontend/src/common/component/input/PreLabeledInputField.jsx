@@ -1,8 +1,8 @@
 import React from "react";
 
-const PreLabeledInputField = ({ label, input }) => {
+const PreLabeledInputField = ({ label, input, className}) => {
     return (
-        <label>
+        <label className={className}>
             <span>{label}</span>
             <span> </span>
             {input}

@@ -43,19 +43,8 @@ public class StoredResourceModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void dataId() {
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("location-type");
         given(model.getDataId()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -66,7 +55,6 @@ public class StoredResourceModelValidatorTest {
     @Test
     public void nullAmount() {
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("location-type");
         given(model.getDataId()).willReturn("data-id");
         given(model.getAmount()).willReturn(null);
 
@@ -78,7 +66,6 @@ public class StoredResourceModelValidatorTest {
     @Test
     public void valid() {
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("location-type");
         given(model.getDataId()).willReturn("data-id");
         given(model.getAmount()).willReturn(234);
 

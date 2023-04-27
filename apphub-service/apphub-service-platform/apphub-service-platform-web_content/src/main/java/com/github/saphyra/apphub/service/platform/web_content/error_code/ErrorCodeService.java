@@ -3,21 +3,16 @@ package com.github.saphyra.apphub.service.platform.web_content.error_code;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class ErrorCodeService extends AbstractDataService<String, Localization> {
     private static final String ERROR_CODE_NOT_FOUND_MESSAGE = "%s could not be translated.";
 
-    private final ErrorReporterService errorReporterService;
-
-    public ErrorCodeService(ContentLoaderFactory contentLoaderFactory, ErrorReporterService errorReporterService) {
+    public ErrorCodeService(ContentLoaderFactory contentLoaderFactory) {
         super("error_code", contentLoaderFactory);
-        this.errorReporterService = errorReporterService;
     }
 
     @Override
@@ -38,11 +33,10 @@ public class ErrorCodeService extends AbstractDataService<String, Localization> 
     public String getByLocaleAndErrorCode(String errorCode, String locale) {
         return getOptional(locale)
             .flatMap(localization -> localization.getOptional(errorCode))
-            .orElseGet(() -> getDefault(locale, errorCode));
+            .orElseGet(() -> getDefault(errorCode));
     }
 
-    private String getDefault(String locale, String errorCode) {
-        errorReporterService.report("ErrorCode localization not found for errorCode " + errorCode + " and locale " + locale);
+    private String getDefault(String errorCode) {
         return String.format(ERROR_CODE_NOT_FOUND_MESSAGE, errorCode);
     }
 }

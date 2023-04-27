@@ -21,9 +21,6 @@ public interface AccountClient {
     @RequestMapping(method = RequestMethod.GET, value = Endpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
     String getLanguage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
-    @GetMapping(Endpoints.USER_DATA_INTERNAL_USER_GET_USERNAME)
-    String getUsernameByUserId(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
-
     @GetMapping(Endpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
     AccountResponse getAccount(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 

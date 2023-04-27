@@ -1,0 +1,33 @@
+#skyxplore-lobby-chat-input-container {
+    text-align: center;
+    padding: 3px;
+    border-bottom: 1px solid white;
+    position: sticky;
+    top: 31px;
+    background: black;
+}
+
+#skyxplore-lobby-chat-input {
+    width: 90%;
+}
+
+.skyxplore-lobby-message-wrapper {}
+
+.skyxplore-lobby-message {
+    display: inline-block;
+    margin: 5px;
+}
+
+.skyxplore-lobby-message-from {
+    font-size: 14px;
+}
+
+.skyxplore-lobby-message-content {}
+
+.own-message {
+    text-align: right;
+}
+
+.system-message {
+    text-align: center;
+}

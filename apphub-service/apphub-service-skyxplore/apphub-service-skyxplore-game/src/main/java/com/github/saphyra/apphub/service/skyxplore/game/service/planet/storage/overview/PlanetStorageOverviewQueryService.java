@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,20 +17,18 @@ public class PlanetStorageOverviewQueryService {
     private final GameDao gameDao;
     private final PlanetStorageDetailQueryService planetStorageDetailQueryService;
 
-    public PlanetStorageResponse getStorage(UUID userId, UUID planetId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
+    public PlanetStorageResponse getStorage(UUID userId, UUID location) {
+        GameData data = gameDao.findByUserIdValidated(userId)
+            .getData();
 
-        return getStorage(planet);
+        return getStorage(data, location);
     }
 
-    public PlanetStorageResponse getStorage(Planet planet) {
-        log.debug("PlanetStorage: {}", planet.getStorageDetails());
+    public PlanetStorageResponse getStorage(GameData gameData, UUID location) {
         return PlanetStorageResponse.builder()
-            .energy(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.ENERGY))
-            .liquid(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.LIQUID))
-            .bulk(planetStorageDetailQueryService.getStorageDetails(planet, StorageType.BULK))
+            .energy(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.ENERGY))
+            .liquid(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.LIQUID))
+            .bulk(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.BULK))
             .build();
     }
 }

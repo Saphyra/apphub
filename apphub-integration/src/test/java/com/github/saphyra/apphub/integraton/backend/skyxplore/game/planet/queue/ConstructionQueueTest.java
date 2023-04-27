@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstructionQueueTest extends BackEndTest {
@@ -49,7 +50,10 @@ public class ConstructionQueueTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SurfaceResponse newBuilding = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SurfaceResponse newBuilding = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         //Get queue
         List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);

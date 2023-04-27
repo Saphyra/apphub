@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

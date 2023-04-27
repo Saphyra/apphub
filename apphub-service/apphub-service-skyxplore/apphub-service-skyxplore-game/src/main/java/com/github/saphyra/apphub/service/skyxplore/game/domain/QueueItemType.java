@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

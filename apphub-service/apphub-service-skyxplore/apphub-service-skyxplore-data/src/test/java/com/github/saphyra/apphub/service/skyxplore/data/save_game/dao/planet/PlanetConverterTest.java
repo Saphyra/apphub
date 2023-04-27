@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.planet;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.common_util.collection.UuidMap;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
@@ -14,12 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,10 +31,8 @@ public class PlanetConverterTest {
     private static final String SOLAR_SYSTEM_ID_STRING = "solar-system-id";
     private static final String OWNER_STRING = "owner";
     private static final String CUSTOM_NAMES_STRING = "custom-names";
-    private static final UUID CITIZEN_ID = UUID.randomUUID();
-    private static final UUID PROCESS_ID = UUID.randomUUID();
-    private static final String BUILDING_ALLOCATIONS = "building-allocations";
-    private static final String CITIZEN_ALLOCATIONS = "citizen-allocations";
+    private static final Double ORBIT_RADIUS = 2345D;
+    private static final Double ORBIT_SPEED = 25D;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -60,16 +53,14 @@ public class PlanetConverterTest {
         model.setCustomNames(CUSTOM_NAMES);
         model.setSize(SIZE);
         model.setOwner(OWNER);
-        model.setBuildingAllocations(Collections.emptyMap());
-        model.setCitizenAllocations(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID));
+        model.setOrbitRadius(ORBIT_RADIUS);
+        model.setOrbitSpeed(ORBIT_SPEED);
 
         given(uuidConverter.convertDomain(PLANET_ID)).willReturn(PLANET_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(uuidConverter.convertDomain(SOLAR_SYSTEM_ID)).willReturn(SOLAR_SYSTEM_ID_STRING);
         given(uuidConverter.convertDomain(OWNER)).willReturn(OWNER_STRING);
 
-        given(objectMapperWrapper.writeValueAsString(Collections.emptyMap())).willReturn(BUILDING_ALLOCATIONS);
-        given(objectMapperWrapper.writeValueAsString(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID))).willReturn(CITIZEN_ALLOCATIONS);
         given(objectMapperWrapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
 
         PlanetEntity result = underTest.convertDomain(model);
@@ -81,8 +72,8 @@ public class PlanetConverterTest {
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES_STRING);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER_STRING);
-        assertThat(result.getBuildingAllocations()).isEqualTo(BUILDING_ALLOCATIONS);
-        assertThat(result.getCitizenAllocations()).isEqualTo(CITIZEN_ALLOCATIONS);
+        assertThat(result.getOrbitSpeed()).isEqualTo(ORBIT_SPEED);
+        assertThat(result.getOrbitRadius()).isEqualTo(ORBIT_RADIUS);
     }
 
     @Test
@@ -95,8 +86,8 @@ public class PlanetConverterTest {
             .customNames(CUSTOM_NAMES_STRING)
             .size(SIZE)
             .owner(OWNER_STRING)
-            .buildingAllocations(BUILDING_ALLOCATIONS)
-            .citizenAllocations(CITIZEN_ALLOCATIONS)
+            .orbitSpeed(ORBIT_SPEED)
+            .orbitRadius(ORBIT_RADIUS)
             .build();
 
         given(uuidConverter.convertEntity(PLANET_ID_STRING)).willReturn(PLANET_ID);
@@ -104,9 +95,6 @@ public class PlanetConverterTest {
         given(uuidConverter.convertEntity(SOLAR_SYSTEM_ID_STRING)).willReturn(SOLAR_SYSTEM_ID);
         given(uuidConverter.convertEntity(OWNER_STRING)).willReturn(OWNER);
 
-        //noinspection unchecked
-        given(objectMapperWrapper.readValue(eq(BUILDING_ALLOCATIONS), any(TypeReference.class))).willReturn(Collections.emptyMap());
-        given(objectMapperWrapper.readValue(CITIZEN_ALLOCATIONS, UuidMap.class)).willReturn(new UuidMap(CollectionUtils.singleValueMap(CITIZEN_ID, PROCESS_ID)));
         given(objectMapperWrapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
 
         PlanetModel result = underTest.convertEntity(entity);
@@ -119,7 +107,7 @@ public class PlanetConverterTest {
         assertThat(result.getCustomNames()).isEqualTo(CUSTOM_NAMES);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getOwner()).isEqualTo(OWNER);
-        assertThat(result.getBuildingAllocations()).isEqualTo(Collections.emptyMap());
-        assertThat(result.getCitizenAllocations()).containsEntry(CITIZEN_ID, PROCESS_ID);
+        assertThat(result.getOrbitSpeed()).isEqualTo(ORBIT_SPEED);
+        assertThat(result.getOrbitRadius()).isEqualTo(ORBIT_RADIUS);
     }
 }

@@ -210,6 +210,9 @@ const Endpoints = {
     //Platform
     CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
 
+    //User
+    USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
+
     //Index
     ACCOUNT_REGISTER: new Endpoint(RequestMethod.POST, "/api/user"),
     LOGIN: new Endpoint(RequestMethod.POST, "/api/user/authentication/login"),
@@ -218,6 +221,44 @@ const Endpoints = {
     //Modules
     MODULES_GET: new Endpoint(RequestMethod.GET, "/api/modules"),
     MODULES_SET_FAVORITE: new Endpoint(RequestMethod.POST, "/api/modules/{module}/favorite"),
+
+    //SkyXplore platform
+    SKYXPLORE_PLATFORM_HAS_CHARACTER: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/exists"),
+    SKYXPLORE_GET_CHARACTER_NAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/name"),
+    SKYXPLORE_IS_USER_IN_GAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
+
+    //SkyXplore Data
+    SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/character"),
+    SKYXPLORE_GET_GAMES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/saved-game"),
+    SKYXPLORE_SEARCH_FOR_FRIENDS: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/friend/candidate"),
+    SKYXPLORE_ADD_FRIEND: new Endpoint(RequestMethod.PUT, "/api/skyxplore/data/friend/request"),
+    SKYXPLORE_GET_INCOMING_FRIEND_REQUEST: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/friend/request/incoming"),
+    SKYXPLORE_GET_SENT_FRIEND_REQUEST: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/friend/request/sent"),
+    SKYXPLORE_CANCEL_FRIEND_REQUEST: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/friend/request/{friendRequestId}"),
+    SKYXPLORE_ACCEPT_FRIEND_REQUEST: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/friend/request/{friendRequestId}"),
+    SKYXPLORE_GET_FRIENDS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/friend"),
+    SKYXPLORE_REMOVE_FRIEND: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/friend/{friendshipId}"),
+
+    //SkyXplore Lobby
+    SKYXPLORE_CREATE_LOBBY: new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby"),
+    SKYXPLORE_LOBBY_IS_IN_LOBBY: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby"),
+    SKYXPLORE_LOBBY_VIEW_FOR_PAGE: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/page"),
+    SKYXPLORE_LOBBY_GET_ALLIANCES: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/alliances"),
+    SKYXPLORE_LOBBY_GET_MEMBERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/members"),
+    SKYXPLORE_LOBBY_EXIT: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby"),
+    SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/player/{userId}"),
+    SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/ai/{userId}"),
+    SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/friends/active"),
+    SKYXPLORE_INVITE_TO_LOBBY: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/invite/{friendId}"),
+    SKYXPLORE_LOBBY_ACCEPT_INVITATION: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/join/{invitorId}"),
+    SKYXPLORE_LOBBY_GET_AIS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/ai"),
+    SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI: new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby/ai"),
+    SKYXPLORE_LOBBY_REMOVE_AI: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby/ai/{userId}"),
+    SKYXPLORE_LOBBY_GET_SETTINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/settings"),
+    SKYXPLORE_LOBBY_EDIT_SETTINGS: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/settings"),
+    SKYXPLORE_LOBBY_START_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start"),
+    SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}"),
+    SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
 }
 
 export default Endpoints;

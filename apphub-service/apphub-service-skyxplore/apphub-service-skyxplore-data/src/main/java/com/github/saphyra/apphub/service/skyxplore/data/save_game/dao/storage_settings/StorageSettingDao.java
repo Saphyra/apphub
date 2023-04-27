@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.storage_s
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,5 +33,9 @@ public class StorageSettingDao extends AbstractDao<StorageSettingEntity, Storage
 
     public void deleteById(UUID storageSettingId) {
         deleteById(uuidConverter.convertDomain(storageSettingId));
+    }
+
+    public List<StorageSettingModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

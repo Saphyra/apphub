@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +20,8 @@ class DeconstructionServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
+    private static final Integer PAGE = 24;
+    private static final Integer ITEMS_PER_PAGE = 34;
 
     @Mock
     private DeconstructionDao dao;
@@ -55,27 +56,16 @@ class DeconstructionServiceTest {
     }
 
     @Test
-    void findById() {
-        given(dao.findById(DECONSTRUCTION_ID)).willReturn(Optional.of(model));
-
-        Optional<DeconstructionModel> result = underTest.findById(DECONSTRUCTION_ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    void getByParent() {
-        given(dao.getByExternalReference(EXTERNAL_REFERENCE)).willReturn(List.of(model));
-
-        List<DeconstructionModel> result = underTest.getByParent(EXTERNAL_REFERENCE);
-
-        assertThat(result).containsExactly(model);
-    }
-
-    @Test
     void deleteById() {
         underTest.deleteById(DECONSTRUCTION_ID);
 
         verify(dao).deleteById(DECONSTRUCTION_ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

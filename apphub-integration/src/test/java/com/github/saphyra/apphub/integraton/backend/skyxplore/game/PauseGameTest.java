@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PauseGameTest extends BackEndTest {
@@ -46,8 +47,9 @@ public class PauseGameTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
 
-        SurfaceResponse modifiedSurface = SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
-        assertThat(modifiedSurface.getBuilding()).isNotNull();
+        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"));
 
         gameWsClient.clearMessages();
 

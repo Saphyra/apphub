@@ -19,7 +19,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class PriorityModelValidatorTest {
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String LOCATION_TYPE = "location-type";
     private static final String PRIORITY_TYPE = "priority-type";
     private static final Integer VALUE = 2354;
 
@@ -47,19 +46,8 @@ public class PriorityModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void nullPriorityType() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getPriorityType()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -70,7 +58,6 @@ public class PriorityModelValidatorTest {
     @Test
     public void nullValue() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getPriorityType()).willReturn(PRIORITY_TYPE);
         given(model.getValue()).willReturn(null);
 
@@ -82,7 +69,6 @@ public class PriorityModelValidatorTest {
     @Test
     public void valid() {
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getLocationType()).willReturn(LOCATION_TYPE);
         given(model.getPriorityType()).willReturn(PRIORITY_TYPE);
         given(model.getValue()).willReturn(VALUE);
 

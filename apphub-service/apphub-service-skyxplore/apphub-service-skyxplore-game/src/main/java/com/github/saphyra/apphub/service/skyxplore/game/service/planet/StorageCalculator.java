@@ -3,13 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -17,15 +16,12 @@ import static java.util.Objects.isNull;
 public class StorageCalculator {
     private final StorageBuildingService storageBuildingService;
 
-    public int calculateCapacity(Planet planet, StorageType storageType) {
+    public int calculateCapacity(GameData gameData, UUID location, StorageType storageType) {
         StorageBuilding storageBuilding = storageBuildingService.findByStorageType(storageType);
 
-        return planet.getSurfaces()
-            .values()
+        return gameData.getBuildings()
+            .getByLocationAndDataId(location, storageBuilding.getId())
             .stream()
-            .filter(surface -> !isNull(surface.getBuilding()))
-            .map(Surface::getBuilding)
-            .filter(building -> building.getDataId().equals(storageBuilding.getId()))
             .mapToInt(value -> value.getLevel() * storageBuilding.getCapacity())
             .sum();
     }

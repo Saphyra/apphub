@@ -1,30 +1,29 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-
 @ExtendWith(MockitoExtension.class)
-public class StorageCalculatorTest {
-    private static final String STORAGE_BUILDING_DATA_ID = "storage-building-data-id";
-    private static final Integer CAPACITY = 314;
-    private static final Integer LEVEL = 235;
+class StorageCalculatorTest {
+    private static final UUID LOCATION = UUID.randomUUID();
+    private static final String DATA_ID = "data-id";
+    private static final Integer CAPACITY = 34;
+    private static final Integer LEVEL = 2;
 
     @Mock
     private StorageBuildingService storageBuildingService;
@@ -33,50 +32,28 @@ public class StorageCalculatorTest {
     private StorageCalculator underTest;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
-    private Surface emptySurface;
+    private StorageBuilding storageBuilding;
 
     @Mock
-    private Surface notStorageSurface;
+    private Buildings buildings;
 
     @Mock
-    private Surface storageSurface;
-
-    @Mock
-    private Building notStorageBuilding;
-
-    @Mock
-    private Building storageBuilding;
-
-    @Mock
-    private StorageBuilding storageBuildingData;
+    private Building building;
 
     @Test
-    public void calculateCapacity() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(
-            CollectionUtils.toMap(
-                new BiWrapper<>(new Coordinate(0, 0), emptySurface),
-                new BiWrapper<>(new Coordinate(0, 1), notStorageSurface),
-                new BiWrapper<>(new Coordinate(0, 2), storageSurface)
-            ))
-        );
+    void calculateCapacity() {
+        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuilding);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(storageBuilding.getId()).willReturn(DATA_ID);
+        given(buildings.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(building));
+        given(storageBuilding.getCapacity()).willReturn(CAPACITY);
+        given(building.getLevel()).willReturn(LEVEL);
 
-        given(notStorageSurface.getBuilding()).willReturn(notStorageBuilding);
-        given(storageSurface.getBuilding()).willReturn(storageBuilding);
+        int result = underTest.calculateCapacity(gameData, LOCATION, StorageType.CITIZEN);
 
-        given(notStorageBuilding.getDataId()).willReturn("asd");
-        given(storageBuilding.getDataId()).willReturn(STORAGE_BUILDING_DATA_ID);
-
-        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
-        given(storageBuildingData.getId()).willReturn(STORAGE_BUILDING_DATA_ID);
-        given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
-
-        given(storageBuilding.getLevel()).willReturn(LEVEL);
-
-        int result = underTest.calculateCapacity(planet, StorageType.CITIZEN);
-
-        assertThat(result).isEqualTo(LEVEL * CAPACITY);
+        assertThat(result).isEqualTo(CAPACITY * LEVEL);
     }
 }

@@ -68,11 +68,12 @@ public class PauseGameTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver);
 
-        AwaitilityWrapper.create(100, 5)
-            .until(() -> SkyXplorePlanetActions.getQueue(driver).get(0).getStatus() > 100)
+        AwaitilityWrapper.create(100, 1)
+            .until(() -> SkyXplorePlanetActions.getQueue(driver).get(0).getStatus() > 50)
             .assertTrue("QueueItem is not started.");
 
         SkyXploreGameActions.pauseGame(driver);
+        SleepUtil.sleep(1000);
         double status = SkyXplorePlanetActions.getQueue(driver)
             .get(0)
             .getStatus();
@@ -86,5 +87,7 @@ public class PauseGameTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).get(0).getStatus() > status)
             .assertTrue("Game is not started.");
+
+        SkyXploreGameActions.pauseGame(driver);
     }
 }

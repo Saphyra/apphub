@@ -73,7 +73,7 @@ public class ExitFromLobbyTest extends BackEndTest {
         ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId4);
 
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId3);
-        WebSocketEvent memberLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
+        WebSocketEvent memberLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT)
             .orElseThrow(() -> new RuntimeException("WebSocket event did not arrive"));
         ExitFromLobbyWsMessage memberLeftMessage = memberLeftEvent.getPayloadAs(ExitFromLobbyWsMessage.class);
         assertThat(memberLeftMessage.getCharacterName()).isEqualTo(characterModel3.getName());
@@ -91,7 +91,7 @@ public class ExitFromLobbyTest extends BackEndTest {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId2, userId4);
 
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId1);
-        WebSocketEvent hostLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
+        WebSocketEvent hostLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT)
             .orElseThrow(() -> new RuntimeException("WebSocket event did not arrive"));
         ExitFromLobbyWsMessage hostLeftMessage = hostLeftEvent.getPayloadAs(ExitFromLobbyWsMessage.class);
         assertThat(hostLeftMessage.getCharacterName()).isEqualTo(characterModel1.getName());

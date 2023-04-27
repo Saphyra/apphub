@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.character;
 
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -26,7 +26,7 @@ public class SkyXploreCharacterActions {
     }
 
     public static void verifyValidCharacterName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldStateLegacy(CharacterPage.invalidCharacterName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(CharacterPage.invalidCharacterName(driver), false, null);
         assertThat(CharacterPage.submitButton(driver).isEnabled()).isTrue();
     }
 
@@ -36,6 +36,6 @@ public class SkyXploreCharacterActions {
 
     public static void createCharacter(WebDriver driver) {
         submitForm(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
     }
 }

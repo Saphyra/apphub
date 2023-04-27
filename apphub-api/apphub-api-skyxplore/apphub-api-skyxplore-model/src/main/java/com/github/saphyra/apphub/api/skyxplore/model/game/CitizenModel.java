@@ -13,7 +13,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class CitizenModel extends GameItem {
     private UUID location;
-    private String locationType;
     private String name;
     private Integer morale;
     private Integer satiety;

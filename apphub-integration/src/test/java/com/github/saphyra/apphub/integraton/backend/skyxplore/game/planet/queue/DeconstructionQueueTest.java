@@ -51,7 +51,10 @@ public class DeconstructionQueueTest extends BackEndTest {
 
         UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
-        SurfaceResponse surfaceResponse = SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         //Get queue
         List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);

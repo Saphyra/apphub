@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ public class InvitationService {
     private final CharacterProxy characterProxy;
     private final MessageSenderProxy messageSenderProxy;
     private final SkyXploreDataProxy dataProxy;
+    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
     private final int floodingLimitSeconds;
 
     public InvitationService(
@@ -45,7 +47,7 @@ public class InvitationService {
         CharacterProxy characterProxy,
         MessageSenderProxy messageSenderProxy,
         SkyXploreDataProxy dataProxy,
-        @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
+        LobbyMemberToResponseConverter lobbyMemberToResponseConverter, @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
     ) {
         this.lobbyDao = lobbyDao;
         this.invitationFactory = invitationFactory;
@@ -53,6 +55,7 @@ public class InvitationService {
         this.characterProxy = characterProxy;
         this.messageSenderProxy = messageSenderProxy;
         this.dataProxy = dataProxy;
+        this.lobbyMemberToResponseConverter = lobbyMemberToResponseConverter;
         this.floodingLimitSeconds = floodingLimitSeconds;
     }
 
@@ -89,9 +92,19 @@ public class InvitationService {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, characterId + " is not an expected member of LOAD_GAME lobby " + lobby.getLobbyId());
         }
 
-        Invitation invitation = invitationFactory.create(senderId, characterId);
-        lobby.getInvitations()
-            .add(invitation);
+        Invitation invitation = lobby.getInvitations()
+            .stream()
+            .filter(i -> i.getInvitorId().equals(senderId))
+            .filter(i -> i.getCharacterId().equals(characterId))
+            .findAny()
+            .orElseGet(() -> {
+                Invitation i = invitationFactory.create(senderId, characterId);
+                lobby.getInvitations()
+                    .add(i);
+                return i;
+            });
+
+        messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertInvitation(invitation), lobby.getMembers().keySet());
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
             .senderId(senderId)

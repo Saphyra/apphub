@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameBuildingController;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
@@ -26,32 +25,32 @@ public class BuildingController implements SkyXploreGameBuildingController {
     private final CancelDeconstructionService cancelDeconstructionService;
 
     @Override
-    public SurfaceResponse constructNewBuilding(OneParamRequest<String> dataId, UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
+    public void constructNewBuilding(OneParamRequest<String> dataId, UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to build a {} to surface {} of planet {}", accessTokenHeader.getUserId(), dataId.getValue(), surfaceId, planetId);
-        return constructNewBuildingService.constructNewBuilding(accessTokenHeader.getUserId(), dataId.getValue(), planetId, surfaceId);
+        constructNewBuildingService.constructNewBuilding(accessTokenHeader.getUserId(), dataId.getValue(), planetId, surfaceId);
     }
 
     @Override
-    public SurfaceResponse upgradeBuilding(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
+    public void upgradeBuilding(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to upgrade building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        return upgradeBuildingService.upgradeBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        upgradeBuildingService.upgradeBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 
     @Override
-    public SurfaceResponse cancelConstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
+    public void cancelConstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel construction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        return cancelConstructionService.cancelConstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        cancelConstructionService.cancelConstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 
     @Override
-    public SurfaceResponse deconstructBuilding(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
+    public void deconstructBuilding(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to deconstruct building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        return deconstructBuildingService.deconstructBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        deconstructBuildingService.deconstructBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 
     @Override
-    public SurfaceResponse cancelDeconstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
+    public void cancelDeconstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel deconstruction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        return cancelDeconstructionService.cancelDeconstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        cancelDeconstructionService.cancelDeconstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
     }
 }

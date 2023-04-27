@@ -151,7 +151,7 @@ public class StorageSettingTest extends SeleniumTest {
 
         //Check resource produced
         AwaitilityWrapper.create(60, 10)
-            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 300)
+            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 400)
             .assertTrue("Resource not produced.");
     }
 }

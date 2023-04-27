@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,20 +20,17 @@ public class PlanetBuildingOverviewQueryService {
     private final PlanetBuildingOverviewMapper overviewMapper;
 
     public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(UUID userId, UUID planetId) {
-        Planet planet = gameDao.findByUserIdValidated(userId)
-            .getUniverse()
-            .findPlanetByIdValidated(planetId);
-        return getBuildingOverview(planet);
+        GameData gameData = gameDao.findByUserIdValidated(userId)
+            .getData();
+        return getBuildingOverview(gameData, planetId);
     }
 
-    public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(Planet planet) {
-        return planet
-            .getSurfaces()
-            .values()
+    public Map<String, PlanetBuildingOverviewResponse> getBuildingOverview(GameData gameData, UUID planetId) {
+        return gameData.getSurfaces()
+            .getByPlanetId((planetId))
             .stream()
-            .collect(Collectors.groupingBy(Surface::getSurfaceType))
-            .entrySet()
-            .stream()
-            .collect(Collectors.toMap(surfaceTypeListEntry -> surfaceTypeListEntry.getKey().name(), o -> overviewMapper.createOverview(o.getValue())));
+            .map(Surface::getSurfaceType)
+            .distinct()
+            .collect(Collectors.toMap(Enum::name, surfaceType -> overviewMapper.createOverview(gameData, planetId, surfaceType)));
     }
 }

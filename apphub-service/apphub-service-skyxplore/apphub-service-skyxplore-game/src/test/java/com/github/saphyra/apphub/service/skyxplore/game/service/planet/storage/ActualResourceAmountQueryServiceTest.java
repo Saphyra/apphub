@@ -3,11 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.TestStoredResourcesFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -26,6 +26,7 @@ public class ActualResourceAmountQueryServiceTest {
     private static final String DATA_ID_2 = "data-id-2";
     private static final Integer AMOUNT = 245;
     private static final Integer MASS = 246;
+    private static final UUID LOCATION = UUID.randomUUID();
     @Mock
     private ResourceDataService resourceDataService;
 
@@ -33,10 +34,7 @@ public class ActualResourceAmountQueryServiceTest {
     private ActualResourceAmountQueryService underTest;
 
     @Mock
-    private Planet planet;
-
-    @Mock
-    private StorageDetails storageDetails;
+    private GameData gameData;
 
     @Mock
     private StoredResource storedResource1;
@@ -51,23 +49,22 @@ public class ActualResourceAmountQueryServiceTest {
     private StoredResources storedResources;
 
     @Test
-    public void getActualAmount_byDataIdAndPlanet() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(storedResources);
-        given(storedResources.get(DATA_ID_1)).willReturn(storedResource1);
+    public void getActualAmount_byLocationAndDataId() {
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.findByLocationAndDataId(LOCATION, DATA_ID_1)).willReturn(Optional.of(storedResource1));
+
         given(storedResource1.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.getActualAmount(DATA_ID_1, planet);
+        int result = underTest.getActualAmount(gameData, LOCATION, DATA_ID_1);
 
         assertThat(result).isEqualTo(AMOUNT);
     }
 
     @Test
-    public void getActualAmount_byPlanetAndStorageType() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(storedResources);
+    public void getActualAmount_byLocationAndStorageType() {
+        given(gameData.getStoredResources()).willReturn(storedResources);
 
-        given(storedResources.values()).willReturn(List.of(storedResource1, storedResource2));
+        given(storedResources.getByLocation(LOCATION)).willReturn(List.of(storedResource1, storedResource2));
 
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
         given(storedResource2.getDataId()).willReturn(DATA_ID_2);
@@ -76,20 +73,17 @@ public class ActualResourceAmountQueryServiceTest {
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(storedResource1.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.getActualAmount(planet, StorageType.BULK);
+        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.BULK);
 
         assertThat(result).isEqualTo(AMOUNT);
     }
 
     @Test
     public void getActualStorageAmount() {
-        storedResources = TestStoredResourcesFactory.create();
+        given(gameData.getStoredResources()).willReturn(storedResources);
 
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByLocation(LOCATION)).willReturn(List.of(storedResource1, storedResource2));
 
-        storedResources.put(DATA_ID_1, storedResource1);
-        storedResources.put(DATA_ID_2, storedResource2);
 
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
@@ -98,7 +92,7 @@ public class ActualResourceAmountQueryServiceTest {
         given(resourceData.getMass()).willReturn(MASS);
         given(resourceDataService.get(DATA_ID_1)).willReturn(resourceData);
 
-        int result = underTest.getActualStorageAmount(planet, StorageType.BULK);
+        int result = underTest.getActualStorageAmount(gameData, LOCATION, StorageType.BULK);
 
         assertThat(result).isEqualTo(AMOUNT * MASS);
     }

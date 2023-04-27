@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -110,5 +110,14 @@ public class GameDaoTest {
         assertThat(result).containsExactly(game);
         result.clear();
         assertThat(underTest.getAll()).containsExactly(game);
+    }
+
+    @Test
+    void findById() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
+        underTest.save(game);
+
+        assertThat(underTest.findById(GAME_ID)).isEqualTo(game);
     }
 }

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.planet;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,5 +33,9 @@ public class PlanetDao extends AbstractDao<PlanetEntity, PlanetModel, String, Pl
 
     public void deleteById(UUID planetId) {
         deleteById(uuidConverter.convertDomain(planetId));
+    }
+
+    public List<PlanetModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+        return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

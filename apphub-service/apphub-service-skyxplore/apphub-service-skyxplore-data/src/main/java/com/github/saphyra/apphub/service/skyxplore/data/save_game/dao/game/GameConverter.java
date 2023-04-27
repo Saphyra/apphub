@@ -23,6 +23,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
         model.setLastPlayed(entity.getLastPlayed());
         model.setMarkedForDeletion(entity.getMarkedForDeletion());
         model.setMarkedForDeletionAt(entity.getMarkedForDeletionAt());
+        model.setUniverseSize(entity.getUniverseSize());
         return model;
     }
 
@@ -35,6 +36,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
             .lastPlayed(domain.getLastPlayed())
             .markedForDeletion(domain.getMarkedForDeletion())
             .markedForDeletionAt(domain.getMarkedForDeletionAt())
+            .universeSize(domain.getUniverseSize())
             .build();
     }
 }

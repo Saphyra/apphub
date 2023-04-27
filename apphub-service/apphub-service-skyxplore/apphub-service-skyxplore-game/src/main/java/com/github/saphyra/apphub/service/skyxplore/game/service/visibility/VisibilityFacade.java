@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.visibility;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,8 @@ public class VisibilityFacade {
     private final SolarSystemVisibilityService solarSystemVisibilityService;
     private final PlanetVisibilityService planetVisibilityService;
 
-    public boolean isVisible(UUID userId, SolarSystem solarSystem) {
-        return solarSystemVisibilityService.isVisible(userId, solarSystem);
+    public boolean isVisible(GameData gameData, UUID userId, UUID solarSystemId) {
+        return solarSystemVisibilityService.isVisible(gameData, userId, solarSystemId);
     }
 
     public boolean isVisible(UUID userId, Planet planet) {
