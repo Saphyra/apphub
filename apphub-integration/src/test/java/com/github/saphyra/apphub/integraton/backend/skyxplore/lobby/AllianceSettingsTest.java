@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreL
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayer;
@@ -15,6 +16,7 @@ import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResp
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
+import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -131,5 +133,52 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(AiPlayer.class);
         assertThat(aiPlayer.getUserId()).isEqualTo(aiId);
         assertThat(aiPlayer.getAllianceId()).isEqualTo(allianceId1);
+    }
+
+    @Test(groups = "skyxplore")
+    void gameDoesNotStartWithOneAlliance(){
+        Language language = Language.ENGLISH;
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
+        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+
+        SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
+
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+
+        SkyXploreLobbyActions.createOrModifyAi(language, accessTokenId1, AiPlayer.builder().name(AI_NAME).build());
+
+        UUID aiId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
+            .orElseThrow()
+            .getPayloadAs(AiPlayer.class)
+            .getUserId();
+
+        SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId1, Constants.NEW_ALLIANCE_VALUE);
+
+        UUID allianceId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
+            .orElseThrow()
+            .getPayloadAs(AllianceCreatedResponse.class)
+            .getAlliance()
+            .getAllianceId();
+
+        SkyXploreLobbyActions.changeAllianceOfAI(language, accessTokenId1, aiId, allianceId);
+
+        wsClient.clearMessages();
+
+        WebSocketEvent readyEvent = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
+            .payload(true)
+            .build();
+
+        wsClient.send(readyEvent);
+
+        wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
+            .orElseThrow();
+
+        Response response = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId1);
+
+        ResponseValidator.verifyErrorResponse(response, 412, ErrorCode.NOT_ENOUGH_ALLIANCES);
     }
 }

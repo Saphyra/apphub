@@ -167,4 +167,10 @@ public class SkyXploreLobbyActions {
             .body(new OneParamRequest<>(alliance))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, "userId", aiId));
     }
+
+    public static Response getEditSettingsResponse(Language language, UUID accessTokenId, SkyXploreGameSettings settings) {
+        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+            .body(settings)
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_EDIT_SETTINGS));
+    }
 }

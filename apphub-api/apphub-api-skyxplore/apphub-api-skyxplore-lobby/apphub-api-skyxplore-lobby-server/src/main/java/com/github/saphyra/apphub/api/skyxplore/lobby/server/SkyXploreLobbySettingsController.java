@@ -19,11 +19,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SkyXploreLobbySettingsController {
-    //TODO API test
     @PostMapping(Endpoints.SKYXPLORE_LOBBY_EDIT_SETTINGS)
     void editSettings(@RequestBody SkyXploreGameSettings settings, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_SETTINGS)
     SkyXploreGameSettings getGameSettings(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

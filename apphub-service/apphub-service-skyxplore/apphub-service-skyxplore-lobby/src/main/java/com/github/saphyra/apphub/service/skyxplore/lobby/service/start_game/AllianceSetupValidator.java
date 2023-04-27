@@ -21,8 +21,6 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 class AllianceSetupValidator {
-    //TODO API test
-    //TODO Selenium test
     void check(SkyXploreGameCreationRequest request) {
         if (request.getAis().isEmpty() && request.getMembers().size() == 1) {
             log.info("There is only one player. AI will be generated automatically.");

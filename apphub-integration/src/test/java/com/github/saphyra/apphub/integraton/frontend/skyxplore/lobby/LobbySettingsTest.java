@@ -6,12 +6,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbySettingsHelper;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.Range;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayerElement;
@@ -334,5 +336,37 @@ public class LobbySettingsTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.findAiByName(playerDriver, aiName).isEmpty())
             .assertTrue("Ai with name " + aiName + " is still present.");
+    }
+
+    @Test(groups = "skyxplore")
+    void gameDoesNotStartWithOnlyOneAlliance() {
+        WebDriver driver = extractDriver();
+
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        Navigation.toIndexPage(driver);
+        IndexPageActions.registerUser(driver, userData);
+        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        SkyXploreCharacterActions.submitForm(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+            .assertTrue();
+
+        SkyXploreMainMenuActions.createLobby(driver, GAME_NAME);
+
+        SkyXploreLobbyActions.createAi(driver, AI_NAME);
+
+        SkyXploreLobbyActions.findMemberValidated(driver, userData.getUsername())
+            .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
+
+        SkyXploreLobbyActions.findAiByName(driver, AI_NAME)
+            .orElseThrow()
+            .setAlliance("1");
+
+        SkyXploreLobbyActions.setReady(driver);
+
+        SkyXploreLobbyActions.startGameCreation(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani.");
     }
 }
