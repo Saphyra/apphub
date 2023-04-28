@@ -26,7 +26,7 @@ class BuildingDetailsMapper {
             .collect(Collectors.groupingBy(Building::getDataId))
             .entrySet()
             .stream()
-            .map(entry -> buildingDetailMapper.createBuildingDetail(entry.getKey(), entry.getValue()))
+            .map(entry -> buildingDetailMapper.createBuildingDetail(gameData, entry.getKey(), entry.getValue()))
             .collect(Collectors.toList());
     }
 }

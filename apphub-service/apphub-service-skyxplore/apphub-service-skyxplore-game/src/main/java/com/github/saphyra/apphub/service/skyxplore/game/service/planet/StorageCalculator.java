@@ -22,6 +22,7 @@ public class StorageCalculator {
         return gameData.getBuildings()
             .getByLocationAndDataId(location, storageBuildingData.getId())
             .stream()
+            .filter(building -> gameData.getDeconstructions().findByExternalReference(building.getBuildingId()).isEmpty())
             .mapToInt(value -> value.getLevel() * storageBuildingData.getCapacity())
             .sum();
     }

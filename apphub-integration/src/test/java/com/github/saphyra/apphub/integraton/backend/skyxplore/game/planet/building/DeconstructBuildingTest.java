@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.DeconstructionResponse;
+import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
@@ -97,7 +98,13 @@ public class DeconstructBuildingTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
             .getPayload();
 
-        //PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 0);// TODO restore when buildingDetails mapper is updated
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_CONCRETE, Constants.DATA_ID_BATTERY, 1, 0);
+
+        PlanetStorageResponse planetStorageResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)
+            .orElseThrow()
+            .getPayloadAs(PlanetStorageResponse.class);
+
+        assertThat(planetStorageResponse.getEnergy().getCapacity()).isEqualTo(0);
 
         //Cancel deconstruction
         gameWsClient.clearMessages();

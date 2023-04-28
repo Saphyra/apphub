@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.BuildingCapacityCalculator;
@@ -34,6 +36,7 @@ class ProducerBuildingFinderServiceTest {
     private static final String OCCUPIED_BUILDING_DATA_ID = "occupied-building-data-id";
     private static final String NOT_PRODUCTION_BUILDING_DATA_ID = "not-production-building-data-id";
     private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID DECONSTRUCTED_BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private ProductionBuildingService productionBuildingService;
@@ -63,6 +66,9 @@ class ProducerBuildingFinderServiceTest {
     private Building occupiedBuilding;
 
     @Mock
+    private Building deconstructedBuilding;
+
+    @Mock
     private ProductionBuildingData producerBuildingData;
 
     @Mock
@@ -80,11 +86,21 @@ class ProducerBuildingFinderServiceTest {
     @Mock
     private Surface surface;
 
+    @Mock
+    private Deconstructions deconstructions;
+
+    @Mock
+    private Deconstruction deconstruction;
+
     @Test
     void findProducerBuildingDataId() {
         given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocation(LOCATION)).willReturn(List.of(irrelevantBuilding, occupiedBuilding, notProductionBuilding, producerBuilding));
+        given(buildings.getByLocation(LOCATION)).willReturn(List.of(deconstructedBuilding, irrelevantBuilding, occupiedBuilding, notProductionBuilding, producerBuilding));
 
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_ID)).willReturn(Optional.of(deconstruction));
+
+        given(deconstructedBuilding.getBuildingId()).willReturn(DECONSTRUCTED_BUILDING_ID);
         given(producerBuilding.getDataId()).willReturn(PRODUCER_BUILDING_DATA_ID);
         given(irrelevantBuilding.getDataId()).willReturn(IRRELEVANT_BUILDING_DATA_ID);
         given(occupiedBuilding.getDataId()).willReturn(OCCUPIED_BUILDING_DATA_ID);

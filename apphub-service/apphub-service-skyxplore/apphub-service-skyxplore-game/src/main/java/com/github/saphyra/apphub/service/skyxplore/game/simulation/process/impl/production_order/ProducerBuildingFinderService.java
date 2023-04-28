@@ -27,6 +27,7 @@ class ProducerBuildingFinderService {
         return gameData.getBuildings()
             .getByLocation(location)
             .stream()
+            .filter(building -> gameData.getDeconstructions().findByExternalReference(building.getBuildingId()).isEmpty())
             .filter(building -> canProduce(gameData, dataId, building))
             .filter(building -> buildingCapacityCalculator.calculateCapacity(gameData, building) > 0)
             .map(Building::getDataId)
