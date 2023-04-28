@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreS
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.skyxplore.DeconstructionResponse;
@@ -51,10 +52,16 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
+        //Storage in use
+        UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_DEPOT);
+        Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
+
+        ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.SKYXPLORE_STORAGE_USED);
+
         //Building under construction
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
         SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
-        UUID buildingId = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
+        buildingId = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
             .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
             .getPayloadAs(SurfaceResponse.class)
             .getBuilding()
@@ -67,7 +74,7 @@ public class DeconstructBuildingTest extends BackEndTest {
         //Deconstruct building
         gameWsClient.clearMessages();
 
-        buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
+        buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_BATTERY);
 
         SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
         SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
@@ -84,7 +91,7 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         assertThat(queueItemModifiedEvent.getItemId()).isEqualTo(deconstruction.getDeconstructionId());
         assertThat(queueItemModifiedEvent.getType()).isEqualTo(Constants.QUEUE_TYPE_DECONSTRUCTION);
-        assertThat(queueItemModifiedEvent.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
+        assertThat(queueItemModifiedEvent.getData()).containsEntry("dataId", Constants.DATA_ID_BATTERY);
 
         Object buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))

@@ -21,17 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ActualResourceAmountQueryServiceTest {
+public class StoredResourceAmountQueryServiceTest {
     private static final String DATA_ID_1 = "data-id-1";
     private static final String DATA_ID_2 = "data-id-2";
     private static final Integer AMOUNT = 245;
-    private static final Integer MASS = 246;
     private static final UUID LOCATION = UUID.randomUUID();
     @Mock
     private ResourceDataService resourceDataService;
 
     @InjectMocks
-    private ActualResourceAmountQueryService underTest;
+    private StoredResourceAmountQueryService underTest;
 
     @Mock
     private GameData gameData;
@@ -89,11 +88,9 @@ public class ActualResourceAmountQueryServiceTest {
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
         given(storedResource1.getAmount()).willReturn(AMOUNT);
         given(resourceData.getId()).willReturn(DATA_ID_1);
-        given(resourceData.getMass()).willReturn(MASS);
-        given(resourceDataService.get(DATA_ID_1)).willReturn(resourceData);
 
         int result = underTest.getActualStorageAmount(gameData, LOCATION, StorageType.BULK);
 
-        assertThat(result).isEqualTo(AMOUNT * MASS);
+        assertThat(result).isEqualTo(AMOUNT);
     }
 }

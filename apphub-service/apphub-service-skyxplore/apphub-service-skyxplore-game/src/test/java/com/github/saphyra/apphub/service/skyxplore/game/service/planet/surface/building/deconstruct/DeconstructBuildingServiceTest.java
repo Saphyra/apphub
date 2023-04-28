@@ -56,6 +56,9 @@ class DeconstructBuildingServiceTest {
     @Mock
     private SyncCacheFactory syncCacheFactory;
 
+    @Mock
+    private DeconstructionPreconditions deconstructionPreconditions;
+
     @InjectMocks
     private DeconstructBuildingService underTest;
 
@@ -138,6 +141,8 @@ class DeconstructBuildingServiceTest {
         given(syncCacheFactory.create(game)).willReturn(syncCache);
 
         underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+
+        verify(deconstructionPreconditions).checkIfBuildingCanBeDeconstructed(gameData, building);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));

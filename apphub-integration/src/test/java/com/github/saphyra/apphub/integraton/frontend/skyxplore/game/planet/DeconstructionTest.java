@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
@@ -53,8 +54,14 @@ public class DeconstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
+        //Storage in use
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_DEPOT);
+        surface.deconstructBuilding(driver);
+
+        NotificationUtil.verifyErrorNotification(driver, "Raktár használatban. Szabadíts fel egy kis helyet, mielőtt lerombolod.");
+
         //Deconstruct
-        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
+        surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_BATTERY);
         String surfaceId = surface.getSurfaceId();
         surface.deconstructBuilding(driver);
 

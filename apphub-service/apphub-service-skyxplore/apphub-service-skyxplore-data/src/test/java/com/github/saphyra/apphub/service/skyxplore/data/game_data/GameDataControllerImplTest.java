@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
@@ -77,7 +77,7 @@ public class GameDataControllerImplTest {
 
     @Test
     public void availableBuildings() {
-        BuildingData buildingData = new StorageBuilding();
+        BuildingData buildingData = new StorageBuildingData();
         buildingData.setId(BUILDING_DATA_ID);
 
         MiscellaneousBuilding miscellaneousBuilding = new MiscellaneousBuilding();

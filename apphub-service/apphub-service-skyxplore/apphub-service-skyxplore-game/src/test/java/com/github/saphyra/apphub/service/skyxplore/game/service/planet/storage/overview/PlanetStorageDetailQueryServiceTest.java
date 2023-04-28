@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ActualResourceAmountQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class PlanetStorageDetailQueryServiceTest {
     private ReservedStorageQueryService reservedStorageQueryService;
 
     @Mock
-    private ActualResourceAmountQueryService actualResourceAmountQueryService;
+    private StoredResourceAmountQueryService storedResourceAmountQueryService;
 
     @Mock
     private AllocatedResourceAmountQueryService allocatedResourceAmountQueryService;
@@ -60,7 +60,7 @@ public class PlanetStorageDetailQueryServiceTest {
     public void getStorageDetails() {
         given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY);
         given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.BULK)).willReturn(RESERVED_STORAGE_AMOUNT);
-        given(actualResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ALLOCATED_AMOUNT);
         given(resourceDetailsQueryService.getResourceDetails(gameData, LOCATION, StorageType.BULK)).willReturn(Arrays.asList(resourceDetailsResponse));
 

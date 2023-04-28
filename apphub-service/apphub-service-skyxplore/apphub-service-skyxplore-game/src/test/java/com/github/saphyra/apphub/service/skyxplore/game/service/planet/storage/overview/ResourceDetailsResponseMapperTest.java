@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ActualResourceAmountQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class ResourceDetailsResponseMapperTest {
     private ReservedStorageQueryService reservedStorageQueryService;
 
     @Mock
-    private ActualResourceAmountQueryService actualResourceAmountQueryService;
+    private StoredResourceAmountQueryService storedResourceAmountQueryService;
 
     @Mock
     private AllocatedResourceAmountQueryService allocatedResourceAmountQueryService;
@@ -48,7 +48,7 @@ public class ResourceDetailsResponseMapperTest {
         given(resourceData.getId()).willReturn(DATA_ID);
 
         given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, DATA_ID)).willReturn(RESERVED_STORAGE_AMOUNT);
-        given(actualResourceAmountQueryService.getActualAmount(gameData, LOCATION, DATA_ID)).willReturn(ACTUAL_AMOUNT);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, DATA_ID)).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, DATA_ID)).willReturn(ALLOCATED_AMOUNT);
 
         ResourceDetailsResponse result = underTest.createResourceData(gameData, LOCATION, resourceData);

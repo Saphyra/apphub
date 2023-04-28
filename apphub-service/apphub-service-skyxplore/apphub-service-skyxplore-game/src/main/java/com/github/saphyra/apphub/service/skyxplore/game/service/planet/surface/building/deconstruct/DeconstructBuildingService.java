@@ -6,11 +6,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.DeconstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +25,7 @@ public class DeconstructBuildingService {
     private final DeconstructionFactory deconstructionFactory;
     private final DeconstructionProcessFactory deconstructionProcessFactory;
     private final SyncCacheFactory syncCacheFactory;
+    private final DeconstructionPreconditions deconstructionPreconditions;
 
     public void deconstructBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -33,17 +34,19 @@ public class DeconstructBuildingService {
             throw ExceptionFactory.forbiddenOperation(buildingId + " is under construction");
         }
 
-        Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
-
         Building building = game.getData()
             .getBuildings()
             .findByBuildingId(buildingId);
+
+        deconstructionPreconditions.checkIfBuildingCanBeDeconstructed(game.getData(), building);
 
         Surface surface = game.getData()
             .getSurfaces()
             .findBySurfaceId(building.getSurfaceId());
 
         SyncCache syncCache = syncCacheFactory.create(game);
+
+        Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
 
         game.getEventLoop()
             .processWithWait(() -> {

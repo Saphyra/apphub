@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
@@ -35,7 +35,7 @@ class StorageCalculatorTest {
     private GameData gameData;
 
     @Mock
-    private StorageBuilding storageBuilding;
+    private StorageBuildingData storageBuildingData;
 
     @Mock
     private Buildings buildings;
@@ -45,11 +45,11 @@ class StorageCalculatorTest {
 
     @Test
     void calculateCapacity() {
-        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuilding);
+        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
         given(gameData.getBuildings()).willReturn(buildings);
-        given(storageBuilding.getId()).willReturn(DATA_ID);
+        given(storageBuildingData.getId()).willReturn(DATA_ID);
         given(buildings.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(building));
-        given(storageBuilding.getCapacity()).willReturn(CAPACITY);
+        given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
         given(building.getLevel()).willReturn(LEVEL);
 
         int result = underTest.calculateCapacity(gameData, LOCATION, StorageType.CITIZEN);

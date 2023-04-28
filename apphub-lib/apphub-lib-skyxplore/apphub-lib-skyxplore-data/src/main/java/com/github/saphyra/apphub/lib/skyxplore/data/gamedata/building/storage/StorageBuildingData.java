@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class StorageBuilding extends BuildingData {
+public class StorageBuildingData extends BuildingData {
     private StorageType stores;
     private Integer capacity;
 

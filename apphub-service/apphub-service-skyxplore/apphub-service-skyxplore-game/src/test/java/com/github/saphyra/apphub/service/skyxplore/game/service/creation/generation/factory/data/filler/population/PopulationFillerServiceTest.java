@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -43,7 +43,7 @@ class PopulationFillerServiceTest {
     private Planet emptyPlanet;
 
     @Mock
-    private StorageBuilding storageBuilding;
+    private StorageBuildingData storageBuildingData;
 
     @Test
     void fillPopulation() {
@@ -56,8 +56,8 @@ class PopulationFillerServiceTest {
         given(planet.hasOwner()).willReturn(true);
         given(emptyPlanet.hasOwner()).willReturn(false);
 
-        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuilding);
-        given(storageBuilding.getCapacity()).willReturn(2);
+        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
+        given(storageBuildingData.getCapacity()).willReturn(2);
 
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
