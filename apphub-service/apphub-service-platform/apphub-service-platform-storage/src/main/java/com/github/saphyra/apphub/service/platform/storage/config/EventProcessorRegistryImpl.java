@@ -13,24 +13,24 @@ import java.util.List;
 
 @Component
 class EventProcessorRegistryImpl implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public EventProcessorRegistryImpl(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.STORAGE_CLEAN_UP_STORED_FILES)
                 .url(Endpoints.EVENT_CLEAN_UP_STORED_FILES)
                 .build()

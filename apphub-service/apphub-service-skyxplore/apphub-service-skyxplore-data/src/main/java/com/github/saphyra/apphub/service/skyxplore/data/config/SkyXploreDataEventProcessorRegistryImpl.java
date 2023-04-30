@@ -13,24 +13,24 @@ import java.util.List;
 
 @Component
 public class SkyXploreDataEventProcessorRegistryImpl implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public SkyXploreDataEventProcessorRegistryImpl(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.SKYXPLORE_GAME_DELETION_EVENT_NAME)
                 .url(Endpoints.EVENT_SKYXPLORE_DELETE_GAMES)
                 .build()

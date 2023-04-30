@@ -1,11 +1,11 @@
 NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
 DISABLED_GROUPS=${3:-}
+SERVER_PORT=${4:-8100}
+DATABASE_PORT=${4:-8101}
 
 echo "Running Integration tests against namespace $NAMESPACE_NAME"
 
-SERVER_PORT=8100
-DATABASE_PORT=8101
 start ./port_forward.sh $NAMESPACE_NAME $SERVER_PORT $DATABASE_PORT
 
 cd apphub-integration || exit

@@ -36,7 +36,7 @@ public class EventProcessorFactoryTest {
     @Test
     public void create() {
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .eventName(EVENT_NAME)
             .url(URL)
             .build();
@@ -46,7 +46,7 @@ public class EventProcessorFactoryTest {
         EventProcessor result = underTest.create(request);
 
         assertThat(result.getEventProcessorId()).isEqualTo(EVENT_PROCESSOR_ID);
-        assertThat(result.getServiceName()).isEqualTo(SERVICE_NAME);
+        assertThat(result.getHost()).isEqualTo(SERVICE_NAME);
         assertThat(result.getEventName()).isEqualTo(EVENT_NAME);
         assertThat(result.getUrl()).isEqualTo(URL);
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);

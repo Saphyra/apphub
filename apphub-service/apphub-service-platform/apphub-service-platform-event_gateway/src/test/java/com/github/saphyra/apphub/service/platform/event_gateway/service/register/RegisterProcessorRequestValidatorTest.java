@@ -25,13 +25,13 @@ public class RegisterProcessorRequestValidatorTest {
     public void setUp() {
         builder = RegisterProcessorRequest.builder()
             .eventName(EVENT_NAME)
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .url(URL);
     }
 
     @Test
     public void blankServiceName() {
-        Throwable ex = catchThrowable(() -> underTest.validate(builder.serviceName(" ").build()));
+        Throwable ex = catchThrowable(() -> underTest.validate(builder.host(" ").build()));
 
         ExceptionValidator.validateInvalidParam(ex, "serviceName", "must not be null or blank");
     }

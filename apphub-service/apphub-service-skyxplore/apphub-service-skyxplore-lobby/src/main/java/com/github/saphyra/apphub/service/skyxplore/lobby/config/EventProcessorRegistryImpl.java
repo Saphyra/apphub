@@ -12,19 +12,19 @@ import java.util.List;
 
 @Component
 public class EventProcessorRegistryImpl implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public EventProcessorRegistryImpl(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.SKYXPLORE_LOBBY_CLEANUP_EVENT_NAME)
                 .url(Endpoints.EVENT_SKYXPLORE_LOBBY_CLEANUP)
                 .build()

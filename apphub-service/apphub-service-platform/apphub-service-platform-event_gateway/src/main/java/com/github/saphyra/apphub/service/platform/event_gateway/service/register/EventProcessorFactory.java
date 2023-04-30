@@ -19,7 +19,7 @@ class EventProcessorFactory {
         log.info("Creating new eventProcessor... {}", request);
         return EventProcessor.builder()
             .eventProcessorId(idGenerator.randomUuid())
-            .serviceName(request.getServiceName())
+            .host(request.getHost())
             .url(request.getUrl())
             .eventName(request.getEventName())
             .lastAccess(dateTimeUtil.getCurrentDateTime())

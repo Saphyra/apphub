@@ -14,7 +14,7 @@ public class EventProcessorDao extends AbstractDao<EventProcessorEntity, EventPr
     }
 
     public Optional<EventProcessor> findByServiceNameAndEventName(String serviceName, String eventName) {
-        return converter.convertEntity(repository.findByServiceNameAndEventName(serviceName, eventName));
+        return converter.convertEntity(repository.findByHostAndEventName(serviceName, eventName));
     }
 
     public List<EventProcessor> getByEventName(String eventName) {
@@ -26,6 +26,6 @@ public class EventProcessorDao extends AbstractDao<EventProcessorEntity, EventPr
     }
 
     public List<EventProcessor> getByServiceName(String serviceName) {
-        return converter.convertEntity(repository.getByServiceName(serviceName));
+        return converter.convertEntity(repository.getByHost(serviceName));
     }
 }

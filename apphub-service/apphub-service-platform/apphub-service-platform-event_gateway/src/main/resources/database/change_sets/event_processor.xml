@@ -19,4 +19,12 @@
 
         <addPrimaryKey schemaName="event_gateway" tableName="event_processor" columnNames="event_processor_id" constraintName="event_processor-pk"/>
     </changeSet>
+
+    <changeSet id="rename-service_name-to-host" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="event_gateway" tableName="event_processor" columnName="service_name"/>
+        </preConditions>
+
+        <renameColumn schemaName="event_gateway" tableName="event_processor" oldColumnName="service_name" newColumnName="host"/>
+    </changeSet>
 </databaseChangeLog>

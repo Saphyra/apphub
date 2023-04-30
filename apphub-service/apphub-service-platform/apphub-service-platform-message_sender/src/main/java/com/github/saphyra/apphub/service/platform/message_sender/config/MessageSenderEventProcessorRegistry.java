@@ -12,24 +12,24 @@ import java.util.List;
 
 @Component
 public class MessageSenderEventProcessorRegistry implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public MessageSenderEventProcessorRegistry(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME)
                 .url(Endpoints.EVENT_MESSAGE_SENDER_PING_REQUEST)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
                 .url(Endpoints.EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP)
                 .build()

@@ -19,7 +19,6 @@ import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -62,7 +61,7 @@ class EventGatewayBeanConfiguration {
     }
 
     @Bean
-    @LoadBalanced
+    //@LoadBalanced
     RestTemplate restTemplate() {
         return new RestTemplate();
     }
