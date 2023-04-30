@@ -33,7 +33,6 @@ import com.github.saphyra.apphub.service.notebook.service.table.TableJoinFactory
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -112,7 +111,7 @@ public class CustomTableCreationService {
                 FileMetadata createFileRequest = objectMapperWrapper.convertValue(column.getValue(), FileMetadata.class);
                 UUID storedFileId;
                 if (isNull(createFileRequest.getStoredFileId())) {
-                    storedFileId = storageProxy.createFile(createFileRequest.getFileName(), FilenameUtils.removeExtension(createFileRequest.getFileName()), createFileRequest.getSize());
+                    storedFileId = storageProxy.createFile(createFileRequest.getFileName(), createFileRequest.getSize());
 
                     CustomTableCreatedResponse response = CustomTableCreatedResponse.builder()
                         .rowIndex(row.getRowIndex())

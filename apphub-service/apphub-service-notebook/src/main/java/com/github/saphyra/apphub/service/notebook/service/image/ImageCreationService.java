@@ -31,7 +31,8 @@ public class ImageCreationService {
     public UUID createImage(UUID userId, CreateFileRequest request) {
         createFileRequestValidator.validate(request);
 
-        UUID fileId = storageProxy.createFile(request.getFileName(), request.getSize());
+        FileMetadata metadata = request.getMetadata();
+        UUID fileId = storageProxy.createFile(metadata.getFileName(), metadata.getSize());
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.IMAGE);
         File file = fileFactory.create(userId, listItem.getListItemId(), fileId);
