@@ -51,7 +51,7 @@ public class RegisterProcessorServiceTest {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .eventName(EVENT_NAME)
             .url(URL_1)
             .build();
@@ -69,7 +69,7 @@ public class RegisterProcessorServiceTest {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .eventName(EVENT_NAME)
             .url(URL_2)
             .build();
@@ -88,7 +88,7 @@ public class RegisterProcessorServiceTest {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
         RegisterProcessorRequest request = RegisterProcessorRequest.builder()
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .eventName(EVENT_NAME)
             .url(URL_1)
             .build();

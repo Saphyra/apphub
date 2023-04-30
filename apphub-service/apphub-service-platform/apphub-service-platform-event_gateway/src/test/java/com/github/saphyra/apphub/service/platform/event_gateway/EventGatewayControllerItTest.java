@@ -61,7 +61,7 @@ public class EventGatewayControllerItTest {
     private static final String VALUE = "value";
     private static final String ASSEMBLED_EVENT_URL = "http://" + SERVICE_NAME + TEST_EVENT_URL_1;
     private static final RegisterProcessorRequest REGISTER_PROCESSOR_REQUEST = RegisterProcessorRequest.builder()
-        .serviceName(SERVICE_NAME)
+        .host(SERVICE_NAME)
         .url(TEST_EVENT_URL_1)
         .eventName(TEST_EVENT_NAME_1)
         .build();
@@ -97,7 +97,7 @@ public class EventGatewayControllerItTest {
 
     @Test
     public void registerProcessor_blankServiceName() throws Exception {
-        Response response = sendRegisterProcessorRequest(REGISTER_PROCESSOR_REQUEST.toBuilder().serviceName(" ").build());
+        Response response = sendRegisterProcessorRequest(REGISTER_PROCESSOR_REQUEST.toBuilder().host(" ").build());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
@@ -143,7 +143,7 @@ public class EventGatewayControllerItTest {
         EventProcessor newProcessor = registerProcessor(REGISTER_PROCESSOR_REQUEST.toBuilder().url(TEST_EVENT_URL_2).build());
 
         assertThat(newProcessor.getEventProcessorId()).isEqualTo(eventProcessor.getEventProcessorId());
-        assertThat(newProcessor.getServiceName()).isEqualTo(eventProcessor.getServiceName());
+        assertThat(newProcessor.getHost()).isEqualTo(eventProcessor.getHost());
         assertThat(newProcessor.getEventName()).isEqualTo(eventProcessor.getEventName());
         assertThat(newProcessor.getUrl()).isEqualTo(TEST_EVENT_URL_2);
         assertThat(newProcessor.getLastAccess()).isAfter(eventProcessor.getLastAccess());
@@ -215,7 +215,7 @@ public class EventGatewayControllerItTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        Optional<EventProcessor> eventProcessor = eventProcessorDao.findByServiceNameAndEventName(registerProcessorRequest.getServiceName(), registerProcessorRequest.getEventName());
+        Optional<EventProcessor> eventProcessor = eventProcessorDao.findByServiceNameAndEventName(registerProcessorRequest.getHost(), registerProcessorRequest.getEventName());
         assertThat(eventProcessor).isNotEmpty();
         return eventProcessor.get();
     }

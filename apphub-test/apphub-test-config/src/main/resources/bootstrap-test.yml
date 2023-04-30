@@ -1,4 +1,5 @@
 event:
+  serviceHost: placeholder
   processor:
     enabled: false
     registration:

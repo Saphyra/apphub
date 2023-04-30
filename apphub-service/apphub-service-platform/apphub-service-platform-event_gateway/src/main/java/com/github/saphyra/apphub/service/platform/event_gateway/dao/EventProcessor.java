@@ -16,7 +16,7 @@ public class EventProcessor {
     private final UUID eventProcessorId;
 
     @NonNull
-    private final String serviceName;
+    private final String host;
 
     @NonNull
     private String url;

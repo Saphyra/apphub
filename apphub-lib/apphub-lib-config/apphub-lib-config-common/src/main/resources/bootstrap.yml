@@ -2,52 +2,6 @@ spring:
   cloud:
     kubernetes:
       enabled: false
-    discovery:
-      client:
-        simple:
-          instances:
-            frontend[0]:
-              uri: http://frontend:3000
-            admin-panel[0]:
-              uri: http://admin-panel:8080
-            community[0]:
-              uri: http://community:8080
-            calendar[0]:
-              uri: http://calendar:8080
-            modules[0]:
-              uri: http://modules:8080
-            notebook[0]:
-              uri: http://notebook:8080
-            encryption[0]:
-              uri: http://encryption:8080
-            event-gateway[0]:
-              uri: http://event-gateway:8080
-            localization[0]:
-              uri: http://localization:8080
-            main-gateway[0]:
-              uri: http://main-gateway:8080
-            message-sender[0]:
-              uri: http://message-sender:8080
-            scheduler[0]:
-              uri: http://scheduler:8080
-            storage[0]:
-              uri: http://storage:8080
-            web-content[0]:
-              uri: http://web-content:8080
-            web-content-localization[0]:
-              uri: http://web-content:8080
-            skyxplore-data[0]:
-              uri: http://skyxplore-data:8080
-            skyxplore-game[0]:
-              uri: http://skyxplore-game:8080
-            skyxplore-lobby[0]:
-              uri: http://skyxplore-lobby:8080
-            training[0]:
-              uri: http://training:8080
-            user[0]:
-              uri: http://user:8080
-            utils[0]:
-              uri: http://utils:8080
   datasource:
     username: postgres
     password: postgres

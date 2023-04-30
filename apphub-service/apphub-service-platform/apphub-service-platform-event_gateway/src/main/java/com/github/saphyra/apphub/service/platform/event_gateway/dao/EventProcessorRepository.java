@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 interface EventProcessorRepository extends CrudRepository<EventProcessorEntity, String> {
-    Optional<EventProcessorEntity> findByServiceNameAndEventName(String serviceName, String eventName);
+    Optional<EventProcessorEntity> findByHostAndEventName(String host, String eventName);
 
     List<EventProcessorEntity> getByEventName(String eventName);
 
-    List<EventProcessorEntity> getByServiceName(String serviceName);
+    List<EventProcessorEntity> getByHost(String host);
 
     List<EventProcessorEntity> getByLastAccessBefore(LocalDateTime expiration);
 }

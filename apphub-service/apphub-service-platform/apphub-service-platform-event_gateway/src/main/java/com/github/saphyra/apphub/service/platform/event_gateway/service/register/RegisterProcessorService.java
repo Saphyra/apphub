@@ -19,7 +19,7 @@ public class RegisterProcessorService {
 
     public void registerProcessor(RegisterProcessorRequest request) {
         registerProcessorRequestValidator.validate(request);
-        EventProcessor eventProcessor = eventProcessorDao.findByServiceNameAndEventName(request.getServiceName(), request.getEventName())
+        EventProcessor eventProcessor = eventProcessorDao.findByServiceNameAndEventName(request.getHost(), request.getEventName())
             .orElseGet(() -> eventProcessorFactory.create(request));
 
         eventProcessor.setUrl(request.getUrl());

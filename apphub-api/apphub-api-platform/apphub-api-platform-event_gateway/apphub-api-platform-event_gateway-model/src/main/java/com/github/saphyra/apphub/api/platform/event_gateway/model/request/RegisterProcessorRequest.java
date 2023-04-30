@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class RegisterProcessorRequest {
-    private String serviceName;
+    private String host;
     private String url;
     private String eventName;
 }
