@@ -1,0 +1,38 @@
+{
+    "title": {
+        "en": "Character - SkyXplore - Apphub",
+        "hu": "Karakter - SkyXplore - Apphub"
+    },
+    "page-title": {
+        "en": "Character",
+        "hu": "Karakter"
+    },
+    "back-button": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "edit-character": {
+        "en": "Edit character",
+        "hu": "Karakter szerkesztése"
+    },
+    "new-character": {
+        "en": "New character",
+        "hu": "Új karakter"
+    },
+    "character-name": {
+        "en": "Character name",
+        "hu": "Karakternév"
+    },
+    "character-name-too-short": {
+        "en": "Character name too short. (Minimum 3 characters)",
+        "hu": "Karakter név túl rövid. (Minimum 3 karakter)"
+    },
+    "character-name-too-long": {
+        "en": "Character name too long. (Maximum 30 characters)",
+        "hu": "Karakter név túl hosszú. (Maximum 30 karakter)"
+    },
+    "save-character": {
+        "en": "Save",
+        "hu": "Mentés"
+    }
+}

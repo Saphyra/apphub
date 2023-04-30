@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -32,20 +31,17 @@ public class CharacterCrudTest extends SeleniumTest {
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
 
         SkyXploreCharacterActions.fillCharacterName(driver, "aa");
-        SleepUtil.sleep(2000);
-        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakternév túl rövid (minimum 3 karakter).");
+        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakter név túl rövid. (Minimum 3 karakter)");
 
         SkyXploreCharacterActions.fillCharacterName(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SleepUtil.sleep(2000);
-        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakternév túl hosszú (maximum 30 karakter).");
+        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakter név túl hosszú. (Maximum 30 karakter)");
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
-        SleepUtil.sleep(2000);
         SkyXploreCharacterActions.verifyValidCharacterName(driver);
 
         SkyXploreCharacterActions.submitForm(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
 
         SkyXploreMainMenuActions.back(driver);
         ModulesPageActions.logout(driver);
@@ -56,16 +52,14 @@ public class CharacterCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
-        SleepUtil.sleep(2000);
         SkyXploreCharacterActions.submitForm(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Ez a karakternév már foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "Ez a karakternév már foglalt.");
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData2.getUsername());
-        SleepUtil.sleep(2000);
         SkyXploreCharacterActions.submitForm(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
 
         SkyXploreMainMenuActions.editCharacter(driver);
 
@@ -75,10 +69,9 @@ public class CharacterCrudTest extends SeleniumTest {
         String newCharacterName = RegistrationParameters.validParameters()
             .getUsername();
         SkyXploreCharacterActions.fillCharacterName(driver, newCharacterName);
-        SleepUtil.sleep(2000);
         SkyXploreCharacterActions.submitForm(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
 
         SkyXploreMainMenuActions.editCharacter(driver);
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);

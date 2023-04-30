@@ -3,10 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,19 +25,16 @@ public class StorageSettingEditionService {
     private final SyncCacheFactory syncCacheFactory;
 
     @SneakyThrows
-    public StorageSettingApiModel edit(UUID userId, UUID planetId, StorageSettingApiModel request) {
+    public StorageSettingApiModel edit(UUID userId, StorageSettingApiModel request) {
         storageSettingsModelValidator.validate(request);
 
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game
-            .getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
 
-        SyncCache syncCache = syncCacheFactory.create();
+        SyncCache syncCache = syncCacheFactory.create(game);
 
         return game.getEventLoop()
             .processWithResponse(() -> {
-                    StorageSetting storageSetting = planet.getStorageDetails()
+                    StorageSetting storageSetting =game.getData()
                         .getStorageSettings()
                         .findByStorageSettingIdValidated(request.getStorageSettingId());
 
@@ -46,7 +42,7 @@ public class StorageSettingEditionService {
                     storageSetting.setBatchSize(request.getBatchSize());
                     storageSetting.setTargetAmount(request.getTargetAmount());
 
-                    syncCache.saveGameItem(storageSettingToModelConverter.convert(storageSetting, game.getGameId()));
+                    syncCache.saveGameItem(storageSettingToModelConverter.convert(game.getGameId(), storageSetting));
 
                     return storageSettingToApiModelMapper.convert(storageSetting);
                 },

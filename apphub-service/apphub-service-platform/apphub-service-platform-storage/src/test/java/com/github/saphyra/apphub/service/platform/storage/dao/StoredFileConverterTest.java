@@ -22,7 +22,6 @@ public class StoredFileConverterTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
     private static final String FILE_NAME = "file-name";
-    private static final String EXTENSION = "extension";
     private static final long SIZE = 2345;
     private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
     private static final String STORED_FILE_ID_STRING = "stored-file-id";
@@ -54,7 +53,6 @@ public class StoredFileConverterTest {
             .createdAt(CREATED_AT)
             .fileUploaded(true)
             .fileName(FILE_NAME)
-            .extension(EXTENSION)
             .size(SIZE)
             .build();
 
@@ -63,7 +61,6 @@ public class StoredFileConverterTest {
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(stringEncryptor.encryptEntity(FILE_NAME, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_FILE_NAME);
-        given(stringEncryptor.encryptEntity(EXTENSION, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_EXTENSION);
         given(longEncryptor.encryptEntity(SIZE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_SIZE);
 
         StoredFileEntity result = underTest.convertDomain(storedFile);
@@ -73,7 +70,6 @@ public class StoredFileConverterTest {
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
         assertThat(result.isFileUploaded()).isTrue();
         assertThat(result.getFileName()).isEqualTo(ENCRYPTED_FILE_NAME);
-        assertThat(result.getExtension()).isEqualTo(ENCRYPTED_EXTENSION);
         assertThat(result.getSize()).isEqualTo(ENCRYPTED_SIZE);
     }
 
@@ -85,7 +81,6 @@ public class StoredFileConverterTest {
             .createdAt(CREATED_AT)
             .fileUploaded(true)
             .fileName(ENCRYPTED_FILE_NAME)
-            .extension(ENCRYPTED_EXTENSION)
             .size(ENCRYPTED_SIZE)
             .build();
 
@@ -94,7 +89,6 @@ public class StoredFileConverterTest {
         given(uuidConverter.convertEntity(STORED_FILE_ID_STRING)).willReturn(STORED_FILE_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(stringEncryptor.decryptEntity(ENCRYPTED_FILE_NAME, ACCESS_TOKEN_USER_ID)).willReturn(FILE_NAME);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_EXTENSION, ACCESS_TOKEN_USER_ID)).willReturn(EXTENSION);
         given(longEncryptor.decryptEntity(ENCRYPTED_SIZE, ACCESS_TOKEN_USER_ID)).willReturn(SIZE);
 
         StoredFile result = underTest.convertEntity(storedFile);
@@ -104,7 +98,6 @@ public class StoredFileConverterTest {
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
         assertThat(result.isFileUploaded()).isTrue();
         assertThat(result.getFileName()).isEqualTo(FILE_NAME);
-        assertThat(result.getExtension()).isEqualTo(EXTENSION);
         assertThat(result.getSize()).isEqualTo(SIZE);
     }
 }

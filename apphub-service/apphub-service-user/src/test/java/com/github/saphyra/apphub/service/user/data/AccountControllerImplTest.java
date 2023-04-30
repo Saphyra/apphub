@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
@@ -126,12 +127,13 @@ public class AccountControllerImplTest {
 
     @Test
     public void getUsernameByUserId() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
         given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUsername()).willReturn(USERNAME);
 
-        String result = underTest.getUsernameByUserId(USER_ID_1);
+        OneParamResponse<String> result = underTest.getUsernameByUserId(accessTokenHeader);
 
-        assertThat(result).isEqualTo(USERNAME);
+        assertThat(result.getValue()).isEqualTo(USERNAME);
     }
 
     @Test

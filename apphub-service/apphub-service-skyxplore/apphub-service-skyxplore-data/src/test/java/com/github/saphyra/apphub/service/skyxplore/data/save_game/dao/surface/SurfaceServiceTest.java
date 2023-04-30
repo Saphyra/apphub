@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class SurfaceServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 246;
+    private static final Integer ITEMS_PER_PAGE = 364;
 
     @Mock
-    private SurfaceDao surfaceDao;
+    private SurfaceDao dao;
 
     @Mock
     private SurfaceModelValidator surfaceModelValidator;
@@ -38,7 +39,7 @@ public class SurfaceServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(surfaceDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,20 @@ public class SurfaceServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(surfaceModelValidator).validate(model);
-        verify(surfaceDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(surfaceDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<SurfaceModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(surfaceDao.getByPlanetId(ID)).willReturn(Arrays.asList(model));
-
-        List<SurfaceModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(surfaceDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

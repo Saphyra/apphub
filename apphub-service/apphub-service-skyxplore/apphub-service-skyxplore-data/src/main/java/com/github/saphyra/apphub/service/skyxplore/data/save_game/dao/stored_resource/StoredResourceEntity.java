@@ -20,7 +20,6 @@ class StoredResourceEntity {
     private String storedResourceId;
     private String gameId;
     private String location;
-    private String locationType;
     private String dataId;
     private int amount;
 }

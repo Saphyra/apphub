@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -38,24 +36,24 @@ public class SkyXploreStorageSettingActions {
         return response.getBody().as(StorageSettingsResponse.class);
     }
 
-    public static void deleteStorageSetting(Language language, UUID accessTokenId, UUID planetId, UUID storageSettingId) {
+    public static void deleteStorageSetting(Language language, UUID accessTokenId, UUID storageSettingId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("storageSettingId", storageSettingId))));
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, "storageSettingId", storageSettingId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static StorageSettingModel editStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
-        Response response = getEditStorageSettingResponse(language, accessTokenId, planetId, model);
+    public static StorageSettingModel editStorageSetting(Language language, UUID accessTokenId, StorageSettingModel model) {
+        Response response = getEditStorageSettingResponse(language, accessTokenId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(StorageSettingModel.class);
     }
 
-    public static Response getEditStorageSettingResponse(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+    public static Response getEditStorageSettingResponse(Language language, UUID accessTokenId, StorageSettingModel model) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(model)
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING, "planetId", planetId));
+            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING));
     }
 }

@@ -20,7 +20,6 @@ public class AllocatedResourceEntity {
     private String allocatedResourceId;
     private String gameId;
     private String location;
-    private String locationType;
     private String externalReference;
     private String dataId;
     private int amount;

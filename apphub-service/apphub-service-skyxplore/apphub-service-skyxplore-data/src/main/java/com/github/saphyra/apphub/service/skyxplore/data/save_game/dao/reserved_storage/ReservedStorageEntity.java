@@ -19,7 +19,6 @@ class ReservedStorageEntity {
     @Id
     private String reservedStorageId;
     private String location;
-    private String locationType;
     private String gameId;
     private String externalReference;
     private String dataId;

@@ -43,10 +43,11 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void openCreateGameDialog(WebDriver driver) {
-        MainMenuPage.createGameButton(driver).click();
+        MainMenuPage.createGameButton(driver)
+            .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> MainMenuPage.createGameDialog(driver).isDisplayed())
+            .until(() -> MainMenuPage.createGameDialog(driver).isPresent())
             .assertTrue("Failed opening Game creation dialog");
     }
 
@@ -57,12 +58,6 @@ public class SkyXploreMainMenuActions {
     public static void verifyInvalidGameName(WebDriver driver, String errorMessage) {
         WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), true, errorMessage);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isFalse();
-    }
-
-    public static void waitForPageLoads(WebDriver driver) {
-        AwaitilityWrapper.createDefault()
-            .until(() -> !driver.findElements(MainMenuPage.GAME_NAME_INPUT).isEmpty())
-            .assertTrue("Failed to load SkyXplore MainMenu page.");
     }
 
     public static void verifyValidGameName(WebDriver driver) {
@@ -100,7 +95,7 @@ public class SkyXploreMainMenuActions {
 
     public static void openSavedGames(WebDriver driver) {
         if (!WebElementUtils.getIfPresent(() -> MainMenuPage.savedGamesWrapper(driver)).isPresent()) {
-            MainMenuPage.LoadGameButton(driver).click();
+            MainMenuPage.loadGameButton(driver).click();
         }
     }
 
@@ -109,5 +104,10 @@ public class SkyXploreMainMenuActions {
             .stream()
             .map(SavedGame::new)
             .collect(Collectors.toList());
+    }
+
+    public static void confirmFriendDeletion(WebDriver driver) {
+        MainMenuPage.confirmFriendDeletionButton(driver)
+            .click();
     }
 }

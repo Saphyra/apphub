@@ -1,0 +1,21 @@
+#skyxplore-main-menu main {
+    display: grid;
+    grid-template-columns: 70% auto;
+    padding: 0;
+}
+
+#skyxplore-main-menu-buttons {
+    border-right: 5px ridge white;
+}
+
+.skyxplore-main-menu-button {
+    display: block;
+    width: 90%;
+    margin: 16px auto;
+    font-size: 24px;
+}
+
+.skyxplore-no-saved-games{
+    text-align: center;
+    font-size: 24px;
+}

@@ -18,6 +18,6 @@ class ExitFromGameService {
     public void exitFromGame(UUID userId) {
         wsEventController.userLeftGame(userId);
         gameDao.findByUserId(userId)
-            .ifPresent(gameDao::delete);
+            .ifPresent(gameDao::delete); //Removal is necessary to let the user logging in to another game instantly
     }
 }

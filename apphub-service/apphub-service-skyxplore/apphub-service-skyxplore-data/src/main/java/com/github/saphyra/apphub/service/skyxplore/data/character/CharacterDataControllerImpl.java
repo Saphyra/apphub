@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.character;
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreCharacterDataController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.service.creation.CharacterCreationService;
 import com.github.saphyra.apphub.service.skyxplore.data.common.SkyXploreCharacterModelConverter;
@@ -23,8 +24,10 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     private final SkyXploreCharacterModelConverter characterModelConverter;
 
     @Override
-    public ResponseEntity<SkyXploreCharacterModel> getCharacter(AccessTokenHeader accessTokenHeader) {
-        return internalGetCharacterByUserId(accessTokenHeader.getUserId());
+    public OneParamResponse<String> getCharacterName(AccessTokenHeader accessTokenHeader) {
+        String result = characterDao.findByIdValidated(accessTokenHeader.getUserId())
+            .getName();
+        return new OneParamResponse<>(result);
     }
 
     @Override
@@ -42,8 +45,8 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     }
 
     @Override
-    public boolean exists(UUID userId) {
-        log.info("Checking if character exists for user {}", userId);
-        return characterDao.exists(userId);
+    public OneParamResponse<Boolean> exists(AccessTokenHeader accessTokenHeader) {
+        log.info("Checking if character exists for user {}", accessTokenHeader.getUserId());
+        return new OneParamResponse<>(characterDao.exists(accessTokenHeader.getUserId()));
     }
 }

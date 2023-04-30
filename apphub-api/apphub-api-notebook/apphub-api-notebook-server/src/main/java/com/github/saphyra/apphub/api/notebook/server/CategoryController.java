@@ -23,6 +23,13 @@ public interface CategoryController {
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_CATEGORY_TREE)
     List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Returning all the direct children of the given category
+     *
+     * @param categoryId null returns content of root
+     * @param type       Filtering for listItemType
+     * @param exclude    Excluding listItems with the given listItemId. (Used by client, when editing listItems so the modified category cannot be moved to itself)
+     */
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY)
     ChildrenOfCategoryResponse getChildrenOfCategory(
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader,

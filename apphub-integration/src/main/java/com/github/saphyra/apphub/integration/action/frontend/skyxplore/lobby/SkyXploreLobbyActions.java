@@ -1,20 +1,23 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.SelectMenu;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameSettingOption;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameSettingOptionValue;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayerElement;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyChatMessage;
 import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
+import com.github.saphyra.apphub.integration.structure.skyxplore.OnlineFriend;
+import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
+import static com.github.saphyra.apphub.integration.framework.WebElementUtils.setNumberSlow;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -25,10 +28,6 @@ public class SkyXploreLobbyActions {
 
     public static void setReady(WebDriver driver) {
         LobbyPage.setReadyButton(driver).click();
-    }
-
-    public static LobbyMember getHostMember(WebDriver driver) {
-        return new LobbyMember(LobbyPage.hostMember(driver));
     }
 
     public static boolean pageLoaded(WebDriver driver) {
@@ -42,8 +41,23 @@ public class SkyXploreLobbyActions {
             .collect(Collectors.toList());
     }
 
-    public static List<WebElement> getOnlineFriends(WebDriver driver) {
-        return LobbyPage.onlineFriends(driver);
+    public static List<OnlineFriend> getOnlineFriends(WebDriver driver) {
+        return LobbyPage.onlineFriends(driver)
+            .stream()
+            .map(OnlineFriend::new)
+            .collect(Collectors.toList());
+    }
+
+    public static LobbyMember findMemberValidated(WebDriver driver, String name) {
+        return findMember(driver, name)
+            .orElseThrow(() -> new RuntimeException("LobbyMember not found with name " + name));
+    }
+
+    public static Optional<LobbyMember> findMember(WebDriver driver, String name) {
+        return getMembers(driver)
+            .stream()
+            .filter(lobbyMember -> lobbyMember.getName().equals(name))
+            .findFirst();
     }
 
     public static List<LobbyMember> getMembers(WebDriver driver) {
@@ -55,13 +69,13 @@ public class SkyXploreLobbyActions {
 
     public static void inviteFriend(WebDriver driver, String username) {
         getOnlineFriend(driver, username)
-            .click();
+            .invite();
     }
 
-    public static WebElement getOnlineFriend(WebDriver driver, String username) {
+    public static OnlineFriend getOnlineFriend(WebDriver driver, String username) {
         return AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getOnlineFriends(driver), webElements -> !webElements.isEmpty())
             .stream()
-            .filter(element -> element.getText().equals(username))
+            .filter(element -> element.getName().equals(username))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Online friend not found."));
     }
@@ -85,22 +99,79 @@ public class SkyXploreLobbyActions {
         LobbyPage.exitButton(driver).click();
     }
 
-    public static void changeGameSetting(WebDriver driver, GameSettingOption option, GameSettingOptionValue optionValue) {
-        SelectMenu selectMenu = getGameSettingInput(driver, option);
-        assertThat(selectMenu.isEnabled()).isTrue();
-
-        selectMenu.selectOption(optionValue.name());
-    }
-
-    public static SelectMenu getGameSettingInput(WebDriver driver, GameSettingOption option) {
-        return new SelectMenu(LobbyPage.getGameSettingSelect(driver, option));
-    }
-
     public static LobbyMember getMember(WebDriver driver, String username) {
-        return getMembers(driver)
-            .stream()
-            .filter(lobbyMember -> lobbyMember.getName().equals(username))
-            .findFirst()
+        return findMember(driver, username)
             .orElseThrow(() -> new RuntimeException("LobbyMember not found."));
+    }
+
+    public static void startGameWithMissingPlayers(WebDriver driver) {
+        LobbyPage.startGameAnywaysButton(driver)
+            .click();
+    }
+
+    public static void setSettings(WebDriver driver, SkyXploreGameSettings settings) {
+        setNumberSlow(LobbyPage.maxPlayersPerSolarSystem(driver), settings.getMaxPlayersPerSolarSystem());
+
+        setNumberSlow(LobbyPage.additionalSolarSystemsMax(driver), settings.getAdditionalSolarSystems().getMax());
+        setNumberSlow(LobbyPage.additionalSolarSystemsMin(driver), settings.getAdditionalSolarSystems().getMin());
+
+        setNumberSlow(LobbyPage.planetsPerSolarSystemMax(driver), settings.getPlanetsPerSolarSystem().getMax());
+        setNumberSlow(LobbyPage.planetsPerSolarSystemMin(driver), settings.getPlanetsPerSolarSystem().getMin());
+
+        setNumberSlow(LobbyPage.planetSizeMax(driver), settings.getPlanetSize().getMax());
+        setNumberSlow(LobbyPage.planetSizeMin(driver), settings.getPlanetSize().getMin());
+    }
+
+    public static void verifySettings(WebDriver driver, SkyXploreGameSettings shouldBeVisible) {
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.maxPlayersPerSolarSystem(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getMaxPlayersPerSolarSystem());
+
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.additionalSolarSystemsMin(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getAdditionalSolarSystems().getMin());
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.additionalSolarSystemsMax(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getAdditionalSolarSystems().getMax());
+
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.planetsPerSolarSystemMin(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getPlanetsPerSolarSystem().getMin());
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.planetsPerSolarSystemMax(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getPlanetsPerSolarSystem().getMax());
+
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.planetSizeMin(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getPlanetSize().getMin());
+        assertThat((Integer) WebElementUtils.getValueOfInputAs(LobbyPage.planetSizeMax(driver), Integer::parseInt)).isEqualTo(shouldBeVisible.getPlanetSize().getMax());
+    }
+
+    public static void createAi(WebDriver driver, String aiName) {
+        fillNewAiName(driver, aiName);
+
+        LobbyPage.createAiButton(driver)
+            .click();
+    }
+
+    public static void fillNewAiName(WebDriver driver, String aiName) {
+        clearAndFill(LobbyPage.newAiName(driver), aiName);
+    }
+
+    public static void verifyInvalidAiName(WebDriver driver, String errorMessage) {
+        WebElementUtils.verifyInvalidFieldState(LobbyPage.invalidNewAiName(driver), true, errorMessage);
+        assertThat(LobbyPage.createAiButton(driver).isEnabled()).isFalse();
+    }
+
+    public static AiPlayerElement findAiByNameValidated(WebDriver driver, String aiName) {
+        return findAiByName(driver, aiName)
+            .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + aiName));
+    }
+
+    public static Optional<AiPlayerElement> findAiByName(WebDriver driver, String aiName) {
+        return getAis(driver)
+            .stream()
+            .filter(aiPlayer -> aiPlayer.getName().equals(aiName))
+            .findFirst();
+    }
+
+    public static List<AiPlayerElement> getAis(WebDriver driver) {
+        return LobbyPage.getAis(driver)
+            .stream()
+            .map(AiPlayerElement::new)
+            .collect(Collectors.toList());
+    }
+
+    public static boolean isCreateAiPanelPresent(WebDriver driver) {
+        return LobbyPage.createAiPanel(driver)
+            .isPresent();
     }
 }

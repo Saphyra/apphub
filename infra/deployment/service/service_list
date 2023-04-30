@@ -1,13 +1,12 @@
 admin-panel apphub-service-admin_panel 02_service
 community apphub-service-community 02_service
-diary apphub-service-diary 02_service
+calendar apphub-service-calendar 02_service
 modules apphub-service-modules 02_service
 notebook apphub-service-notebook 02_service
 training apphub-service-training 02_service
 user apphub-service-user 02_service
 utils apphub-service-utils 02_service
 event-gateway apphub-service-platform-event_gateway 01_platform
-localization apphub-service-platform-localization 02_service
 main-gateway apphub-service-platform-main_gateway 02_service
 message-sender apphub-service-platform-message_sender 02_service
 scheduler apphub-service-platform-scheduler 02_service
@@ -17,3 +16,4 @@ skyxplore-game apphub-service-skyxplore-game 02_service
 skyxplore-lobby apphub-service-skyxplore-lobby 02_service
 encryption apphub-service-platform-encryption 02_service
 storage apphub-service-platform-storage 02_service
+frontend apphub-frontend 01_platform

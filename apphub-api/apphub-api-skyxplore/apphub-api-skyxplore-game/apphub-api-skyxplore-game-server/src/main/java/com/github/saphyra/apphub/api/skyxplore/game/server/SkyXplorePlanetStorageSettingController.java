@@ -23,8 +23,8 @@ public interface SkyXplorePlanetStorageSettingController {
     StorageSettingApiModel createStorageSetting(@RequestBody StorageSettingApiModel request, @PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING)
-    void deleteStorageSetting(@PathVariable("planetId") UUID planetId, @PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteStorageSetting(@PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING)
-    StorageSettingApiModel editStorageSetting(@RequestBody StorageSettingApiModel request, @PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    StorageSettingApiModel editStorageSetting(@RequestBody StorageSettingApiModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

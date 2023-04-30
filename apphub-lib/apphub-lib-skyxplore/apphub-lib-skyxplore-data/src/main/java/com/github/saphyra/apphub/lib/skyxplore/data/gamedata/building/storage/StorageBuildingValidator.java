@@ -13,22 +13,22 @@ import static java.util.Objects.requireNonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StorageBuildingValidator implements DataValidator<Map<String, StorageBuilding>> {
+public class StorageBuildingValidator implements DataValidator<Map<String, StorageBuildingData>> {
     private final BuildingDataValidator buildingDataValidator;
 
     @Override
-    public void validate(Map<String, StorageBuilding> item) {
+    public void validate(Map<String, StorageBuildingData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String key, StorageBuilding storageBuilding) {
+    private void validate(String key, StorageBuildingData storageBuildingData) {
         try {
             log.debug("Validating StorageBuilding with key {}", key);
-            buildingDataValidator.validate(storageBuilding);
-            requireNonNull(storageBuilding.getStores(), "Stores must not be null.");
-            requireNonNull(storageBuilding.getCapacity(), "Capacity must not be null.");
-            if (storageBuilding.getCapacity() < 1) {
-                throw new IllegalStateException("Capacity is " + storageBuilding.getCapacity() + " what is lower than 1");
+            buildingDataValidator.validate(storageBuildingData);
+            requireNonNull(storageBuildingData.getStores(), "Stores must not be null.");
+            requireNonNull(storageBuildingData.getCapacity(), "Capacity must not be null.");
+            if (storageBuildingData.getCapacity() < 1) {
+                throw new IllegalStateException("Capacity is " + storageBuildingData.getCapacity() + " what is lower than 1");
             }
         } catch (Exception e) {
             throw new IllegalStateException("Invalid data with key " + key, e);

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class CitizenSatietyProperties {
     private int max;
-    private int satietyDecreasedPerSecond;
+    private int satietyDecreasedPerTick;
 }

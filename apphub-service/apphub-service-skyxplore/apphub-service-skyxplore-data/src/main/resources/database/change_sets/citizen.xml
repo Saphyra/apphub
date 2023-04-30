@@ -44,4 +44,14 @@
             <column name="melee_weapon_data_id" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="remove-location_type-from-citizen" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="citizen" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="citizen">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

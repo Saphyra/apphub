@@ -34,4 +34,46 @@
 
         <renameColumn schemaName="skyxplore_game" tableName="priority" oldColumnName="value" newColumnName="priority_value"/>
     </changeSet>
+
+    <changeSet id="drop-column-location_type-from-priority" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="priority" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="priority">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="add-column-priority_id-to-priority" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="priority" columnName="priority_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="priority">
+            <column name="priority_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="replace-primary-key-from-priority" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <primaryKeyExists schemaName="skyxplore_game" tableName="priority"/>
+                <columnExists schemaName="skyxplore_game" tableName="priority" columnName="priority_id"/>
+            </and>
+        </preConditions>
+
+        <dropPrimaryKey schemaName="skyxplore_game" tableName="priority" constraintName="priority_pk"/>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="priority" columnNames="priority_id" constraintName="priority-pk"/>
+    </changeSet>
+
+    <changeSet id="remove-not-null-constraints-from-priority" author="saphyra">
+        <dropNotNullConstraint schemaName="skyxplore_game" tableName="priority" columnName="location"/>
+        <dropNotNullConstraint schemaName="skyxplore_game" tableName="priority" columnName="priority_type"/>
+    </changeSet>
 </databaseChangeLog>

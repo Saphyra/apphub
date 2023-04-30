@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.allocated_resource;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,6 @@ interface AllocatedResourceRepository extends CrudRepository<AllocatedResourceEn
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<AllocatedResourceEntity> getByLocation(String location);
+
+    List<AllocatedResourceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

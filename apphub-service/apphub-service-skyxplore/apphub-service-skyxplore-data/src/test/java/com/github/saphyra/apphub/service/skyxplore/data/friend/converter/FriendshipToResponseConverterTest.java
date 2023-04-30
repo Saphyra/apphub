@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.converter;
 
-import com.github.saphyra.apphub.api.skyxplore.response.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +22,9 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class LoadGameItemServiceTest {
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer ITEMS_PER_PAGE = 32465;
+    private static final Integer PAGE = 346;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameItemService gameItemService;
@@ -40,59 +42,28 @@ public class LoadGameItemServiceTest {
         underTest = LoadGameItemService.builder()
             .errorReporterService(errorReporterService)
             .gameItemServices(Arrays.asList(gameItemService))
+            .itemsPerPage(ITEMS_PER_PAGE)
             .build();
     }
 
     @Test
-    public void loadGameItem_noServiceFound() {
+    public void loadPageForGameItems_noServiceFound() {
         given(gameItemService.getType()).willReturn(GameItemType.CITIZEN);
 
-        GameItem result = underTest.loadGameItem(ID, GameItemType.GAME);
-
-        assertThat(result).isNull();
-        verify(errorReporterService).report(anyString());
-    }
-
-    @Test
-    public void loadGameItem_itemNotFound() {
-        given(gameItemService.getType()).willReturn(GameItemType.GAME);
-        given(gameItemService.findById(ID)).willReturn(Optional.empty());
-
-        GameItem result = underTest.loadGameItem(ID, GameItemType.GAME);
-
-        assertThat(result).isNull();
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Test
-    public void loadGameItem() {
-        given(gameItemService.getType()).willReturn(GameItemType.GAME);
-        Optional gameItemOptional = Optional.of(gameItem);
-        given(gameItemService.findById(ID)).willReturn(gameItemOptional);
-
-        GameItem result = underTest.loadGameItem(ID, GameItemType.GAME);
-
-        assertThat(result).isEqualTo(gameItem);
-    }
-
-    @Test
-    public void loadChildrenOfGameItem_noServiceFound() {
-        given(gameItemService.getType()).willReturn(GameItemType.CITIZEN);
-
-        List<? extends GameItem> result = underTest.loadChildrenOfGameItem(ID, GameItemType.GAME);
+        List<? extends GameItem> result = underTest.loadPageForGameItems(ID, PAGE, GameItemType.GAME);
 
         assertThat(result).isEmpty();
         verify(errorReporterService).report(anyString());
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
-    public void loadChildrenOfGameItem() {
+    public void loadPageForGameItems() {
         given(gameItemService.getType()).willReturn(GameItemType.GAME);
-        List list = Arrays.asList(gameItem);
-        given(gameItemService.getByParent(ID)).willReturn(list);
+        List gameItems = List.of(gameItem);
+        given(gameItemService.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(gameItems);
 
-        List result = underTest.loadChildrenOfGameItem(ID, GameItemType.GAME);
+        List result = underTest.loadPageForGameItems(GAME_ID, PAGE, GameItemType.GAME);
 
         assertThat(result).containsExactly(gameItem);
     }

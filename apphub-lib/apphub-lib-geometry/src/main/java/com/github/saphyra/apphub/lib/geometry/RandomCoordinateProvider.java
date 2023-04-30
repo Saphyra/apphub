@@ -7,6 +7,15 @@ import lombok.RequiredArgsConstructor;
 public class RandomCoordinateProvider {
     private final Random random;
 
+    public Coordinate getCoordinateOnCircle(double radius) {
+        double randomDistance = random.randDouble() * 2 * Math.PI;
+
+        return new Coordinate(
+            Math.cos(randomDistance) * radius,
+            Math.sin(randomDistance) * radius
+        );
+    }
+
     public Coordinate getCoordinateInCircle(double radius) {
         double randomDistance = random.randDouble() * 2 * Math.PI;
         double r = radius * Math.sqrt(random.randDouble());

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class AllianceService implements GameItemService {
-    private final AllianceDao allianceDao;
+    private final AllianceDao dao;
     private final AllianceModelValidator allianceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        allianceDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -40,21 +39,16 @@ public class AllianceService implements GameItemService {
             .collect(Collectors.toList());
 
 
-        allianceDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<AllianceModel> findById(UUID id) {
-        return allianceDao.findById(id);
-    }
-
-    @Override
-    public List<AllianceModel> getByParent(UUID parent) {
-        return allianceDao.getByGameId(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        allianceDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<AllianceModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getByGameId(gameId);
     }
 }

@@ -13,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ToString
 @ExtendWith(MockitoExtension.class)
@@ -46,19 +46,15 @@ public class TerraformationControllerTest {
 
     @Test
     public void terraformSurface() {
-        given(terraformationService.terraform(USER_ID, PLANET_ID, SURFACE_ID, SURFACE_TYPE)).willReturn(surfaceResponse);
+        underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(result);
+        verify(terraformationService).terraform(USER_ID, PLANET_ID, SURFACE_ID, SURFACE_TYPE);
     }
 
     @Test
     public void cancelTerraformation() {
-        given(cancelTerraformationService.cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID)).willReturn(surfaceResponse);
+        underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(result);
+        verify(cancelTerraformationService).cancelTerraformationOfSurface(USER_ID, PLANET_ID, SURFACE_ID);
     }
 }

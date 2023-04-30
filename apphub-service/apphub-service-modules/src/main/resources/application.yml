@@ -42,16 +42,16 @@ modules:
         url: /web/user/account
         mobileAllowed: true
     office:
-      - name: notebook
-        url: /web/notebook
-        mobileAllowed: false
-        roles:
-          - NOTEBOOK
-      - name: diary
-        url: /web/diary
-        mobileAllowed: false
-        roles:
-          - DIARY
+    - name: notebook
+      url: /web/notebook
+      mobileAllowed: false
+      roles:
+      - NOTEBOOK
+    - name: calendar
+      url: /web/calendar
+      mobileAllowed: false
+      roles:
+      - CALENDAR
     development-utils:
       - name: json-formatter
         url: /web/utils/json-formatter

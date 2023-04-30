@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.integration.action.frontend.index;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
@@ -75,7 +74,7 @@ public class IndexPageActions {
             .pollInterval(1, TimeUnit.SECONDS);
         AwaitilityWrapper.wrap(conditionFactory)
             .until(() -> WebElementUtils.getIfPresent(() -> IndexPage.registrationSubmitButton(driver)).isEmpty())
-            .assertTrue("Registration failed. Notifications: " + NotificationUtil.getNotificationTexts(driver));
+            .assertTrue("Registration failed.");
     }
 
     public static void submitRegistration(WebDriver driver) {

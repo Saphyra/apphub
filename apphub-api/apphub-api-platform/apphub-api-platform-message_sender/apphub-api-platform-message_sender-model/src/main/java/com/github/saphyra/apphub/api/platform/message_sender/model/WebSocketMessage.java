@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -15,6 +16,10 @@ import java.util.UUID;
 public class WebSocketMessage {
     private Collection<UUID> recipients;
     private WebSocketEvent event;
+
+    public static WebSocketMessage forEventAndRecipients(WebSocketEventName eventName, UUID recipient, Object payload) {
+        return forEventAndRecipients(eventName, List.of(recipient), payload);
+    }
 
     public static WebSocketMessage forEventAndRecipients(WebSocketEventName eventName, Collection<UUID> recipients) {
         return forEventAndRecipients(eventName, recipients, null);

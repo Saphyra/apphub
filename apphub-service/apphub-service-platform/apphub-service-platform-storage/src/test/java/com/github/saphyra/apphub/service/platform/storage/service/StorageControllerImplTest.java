@@ -25,7 +25,6 @@ import static org.mockito.Mockito.verify;
 public class StorageControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
-    private static final String EXTENSION = "extension";
     private static final Long SIZE = 234L;
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final UUID NEW_STORED_FILE_ID = UUID.randomUUID();
@@ -69,11 +68,10 @@ public class StorageControllerImplTest {
     public void createFile() {
         CreateFileRequest request = CreateFileRequest.builder()
             .fileName(FILE_NAME)
-            .extension(EXTENSION)
             .size(SIZE)
             .build();
 
-        given(storeFileService.createFile(USER_ID, FILE_NAME, EXTENSION, SIZE)).willReturn(STORED_FILE_ID);
+        given(storeFileService.createFile(USER_ID, FILE_NAME, SIZE)).willReturn(STORED_FILE_ID);
 
         UUID result = underTest.createFile(request, accessTokenHeader);
 

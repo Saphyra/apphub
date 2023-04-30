@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -9,22 +8,15 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildin
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.LocationType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.process.impl.construction.ConstructionProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.ConstructionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItemToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction.BuildingConstructionToQueueItemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceToResponseConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.BuildingToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.ConstructionToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.WsMessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +25,6 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -43,27 +34,23 @@ public class UpgradeBuildingService {
     private final AllBuildingService allBuildingService;
     private final ConstructionFactory constructionFactory;
     private final ResourceAllocationService resourceAllocationService;
-    private final GameDataProxy gameDataProxy;
-    private final BuildingToModelConverter buildingToModelConverter;
-    private final ConstructionToModelConverter constructionToModelConverter;
-    private final SurfaceToResponseConverter surfaceToResponseConverter;
-    private final BuildingConstructionToQueueItemConverter buildingConstructionToQueueItemConverter;
-    private final QueueItemToResponseConverter queueItemToResponseConverter;
-    private final WsMessageSender messageSender;
     private final ConstructionProcessFactory constructionProcessFactory;
+    private final SyncCacheFactory syncCacheFactory;
 
-    public SurfaceResponse upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
+    public void upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        Planet planet = game
-            .getUniverse()
-            .findByOwnerAndPlanetIdValidated(userId, planetId);
-        Surface surface = planet.getSurfaces()
-            .findByBuildingIdValidated(buildingId);
-        Building building = surface.getBuilding();
 
-        if (nonNull(building.getConstruction())) {
+        if (game.getData().getDeconstructions().findByExternalReference(buildingId).isPresent()) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, buildingId + " on planet " + planetId + " is under deconstruction.");
+        }
+
+        if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Construction already in progress on planet " + planetId + " and building " + buildingId);
         }
+
+        Building building = game.getData()
+            .getBuildings()
+            .findByBuildingId(buildingId);
 
         BuildingData buildingData = allBuildingService.get(building.getDataId());
         ConstructionRequirements constructionRequirements = buildingData.getConstructionRequirements()
@@ -76,29 +63,48 @@ public class UpgradeBuildingService {
             );
         }
 
-        Construction construction = constructionFactory.create(building.getBuildingId(), constructionRequirements.getParallelWorkers(), constructionRequirements.getRequiredWorkPoints());
+        Construction construction = constructionFactory.create(
+            building.getBuildingId(),
+            ConstructionType.CONSTRUCTION,
+            planetId,
+            constructionRequirements.getParallelWorkers(),
+            constructionRequirements.getRequiredWorkPoints()
+        );
 
-        return game.getEventLoop()
-            .processWithResponseAndWait(() -> {
-                resourceAllocationService.processResourceRequirements(game.getGameId(), planet, LocationType.PLANET, construction.getConstructionId(), constructionRequirements.getRequiredResources());
-                building.setConstruction(construction);
+        Surface surface = game.getData()
+            .getSurfaces()
+            .findBySurfaceId(building.getSurfaceId());
 
-                ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planet, building);
+        UUID ownerId = game.getData()
+            .getPlanets()
+            .get(planetId)
+            .getOwner();
 
-                game.getProcesses()
-                    .add(constructionProcess);
+        SyncCache syncCache = syncCacheFactory.create(game);
 
-                gameDataProxy.saveItem(
-                    buildingToModelConverter.convert(building, game.getGameId()),
-                    constructionToModelConverter.convert(construction, game.getGameId()),
-                    constructionProcess.toModel()
+        game.getEventLoop()
+            .processWithWait(() -> {
+                resourceAllocationService.processResourceRequirements(
+                    syncCache,
+                    game.getData(),
+                    planetId,
+                    ownerId,
+                    construction.getConstructionId(),
+                    constructionRequirements.getRequiredResources()
                 );
 
-                QueueResponse queueResponse = queueItemToResponseConverter.convert(buildingConstructionToQueueItemConverter.convert(building), planet);
-                messageSender.planetQueueItemModified(userId, planetId, queueResponse);
+                game.getData()
+                    .getConstructions()
+                    .add(construction);
 
-                return surfaceToResponseConverter.convert(surface);
-            })
+                ConstructionProcess constructionProcess = constructionProcessFactory.create(game.getData(), planetId, construction.getConstructionId());
+
+                game.getData()
+                    .getProcesses()
+                    .add(constructionProcess);
+
+                syncCache.constructionCreated(userId, planetId, construction, surface, constructionProcess);
+            }, syncCache)
             .getOrThrow();
     }
 }

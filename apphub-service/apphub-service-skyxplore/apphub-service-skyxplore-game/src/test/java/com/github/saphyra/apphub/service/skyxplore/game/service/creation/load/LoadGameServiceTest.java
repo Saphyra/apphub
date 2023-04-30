@@ -1,51 +1,45 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.GameLoader;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class LoadGameServiceTest {
+class LoadGameServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID HOST = UUID.randomUUID();
     private static final UUID MEMBER_ID = UUID.randomUUID();
 
     @Mock
-    private GameItemLoader gameItemLoader;
-
-    @Mock
     private GameLoader gameLoader;
 
-    @SuppressWarnings("unused")
-    @Spy
-    private final ExecutorServiceBeanFactory executorServiceBeanFactory = ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class));
+    @Mock
+    private ExecutorServiceBean executorServiceBean;
 
     @Mock
-    private LoadGameRequestValidator requestValidator;
+    private GameDataProxy gameDataProxy;
+
+    @Mock
+    private ExecutorServiceBeanFactory executorServiceBeanFactory;
 
     @InjectMocks
     private LoadGameService underTest;
@@ -56,43 +50,43 @@ public class LoadGameServiceTest {
     @Mock
     private GameModel gameModel;
 
+    @BeforeEach
+    void setUp() {
+        given(executorServiceBeanFactory.create(any())).willReturn(executorServiceBean);
 
-    @AfterEach
-    public void verif() {
-        verify(requestValidator).validate(request);
+        underTest = LoadGameService.builder()
+            .gameLoader(gameLoader)
+            .gameDataProxy(gameDataProxy)
+            .executorServiceBeanFactory(executorServiceBeanFactory)
+            .build();
     }
 
     @Test
-    public void gameNotFound() {
+    void loadGame_notHost() {
         given(request.getGameId()).willReturn(GAME_ID);
-
-        Throwable ex = catchThrowable(() -> underTest.loadGame(request));
-
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND);
-    }
-
-    @Test
-    public void differentHost() {
-        given(request.getGameId()).willReturn(GAME_ID);
-        given(request.getHost()).willReturn(HOST);
-        given(gameItemLoader.loadItem(GAME_ID, GameItemType.GAME)).willReturn(Optional.of(gameModel));
+        given(gameDataProxy.getGameModel(GAME_ID)).willReturn(gameModel);
         given(gameModel.getHost()).willReturn(UUID.randomUUID());
+        given(request.getHost()).willReturn(HOST);
 
         Throwable ex = catchThrowable(() -> underTest.loadGame(request));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
+        ExceptionValidator.validateForbiddenOperation(ex);
     }
 
     @Test
-    public void loadGame() {
+    void loadGame() {
         given(request.getGameId()).willReturn(GAME_ID);
-        given(request.getHost()).willReturn(HOST);
-        given(request.getMembers()).willReturn(Arrays.asList(MEMBER_ID));
-        given(gameItemLoader.loadItem(GAME_ID, GameItemType.GAME)).willReturn(Optional.of(gameModel));
+        given(gameDataProxy.getGameModel(GAME_ID)).willReturn(gameModel);
         given(gameModel.getHost()).willReturn(HOST);
+        given(request.getHost()).willReturn(HOST);
+        given(request.getMembers()).willReturn(List.of(MEMBER_ID));
 
         underTest.loadGame(request);
 
-        verify(gameLoader, timeout(1000)).loadGame(gameModel, Arrays.asList(MEMBER_ID));
+        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(executorServiceBean).execute(argumentCaptor.capture());
+        argumentCaptor.getValue()
+            .run();
+        verify(gameLoader).loadGame(gameModel, List.of(MEMBER_ID));
     }
 }

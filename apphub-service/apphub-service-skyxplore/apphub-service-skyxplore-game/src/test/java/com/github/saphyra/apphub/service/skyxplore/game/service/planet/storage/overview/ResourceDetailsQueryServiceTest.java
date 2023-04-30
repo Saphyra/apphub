@@ -1,26 +1,27 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class ResourceDetailsQueryServiceTest {
+    private static final UUID LOCATION = UUID.randomUUID();
+
     @Mock
     private ResourceDataService resourceDataService;
 
@@ -31,10 +32,7 @@ public class ResourceDetailsQueryServiceTest {
     private ResourceDetailsQueryService underTest;
 
     @Mock
-    private Planet planet;
-
-    @Mock
-    private StorageDetails storageDetails;
+    private GameData gameData;
 
     @Mock
     private ResourceData resourceData1;
@@ -50,15 +48,13 @@ public class ResourceDetailsQueryServiceTest {
 
     @Test
     public void getResourceDetails() {
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData1, resourceData2));
-        given(resourceDetailsResponseMapper.createResourceData(resourceData1, storageDetails)).willReturn(emptyResourceDetailsResponse);
-        given(resourceDetailsResponseMapper.createResourceData(resourceData2, storageDetails)).willReturn(resourceDetailsResponse);
+        given(resourceDetailsResponseMapper.createResourceData(gameData, LOCATION, resourceData1)).willReturn(emptyResourceDetailsResponse);
+        given(resourceDetailsResponseMapper.createResourceData(gameData, LOCATION, resourceData2)).willReturn(resourceDetailsResponse);
         given(emptyResourceDetailsResponse.valuePresent()).willReturn(false);
         given(resourceDetailsResponse.valuePresent()).willReturn(true);
 
-        List<ResourceDetailsResponse> result = underTest.getResourceDetails(planet, StorageType.BULK);
+        List<ResourceDetailsResponse> result = underTest.getResourceDetails(gameData, LOCATION, StorageType.BULK);
 
         assertThat(result).containsExactly(resourceDetailsResponse);
     }

@@ -67,7 +67,10 @@ public class TerraformTest extends BackEndTest {
         ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
 
         //Terraform
-        SurfaceResponse modifiedSurfaceResponse = SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+        SurfaceResponse modifiedSurfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(emptySurfaceId))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurfaceResponse.getTerraformation()).isNotNull();
 
@@ -93,7 +96,10 @@ public class TerraformTest extends BackEndTest {
 
         //Cancel
         gameWsClient.clearMessages();
-        modifiedSurfaceResponse = SkyXploreSurfaceActions.cancelTerraformation(language, accessTokenId, planetId, emptySurfaceId);
+        SkyXploreSurfaceActions.cancelTerraformation(language, accessTokenId, planetId, emptySurfaceId);
+        modifiedSurfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(emptySurfaceId))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurfaceResponse.getTerraformation()).isNull();
 
@@ -127,7 +133,10 @@ public class TerraformTest extends BackEndTest {
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SurfaceResponse modifiedSurface = SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(surfaceId))
+            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
+            .getPayloadAs(SurfaceResponse.class);
 
         assertThat(modifiedSurface.getTerraformation()).isNotNull();
 

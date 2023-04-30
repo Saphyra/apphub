@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.integraton.frontend.index;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -31,19 +31,19 @@ public class LoginTest extends SeleniumTest {
 
         //Empty email
         IndexPageActions.submitLogin(driver, emptyEmail());
-        NotificationUtil.verifyErrorNotification(driver, EMPTY_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
 
         //Empty password
         IndexPageActions.submitLogin(driver, emptyPassword());
-        NotificationUtil.verifyErrorNotification(driver, EMPTY_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
 
         //Incorrect e-mail
         IndexPageActions.submitLogin(driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
-        NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
 
         //Incorrect-password
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
 
         //Successful login
         LoginParameters loginParameters = LoginParameters.fromRegistrationParameters(registrationParameters);
@@ -60,14 +60,14 @@ public class LoginTest extends SeleniumTest {
             .limit(2)
             .forEach(s -> {
                 IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-                NotificationUtil.verifyErrorNotification(driver, BAD_CREDENTIALS_MESSAGE);
+                ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
             });
 
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
 
         IndexPageActions.submitLogin(driver, loginParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 

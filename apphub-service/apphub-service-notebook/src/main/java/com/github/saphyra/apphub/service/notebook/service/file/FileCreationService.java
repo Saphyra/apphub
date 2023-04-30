@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -32,9 +31,7 @@ public class FileCreationService {
     public UUID createFile(UUID userId, CreateFileRequest request) {
         createFileRequestValidator.validate(request);
 
-        FileMetadata metadata = request.getMetadata();
-
-        UUID fileId = storageProxy.createFile(metadata.getFileName(), FilenameUtils.getExtension(metadata.getFileName()), metadata.getSize());
+        UUID fileId = storageProxy.createFile(request.getFileName(), request.getSize());
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.FILE);
         File file = fileFactory.create(userId, listItem.getListItemId(), fileId);

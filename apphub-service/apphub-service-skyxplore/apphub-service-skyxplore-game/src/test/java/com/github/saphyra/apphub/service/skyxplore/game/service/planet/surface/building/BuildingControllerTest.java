@@ -1,11 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.CancelConstructionService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.ConstructNewBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction.UpgradeBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.DeconstructBuildingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BuildingControllerTest {
@@ -35,44 +36,55 @@ public class BuildingControllerTest {
     @Mock
     private CancelConstructionService cancelConstructionService;
 
+    @Mock
+    private DeconstructBuildingService deconstructBuildingService;
+
+    @Mock
+    private CancelDeconstructionService cancelDeconstructionService;
+
     @InjectMocks
     private BuildingController underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Mock
-    private SurfaceResponse surfaceResponse;
-
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
     }
 
     @Test
-    public void constructNewBuilding() {
-        given(constructNewBuildingService.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID)).willReturn(surfaceResponse);
+    void constructNewBuilding() {
+        underTest.constructNewBuilding(new OneParamRequest<>(DATA_ID), PLANET_ID, SURFACE_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.constructNewBuilding(new OneParamRequest<>(DATA_ID), PLANET_ID, SURFACE_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(constructNewBuildingService).constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
     }
 
     @Test
-    public void upgradeBuilding() {
-        given(upgradeBuildingService.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+    void upgradeBuilding() {
+        underTest.upgradeBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.upgradeBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(surfaceResponse);
+        verify(upgradeBuildingService).upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 
     @Test
-    public void cancelConstruction() {
-        given(cancelConstructionService.cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID)).willReturn(surfaceResponse);
+    void cancelConstruction() {
+        underTest.cancelConstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        SurfaceResponse result = underTest.cancelConstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
+        verify(cancelConstructionService).cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+    }
 
-        assertThat(result).isEqualTo(surfaceResponse);
+    @Test
+    void deconstructBuilding() {
+        underTest.deconstructBuilding(PLANET_ID, BUILDING_ID, accessTokenHeader);
+
+        verify(deconstructBuildingService).deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+    }
+
+    @Test
+    void cancelDeconstruction() {
+        underTest.cancelDeconstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
+
+        verify(cancelDeconstructionService).cancelDeconstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
     }
 }

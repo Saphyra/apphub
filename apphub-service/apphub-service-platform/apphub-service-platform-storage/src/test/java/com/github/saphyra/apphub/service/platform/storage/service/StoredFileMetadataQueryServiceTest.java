@@ -56,7 +56,6 @@ public class StoredFileMetadataQueryServiceTest {
             .storedFileId(STORED_FILE_ID)
             .userId(USER_ID)
             .createdAt(CREATED_AT)
-            .extension(EXTENSION)
             .fileName(FILE_NAME)
             .size(SIZE)
             .fileUploaded(true)
@@ -68,7 +67,6 @@ public class StoredFileMetadataQueryServiceTest {
 
         assertThat(result.getStoredFileId()).isEqualTo(STORED_FILE_ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT_EPOCH);
-        assertThat(result.getExtension()).isEqualTo(EXTENSION);
         assertThat(result.getFileName()).isEqualTo(FILE_NAME);
         assertThat(result.getSize()).isEqualTo(SIZE);
         assertThat(result.getFileUploaded()).isTrue();

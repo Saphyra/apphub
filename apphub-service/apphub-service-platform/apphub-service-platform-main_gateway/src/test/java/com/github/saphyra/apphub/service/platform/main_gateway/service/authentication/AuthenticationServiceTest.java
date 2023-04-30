@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.authorization.AuthorizationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +42,6 @@ public class AuthenticationServiceTest {
     private static final String ACCESS_TOKEN_ID_STRING = "access-token-id";
     private static final String ENCODED_ACCESS_TOKEN = "encoded-access-token";
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
-    private static final String REQUEST_METHOD = "request-method";
     private static final String PATH = "/path";
 
     @Mock
@@ -58,7 +60,10 @@ public class AuthenticationServiceTest {
     private AccessTokenHeaderConverter accessTokenHeaderConverter;
 
     @Mock
-    private AuthenticationResultHandlerFactory authenticationResultHandlerFactory;
+    private AuthResultHandlerFactory authResultHandlerFactory;
+
+    @Mock
+    private AuthorizationService authorizationService;
 
     @InjectMocks
     private AuthenticationService underTest;
@@ -75,7 +80,7 @@ public class AuthenticationServiceTest {
     private ErrorResponseWrapper errorResponseWrapper;
 
     @Mock
-    private AuthenticationResultHandler resultHandler;
+    private AuthResultHandler resultHandler;
 
     @Mock
     private HttpCookie cookie;
@@ -93,9 +98,9 @@ public class AuthenticationServiceTest {
         given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(null);
         given(httpHeaders.getFirst(Constants.LOCALE_HEADER)).willReturn(LOCALE);
         given(errorResponseFactory.create(LOCALE, HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, new HashMap<>())).willReturn(errorResponseWrapper);
-        given(authenticationResultHandlerFactory.unauthorized(httpHeaders, errorResponseWrapper)).willReturn(resultHandler);
+        given(authResultHandlerFactory.authenticationFailed(httpHeaders, errorResponseWrapper)).willReturn(resultHandler);
 
-        AuthenticationResultHandler result = underTest.authenticate(request);
+        AuthResultHandler result = underTest.authenticate(request);
 
         assertThat(result).isEqualTo(resultHandler);
     }
@@ -109,11 +114,30 @@ public class AuthenticationServiceTest {
         cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
         given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID_STRING);
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.empty());
-        given(authenticationResultHandlerFactory.unauthorized(httpHeaders, errorResponseWrapper)).willReturn(resultHandler);
+        given(authResultHandlerFactory.authenticationFailed(httpHeaders, errorResponseWrapper)).willReturn(resultHandler);
 
-        AuthenticationResultHandler result = underTest.authenticate(request);
+        AuthResultHandler result = underTest.authenticate(request);
 
         assertThat(result).isEqualTo(resultHandler);
+    }
+
+    @Test
+    public void unauthorized() {
+        given(request.getCookies()).willReturn(cookies);
+        given(request.getHeaders()).willReturn(httpHeaders);
+        given(httpHeaders.getFirst(Constants.LOCALE_HEADER)).willReturn(LOCALE);
+        cookies.put(Constants.ACCESS_TOKEN_COOKIE, Arrays.asList(cookie));
+        given(cookie.getValue()).willReturn(ACCESS_TOKEN_ID_STRING);
+        given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(internalAccessTokenResponse));
+        given(accessTokenHeaderFactory.create(internalAccessTokenResponse)).willReturn(accessTokenHeader);
+
+        given(authorizationService.authorize(request, accessTokenHeader, LOCALE)).willReturn(Optional.of(resultHandler));
+
+        AuthResultHandler result = underTest.authenticate(request);
+
+        assertThat(result).isEqualTo(resultHandler);
+
+        verify(authResultHandlerFactory, times(0)).authorized(any());
     }
 
     @Test
@@ -126,15 +150,17 @@ public class AuthenticationServiceTest {
         given(accessTokenQueryService.getAccessToken(ACCESS_TOKEN_ID_STRING)).willReturn(Optional.of(internalAccessTokenResponse));
         given(accessTokenHeaderFactory.create(internalAccessTokenResponse)).willReturn(accessTokenHeader);
         given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ENCODED_ACCESS_TOKEN);
-        given(authenticationResultHandlerFactory.authorized(ENCODED_ACCESS_TOKEN)).willReturn(resultHandler);
+        given(authResultHandlerFactory.authorized(ENCODED_ACCESS_TOKEN)).willReturn(resultHandler);
         given(internalAccessTokenResponse.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(request.getMethod()).willReturn(HttpMethod.POST);
         given(request.getURI()).willReturn(new URI(UrlFactory.create(1000, PATH)));
+        given(authorizationService.authorize(request, accessTokenHeader, LOCALE)).willReturn(Optional.empty());
 
-        AuthenticationResultHandler result = underTest.authenticate(request);
+        AuthResultHandler result = underTest.authenticate(request);
 
         assertThat(result).isEqualTo(resultHandler);
 
+        verify(authorizationService).authorize(request, accessTokenHeader, LOCALE);
         verify(accessTokenExpirationUpdateService).updateExpiration(HttpMethod.POST, PATH, ACCESS_TOKEN_ID);
     }
 }

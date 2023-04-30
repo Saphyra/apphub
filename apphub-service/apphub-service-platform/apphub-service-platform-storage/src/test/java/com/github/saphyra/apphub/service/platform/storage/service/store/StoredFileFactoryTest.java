@@ -19,7 +19,6 @@ import static org.mockito.BDDMockito.given;
 public class StoredFileFactoryTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
-    private static final String EXTENSION = "extension";
     private static final Long SIZE = 234L;
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
@@ -38,14 +37,13 @@ public class StoredFileFactoryTest {
         given(idGenerator.randomUuid()).willReturn(STORED_FILE_ID);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CREATED_AT);
 
-        StoredFile result = underTest.create(USER_ID, FILE_NAME, EXTENSION, SIZE);
+        StoredFile result = underTest.create(USER_ID, FILE_NAME, SIZE);
 
         assertThat(result.getStoredFileId()).isEqualTo(STORED_FILE_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
         assertThat(result.isFileUploaded()).isFalse();
         assertThat(result.getFileName()).isEqualTo(FILE_NAME);
-        assertThat(result.getExtension()).isEqualTo(EXTENSION);
         assertThat(result.getSize()).isEqualTo(SIZE);
     }
 }

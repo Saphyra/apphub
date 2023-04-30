@@ -1,5 +1,5 @@
 (function DisabledRoleController(){
-    const roleLocalization = localization.loadCustomLocalization("admin_panel", "roles");
+    const roleLocalization = localization.loadCustomLocalization("admin-panel", "roles");
 
     pageLoader.addLoader(loadRoles, "Load disabled roles");
 

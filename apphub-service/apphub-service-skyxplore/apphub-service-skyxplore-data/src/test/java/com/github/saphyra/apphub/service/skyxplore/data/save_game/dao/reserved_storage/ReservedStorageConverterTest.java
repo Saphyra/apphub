@@ -25,7 +25,6 @@ public class ReservedStorageConverterTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String LOCATION_TYPE = "location-type";
     private static final String LOCATION_STRING = "location";
 
     @Mock
@@ -43,7 +42,6 @@ public class ReservedStorageConverterTest {
         model.setDataId(DATA_ID);
         model.setAmount(AMOUNT);
         model.setLocation(LOCATION);
-        model.setLocationType(LOCATION_TYPE);
 
         given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESERVED_STORAGE_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -58,7 +56,6 @@ public class ReservedStorageConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
     }
 
     @Test
@@ -68,7 +65,6 @@ public class ReservedStorageConverterTest {
             .gameId(GAME_ID_STRING)
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .location(LOCATION_STRING)
-            .locationType(LOCATION_TYPE)
             .dataId(DATA_ID)
             .amount(AMOUNT)
             .build();
@@ -87,6 +83,5 @@ public class ReservedStorageConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
     }
 }

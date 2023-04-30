@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class SkillServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 235;
+    private static final Integer ITEMS_PER_PAGE = 4753;
 
     @Mock
-    private SkillDao skillDao;
+    private SkillDao dao;
 
     @Mock
     private SkillModelValidator skillModelValidator;
@@ -38,7 +39,7 @@ public class SkillServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(skillDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,20 @@ public class SkillServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(skillModelValidator).validate(model);
-        verify(skillDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(skillDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<SkillModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByParent() {
-        given(skillDao.getByCitizenId(ID)).willReturn(Arrays.asList(model));
-
-        List<SkillModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(skillDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -30,7 +30,7 @@ public class ActiveFriendsService {
         return skyXploreDataProxy.getFriends(accessTokenHeader)
             .stream()
             .filter(friendshipResponse -> activeUsersDao.isOnline(friendshipResponse.getFriendId()))
-            .filter(friendshipResponse -> LobbyType.NEW_GAME == lobby.getType() || lobby.getMembers().containsKey(friendshipResponse.getFriendId()))
+            .filter(friendshipResponse -> LobbyType.NEW_GAME == lobby.getType() || lobby.getExpectedPlayers().contains(friendshipResponse.getFriendId()))
             .map(friendshipResponse -> ActiveFriendResponse.builder()
                 .friendName(friendshipResponse.getFriendName())
                 .friendId(friendshipResponse.getFriendId())

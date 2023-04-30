@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
-import com.github.saphyra.apphub.api.skyxplore.response.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.GameSettingsResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyMembersResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.LobbyViewForPage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.GameSettings;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
@@ -22,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -39,6 +37,16 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final StartGameService startGameService;
 
     @Override
+    public OneParamResponse<Boolean> isUserInLobby(AccessTokenHeader accessTokenHeader) {
+        boolean isInLobby = lobbyDao.findByUserId(accessTokenHeader.getUserId())
+            .isPresent();
+
+        log.info("{} is in lobby: {}", accessTokenHeader.getUserId(), isInLobby);
+
+        return new OneParamResponse<>(isInLobby);
+    }
+
+    @Override
     public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
         log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
         lobbyCreationService.createNew(accessTokenHeader.getUserId(), lobbyName.getValue());
@@ -48,22 +56,13 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public LobbyViewForPage lobbyForPage(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
 
-        Optional<Lobby> lobbyOptional = lobbyDao.findByUserId(accessTokenHeader.getUserId());
-        if (lobbyOptional.isPresent()) {
-            Lobby lobby = lobbyOptional.get();
-
-            return LobbyViewForPage.builder()
-                .inLobby(true)
-                .host(lobby.getHost())
-                .gameCreationStarted(lobby.isGameCreationStarted())
-                .lobbyName(lobby.getLobbyName())
-                .type(lobby.getType().name())
-                .build();
-        } else {
-            return LobbyViewForPage.builder()
-                .inLobby(false)
-                .build();
-        }
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
+        return LobbyViewForPage.builder()
+            .lobbyName(lobby.getLobbyName())
+            .isHost(accessTokenHeader.getUserId().equals(lobby.getHost()))
+            .lobbyType(lobby.getType().name())
+            .ownUserId(accessTokenHeader.getUserId())
+            .build();
     }
 
     @Override
@@ -93,27 +92,13 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     @Override
     public void userLeftLobby(UUID userId) {
         log.info("User {} is left the lobby", userId);
-        exitFromLobbyService.exit(userId);
+        exitFromLobbyService.userDisconnected(userId);
     }
 
     @Override
-    public LobbyMembersResponse getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
+    public List<LobbyMemberResponse> getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the members of his lobby.", accessTokenHeader.getUserId());
         return lobbyMemberQueryService.getMembers(accessTokenHeader.getUserId());
-    }
-
-    @Override
-    public GameSettingsResponse getGameSettings(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the settings of his lobby.", accessTokenHeader.getUserId());
-        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
-        GameSettings settings = lobby.getSettings();
-        return GameSettingsResponse.builder()
-            .universeSize(settings.getUniverseSize().name())
-            .systemAmount(settings.getSystemAmount().name())
-            .systemSize(settings.getSystemSize().name())
-            .planetSize(settings.getPlanetSize().name())
-            .aiPresence(settings.getAiPresence().name())
-            .build();
     }
 
     @Override

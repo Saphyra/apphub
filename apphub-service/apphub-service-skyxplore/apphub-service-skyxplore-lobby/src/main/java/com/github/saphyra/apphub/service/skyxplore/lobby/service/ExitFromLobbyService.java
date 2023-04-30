@@ -3,11 +3,16 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +30,8 @@ public class ExitFromLobbyService {
     private final CharacterProxy characterProxy;
     private final LobbyDao lobbyDao;
     private final MessageSenderProxy messageSenderProxy;
+    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private final DateTimeUtil dateTimeUtil;
 
     public void exit(UUID userId) {
         lobbyDao.findByUserId(userId)
@@ -70,10 +77,11 @@ public class ExitFromLobbyService {
             userId,
             lobby.getHost().equals(userId),
             characterProxy.getCharacter(userId).getName(),
-            lobby.getExpectedPlayers().contains(userId)
+            lobby.getExpectedPlayers().contains(userId),
+            dateTimeUtil.getCurrentTimeEpochMillis()
         );
         WebSocketEvent event = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT_FROM_LOBBY)
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT)
             .payload(payload)
             .build();
         WebSocketMessage message = WebSocketMessage.builder()
@@ -83,6 +91,18 @@ public class ExitFromLobbyService {
         messageSenderProxy.sendToLobby(message);
     }
 
+    public void userDisconnected(UUID userId) {
+        Lobby lobby = lobbyDao.findByUserIdValidated(userId);
+
+        LobbyMember lobbyMember = lobby.getMembers()
+            .get(userId);
+        lobbyMember.setStatus(LobbyMemberStatus.DISCONNECTED);
+
+        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
+        messageSenderProxy.lobbyMemberModified(response, lobby.getMembers().keySet());
+        messageSenderProxy.lobbyMemberDisconnected(response, lobby.getMembers().keySet());
+    }
+
     @Data
     @AllArgsConstructor
     static class ExitMessage {
@@ -90,5 +110,6 @@ public class ExitFromLobbyService {
         private boolean host;
         private String characterName;
         private boolean expectedPlayer;
+        private Long createdAt;
     }
 }

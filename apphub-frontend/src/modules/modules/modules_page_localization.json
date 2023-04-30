@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Modules - Apphub",
+        "hu": "Modulok - Apphub"
+    },
+    "logout": {
+        "en": "Logout",
+        "hu": "Kijelentkezés"
+    },
+    "all-modules": {
+        "en": "All modules",
+        "hu": "Összes modul"
+    },
+    "search":{
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "no-result": {
+        "en": "No result",
+        "hu": "Nincs találat"
+    },
+    "favorites": {
+        "en": "Favorites",
+        "hu": "Kedvencek"
+    }
+}

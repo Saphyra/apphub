@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.platform.web_content.error_page;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import com.github.saphyra.apphub.lib.error_handler.service.translation.LocalizedMessageProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import com.github.saphyra.apphub.service.platform.web_content.error_code.ErrorCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 class ErrorController {
     private final LocaleProvider localeProvider;
-    private final LocalizedMessageProvider localizedMessageProvider;
+    private final ErrorCodeService errorCodeService;
     private final UserBannedDescriptionResolver userBannedDescriptionResolver;
     private final UserLoggedInQueryService userLoggedInQueryService;
 
@@ -39,7 +39,7 @@ class ErrorController {
         ErrorCode ec = Optional.ofNullable(errorCode)
             .map(ErrorCode::valueOf)
             .orElse(ErrorCode.UNKNOWN_ERROR);
-        String localizedMessage = localizedMessageProvider.getLocalizedMessage(localeProvider.getLocaleValidated(), ec);
+        String localizedMessage = errorCodeService.getByLocaleAndErrorCode(ec, localeProvider.getLocaleValidated());
         mav.addObject("message", localizedMessage);
         mav.addObject("error_code", ec);
         mav.addObject("display_logout_button", userLoggedInQueryService.isUserLoggedIn(accessTokenId));

@@ -13,24 +13,24 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class StorageBuildingService extends ValidationAbstractDataService<String, StorageBuilding> {
-    public StorageBuildingService(ContentLoaderFactory contentLoaderFactory, DataValidator<Map<String, StorageBuilding>> dataValidator) {
+public class StorageBuildingService extends ValidationAbstractDataService<String, StorageBuildingData> {
+    public StorageBuildingService(ContentLoaderFactory contentLoaderFactory, DataValidator<Map<String, StorageBuildingData>> dataValidator) {
         super("/data/building/storage", contentLoaderFactory, dataValidator);
     }
 
     @Override
     @PostConstruct
     public void init() {
-        super.load(StorageBuilding.class);
+        super.load(StorageBuildingData.class);
         log.debug("StorageBuildingService: {}", this);
     }
 
     @Override
-    public void addItem(StorageBuilding content, String fileName) {
+    public void addItem(StorageBuildingData content, String fileName) {
         put(content.getId(), content);
     }
 
-    public StorageBuilding findByStorageType(StorageType storageType) {
+    public StorageBuildingData findByStorageType(StorageType storageType) {
         return values().stream()
             .filter(storageBuilding -> storageBuilding.getStores().equals(storageType))
             .findFirst()

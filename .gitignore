@@ -4,3 +4,13 @@
 *.db
 *.out
 logs/**
+
+**/node_modules
+**/.pnp
+**.pnp.js
+
+# testing
+**/coverage
+
+# production
+**/build

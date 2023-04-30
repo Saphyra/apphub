@@ -1,45 +1,40 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.GameLoader;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
 public class LoadGameService {
-    private final GameItemLoader gameItemLoader;
-    private final ExecutorServiceBean executorServiceBean;
     private final GameLoader gameLoader;
-    private final LoadGameRequestValidator loadGameRequestValidator;
+    private final ExecutorServiceBean executorServiceBean;
+    private final GameDataProxy gameDataProxy;
 
+    @Builder
     public LoadGameService(
-        GameItemLoader gameItemLoader,
         GameLoader gameLoader,
-        LoadGameRequestValidator loadGameRequestValidator,
+        GameDataProxy gameDataProxy,
         ExecutorServiceBeanFactory executorServiceBeanFactory
     ) {
-        this.gameItemLoader = gameItemLoader;
-        executorServiceBean = executorServiceBeanFactory.create(Executors.newSingleThreadExecutor());
         this.gameLoader = gameLoader;
-        this.loadGameRequestValidator = loadGameRequestValidator;
+        executorServiceBean = executorServiceBeanFactory.create(Executors.newSingleThreadExecutor());
+        this.gameDataProxy = gameDataProxy;
     }
 
     public void loadGame(SkyXploreLoadGameRequest request) {
-        loadGameRequestValidator.validate(request);
-
-        Optional<GameModel> o = gameItemLoader.loadItem(request.getGameId(), GameItemType.GAME);
-        GameModel game = o.orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.GAME_NOT_FOUND, "Game not found with id " + request.getGameId()));
+        GameModel game = gameDataProxy.getGameModel(request.getGameId());
 
         if (!game.getHost().equals(request.getHost())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, request.getHost() + " must not load game " + request.getGameId());

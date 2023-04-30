@@ -1,0 +1,11 @@
+{
+  "ACCESS": "Access",
+  "ADMIN": "Administrator",
+  "NOTEBOOK": "Notebook",
+  "SKYXPLORE": "SkyXplore",
+  "TRAINING": "Training",
+  "TEST": "Test",
+  "UTILS": "Development utils",
+  "COMMUNITY": "Community",
+  "CALENDAR": "Calendar"
+}

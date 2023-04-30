@@ -25,4 +25,5 @@ class GameEntity {
     private LocalDateTime lastPlayed;
     private Boolean markedForDeletion;
     private LocalDateTime markedForDeletionAt;
+    private Integer universeSize;
 }

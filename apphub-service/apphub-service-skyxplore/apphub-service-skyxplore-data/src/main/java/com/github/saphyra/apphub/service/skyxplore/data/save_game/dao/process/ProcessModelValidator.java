@@ -19,7 +19,6 @@ public class ProcessModelValidator {
         ValidationUtil.notNull(model.getProcessType(), "processType");
         ValidationUtil.notNull(model.getStatus(), "status");
         ValidationUtil.notNull(model.getLocation(), "location");
-        ValidationUtil.notNull(model.getLocationType(), "locationType");
         ValidationUtil.notNull(model.getExternalReference(), "externalReference");
         ValidationUtil.notNull(model.getData(), "data");
     }

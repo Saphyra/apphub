@@ -5,14 +5,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageDetails;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.storage.StorageSettings;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.process.cache.SyncCacheFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.process.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +33,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class StorageSettingEditionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final int PRIORITY = 2;
     private static final int BATCH_SIZE = 245;
@@ -64,10 +61,7 @@ public class StorageSettingEditionServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private StorageSettingApiModel request;
@@ -88,9 +82,6 @@ public class StorageSettingEditionServiceTest {
     private Future<ExecutionResult<StorageSettingApiModel>> future;
 
     @Mock
-    private StorageDetails storageDetails;
-
-    @Mock
     private StorageSettings storageSettings;
 
     @Mock
@@ -105,11 +96,11 @@ public class StorageSettingEditionServiceTest {
     @Test
     public void edit() throws Exception {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
+        given(game.getData()).willReturn(gameData);
         given(game.getGameId()).willReturn(GAME_ID);
-        given(universe.findByOwnerAndPlanetIdValidated(USER_ID, PLANET_ID)).willReturn(planet);
-        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(syncCacheFactory.create(game)).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
+        //noinspection unchecked
         given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);
         given(future.get()).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(response);
@@ -119,13 +110,12 @@ public class StorageSettingEditionServiceTest {
         given(request.getBatchSize()).willReturn(BATCH_SIZE);
         given(request.getTargetAmount()).willReturn(TARGET_AMOUNT);
 
-        given(planet.getStorageDetails()).willReturn(storageDetails);
-        given(storageDetails.getStorageSettings()).willReturn(storageSettings);
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(storageSettingToModelConverter.convert(storageSetting, GAME_ID)).willReturn(model);
+        given(storageSettingToModelConverter.convert(GAME_ID, storageSetting)).willReturn(model);
         given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
 
-        StorageSettingApiModel result = underTest.edit(USER_ID, PLANET_ID, request);
+        StorageSettingApiModel result = underTest.edit(USER_ID, request);
 
         verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
         argumentCaptor.getValue()

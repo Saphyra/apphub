@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.skyxplore.game.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,22 +49,11 @@ public class ProcessesTest {
 
     @Test
     public void findByExternalReferenceAndTypeValidated_notFound() {
-        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.REQUEST_WORK));
+        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.WORK));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
-    @Test
-    public void findByExternalReferenceAndTypeValidated_multipleResult() {
-        underTest.add(process);
-        underTest.add(process);
-        given(process.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(process.getType()).willReturn(ProcessType.PRODUCTION_ORDER);
-
-        Throwable ex = catchThrowable(() -> underTest.findByExternalReferenceAndTypeValidated(EXTERNAL_REFERENCE, ProcessType.PRODUCTION_ORDER));
-
-        ExceptionValidator.validateReportedException(ex, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
-    }
 
     @Test
     public void findByExternalReferenceAndTypeValidated() {

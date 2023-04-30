@@ -52,6 +52,7 @@
         <versions.apache-commons-pool>2.9.0</versions.apache-commons-pool>
         <versions.jakartaValidationApi>3.0.2</versions.jakartaValidationApi>
         <versions.jakartaServletApi>6.0.0</versions.jakartaServletApi>
+        <versions.jaxbApi>2.4.0-b180830.0359</versions.jaxbApi>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.10.1</versions.maven-compiler-plugin>

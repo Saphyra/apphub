@@ -1,0 +1,30 @@
+{
+    "accounts": {
+        "en": "Account",
+        "hu": "Fiók"
+    },
+    "office": {
+        "en": "Office",
+        "hu": "Iroda"
+    },
+    "development-utils": {
+        "en": "Development utils",
+        "hu": "Fejlesztői eszközök"
+    },
+    "game": {
+        "en": "Game",
+        "hu": "Játék"
+    },
+    "admin-panel": {
+        "en": "Admin panel",
+        "hu": "Kezelőfelület"
+    },
+    "training": {
+        "en": "Training",
+        "hu": "Oktatás"
+    },
+    "community": {
+        "en": "Community",
+        "hu": "Közösség"
+    }
+}

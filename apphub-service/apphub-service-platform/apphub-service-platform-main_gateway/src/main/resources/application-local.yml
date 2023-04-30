@@ -5,11 +5,20 @@ spring:
   cloud:
     gateway:
       routes:
+      #FRONTEND
+      - id: frontend
+        uri: http://localhost:3000
+        predicates:
+        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby
+      - id: frontend-resources
+        uri: http://localhost:3000
+        predicates:
+        - Path=/web/static/**
       #RESOURCES
       - id: common-resorces
         uri: http://localhost:8083
         predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
       - id: training-resorces
         uri: http://localhost:8086
         predicates:
@@ -19,7 +28,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+        - Path=/web/notebook, /web/user/account, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/calendar
       - id: error-page
         uri: http://localhost:8083
         predicates:
@@ -47,7 +56,7 @@ spring:
         predicates:
         - Path=/api/modules/**
       - id: utils
-        uri: http://localhost:8095
+        uri: http://localhost:8100
         predicates:
         - Path=/api/utils/**
       - id: skyxplore-data
@@ -70,20 +79,14 @@ spring:
         uri: http://localhost:8096
         predicates:
         - Path=/api/community/**
-      - id: diary
+      - id: calendar
         uri: http://localhost:8097
         predicates:
-        - Path=/api/diary/**
+        - Path=/api/calendar/**
       - id: storage
         uri: http://localhost:8099
         predicates:
         - Path=/api/storage/**
-
-      #PLATFORM
-      - id: localization
-        uri: http://localhost:8084
-        predicates:
-        - Path=/localization/**
 
       #WS
       - id: ws

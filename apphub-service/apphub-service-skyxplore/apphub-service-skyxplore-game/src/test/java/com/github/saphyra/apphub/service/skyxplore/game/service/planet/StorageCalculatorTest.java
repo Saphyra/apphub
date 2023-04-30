@@ -1,30 +1,33 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuilding;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-
 @ExtendWith(MockitoExtension.class)
-public class StorageCalculatorTest {
-    private static final String STORAGE_BUILDING_DATA_ID = "storage-building-data-id";
-    private static final Integer CAPACITY = 314;
-    private static final Integer LEVEL = 235;
+class StorageCalculatorTest {
+    private static final UUID LOCATION = UUID.randomUUID();
+    private static final String DATA_ID = "data-id";
+    private static final Integer CAPACITY = 34;
+    private static final Integer LEVEL = 2;
+    private static final UUID BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private StorageBuildingService storageBuildingService;
@@ -33,50 +36,41 @@ public class StorageCalculatorTest {
     private StorageCalculator underTest;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
-    private Surface emptySurface;
+    private StorageBuildingData storageBuildingData;
 
     @Mock
-    private Surface notStorageSurface;
+    private Buildings buildings;
 
     @Mock
-    private Surface storageSurface;
+    private Building building;
 
     @Mock
-    private Building notStorageBuilding;
+    private Building deconstructedBuilding;
 
     @Mock
-    private Building storageBuilding;
+    private Deconstructions deconstructions;
 
     @Mock
-    private StorageBuilding storageBuildingData;
+    private Deconstruction deconstruction;
 
     @Test
-    public void calculateCapacity() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(
-            CollectionUtils.toMap(
-                new BiWrapper<>(new Coordinate(0, 0), emptySurface),
-                new BiWrapper<>(new Coordinate(0, 1), notStorageSurface),
-                new BiWrapper<>(new Coordinate(0, 2), storageSurface)
-            ))
-        );
-
-        given(notStorageSurface.getBuilding()).willReturn(notStorageBuilding);
-        given(storageSurface.getBuilding()).willReturn(storageBuilding);
-
-        given(notStorageBuilding.getDataId()).willReturn("asd");
-        given(storageBuilding.getDataId()).willReturn(STORAGE_BUILDING_DATA_ID);
-
+    void calculateCapacity() {
         given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
-        given(storageBuildingData.getId()).willReturn(STORAGE_BUILDING_DATA_ID);
+        given(gameData.getBuildings()).willReturn(buildings);
+        given(storageBuildingData.getId()).willReturn(DATA_ID);
+        given(buildings.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(building, deconstructedBuilding));
         given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
+        given(building.getLevel()).willReturn(LEVEL);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructedBuilding.getBuildingId()).willReturn(BUILDING_ID);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(deconstruction));
+        given(deconstructions.findByExternalReference(null)).willReturn(Optional.empty());
 
-        given(storageBuilding.getLevel()).willReturn(LEVEL);
+        int result = underTest.calculateCapacity(gameData, LOCATION, StorageType.CITIZEN);
 
-        int result = underTest.calculateCapacity(planet, StorageType.CITIZEN);
-
-        assertThat(result).isEqualTo(LEVEL * CAPACITY);
+        assertThat(result).isEqualTo(CAPACITY * LEVEL);
     }
 }

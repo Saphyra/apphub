@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.SurfaceMap;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,20 +14,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class TerraformationQueueItemQueryServiceTest {
+class TerraformationQueueItemQueryServiceTest {
+    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
+
     @Mock
-    private SurfaceToQueueItemConverter surfaceToQueueItemConverter;
+    private TerraformationToQueueItemConverter terraformationToQueueItemConverter;
 
     @InjectMocks
     private TerraformationQueueItemQueryService underTest;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private Surface surface;
@@ -38,13 +39,25 @@ public class TerraformationQueueItemQueryServiceTest {
     @Mock
     private QueueItem queueItem;
 
-    @Test
-    public void getQueue() {
-        given(planet.getSurfaces()).willReturn(new SurfaceMap(CollectionUtils.singleValueMap(GameConstants.ORIGO, surface)));
-        given(surface.getTerraformation()).willReturn(construction);
-        given(surfaceToQueueItemConverter.convert(surface)).willReturn(queueItem);
+    @Mock
+    private GameData gameData;
 
-        List<QueueItem> result = underTest.getQueue(planet);
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Surfaces surfaces;
+
+    @Test
+    void getQueue() {
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.getByLocationAndType(LOCATION, ConstructionType.TERRAFORMATION)).willReturn(List.of(construction));
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(construction.getExternalReference()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(terraformationToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
+
+        List<QueueItem> result = underTest.getQueue(gameData, LOCATION);
 
         assertThat(result).containsExactly(queueItem);
     }

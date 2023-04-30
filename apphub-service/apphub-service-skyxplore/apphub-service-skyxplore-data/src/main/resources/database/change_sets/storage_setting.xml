@@ -21,4 +21,14 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="storage_setting" columnNames="storage_setting_id" constraintName="storage_setting_pk"/>
     </changeSet>
+
+    <changeSet id="remove-location_type-from-storage_setting" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="storage_setting" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="storage_setting">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

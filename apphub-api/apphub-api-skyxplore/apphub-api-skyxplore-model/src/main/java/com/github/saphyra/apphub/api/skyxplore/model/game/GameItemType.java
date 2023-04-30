@@ -9,7 +9,6 @@ public enum GameItemType {
     GAME(GameModel.class),
     PLAYER(PlayerModel.class),
     ALLIANCE(AllianceModel.class),
-    UNIVERSE(UniverseModel.class),
     SOLAR_SYSTEM(SolarSystemModel.class),
     PLANET(PlanetModel.class),
     CITIZEN(CitizenModel.class),
@@ -17,7 +16,7 @@ public enum GameItemType {
     SURFACE(SurfaceModel.class),
     BUILDING(BuildingModel.class),
     CONSTRUCTION(ConstructionModel.class),
-    SYSTEM_CONNECTION(SystemConnectionModel.class),
+    DECONSTRUCTION(DeconstructionModel.class),
     ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class),
     STORED_RESOURCE(StoredResourceModel.class),
@@ -26,8 +25,11 @@ public enum GameItemType {
     COORDINATE(CoordinateModel.class),
     LINE(LineModel.class),
     PRODUCTION_ORDER(ProductionOrderModel.class),
-    DURABILITY_ITEM_MODEL(DurabilityItemModel.class),
-    PROCESS(ProcessModel.class);
+    DURABILITY(DurabilityModel.class),
+    PROCESS(ProcessModel.class),
+    CITIZEN_ALLOCATION(CitizenAllocationModel.class),
+    BUILDING_ALLOCATION(BuildingAllocationModel.class),
+    ;
 
     private final Class<? extends GameItem> modelType;
 }

@@ -24,7 +24,6 @@ public class ProcessConverterTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String LOCATION_TYPE = "location-type";
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String KEY = "key";
     private static final String VALUE = "value";
@@ -51,7 +50,6 @@ public class ProcessConverterTest {
         model.setProcessType(ProcessType.PRODUCTION_ORDER);
         model.setStatus(ProcessStatus.IN_PROGRESS);
         model.setLocation(LOCATION);
-        model.setLocationType(LOCATION_TYPE);
         model.setExternalReference(EXTERNAL_REFERENCE);
         model.setData(CollectionUtils.singleValueMap(KEY, VALUE));
 
@@ -69,7 +67,6 @@ public class ProcessConverterTest {
         assertThat(result.getProcessType()).isEqualTo(ProcessType.PRODUCTION_ORDER.name());
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS.name());
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE_STRING);
         assertThat(result.getData()).isEqualTo(DATA_STRING);
     }
@@ -82,7 +79,6 @@ public class ProcessConverterTest {
         entity.setProcessType(ProcessType.PRODUCTION_ORDER.name());
         entity.setStatus(ProcessStatus.IN_PROGRESS.name());
         entity.setLocation(LOCATION_STRING);
-        entity.setLocationType(LOCATION_TYPE);
         entity.setExternalReference(EXTERNAL_REFERENCE_STRING);
         entity.setData(DATA_STRING);
 
@@ -101,7 +97,6 @@ public class ProcessConverterTest {
         assertThat(result.getProcessType()).isEqualTo(ProcessType.PRODUCTION_ORDER);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getLocationType()).isEqualTo(LOCATION_TYPE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getData()).containsEntry(KEY, VALUE);
     }

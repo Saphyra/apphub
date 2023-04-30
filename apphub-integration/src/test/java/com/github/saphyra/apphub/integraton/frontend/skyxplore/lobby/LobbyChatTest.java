@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.integration.structure.user.RegistrationParamete
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -23,11 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LobbyChatTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
-    private static final String USER_JOINED_TO_LOBBY_TEMPLATE = "%s csatlakozott az előszobához.";
+    private static final String USER_JOINED_TO_LOBBY_TEMPLATE = "%s csatlakozott.";
     private static final String MESSAGE_TEXT_1 = "message-1";
     private static final String MESSAGE_TEXT_2 = "message-2";
-    private static final String MESSAGE_TEXT_3 = "message-3";
-    private static final String USER_LEFT_LOBBY_TEMPLATE = "%s kilépett.";
+    private static final String USER_LEFT_LOBBY_TEMPLATE = "%s elhagyta az előszobát.";
 
     @Test(groups = "skyxplore")
     public void sendAndReceiveMessages() {
@@ -79,29 +77,19 @@ public class LobbyChatTest extends SeleniumTest {
 
         List<LobbyChatMessage> hostMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
         assertThat(hostMessages).hasSize(1);
-        verifyChatMessage(hostMessages.get(0), userData1.getUsername(), true, Arrays.asList(MESSAGE_TEXT_1));
+        verifyChatMessage(hostMessages.get(0), userData1.getUsername(), true, MESSAGE_TEXT_1);
 
         List<LobbyChatMessage> memberMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver2), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
         assertThat(memberMessages).hasSize(1);
-        verifyChatMessage(memberMessages.get(0), userData1.getUsername(), false, Arrays.asList(MESSAGE_TEXT_1));
+        verifyChatMessage(memberMessages.get(0), userData1.getUsername(), false, MESSAGE_TEXT_1);
 
-        SkyXploreLobbyActions.sendMessage(driver1, MESSAGE_TEXT_2);
-
-        List<LobbyChatMessage> hostMessages2 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
-        assertThat(hostMessages2).hasSize(1);
-        verifyChatMessage(hostMessages2.get(0), userData1.getUsername(), true, Arrays.asList(MESSAGE_TEXT_1, MESSAGE_TEXT_2));
-
-        List<LobbyChatMessage> memberMessages2 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver2), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
-        assertThat(memberMessages2).hasSize(1);
-        verifyChatMessage(memberMessages2.get(0), userData1.getUsername(), false, Arrays.asList(MESSAGE_TEXT_1, MESSAGE_TEXT_2));
-
-        SkyXploreLobbyActions.sendMessage(driver2, MESSAGE_TEXT_3);
+        SkyXploreLobbyActions.sendMessage(driver2, MESSAGE_TEXT_2);
 
         List<LobbyChatMessage> hostMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> lobbyChatMessages.size() == 2);
-        verifyChatMessage(hostMessages3.get(1), userData2.getUsername(), false, Arrays.asList(MESSAGE_TEXT_3));
+        verifyChatMessage(hostMessages3.get(0), userData2.getUsername(), false, MESSAGE_TEXT_2);
 
         List<LobbyChatMessage> memberMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver2), lobbyChatMessages -> lobbyChatMessages.size() == 2);
-        verifyChatMessage(memberMessages3.get(1), userData2.getUsername(), true, Arrays.asList(MESSAGE_TEXT_3));
+        verifyChatMessage(memberMessages3.get(0), userData2.getUsername(), true, MESSAGE_TEXT_2);
 
         SkyXploreLobbyActions.exitLobby(driver2);
 
@@ -110,10 +98,10 @@ public class LobbyChatTest extends SeleniumTest {
             .assertTrue();
     }
 
-    private void verifyChatMessage(LobbyChatMessage message, String senderName, boolean ownMessage, List<String> messages) {
+    private void verifyChatMessage(LobbyChatMessage message, String senderName, boolean ownMessage, String messageText) {
         assertThat(message.getSender()).isEqualTo(senderName);
         assertThat(message.isOwn()).isEqualTo(ownMessage);
 
-        assertThat(message.getMessages()).isEqualTo(messages);
+        assertThat(message.getText()).isEqualTo(messageText);
     }
 }

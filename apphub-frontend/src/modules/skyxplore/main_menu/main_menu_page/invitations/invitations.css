@@ -1,0 +1,21 @@
+#skyxplore-main-menu-invitations{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.skyxplore-main-menu-invitation{
+    margin: 10px;
+    border: 3px ridge white;
+    border-radius: 5px;
+}
+
+.skyxplore-main-menu-invitation-name{
+    padding: 5px;
+    border-bottom: 2px ridge white;;
+}
+
+.skyxplore-main-menu-invitation-buttons{
+    white-space: nowrap;
+    text-align: center;
+}

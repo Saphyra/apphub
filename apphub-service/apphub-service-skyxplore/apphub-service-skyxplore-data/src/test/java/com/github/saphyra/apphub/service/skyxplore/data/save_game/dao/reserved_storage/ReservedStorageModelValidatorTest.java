@@ -57,21 +57,9 @@ public class ReservedStorageModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void nullDataId() {
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("asd");
         given(model.getDataId()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -84,7 +72,6 @@ public class ReservedStorageModelValidatorTest {
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("asd");
         given(model.getAmount()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -98,7 +85,6 @@ public class ReservedStorageModelValidatorTest {
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);
         given(model.getLocation()).willReturn(UUID.randomUUID());
-        given(model.getLocationType()).willReturn("asd");
 
         underTest.validate(model);
     }

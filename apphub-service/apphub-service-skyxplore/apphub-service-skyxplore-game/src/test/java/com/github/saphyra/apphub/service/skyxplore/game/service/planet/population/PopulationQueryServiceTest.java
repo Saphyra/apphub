@@ -1,14 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.common.converter.response.CitizenToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.commodity.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Universe;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +28,7 @@ public class PopulationQueryServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private CitizenToResponseConverter citizenToResponseConverter;
+    private CitizenConverter citizenConverter;
 
     @InjectMocks
     private PopulationQueryService underTest;
@@ -39,10 +37,7 @@ public class PopulationQueryServiceTest {
     private Game game;
 
     @Mock
-    private Universe universe;
-
-    @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
     private Citizen citizen;
@@ -50,13 +45,16 @@ public class PopulationQueryServiceTest {
     @Mock
     private CitizenResponse citizenResponse;
 
+    @Mock
+    private Citizens citizens;
+
     @Test
     public void getPopulation() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getUniverse()).willReturn(universe);
-        given(universe.findPlanetByIdValidated(PLANET_ID)).willReturn(planet);
-        given(planet.getPopulation()).willReturn(new OptionalHashMap<>(CollectionUtils.singleValueMap(UUID.randomUUID(), citizen)));
-        given(citizenToResponseConverter.convert(citizen)).willReturn(citizenResponse);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getCitizens()).willReturn(citizens);
+        given(citizens.getByLocation(PLANET_ID)).willReturn(List.of(citizen));
+        given(citizenConverter.toResponse(gameData, citizen)).willReturn(citizenResponse);
 
         List<CitizenResponse> result = underTest.getPopulation(USER_ID, PLANET_ID);
 

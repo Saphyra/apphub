@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,9 +20,11 @@ import static org.mockito.Mockito.verify;
 public class PlanetServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
+    private static final Integer PAGE = 2345;
+    private static final Integer ITEMS_PER_PAGE = 367;
 
     @Mock
-    private PlanetDao planetDao;
+    private PlanetDao dao;
 
     @Mock
     private PlanetModelValidator planetModelValidator;
@@ -38,7 +39,7 @@ public class PlanetServiceTest {
     public void deleteByGameId() {
         underTest.deleteByGameId(GAME_ID);
 
-        verify(planetDao).deleteByGameId(GAME_ID);
+        verify(dao).deleteByGameId(GAME_ID);
     }
 
     @Test
@@ -51,31 +52,20 @@ public class PlanetServiceTest {
         underTest.save(Arrays.asList(model));
 
         verify(planetModelValidator).validate(model);
-        verify(planetDao).saveAll(Arrays.asList(model));
-    }
-
-    @Test
-    public void findById() {
-        given(planetDao.findById(ID)).willReturn(Optional.of(model));
-
-        Optional<PlanetModel> result = underTest.findById(ID);
-
-        assertThat(result).contains(model);
-    }
-
-    @Test
-    public void getByModel() {
-        given(planetDao.getBySolarSystemId(ID)).willReturn(Arrays.asList(model));
-
-        List<PlanetModel> result = underTest.getByParent(ID);
-
-        assertThat(result).containsExactly(model);
+        verify(dao).saveAll(Arrays.asList(model));
     }
 
     @Test
     public void deleteById() {
         underTest.deleteById(ID);
 
-        verify(planetDao).deleteById(ID);
+        verify(dao).deleteById(ID);
+    }
+
+    @Test
+    void loadPage() {
+        given(dao.getPageByGameId(GAME_ID, PAGE, ITEMS_PER_PAGE)).willReturn(List.of(model));
+
+        assertThat(underTest.loadPage(GAME_ID, PAGE, ITEMS_PER_PAGE)).containsExactly(model);
     }
 }

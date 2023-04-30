@@ -15,5 +15,6 @@ public class LobbyMemberResponse {
     private UUID userId;
     private String characterName;
     private LobbyMemberStatus status;
-    private String alliance;
+    private UUID allianceId;
+    private Long createdAt;
 }

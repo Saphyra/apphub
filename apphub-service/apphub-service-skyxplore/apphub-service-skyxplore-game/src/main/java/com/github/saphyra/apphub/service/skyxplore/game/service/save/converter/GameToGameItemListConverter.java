@@ -18,19 +18,19 @@ import java.util.stream.Collectors;
 public class GameToGameItemListConverter {
     private final AllianceToModelConverter allianceConverter;
     private final PlayerToModelConverter playerConverter;
-    private final UniverseToModelConverter universeConverter;
+    private final GameDataConverter gameDataConverter;
 
     public List<GameItem> convertDeep(Game game) {
         List<GameItem> result = new ArrayList<>();
         result.add(convert(game));
         result.addAll(convertPlayers(game));
         result.addAll(convertAlliances(game));
-        result.addAll(convertUniverse(game));
+        result.addAll(convertData(game));
         return result;
     }
 
-    private List<GameItem> convertUniverse(Game game) {
-        return universeConverter.convertDeep(game.getUniverse(), game);
+    private List<GameItem> convertData(Game game) {
+        return gameDataConverter.convert(game.getGameId(), game.getData());
     }
 
     private List<GameItem> convertAlliances(Game game) {
@@ -49,7 +49,7 @@ public class GameToGameItemListConverter {
             .collect(Collectors.toList());
     }
 
-    public GameItem convert(Game game) {
+    public GameModel convert(Game game) {
         GameModel gameModel = new GameModel();
         gameModel.setGameId(game.getGameId());
         gameModel.setId(game.getGameId());
@@ -59,6 +59,7 @@ public class GameToGameItemListConverter {
         gameModel.setLastPlayed(game.getLastPlayed());
         gameModel.setMarkedForDeletion(game.getMarkedForDeletion());
         gameModel.setMarkedForDeletionAt(game.getMarkedForDeletionAt());
+        gameModel.setUniverseSize(game.getData().getUniverseSize());
         return gameModel;
     }
 }

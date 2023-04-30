@@ -72,16 +72,16 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
 
     @Test
     public void deleteStorageSetting() {
-        underTest.deleteStorageSetting(PLANET_ID, STORAGE_SETTING_ID, accessTokenHeader);
+        underTest.deleteStorageSetting(STORAGE_SETTING_ID, accessTokenHeader);
 
-        verify(storageSettingDeletionService).deleteStorageSetting(USER_ID, PLANET_ID, STORAGE_SETTING_ID);
+        verify(storageSettingDeletionService).deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
     }
 
     @Test
     public void editStorageSetting() {
-        given(storageSettingEditionService.edit(USER_ID, PLANET_ID, storageSettingModel)).willReturn(storageSettingModel);
+        given(storageSettingEditionService.edit(USER_ID, storageSettingModel)).willReturn(storageSettingModel);
 
-        StorageSettingApiModel result = underTest.editStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+        StorageSettingApiModel result = underTest.editStorageSetting(storageSettingModel, accessTokenHeader);
 
         assertThat(result).isEqualTo(storageSettingModel);
     }

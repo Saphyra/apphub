@@ -18,4 +18,16 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="building" columnNames="building_id" constraintName="building_pk"/>
     </changeSet>
+
+    <changeSet id="add-column-location-to-building" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="building" columnName="location"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="building">
+            <column name="location" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

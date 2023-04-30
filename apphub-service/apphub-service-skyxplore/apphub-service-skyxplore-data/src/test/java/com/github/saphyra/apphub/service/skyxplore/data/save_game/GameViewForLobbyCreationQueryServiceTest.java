@@ -30,6 +30,9 @@ public class GameViewForLobbyCreationQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final String GAME_NAME = "game-name";
+    private static final UUID AI_USER_ID = UUID.randomUUID();
+    private static final String AI_USERNAME = "ai-username";
+    private static final UUID AI_ALLIANCE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -74,6 +77,9 @@ public class GameViewForLobbyCreationQueryServiceTest {
         given(gameModel.getHost()).willReturn(USER_ID);
         given(playerDao.getByGameId(GAME_ID)).willReturn(Arrays.asList(playerModel, aiPlayerModel));
         given(aiPlayerModel.getAi()).willReturn(true);
+        given(aiPlayerModel.getUserId()).willReturn(AI_USER_ID);
+        given(aiPlayerModel.getUsername()).willReturn(AI_USERNAME);
+        given(aiPlayerModel.getAllianceId()).willReturn(AI_ALLIANCE_ID);
         given(playerModel.getAi()).willReturn(false);
         given(playerModel.getUserId()).willReturn(USER_ID);
         given(playerModel.getAllianceId()).willReturn(ALLIANCE_ID);
@@ -86,5 +92,9 @@ public class GameViewForLobbyCreationQueryServiceTest {
         assertThat(result.getName()).isEqualTo(GAME_NAME);
         assertThat(result.getAlliances()).containsExactly(allianceModel);
         assertThat(result.getPlayers()).containsExactly(playerModel);
+        assertThat(result.getAis()).hasSize(1);
+        assertThat(result.getAis().get(0).getUserId()).isEqualTo(AI_USER_ID);
+        assertThat(result.getAis().get(0).getName()).isEqualTo(AI_USERNAME);
+        assertThat(result.getAis().get(0).getAllianceId()).isEqualTo(AI_ALLIANCE_ID);
     }
 }

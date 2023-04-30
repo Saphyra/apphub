@@ -1,13 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.map.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.service.visibility.VisibilityFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,19 +17,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class PlanetToLocationResponseConverterTest {
-    private static final UUID PLANET_ID = UUID.randomUUID();
-    private static final String DEFAULT_NAME = "default-name";
-    private static final String OWNER_NAME = "owner-name";
+class PlanetToLocationResponseConverterTest {
+    private static final UUID SOLAR_SYSTEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final String PLANET_NAME = "planet-name";
+    private static final UUID OWNER_ID = UUID.randomUUID();
+    private static final String PLAYER_NAME = "player-name";
 
     @Mock
     private VisibilityFacade visibilityFacade;
@@ -39,40 +43,49 @@ public class PlanetToLocationResponseConverterTest {
     private Game game;
 
     @Mock
-    private Planet planet;
+    private GameData gameData;
 
     @Mock
-    private Planet filteredPlanet;
+    private Planets planets;
 
     @Mock
-    private Player player;
+    private Planet visiblePlanet;
 
     @Mock
-    private CoordinateModel coordinateModel;
+    private Planet hiddenPlanet;
+
+    @Mock
+    private Coordinates coordinates;
 
     @Mock
     private Coordinate coordinate;
 
-    @Test
-    public void mapPlanets() {
-        given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(planet.getDefaultName()).willReturn(DEFAULT_NAME);
-        given(planet.getCustomNames()).willReturn(new OptionalHashMap<>());
-        given(planet.getCoordinate()).willReturn(coordinateModel);
-        given(coordinateModel.getCoordinate()).willReturn(coordinate);
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
-        given(player.getPlayerName()).willReturn(OWNER_NAME);
-        given(visibilityFacade.isVisible(USER_ID, planet)).willReturn(true);
-        given(visibilityFacade.isVisible(USER_ID, filteredPlanet)).willReturn(false);
+    @Mock
+    private Player player;
 
-        List<PlanetLocationResponse> result = underTest.mapPlanets(USER_ID, Arrays.asList(planet, filteredPlanet), game);
+    @Test
+    void mapPlanets() {
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.getBySolarSystemId(SOLAR_SYSTEM_ID)).willReturn(List.of(visiblePlanet, hiddenPlanet));
+        given(visibilityFacade.isVisible(USER_ID, visiblePlanet)).willReturn(true);
+        given(visibilityFacade.isVisible(USER_ID, hiddenPlanet)).willReturn(false);
+        given(gameData.getCoordinates()).willReturn(coordinates);
+        given(visiblePlanet.getPlanetId()).willReturn(PLANET_ID);
+        given(coordinates.findByReferenceId(PLANET_ID)).willReturn(coordinate);
+        given(visiblePlanet.getCustomNames()).willReturn(CollectionUtils.singleValueMap(USER_ID, PLANET_NAME, new OptionalHashMap<>()));
+        given(visiblePlanet.getOwner()).willReturn(OWNER_ID);
+        given(game.getPlayers()).willReturn(Map.of(OWNER_ID, player));
+        given(player.getPlayerName()).willReturn(PLAYER_NAME);
+
+        List<PlanetLocationResponse> result = underTest.mapPlanets(game, SOLAR_SYSTEM_ID, USER_ID);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getPlanetId()).isEqualTo(PLANET_ID);
-        assertThat(result.get(0).getPlanetName()).isEqualTo(DEFAULT_NAME);
-        assertThat(result.get(0).getCoordinate()).isEqualTo(coordinate);
-        assertThat(result.get(0).getOwner()).isEqualTo(USER_ID);
-        assertThat(result.get(0).getOwnerName()).isEqualTo(OWNER_NAME);
+        PlanetLocationResponse response = result.get(0);
+        assertThat(response.getPlanetId()).isEqualTo(PLANET_ID);
+        assertThat(response.getPlanetName()).isEqualTo(PLANET_NAME);
+        assertThat(response.getCoordinate()).isEqualTo(coordinate);
+        assertThat(response.getOwner()).isEqualTo(OWNER_ID);
+        assertThat(response.getOwnerName()).isEqualTo(PLAYER_NAME);
     }
 }

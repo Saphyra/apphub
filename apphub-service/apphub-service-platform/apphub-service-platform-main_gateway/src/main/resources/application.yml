@@ -12,12 +12,25 @@ spring:
       globalcors:
         enabled: false
       routes:
+      #FRONTEND
+      - id: frontend
+        uri: http://frontend:3000
+        predicates:
+        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby
+        filters:
+        - StripPrefix=10
+      - id: frontend-resources
+        uri: http://frontend:3000
+        predicates:
+        - Path=/web/static/**
+        filters:
+        - StripPrefix=1
       #RESOURCES
-      - id: common-resorces
+      - id: common-resources
         uri: http://web-content:8080
         predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/diary/**, /res/modules/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
-      - id: training-resorces
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/notebook/**, /res/skyxplore/**, /res/utils/**, /res/user/**
+      - id: training-resources
         uri: http://training:8080
         predicates:
         - Path=/res/training/**
@@ -26,7 +39,7 @@ spring:
       - id: common-pages
         uri: http://web-content:8080
         predicates:
-        - Path=/web, /web/notebook, /web/user/account, /web/modules, /web/admin-panel/**, /web/utils/**, /web/skyxplore/**, /web/community, /web/diary
+        - Path=/web/notebook, /web/user/account, /web/admin-panel/**, /web/utils/**, /web/skyxplore/game, /web/community, /web/calendar
       - id: error-page
         uri: http://web-content:8080
         predicates:
@@ -77,20 +90,14 @@ spring:
         uri: http://community:8080
         predicates:
         - Path=/api/community/**
-      - id: diary
-        uri: http://diary:8080
+      - id: calendar
+        uri: http://calendar:8080
         predicates:
-        - Path=/api/diary/**
+        - Path=/api/calendar/**
       - id: storage
         uri: http://storage:8080
         predicates:
         - Path=/api/storage/**
-
-      #PLATFORM
-      - id: localization
-        uri: http://localization:8080
-        predicates:
-        - Path=/localization/**
 
       #WS
       - id: ws
@@ -101,3 +108,157 @@ spring:
 nonSessionExtendingUris:
 - pattern: /api/user/authentication/session
   method: GET
+
+role:
+  settings:
+  #Global
+  - pattern: /web/**
+    methods:
+    - GET
+    requiredRoles:
+    - ACCESS
+    whitelistedEndpoints:
+    - pattern: /web/error
+      method: GET
+    - pattern: /web
+      method: GET
+  - pattern: /api/**
+    methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ACCESS
+    whitelistedEndpoints:
+    - pattern: /api/user/authentication/login
+      method: POST
+    - pattern: /api/user/authentication/logout
+      method: POST
+    - pattern: /api/user/authentication/session
+      method: GET
+    - pattern: /api/user
+      method: POST
+  #Training
+  - pattern: /web/training/**
+    methods:
+    - GET
+    requiredRoles:
+    - TRAINING
+  #Notebook
+  - pattern: /web/notebook
+    methods:
+    - GET
+    requiredRoles:
+    - NOTEBOOK
+  - pattern: /api/notebook/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - NOTEBOOK
+  #User
+  - pattern: /api/user/data/roles
+    methods:
+    - POST
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/*
+    methods:
+    - PUT
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/disabled
+    methods:
+    - GET
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/roles/all
+    methods:
+    - POST
+    - DELETE
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/data/ban/*
+    methods:
+    - POST
+    requiredRoles:
+    - ADMIN
+  #Admin-panel
+  - pattern: /web/admin-panel/**
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/admin-panel/**
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    requiredRoles:
+    - ADMIN
+  #SkyXplore
+  - pattern: /web/skyxplore/**
+    methods:
+    - GET
+    requiredRoles:
+    - SKYXPLORE
+  - pattern: /api/skyxplore/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - SKYXPLORE
+  #Utils
+  - pattern: /web/utils/**
+    methods:
+    - GET
+    requiredRoles:
+    - UTILS
+  - pattern: /api/utils/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - UTILS
+  #Community
+  - pattern: /web/community
+    methods:
+    - GET
+    requiredRoles:
+    - COMMUNITY
+  - pattern: /api/community/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - COMMUNITY
+  #Calendar
+  - pattern: /web/calendar
+    methods:
+    - GET
+    requiredRoles:
+    - CALENDAR
+  - pattern: /api/calendar/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - CALENDAR

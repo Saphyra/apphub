@@ -50,14 +50,12 @@ public class ModulesTest extends BackEndTest {
             .build();
         assertThat(result.get("office")).contains(expectedModuleNotebook);
 
-        if (!DISABLED_TEST_GROUPS.contains("diary")) {
-            ModulesResponse expectedModuleDiary = ModulesResponse.builder()
-                .name("diary")
-                .url("/web/diary")
-                .favorite(false)
-                .build();
-            assertThat(result.get("office")).contains(expectedModuleDiary);
-        }
+        ModulesResponse expectedModuleCalendar = ModulesResponse.builder()
+            .name("calendar")
+            .url("/web/calendar")
+            .favorite(false)
+            .build();
+        assertThat(result.get("office")).contains(expectedModuleCalendar);
 
         ModulesResponse expectedModuleHtmlTraining = ModulesResponse.builder()
             .name("html")

@@ -3,10 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.proxy;
 import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
 import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +25,9 @@ public class MessageSenderProxyTest {
 
     @Mock
     private MessageSenderApiClient messageSenderClient;
+
+    @Mock
+    private ExecutorServiceBean executorServiceBean;
 
     @InjectMocks
     private MessageSenderProxy underTest;
@@ -45,6 +50,11 @@ public class MessageSenderProxyTest {
     @Test
     public void sendToGame() {
         underTest.sendToGame(message);
+
+        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(executorServiceBean).execute(argumentCaptor.capture());
+        argumentCaptor.getValue()
+            .run();
 
         verify(messageSenderClient).sendMessage(MessageGroup.SKYXPLORE_GAME, message, LOCALE);
     }

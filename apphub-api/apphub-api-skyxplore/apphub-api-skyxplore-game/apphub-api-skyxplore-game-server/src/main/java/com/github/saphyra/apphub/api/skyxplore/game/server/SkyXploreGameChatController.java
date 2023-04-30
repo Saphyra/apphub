@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 
 public interface SkyXploreGameChatController {
+    /**
+     * Listing all the players connected to the game
+     */
     @GetMapping(Endpoints.SKYXPLORE_GAME_GET_PLAYERS)
     List<SkyXploreCharacterModel> getPlayers(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

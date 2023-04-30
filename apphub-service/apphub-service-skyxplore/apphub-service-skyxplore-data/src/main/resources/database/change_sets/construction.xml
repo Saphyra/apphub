@@ -33,4 +33,38 @@
             <column name="parallel_workers" type="integer"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="remove-column-location_type-from-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="location_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="location_type"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="add-column-construction_type-to-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="construction" columnName="construction_type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="construction_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-location-to-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="construction" columnName="location"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="location" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

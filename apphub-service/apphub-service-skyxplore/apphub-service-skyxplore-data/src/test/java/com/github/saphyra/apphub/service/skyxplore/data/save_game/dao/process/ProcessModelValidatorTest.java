@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class ProcessModelValidatorTest {
     private static final UUID ID = UUID.randomUUID();
-    private static final String STRING = "string";
 
     @Mock
     private GameItemValidator gameItemValidator;
@@ -43,7 +42,6 @@ public class ProcessModelValidatorTest {
         given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
         given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(model.getLocation()).willReturn(ID);
-        given(model.getLocationType()).willReturn(STRING);
         given(model.getExternalReference()).willReturn(ID);
         given(model.getData()).willReturn(Collections.emptyMap());
 
@@ -81,23 +79,10 @@ public class ProcessModelValidatorTest {
     }
 
     @Test
-    public void nullLocationType() {
-        given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
-        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
-        given(model.getLocation()).willReturn(ID);
-        given(model.getLocationType()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(model));
-
-        ExceptionValidator.validateInvalidParam(ex, "locationType", "must not be null");
-    }
-
-    @Test
     public void nullExternalReference() {
         given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
         given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(model.getLocation()).willReturn(ID);
-        given(model.getLocationType()).willReturn(STRING);
         given(model.getExternalReference()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
@@ -110,7 +95,6 @@ public class ProcessModelValidatorTest {
         given(model.getProcessType()).willReturn(ProcessType.PRODUCTION_ORDER);
         given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(model.getLocation()).willReturn(ID);
-        given(model.getLocationType()).willReturn(STRING);
         given(model.getExternalReference()).willReturn(ID);
         given(model.getData()).willReturn(null);
 

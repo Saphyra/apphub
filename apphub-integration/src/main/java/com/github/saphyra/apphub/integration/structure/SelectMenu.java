@@ -15,9 +15,19 @@ public class SelectMenu {
         return webElement.isEnabled();
     }
 
-    public void selectOption(String value) {
+    public void selectOptionByValue(String value) {
         webElement.click();
         webElement.findElement(By.cssSelector(String.format(":scope option[value=\"%s\"]", value)))
+            .click();
+    }
+
+    public void selectOptionByLabel(String label) {
+        webElement.click();
+        webElement.findElements(By.cssSelector(":scope option"))
+            .stream()
+            .filter(option -> option.getText().equals(label))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No option available with label " + label))
             .click();
     }
 

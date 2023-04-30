@@ -4,10 +4,9 @@ DISABLED_GROUPS=${3:-}
 
 echo "Running Integration tests against namespace $NAMESPACE_NAME"
 
-SERVER_PORT=$RANDOM
-DATABASE_PORT=$RANDOM
-start kubectl port-forward deployment/main-gateway $SERVER_PORT:8080 -n "$NAMESPACE_NAME"
-start kubectl port-forward deployment/postgres $DATABASE_PORT:5432 -n "$NAMESPACE_NAME"
+SERVER_PORT=8100
+DATABASE_PORT=8101
+start ./port_forward.sh $NAMESPACE_NAME $SERVER_PORT $DATABASE_PORT
 
 cd apphub-integration || exit
 mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS" clean test

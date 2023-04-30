@@ -17,12 +17,14 @@ public class Constants {
     public final String ROLE_TRAINING = "TRAINING";
     public final String ROLE_UTILS = "UTILS";
     public final String ROLE_COMMUNITY = "COMMUNITY";
-    public final String ROLE_DIARY = "DIARY";
+    public final String ROLE_CALENDAR = "CALENDAR";
 
     public final String TEST_ROLE_NAME = "Teszt";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
-    public final String NEW_ALLIANCE_VALUE = "new-alliance";
-    public final String NO_ALLIANCE_VALUE = "no-alliance";
+    public static final String NEW_ALLIANCE_LABEL = "Új szövetség";
+    public static final String NEW_ALLIANCE_VALUE = "new-alliance";
+    public final String NO_ALLIANCE_LABEL = "Nincs szövetség";
+    public static final String NO_ALLIANCE_VALUE = "no-alliance";
 
     //SurfaceTypes
     public final String SURFACE_TYPE_DESERT = "DESERT";
@@ -37,13 +39,17 @@ public class Constants {
     public final String DATA_ID_WATER_PUMP = "water_pump";
     public final String DATA_ID_CAMP = "camp";
     public final String DATA_ID_ORE = "ore";
+    public static final String DATA_ID_DEPOT = "depot";
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
+    public final String QUEUE_TYPE_DECONSTRUCTION = "DECONSTRUCTION";
     public final String QUEUE_TYPE_TERRAFORMATION = "TERRAFORMATION";
 
     //Etc
     public final int DEFAULT_PRIORITY = 5;
+    public static final String DEFAULT_GAME_NAME = "game-name";
+    public static final int MAX_CITIZEN_MORALE = 10000;
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";
@@ -51,12 +57,12 @@ public class Constants {
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
 
-    //Diary
-    public final String DIARY_OCCURRENCE_STATUS_PENDING = "PENDING";
-    public final String DIARY_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
-    public final String DIARY_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
-    public final String DIARY_OCCURRENCE_STATUS_DONE = "DONE";
-    public final String DIARY_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
+    //Calendar
+    public final String CALENDAR_OCCURRENCE_STATUS_PENDING = "PENDING";
+    public final String CALENDAR_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
+    public final String CALENDAR_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
+    public final String CALENDAR_OCCURRENCE_STATUS_DONE = "DONE";
+    public final String CALENDAR_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
 
     //User settings
     public final String USER_SETTING_CATEGORY_NOTEBOOK = "notebook";

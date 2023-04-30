@@ -13,26 +13,26 @@ import static java.util.Objects.requireNonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ProductionBuildingValidator implements DataValidator<Map<String, ProductionBuilding>> {
+public class ProductionBuildingValidator implements DataValidator<Map<String, ProductionBuildingData>> {
     private final BuildingDataValidator buildingDataValidator;
     private final ProductionDataValidator productionDataValidator;
 
     @Override
-    public void validate(Map<String, ProductionBuilding> item) {
+    public void validate(Map<String, ProductionBuildingData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String key, ProductionBuilding productionBuilding) {
+    private void validate(String key, ProductionBuildingData productionBuildingData) {
         try {
             log.debug("Validating ProductionBuilding with key {}", key);
-            buildingDataValidator.validate(productionBuilding);
-            requireNonNull(productionBuilding.getWorkers(), "Workers must not be null.");
-            if (productionBuilding.getWorkers() < 1) {
+            buildingDataValidator.validate(productionBuildingData);
+            requireNonNull(productionBuildingData.getWorkers(), "Workers must not be null.");
+            if (productionBuildingData.getWorkers() < 1) {
                 throw new IllegalStateException("Workers must be higher than 0");
             }
-            requireNonNull(productionBuilding.getPrimarySurfaceType(), "PrimarySurfaceType must not be null.");
-            requireNonNull(productionBuilding.getPlaceableSurfaceTypes(), "PlaceableSurfaceTypes must not be null.");
-            productionDataValidator.validate(productionBuilding.getGives());
+            requireNonNull(productionBuildingData.getPrimarySurfaceType(), "PrimarySurfaceType must not be null.");
+            requireNonNull(productionBuildingData.getPlaceableSurfaceTypes(), "PlaceableSurfaceTypes must not be null.");
+            productionDataValidator.validate(productionBuildingData.getGives());
         } catch (Exception e) {
             throw new IllegalStateException("Invalid data with key " + key, e);
         }

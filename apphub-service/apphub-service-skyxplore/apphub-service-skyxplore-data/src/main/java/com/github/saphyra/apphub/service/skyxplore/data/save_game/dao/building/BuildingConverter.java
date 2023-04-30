@@ -21,6 +21,7 @@ class BuildingConverter extends ConverterBase<BuildingEntity, BuildingModel> {
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.BUILDING);
         model.setSurfaceId(uuidConverter.convertEntity(entity.getSurfaceId()));
+        model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
         model.setDataId(entity.getDataId());
         model.setLevel(entity.getLevel());
         return model;
@@ -32,6 +33,7 @@ class BuildingConverter extends ConverterBase<BuildingEntity, BuildingModel> {
             .buildingId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .surfaceId(uuidConverter.convertDomain(domain.getSurfaceId()))
+            .location(uuidConverter.convertDomain(domain.getLocation()))
             .dataId(domain.getDataId())
             .level(domain.getLevel())
             .build();

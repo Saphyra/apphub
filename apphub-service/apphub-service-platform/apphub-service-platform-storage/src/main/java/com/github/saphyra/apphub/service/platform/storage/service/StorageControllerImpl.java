@@ -30,7 +30,7 @@ public class StorageControllerImpl implements StorageController {
     @Override
     public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a file.", accessTokenHeader.getUserId());
-        return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getExtension(), request.getSize());
+        return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getSize());
     }
 
     @Override

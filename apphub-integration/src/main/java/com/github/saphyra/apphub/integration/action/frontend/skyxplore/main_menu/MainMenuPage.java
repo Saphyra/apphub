@@ -5,77 +5,80 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 class MainMenuPage {
-    private static final By BACK_BUTTON = By.id("back-button");
-    private static final By EDIT_CHARACTER_BUTTON = By.id("edit-character-button");
-    private static final By CREATE_GAME_BUTTON = By.id("new-game-button");
-    private static final By CREATE_GAME_DIALOG = By.id("lobby-creation");
     static final By GAME_NAME_INPUT = By.id("lobby-name");
-    private static final By INVALID_GAME_NAME = By.id("invalid-lobby-name");
-    private static final By SUBMIT_GAME_CREATION_FORM_BUTTON = By.id("create-lobby-button");
 
     static WebElement backButton(WebDriver driver) {
-        return driver.findElement(BACK_BUTTON);
+        return driver.findElement(By.id("skyxplore-home-button"));
     }
 
     static WebElement editCharacterButton(WebDriver driver) {
-        return driver.findElement(EDIT_CHARACTER_BUTTON);
+        return driver.findElement(By.id("skyxplore-edit-character-button"));
     }
 
     static WebElement createGameButton(WebDriver driver) {
-        return driver.findElement(CREATE_GAME_BUTTON);
+        return driver.findElement(By.id("skyxplore-new-game-button"));
     }
 
-    static WebElement createGameDialog(WebDriver driver) {
-        return driver.findElement(CREATE_GAME_DIALOG);
+    static Optional<WebElement> createGameDialog(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#skyxplore-new-game"))
+            .stream()
+            .findFirst();
     }
 
     static WebElement gameNameInput(WebDriver driver) {
-        return driver.findElement(GAME_NAME_INPUT);
+        return driver.findElement(By.id("skyxplore-game-name"));
     }
 
-    static WebElement invalidGameName(WebDriver driver) {
-        return driver.findElement(INVALID_GAME_NAME);
+    static Optional<WebElement> invalidGameName(WebDriver driver) {
+        return driver.findElements(By.id("skyxplore-game-name-validation"))
+            .stream()
+            .findFirst();
     }
 
     static WebElement submitGameCreationFormButton(WebDriver driver) {
-        return driver.findElement(SUBMIT_GAME_CREATION_FORM_BUTTON);
+        return driver.findElement(By.id("skyxplore-create-new-game-button"));
     }
 
     static WebElement newFriendName(WebDriver driver) {
-        return driver.findElement(By.id("new-friend-name"));
+        return driver.findElement(By.id("skyxplore-contacts-search-input"));
     }
 
     static List<WebElement> friendCandidates(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#new-friend-search-result .button"));
+        return driver.findElements(By.cssSelector(".skyxplore-friend-candidate"));
     }
 
     static List<WebElement> incomingFriendRequests(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#incoming-friend-request-list .friend-list-item"));
+        return driver.findElements(By.cssSelector("#skyxplore-main-menu-incoming-friend-requests .skyxplore-contacts-list-item"));
     }
 
     static List<WebElement> friends(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#friend-list .friend-list-item"));
+        return driver.findElements(By.cssSelector("#skyxplore-main-menu-friends .skyxplore-contacts-list-item"));
     }
 
     public static List<WebElement> invitations(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#invitations .invitation"));
+        return driver.findElements(By.cssSelector("#skyxplore-main-menu-invitations .skyxplore-main-menu-invitation"));
     }
 
     public static List<WebElement> sentFriendRequests(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#outgoing-friend-request-list .friend-list-item"));
+        return driver.findElements(By.cssSelector("#skyxplore-main-menu-sent-friend-requests .skyxplore-contacts-list-item"));
     }
 
     public static WebElement savedGamesWrapper(WebDriver driver) {
-        return driver.findElement(By.id("games-wrapper"));
+        return driver.findElement(By.id("skyxplore-main-menu-saved-games-wrapper"));
     }
 
-    public static WebElement LoadGameButton(WebDriver driver) {
-        return driver.findElement(By.id("load-game-button"));
+    public static WebElement loadGameButton(WebDriver driver) {
+        return driver.findElement(By.id("skyxplore-load-game-button"));
     }
 
     public static List<WebElement> savedGames(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#games .game-item"));
+        return driver.findElements(By.cssSelector("#skyxplore-main-menu-saved-games-wrapper .skyxplore-saved-game"));
+    }
+
+    public static WebElement confirmFriendDeletionButton(WebDriver driver) {
+        return driver.findElement(By.id("skyxplore-remove-friend-button"));
     }
 }

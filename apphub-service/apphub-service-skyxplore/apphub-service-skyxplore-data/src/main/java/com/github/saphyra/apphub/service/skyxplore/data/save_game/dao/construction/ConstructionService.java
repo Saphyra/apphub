@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class ConstructionService implements GameItemService {
-    private final ConstructionDao constructionDao;
+    private final ConstructionDao dao;
     private final ConstructionModelValidator constructionModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
         log.info("Deleting {}s by gameId {}", getClass().getSimpleName(), gameId);
-        constructionDao.deleteByGameId(gameId);
+        dao.deleteByGameId(gameId);
     }
 
     @Override
@@ -39,21 +38,16 @@ class ConstructionService implements GameItemService {
             .peek(constructionModelValidator::validate)
             .collect(Collectors.toList());
 
-        constructionDao.saveAll(models);
-    }
-
-    @Override
-    public Optional<ConstructionModel> findById(UUID id) {
-        return constructionDao.findById(id);
-    }
-
-    @Override
-    public List<ConstructionModel> getByParent(UUID parent) {
-        return constructionDao.getByLocation(parent);
+        dao.saveAll(models);
     }
 
     @Override
     public void deleteById(UUID id) {
-        constructionDao.deleteById(id);
+        dao.deleteById(id);
+    }
+
+    @Override
+    public List<ConstructionModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+        return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

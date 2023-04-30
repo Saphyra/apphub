@@ -1,0 +1,62 @@
+{
+    "NO_VALID_SESSION": {
+        "en": "Session expired.",
+        "hu": "A bejelentkezés lejárt."
+    },
+    "REGISTRATION_SUCCESSFUL": {
+        "en": "Registration successful.",
+        "hu": "Sikeres regisztráció."
+    },
+    "BAD_CREDENTIALS": {
+        "en": "Unknown combination of e-mail address and password.",
+        "hu": "Az email cím és jelszó kombinációja ismeretlen."
+    },
+    "SUCCEESSFUL_LOGOUT": {
+        "en": "Successfully logged out.",
+        "hu": "Sikeres kijelentkezés."
+    },
+    "EMPTY_CREDENTIALS": {
+        "en": "Please fill e-mail address and password!",
+        "hu": "E-mail és jelszó megadása kötelező!"
+    },
+    "USERNAME_ALREADY_EXISTS": {
+        "en": "Username already in use.",
+        "hu": "A felhasználónév foglalt."
+    },
+    "EMAIL_ALREADY_EXISTS": {
+        "en": "E-mail address is already in use.",
+        "hu": "Az email foglalt."
+    },
+    "ACCOUNT_LOCKED": {
+        "en": "Account locked. Try again later.",
+        "hu": "Fiók zárolva. Próbáld újra később!"
+    },
+    "MISSING_ROLE": {
+        "en": "You are not allowed to perform this operation.",
+        "hu": "Ehhez a művelethez nincs jogosultságod."
+    },
+    "FRIEND_REQUEST_ALREADY_EXISTS": {
+        "en": "Friend request already exists.",
+        "hu": "Már van ilyen barátkérelem."
+    },
+    "TOO_FREQUENT_INVITATIONS": {
+        "en": "You have invited this player recently. Please wait a few seconds before trying again.",
+        "hu": "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!"
+    },
+    "LOBBY_MEMBER_NOT_READY":{
+        "en": "No all members are ready.",
+        "hu": "Még nincs kész mindenki."
+    },
+    "SKYXPLORE_CHARACTER_SAVED": {
+        "en": "Character saved.",
+        "hu": "Karakter elmentve."
+    },
+    "CHARACTER_NAME_ALREADY_EXISTS": {
+        "en": "Character name already exists.",
+        "hu": "Ez a karakternév már foglalt."
+    },
+    "NOT_ENOUGH_ALLIANCES": {
+        "en": "Every player is in the same alliance. Game is boring with no one to conquer.",
+        "hu": "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani."
+    }
+}

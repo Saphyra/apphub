@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.surface;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,6 @@ interface SurfaceRepository extends CrudRepository<SurfaceEntity, String> {
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<SurfaceEntity> getByPlanetId(String planetId);
+
+    List<SurfaceEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

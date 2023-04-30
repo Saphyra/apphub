@@ -98,7 +98,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
             .assertTrue("User deletion is not scheduled.");
 
         assertThat(BanActions.isUserMarkedForDeletion(adminDriver)).isTrue();
-        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE.toString() + " " + (HOURS + 1) + ":" + MINUTES + ":00");
+        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE.toString() + " " + (HOURS + 2) + ":" + MINUTES + ":00");
 
         //Delete schedule
         BanActions.unmarkForDeletion(adminDriver);

@@ -21,7 +21,6 @@ class CitizenConverter extends ConverterBase<CitizenEntity, CitizenModel> {
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.CITIZEN);
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setLocationType(entity.getLocationType());
         model.setName(entity.getName());
         model.setMorale(entity.getMorale());
         model.setSatiety(entity.getSatiety());
@@ -36,7 +35,6 @@ class CitizenConverter extends ConverterBase<CitizenEntity, CitizenModel> {
             .citizenId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .locationType(domain.getLocationType())
             .name(domain.getName())
             .morale(domain.getMorale())
             .satiety(domain.getSatiety())

@@ -27,7 +27,6 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .createdAt(domain.getCreatedAt())
             .fileUploaded(domain.isFileUploaded())
             .fileName(stringEncryptor.encryptEntity(domain.getFileName(), userId))
-            .extension(stringEncryptor.encryptEntity(domain.getExtension(), userId))
             .size(longEncryptor.encryptEntity(domain.getSize(), userId))
             .build();
     }
@@ -41,7 +40,6 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .createdAt(entity.getCreatedAt())
             .fileUploaded(entity.isFileUploaded())
             .fileName(stringEncryptor.decryptEntity(entity.getFileName(), userId))
-            .extension(stringEncryptor.decryptEntity(entity.getExtension(), userId))
             .size(longEncryptor.decryptEntity(entity.getSize(), userId))
             .build();
     }

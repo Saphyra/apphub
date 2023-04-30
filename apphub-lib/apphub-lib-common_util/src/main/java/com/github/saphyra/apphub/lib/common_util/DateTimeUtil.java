@@ -27,4 +27,10 @@ public class DateTimeUtil {
     public LocalDate getCurrentDate() {
         return LocalDate.now();
     }
+
+    public Long getCurrentTimeEpochMillis() {
+        return getCurrentDateTime()
+            .toInstant(ZoneOffset.UTC)
+            .toEpochMilli();
+    }
 }
