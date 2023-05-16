@@ -31,7 +31,7 @@ public class ChecklistItemNodeRequestValidator {
         }
 
         if (!isNull(request.getChecklistItemId())) {
-            if (!checklistItemDao.findById(uuidConverter.convertDomain(request.getChecklistItemId())).isPresent()) {
+            if (checklistItemDao.findById(uuidConverter.convertDomain(request.getChecklistItemId())).isEmpty()) {
                 throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ChecklistListItem not found with id " + request.getChecklistItemId());
             }
         }

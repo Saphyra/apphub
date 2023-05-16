@@ -17,7 +17,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CheckedChecklistItemDeletionServiceTest {
+public class ChecklistItemDeletionServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
@@ -28,7 +28,7 @@ public class CheckedChecklistItemDeletionServiceTest {
     private ContentDao contentDao;
 
     @InjectMocks
-    private CheckedChecklistItemDeletionService underTest;
+    private ChecklistItemDeletionService underTest;
 
     @Mock
     private ChecklistItem checklistItem;

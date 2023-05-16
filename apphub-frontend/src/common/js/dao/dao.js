@@ -47,6 +47,9 @@ const Request = class {
         return queryParamsFilled;
 
         function fillPathVariables(url, pathVariables) {
+            if (!pathVariables) {
+                return url;
+            }
             let result = url;
 
             new MapStream(pathVariables)
@@ -59,6 +62,10 @@ const Request = class {
         }
 
         function fillQueryParams(url, queryParams) {
+            if (!queryParams) {
+                return url;
+            }
+
             if (Object.keys(queryParams).length === 0) {
                 return url;
             }
@@ -142,7 +149,7 @@ const Response = class {
             .orElse("Unknown response status code: " + status);
     }
 
-    toString = function(){
+    toString = function () {
         return this.status + ": " + this.statusKey + " - " + this.body;
     }
 }
@@ -259,6 +266,30 @@ const Endpoints = {
     SKYXPLORE_LOBBY_START_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start"),
     SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}"),
     SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
+
+    //Notebook
+    NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),
+    NOTEBOOK_GET_PINNED_ITEMS: new Endpoint(RequestMethod.GET, "/api/notebook/item/pinned"),
+    NOTEBOOK_GET_CHILDREN_OF_CATEGORY: new Endpoint(RequestMethod.GET, "/api/notebook/category/children"),
+    NOTEBOOK_CREATE_CATEGORY: new Endpoint(RequestMethod.PUT, "/api/notebook/category"),
+    NOTEBOOK_CREATE_TEXT: new Endpoint(RequestMethod.PUT, "/api/notebook/text"),
+    NOTEBOOK_GET_TEXT: new Endpoint(RequestMethod.GET, "/api/notebook/text/{listItemId}"),
+    NOTEBOOK_EDIT_TEXT: new Endpoint(RequestMethod.POST, "/api/notebook/text/{listItemId}"),
+    NOTEBOOK_DELETE_LIST_ITEM: new Endpoint(RequestMethod.DELETE, "/api/notebook/item/{listItemId}"),
+    NOTEBOOK_ARCHIVE_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/item/{listItemId}/archive"),
+    NOTEBOOK_PIN_LIST_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/item/{listItemId}/pin"),
+    NOTEBOOK_CLONE_LIST_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/{listItemId}/clone"),
+    NOTEBOOK_GET_LIST_ITEM: new Endpoint(RequestMethod.GET, "/api/notebook/list-item/{listItemId}"),
+    NOTEBOOK_EDIT_LIST_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/item/{listItemId}"),
+    NOTEBOOK_CREATE_LINK: new Endpoint(RequestMethod.PUT, "/api/notebook/link"),
+    NOTEBOOK_CREATE_ONLY_TITLE: new Endpoint(RequestMethod.PUT, "/api/notebook/only-title"),
+    NOTEBOOK_CREATE_CHECKLIST: new Endpoint(RequestMethod.PUT, "/api/notebook/checklist"),
+    NOTEBOOK_GET_CHECKLIST: new Endpoint(RequestMethod.GET, "/api/notebook/checklist/{listItemId}"),
+    NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/item/{checklistItemId}/status"),
+    NOTEBOOK_DELETE_CHECKLIST_ITEM: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist/item/{checklistItemId}"),
+    NOTEBOOK_EDIT_CHECKLIST: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}"),
+    NOTEBOOK_CHECKLIST_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist/{listItemId}/checked"),
+    NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}/order"),
 }
 
 export default Endpoints;

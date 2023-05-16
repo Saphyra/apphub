@@ -16,7 +16,7 @@ public class MemoryStatusUpdateTriggerScheduler {
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.memoryStatusUpdateTrigger}")
     public void triggerMemoryStatusUpdate() {
-        log.info("Triggering memory status update...");
+        log.debug("Triggering memory status update...");
         monitoringClient.triggerMemoryStatusUpdate(commonConfigProperties.getDefaultLocale());
     }
 }

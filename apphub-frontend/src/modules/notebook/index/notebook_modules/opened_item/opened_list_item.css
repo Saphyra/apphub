@@ -1,0 +1,11 @@
+.notebook-content-view{
+    display: flex;
+    flex-direction: column;
+}
+
+.notebook-content-view-main{
+    flex-grow: 1;
+    overflow: auto;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}

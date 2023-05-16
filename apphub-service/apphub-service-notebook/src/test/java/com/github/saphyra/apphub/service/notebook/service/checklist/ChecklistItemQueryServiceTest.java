@@ -26,6 +26,7 @@ public class ChecklistItemQueryServiceTest {
     private static final String CONTENT = "content";
     private static final Integer ORDER = 23245;
     private static final String TITLE = "title";
+    private static final UUID PARENT = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
@@ -58,10 +59,12 @@ public class ChecklistItemQueryServiceTest {
         given(checklistItem.getChecked()).willReturn(true);
         given(checklistItem.getOrder()).willReturn(ORDER);
         given(listItem.getTitle()).willReturn(TITLE);
+        given(listItem.getParent()).willReturn(PARENT);
 
         ChecklistResponse result = underTest.query(LIST_ITEM_ID);
 
         assertThat(result.getTitle()).isEqualTo(TITLE);
+        assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getNodes()).hasSize(1);
         assertThat(result.getNodes().get(0).getChecklistItemId()).isEqualTo(CHECKLIST_ITEM_ID);
         assertThat(result.getNodes().get(0).getContent()).isEqualTo(CONTENT);

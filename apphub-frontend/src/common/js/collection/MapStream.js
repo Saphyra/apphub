@@ -1,4 +1,5 @@
 import Optional from "./Optional";
+import Stream from "./Stream";
 
 const MapStream = class {
     constructor(items) {
@@ -53,6 +54,22 @@ const MapStream = class {
             .forEach((key) => result[key] = mapper(key, this.items[key]));
 
         return new MapStream(result);
+    }
+
+    peek(consumer){
+        this.forEach(consumer);
+
+        return this;
+    }
+
+    sorted(comparator) {
+        return this.toListStream((key, value) => { return { key: key, value: value } })
+            .sorted(comparator)
+            .toMapStream(item => item.key, item => item.value);
+    }
+
+    toListStream(mapper){
+        return new Stream(this.toList(mapper));
     }
 
     toList(mapper = (key, value) => value) {

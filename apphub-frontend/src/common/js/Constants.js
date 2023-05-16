@@ -23,6 +23,9 @@ const Constants = {
     SKYXPLORE_CHARACTER_PAGE: "/web/skyxplore/character",
     SKYXPLORE_LOBBY_PAGE: "/web/skyxplore/lobby",
     SKYXPLORE_GAME_PAGE: "/web/skyxplore/game",
+    NOTEBOOK_PAGE: "/web/notebook",
+    NOTEBOOK_NEW_PAGE: "/web/notebook/new",
+    NOTEBOOK_EDIT_PAGE: "/web/notebook/edit",
 
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,

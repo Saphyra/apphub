@@ -1,0 +1,8 @@
+.notebook-list-item-title {
+    text-align: center;
+}
+
+.notebook-list-item-title input {
+    width: 75%;
+    font-size: 20px;
+}

@@ -35,12 +35,25 @@ const getQueryParam = (paramName) => {
     return new URLSearchParams(window.location.search).get(paramName);
 }
 
+const isBlank = (str) => {
+    return "&nbsp;" == str || (!str || /^\s*$/.test(str));
+}
+
+const generateRandomId = () => {
+    var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
     getBrowserLanguage: getBrowserLanguage,
     throwException: throwException,
     getQueryParam: getQueryParam,
+    isBlank: isBlank,
+    generateRandomId: generateRandomId,
 }
 
 export default Utils;

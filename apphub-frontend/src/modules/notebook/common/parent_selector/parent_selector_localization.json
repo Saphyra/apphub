@@ -1,0 +1,18 @@
+{
+    "selected-parent": {
+        "en": "Parent selected",
+        "hu": "Kiválasztott szülő"
+    },
+    "root": {
+        "en": "Root",
+        "hu": "Gyökér"
+    },
+    "up": {
+        "en": "Up",
+        "hu": "Fel"
+    },
+    "no-child": {
+        "en": "No category.",
+        "hu": "Nincs kategória."
+    }
+}

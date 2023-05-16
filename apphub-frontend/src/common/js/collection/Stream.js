@@ -50,6 +50,10 @@ const Stream = class {
         return this;
     }
 
+    remove(predicate) {
+        return this.filter(item => !predicate(item));
+    }
+
     sorted(comparator) {
         const arr = this.items.slice();
 

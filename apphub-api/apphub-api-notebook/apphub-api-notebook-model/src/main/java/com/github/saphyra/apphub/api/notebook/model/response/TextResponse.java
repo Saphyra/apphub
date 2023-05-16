@@ -14,6 +14,8 @@ public class TextResponse {
     @NonNull
     private final UUID textId;
 
+    private final UUID parent;
+
     @NonNull
     private final String title;
 

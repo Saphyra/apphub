@@ -27,6 +27,7 @@ public class ChecklistItemQueryService {
     public ChecklistResponse query(UUID listItemId) {
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
         return ChecklistResponse.builder()
+            .parent(listItem.getParent())
             .title(listItem.getTitle())
             .nodes(queryNodes(listItemId))
             .build();

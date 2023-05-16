@@ -14,9 +14,16 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CheckedChecklistItemDeletionService {
+public class ChecklistItemDeletionService {
     private final ChecklistItemDao checklistItemDao;
     private final ContentDao contentDao;
+
+    @Transactional
+    //TODO unit test
+    public void delete(UUID checklistItemId) {
+        ChecklistItem checklistItem = checklistItemDao.findByIdValidated(checklistItemId);
+        delete(checklistItem);
+    }
 
     @Transactional
     public void deleteCheckedItems(UUID listItemId) {

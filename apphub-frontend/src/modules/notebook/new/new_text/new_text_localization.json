@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "New text - Notebook - Apphub",
+        "hu": "Új szöveg - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New text",
+        "hu": "Új szöveg"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "text-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "content": {
+        "en": "Content",
+        "hu": "Tartalom"
+    }
+}

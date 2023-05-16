@@ -1,0 +1,98 @@
+.notebook-content-category-content-list-item {
+    margin: 6px;
+    text-align: left;
+}
+
+.notebook-content-category-content-list-item.archived {
+    text-decoration: line-through;
+    opacity: 0.25;
+}
+
+.notebook-content-category-content-list-item-title {
+    font-size: 22px;
+}
+
+.notebook-content-category-content-list-item-buttons {
+    float: right;
+}
+
+.notebook-content-category-content-list-item-buttons button {
+    border-width: 1px;
+    margin: 0;
+    width: 23px;
+    height: 23px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin-left: 6px;
+}
+
+.notebook-content-category-content-list-item-delete-button {
+    background-image: url("../../../../../common/style/img/delete.png");
+}
+
+.notebook-content-category-content-list-item-archive-button,
+.notebook-content-category-content-list-item-unarchive-button {
+    background-image: url("../../../../../common/style/img/archive.png");
+}
+
+.notebook-content-category-content-list-item-pin-button,
+.notebook-content-category-content-list-item-unpin-button {
+    background-image: url("../../../../../common/style/img/pin.png");
+}
+
+.notebook-content-category-content-list-item-unpin-button {
+    background-color: green;
+}
+
+.notebook-content-category-content-list-item-parent-button {
+    background-image: url("../../../../../common/style/img/parent.png");
+}
+
+.notebook-content-category-content-list-item-clone-button {
+    background-image: url("../../../../../common/style/img/clone.png");
+}
+
+.notebook-content-category-content-list-item-edit-button {
+    background-image: url("../../../../../common/style/img/edit.png");
+}
+
+.category {
+    border-color: springgreen;
+}
+
+.text {
+    border-color: white;
+}
+
+.link {
+    border-color: rgb(40, 40, 255);
+}
+
+.only_title {}
+
+.checklist,
+.pinned,
+.archived.archive-button {
+    border-color: orange;
+}
+
+.table {
+    border-color: hotpink;
+}
+
+.checklist_table {
+    border-color: purple;
+}
+
+.image {
+    border-color: brown;
+}
+
+.file {
+    border-color: black;
+}
+
+.custom_table {
+    border-color: cyan;
+}

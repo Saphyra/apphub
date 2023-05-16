@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemsOrderService;
@@ -43,7 +43,7 @@ public class ChecklistControllerImplTest {
     private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
 
     @Mock
-    private CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
+    private ChecklistItemDeletionService checklistItemDeletionService;
 
     @Mock
     private ChecklistItemsOrderService checklistItemsOrderService;
@@ -75,7 +75,7 @@ public class ChecklistControllerImplTest {
 
     @Test
     public void editChecklistItem() {
-        underTest.editChecklistItem(editChecklistItemRequest, LIST_ITEM_ID);
+        underTest.editChecklist(editChecklistItemRequest, LIST_ITEM_ID);
 
         verify(editChecklistItemService).edit(editChecklistItemRequest, LIST_ITEM_ID);
     }
@@ -84,7 +84,7 @@ public class ChecklistControllerImplTest {
     public void getChecklistItem() {
         given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
 
-        ChecklistResponse result = underTest.getChecklistItem(LIST_ITEM_ID);
+        ChecklistResponse result = underTest.getChecklist(LIST_ITEM_ID);
 
         assertThat(result).isEqualTo(checklistResponse);
     }
@@ -100,7 +100,7 @@ public class ChecklistControllerImplTest {
     public void deleteCheckedItems() {
         underTest.deleteCheckedItems(LIST_ITEM_ID);
 
-        verify(checkedChecklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
+        verify(checklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
     }
 
     @Test

@@ -1,0 +1,43 @@
+.notebook-checklist-item {
+    display: grid;
+    grid-template-columns: 38px auto 95px;
+    border: 2px ridge white;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.notebook-checklist-item-checked-wrapper {
+    border-right: 2px ridge white;
+}
+
+.notebook-checklist-item-checked {
+    transform: scale(2);
+    margin: 12px;
+}
+
+.notebook-checklist-item-content-wrapper {
+    text-align: center;
+}
+
+.notebook-checklist-item-content {
+    width: calc(100% - 20px);
+    margin: 5px;
+}
+
+.notebook-checklist-item-content-not-editable {
+    text-align: left;
+    font-size: 28px;
+    padding: 4px;
+    cursor: pointer;
+    height: 100%;
+}
+
+.notebook-checklist-item-content-not-editable.checked {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.notebook-checklist-item-buttons {
+    border-left: 2px ridge white;
+    padding: 0 5px;
+}

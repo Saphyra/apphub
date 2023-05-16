@@ -1,0 +1,106 @@
+{
+    "title": {
+        "en": "Notebook - Apphub",
+        "hu": "Jegyzetfüzet - Apphub"
+    },
+    "root": {
+        "en": "Root",
+        "hu": "Gyökér"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "up": {
+        "en": "Up",
+        "hu": "Fel"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "new": {
+        "en": "New",
+        "hu": "Új"
+    },
+    "category-empty": {
+        "en": "Empty",
+        "hu": "Üres"
+    },
+    "list-item-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "content": {
+        "en": "Content",
+        "hu": "Tartalom"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Módosít"
+    },
+    "discard": {
+        "en": "Discard",
+        "hu": "Mégse"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "confirm-list-item-deletion-title": {
+        "en": "Delete list item?",
+        "hu": "Elem törlése?"
+    },
+    "confirm-list-item-deletion-content": {
+        "en": "Are you sure you want to delete list item {listItemTitle}?",
+        "hu": "Biztosan törölni szeretnéd a {listItemTitle} elemet?"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "archive": {
+        "en": "Archive",
+        "hu": "Archiválás"
+    },
+    "unarchive": {
+        "en": "Unarchive",
+        "hu": "Archiválás visszavonása"
+    },
+    "pin": {
+        "en": "Pin",
+        "hu": "Kitűzés"
+    },
+    "unpin": {
+        "en": "Unpin",
+        "hu": "Kitűzés visszavonása"
+    },
+    "open-parent": {
+        "en": "Open parent",
+        "hu": "Szülő megnyitása"
+    },
+    "clone": {
+        "en": "Clone",
+        "hu": "Duplikálás"
+    },
+    "checklist-empty": {
+        "en": "Checklist is empty.",
+        "hu": "A lista üres."
+    },
+    "delete-checked": {
+        "en": "Delete checked",
+        "hu": "Kijelöltek törlése"
+    },
+    "order-items": {
+        "en": "Order items",
+        "hu": "Sorba rendezés"
+    },
+    "add-item": {
+        "en": "New item",
+        "hu": "Új elem"
+    }
+}

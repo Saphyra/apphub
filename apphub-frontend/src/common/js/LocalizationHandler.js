@@ -18,6 +18,10 @@ const LocalizationHandler = class {
 
         let result = item[locale];
 
+        if (!result) {
+            Utils.throwException("IllegalArgument", "No localization found for key " + key + " and locale " + locale);
+        }
+
         new MapStream(params)
             .forEach((key, value) => result = result.replace("{" + key + "}", value));
 

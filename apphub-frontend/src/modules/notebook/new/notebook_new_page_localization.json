@@ -1,0 +1,54 @@
+{
+    "title": {
+        "en": "New - Notebook - Apphub",
+        "hu": "Új  - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New item",
+        "hu": "Új elem"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "text": {
+        "en": "Text",
+        "hu": "Szöveg"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "link": {
+        "en": "Link",
+        "hu": "Link"
+    },
+    "checklist": {
+        "en": "Checklist",
+        "hu": "Lista"
+    },
+    "table": {
+        "en": "Table",
+        "hu": "Táblázat"
+    },
+    "checklist-table": {
+        "en": "Checklist-table",
+        "hu": "Lista-táblázat"
+    },
+    "custom-table": {
+        "en": "Custom table",
+        "hu": "Egyedi táblázat"
+    },
+    "only-title": {
+        "en": "Only title",
+        "hu": "Csak cím"
+    },
+    "image": {
+        "en": "Image",
+        "hu": "Kép"
+    },
+    "file": {
+        "en": "File",
+        "hu": "Fájl"
+    }
+}

@@ -14,6 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Component
+//TODO unit test
 public class TextQueryService {
     private final ListItemDao listItemDao;
     private final ContentDao contentDao;
@@ -24,6 +25,7 @@ public class TextQueryService {
 
         return TextResponse.builder()
             .textId(textId)
+            .parent(listItem.getParent())
             .title(listItem.getTitle())
             .content(content.getContent())
             .build();

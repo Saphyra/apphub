@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemsOrderService;
@@ -27,7 +27,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistItemQueryService checklistItemQueryService;
     private final EditChecklistItemService editChecklistItemService;
     private final ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
-    private final CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
+    private final ChecklistItemDeletionService checklistItemDeletionService;
     private final ChecklistItemsOrderService checklistItemsOrderService;
 
     @Override
@@ -37,13 +37,14 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    public void editChecklistItem(EditChecklistItemRequest request, UUID listItemId) {
+    public ChecklistResponse editChecklist(EditChecklistItemRequest request, UUID listItemId) {
         log.info("Editing checklistItem with listItemId {}", listItemId);
         editChecklistItemService.edit(request, listItemId);
+        return getChecklist(listItemId); //TODO unit test
     }
 
     @Override
-    public ChecklistResponse getChecklistItem(UUID listItemId) {
+    public ChecklistResponse getChecklist(UUID listItemId) {
         log.info("Querying checklist item with id {}", listItemId);
         return checklistItemQueryService.query(listItemId);
     }
@@ -55,14 +56,23 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    public void deleteCheckedItems(UUID listItemId) {
-        log.info("Deleting checked items of checklist {}", listItemId);
-        checkedChecklistItemDeletionService.deleteCheckedItems(listItemId);
+    //TODO unit test
+    public void deleteChecklistItem(UUID checklistItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete checklistItem {}", accessTokenHeader.getUserId(), checklistItemId);
+        checklistItemDeletionService.delete(checklistItemId);
     }
 
     @Override
-    public void orderItems(UUID listItemId) {
+    public ChecklistResponse deleteCheckedItems(UUID listItemId) {
+        log.info("Deleting checked items of checklist {}", listItemId);
+        checklistItemDeletionService.deleteCheckedItems(listItemId);
+        return getChecklist(listItemId); //TODO unit test
+    }
+
+    @Override
+    public ChecklistResponse orderItems(UUID listItemId) {
         log.info("Ordering checklist items {}", listItemId);
         checklistItemsOrderService.orderChecklistItems(listItemId);
+        return getChecklist(listItemId); //TODO unit test
     }
 }
