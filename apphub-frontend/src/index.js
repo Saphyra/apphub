@@ -20,6 +20,7 @@ import NotebookEditListItemPage from './modules/notebook/edit/NotebookEditListIt
 import NewLinkPage from './modules/notebook/new/new_link/NewLinkPage';
 import NewOnlyTitlePage from './modules/notebook/new/new_only_title/NewOnlyTitlePage';
 import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistPage';
+import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,15 @@ const router = createBrowserRouter([
   {
     path: "/web/notebook/new/checklist/:parent",
     element: <NewChecklistPage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/table/:parent",
+    element: <NewTablePage />,
     loader: ({ params }) => {
       return {
         parent: params.parent

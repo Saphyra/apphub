@@ -2,5 +2,9 @@
     "list-item-title-blank": {
         "en": "Title must not be blank.",
         "hu": "Cím nem lehet üres."
+    },
+    "table-head-name-blank": {
+        "en": "Name of the column must not be blank.",
+        "hu": "Az oszlop neve nem lehet üres."
     }
 }

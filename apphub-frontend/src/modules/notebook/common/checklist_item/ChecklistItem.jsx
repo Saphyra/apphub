@@ -1,9 +1,9 @@
 import React from "react";
 import InputField from "../../../../common/component/input/InputField";
 import Button from "../../../../common/component/input/Button";
-import MoveDirection from "./MoveDirection";
 import "./checklist_item.css";
 import UpdateType from "./UpdateType";
+import MoveDirection from "../MoveDirection";
 
 const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true }) => {
     const toggleChecked = () => {

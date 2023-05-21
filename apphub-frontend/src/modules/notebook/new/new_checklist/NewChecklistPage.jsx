@@ -18,7 +18,7 @@ import validateListItemTitle from "../../common/validator/ListItemTitleValidator
 import Endpoints from "../../../../common/js/dao/dao";
 import ChecklistItem from "../../common/checklist_item/ChecklistItem";
 import ChecklistItemData from "../../common/checklist_item/ChecklistItemData";
-import MoveDirection from "../../common/checklist_item/MoveDirection";
+import MoveDirection from "../../common/MoveDirection";
 
 const NewChecklistPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -34,7 +34,12 @@ const NewChecklistPage = () => {
     useEffect(() => addItem(), []);
 
     const addItem = () => {
-        const newRow = new ChecklistItemData(items.length);
+        const maxOrder = new Stream(items)
+            .map(item => item.order)
+            .max()
+            .orElse(0);
+
+        const newRow = new ChecklistItemData(maxOrder + 1);
         const copy = new Stream(items)
             .add(newRow)
             .toList();
@@ -71,7 +76,7 @@ const NewChecklistPage = () => {
                 newIndex = itemIndex + 1;
                 break;
             default:
-                Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+                Utils.throwException("IllegalArgument", "Unhandled MoveDirection: " + moveDirection);
         }
 
         const otherItem = orderedItems[newIndex];

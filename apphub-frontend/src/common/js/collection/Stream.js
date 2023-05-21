@@ -1,3 +1,4 @@
+import Utils from "../Utils";
 import MapStream from "./MapStream";
 import Optional from "./Optional";
 
@@ -42,6 +43,26 @@ const Stream = class {
 
     map(mapper) {
         return new Stream(this.items.map(mapper));
+    }
+
+    max() {
+        if(this.items.length === 0){
+            return new Optional(null);
+        }
+
+        let currentMax = Number.MIN_SAFE_INTEGER;
+
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number.");
+            }
+
+            if (item > currentMax) {
+                currentMax = item;
+            }
+        });
+
+        return new Optional(currentMax);
     }
 
     peek(consumer) {

@@ -290,6 +290,7 @@ const Endpoints = {
     NOTEBOOK_EDIT_CHECKLIST: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}"),
     NOTEBOOK_CHECKLIST_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist/{listItemId}/checked"),
     NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}/order"),
+    NOTEBOOK_CREATE_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/table"),
 }
 
 export default Endpoints;

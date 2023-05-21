@@ -6,7 +6,7 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ChecklistItem from "../../../../common/checklist_item/ChecklistItem";
 import ChecklistItemData from "../../../../common/checklist_item/ChecklistItemData";
-import MoveDirection from "../../../../common/checklist_item/MoveDirection";
+import MoveDirection from "../../../../common/MoveDirection";
 import Utils from "../../../../../../common/js/Utils";
 import "./checklist.css";
 import UpdateType from "../../../../common/checklist_item/UpdateType";
