@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ public class ExecutorServiceBeanTest {
     public static final String TEST_RESULT = "asd";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final SleepService sleepService = new SleepService();
 
     @Mock
     private ErrorReporterService errorReporterService;
@@ -43,7 +41,6 @@ public class ExecutorServiceBeanTest {
         underTest = ExecutorServiceBean.builder()
             .errorReporterService(errorReporterService)
             .executor(executorService)
-            .sleepService(sleepService)
             .build();
     }
 
