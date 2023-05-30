@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -78,31 +79,22 @@ public class ExecutorServiceBean {
         log.debug("Processing {} items...", dataList.size());
 
         List<Future<ExecutionResult<R>>> futures = dataList.stream()
-            .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
-            .collect(Collectors.toList());
+                .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
+                .collect(Collectors.toList());
 
-        long inProgress;
-        do {
-            inProgress = futures.stream()
-                .filter(rFuture -> !rFuture.isDone())
-                .count();
-
-            if (inProgress > 0) {
-                log.debug("Incomplete tasks: {} out of {}", inProgress, dataList.size());
-                sleepService.sleep(1);
+        List<R> results = new ArrayList<>();
+        for (Future<ExecutionResult<R>> future : futures) {
+            try {
+                results.add(future.get().getOrThrow());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        } while (inProgress > 0);
+        }
 
-        return futures.stream()
-            .map(rFuture -> {
-                try {
-                    return rFuture.get()
-                        .getOrThrow();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            })
-            .collect(Collectors.toList());
+        return results;
     }
 
     public void stop() {
