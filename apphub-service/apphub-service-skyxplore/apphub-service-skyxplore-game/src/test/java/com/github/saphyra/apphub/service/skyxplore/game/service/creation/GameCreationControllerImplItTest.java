@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import com.github.saphyra.apphub.service.skyxplore.game.SkyxploreGameApplication;
+import com.github.saphyra.apphub.service.skyxplore.game.SkyXploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
@@ -44,7 +44,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {SkyxploreGameApplication.class})
+@ContextConfiguration(classes = {SkyXploreGameApplication.class})
 public class GameCreationControllerImplItTest {
     private static final String CHARACTER_NAME = "character-name";
     private static final String ALLIANCE_NAME = "alliance-name";

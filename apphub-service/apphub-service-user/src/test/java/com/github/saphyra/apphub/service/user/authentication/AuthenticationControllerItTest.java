@@ -290,7 +290,7 @@ public class AuthenticationControllerItTest {
 
     @Test
     public void getAccessTokenById() {
-        LocalDateTime referenceDate = LocalDateTime.now();
+        LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
