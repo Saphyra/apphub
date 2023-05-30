@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
@@ -25,6 +26,9 @@ import java.util.stream.Collectors;
 public class ExecutorServiceBean {
     @NonNull
     private final ExecutorService executor;
+
+    @NonNull
+    private final SleepService sleepService;
 
     @NonNull
     private final ErrorReporterService errorReporterService;
