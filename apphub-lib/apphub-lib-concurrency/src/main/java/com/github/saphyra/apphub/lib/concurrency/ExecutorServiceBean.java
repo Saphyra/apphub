@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
@@ -10,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -18,7 +18,6 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,9 +25,6 @@ import java.util.ArrayList;
 public class ExecutorServiceBean {
     @NonNull
     private final ExecutorService executor;
-
-    @NonNull
-    private final SleepService sleepService;
 
     @NonNull
     private final ErrorReporterService errorReporterService;
@@ -69,10 +65,10 @@ public class ExecutorServiceBean {
         }
 
         return Lists.partition(dataList, parallelism)
-            .stream()
-            .map(part -> processCollectionWithWait(part, mapper))
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+                .stream()
+                .map(part -> processCollectionWithWait(part, mapper))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {
