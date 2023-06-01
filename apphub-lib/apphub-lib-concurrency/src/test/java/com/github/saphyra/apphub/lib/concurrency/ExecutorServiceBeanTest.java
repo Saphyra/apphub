@@ -86,12 +86,12 @@ public class ExecutorServiceBeanTest {
 
     @Test
     public void processCollectionWithWait_reportError() {
-        RuntimeException cause = new RuntimeException("asd");
+        RuntimeException cause = new RuntimeException("exception-message");
         Throwable ex = catchThrowable(() -> underTest.processCollectionWithWait(Arrays.asList(TEST_RESULT), s -> {
             throw cause;
         }, 1));
 
-        assertThat(ex.getCause()).isEqualTo(cause);
+        assertThat(ex).isEqualTo(cause);
         verify(errorReporterService).report(anyString(), eq(cause));
     }
 

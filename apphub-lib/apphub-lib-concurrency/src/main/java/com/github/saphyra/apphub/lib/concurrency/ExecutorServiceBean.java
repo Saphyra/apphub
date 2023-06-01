@@ -66,33 +66,31 @@ public class ExecutorServiceBean {
         }
 
         return Lists.partition(dataList, parallelism)
-                .stream()
-                .map(part -> processCollectionWithWait(part, mapper))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+            .stream()
+            .map(part -> processCollectionWithWait(part, mapper))
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {
         log.debug("Processing {} items...", dataList.size());
 
         List<Future<ExecutionResult<R>>> futures = dataList.stream()
-                .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
-                .collect(Collectors.toList());
+            .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
+            .toList();
 
         List<R> results = new ArrayList<>();
         for (Future<ExecutionResult<R>> future : futures) {
-
-                results.add(getFutureResult(future));
-
+            results.add(getFutureResult(future));
         }
 
         return results;
-
     }
 
     @SneakyThrows
     private <R> R getFutureResult(Future<ExecutionResult<R>> future) {
-        return future.get().getOrThrow();
+        return future.get()
+            .getOrThrow();
     }
 
     public void stop() {
