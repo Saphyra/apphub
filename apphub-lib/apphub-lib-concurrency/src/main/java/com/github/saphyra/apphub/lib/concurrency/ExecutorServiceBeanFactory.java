@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,6 @@ import static java.util.Objects.isNull;
 public class ExecutorServiceBeanFactory {
     private volatile static ExecutorService DEFAULT_EXECUTOR;
 
-    private final SleepService sleepService;
     private final ErrorReporterService errorReporterService;
 
     public ExecutorServiceBean create() {
@@ -24,7 +22,6 @@ public class ExecutorServiceBeanFactory {
 
     public ExecutorServiceBean create(ExecutorService executorService) {
         return ExecutorServiceBean.builder()
-            .sleepService(sleepService)
             .executor(executorService)
             .errorReporterService(errorReporterService)
             .build();
@@ -32,7 +29,6 @@ public class ExecutorServiceBeanFactory {
 
     public ScheduledExecutorServiceBean createScheduled(int threadCount) {
         return ScheduledExecutorServiceBean.builder()
-            .sleepService(sleepService)
             .errorReporterService(errorReporterService)
             .executor(Executors.newScheduledThreadPool(threadCount))
             .build();
