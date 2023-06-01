@@ -14,7 +14,6 @@ public class Endpoints {
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
-    public static final String SKYXPLORE_CHARACTER_PAGE = "/web/skyxplore/character";
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
