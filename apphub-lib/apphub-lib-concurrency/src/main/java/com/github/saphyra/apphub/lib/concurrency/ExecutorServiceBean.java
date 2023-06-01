@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,17 +81,18 @@ public class ExecutorServiceBean {
 
         List<R> results = new ArrayList<>();
         for (Future<ExecutionResult<R>> future : futures) {
-            try {
-                results.add(future.get().getOrThrow());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException(e);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+
+                results.add(getFutureResult(future));
+
         }
 
         return results;
+
+    }
+
+    @SneakyThrows
+    private <R> R getFutureResult(Future<ExecutionResult<R>> future) {
+        return future.get().getOrThrow();
     }
 
     public void stop() {
