@@ -25,7 +25,7 @@ function sessionChecker(){
             function unauthorizedErrorHandler(){
                 return new ErrorHandler(
                     function(request, response){return response.status == ResponseStatus.UNAUTHORIZED},
-                    function(){window.location.href = Mapping.INDEX_PAGE}
+                    function(){window.location.href = Mapping.INDEX_PAGE + "?redirect=/" + (window.location.pathname + window.location.search).substr(1)}
                 );
             }
         }

@@ -3,6 +3,7 @@ spring:
     name: skyxplore-game
 
 abandonedGameExpirationSeconds: 300
+skyXploreDataHost: skyxplore-data:8080
 
 game:
   tickTimeMillis: 100

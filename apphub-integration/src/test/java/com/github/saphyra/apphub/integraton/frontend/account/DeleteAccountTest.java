@@ -50,14 +50,16 @@ public class DeleteAccountTest extends SeleniumTest {
 
         AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
         ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
 
         //Cancel deletion
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ACCOUNT_PAGE))
+            .assertTrue("Account page is not opened");
 
         AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
         AccountPageActions.submitDeleteAccountForm(driver);
