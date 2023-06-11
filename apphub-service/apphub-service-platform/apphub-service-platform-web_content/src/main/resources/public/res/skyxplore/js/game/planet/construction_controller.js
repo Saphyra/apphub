@@ -303,20 +303,14 @@
             .withConfirmButton(localization.getAdditionalContent("cancel-construction-confirm-button"))
             .withDeclineButton(localization.getAdditionalContent("cancel-construction-cancel-button"));
 
-        return new Promise((resolve, reject) => {
-            confirmationService.openDialog(
-                "cancel-construction-confirmation-dialog",
-                confirmationDialogLocalization,
-                function(){
-                    const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
-                        request.convertResponse = jsonConverter;
-                        request.processValidResponse = function(surface){
-                            resolve(surface);
-                        }
-                    dao.sendRequestAsync(request);
-                }
-            );
-        });
+        confirmationService.openDialog(
+            "cancel-construction-confirmation-dialog",
+            confirmationDialogLocalization,
+            function(){
+                const request = new Request(Mapping.getEndpoint("SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION", {planetId: planetId, buildingId: buildingId}));
+                dao.sendRequestAsync(request);
+            }
+        );
     }
 
     function cancelDeconstruction(planetId, buildingId, dataId){

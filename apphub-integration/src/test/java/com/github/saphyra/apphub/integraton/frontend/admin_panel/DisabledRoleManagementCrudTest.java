@@ -4,8 +4,10 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.disabled_roles.DisabledRolesActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
@@ -59,7 +61,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
+            .assertTrue("Disabled role management page is not opened.");
 
         //Disable role
         initialRole = DisabledRolesActions.getDisabledRoles(driver)
@@ -102,7 +107,9 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         //Enable role
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
+            .assertTrue("Disabled role management page is not opened.");
 
         disabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()

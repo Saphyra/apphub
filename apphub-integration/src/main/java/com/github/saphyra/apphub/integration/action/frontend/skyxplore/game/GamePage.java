@@ -223,4 +223,8 @@ class GamePage {
     public static WebElement upgradeBuildingButton(WebDriver driver) {
         return driver.findElement(By.id("upgrade-building-button"));
     }
+
+    public static WebElement upgradeBuildingWindow(WebDriver driver) {
+        return driver.findElement(By.id("upgrade-building"));
+    }
 }

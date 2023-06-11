@@ -66,7 +66,7 @@ class TickSchedulerTest {
 
     @BeforeEach
     void setUp() {
-        eventLoop = new EventLoop(new ExecutorServiceBeanFactory(sleepService, errorReporterService));
+        eventLoop = new EventLoop(new ExecutorServiceBeanFactory(errorReporterService));
     }
 
     @Test

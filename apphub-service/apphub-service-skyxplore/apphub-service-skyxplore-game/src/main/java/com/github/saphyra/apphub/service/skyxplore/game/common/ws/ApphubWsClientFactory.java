@@ -14,7 +14,7 @@ public class ApphubWsClientFactory {
     private final SleepService sleepService;
 
     public SkyXploreWsClient create(String service, String endpoint) throws Exception {
-        String url = String.format("ws://%s:8080%s", service, endpoint);
+        String url = String.format("ws://%s%s", service, endpoint);
         log.info("ApphubWsClient URL: {}", url);
         return SkyXploreWsClient.builder()
             .url(url)

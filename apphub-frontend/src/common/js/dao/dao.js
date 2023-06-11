@@ -165,7 +165,7 @@ const defaultErrorHandler = () => {
                     case "SESSION_EXPIRED":
                     case "NO_SESSION_AVAILABLE":
                         sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
-                        window.location.href = Constants.INDEX_PAGE;
+                        window.location.href = Constants.INDEX_PAGE + "?redirect=/" + (window.location.pathname + window.location.search).substr(1);
                         break;
                     default:
                         NotificationService.showErrorCode(errorResponse.errorCode, errorResponse.params);

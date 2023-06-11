@@ -41,6 +41,7 @@ public class TestBase {
 
     public static int SERVER_PORT;
     public static int DATABASE_PORT;
+    public static String DATABASE_NAME;
     public static boolean REST_LOGGING_ENABLED;
     public static List<String> DISABLED_TEST_GROUPS;
     public static Connection CONNECTION;
@@ -66,6 +67,9 @@ public class TestBase {
 
         DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "serverPort is null"));
         log.info("DatabasePort: {}", DATABASE_PORT);
+
+        DATABASE_NAME = System.getProperty("databaseName", "postgres");
+        log.info("DatabaseName: {}", DATABASE_NAME);
 
         REST_LOGGING_ENABLED = Optional.ofNullable(System.getProperty("restLoggingEnabled"))
             .map(Boolean::parseBoolean)

@@ -71,7 +71,9 @@ public class BanCrudTest extends SeleniumTest {
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        AwaitilityWrapper.createDefault()
+            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
+            .assertTrue("Ban page is not opened.");
         openUser(adminDriver, testUserData);
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
@@ -94,7 +96,9 @@ public class BanCrudTest extends SeleniumTest {
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        AwaitilityWrapper.createDefault()
+            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
+            .assertTrue("Ban page is not opened.");
         openUser(adminDriver, testUserData);
 
         revokeBan(adminDriver, adminUserData.getPassword());

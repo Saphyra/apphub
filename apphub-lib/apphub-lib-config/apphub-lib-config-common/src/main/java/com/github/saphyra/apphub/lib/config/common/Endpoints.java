@@ -4,7 +4,6 @@ public class Endpoints {
     //PAGES
     public static final String INDEX_PAGE = "/web";
     public static final String ACCOUNT_PAGE = "/web/user/account";
-    public static final String MODULES_PAGE = "/web/modules";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
