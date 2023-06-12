@@ -9,13 +9,16 @@ import { ToastContainer } from "react-toastify";
 import NotificationService from "../../common/js/notification/NotificationService";
 import Endpoints, { ResponseStatus } from "../../common/js/dao/dao";
 import ErrorHandler from "../../common/js/dao/ErrorHandler";
+import { useSearchParams } from "react-router-dom";
 import Constants from "../../common/js/Constants";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     useEffect(() => NotificationService.displayStoredMessages(), null);
-    useEffect(() => redirectIfLoggedIn(), null);
+    useEffect(() => redirectIfLoggedIn(), [searchParams]);
 
     document.title = localizationHandler.get("title");
 
@@ -28,7 +31,9 @@ const IndexPage = () => {
                 ))
                 .send();
 
-            window.location.href = Constants.MODULES_PAGE;
+                const location = searchParams.get("redirect") || Constants.MODULES_PAGE;
+            
+            window.location.href = location;
         }
         queryAndRedirect();
     }

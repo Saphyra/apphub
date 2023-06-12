@@ -1,2 +1,8 @@
 server:
   port: 8099
+
+FTP_CLIENT_USERNAME: ftp_dev
+
+ftp:
+  client:
+    server: localhost
