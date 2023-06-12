@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edition.table_join;
 
-import com.github.saphyra.apphub.lib.common_domain.KeyValuePair;
+import com.github.saphyra.apphub.api.notebook.model.request.EditTableJoinRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +23,7 @@ public class EditTableTableJoinServiceTest {
     private EditTableTableJoinDeletionService editTableTableJoinDeletionService;
 
     @Mock
-    private EditTableTableJoinUpdateService editTableTableJoinUpdateService;
-
-    @Mock
-    private EditTableTableJoinCreationService editTableTableJoinCreationService;
+    private CreateAndEditTableTableJoinUpdateService createAndEditTableTableJoinUpdateService;
 
     @InjectMocks
     private EditTableTableJoinService underTest;
@@ -34,16 +31,18 @@ public class EditTableTableJoinServiceTest {
     @Mock
     private ListItem listItem;
 
+    @Mock
+    private EditTableJoinRequest editTableJoinRequest;
+
     @Test
     public void processEditions() {
-        List<List<KeyValuePair<String>>> columns = Arrays.asList(Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "asd")));
+        List<EditTableJoinRequest> columns = Arrays.asList(editTableJoinRequest);
 
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
         underTest.processEditions(columns, listItem);
 
         verify(editTableTableJoinDeletionService).process(columns, LIST_ITEM_ID);
-        verify(editTableTableJoinUpdateService).process(columns, LIST_ITEM_ID);
-        verify(editTableTableJoinCreationService).process(columns, listItem);
+        verify(createAndEditTableTableJoinUpdateService).process(columns, listItem);
     }
 }

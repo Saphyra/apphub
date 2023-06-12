@@ -1,22 +1,29 @@
 import React from "react";
 import InputField from "../../../../../../common/component/input/InputField";
 
-const TableColumn = ({ columnData, updateColumn }) => {
+const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
     const updateContent = (newValue) => {
         columnData.content = newValue;
         updateColumn();
     }
+    if (editingEnabled) {
+        return (
+            <td>
+                <InputField
+                    className="noteabook-table-column-input"
+                    type="text"
+                    onchangeCallback={updateContent}
+                    value={columnData.content}
+                />
+            </td>
+        )
+    } else {
+        return (
 
-    return (
-        <td>
-            <InputField
-                className="noteabook-table-column-input"
-                type="text"
-                onchangeCallback={updateContent}
-                value={columnData.content}
-            />
-        </td>
-    )
+            <td>{columnData.content}</td>
+        );
+    }
+
 }
 
 export default TableColumn;

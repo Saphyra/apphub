@@ -58,5 +58,9 @@
     "NOT_ENOUGH_ALLIANCES": {
         "en": "Every player is in the same alliance. Game is boring with no one to conquer.",
         "hu": "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani."
+    },
+    "INVALID_PARAM": {
+        "en": "Invalid parameter.",
+        "hu": "Érvénytelen paraméter."
     }
 }

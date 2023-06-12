@@ -36,5 +36,4 @@ public class TableHeadFactory {
         Content content = contentFactory.create(listItemId, tableHead.getTableHeadId(), userId, columnName);
         return new BiWrapper<>(tableHead, content);
     }
-
 }

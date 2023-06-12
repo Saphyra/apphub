@@ -70,9 +70,13 @@ public class TableControllerImplTest {
 
     @Test
     public void editTable() {
-        underTest.editTable(editTableRequest, LIST_ITEM_ID);
+        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
+
+        TableResponse<String> result = underTest.editTable(editTableRequest, LIST_ITEM_ID);
 
         verify(tableEditionService).edit(LIST_ITEM_ID, editTableRequest);
+
+        assertThat(result).isEqualTo(tableResponse);
     }
 
     @Test

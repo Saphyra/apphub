@@ -5,6 +5,7 @@ import Utils from "../../../../common/js/Utils";
 import Text from "./opened_item/text/Text";
 import "./opened_item/opened_list_item.css";
 import Checklist from "./opened_item/checklist/Checklist";
+import Table from "./opened_item/table/Table";
 
 const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
     const getContent = () => {
@@ -26,6 +27,13 @@ const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem
                 />
             case ListItemType.CHECKLIST:
                 return <Checklist
+                    localizationHandler={localizationHandler}
+                    openedListItem={openedListItem}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                />
+            case ListItemType.TABLE:
+                return <Table
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}

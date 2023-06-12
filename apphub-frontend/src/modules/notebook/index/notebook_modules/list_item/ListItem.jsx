@@ -20,6 +20,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case ListItemType.CATEGORY:
             case ListItemType.TEXT:
             case ListItemType.CHECKLIST:
+            case ListItemType.TABLE:
                 setOpenedListItem({ id: data.id, type: data.type });
                 break;
             case ListItemType.LINK:

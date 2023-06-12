@@ -1,13 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist_table.edition;
 
-import com.github.saphyra.apphub.api.notebook.model.request.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.lib.common_domain.KeyValuePair;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
-import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,29 +11,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class ChecklistTableEditionServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
-    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private TableEditionService tableEditionService;
 
     @Mock
-    private EditTableRequestConverter editTableRequestConverter;
+    private EditChecklistTableRowDeletionService editChecklistTableRowDeletionService;
 
     @Mock
-    private ChecklistTableRowDao checklistTableRowDao;
-
-    @Mock
-    private ChecklistTableRowFactory checklistTableRowFactory;
+    private EditChecklistTableCreateAndUpdateRowService editChecklistTableCreateAndUpdateRowService;
 
     @InjectMocks
     private ChecklistTableEditionService underTest;
@@ -52,34 +43,17 @@ public class ChecklistTableEditionServiceTest {
     private ListItem listItem;
 
     @Mock
-    private ChecklistTableRow checklistTableRow;
+    private EditChecklistTableRowRequest editChecklistTableRowRequest;
 
     @Test
-    public void rowAlreadyPresent() {
-        given(editTableRequestConverter.convert(editChecklistTableRequest)).willReturn(editTableRequest);
+    void edit() {
+        given(editChecklistTableRequest.getTable()).willReturn(editTableRequest);
         given(tableEditionService.edit(LIST_ITEM_ID, editTableRequest)).willReturn(listItem);
-        given(editChecklistTableRequest.getRows()).willReturn(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder().checked(true).build()));
-        given(checklistTableRowDao.findByParentAndRowIndex(LIST_ITEM_ID, 0)).willReturn(Optional.of(checklistTableRow));
+        given(editChecklistTableRequest.getRows()).willReturn(List.of(editChecklistTableRowRequest));
 
         underTest.edit(LIST_ITEM_ID, editChecklistTableRequest);
 
-        verify(checklistTableRow).setChecked(true);
-        verify(checklistTableRowDao).save(checklistTableRow);
-        verify(checklistTableRowDao).deleteByParentAndRowIndexGreaterThanEqual(LIST_ITEM_ID, 1);
-    }
-
-    @Test
-    public void newRow() {
-        given(listItem.getUserId()).willReturn(USER_ID);
-        given(editTableRequestConverter.convert(editChecklistTableRequest)).willReturn(editTableRequest);
-        given(tableEditionService.edit(LIST_ITEM_ID, editTableRequest)).willReturn(listItem);
-        given(editChecklistTableRequest.getRows()).willReturn(Arrays.asList(ChecklistTableRowRequest.<KeyValuePair<String>>builder().checked(true).build()));
-        given(checklistTableRowDao.findByParentAndRowIndex(LIST_ITEM_ID, 0)).willReturn(Optional.empty());
-        given(checklistTableRowFactory.create(USER_ID, LIST_ITEM_ID, 0, true)).willReturn(checklistTableRow);
-
-        underTest.edit(LIST_ITEM_ID, editChecklistTableRequest);
-
-        verify(checklistTableRowDao).save(checklistTableRow);
-        verify(checklistTableRowDao).deleteByParentAndRowIndexGreaterThanEqual(LIST_ITEM_ID, 1);
+        then(editChecklistTableRowDeletionService).should().deleteChecklistTableRows(List.of(editChecklistTableRowRequest), LIST_ITEM_ID);
+        then(editChecklistTableCreateAndUpdateRowService).should().createAndUpdate(List.of(editChecklistTableRowRequest), listItem);
     }
 }

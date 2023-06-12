@@ -102,5 +102,17 @@
     "add-item": {
         "en": "New item",
         "hu": "Új elem"
+    },
+    "table-head-title": {
+        "en": "Name of the column",
+        "hu": "Oszlop neve"
+    },
+    "new-column": {
+        "en": "New column",
+        "hu": "Új oszlop"
+    },
+    "new-row": {
+        "en": "New row",
+        "hu": "Új sor"
     }
 }

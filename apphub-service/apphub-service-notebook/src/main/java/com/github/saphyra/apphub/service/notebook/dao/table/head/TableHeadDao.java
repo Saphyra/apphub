@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -30,5 +31,15 @@ public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String
 
     public List<TableHead> getByParent(UUID parent) {
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
+    }
+
+    //TODO unit test
+    public void deleteById(UUID tableHeadId) {
+        deleteById(uuidConverter.convertDomain(tableHeadId));
+    }
+
+    //TODO unit test
+    public Optional<TableHead> findById(UUID tableHeadId) {
+        return findById(uuidConverter.convertDomain(tableHeadId));
     }
 }

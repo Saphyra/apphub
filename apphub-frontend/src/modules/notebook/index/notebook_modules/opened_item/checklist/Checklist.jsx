@@ -178,7 +178,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     return (
         <div id="notebook-content-checklist" className="notebook-content notebook-content-view">
             <ListItemTitle
-                id="notebook-content-text-title"
+                id="notebook-content-checklist-title"
                 placeholder={localizationHandler.get("list-item-title")}
                 value={title}
                 setListItemTitle={setTitle}
@@ -201,7 +201,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             <div className="notebook-content-buttons">
                 {!editingEnabled &&
                     <Button
-                        id="notebook-content-text-edit-button"
+                        id="notebook-content-checklist-edit-button"
                         label={localizationHandler.get("edit")}
                         onclick={() => setEditingEnabled(true)}
                     />
@@ -209,7 +209,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
                 {!editingEnabled &&
                     <Button
-                        id="notebook-content-text-delete-checked-button"
+                        id="notebook-content-checklist-delete-checked-button"
                         label={localizationHandler.get("delete-checked")}
                         onclick={() => deleteChecked()}
                     />
@@ -217,7 +217,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
                 {!editingEnabled &&
                     <Button
-                        id="notebook-content-text-order-items-button"
+                        id="notebook-content-checklist-order-items-button"
                         label={localizationHandler.get("order-items")}
                         onclick={() => orderItems()}
                     />
@@ -225,7 +225,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-text-discard-button"
+                        id="notebook-content-checklist-discard-button"
                         label={localizationHandler.get("discard")}
                         onclick={() => discard()}
                     />
@@ -233,7 +233,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-text-save-button"
+                        id="notebook-content-checklist-save-button"
                         label={localizationHandler.get("save")}
                         onclick={() => save()}
                     />
@@ -241,7 +241,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-text-add-item-button"
+                        id="notebook-content-checklist-add-item-button"
                         label={localizationHandler.get("add-item")}
                         onclick={() => addItem()}
                     />

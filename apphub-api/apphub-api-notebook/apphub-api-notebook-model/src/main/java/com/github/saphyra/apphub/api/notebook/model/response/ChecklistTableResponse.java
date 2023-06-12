@@ -20,5 +20,5 @@ public class ChecklistTableResponse {
     private final List<TableColumnResponse<String>> tableColumns;
 
     @NonNull
-    private final Map<Integer, Boolean> rowStatus;
+    private final Map<Integer, Boolean> rowStatus; //TODO return rowId
 }

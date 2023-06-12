@@ -33,11 +33,12 @@ public class ChecklistTableRowDao extends AbstractDao<ChecklistTableRowEntity, C
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
-    public void deleteByParentAndRowIndexGreaterThanEqual(UUID parent, int rowIndex) {
-        repository.deleteByParentAndRowIndexGreaterThanEqual(uuidConverter.convertDomain(parent), rowIndex);
-    }
-
     public void deleteByParent(UUID listItemId) {
         repository.deleteByParent(uuidConverter.convertDomain(listItemId));
+    }
+
+    //TODO unit test
+    public Optional<ChecklistTableRow> findById(UUID rowId) {
+        return findById(uuidConverter.convertDomain(rowId));
     }
 }

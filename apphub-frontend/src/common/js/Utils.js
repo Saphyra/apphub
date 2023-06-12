@@ -46,6 +46,10 @@ const generateRandomId = () => {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
+const hasValue = (value) =>{
+    return value !== null && value !== undefined;
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -54,6 +58,7 @@ const Utils = {
     getQueryParam: getQueryParam,
     isBlank: isBlank,
     generateRandomId: generateRandomId,
+    hasValue: hasValue,
 }
 
 export default Utils;

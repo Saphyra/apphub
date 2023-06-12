@@ -31,7 +31,7 @@ public class TableEditionService {
         listItem.setTitle(request.getTitle());
         listItemDao.save(listItem);
 
-        editTableTableHeadService.processEditions(request.getColumnNames(), listItem);
+        editTableTableHeadService.processEditions(request.getTableHeads(), listItem);
         editTableTableJoinService.processEditions(request.getColumns(), listItem);
 
         return listItem;

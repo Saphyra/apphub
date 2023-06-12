@@ -35,9 +35,10 @@ public class TableControllerImpl implements TableController {
     }
 
     @Override
-    public void editTable(EditTableRequest request, UUID listItemId) {
+    public TableResponse<String> editTable(EditTableRequest request, UUID listItemId) {
         log.info("Editing table {}", listItemId);
         tableEditionService.edit(listItemId, request);
+        return getTable(listItemId);
     }
 
     @Override

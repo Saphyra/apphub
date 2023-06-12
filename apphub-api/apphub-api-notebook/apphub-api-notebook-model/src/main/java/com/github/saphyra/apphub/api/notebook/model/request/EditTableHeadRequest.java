@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class EditTableRequest {
-    private String title;
-    private List<EditTableHeadRequest> tableHeads;
-    private List<EditTableJoinRequest> columns;
+public class EditTableHeadRequest {
+    private UUID tableHeadId;
+    private Integer columnIndex;
+    private String columnName;
 }

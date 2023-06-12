@@ -4,11 +4,19 @@ import Optional from "./Optional";
 
 const Stream = class {
     constructor(items) {
-        this.items = items === null ? [] : items.slice();
+        this.items = Utils.hasValue(items) ? items.slice() : [];
     }
 
     add(item) {
         this.items.push(item);
+
+        return this;
+    }
+
+    addAll(items) {
+        for (let i in items) {
+            this.items.push(items[i]);
+        }
 
         return this;
     }
@@ -37,6 +45,15 @@ const Stream = class {
         return new Optional(this.items[0]);
     }
 
+    flatMap(mapper) {
+        const result = new Stream();
+
+        this.map(item => mapper(item))
+            .forEach(items => result.addAll(items.toList()));
+
+        return result;
+    }
+
     forEach(consumer) {
         this.items.forEach(consumer);
     }
@@ -46,7 +63,7 @@ const Stream = class {
     }
 
     max() {
-        if(this.items.length === 0){
+        if (this.items.length === 0) {
             return new Optional(null);
         }
 
@@ -54,7 +71,7 @@ const Stream = class {
 
         this.forEach(item => {
             if (typeof item !== "number") {
-                Utils.throwException("IllegalArgument", item + " is not a number.");
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
             }
 
             if (item > currentMax) {

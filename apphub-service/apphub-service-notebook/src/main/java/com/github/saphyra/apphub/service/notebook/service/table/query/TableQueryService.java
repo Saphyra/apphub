@@ -27,6 +27,7 @@ public class TableQueryService {
 
         return TableResponse.<T>builder()
             .title(listItem.getTitle())
+            .parent(listItem.getParent())
             .tableHeads(fetchTableHeads(listItemId))
             .tableColumns(tableColumnResponseProvider.fetchTableColumns(listItemId))
             .build();
