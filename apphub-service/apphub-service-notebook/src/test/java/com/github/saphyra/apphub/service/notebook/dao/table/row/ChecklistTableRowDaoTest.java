@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,17 +48,6 @@ public class ChecklistTableRowDaoTest {
         underTest.deleteByUserId(USER_ID);
 
         verify(repository).deleteByUserId(USER_ID_STRING);
-    }
-
-    @Test
-    public void findByParentAndRowIndex() {
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
-        given(repository.findByParentAndRowIndex(PARENT_STRING, ROW_INDEX)).willReturn(Optional.of(entity));
-        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-
-        Optional<ChecklistTableRow> result = underTest.findByParentAndRowIndex(PARENT, ROW_INDEX);
-
-        assertThat(result).contains(domain);
     }
 
     @Test

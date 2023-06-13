@@ -12,7 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +25,6 @@ public class ChecklistTableRowRepositoryTest {
     private static final String USER_ID_2 = "user-id-2";
     private static final String PARENT_1 = "parent-1";
     private static final String PARENT_2 = "parent-2";
-    private static final Integer ROW_INDEX = 435;
 
     @Autowired
     private ChecklistTableRowRepository underTest;
@@ -53,20 +51,6 @@ public class ChecklistTableRowRepositoryTest {
         underTest.deleteByUserId(USER_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity2);
-    }
-
-    @Test
-    public void findByParentAndRowIndex() {
-        ChecklistTableRowEntity entity = ChecklistTableRowEntity.builder()
-            .rowId(ROW_ID_1)
-            .parent(PARENT_1)
-            .rowIndex(ROW_INDEX)
-            .build();
-        underTest.save(entity);
-
-        Optional<ChecklistTableRowEntity> result = underTest.findByParentAndRowIndex(PARENT_1, ROW_INDEX);
-
-        assertThat(result).contains(entity);
     }
 
     @Test

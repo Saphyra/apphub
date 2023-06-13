@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 public class ChecklistTableControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
-    private static final Integer ROW_INDEX = 234;
+    private static final UUID ROW_ID = UUID.randomUUID();
 
     @Mock
     private ChecklistTableCreationService checklistTableCreationService;
@@ -87,9 +87,9 @@ public class ChecklistTableControllerImplTest {
 
     @Test
     public void setChecklistTableRowStatus() {
-        underTest.setChecklistTableRowStatus(LIST_ITEM_ID, ROW_INDEX, new OneParamRequest<>(true));
+        underTest.setChecklistTableRowStatus(ROW_ID, new OneParamRequest<>(true));
 
-        verify(checklistTableStatusUpdateService).updateStatus(LIST_ITEM_ID, ROW_INDEX, true);
+        verify(checklistTableStatusUpdateService).updateStatus(ROW_ID, true);
     }
 
     @Test

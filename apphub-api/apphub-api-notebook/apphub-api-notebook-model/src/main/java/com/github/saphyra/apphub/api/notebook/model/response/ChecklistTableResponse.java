@@ -6,12 +6,15 @@ import lombok.NonNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @Builder
 public class ChecklistTableResponse {
     @NonNull
     private final String title;
+
+    private final UUID parent;
 
     @NonNull
     private final List<TableHeadResponse> tableHeads;
@@ -20,5 +23,5 @@ public class ChecklistTableResponse {
     private final List<TableColumnResponse<String>> tableColumns;
 
     @NonNull
-    private final Map<Integer, Boolean> rowStatus; //TODO return rowId
+    private final Map<Integer, ChecklistTableRowStatusResponse> rowStatus;
 }

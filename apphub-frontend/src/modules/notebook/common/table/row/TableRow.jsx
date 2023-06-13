@@ -4,8 +4,9 @@ import MoveDirection from "../../MoveDirection";
 import Stream from "../../../../../common/js/collection/Stream";
 import TableColumn from "./column/TableColumn";
 import "./table_row.css";
+import InputField from "../../../../../common/component/input/InputField";
 
-const TableRow = ({ rowData, updateRow, removeRow, moveRow, editingEnabled = true }) => {
+const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editingEnabled = true, checklist = false }) => {
     const getColumns = () => {
         return new Stream(rowData.columns)
             .sorted((a, b) => a.columnIndex - b.columnIndex)
@@ -18,6 +19,22 @@ const TableRow = ({ rowData, updateRow, removeRow, moveRow, editingEnabled = tru
                 />
             )
             .toList();
+    }
+
+    const getCheckbox = () => {
+        return (
+            <td className="notebook-table-row-checked-cell">
+                <InputField
+                    className="notebook-table-row-checked"
+                    type="checkbox"
+                    onchangeCallback={(checked) => {
+                        rowData.checked = checked;
+                        updateChecked(rowData);
+                    }}
+                    checked={rowData.checked}
+                />
+            </td>
+        )
     }
 
     const getCommandButtons = () => {
@@ -47,8 +64,10 @@ const TableRow = ({ rowData, updateRow, removeRow, moveRow, editingEnabled = tru
     }
 
     return (
-        <tr>
+        <tr className={"notebook-table-row" + (rowData.checked ? " checked" : "")}>
             {getCommandButtons()}
+
+            {checklist && getCheckbox()}
 
             {getColumns()}
         </tr>

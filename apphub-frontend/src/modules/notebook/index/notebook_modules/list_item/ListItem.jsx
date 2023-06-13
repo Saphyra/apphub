@@ -21,6 +21,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case ListItemType.TEXT:
             case ListItemType.CHECKLIST:
             case ListItemType.TABLE:
+            case ListItemType.CHECKLIST_TABLE:
                 setOpenedListItem({ id: data.id, type: data.type });
                 break;
             case ListItemType.LINK:
@@ -29,7 +30,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case ListItemType.ONLY_TITLE:
                 break;
             default:
-                Utils.throwException("IllegalArgument", "ListItemType " + data.type + " is not handled.");
+                Utils.throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
         }
     }
 

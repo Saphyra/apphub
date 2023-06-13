@@ -18,7 +18,7 @@ import NotificationService from "../../../../../../common/js/notification/Notifi
 import validateTableHeadNames from "../../../../common/validator/TableHeadNameValidator";
 import EventName from "../../../../../../common/js/event/EventName";
 
-const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
+const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
@@ -30,7 +30,9 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     //System
     const loadTable = () => {
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_TABLE.createRequest(null, { listItemId: openedListItem.id })
+            const endpoint = checklist ? Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE : Endpoints.NOTEBOOK_GET_TABLE;
+
+            const response = await endpoint.createRequest(null, { listItemId: openedListItem.id })
                 .send();
 
             setDataFromResponse(response);
@@ -60,8 +62,6 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                 tableColumnMapping[tableColumn.rowIndex].push(tableColumn);
             });
 
-        console.log(tableColumnMapping);
-
         const trows = new MapStream(tableColumnMapping)
             .toList((rowIndex, columns) => {
                 const columnDataList = new Stream(columns)
@@ -74,7 +74,9 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 return new TableRowData(
                     Number(rowIndex),
-                    columnDataList
+                    columnDataList,
+                    response.rowStatus[rowIndex].checked,
+                    response.rowStatus[rowIndex].rowId
                 );
             });
         setRows(trows);
@@ -118,9 +120,11 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                     key={row.rowId}
                     rowData={row}
                     updateRow={updateRow}
+                    updateChecked={updateChecked}
                     removeRow={removeRow}
                     moveRow={moveRow}
                     editingEnabled={editingEnabled}
+                    checklist={checklist}
                 />
             )
             .toList();
@@ -149,7 +153,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
             return;
         }
 
-        const payload = {
+        const tablePayload = {
             title: title,
             tableHeads: new Stream(tableHeads)
                 .sorted((a, b) => a.columnIndex - b.columnIndex)
@@ -176,8 +180,28 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                 .toList()
         }
 
-        const response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(payload, { listItemId: openedListItem.id })
-            .send();
+        let response;
+        if (checklist) {
+            const payload = {
+                table: tablePayload,
+                rows: new Stream(rows)
+                    .map(row => {
+                        return {
+                            rowId: row.rowId,
+                            rowIndex: row.rowIndex,
+                            checked: row.checked
+                        }
+                    })
+                    .toList()
+            };
+            response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE.createRequest(payload, { listItemId: openedListItem.id })
+                .send();
+
+        } else {
+            response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: openedListItem.id })
+                .send();
+        }
+
 
         setEditingEnabled(false);
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
@@ -336,6 +360,15 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         setRows(copy);
     }
 
+    const updateChecked = (row) => {
+        if (!editingEnabled) {
+            Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
+                .send();
+        }
+
+        updateRow();
+    }
+
     return (
         <div id="notebook-content-table" className="notebook-content notebook-content-view">
             <ListItemTitle
@@ -359,6 +392,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                     <thead>
                         <tr>
                             {editingEnabled && <th></th>}
+                            {checklist && <th>{localizationHandler.get("checked")}</th>}
                             {getTableHeads()}
                         </tr>
                     </thead>

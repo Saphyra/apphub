@@ -48,9 +48,9 @@ class CustomTableControllerImpl implements CustomTableController {
     }
 
     @Override
-    public void setChecklistTableRowStatus(UUID listItemId, Integer rowIndex, OneParamRequest<Boolean> status, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to modify row status of CustomTable {}", accessTokenHeader.getUserId(), listItemId);
-        checklistTableStatusUpdateService.updateStatus(listItemId, rowIndex, status.getValue());
+    public void setCustomTableRowStatus(UUID rowId, OneParamRequest<Boolean> status, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to modify row status of CustomTable row {}", accessTokenHeader.getUserId(), rowId);
+        checklistTableStatusUpdateService.updateStatus(rowId, status.getValue());
     }
 
     @Override

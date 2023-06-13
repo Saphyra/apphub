@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist_table;
 
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableResponse;
+import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableRowStatusResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
@@ -24,14 +25,22 @@ public class ChecklistTableQueryService {
 
     public ChecklistTableResponse getChecklistTable(UUID listItemId) {
         TableResponse<String> tableResponse = tableQueryService.getTable(listItemId, contentTableColumnResponseProvider);
-        Map<Integer, Boolean> rowStatus = checklistTableRowDao.getByParent(listItemId)
+        Map<Integer, ChecklistTableRowStatusResponse> rowStatus = checklistTableRowDao.getByParent(listItemId)
             .stream()
-            .collect(Collectors.toMap(ChecklistTableRow::getRowIndex, ChecklistTableRow::isChecked));
+            .collect(Collectors.toMap(ChecklistTableRow::getRowIndex, this::getRowStatusResponse));
         return ChecklistTableResponse.builder()
             .title(tableResponse.getTitle())
+            .parent(tableResponse.getParent())
             .tableHeads(tableResponse.getTableHeads())
             .tableColumns(tableResponse.getTableColumns())
             .rowStatus(rowStatus)
+            .build();
+    }
+
+    private ChecklistTableRowStatusResponse getRowStatusResponse(ChecklistTableRow row) {
+        return ChecklistTableRowStatusResponse.builder()
+            .rowId(row.getRowId())
+            .checked(row.isChecked())
             .build();
     }
 }

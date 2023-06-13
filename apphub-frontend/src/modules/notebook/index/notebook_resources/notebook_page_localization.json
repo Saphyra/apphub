@@ -114,5 +114,9 @@
     "new-row": {
         "en": "New row",
         "hu": "Új sor"
+    },
+    "checked": {
+        "en": "Checked",
+        "hu": "Jelölés"
     }
 }

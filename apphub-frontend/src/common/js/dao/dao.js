@@ -293,6 +293,10 @@ const Endpoints = {
     NOTEBOOK_CREATE_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/table"),
     NOTEBOOK_GET_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/table/{listItemId}"),
     NOTEBOOK_EDIT_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/table/{listItemId}"),
+    NOTEBOOK_CREATE_CHECKLIST_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/checklist-table"),
+    NOTEBOOK_GET_CHECKLIST_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/checklist-table/{listItemId}"),
+    NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{rowId}/status"),
+    NOTEBOOK_EDIT_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{listItemId}"),
 }
 
 export default Endpoints;

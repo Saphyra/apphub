@@ -103,7 +103,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/notebook/new/table/:parent",
-    element: <NewTablePage />,
+    element: <NewTablePage checklist={false} />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/checklist-table/:parent",
+    element: <NewTablePage checklist={true} />,
     loader: ({ params }) => {
       return {
         parent: params.parent

@@ -49,9 +49,9 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    public void setChecklistTableRowStatus(UUID listItemId, Integer rowIndex, OneParamRequest<Boolean> status) {
-        log.info("Setting checklistTable row status for table {}", listItemId);
-        checklistTableStatusUpdateService.updateStatus(listItemId, rowIndex, status.getValue());
+    public void setChecklistTableRowStatus(UUID rowId, OneParamRequest<Boolean> status) {
+        log.info("Setting checklistTable row status for row {}", rowId);
+        checklistTableStatusUpdateService.updateStatus( rowId, status.getValue());
     }
 
     @Override

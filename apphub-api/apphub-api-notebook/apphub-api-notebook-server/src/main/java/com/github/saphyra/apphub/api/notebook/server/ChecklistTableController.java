@@ -28,7 +28,7 @@ public interface ChecklistTableController {
     ChecklistTableResponse getChecklistTable(@PathVariable("listItemId") UUID listItemId);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS)
-    void setChecklistTableRowStatus(@PathVariable("listItemId") UUID listItemId, @PathVariable("rowIndex") Integer rowIndex, @RequestBody OneParamRequest<Boolean> status);
+    void setChecklistTableRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status);
 
     @DeleteMapping(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE)
     void deleteCheckedItems(@PathVariable("listItemId") UUID listItemId);

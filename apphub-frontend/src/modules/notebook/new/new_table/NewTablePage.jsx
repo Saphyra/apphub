@@ -24,10 +24,9 @@ import Endpoints from "../../../../common/js/dao/dao";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../common/validator/TableHeadNameValidator";
 
-const NewTablePage = () => {
+const NewTablePage = ({ checklist }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
-
 
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
@@ -46,6 +45,7 @@ const NewTablePage = () => {
         }
 
         const columnNames = new Stream(tableHeads)
+            .sorted((a, b) => a.columnIndex - b.columnIndex)
             .map(tableHead => tableHead.content)
             .toList();
 
@@ -55,23 +55,46 @@ const NewTablePage = () => {
             return;
         }
 
-        const payload = {
-            title: listItemTitle,
-            parent: parentId,
-            columnNames: columnNames,
-            columns: new Stream(rows)
-                .sorted((a, b) => a.rowIndex - b.rowIndex)
-                .map(row =>
-                    new Stream(row.columns)
-                        .sorted((a, b) => a.columnIndex - b.columnIndex)
-                        .map(column => column.content)
-                        .toList()
-                )
-                .toList()
-        }
+        if (checklist) {
+            const payload = {
+                title: listItemTitle,
+                parent: parentId,
+                columnNames: columnNames,
+                rows: new Stream(rows)
+                    .sorted((a, b) => a.rowIndex - b.rowIndex)
+                    .map(row => {
+                        return {
+                            checked: row.checked,
+                            columns: new Stream(row.columns)
+                                .sorted((a, b) => a.columnIndex - b.columnIndex)
+                                .map(column => column.content)
+                                .toList()
+                        }
+                    })
+                    .toList()
+            }
 
-        await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
-            .send();
+            await Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE.createRequest(payload)
+                .send();
+        } else {
+            const payload = {
+                title: listItemTitle,
+                parent: parentId,
+                columnNames: columnNames,
+                columns: new Stream(rows)
+                    .sorted((a, b) => a.rowIndex - b.rowIndex)
+                    .map(row =>
+                        new Stream(row.columns)
+                            .sorted((a, b) => a.columnIndex - b.columnIndex)
+                            .map(column => column.content)
+                            .toList()
+                    )
+                    .toList()
+            }
+
+            await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
+                .send();
+        }
 
         window.location.href = Constants.NOTEBOOK_PAGE;
     }
@@ -260,6 +283,8 @@ const NewTablePage = () => {
         return (
             <tr>
                 <th></th>
+                {checklist && <th>{localizationHandler.get("checked")}</th>}
+
                 {
                     new Stream(tableHeads)
                         .sorted((a, b) => a.columnIndex - b.columnIndex)
@@ -287,8 +312,10 @@ const NewTablePage = () => {
                     key={row.rowId}
                     rowData={row}
                     updateRow={updateRow}
+                    updateChecked={updateRow}
                     moveRow={moveRow}
                     removeRow={removeRow}
+                    checklist={checklist}
                 />
             )
             .toList();

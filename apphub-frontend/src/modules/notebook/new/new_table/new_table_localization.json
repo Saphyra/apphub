@@ -34,5 +34,9 @@
     "table-head-title": {
         "en": "Name of the column",
         "hu": "Oszlop neve"
+    },
+    "checked": {
+        "en": "Checked",
+        "hu": "Jelölés"
     }
 }

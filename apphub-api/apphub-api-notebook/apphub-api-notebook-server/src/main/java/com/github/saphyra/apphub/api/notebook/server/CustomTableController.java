@@ -30,7 +30,7 @@ public interface CustomTableController {
     CustomTableResponse getCustomTable(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(path = Endpoints.NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS)
-    void setChecklistTableRowStatus(@PathVariable("listItemId") UUID listItemId, @PathVariable("rowIndex") Integer rowIndex, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void setCustomTableRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE)
     void deleteCheckedItems(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

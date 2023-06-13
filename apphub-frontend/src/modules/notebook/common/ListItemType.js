@@ -5,6 +5,7 @@ const ListItemType = {
     ONLY_TITLE: "ONLY_TITLE",
     CHECKLIST: "CHECKLIST",
     TABLE: "TABLE",
+    CHECKLIST_TABLE: "CHECKLIST_TABLE",
 }
 
 export default ListItemType;

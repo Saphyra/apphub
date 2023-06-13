@@ -38,6 +38,15 @@ const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
+                    checklist={false}
+                />
+            case ListItemType.CHECKLIST_TABLE:
+                return <Table
+                    localizationHandler={localizationHandler}
+                    openedListItem={openedListItem}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                    checklist={true}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled ListItemType: " + openedListItem.type);
