@@ -32,7 +32,7 @@ public class ListItemCloneService {
     }
 
     private void clone(UUID parent, ListItem toClone, String title) {
-        ListItem listItemClone = listItemFactory.create(toClone.getUserId(), title, parent, toClone.getType());
+        ListItem listItemClone = listItemFactory.create(toClone.getUserId(), title, parent, toClone.getType(), toClone.isPinned(), toClone.isArchived());
         listItemDao.save(listItemClone);
 
         switch (toClone.getType()) {

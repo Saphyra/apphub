@@ -13,13 +13,15 @@ import java.util.UUID;
 public class ListItemFactory {
     private final IdGenerator idGenerator;
 
-    public ListItem create(UUID userId, String title, UUID parent, ListItemType type) {
+    public ListItem create(UUID userId, String title, UUID parent, ListItemType type, boolean pinned, boolean archived) {
         return ListItem.builder()
             .listItemId(idGenerator.randomUuid())
             .userId(userId)
             .parent(parent)
             .type(type)
             .title(title)
+            .pinned(pinned)
+            .archived(archived)
             .build();
     }
 }
