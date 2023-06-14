@@ -70,19 +70,29 @@ public class CloneListItemTest extends SeleniumTest {
         DetailedListActions.findDetailedItem(driver, ROOT_TITLE)
             .open();
 
+        DetailedListActions.findDetailedItem(driver, PARENT_TITLE)
+            .pin(driver);
+        DetailedListActions.findDetailedItem(driver, PARENT_TITLE)
+            .archive(driver);
+
         ListItemDetailsItem parentItem = DetailedListActions.findDetailedItem(driver, PARENT_TITLE);
         String parentId = parentItem.getId();
+
         parentItem.cloneItem(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Duplikálás sikeres.");
 
         ListItemDetailsItem clonedParentItem = AwaitilityWrapper.getListWithWait(
-            () -> DetailedListActions.getDetailedListItems(driver),
-            listItemDetailsItems -> listItemDetailsItems.size() == 2
-        ).stream()
+                () -> DetailedListActions.getDetailedListItems(driver),
+                listItemDetailsItems -> listItemDetailsItems.size() == 2
+            ).stream()
             .filter(listItemDetailsItem -> !listItemDetailsItem.getId().equals(parentId))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Clone not found"));
+
+        assertThat(clonedParentItem.isArchived()).isTrue();
+        assertThat(clonedParentItem.isPinned()).isTrue();
+
         clonedParentItem.open();
 
         DetailedListActions.findDetailedItem(driver, CHILD_CATEGORY_TITLE)
