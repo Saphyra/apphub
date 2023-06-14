@@ -120,6 +120,9 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
+        NotebookActions.archive(language, accessTokenId, parentId, true);
+        NotebookActions.pin(language, accessTokenId, parentId, true);
+
         Response cloneResponse = NotebookActions.getCloneListItemResponse(language, accessTokenId, parentId);
 
         assertThat(cloneResponse.getStatusCode()).isEqualTo(200);
@@ -128,12 +131,16 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(rootItems.getChildren()).hasSize(2);
         assertThat(rootItems.getChildren().stream().allMatch(notebookView -> notebookView.getTitle().equals(PARENT_TITLE))).isTrue();
 
-        UUID clonedParentId = rootItems.getChildren()
+        NotebookView clonedItem = rootItems.getChildren()
             .stream()
             .filter(notebookView -> !notebookView.getId().equals(parentId))
             .findFirst()
-            .map(NotebookView::getId)
             .orElseThrow(() -> new RuntimeException("Clone not found"));
+
+        assertThat(clonedItem.isArchived()).isTrue();
+        assertThat(clonedItem.isPinned()).isTrue();
+
+        UUID clonedParentId = clonedItem.getId();
 
         ChildrenOfCategoryResponse clonedParentItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, clonedParentId);
         assertThat(clonedParentItems.getChildren()).hasSize(6);

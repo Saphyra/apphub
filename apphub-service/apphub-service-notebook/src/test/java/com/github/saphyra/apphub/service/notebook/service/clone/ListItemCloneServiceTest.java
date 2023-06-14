@@ -43,6 +43,10 @@ public class ListItemCloneServiceTest {
     private static final UUID FILE_LIST_ITEM_ID = UUID.randomUUID();
     private static final String FILE_TITLE = "file-title";
 
+    private static final boolean PINNED = false;
+
+    private static final boolean ARCHIVED = false;
+
     @Mock
     private ListItemDao listItemDao;
 
@@ -122,7 +126,7 @@ public class ListItemCloneServiceTest {
         given(parentListItemClone.getListItemId()).willReturn(PARENT_LIST_ITEM_CLONE_ID);
 
         given(listItemDao.findByIdValidated(PARENT_LIST_ITEM_ID)).willReturn(parentListItem);
-        given(listItemFactory.create(USER_ID, PARENT_LIST_ITEM_TITLE, PARENT_OF_PARENT, ListItemType.CATEGORY)).willReturn(parentListItemClone);
+        given(listItemFactory.create(USER_ID, PARENT_LIST_ITEM_TITLE, PARENT_OF_PARENT, ListItemType.CATEGORY, PINNED, ARCHIVED)).willReturn(parentListItemClone);
 
         given(listItemDao.getByUserIdAndParent(USER_ID, PARENT_LIST_ITEM_ID)).willReturn(Arrays.asList(
             categoryListItem,
@@ -136,17 +140,17 @@ public class ListItemCloneServiceTest {
             fileListItem
         ));
 
-        given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY)).willReturn(categoryListItemClone);
+        given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY, PINNED, ARCHIVED)).willReturn(categoryListItemClone);
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_LIST_ITEM_ID)).willReturn(Collections.emptyList());
 
-        given(listItemFactory.create(USER_ID, LINK_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.LINK)).willReturn(linkListItemClone);
-        given(listItemFactory.create(USER_ID, TEXT_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TEXT)).willReturn(textListItemClone);
-        given(listItemFactory.create(USER_ID, CHECKLIST_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST)).willReturn(checklistListItemClone);
-        given(listItemFactory.create(USER_ID, TABLE_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TABLE)).willReturn(tableListItemClone);
-        given(listItemFactory.create(USER_ID, CHECKLIST_TABLE_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST_TABLE)).willReturn(checklistTableListItemClone);
-        given(listItemFactory.create(USER_ID, ONLY_TITLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.ONLY_TITLE)).willReturn(onlyTitleListItemClone);
-        given(listItemFactory.create(USER_ID, IMAGE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.IMAGE)).willReturn(imageListItemClone);
-        given(listItemFactory.create(USER_ID, FILE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.FILE)).willReturn(fileListItemClone);
+        given(listItemFactory.create(USER_ID, LINK_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.LINK, PINNED, ARCHIVED)).willReturn(linkListItemClone);
+        given(listItemFactory.create(USER_ID, TEXT_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TEXT, PINNED, ARCHIVED)).willReturn(textListItemClone);
+        given(listItemFactory.create(USER_ID, CHECKLIST_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST, PINNED, ARCHIVED)).willReturn(checklistListItemClone);
+        given(listItemFactory.create(USER_ID, TABLE_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.TABLE, PINNED, ARCHIVED)).willReturn(tableListItemClone);
+        given(listItemFactory.create(USER_ID, CHECKLIST_TABLE_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CHECKLIST_TABLE, PINNED, ARCHIVED)).willReturn(checklistTableListItemClone);
+        given(listItemFactory.create(USER_ID, ONLY_TITLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.ONLY_TITLE, PINNED, ARCHIVED)).willReturn(onlyTitleListItemClone);
+        given(listItemFactory.create(USER_ID, IMAGE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.IMAGE, PINNED, ARCHIVED)).willReturn(imageListItemClone);
+        given(listItemFactory.create(USER_ID, FILE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.FILE, PINNED, ARCHIVED)).willReturn(fileListItemClone);
 
         underTest.clone(PARENT_LIST_ITEM_ID);
 
