@@ -185,7 +185,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 disabled={!editingEnabled}
                 closeButton={
                     <Button
-                        id="notebook-content-text-close-button"
+                        id="notebook-content-checklist-close-button"
                         className="notebook-close-button"
                         label="X"
                         onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}

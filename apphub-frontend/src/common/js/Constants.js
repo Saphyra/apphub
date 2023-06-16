@@ -15,7 +15,8 @@ const Constants = {
     MAX_CHARACTER_NAME_LENGTH: 30,
     MIN_GAME_NAME_LENGTH: 3,
     MAX_GAME_NAME_LENGTH: 30,
-    
+    FILE_SIZE_LIMIT: 2147483648,
+
     //PAGES
     MODULES_PAGE: "/web/modules",
     INDEX_PAGE: "/web",

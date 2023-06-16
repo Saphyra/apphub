@@ -1,0 +1,10 @@
+#notebook-content-image-content{
+    text-align: center;
+    padding: 20px;
+}
+
+#notebook-content-image-src{
+    max-width: 95%;
+    max-height: 95%;
+    border: 2px ridge white;
+}

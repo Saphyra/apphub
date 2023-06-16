@@ -118,5 +118,13 @@
     "checked": {
         "en": "Checked",
         "hu": "Jelölés"
+    },
+    "list-item-disabled": {
+        "en": "Item not available for technical reasons.",
+        "hu": "Elem technikai okokból nem elérhető."
+    },
+    "download": {
+        "en": "Download",
+        "hu": "Letöltés"
     }
 }

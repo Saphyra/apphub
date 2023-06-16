@@ -6,6 +6,7 @@ const ListItemType = {
     CHECKLIST: "CHECKLIST",
     TABLE: "TABLE",
     CHECKLIST_TABLE: "CHECKLIST_TABLE",
+    IMAGE: "IMAGE",
 }
 
 export default ListItemType;

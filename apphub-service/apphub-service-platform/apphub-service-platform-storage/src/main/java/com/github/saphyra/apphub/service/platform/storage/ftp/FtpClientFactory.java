@@ -11,6 +11,7 @@ public class FtpClientFactory {
     private final FtpClientProperties properties;
 
     public FtpClientWrapper create() {
+        log.info("Creating FTP client with username {}", properties.getUsername());
         return new FtpClientWrapper(properties);
     }
 }

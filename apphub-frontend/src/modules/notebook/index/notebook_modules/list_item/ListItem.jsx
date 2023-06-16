@@ -9,6 +9,7 @@ import Event from "../../../../../common/js/event/Event";
 import EventName from "../../../../../common/js/event/EventName";
 import ListItemMode from "./ListItemMode";
 import Constants from "../../../../../common/js/Constants";
+import NotificationService from "../../../../../common/js/notification/NotificationService";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode }) => {
     const [displayDeleteListItemConfirmationDialog, setDisplayDeleteListItemConfirmationDialog] = useState(false);
@@ -16,12 +17,18 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     console.log(data); //TODO remove
 
     const handleOnclick = () => {
+        if(!data.enabled){
+            NotificationService.showError(localizationHandler.get("list-item-disabled"));
+            return;
+        }
+
         switch (data.type) {
             case ListItemType.CATEGORY:
             case ListItemType.TEXT:
             case ListItemType.CHECKLIST:
             case ListItemType.TABLE:
             case ListItemType.CHECKLIST_TABLE:
+            case ListItemType.IMAGE:
                 setOpenedListItem({ id: data.id, type: data.type });
                 break;
             case ListItemType.LINK:
@@ -107,7 +114,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         <div>
             <div
                 id={data.id}
-                className={"button notebook-content-category-content-list-item " + data.type.toLowerCase() + (data.archived ? " archived" : "" + (data.type == ListItemType.ONLY_TITLE ? " disabled" : ""))}
+                className={"button notebook-content-category-content-list-item " + data.type.toLowerCase() + (data.archived ? " archived" : "" + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled" : ""))}
                 onClick={handleOnclick}
             >
                 <span className="notebook-content-category-content-list-item-title">{data.title}</span>

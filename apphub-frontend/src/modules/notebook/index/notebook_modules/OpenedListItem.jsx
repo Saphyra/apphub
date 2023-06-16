@@ -6,6 +6,7 @@ import Text from "./opened_item/text/Text";
 import "./opened_item/opened_list_item.css";
 import Checklist from "./opened_item/checklist/Checklist";
 import Table from "./opened_item/table/Table";
+import Image from "./opened_item/image/Image";
 
 const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
     const getContent = () => {
@@ -48,8 +49,15 @@ const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem
                     setLastEvent={setLastEvent}
                     checklist={true}
                 />
+            case ListItemType.IMAGE:
+                return <Image
+                    localizationHandler={localizationHandler}
+                    openedListItem={openedListItem}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                />
             default:
-                Utils.throwException("IllegalArgument", "Unhandled ListItemType: " + openedListItem.type);
+                Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);
         }
     }
 

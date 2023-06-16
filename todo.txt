@@ -1,6 +1,5 @@
 TODO custom table
 TODO file
-TODO image
 TODO search
 TODO Drag and Drop listItemEdition
 TODO Command prompt for discard

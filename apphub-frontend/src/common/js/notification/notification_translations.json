@@ -62,5 +62,9 @@
     "INVALID_PARAM": {
         "en": "Invalid parameter.",
         "hu": "Érvénytelen paraméter."
+    },
+    "GENERAL_ERROR": {
+        "en": "General error",
+        "hu": "Hiba"
     }
 }

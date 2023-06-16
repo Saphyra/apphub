@@ -6,6 +6,8 @@ import ErrorHandler from "./ErrorHandler";
 import NotificationService from "../notification/NotificationService";
 import Stream from "../collection/Stream";
 import NotificationKey from "../notification/NotificationKey";
+import getDefaultErrorHandler from "./DefaultErrorHandler";
+import Response from "./Response";
 
 const Endpoint = class {
     constructor(requestMethod, url) {
@@ -13,43 +15,30 @@ const Endpoint = class {
         this.url = url;
     }
 
-    createRequest(body, pathVariables = {}, queryParams = {}) {
-        return new Request(this, body, pathVariables, queryParams);
-    }
-}
-
-const RequestMethod = {
-    POST: "POST",
-    GET: "GET",
-    PUT: "PUT",
-    DELETE: "DELETE"
-}
-
-const Request = class {
-    constructor(endpoint, body, pathVariables, queryParams) {
-        this.requestMethod = endpoint.requestMethod;
-        this.url = this.assembleUrl(endpoint.url, pathVariables, queryParams);
-        this.body = this.processBody(body);
-        this.responseConverter = (response) => {
-            if (response.body !== null && response.body.length >= 2) {
-                return JSON.parse(response.body);
-            } else {
-                return null;
-            }
+    createRequest(body, pathVariables = {}, queryParams = {}, rawBody = false) {
+        const request = new Request(
+            this.requestMethod,
+            this.assembleUrl(pathVariables, queryParams),
+            body,
+            rawBody
+        );
+        if (this.requestMethod !== RequestMethod.GET) {
+            request.header("Content-Type", "application/json");
         }
-        this.errorHandlers = [];
+
+        return request;
     }
 
-    assembleUrl(url, pathVariables, queryParams) {
-        const pathVariablesFilled = fillPathVariables(url, pathVariables);
+    assembleUrl(pathVariables, queryParams) {
+        pathVariables = pathVariables || {};
+        queryParams = queryParams || {};
+
+        const pathVariablesFilled = fillPathVariables(this.url, pathVariables);
         const queryParamsFilled = fillQueryParams(pathVariablesFilled, queryParams);
 
         return queryParamsFilled;
 
         function fillPathVariables(url, pathVariables) {
-            if (!pathVariables) {
-                return url;
-            }
             let result = url;
 
             new MapStream(pathVariables)
@@ -62,10 +51,6 @@ const Request = class {
         }
 
         function fillQueryParams(url, queryParams) {
-            if (!queryParams) {
-                return url;
-            }
-
             if (Object.keys(queryParams).length === 0) {
                 return url;
             }
@@ -76,6 +61,36 @@ const Request = class {
 
             return url + "?" + queryString;
         }
+    }
+}
+
+const RequestMethod = {
+    POST: "POST",
+    GET: "GET",
+    PUT: "PUT",
+    DELETE: "DELETE"
+}
+
+const Request = class {
+    constructor(requestMethod, url, body, rawBody = false) {
+        this.requestMethod = requestMethod;
+        this.url = url;
+        this.body = rawBody ? body : this.processBody(body);
+        this.responseConverter = (response) => {
+            if (response.body !== null && response.body.length >= 2) {
+                return JSON.parse(response.body);
+            } else {
+                return null;
+            }
+        }
+        this.errorHandlers = [];
+        this.headers = {};
+    }
+
+    header(name, value) {
+        this.headers[name] = value;
+
+        return this;
     }
 
     processBody(body) {
@@ -97,9 +112,9 @@ const Request = class {
         const xhr = new XMLHttpRequest();
         xhr.open(this.requestMethod, this.url, true);
 
-        if (this.requestMethod !== RequestMethod.GET) {
-            xhr.setRequestHeader("Content-Type", "application/json");
-        }
+        new MapStream(this.headers)
+            .filter((name, value) => Utils.hasValue(value))
+            .forEach((name, value) => xhr.setRequestHeader(name, value));
 
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, Utils.getBrowserLanguage());
@@ -107,7 +122,7 @@ const Request = class {
 
         return new Promise((resolve, reject) => {
             xhr.onload = () => {
-                const response = new Response(xhr);
+                const response = new Response(xhr.status, xhr.responseText);
                 if (response.status === ResponseStatus.OK) {
                     const parsedBody = this.responseConverter(response);
                     resolve(parsedBody);
@@ -130,69 +145,9 @@ const Request = class {
         new Stream(this.errorHandlers)
             .filter((errorHandler) => errorHandler.canHandle(response))
             .findFirst()
-            .orElse(defaultErrorHandler())
+            .orElse(getDefaultErrorHandler())
             .handle(response);
     }
-}
-
-const Response = class {
-    constructor(xhr) {
-        this.status = xhr.status;
-        this.statusKey = this.getStatusKey(xhr.status);
-        this.body = xhr.responseText;
-    }
-
-    getStatusKey(status) {
-        return new MapStream(ResponseStatus)
-            .filter((key, value) => value === status)
-            .findAny()
-            .orElse("Unknown response status code: " + status);
-    }
-
-    toString = function () {
-        return this.status + ": " + this.statusKey + " - " + this.body;
-    }
-}
-
-const defaultErrorHandler = () => {
-    return new ErrorHandler(
-        () => true,
-        (response) => {
-            if (isErrorResponse(response.body)) {
-                const errorResponse = JSON.parse(response.body);
-
-                switch (errorResponse.errorCode) {
-                    case "SESSION_EXPIRED":
-                    case "NO_SESSION_AVAILABLE":
-                        sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
-                        window.location.href = Constants.INDEX_PAGE + "?redirect=/" + (window.location.pathname + window.location.search).substr(1);
-                        break;
-                    default:
-                        NotificationService.showErrorCode(errorResponse.errorCode, errorResponse.params);
-                }
-
-            } else {
-                NotificationService.showError("Error response from BackEnd: " + response.toString());
-            }
-
-            function isErrorResponse(responseBody) {
-                try {
-                    if (responseBody === null || responseBody.length === 0) {
-                        console.log("Empty response body");
-                        return false;
-                    }
-
-                    const errorResponse = JSON.parse(responseBody);
-
-                    return errorResponse.errorCode !== undefined
-                        && errorResponse.params !== undefined;
-                } catch (e) {
-                    console.log(e);
-                    return false;
-                }
-            }
-        }
-    );
 }
 
 export const ResponseStatus = {
@@ -297,6 +252,12 @@ const Endpoints = {
     NOTEBOOK_GET_CHECKLIST_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/checklist-table/{listItemId}"),
     NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{rowId}/status"),
     NOTEBOOK_EDIT_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{listItemId}"),
+    NBOTEBOOK_CREATE_IMAGE: new Endpoint(RequestMethod.PUT, "/api/notebook/image"),
+    NOTEBOOK_GET_LIST_ITEM: new Endpoint(RequestMethod.GET, "/api/notebook/list-item/{listItemId}"),
+
+    //Storage
+    STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),
+    STORAGE_DOWNLOAD_FILE: new Endpoint(RequestMethod.GET, "/api/storage/{storedFileId}"),
 }
 
 export default Endpoints;

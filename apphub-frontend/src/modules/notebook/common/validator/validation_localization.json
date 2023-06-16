@@ -6,5 +6,13 @@
     "table-head-name-blank": {
         "en": "Name of the column must not be blank.",
         "hu": "Az oszlop neve nem lehet üres."
+    },
+    "file-not-selected": {
+        "en": "File not selected.",
+        "hu": "Nincs fájl kiválasztva."
+    },
+    "file-too-large": {
+        "en": "File too large. (Max. 2GB)",
+        "hu": "Fájl túl nagy. (Max. 2GB)"
     }
 }
