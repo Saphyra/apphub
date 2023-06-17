@@ -1,3 +1,5 @@
+import Constants from "./Constants";
+
 const getCookie = (key) => {
     const cookies = document.cookie.split('; ');
     for (let cIndex in cookies) {
@@ -50,6 +52,31 @@ const hasValue = (value) =>{
     return value !== null && value !== undefined;
 }
 
+const formatFileSize =(bytes) =>{
+    if(bytes > Constants.GIGABYTES){
+        return limitDecimals(bytes / Constants.GIGABYTES, 1) + " GB";
+    }
+
+    if(bytes > Constants.MEGABYTES){
+        return limitDecimals(bytes / Constants.MEGABYTES, 1) + " MB";
+    }
+
+    if(bytes > Constants.KILOBYTES){
+        return limitDecimals(bytes / Constants.KILOBYTES, 1) + " KB";
+    }
+
+    return bytes + " B";
+
+    function limitDecimals(value, limit){
+        if(value % 1 == 0){
+            return value;
+        }
+
+        return parseFloat(value)
+            .toFixed(limit);
+    }
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -59,6 +86,7 @@ const Utils = {
     isBlank: isBlank,
     generateRandomId: generateRandomId,
     hasValue: hasValue,
+    formatFileSize: formatFileSize,
 }
 
 export default Utils;

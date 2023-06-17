@@ -126,5 +126,17 @@
     "download": {
         "en": "Download",
         "hu": "Letöltés"
+    },
+    "file-name": {
+        "en": "File name",
+        "hu": "Fájlnév"
+    },
+    "file-size": {
+        "en": "Size",
+        "hu": "Méret"
+    },
+    "created-at": {
+        "en": "Created at",
+        "hu": "Létrehozva"
     }
 }

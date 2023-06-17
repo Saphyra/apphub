@@ -22,6 +22,7 @@ import NewOnlyTitlePage from './modules/notebook/new/new_only_title/NewOnlyTitle
 import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistPage';
 import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
 import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
+import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
 
 const router = createBrowserRouter([
   {
@@ -123,6 +124,15 @@ const router = createBrowserRouter([
   {
     path: "/web/notebook/new/image/:parent",
     element: <NewImagePage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/file/:parent",
+    element: <NewFilePage />,
     loader: ({ params }) => {
       return {
         parent: params.parent

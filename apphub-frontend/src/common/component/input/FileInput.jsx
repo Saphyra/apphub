@@ -8,7 +8,6 @@ const FileInput = ({ id, className, onchangeCallback, accept }) => {
         }
 
         const file = e.target.files[0];
-        console.log(file);
         const fileData = {
             fileName: file.name,
             size: file.size,

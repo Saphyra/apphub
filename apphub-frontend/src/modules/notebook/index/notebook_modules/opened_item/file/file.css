@@ -1,0 +1,8 @@
+#notebook-content-file-content-table{
+    margin: 20px auto;
+}
+
+#notebook-content-file-content-table td:first-child{
+    text-align: right;
+    font-weight: bold;
+}

@@ -4,7 +4,8 @@ import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import "./image.css";
-const Image = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
+
+const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
     const [parent, setParent] = useState(null);
     const [storedFileId, setStoredFileId] = useState(null);

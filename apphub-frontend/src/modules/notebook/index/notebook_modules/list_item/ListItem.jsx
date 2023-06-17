@@ -29,6 +29,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case ListItemType.TABLE:
             case ListItemType.CHECKLIST_TABLE:
             case ListItemType.IMAGE:
+            case ListItemType.FILE:
                 setOpenedListItem({ id: data.id, type: data.type });
                 break;
             case ListItemType.LINK:

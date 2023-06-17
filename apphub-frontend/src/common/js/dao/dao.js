@@ -254,10 +254,12 @@ const Endpoints = {
     NOTEBOOK_EDIT_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{listItemId}"),
     NBOTEBOOK_CREATE_IMAGE: new Endpoint(RequestMethod.PUT, "/api/notebook/image"),
     NOTEBOOK_GET_LIST_ITEM: new Endpoint(RequestMethod.GET, "/api/notebook/list-item/{listItemId}"),
+    NBOTEBOOK_CREATE_FILE: new Endpoint(RequestMethod.PUT, "/api/notebook/file"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),
     STORAGE_DOWNLOAD_FILE: new Endpoint(RequestMethod.GET, "/api/storage/{storedFileId}"),
+    STORAGE_GET_METADATA: new Endpoint(RequestMethod.GET, "/api/storage/{storedFileId}/metadata"),
 }
 
 export default Endpoints;
