@@ -1,0 +1,11 @@
+TODO set proper name
+
+===FEATURES===
+
+===BUGFIXES===
+Cloned Notebook list item inherits the "pinned" and "archived" flags of the parent
+
+===PLATFORM CHANGES===
+Removed deprecated frontend code of Modules module from WebContent resources
+Removed SleepService from ExecutorServiceBean, using the built-in waiting mechanism of the Future<T> interface
+System is fully operational locally, minikube is no longer required
