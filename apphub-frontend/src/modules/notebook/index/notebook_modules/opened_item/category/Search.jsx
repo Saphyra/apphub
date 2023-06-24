@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
-import "./category.css"
+import Settings from "./category/Settings";
 import Button from "../../../../../../common/component/input/Button";
+import ListItemType from "../../../../common/ListItemType";
+import "./search.css";
+import EventName from "../../../../../../common/js/event/EventName";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
-import ListItemType from "../../../../common/ListItemType";
 import ListItem from "../../list_item/ListItem";
-import Settings from "./category/Settings";
-import EventName from "../../../../../../common/js/event/EventName";
 import ListItemMode from "../../list_item/ListItemMode";
 
-const Category = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
-    const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
+const Search = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
+    const [searchResult, setSearchResult] = useState([]);
 
+    useEffect(() => loadSearchResult(), [openedListItem.id]);
     useEffect(() => processEvent(), [lastEvent]);
-    useEffect(() => loadCategory(), [openedListItem]);
+
+    const loadSearchResult = () => {
+        const fetch = async () => {
+            const response = await Endpoints.NOTEBOOK_SEARCH.createRequest({ value: openedListItem.id })
+                .send();
+
+            setSearchResult(response);
+        }
+        fetch();
+    }
 
     const processEvent = () => {
         if (lastEvent === null) {
@@ -25,26 +35,16 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
             case EventName.NOTEBOOK_LIST_ITEM_ARCHIVED:
             case EventName.NOTEBOOK_LIST_ITEM_PINNED:
             case EventName.NOTEBOOK_LIST_ITEM_CLONED:
-                loadCategory();
+                loadSearchResult();
                 break;
         }
     }
 
-    const loadCategory = () => {
-        const fetch = async () => {
-            const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
-            const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
-                .send();
-            setOpenedCategoryContent(response);
-        }
-        fetch();
-    }
-
     const getContent = () => {
-        if (openedCategoryContent.children.length === 0) {
+        if (searchResult.length === 0) {
             return (
-                <div id="notebook-content-category-content-empty">
-                    {localizationHandler.get("category-empty")}
+                <div id="notebook-content-search-content-empty">
+                    {localizationHandler.get("no-search-result")}
                 </div>
             );
         }
@@ -65,7 +65,7 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
             }
         }
 
-        return new Stream(openedCategoryContent.children)
+        return new Stream(searchResult)
             .sorted((a, b) => compare(a, b))
             .map(child =>
                 <ListItem
@@ -81,22 +81,21 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
     }
 
     return (
-        <div id="notebook-content-category" className="notebook-content">
+        <div id="notebook-content-search" className="notebook-content">
             <Settings
                 localizationHandler={localizationHandler}
                 openedListItem={openedListItem}
                 setOpenedListItem={setOpenedListItem}
             />
 
-            <div id="notebook-content-category-content">
-                <div id="notebook-content-category-content-navigation">
-                    <div id="notebook-content-category-content-title"> {openedListItem.id === null ? localizationHandler.get("root") : openedCategoryContent.title} </div>
+            <div id="notebook-content-search-content">
+                <div id="notebook-content-search-content-navigation">
+                    <div id="notebook-content-search-content-title"> {localizationHandler.get("search-result")} </div>
 
                     <Button
-                        id="notebook-content-category-content-up-button"
+                        id="notebook-content-search-content-up-button"
                         label={localizationHandler.get("up")}
-                        onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: ListItemType.CATEGORY })}
-                        disabled={openedListItem.id === null}
+                        onclick={() => setOpenedListItem({ id: openedListItem.parent, type: ListItemType.CATEGORY })}
                     />
                 </div>
 
@@ -108,4 +107,4 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
     );
 }
 
-export default Category;
+export default Search;

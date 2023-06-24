@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./notebook_resources/notebook.css";
+import "./notebook.css";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
-import localizationData from "./notebook_resources/notebook_page_localization.json";
-import Endpoints from "../../../common/js/dao/dao";
+import localizationData from "./notebook_page_localization.json";
 import Footer from "../../../common/component/Footer";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";

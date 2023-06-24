@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
-import "./settings/settings.css"
+import "./settings.css"
+import ListItemType from "../../../../../common/ListItemType";
 
-const Settings = ({ localizationHandler }) => {
+const Settings = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [settingsDisplayed, setSettingsDispalyed] = useState(false);
+    const [searchText, setSearchText] = useState(openedListItem.type === ListItemType.SEARCH ? openedListItem.id : "");
+    const [searchTimeout, setSearchTimeout] = useState(null);
+
+    let timeout = null;
+
+    useEffect(() => searchTextModified(), [searchText]);
 
     const getToggleSettingsDisplayedButton = () => {
         return <Button
@@ -15,19 +22,39 @@ const Settings = ({ localizationHandler }) => {
         />
     }
 
+    const searchTextModified = () => {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+            setSearchTimeout(null);
+        }
+
+        if (searchText.length < 3) {
+            return;
+        }
+
+        timeout = setTimeout(
+            () => {
+                setOpenedListItem({
+                    id: searchText,
+                    type: ListItemType.SEARCH,
+                    parent: openedListItem.type === ListItemType.SEARCH ? openedListItem.parent : openedListItem.id
+                })
+            },
+            1000
+        );
+
+        setSearchTimeout(timeout);
+    }
+
     return (
         <div id="notebook-settings">
             <InputField
                 id="notebook-search"
                 type="text"
                 placeholder={localizationHandler.get("search")}
-                onchangeCallback={() => {}}
-            />
-
-            <Button 
-                id="notebook-clear-search"
-                onclick={() => {}}
-                label="X"
+                onchangeCallback={setSearchText}
+                value={searchText}
+                autoFocus={openedListItem.type === ListItemType.SEARCH}
             />
 
             {getToggleSettingsDisplayedButton()}

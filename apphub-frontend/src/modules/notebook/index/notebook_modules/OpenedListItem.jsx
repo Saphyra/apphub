@@ -8,10 +8,21 @@ import Checklist from "./opened_item/checklist/Checklist";
 import Table from "./opened_item/table/Table";
 import Image from "./opened_item/image/Image";
 import File from "./opened_item/file/File";
+import Search from "./opened_item/category/Search";
 
 const OpenedListItem = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
+    console.log("Opened ListItem", openedListItem);
+
     const getContent = () => {
         switch (openedListItem.type) {
+            case ListItemType.SEARCH:
+                return <Search
+                    localizationHandler={localizationHandler}
+                    openedListItem={openedListItem}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                    lastEvent={lastEvent}
+                />
             case ListItemType.CATEGORY:
                 return <Category
                     localizationHandler={localizationHandler}

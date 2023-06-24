@@ -1,0 +1,33 @@
+#notebook-content-search{
+    display: grid;
+    grid-template-rows: 38px auto;
+}
+
+#notebook-content-search-content{
+    display: grid;
+    grid-template-rows: 70px auto;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+#notebook-content-search-content-navigation{
+    border-bottom: 1px solid white;
+}
+
+#notebook-content-search-content-title{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 5px;
+}
+
+#notebook-content-search-content-up-button{
+    display: block;
+    margin: 5px auto;
+    width: 90%;
+}
+
+#notebook-content-search-content-empty {
+    text-align: center;
+    font-size: 24px;
+    padding: 20px;
+}

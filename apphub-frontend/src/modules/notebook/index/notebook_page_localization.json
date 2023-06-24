@@ -138,5 +138,13 @@
     "created-at": {
         "en": "Created at",
         "hu": "Létrehozva"
+    },
+    "search-result": {
+        "en": "Search result",
+        "hu": "Keresés eredménye"
+    },
+    "no-search-result": {
+        "en": "No result found.",
+        "hu": "Nincs találat."
     }
 }
