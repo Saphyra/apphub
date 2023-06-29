@@ -137,6 +137,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
 
     const discard = () => {
+        //TODO Confirm first
         setEditingEnabled(false);
         loadChecklist();
     }

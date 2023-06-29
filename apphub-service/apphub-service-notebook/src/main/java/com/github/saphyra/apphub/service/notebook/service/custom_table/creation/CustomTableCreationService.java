@@ -125,7 +125,7 @@ public class CustomTableCreationService {
                 File file = fileFactory.create(userId, tableJoin.getTableJoinId(), storedFileId);
                 fileDao.save(file);
             }
-            case EMPTY -> log.debug("No validation required");
+            case EMPTY -> log.debug("No content required");
             default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
         }
     }

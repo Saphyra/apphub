@@ -30,6 +30,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     }
 
     const discard = () => {
+        //TODO Confirm first
         setEditingEnabled(false);
         loadText();
     }

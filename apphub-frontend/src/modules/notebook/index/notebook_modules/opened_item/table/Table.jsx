@@ -132,6 +132,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
     //Operations
     const discard = () => {
+        //TODO Confirm first
         setEditingEnabled(false);
         loadTable();
     }
