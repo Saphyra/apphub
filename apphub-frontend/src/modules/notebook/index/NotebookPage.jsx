@@ -45,6 +45,7 @@ const NotebookPage = () => {
                         localizationHandler={localizationHandler}
                         setOpenedListItem={setOpenedListItem}
                         lastEvent={lastEvent}
+                        setLastEvent={setLastEvent}
                     />
 
                     <PinnedItems

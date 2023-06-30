@@ -8,6 +8,7 @@ import ListItem from "../../list_item/ListItem";
 import Settings from "./category/Settings";
 import EventName from "../../../../../../common/js/event/EventName";
 import ListItemMode from "../../list_item/ListItemMode";
+import moveListItem from "../../../../common/MoveListItemService";
 
 const Category = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
@@ -25,6 +26,7 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
             case EventName.NOTEBOOK_LIST_ITEM_ARCHIVED:
             case EventName.NOTEBOOK_LIST_ITEM_PINNED:
             case EventName.NOTEBOOK_LIST_ITEM_CLONED:
+            case EventName.NOTEBOOK_LIST_ITEM_MODIFIED:
                 loadCategory();
                 break;
         }
@@ -80,6 +82,18 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
             .toList();
     }
 
+    //Drag & Drop
+    const handleOnDragOver = (e) => {
+        if (openedListItem.id !== null) {
+            e.preventDefault();
+        }
+    }
+
+    const handleOnDrop = (e) => {
+        const movedItemId = e.dataTransfer.getData("id");
+        moveListItem(movedItemId, openedCategoryContent.parent, setLastEvent);
+    }
+
     return (
         <div id="notebook-content-category" className="notebook-content">
             <Settings
@@ -89,7 +103,11 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
             />
 
             <div id="notebook-content-category-content">
-                <div id="notebook-content-category-content-navigation">
+                <div
+                    id="notebook-content-category-content-navigation"
+                    onDrop={handleOnDrop}
+                    onDragOver={handleOnDragOver}
+                >
                     <div id="notebook-content-category-content-title"> {openedListItem.id === null ? localizationHandler.get("root") : openedCategoryContent.title} </div>
 
                     <Button

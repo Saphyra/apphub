@@ -10,14 +10,13 @@ import EventName from "../../../../../common/js/event/EventName";
 import ListItemMode from "./ListItemMode";
 import Constants from "../../../../../common/js/Constants";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import moveListItem from "../../../common/MoveListItemService";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode }) => {
     const [displayDeleteListItemConfirmationDialog, setDisplayDeleteListItemConfirmationDialog] = useState(false);
 
-    console.log(data); //TODO remove
-
     const handleOnclick = () => {
-        if(!data.enabled){
+        if (!data.enabled) {
             NotificationService.showError(localizationHandler.get("list-item-disabled"));
             return;
         }
@@ -111,8 +110,29 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         />
     }
 
+    //Drag & Drop
+    const handleOnDragStart = (e) => {
+        e.dataTransfer.setData("id", data.id);
+    }
+
+    const handleOnDragOver = (e) => {
+        if (data.type === ListItemType.CATEGORY) {
+            e.preventDefault();
+        }
+    }
+
+    const handleOnDrop = (e) => {
+        const movedItemId = e.dataTransfer.getData("id");
+        moveListItem(movedItemId, data.id, setLastEvent);
+    }
+
     return (
-        <div>
+        <div
+            draggable
+            onDragStart={handleOnDragStart}
+            onDrop={handleOnDrop}
+            onDragOver={handleOnDragOver}
+        >
             <div
                 id={data.id}
                 className={"button notebook-content-category-content-list-item " + data.type.toLowerCase() + (data.archived ? " archived" : "" + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled" : ""))}

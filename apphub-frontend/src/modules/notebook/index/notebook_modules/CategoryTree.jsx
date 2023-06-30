@@ -4,7 +4,7 @@ import "./category_tree/category_tree.css";
 import Leaf from "./category_tree/Leaf";
 import EventName from "../../../../common/js/event/EventName";
 
-const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent }) => {
+const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent }) => {
     const [tree, setTree] = useState([]);
     const [openedLeaves, setOpenedLeavesD] = useState(sessionStorage.openedLeaves ? JSON.parse(sessionStorage.openedLeaves) : []);
 
@@ -25,6 +25,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent }) => 
             case EventName.NOTEBOOK_LIST_ITEM_DELETED:
             case EventName.NOTEBOOK_LIST_ITEM_ARCHIVED:
             case EventName.NOTEBOOK_LIST_ITEM_CLONED:
+            case EventName.NOTEBOOK_LIST_ITEM_MODIFIED:
                 loadTree();
                 break;
         }
@@ -55,6 +56,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent }) => 
                 openedLeaves={openedLeaves}
                 setOpenedLeaves={setOpenedLeaves}
                 setOpenedListItem={setOpenedListItem}
+                setLastEvent={setLastEvent}
             />
         </div>
     );

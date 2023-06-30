@@ -2,8 +2,9 @@ import React from "react";
 import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import ListItemType from "../../../common/ListItemType";
+import moveListItem from "../../../common/MoveListItemService";
 
-const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem }) => {
+const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setLastEvent}) => {
     const hasLeaves = category.children.length > 0;
     const isOpened = openedLeaves.indexOf(category.categoryId) > -1;
 
@@ -20,6 +21,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem }) =>
                                 openedLeaves={openedLeaves}
                                 setOpenedLeaves={setOpenedLeaves}
                                 setOpenedListItem={setOpenedListItem}
+                                setLastEvent={setLastEvent}
                             />
                         )
                         .toList()
@@ -58,14 +60,28 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem }) =>
         />
     }
 
+    //Drag & Drop
+    const handleOnDragOver = (e) => {
+        e.preventDefault();
+    }
+
+    const handleOnDrop = (e) => {
+        const movedItemId = e.dataTransfer.getData("id");
+        moveListItem(movedItemId, category.categoryId, setLastEvent);
+    }
+
     return (
-        <div className="notebook-tree-leaf-wrapper">
+        <div
+            className="notebook-tree-leaf-wrapper"
+            onDragOver={handleOnDragOver}
+            onDrop={handleOnDrop}
+        >
             <div className="notebook-tree-leaf button">
                 {hasLeaves && (isOpened ? closeButton() : expandButton())}
 
                 <div
                     className="notebook-tree-leaf-title"
-                    onClick={() => setOpenedListItem({id: category.categoryId, type: ListItemType.CATEGORY})}
+                    onClick={() => setOpenedListItem({ id: category.categoryId, type: ListItemType.CATEGORY })}
                 >
                     {category.title}
                 </div>
