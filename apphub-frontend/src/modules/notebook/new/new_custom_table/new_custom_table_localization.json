@@ -1,0 +1,38 @@
+{
+    "title": {
+        "en": "New custom table - Notebook - Apphub",
+        "hu": "Új egyedi táblázat - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New custom table",
+        "hu": "Új egyedi táblázat"
+    },
+    "table-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Mentés"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "new-column": {
+        "en": "New column",
+        "hu": "Új oszlop"
+    },
+    "new-row": {
+        "en": "New row",
+        "hu": "Új sor"
+    },
+    "table-head-title": {
+        "en": "Name of the column",
+        "hu": "Oszlop neve"
+    }
+}

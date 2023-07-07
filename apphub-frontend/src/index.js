@@ -23,6 +23,7 @@ import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistP
 import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
 import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
 import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
+import NewCustomTable from './modules/notebook/new/new_custom_table/NewCustomTable';
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,15 @@ const router = createBrowserRouter([
   {
     path: "/web/notebook/new/table/:parent",
     element: <NewTablePage checklist={false} />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/custom-table/:parent",
+    element: <NewCustomTable />,
     loader: ({ params }) => {
       return {
         parent: params.parent

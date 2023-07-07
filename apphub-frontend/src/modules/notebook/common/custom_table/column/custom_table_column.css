@@ -1,0 +1,51 @@
+.notebook-custom-table-change-column-type-button {
+    width: 22px;
+    height: 23px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url("../../../../../common/style/img/edit.png");
+}
+
+.notebook-custom-table-column-type-empty {
+    text-align: center;
+}
+
+.noteabook-custom-table-column-input {
+    width: calc(100% - 36px);
+}
+
+.notebook-custom-table-column-type-checkbox {
+    text-align: center;
+
+}
+
+.notebook-custom-table-column-type-checkbox input {
+    transform: scale(2);
+}
+
+.notebook-custom-table-column-type-number,
+.notebook-custom-table-column-type-range {
+    padding-right: 40px !important;
+}
+
+.notebook-custom-table-column-type-checkbox,
+.notebook-custom-table-column-type-range,
+.notebook-custom-table-column-type-number {
+    position: relative;
+}
+
+.notebook-custom-table-column-type-checkbox .notebook-custom-table-change-column-type-button,
+.notebook-custom-table-column-type-range .notebook-custom-table-change-column-type-button,
+.notebook-custom-table-column-type-number .notebook-custom-table-change-column-type-button {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 4px;
+    right: 4px;
+}
+
+.notebook-custom-table-column-type-color,
+.notebook-custom-table-column-type-range {
+    text-align: center;
+}

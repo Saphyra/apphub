@@ -19,8 +19,9 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
         )
     } else {
         return (
-
-            <td>{columnData.content}</td>
+            <td>
+                {columnData.content}
+            </td>
         );
     }
 
