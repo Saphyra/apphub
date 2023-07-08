@@ -175,6 +175,10 @@ footer label:active {
     outline: default;
 }
 
+input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
 input,
 textarea,
 [contenteditable='true'] {

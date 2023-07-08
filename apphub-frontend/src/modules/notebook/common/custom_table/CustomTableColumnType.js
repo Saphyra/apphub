@@ -2,14 +2,14 @@ const CustomTableColumnType = {
     EMPTY: "EMPTY",
     TEXT: "TEXT",
     NUMBER: "NUMBER",
-    IMAGE: "IMAGE",//TODO
-    FILE: "FILE",//TODO
+    IMAGE: "IMAGE",
+    FILE: "FILE",
     CHECKBOX: "CHECKBOX",
     COLOR: "COLOR",
-    DATE: "DATE",//TODO
-    TIME: "TIME",//TODO
-    DATE_TIME: "DATE_TIME",//TODO
-    MONTH: "MONTH",//TODO
+    DATE: "DATE",
+    TIME: "TIME",
+    DATE_TIME: "DATE_TIME",
+    MONTH: "MONTH",
     RANGE: "RANGE",
     LINK: "LINK",
 }

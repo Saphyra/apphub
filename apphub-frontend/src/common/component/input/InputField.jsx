@@ -9,6 +9,7 @@ const InputField = ({
     onchangeCallback,
     value,
     onkeyupCallback,
+    step,
     disabled = false,
     checked = false,
     autoFocus = false
@@ -38,6 +39,7 @@ const InputField = ({
             disabled={disabled}
             checked={checked}
             autoFocus={autoFocus}
+            step={step}
         />
     )
 }

@@ -10,6 +10,12 @@ import Checkbox from "./type/Checkbox";
 import Number from "./type/Number";
 import Color from "./type/Color";
 import Range from "./type/Range";
+import Date from "./type/Date";
+import Time from "./type/Time";
+import DateTime from "./type/DateTime";
+import Month from "./type/Month";
+import File from "./type/File";
+import Image from "./type/Image";
 
 const CustomTableColumn = ({
     columnData,
@@ -59,15 +65,56 @@ const CustomTableColumn = ({
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-                case CustomTableColumnType.RANGE:
-                    return <Range
-                        data={columnData.data}
-                        updateData={updateData}
-                        selectType={selectType}
-                        localizationHandler={localizationHandler}
-                    />
+            case CustomTableColumnType.RANGE:
+                return <Range
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
             case CustomTableColumnType.COLOR:
                 return <Color
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.DATE:
+                return <Date
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.TIME:
+                return <Time
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.DATE_TIME:
+                return <DateTime
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.MONTH:
+                return <Month
+                    data={columnData.data}
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.FILE:
+                return <File
+                    updateData={updateData}
+                    selectType={selectType}
+                    localizationHandler={localizationHandler}
+                />
+            case CustomTableColumnType.IMAGE:
+                return <Image
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}

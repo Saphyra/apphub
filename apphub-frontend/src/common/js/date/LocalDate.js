@@ -1,3 +1,5 @@
+import Utils from "../Utils";
+
 Date.isLeapYear = function (year) {
     return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
 };
@@ -41,7 +43,7 @@ const create = (date) => {
 }
 
 const now = () => {
-    return this.create(new Date());
+    return create(new Date());
 }
 
 const extractDay = (date) => {
@@ -58,35 +60,35 @@ const extractYear = (date) => {
 
 class LocalDateObj {
     constructor(date) {
-        if (!hasValue(date)) {
-            throwException("IllegalArgument", "date must not be null");
+        if (!Utils.hasValue(date)) {
+            Utils.throwException("IllegalArgument", "date must not be null");
         }
 
         if (!(date instanceof Date)) {
-            throwException("IllegalArgument", "Date is not a Date");
+            Utils.throwException("IllegalArgument", "Date is not a Date");
         }
         this.date = date;
     }
 
 
     plusMonths(m) {
-        return new LocalDateObj(date.plusMonths(m));
+        return new LocalDateObj(this.date.plusMonths(m));
     }
 
     minusMonths(m) {
-        return new LocalDateObj(date.minusMonths(m));
+        return new LocalDateObj(this.date.minusMonths(m));
     }
 
     getMonth() {
-        return String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        return String(this.date.getMonth() + 1).padStart(2, '0'); //January is 0!
     }
 
     getYear() {
-        return date.getFullYear();
+        return this.date.getFullYear();
     }
 
     getDay() {
-        return String(date.getDate()).padStart(2, '0');
+        return String(this.date.getDate()).padStart(2, '0');
     }
 
     format() {
@@ -95,15 +97,14 @@ class LocalDateObj {
 
     isSameMonth(obj) {
         if (!obj instanceof LocalDateObj) {
-            console.log(obj);
-            throwException("IllegalArgument", "obj is not a LocalDateObj");
+            Utils.throwException("IllegalArgument", "obj is not a LocalDateObj");
         }
 
         return this.getYear() == obj.getYear() && this.getMonth() == obj.getMonth();
     }
 
     equals(obj) {
-        if (!hasValue(obj)) {
+        if (!Utils.hasValue(obj)) {
             return false;
         }
 
@@ -112,6 +113,10 @@ class LocalDateObj {
         }
 
         return obj.toString() == this.toString();
+    }
+
+    toString(){
+        return this.getYear() + "-" + this.getMonth() + "-" + this.getDay();
     }
 }
 

@@ -42,7 +42,7 @@ const NewImagePage = () => {
             return;
         }
 
-        const objectUrl = URL.createObjectURL(image.file)
+        const objectUrl = URL.createObjectURL(image.file);
         setPreview(objectUrl)
 
         return () => URL.revokeObjectURL(objectUrl)

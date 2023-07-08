@@ -5,16 +5,32 @@ const Optional = class {
         this.value = value;
     }
 
+    map(mapper) {
+        if (!Utils.hasValue(this.value)) {
+            return this;
+        }
+
+        return new Optional(mapper(this.value));
+    }
+
     orElse(another) {
-        if (this.value === null || this.value === undefined) {
+        if (!Utils.hasValue(this.value)) {
             return another;
         }
 
         return this.value;
     }
 
+    orElseGet(supplier) {
+        if (!Utils.hasValue(this.value)) {
+            return supplier();
+        }
+
+        return this.value;
+    }
+
     orElseThrow(exceptionType, exceptionMessage) {
-        if (this.value === null || this.value === undefined) {
+        if (!Utils.hasValue(this.value)) {
             Utils.throwException(exceptionType, exceptionMessage);
         }
 

@@ -15,28 +15,26 @@
     width: calc(100% - 36px);
 }
 
-.notebook-custom-table-column-type-checkbox {
-    text-align: center;
-
-}
-
 .notebook-custom-table-column-type-checkbox input {
     transform: scale(2);
 }
 
 .notebook-custom-table-column-type-number,
+.notebook-custom-table-column-type-image,
 .notebook-custom-table-column-type-range {
     padding-right: 40px !important;
 }
 
 .notebook-custom-table-column-type-checkbox,
 .notebook-custom-table-column-type-range,
+.notebook-custom-table-column-type-image,
 .notebook-custom-table-column-type-number {
     position: relative;
 }
 
 .notebook-custom-table-column-type-checkbox .notebook-custom-table-change-column-type-button,
 .notebook-custom-table-column-type-range .notebook-custom-table-change-column-type-button,
+.notebook-custom-table-column-type-image .notebook-custom-table-change-column-type-button,
 .notebook-custom-table-column-type-number .notebook-custom-table-change-column-type-button {
     position: absolute;
     width: 26px;
@@ -46,6 +44,24 @@
 }
 
 .notebook-custom-table-column-type-color,
+.notebook-custom-table-column-type-checkbox,
+.notebook-custom-table-column-type-date,
+.notebook-custom-table-column-type-time,
+.notebook-custom-table-column-type-date_time,
+.notebook-custom-table-column-type-month,
+.notebook-custom-table-column-type-image,
+.notebook-custom-table-column-type-number,
 .notebook-custom-table-column-type-range {
     text-align: center;
+}
+
+.notebook-custom-table-column-type-file input {
+    width: 350px;
+}
+
+.notebook-new-custom-table-image-preview {
+    max-width: 400px;
+    max-height: 300px;
+    margin: 5px;
+    border: 2px ridge white;
 }

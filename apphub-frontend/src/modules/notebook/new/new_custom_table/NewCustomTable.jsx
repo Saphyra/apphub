@@ -55,7 +55,40 @@ const NewCustomTable = () => {
     }
 
     const newRow = () => {
-        //TODO
+        const rowIndex = new Stream(rows)
+            .map(row => row.rowIndex)
+            .max()
+            .orElse(0);
+
+        const previousRowColumns = new Stream(rows)
+            .sorted((a, b) => b.rowIndex - a.rowIndex)
+            .findFirst()
+            .map(row => row.columns)
+            .orElse([]);
+
+        const columns = new Stream(tableHeads)
+            .map(tableHead => tableHead.columnIndex)
+            .toMapStream(columnIndex => columnIndex, columnIndex => getColumnType(Number(columnIndex), previousRowColumns))
+            .toList((columnIndex, columnType) => new CustomTableColumnData(Number(columnIndex), columnType, getDefaultDataForColumnType(columnType)))
+
+        const newRow = new TableRowData(rowIndex + 1, columns);
+
+        const copy = new Stream(rows)
+            .add(newRow)
+            .toList();
+
+        setRows(copy);
+    }
+
+    const getColumnType = (columnIndex, previousRowColumns) => {
+        return new Stream(previousRowColumns)
+            .filter(column => column.columnIndex === columnIndex)
+            .findFirst()
+            .map(column => column.type)
+            .orElseGet(() => {
+                console.log("Previous column not found with columnIndex " + columnIndex, previousRowColumns);
+                return CustomTableColumnType.EMPTY;
+            });
     }
 
     const create = () => {
@@ -182,37 +215,40 @@ const NewCustomTable = () => {
             .orElseThrow("IllegalArgument", "No column found with rowIndex " + rowIndex + " and columnIndex " + columnIndex);
 
         column.type = columnType;
+        column.data = getDefaultDataForColumnType(columnType);
+
+        updateRow();
+        setColumnTypeSelectorData(null);
+    }
+
+    const getDefaultDataForColumnType = (columnType) => {
         switch (columnType) {
             case CustomTableColumnType.NUMBER:
-                column.data = {
+                return {
                     value: 0,
                     step: 1
                 }
-                break;
             case CustomTableColumnType.RANGE:
-                column.data = {
+                return {
                     value: 0,
                     step: 1,
                     min: -10,
                     max: 10
                 }
-                break;
             case CustomTableColumnType.TEXT:
             case CustomTableColumnType.LINK:
-                column.data = "";
-                break;
+            case CustomTableColumnType.DATE:
+            case CustomTableColumnType.TIME:
+            case CustomTableColumnType.DATE_TIME:
+            case CustomTableColumnType.MONTH:
+                return "";
             case CustomTableColumnType.CHECKBOX:
-                column.data = false;
-                break;
+                return false;
             case CustomTableColumnType.COLOR:
-                column.data = "#000000";
-                break;
+                return "#000000";
             default:
-                column.data = null;
+                return null;
         }
-
-        updateRow();
-        setColumnTypeSelectorData(null);
     }
 
     //Data

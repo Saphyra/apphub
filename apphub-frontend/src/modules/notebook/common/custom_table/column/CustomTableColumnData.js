@@ -7,6 +7,10 @@ const CustomTableColumnData = class {
             Utils.throwException("IllegalArgument", "columnIndex must not be " + columnIndex);
         }
 
+        if(typeof columnIndex !== "number"){
+            Utils.throwException("IllegalArgument", "ColumnIndex is not a number.");
+        }
+
         this.columnIndex = columnIndex;
         this.type = type;
         this.data = data;

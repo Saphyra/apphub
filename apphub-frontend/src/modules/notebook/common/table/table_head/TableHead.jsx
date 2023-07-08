@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import InputField from "../../../../../common/component/input/InputField";
 import Button from "../../../../../common/component/input/Button";
 import MoveDirection from "../../MoveDirection";
+import "./table_head.css";
 
 const TableHead = ({ localizationHandler, tableHeadData, updateTableHead, moveColumn, removeColumn, editingEnabled = true }) => {
     const updateContent = (content) => {
@@ -11,7 +12,7 @@ const TableHead = ({ localizationHandler, tableHeadData, updateTableHead, moveCo
 
     if (editingEnabled) {
         return (
-            <th>
+            <th className="table-head">
                 <InputField
                     className="notebook-table-head-content"
                     type="text"
