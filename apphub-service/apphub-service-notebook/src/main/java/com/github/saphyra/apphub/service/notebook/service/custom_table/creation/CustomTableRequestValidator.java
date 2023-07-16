@@ -23,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -48,7 +50,6 @@ class CustomTableRequestValidator {
             throw ExceptionFactory.invalidParam("columns", "amount different");
         }
 
-        ValidationUtil.notNull(row.getChecked(), "checked");
         ValidationUtil.notNull(row.getRowIndex(), "rowIndex");
 
         row.getColumns()
@@ -98,7 +99,11 @@ class CustomTableRequestValidator {
         ValidationUtil.parse(hexString, v -> Integer.parseInt(v.toString().substring(1), 16), "colorValue");
     }
 
+    //TODO extract
     private void validateFile(Object value) {
+        if (isNull(value)) {
+            return;
+        }
         FileMetadata request = objectMapperWrapper.convertValue(value, FileMetadata.class);
 
         fileRequestValidator.validate(request);

@@ -26,6 +26,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case ListItemType.TEXT:
             case ListItemType.CHECKLIST:
             case ListItemType.TABLE:
+            case ListItemType.CUSTOM_TABLE:
             case ListItemType.CHECKLIST_TABLE:
             case ListItemType.IMAGE:
             case ListItemType.FILE:

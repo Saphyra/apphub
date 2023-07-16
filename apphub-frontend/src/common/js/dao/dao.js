@@ -257,6 +257,8 @@ const Endpoints = {
     NBOTEBOOK_CREATE_FILE: new Endpoint(RequestMethod.PUT, "/api/notebook/file"),
     NOTEBOOK_SEARCH: new Endpoint(RequestMethod.POST, "/api/notebook/item/search"),
     NOTEBOOK_MOVE_LIST_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/{listItemId}/move"),
+    NOTEBOOK_CREATE_CUSTOM_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/custom-table"),
+    NOTEBOOK_GET_CUSTOM_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/custom-table/{listItemId}"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),

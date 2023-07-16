@@ -3,36 +3,30 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import TableHeadData from "../../../../common/table/table_head/TableHeadData";
 import MapStream from "../../../../../../common/js/collection/MapStream";
-import TableColumnData from "../../../../common/table/row/column/TableColumnData";
+import CustomTableColumnData from "../../../../common/custom_table/column/CustomTableColumnData";
 import TableRowData from "../../../../common/table/row/TableRowData";
 import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import TableHead from "../../../../common/table/table_head/TableHead";
-import "./table.css";
-import TableRow from "../../../../common/table/row/TableRow";
+import CustomTableRow from "../../../../common/custom_table/CustomTableRow";
 import Utils from "../../../../../../common/js/Utils";
 import MoveDirection from "../../../../common/MoveDirection";
-import validateListItemTitle from "../../../../common/validator/ListItemTitleValidator";
-import NotificationService from "../../../../../../common/js/notification/NotificationService";
-import validateTableHeadNames from "../../../../common/validator/TableHeadNameValidator";
-import EventName from "../../../../../../common/js/event/EventName";
+import "./custom_table.css";
 
-const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist }) => {
+const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
 
-    useEffect(() => loadTable(), []);
+    useEffect(() => loadCustomTable(), []);
 
     //System
-    const loadTable = () => {
+    const loadCustomTable = () => {
         const fetch = async () => {
-            const endpoint = checklist ? Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE : Endpoints.NOTEBOOK_GET_TABLE;
-
-            const response = await endpoint.createRequest(null, { listItemId: openedListItem.id })
+            const response = await Endpoints.NOTEBOOK_GET_CUSTOM_TABLE.createRequest(null, { listItemId: openedListItem.id })
                 .send();
 
             setDataFromResponse(response);
@@ -65,8 +59,9 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         const trows = new MapStream(tableColumnMapping)
             .toList((rowIndex, columns) => {
                 const columnDataList = new Stream(columns)
-                    .map(column => new TableColumnData(
+                    .map(column => new CustomTableColumnData(
                         column.columnIndex,
+                        column.type,
                         column.content,
                         column.tableJoinId
                     ))
@@ -74,24 +69,10 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 return new TableRowData(
                     Number(rowIndex),
-                    columnDataList,
-                    response.rowStatus[rowIndex].checked,
-                    response.rowStatus[rowIndex].rowId
+                    columnDataList
                 );
             });
         setRows(trows);
-    }
-
-    const updateTableHead = () => {
-        const copy = new Stream(tableHeads)
-            .toList();
-        setTableHeads(copy);
-    }
-
-    const updateRow = () => {
-        const copy = new Stream(rows)
-            .toList();
-        setRows(copy);
     }
 
     //Assemble
@@ -116,97 +97,28 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         return new Stream(rows)
             .sorted((a, b) => a.rowIndex - b.rowIndex)
             .map(row =>
-                <TableRow
+                <CustomTableRow
                     key={row.rowId}
                     rowData={row}
                     updateRow={updateRow}
-                    updateChecked={updateChecked}
                     removeRow={removeRow}
                     moveRow={moveRow}
                     editingEnabled={editingEnabled}
-                    checklist={checklist}
                 />
             )
             .toList();
     }
 
-    //Operations
-    const discard = () => {
-        //TODO Confirm first
-        setEditingEnabled(false);
-        loadTable();
+    const updateTableHead = () => {
+        const copy = new Stream(tableHeads)
+            .toList();
+        setTableHeads(copy);
     }
 
-    const save = async () => {
-        const titleValidationResult = validateListItemTitle(title);
-        if (!titleValidationResult.valid) {
-            NotificationService.showError(titleValidationResult.message);
-            return;
-        }
-
-        const columnNames = new Stream(tableHeads)
-            .map(tableHead => tableHead.content)
+    const updateRow = () => {
+        const copy = new Stream(rows)
             .toList();
-
-        const tableHeadNameValidationResult = validateTableHeadNames(columnNames);
-        if (!tableHeadNameValidationResult.valid) {
-            NotificationService.showError(tableHeadNameValidationResult.message);
-            return;
-        }
-
-        const tablePayload = {
-            title: title,
-            tableHeads: new Stream(tableHeads)
-                .sorted((a, b) => a.columnIndex - b.columnIndex)
-                .map(tableHead => {
-                    return {
-                        tableHeadId: tableHead.tableHeadId,
-                        columnIndex: tableHead.columnIndex,
-                        columnName: tableHead.content
-                    }
-                })
-                .toList(),
-            columns: new Stream(rows)
-                .flatMap(row =>
-                    new Stream(row.columns)
-                        .map(column => {
-                            return {
-                                tableJoinId: column.columnId,
-                                rowIndex: row.rowIndex,
-                                columnIndex: column.columnIndex,
-                                content: column.content
-                            }
-                        })
-                )
-                .toList()
-        }
-
-        let response;
-        if (checklist) {
-            const payload = {
-                table: tablePayload,
-                rows: new Stream(rows)
-                    .map(row => {
-                        return {
-                            rowId: row.rowId,
-                            rowIndex: row.rowIndex,
-                            checked: row.checked
-                        }
-                    })
-                    .toList()
-            };
-            response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE.createRequest(payload, { listItemId: openedListItem.id })
-                .send();
-
-        } else {
-            response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: openedListItem.id })
-                .send();
-        }
-
-
-        setEditingEnabled(false);
-        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
-        setDataFromResponse(response);
+        setRows(copy);
     }
 
     const newRow = () => {
@@ -217,7 +129,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
         const columns = new Stream(tableHeads)
             .map(tableHead => tableHead.columnIndex)
-            .map(columnIndex => new TableColumnData(columnIndex))
+            .map(columnIndex => new CustomTableColumnData(columnIndex))
             .toList();
 
         const newRow = new TableRowData(rowIndex + 1, columns);
@@ -235,7 +147,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
             .max()
             .orElse(0);
 
-        const newTableHead = new TableHeadData(columnIndex + 1, "", Utils.generateRandomId());
+        const newTableHead = new TableHeadData(columnIndex + 1);
         const copy = new Stream(tableHeads)
             .add(newTableHead)
             .toList();
@@ -243,7 +155,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
         new Stream(rows)
             .forEach(row => {
-                const newColumn = new TableColumnData(newTableHead.columnIndex);
+                const newColumn = new CustomTableColumnData(newTableHead.columnIndex);
                 row.columns.push(newColumn);
             });
 
@@ -361,26 +273,27 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         setRows(copy);
     }
 
-    const updateChecked = (row) => {
-        if (!editingEnabled) {
-            Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
-                .send();
-        }
+    const discard = () => {
+        //TODO Confirm first
+        setEditingEnabled(false);
+        loadCustomTable();
+    }
 
-        updateRow();
+    const save = async () => {
+        //TODO
     }
 
     return (
-        <div id="notebook-content-table" className="notebook-content notebook-content-view">
+        <div id="notebook-content-custom-table" className="notebook-content notebook-content-view">
             <ListItemTitle
-                id="notebook-content-table-title"
+                id="notebook-content-custom-table-title"
                 placeholder={localizationHandler.get("list-item-title")}
                 value={title}
                 setListItemTitle={setTitle}
                 disabled={!editingEnabled}
                 closeButton={
                     <Button
-                        id="notebook-content-table-close-button"
+                        id="notebook-content-custom-table-close-button"
                         className="notebook-close-button"
                         label="X"
                         onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
@@ -393,7 +306,6 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                     <thead>
                         <tr>
                             {editingEnabled && <th></th>}
-                            {checklist && <th>{localizationHandler.get("checked")}</th>}
                             {getTableHeads()}
                         </tr>
                     </thead>
@@ -407,7 +319,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
             <div className="notebook-content-buttons">
                 {!editingEnabled &&
                     <Button
-                        id="notebook-content-table-edit-button"
+                        id="notebook-content-custom-table-edit-button"
                         label={localizationHandler.get("edit")}
                         onclick={() => setEditingEnabled(true)}
                     />
@@ -415,7 +327,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-table-discard-button"
+                        id="notebook-content-custom-table-discard-button"
                         label={localizationHandler.get("discard")}
                         onclick={() => discard()}
                     />
@@ -423,7 +335,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-table-save-button"
+                        id="notebook-content-custom-table-save-button"
                         label={localizationHandler.get("save")}
                         onclick={() => save()}
                     />
@@ -431,7 +343,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-table-new-row-button"
+                        id="notebook-content-custom-table-new-row-button"
                         label={localizationHandler.get("new-row")}
                         onclick={() => newRow()}
                     />
@@ -439,7 +351,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
                 {editingEnabled &&
                     <Button
-                        id="notebook-content-table-new-column-button"
+                        id="notebook-content-custom-table-new-column-button"
                         label={localizationHandler.get("new-column")}
                         onclick={() => newColumn()}
                     />
@@ -449,4 +361,4 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     );
 }
 
-export default Table;
+export default CustomTable;

@@ -21,8 +21,6 @@ import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
-import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
@@ -37,6 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,7 +61,6 @@ public class CustomTableCreationService {
     private final ListItemDao listItemDao;
     private final ContentDao contentDao;
     private final TableHeadDao tableHeadDao;
-    private final ChecklistTableRowDao checklistTableRowDao;
     private final TableJoinDao tableJoinDao;
     private final FileDao fileDao;
 
@@ -88,17 +86,20 @@ public class CustomTableCreationService {
     }
 
     private void createRow(UUID userId, List<CustomTableCreatedResponse> result, ListItem listItem, CustomTableRowRequest row) {
-        ChecklistTableRow checklistTableRow = checklistTableRowFactory.create(userId, listItem.getListItemId(), row.getRowIndex(), row.getChecked());
-        checklistTableRowDao.save(checklistTableRow);
+        List<CustomTableColumnRequest> columns = row.getColumns()
+            .stream()
+            .sorted(Comparator.comparingInt(CustomTableColumnRequest::getColumnIndex))
+            .toList();
 
-        row.getColumns()
-            .forEach(column -> createColumn(userId, result, listItem, row, column));
+        for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
+            createColumn(userId, result, listItem, row.getRowIndex(), columnIndex, columns.get(columnIndex));
+        }
     }
 
-    private void createColumn(UUID userId, List<CustomTableCreatedResponse> result, ListItem listItem, CustomTableRowRequest row, CustomTableColumnRequest column) {
+    private void createColumn(UUID userId, List<CustomTableCreatedResponse> result, ListItem listItem, int rowIndex, int columnIndex, CustomTableColumnRequest column) {
         ColumnType columnType = ColumnType.valueOf(column.getType());
 
-        TableJoin tableJoin = tableJoinFactory.create(listItem.getListItemId(), row.getRowIndex(), column.getColumnIndex(), userId, columnType);
+        TableJoin tableJoin = tableJoinFactory.create(listItem.getListItemId(), rowIndex, columnIndex, userId, columnType);
         tableJoinDao.save(tableJoin);
 
         switch (columnType) {
@@ -114,7 +115,7 @@ public class CustomTableCreationService {
                     storedFileId = storageProxy.createFile(createFileRequest.getFileName(), createFileRequest.getSize());
 
                     CustomTableCreatedResponse response = CustomTableCreatedResponse.builder()
-                        .rowIndex(row.getRowIndex())
+                        .rowIndex(rowIndex)
                         .columnIndex(column.getColumnIndex())
                         .storedFileId(storedFileId)
                         .build();

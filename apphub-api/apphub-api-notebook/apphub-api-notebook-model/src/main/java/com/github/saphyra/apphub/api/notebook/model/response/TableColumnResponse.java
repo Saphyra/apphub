@@ -13,6 +13,8 @@ public class TableColumnResponse<T> {
     private final UUID tableJoinId;
 
     @NonNull
+    private final String type;
+
     private final T content;
 
     @NonNull

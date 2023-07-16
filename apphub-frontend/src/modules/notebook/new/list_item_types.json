@@ -5,7 +5,6 @@
     "checklist": "/web/notebook/new/checklist",
     "table": "/web/notebook/new/table",
     "checklist-table": "/web/notebook/new/checklist-table",
-    "custom-table": "/web/notebook/new/custom-table",
     "only-title": "/web/notebook/new/only-title",
     "image": "/web/notebook/new/image",
     "file": "/web/notebook/new/file"

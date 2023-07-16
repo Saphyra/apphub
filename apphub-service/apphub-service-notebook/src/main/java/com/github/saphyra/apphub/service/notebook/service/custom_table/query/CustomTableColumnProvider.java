@@ -34,6 +34,7 @@ class CustomTableColumnProvider implements TableColumnResponseProvider<Object> {
                 .tableJoinId(tableJoin.getTableJoinId())
                 .rowIndex(tableJoin.getRowIndex())
                 .columnIndex(tableJoin.getColumnIndex())
+                .type(tableJoin.getColumnType().name())
                 .content(getContent(tableJoin))
                 .build()
             )

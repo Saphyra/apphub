@@ -119,6 +119,7 @@ const CustomTableColumn = ({
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
+                    editingEnabled={editingEnabled}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled CustomTableColumnType: " + columnData.type);

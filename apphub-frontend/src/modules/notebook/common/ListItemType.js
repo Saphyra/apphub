@@ -9,6 +9,7 @@ const ListItemType = {
     IMAGE: "IMAGE",
     FILE: "FILE",
     SEARCH: "SEARCH",
+    CUSTOM_TABLE: "CUSTOM_TABLE",
 }
 
 export default ListItemType;

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +14,7 @@ import java.util.Map;
 @Builder
 public class CustomTableResponse {
     private String title;
+    private UUID parent;
     private List<TableHeadResponse> tableHeads;
     private List<TableColumnResponse<Object>> tableColumns;
-    private Map<Integer, Boolean> rowStatus;
 }

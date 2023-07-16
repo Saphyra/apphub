@@ -20,6 +20,12 @@ import CustomTableRow from "../../common/custom_table/CustomTableRow";
 import CustomTableColumnData from "../../common/custom_table/column/CustomTableColumnData";
 import CustomTableColumnTypeSelector from "../../common/custom_table/column_type_selector/CustomTableColumnTypeSelector";
 import CustomTableColumnType from "../../common/custom_table/CustomTableColumnType";
+import Endpoints from "../../../../common/js/dao/dao";
+import Spinner from "../../../../common/component/Spinner";
+import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
+import NotificationService from "../../../../common/js/notification/NotificationService";
+import validateTableHeadNames from "../../common/validator/TableHeadNameValidator";
+import getDefaultErrorHandler from "../../../../common/js/dao/DefaultErrorHandler";
 
 const NewCustomTable = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -31,6 +37,7 @@ const NewCustomTable = () => {
     const [tableHeads, setTableHeads] = useState([new TableHeadData(0)]);
     const [rows, setRows] = useState([new TableRowData(0, [new CustomTableColumnData(0)])]);
     const [columnTypeSelectorData, setColumnTypeSelectorData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     //Operations
     const newColumn = () => {
@@ -91,8 +98,130 @@ const NewCustomTable = () => {
             });
     }
 
-    const create = () => {
-        //TODO
+    const create = async () => {
+        const titleValidationResult = validateListItemTitle(listItemTitle);
+        if (!titleValidationResult.valid) {
+            NotificationService.showError(titleValidationResult.message);
+            return;
+        }
+
+        const columnNames = new Stream(tableHeads)
+            .sorted((a, b) => a.columnIndex - b.columnIndex)
+            .map(tableHead => tableHead.content)
+            .toList();
+
+        const tableHeadNameValidationResult = validateTableHeadNames(columnNames);
+        if (!tableHeadNameValidationResult.valid) {
+            NotificationService.showError(tableHeadNameValidationResult.message);
+            return;
+        }
+
+        const payload = {
+            title: listItemTitle,
+            parent: parentId,
+            columnNames: new Stream(tableHeads)
+                .sorted((a, b) => a.columnIndex - b.columnIndex)
+                .map(tableHead => tableHead.content)
+                .toList(),
+            rows: mapRows()
+        }
+
+        const response = await Endpoints.NOTEBOOK_CREATE_CUSTOM_TABLE.createRequest(payload)
+            .send();
+
+        console.log(response);
+
+        if (response.length > 0) {
+            setDisplaySpinner(true);
+
+            for (let i in response) {
+                const uploadData = response[i];
+                uploadFile(uploadData);
+            }
+        }
+
+        window.location.href = Constants.NOTEBOOK_PAGE;
+    }
+
+    const uploadFile = async ({ rowIndex, columnIndex, storedFileId }) => {
+        const columnData = new Stream(rows)
+            .filter(row => row.rowIndex === rowIndex)
+            .flatMap(row => new Stream(row.columns))
+            .filter(column => column.columnIndex === columnIndex)
+            .findFirst()
+            .orElseThrow("IllegalState", "No column found with rowIndex " + rowIndex + " and columnIndex " + columnIndex)
+            .data;
+
+
+        const formData = new FormData();
+        formData.append("file", columnData.e.target.files[0]);
+
+        const options = {
+            method: "PUT",
+            body: formData,
+            headers: {
+                'Cache-Control': "no-cache",
+                "BrowserLanguage": Utils.getBrowserLanguage(),
+                "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
+            }
+        }
+
+        await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileId }), options)
+            .then(r => {
+                if (!r.ok) {
+                    setDisplaySpinner(false);
+                    r.text()
+                        .then(body => {
+                            const response = new Response(r.status, body);
+                            getDefaultErrorHandler()
+                                .handle(response);
+                        });
+                }
+            });
+    }
+
+    const mapRows = () => {
+        return new Stream(rows)
+            .sorted((a, b) => a.rowIndex - b.rowIndex)
+            .map(row => {
+                return {
+                    rowIndex: row.rowIndex,
+                    columns: mapColumns(row.columns)
+                }
+            })
+            .toList();
+    }
+
+    const mapColumns = (columns) => {
+        return new Stream(columns)
+            .sorted((a, b) => a.columnIndex - b.columnIndex)
+            .map(column => mapColumn(column))
+            .toList();
+    }
+
+    const mapColumn = (column) => {
+        return {
+            columnIndex: column.columnIndex,
+            type: column.type,
+            value: mapValue(column)
+        }
+    }
+
+    const mapValue = (column) => {
+        switch (column.type) {
+            case CustomTableColumnType.IMAGE:
+            case CustomTableColumnType.FILE:
+                if (!Utils.hasValue(column.data)) {
+                    return null;
+                }
+                return {
+                    fileName: column.data.fileName,
+                    size: column.data.size
+                };
+            default:
+                console.log(column.data)
+                return column.data;
+        }
     }
 
     const removeColumn = (tableHead) => {
@@ -393,6 +522,7 @@ const NewCustomTable = () => {
                 />
             }
 
+            {displaySpinner && <Spinner />}
             <ToastContainer />
         </div>
     );
