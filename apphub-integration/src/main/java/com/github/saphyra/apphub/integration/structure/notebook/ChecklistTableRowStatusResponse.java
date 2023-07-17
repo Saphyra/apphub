@@ -11,10 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TableColumnResponse {
-    private UUID tableJoinId;
-    private String content;
-    private String type;
-    private Integer rowIndex;
-    private Integer columnIndex;
+public class ChecklistTableRowStatusResponse {
+    private UUID rowId;
+    private Boolean checked;
 }

@@ -9,12 +9,14 @@ import validateListItemTitle from "../../../../common/validator/ListItemTitleVal
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
+import ConfirmationDialog from "../../../../../../common/component/ConfirmationDialog";
 
-const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent}) => {
+const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [displayDiscardConfirmationDialog, setDisplayDiscardConfirmationDialog] = useState(false);
 
     useEffect(() => loadText(), []);
 
@@ -30,9 +32,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     }
 
     const discard = () => {
-        //TODO Confirm first
-        setEditingEnabled(false);
-        loadText();
+        setDisplayDiscardConfirmationDialog(true);
     }
 
     const save = async () => {
@@ -106,6 +106,32 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
                     />
                 }
             </div>
+
+            {displayDiscardConfirmationDialog &&
+                <ConfirmationDialog
+                    id="notebook-content-checklist-discard-confirmation"
+                    title={localizationHandler.get("confirm-discard-title")}
+                    content={localizationHandler.get("confirm-discard-content")}
+                    choices={[
+                        <Button
+                            key="discard"
+                            id="notebook-content-checklist-discard-confirm-button"
+                            label={localizationHandler.get("discard")}
+                            onclick={() => {
+                                setEditingEnabled(false);
+                                loadText();
+                                setDisplayDiscardConfirmationDialog(false);
+                            }}
+                        />,
+                        <Button
+                            key="cancel"
+                            id="notebook-content-checklist-discard-cancel-button"
+                            label={localizationHandler.get("cancel")}
+                            onclick={() => setDisplayDiscardConfirmationDialog(false)}
+                        />
+                    ]}
+                />
+            }
         </div>
     )
 }

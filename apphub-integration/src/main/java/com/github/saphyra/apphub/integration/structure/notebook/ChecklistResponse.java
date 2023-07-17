@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +15,6 @@ import java.util.List;
 @Builder
 public class ChecklistResponse {
     private String title;
+    private UUID parent;
     private List<ChecklistItemResponse> nodes;
 }

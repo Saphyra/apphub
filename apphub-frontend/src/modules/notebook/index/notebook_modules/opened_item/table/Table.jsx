@@ -17,6 +17,7 @@ import validateListItemTitle from "../../../../common/validator/ListItemTitleVal
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import validateTableHeadNames from "../../../../common/validator/TableHeadNameValidator";
 import EventName from "../../../../../../common/js/event/EventName";
+import ConfirmationDialog from "../../../../../../common/component/ConfirmationDialog";
 
 const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -24,6 +25,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     const [title, setTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
+    const [displayDiscardConfirmationDialog, setDisplayDiscardConfirmationDialog] = useState(false);
 
     useEffect(() => loadTable(), []);
 
@@ -75,8 +77,8 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                 return new TableRowData(
                     Number(rowIndex),
                     columnDataList,
-                    response.rowStatus[rowIndex].checked,
-                    response.rowStatus[rowIndex].rowId
+                    checklist ? response.rowStatus[rowIndex].checked : false,
+                    checklist ? response.rowStatus[rowIndex].rowId : undefined
                 );
             });
         setRows(trows);
@@ -132,9 +134,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
     //Operations
     const discard = () => {
-        //TODO Confirm first
-        setEditingEnabled(false);
-        loadTable();
+        setDisplayDiscardConfirmationDialog(true);
     }
 
     const save = async () => {
@@ -445,6 +445,32 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                     />
                 }
             </div>
+
+            {displayDiscardConfirmationDialog &&
+                <ConfirmationDialog
+                    id="notebook-content-checklist-discard-confirmation"
+                    title={localizationHandler.get("confirm-discard-title")}
+                    content={localizationHandler.get("confirm-discard-content")}
+                    choices={[
+                        <Button
+                            key="discard"
+                            id="notebook-content-checklist-discard-confirm-button"
+                            label={localizationHandler.get("discard")}
+                            onclick={() => {
+                                setEditingEnabled(false);
+                                loadTable();
+                                setDisplayDiscardConfirmationDialog(false);
+                            }}
+                        />,
+                        <Button
+                            key="cancel"
+                            id="notebook-content-checklist-discard-cancel-button"
+                            label={localizationHandler.get("cancel")}
+                            onclick={() => setDisplayDiscardConfirmationDialog(false)}
+                        />
+                    ]}
+                />
+            }
         </div>
     );
 }

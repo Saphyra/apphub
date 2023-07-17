@@ -41,7 +41,7 @@
     },
     "discard": {
         "en": "Discard",
-        "hu": "Mégse"
+        "hu": "Elvetés"
     },
     "save": {
         "en": "Save",
@@ -146,5 +146,13 @@
     "no-search-result": {
         "en": "No result found.",
         "hu": "Nincs találat."
+    },
+    "confirm-discard-title": {
+        "en": "Confirm discard",
+        "hu": "Elvetés megerősítése"
+    },
+    "confirm-discard-content": {
+        "en": "Are you sure you want to discard the changes you made?",
+        "hu": "Biztosan el szeretnéd vetni a változtatásokat?"
     }
 }

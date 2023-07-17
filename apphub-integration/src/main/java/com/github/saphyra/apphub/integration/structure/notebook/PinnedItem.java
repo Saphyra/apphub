@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.notebook;
 
-import com.github.saphyra.apphub.integration.action.frontend.notebook.PinnedItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.PinnedItemActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

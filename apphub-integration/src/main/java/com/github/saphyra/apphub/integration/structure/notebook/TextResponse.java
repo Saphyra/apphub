@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 public class TextResponse {
     private UUID textId;
+    private UUID parent;
     private String title;
     private String content;
 }

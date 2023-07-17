@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,7 +15,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ChecklistTableResponse {
     private String title;
+    private UUID parent;
     private List<TableHeadResponse> tableHeads;
     private List<TableColumnResponse> tableColumns;
-    private Map<Integer, Boolean> rowStatus;
+    private Map<Integer, ChecklistTableRowStatusResponse> rowStatus;
 }

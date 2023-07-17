@@ -30,7 +30,6 @@ class EditTableRequestValidator {
         ValidationUtil.notNull(request.getTableHeads(), "tableHeads");
 
         request.getTableHeads()
-            .stream()
             .forEach(this::validateTableHead);
 
         ValidationUtil.notNull(request.getColumns(), "columns");

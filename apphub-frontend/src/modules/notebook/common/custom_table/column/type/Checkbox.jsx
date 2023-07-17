@@ -8,7 +8,7 @@ const Checkbox = ({ checked, updateData, selectType, localizationHandler }) => {
             <InputField
                 type="checkbox"
                 onchangeCallback={updateData}
-                checked={checked}
+                checked={Boolean(checked)}
             />
 
             <Button

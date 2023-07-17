@@ -191,7 +191,7 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(checklistTableData.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);
         assertThat(checklistTableData.getTableColumns().get(0).getRowIndex()).isEqualTo(0);
         assertThat(checklistTableData.getTableColumns().get(0).getContent()).isEqualTo(CHECKLIST_TABLE_COLUMN_VALUE);
-        assertThat(checklistTableData.getRowStatus().get(0)).isTrue();
+        assertThat(checklistTableData.getRowStatus().get(0).getChecked()).isTrue();
     }
 
     private NotebookView findByTitle(String title, List<NotebookView> views) {

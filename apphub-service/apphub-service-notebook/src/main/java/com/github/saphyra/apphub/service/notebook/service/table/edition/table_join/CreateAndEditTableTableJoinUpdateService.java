@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +29,8 @@ class CreateAndEditTableTableJoinUpdateService {
     }
 
     private void createOrUpdate(EditTableJoinRequest column, ListItem listItem) {
-        tableJoinDao.findById(column.getTableJoinId())
+        Optional.ofNullable(column.getTableJoinId())
+            .flatMap(tableJoinDao::findById)
             .ifPresentOrElse(
                 tableJoin -> update(column, tableJoin),
                 () -> create(column, listItem)

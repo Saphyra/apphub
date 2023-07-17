@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.structure.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.PinnedItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.NotebookPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.PinnedItemActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.AllArgsConstructor;

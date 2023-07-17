@@ -52,11 +52,11 @@ public class NotebookActions {
 
     public static List<CategoryTreeView> getCategoryTree(Language language, UUID accessTokenId) {
         return Arrays.stream(
-            RequestFactory.createAuthorizedRequest(language, accessTokenId)
-                .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE))
-                .getBody()
-                .as(CategoryTreeView[].class)
-        )
+                RequestFactory.createAuthorizedRequest(language, accessTokenId)
+                    .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE))
+                    .getBody()
+                    .as(CategoryTreeView[].class)
+            )
             .collect(Collectors.toList());
     }
 
@@ -285,16 +285,13 @@ public class NotebookActions {
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static void updateChecklistTableRowStatus(Language language, UUID accessTokenId, UUID listItemId, int rowIndex, boolean status) {
-        Response response = getUpdateChecklistTableRowStatusResponse(language, accessTokenId, listItemId, rowIndex, status);
+    public static void updateChecklistTableRowStatus(Language language, UUID accessTokenId, UUID rowId, boolean status) {
+        Response response = getUpdateChecklistTableRowStatusResponse(language, accessTokenId, rowId, status);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistTableRowStatusResponse(Language language, UUID accessTokenId, UUID listItemId, int rowIndex, boolean status) {
-        Map<String, Object> pathVariables = new HashMap<String, Object>() {{
-            put("listItemId", listItemId);
-            put("rowIndex", rowIndex);
-        }};
+    public static Response getUpdateChecklistTableRowStatusResponse(Language language, UUID accessTokenId, UUID rowId, boolean status) {
+        Map<String, Object> pathVariables = Map.of("rowId", rowId);
 
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .body(new OneParamRequest<>(status))

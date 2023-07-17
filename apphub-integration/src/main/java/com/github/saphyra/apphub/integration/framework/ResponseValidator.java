@@ -82,4 +82,11 @@ public class ResponseValidator {
     private static void verifyParam(ErrorResponse errorResponse, String field, String value) {
         assertThat(errorResponse.getParams()).containsEntry(field, value);
     }
+
+    public static void verifyListItemNotFound(Response edit_columnHeadNotFoundResponse) {
+        assertThat(edit_columnHeadNotFoundResponse.getStatusCode()).isEqualTo(404);
+
+        ErrorResponse errorResponse = edit_columnHeadNotFoundResponse.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
+    }
 }

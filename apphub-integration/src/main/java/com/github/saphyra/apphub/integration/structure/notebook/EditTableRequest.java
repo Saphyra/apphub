@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.structure.notebook;
 
-import com.github.saphyra.apphub.integration.structure.KeyValuePair;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +13,6 @@ import java.util.List;
 @Data
 public class EditTableRequest {
     private String title;
-    private List<KeyValuePair<String>> columnNames;
-    private List<List<KeyValuePair<String>>> columns;
+    private List<EditTableHeadRequest> tableHeads;
+    private List<EditTableJoinRequest> columns;
 }

@@ -24,7 +24,7 @@ public interface TableController {
     TableResponse<String> editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_TABLE)
-    TableResponse getTable(@PathVariable("listItemId") UUID listItemId);
+    TableResponse<String> getTable(@PathVariable("listItemId") UUID listItemId);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE)
     void convertToChecklistTable(@PathVariable("listItemId") UUID listItemId);

@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.integraton.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.CategoryActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.DetailedListActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.NotebookPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated.OnlyTitleActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;

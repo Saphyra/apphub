@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TableColumnResponse {
+@Builder
+@Data
+public class EditTableJoinRequest {
     private UUID tableJoinId;
-    private String content;
-    private String type;
     private Integer rowIndex;
     private Integer columnIndex;
+    private String content;
 }
