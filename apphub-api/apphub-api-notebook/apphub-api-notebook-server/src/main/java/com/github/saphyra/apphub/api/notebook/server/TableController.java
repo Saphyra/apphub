@@ -19,7 +19,6 @@ public interface TableController {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_TABLE)
     OneParamResponse<UUID> createTable(@RequestBody CreateTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test - Response added
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_TABLE)
     TableResponse<String> editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId);
 

@@ -1,2 +1,0 @@
-TODO custom table
-TODO Command prompt for discard

@@ -31,14 +31,12 @@ public class TableJoinFactory {
         return result;
     }
 
-    //TODO unit test - ColumnType added
     public BiWrapper<TableJoin, Content> create(UUID listItemId, String columnContent, int rowIndex, int columnIndex, UUID userId) {
-        TableJoin tableJoin = create(listItemId, rowIndex, columnIndex, userId, ColumnType.EMPTY);
+        TableJoin tableJoin = create(listItemId, rowIndex, columnIndex, userId, ColumnType.TEXT);
         Content content = contentFactory.create(listItemId, tableJoin.getTableJoinId(), userId, columnContent);
         return new BiWrapper<>(tableJoin, content);
     }
 
-    //TODO unit test
     public TableJoin create(UUID listItemId, int rowIndex, int columnIndex, UUID userId, ColumnType columnType) {
         return TableJoin.builder()
             .tableJoinId(idGenerator.randomUuid())

@@ -12,7 +12,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FileMetadataValidator {
     private final CommonConfigProperties commonConfigProperties;
 
@@ -21,7 +20,7 @@ public class FileMetadataValidator {
 
         if (isNull(metadata.getStoredFileId())) {
             ValidationUtil.notBlank(metadata.getFileName(), "fileName");
-            ValidationUtil.maximum(metadata.getSize(), commonConfigProperties.getMaxUploadedFileSize(), "fileName");
+            ValidationUtil.maximum(metadata.getSize(), commonConfigProperties.getMaxUploadedFileSize(), "fileSize");
         }
     }
 }

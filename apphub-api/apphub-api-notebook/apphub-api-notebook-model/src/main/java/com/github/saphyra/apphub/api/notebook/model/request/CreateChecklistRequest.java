@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class CreateChecklistItemRequest {
+public class CreateChecklistRequest {
     private UUID parent;
     private String title;
     private List<ChecklistItemNodeRequest> nodes;

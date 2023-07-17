@@ -9,10 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +72,24 @@ public class TableJoinDaoTest {
         List<TableJoin> result = underTest.getByParent(PARENT);
 
         assertThat(result).containsExactly(domain);
+    }
+
+    @Test
+    void deleteById() {
+        given(uuidConverter.convertDomain(TABLE_JOIN_ID)).willReturn(TABLE_JOIN_ID_STRING);
+        given(repository.existsById(TABLE_JOIN_ID_STRING)).willReturn(true);
+
+        underTest.deleteById(TABLE_JOIN_ID);
+
+        then(repository).should().deleteById(TABLE_JOIN_ID_STRING);
+    }
+
+    @Test
+    void findById() {
+        given(uuidConverter.convertDomain(TABLE_JOIN_ID)).willReturn(TABLE_JOIN_ID_STRING);
+        given(repository.findById(TABLE_JOIN_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findById(TABLE_JOIN_ID)).contains(domain);
     }
 }

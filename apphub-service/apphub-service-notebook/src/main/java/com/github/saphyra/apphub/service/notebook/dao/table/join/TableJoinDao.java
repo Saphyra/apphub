@@ -31,12 +31,10 @@ public class TableJoinDao extends AbstractDao<TableJoinEntity, TableJoin, String
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
-    //TODO unit test
     public void deleteById(UUID tableJoinId) {
         deleteById(uuidConverter.convertDomain(tableJoinId));
     }
 
-    //TODO unit test
     public Optional<TableJoin> findById(UUID tableJoinId) {
         return findById(uuidConverter.convertDomain(tableJoinId));
     }

@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,8 @@ public class ChecklistTableRowDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final String PARENT_STRING = "parent";
     private static final UUID PARENT = UUID.randomUUID();
-    private static final int ROW_INDEX = 345;
+    private static final UUID ROW_ID = UUID.randomUUID();
+    private static final String ROW_ID_STRING = "row-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -68,5 +70,14 @@ public class ChecklistTableRowDaoTest {
         underTest.deleteByParent(PARENT);
 
         verify(repository).deleteByParent(PARENT_STRING);
+    }
+
+    @Test
+    void findById() {
+        given(uuidConverter.convertDomain(ROW_ID)).willReturn(ROW_ID_STRING);
+        given(repository.findById(ROW_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findById(ROW_ID)).contains(domain);
     }
 }

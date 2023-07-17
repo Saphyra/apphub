@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.notebook.server;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public interface ChecklistController {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_CHECKLIST)
-    OneParamResponse<UUID> createChecklistItem(@RequestBody CreateChecklistItemRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createChecklist(@RequestBody CreateChecklistRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_CHECKLIST)
     ChecklistResponse editChecklist(@RequestBody EditChecklistItemRequest request, @PathVariable("listItemId") UUID listItemId);
@@ -31,7 +31,6 @@ public interface ChecklistController {
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS)
     void updateStatus(@RequestBody OneParamRequest<Boolean> request, @PathVariable("checklistItemId") UUID checklistItemId);
 
-    //TODO API test
     @DeleteMapping(Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM)
     void deleteChecklistItem(@PathVariable("checklistItemId") UUID checklistItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

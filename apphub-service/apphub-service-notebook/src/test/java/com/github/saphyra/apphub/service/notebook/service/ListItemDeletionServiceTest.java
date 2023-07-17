@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.custom_table.CustomTableDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private FileDeletionService fileDeletionService;
+
+    @Mock
+    private CustomTableDeletionService customTableDeletionService;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -170,5 +174,16 @@ public class ListItemDeletionServiceTest {
 
         verify(listItemDao).delete(deleted);
         verify(fileDeletionService).deleteFile(LIST_ITEM_ID_1);
+    }
+
+    @Test
+    void deleteCustomTable() {
+        given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getType()).willReturn(ListItemType.CUSTOM_TABLE);
+
+        underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
+
+        verify(listItemDao).delete(deleted);
+        verify(customTableDeletionService).delete(deleted);
     }
 }

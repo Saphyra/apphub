@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ListItemQueryService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;

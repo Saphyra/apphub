@@ -9,6 +9,5 @@ interface FileRepository extends CrudRepository<FileEntity, String> {
 
     void deleteByUserId(String userId);
 
-    //TODO unit test
     void deleteByParent(String parent);
 }

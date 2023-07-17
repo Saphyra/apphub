@@ -69,7 +69,6 @@ public class CustomTableDeletionService {
             .peek(tableJoin -> fileDao.deleteByParent(tableJoin.getTableJoinId()))
             .forEach(tableJoinDao::delete);
 
-
         listItemDao.delete(listItem);
     }
 }

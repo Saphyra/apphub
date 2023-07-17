@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CreateFileRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final FileMetadataValidator fileMetadataValidator;

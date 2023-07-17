@@ -19,7 +19,6 @@ public class ChecklistItemDeletionService {
     private final ContentDao contentDao;
 
     @Transactional
-    //TODO unit test
     public void delete(UUID checklistItemId) {
         ChecklistItem checklistItem = checklistItemDao.findByIdValidated(checklistItemId);
         delete(checklistItem);

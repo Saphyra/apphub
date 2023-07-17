@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
@@ -31,7 +31,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistItemsOrderService checklistItemsOrderService;
 
     @Override
-    public OneParamResponse<UUID> createChecklistItem(CreateChecklistItemRequest request, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createChecklist(CreateChecklistRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("Creating new checklist for user {}", accessTokenHeader.getUserId());
         return new OneParamResponse<>(checklistCreationService.create(request, accessTokenHeader.getUserId()));
     }
@@ -40,7 +40,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     public ChecklistResponse editChecklist(EditChecklistItemRequest request, UUID listItemId) {
         log.info("Editing checklistItem with listItemId {}", listItemId);
         editChecklistItemService.edit(request, listItemId);
-        return getChecklist(listItemId); //TODO unit test
+        return getChecklist(listItemId);
     }
 
     @Override
@@ -56,7 +56,6 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    //TODO unit test
     public void deleteChecklistItem(UUID checklistItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete checklistItem {}", accessTokenHeader.getUserId(), checklistItemId);
         checklistItemDeletionService.delete(checklistItemId);
@@ -66,13 +65,13 @@ public class ChecklistControllerImpl implements ChecklistController {
     public ChecklistResponse deleteCheckedItems(UUID listItemId) {
         log.info("Deleting checked items of checklist {}", listItemId);
         checklistItemDeletionService.deleteCheckedItems(listItemId);
-        return getChecklist(listItemId); //TODO unit test
+        return getChecklist(listItemId);
     }
 
     @Override
     public ChecklistResponse orderItems(UUID listItemId) {
         log.info("Ordering checklist items {}", listItemId);
         checklistItemsOrderService.orderChecklistItems(listItemId);
-        return getChecklist(listItemId); //TODO unit test
+        return getChecklist(listItemId);
     }
 }

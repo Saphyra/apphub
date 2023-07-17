@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -32,6 +33,17 @@ public class ChecklistItemDeletionServiceTest {
 
     @Mock
     private ChecklistItem checklistItem;
+
+    @Test
+    void delete() {
+        given(checklistItemDao.findByIdValidated(CHECKLIST_ITEM_ID)).willReturn(checklistItem);
+        given(checklistItem.getChecklistItemId()).willReturn(CHECKLIST_ITEM_ID);
+
+        underTest.delete(CHECKLIST_ITEM_ID);
+
+        then(contentDao).should().deleteByParent(CHECKLIST_ITEM_ID);
+        then(checklistItemDao).should().delete(checklistItem);
+    }
 
     @Test
     public void deleteCheckedItems() {

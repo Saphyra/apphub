@@ -37,37 +37,18 @@ public class ListItemDeletionService {
 
     private void deleteChild(ListItem listItem, UUID userId) {
         switch (listItem.getType()) {
-            case CATEGORY:
-                deleteChildren(listItem, userId);
-                break;
-            case CHECKLIST:
-                checklistItemDao.getByParent(listItem.getListItemId())
-                    .stream()
-                    .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getChecklistItemId()))
-                    .forEach(checklistItemDao::delete);
-                break;
-            case TEXT:
-            case LINK:
-                contentDao.deleteByParent(listItem.getListItemId());
-                break;
-            case TABLE:
-                tableDeletionService.deleteByListItemId(listItem.getListItemId());
-                break;
-            case CHECKLIST_TABLE:
-                checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
-                break;
-            case ONLY_TITLE:
-                log.info("OnlyTitle is handled by default.");
-                break;
-            case IMAGE:
-            case FILE:
-                fileDeletionService.deleteFile(listItem.getListItemId());
-                break;
-            case CUSTOM_TABLE: //TODO unit test
-                customTableDeletionService.delete(listItem);
-                break;
-            default:
-                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
+            case CATEGORY -> deleteChildren(listItem, userId);
+            case CHECKLIST -> checklistItemDao.getByParent(listItem.getListItemId())
+                .stream()
+                .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getChecklistItemId()))
+                .forEach(checklistItemDao::delete);
+            case TEXT, LINK -> contentDao.deleteByParent(listItem.getListItemId());
+            case TABLE -> tableDeletionService.deleteByListItemId(listItem.getListItemId());
+            case CHECKLIST_TABLE -> checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
+            case ONLY_TITLE -> log.info("OnlyTitle is handled by default.");
+            case IMAGE, FILE -> fileDeletionService.deleteFile(listItem.getListItemId());
+            case CUSTOM_TABLE -> customTableDeletionService.delete(listItem);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }
 
         listItemDao.delete(listItem);

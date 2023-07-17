@@ -37,7 +37,6 @@ public class StorageProxy {
         return storageClient.duplicateFile(fileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
     }
 
-    //TODO unit test - Handle Metadata not found error
     public StoredFileResponse getFileMetadata(UUID storedFileId) {
         try {
             return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemNodeRequestValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateChecklistItemRequestValidatorTest {
+public class CreateChecklistRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
 
@@ -36,7 +36,7 @@ public class CreateChecklistItemRequestValidatorTest {
 
     @Test
     public void nullNodes() {
-        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest request = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(PARENT)
             .nodes(null)
@@ -51,7 +51,7 @@ public class CreateChecklistItemRequestValidatorTest {
 
     @Test
     public void validate() {
-        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest request = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(PARENT)
             .nodes(Arrays.asList(nodeRequest))

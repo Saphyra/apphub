@@ -37,34 +37,15 @@ public class ListItemCloneService {
         listItemDao.save(listItemClone);
 
         switch (toClone.getType()) {
-            case CATEGORY:
-                listItemDao.getByUserIdAndParent(toClone.getUserId(), toClone.getListItemId())
-                    .forEach(listItem -> clone(listItemClone.getListItemId(), listItem, listItem.getTitle()));
-                break;
-            case LINK:
-            case TEXT:
-                textAndLinkCloneService.clone(toClone.getListItemId(), listItemClone);
-                break;
-            case CHECKLIST:
-                checklistCloneService.clone(toClone, listItemClone);
-                break;
-            case TABLE:
-                tableCloneService.clone(toClone, listItemClone);
-                break;
-            case CHECKLIST_TABLE:
-                checklistTableCloneService.clone(toClone, listItemClone);
-                break;
-            case ONLY_TITLE:
-                log.info("OnlyTitle is cloned by default.");
-                break;
-            case IMAGE:
-            case FILE:
-                cloneFileService.cloneFile(toClone, listItemClone);
-                break;
-            case CUSTOM_TABLE: //TODO unit test
-                customTableCloneService.clone(toClone, listItemClone);
-            default:
-                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + "cannot be cloned.");
+            case CATEGORY -> listItemDao.getByUserIdAndParent(toClone.getUserId(), toClone.getListItemId()).forEach(listItem -> clone(listItemClone.getListItemId(), listItem, listItem.getTitle()));
+            case LINK, TEXT -> textAndLinkCloneService.clone(toClone.getListItemId(), listItemClone);
+            case CHECKLIST -> checklistCloneService.clone(toClone, listItemClone);
+            case TABLE -> tableCloneService.clone(toClone, listItemClone);
+            case CHECKLIST_TABLE -> checklistTableCloneService.clone(toClone, listItemClone);
+            case ONLY_TITLE -> log.info("OnlyTitle is cloned by default.");
+            case IMAGE, FILE -> cloneFileService.cloneFile(toClone, listItemClone);
+            case CUSTOM_TABLE -> customTableCloneService.clone(toClone, listItemClone);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, toClone.getType() + " cannot be cloned.");
         }
     }
 }

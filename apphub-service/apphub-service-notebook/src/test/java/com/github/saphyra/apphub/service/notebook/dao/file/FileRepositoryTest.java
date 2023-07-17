@@ -19,6 +19,7 @@ public class FileRepositoryTest {
     private static final String FILE_ID_1 = "file-id-1";
     private static final String FILE_ID_2 = "file-id-2";
     private static final String PARENT_1 = "parent-1";
+    private static final String PARENT_2 = "parent-2";
     private static final String USER_ID_1 = "user-1";
     private static final String USER_ID_2 = "user-2";
 
@@ -61,5 +62,25 @@ public class FileRepositoryTest {
         underTest.deleteByUserId(USER_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity2);
+    }
+
+    @Test
+    @Transactional
+    void deleteByParent() {
+        FileEntity entity1 = FileEntity.builder()
+            .fileId(FILE_ID_1)
+            .parent(PARENT_1)
+            .build();
+        underTest.save(entity1);
+
+        FileEntity entity2 = FileEntity.builder()
+            .fileId(FILE_ID_2)
+            .parent(PARENT_2)
+            .build();
+        underTest.save(entity2);
+
+        underTest.deleteByParent(PARENT_2);
+
+        assertThat(underTest.findAll()).containsExactly(entity1);
     }
 }

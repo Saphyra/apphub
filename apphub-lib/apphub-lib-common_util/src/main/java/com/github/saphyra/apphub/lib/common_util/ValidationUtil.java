@@ -33,7 +33,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void length(String value, int length, String field) {
         notNull(value, field);
         if (value.length() != length) {
@@ -55,7 +54,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void atLeastInclusive(Double value, double minValue, String field) {
         notNull(value, field);
         if (value <= minValue) {
@@ -63,7 +61,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void atLeast(Double value, double minValue, String field) {
         notNull(value, field);
         if (value < minValue) {
@@ -126,7 +123,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static <T> T parse(Object value, Function<Object, T> parser, String field) {
         notNull(value, field);
         try {
