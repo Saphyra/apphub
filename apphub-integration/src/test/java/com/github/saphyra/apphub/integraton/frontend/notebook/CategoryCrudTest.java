@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListIt
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewCategoryActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
@@ -70,7 +71,7 @@ public class CategoryCrudTest extends SeleniumTest {
 
         //Edit
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
-        EditListItemActions.selectParent(driver, CATEGORY_2_TITLE);
+        ParentSelectorActions.selectParent(driver, CATEGORY_2_TITLE);
         EditListItemActions.submitForm(driver);
 
         NotebookActions.waitForPageOpened(driver);
@@ -88,7 +89,7 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(leaf.getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_2_TITLE);
         CategoryTreeLeaf child = leaf.getChildren()
             .get(0);
-        child.expand();
+        child.open();
 
         assertThat(child.getChildren()).hasSize(1)
             .extracting(CategoryTreeLeaf::getTitle)
@@ -112,6 +113,61 @@ public class CategoryCrudTest extends SeleniumTest {
             .until(() -> NotebookActions.getListItems(driver).isEmpty())
             .assertTrue("ListItem is not deleted.");
 
-        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).isEmpty();
+        assertThat(NotebookActions.getCategoryTree(driver).hasChildren()).isFalse();
+    }
+
+    @Test(groups = "notebook")
+    public void categoryTreeTest() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        NotebookUtils.newCategory(driver, CATEGORY_1_TITLE);
+        NotebookUtils.newCategory(driver, CATEGORY_2_TITLE, CATEGORY_1_TITLE);
+
+        //Check initial state
+        CategoryTreeLeaf root = NotebookActions.getCategoryTree(driver);
+        assertThat(root.hasChildren()).isTrue();
+        assertThat(root.isOpened()).isTrue();
+        assertThat(root.getChildren()).hasSize(1);
+
+        CategoryTreeLeaf child = root.getChildren()
+            .get(0);
+        assertThat(child.getTitle()).isEqualTo(CATEGORY_1_TITLE);
+        assertThat(child.hasChildren()).isTrue();
+        assertThat(child.isOpened()).isFalse();
+
+        //Open child
+        child.open();
+        assertThat(child.isOpened()).isTrue();
+        assertThat(child.getChildren()).hasSize(1);
+
+        CategoryTreeLeaf grandchild = child.getChildren()
+            .get(0);
+        assertThat(grandchild.hasChildren()).isFalse();
+
+        //Open categories
+        grandchild.openCategory(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.getListItems(driver).isEmpty())
+            .assertTrue("Category content is not loaded.");
+
+        child.openCategory(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_2_TITLE).isPresent())
+            .assertTrue("Category content is not loaded.");
+
+        root.openCategory(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_1_TITLE).isPresent())
+            .assertTrue("Category content is not loaded.");
+
+        root.close();
+
+        assertThat(root.isOpened()).isFalse();
     }
 }

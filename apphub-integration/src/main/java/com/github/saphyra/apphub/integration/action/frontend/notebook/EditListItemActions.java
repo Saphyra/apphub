@@ -13,13 +13,4 @@ public class EditListItemActions {
         driver.findElement(By.id("notebook-edit-save-button"))
             .click();
     }
-
-    public static void selectParent(WebDriver driver, String parentTitle) {
-        driver.findElements(By.cssSelector(".notebook-parent-selector-children .notebook-parent-selector-child"))
-            .stream()
-            .filter(webElement -> webElement.getText().equals(parentTitle))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("No parent available with title " + parentTitle))
-            .click();
-    }
 }

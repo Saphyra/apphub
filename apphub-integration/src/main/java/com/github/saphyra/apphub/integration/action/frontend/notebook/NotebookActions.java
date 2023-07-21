@@ -50,7 +50,7 @@ public class NotebookActions {
     }
 
     public static CategoryTreeLeaf getCategoryTree(WebDriver driver) {
-        return new CategoryTreeLeaf(driver.findElement(By.id("notebook-category-tree")));
+        return new CategoryTreeLeaf(driver.findElement(By.cssSelector("#notebook-category-tree > .notebook-tree-leaf-wrapper")));
     }
 
     public static void waitForPageOpened(WebDriver driver) {
@@ -72,5 +72,10 @@ public class NotebookActions {
     public static void confirmListItemDeletion(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-delete-list-item-button"))
             .click();
+    }
+
+    public static String getOpenedCategoryName(WebDriver driver) {
+        return driver.findElement(By.id("notebook-content-category-content-title"))
+            .getText();
     }
 }
