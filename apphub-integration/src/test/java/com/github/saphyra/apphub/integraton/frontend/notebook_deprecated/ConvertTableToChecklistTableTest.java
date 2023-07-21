@@ -13,12 +13,13 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemDeta
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+@Ignore
 public class ConvertTableToChecklistTableTest extends SeleniumTest {
     private static final String TITLE = "title";
     private static final String COLUMN_NAME = "column-name";

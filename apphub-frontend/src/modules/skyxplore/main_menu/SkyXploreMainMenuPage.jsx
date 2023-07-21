@@ -29,10 +29,15 @@ const SkyXploreMainMenuPage = () => {
         }
     );
 
-    useEffect(() => checkRedirection(), []);
-    useEffect(sessionChecker, []);
-    useEffect(() => NotificationService.displayStoredMessages(), []);
+    useEffect(() => initPage(), []);
+
     useEffect(() => handleMessage(), [lastMessage]);
+
+    const initPage = () => {
+        Redirection.forMainMenu();
+        sessionChecker();
+        NotificationService.displayStoredMessages()
+    }
 
     const handleMessage = () => {
         if (lastMessage === null) {
@@ -46,10 +51,6 @@ const SkyXploreMainMenuPage = () => {
         }
 
         setLastEvent(message);
-    }
-
-    const checkRedirection = () => {
-        Redirection.forMainMenu()
     }
 
     document.title = localizationHandler.get("title");
@@ -83,6 +84,7 @@ const SkyXploreMainMenuPage = () => {
                 localizationHandler={localizationHandler}
                 setDisplaynNewGameConfirmationDialog={setDisplaynNewGameConfirmationDialog}
             />}
+
             <ToastContainer />
         </div>
     );

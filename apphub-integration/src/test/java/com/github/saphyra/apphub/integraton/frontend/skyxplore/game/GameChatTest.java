@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatMes
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatRoom;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -28,6 +29,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class GameChatTest extends SeleniumTest {
     public static final String GENERAL_ROOM_NAME = "Általános";
     private static final String GAME_NAME = "game-name";
@@ -53,13 +55,18 @@ public class GameChatTest extends SeleniumTest {
         BiWrapper<WebDriver, RegistrationParameters> player3 = new BiWrapper<>(driver3, userData3);
         List<Future<Object>> futures = Stream.of(player1, player2, player3)
             .map(biWrapper -> EXECUTOR_SERVICE.submit(() -> {
-                Navigation.toIndexPage(biWrapper.getEntity1());
-                IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
-                ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
-                AwaitilityWrapper.createDefault()
-                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
+                try {
+                    Navigation.toIndexPage(biWrapper.getEntity1());
+                    IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
+                    ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
+                    SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
+                    AwaitilityWrapper.createDefault()
+                        .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                        .assertTrue();
+                } catch (Exception e) {
+                    log.error("Failed setting up users", e);
+                    throw e;
+                }
                 return null;
             }))
             .toList();

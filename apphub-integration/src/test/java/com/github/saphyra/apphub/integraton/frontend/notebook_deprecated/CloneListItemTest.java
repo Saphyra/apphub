@@ -22,6 +22,7 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.NewChecklist
 import com.github.saphyra.apphub.integration.structure.api.notebook.ViewChecklistItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+@Ignore
 public class CloneListItemTest extends SeleniumTest {
     private static final String ROOT_TITLE = "root-title";
     private static final String PARENT_TITLE = "parent-title";

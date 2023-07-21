@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
+@Slf4j
 public class ExitFromLobbyTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
@@ -39,13 +41,18 @@ public class ExitFromLobbyTest extends SeleniumTest {
 
         List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3), new BiWrapper<>(driver4, userData4))
             .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                Navigation.toIndexPage(player.getEntity1());
-                IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(player.getEntity1());
-                AwaitilityWrapper.createDefault()
-                    .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
+                try {
+                    Navigation.toIndexPage(player.getEntity1());
+                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
+                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
+                    SkyXploreCharacterActions.submitForm(player.getEntity1());
+                    AwaitilityWrapper.createDefault()
+                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                        .assertTrue();
+                } catch (Exception e) {
+                    log.error("Failed setting up users", e);
+                    throw e;
+                }
                 return null;
             }))
             .toList();

@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.EmailValidationResult;
@@ -12,16 +11,12 @@ import com.github.saphyra.apphub.integration.structure.api.user.registration.Pas
 import com.github.saphyra.apphub.integration.structure.api.user.registration.RegistrationValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.UsernameValidationResult;
 import lombok.extern.slf4j.Slf4j;
-import org.awaitility.core.ConditionFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.util.concurrent.TimeUnit;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.verifyInvalidFieldState;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 
 @Slf4j
 public class IndexPageActions {
@@ -69,11 +64,8 @@ public class IndexPageActions {
         fillRegistrationForm(driver, registrationParameters);
         submitRegistration(driver);
 
-        ConditionFactory conditionFactory = await()
-            .atMost(15, TimeUnit.SECONDS)
-            .pollInterval(1, TimeUnit.SECONDS);
-        AwaitilityWrapper.wrap(conditionFactory)
-            .until(() -> WebElementUtils.getIfPresent(() -> IndexPage.registrationSubmitButton(driver)).isEmpty())
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
             .assertTrue("Registration failed.");
     }
 

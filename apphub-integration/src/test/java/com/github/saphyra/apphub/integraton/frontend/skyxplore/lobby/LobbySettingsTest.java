@@ -19,6 +19,7 @@ import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocatio
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayerElement;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class LobbySettingsTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-%s";
@@ -44,14 +46,18 @@ public class LobbySettingsTest extends SeleniumTest {
 
         List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
             .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                Navigation.toIndexPage(player.getEntity1());
-                IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(player.getEntity1());
-
-                AwaitilityWrapper.createDefault()
-                    .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
+                try {
+                    Navigation.toIndexPage(player.getEntity1());
+                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
+                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
+                    SkyXploreCharacterActions.submitForm(player.getEntity1());
+                    AwaitilityWrapper.createDefault()
+                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                        .assertTrue();
+                } catch (Exception e) {
+                    log.error("Failed setting up users", e);
+                    throw e;
+                }
                 return null;
             }))
             .toList();
@@ -98,14 +104,18 @@ public class LobbySettingsTest extends SeleniumTest {
 
         List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
             .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                Navigation.toIndexPage(player.getEntity1());
-                IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(player.getEntity1());
-
-                AwaitilityWrapper.createDefault()
-                    .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
+                try {
+                    Navigation.toIndexPage(player.getEntity1());
+                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
+                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
+                    SkyXploreCharacterActions.submitForm(player.getEntity1());
+                    AwaitilityWrapper.createDefault()
+                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                        .assertTrue();
+                } catch (Exception e) {
+                    log.error("Failed setting up users", e);
+                    throw e;
+                }
                 return null;
             }))
             .toList();

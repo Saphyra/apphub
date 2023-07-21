@@ -31,7 +31,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = "skyxplore", priority = -1)
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -69,7 +69,7 @@ public class CitizenOverviewTest extends SeleniumTest {
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
-            .collect(Collectors.toList());
+            .toList();
 
         List<String> newNames = Stream.iterate(0, integer -> integer + 1)
             .limit(citizenNames.size())

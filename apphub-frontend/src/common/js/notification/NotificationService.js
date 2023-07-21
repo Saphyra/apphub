@@ -4,22 +4,26 @@ import { toast } from 'react-toastify';
 
 const localizationHandler = new LocalizationHandler(errorCodes);
 
-const showError = (message) => {
-    toast.error(
-        message,
-        {
-            position: toast.POSITION.TOP_LEFT
-        }
-    );
+const showError = (message, timeout = 0) => {
+    setTimeout(() => {
+        toast.error(
+            message,
+            {
+                position: toast.POSITION.TOP_LEFT
+            }
+        );
+    }, timeout);
 }
 
-const showSuccess = (message) => {
-    toast.success(
-        message,
-        {
-            position: toast.POSITION.TOP_LEFT
-        }
-    );
+const showSuccess = (message, timeout = 0) => {
+    setTimeout(() => {
+        toast.success(
+            message,
+            {
+                position: toast.POSITION.TOP_LEFT
+            }
+        );
+    }, timeout);
 }
 
 const displayStoredMessages = () => {
@@ -29,22 +33,22 @@ const displayStoredMessages = () => {
     console.log("successText", sessionStorage.successText);
 
     if (sessionStorage.errorCode) {
-        showError(localizationHandler.get(sessionStorage.errorCode));
+        showError(localizationHandler.get(sessionStorage.errorCode), 500);
         delete sessionStorage.errorCode;
     }
 
     if (sessionStorage.successCode) {
-        showSuccess(localizationHandler.get(sessionStorage.successCode));
+        showSuccess(localizationHandler.get(sessionStorage.successCode), 500);
         delete sessionStorage.successCode;
     }
 
     if (sessionStorage.errorText) {
-        showError(sessionStorage.errorText);
+        showError(sessionStorage.errorText, 500);
         delete sessionStorage.errorText;
     }
 
     if (sessionStorage.successText) {
-        showSuccess(sessionStorage.successText);
+        showSuccess(sessionStorage.successText, 500);
         delete sessionStorage.successText;
     }
 }

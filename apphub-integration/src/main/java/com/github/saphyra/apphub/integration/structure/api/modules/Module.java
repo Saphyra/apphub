@@ -39,6 +39,7 @@ public class Module {
     }
 
     public void open() {
-        element.findElement(LINK).click();
+        element.findElement(LINK)
+            .click();
     }
 }

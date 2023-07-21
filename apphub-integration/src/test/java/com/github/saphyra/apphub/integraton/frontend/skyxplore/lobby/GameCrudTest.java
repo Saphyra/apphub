@@ -136,16 +136,21 @@ public class GameCrudTest extends SeleniumTest {
 
     private Future<?> registerAndNavigateToSkyXplore(BiWrapper<WebDriver, RegistrationParameters> biWrapper) {
         return EXECUTOR_SERVICE.submit(() -> {
-            WebDriver driver = biWrapper.getEntity1();
-            Navigation.toIndexPage(driver);
-            IndexPageActions.registerUser(driver, biWrapper.getEntity2());
+            try {
+                WebDriver driver = biWrapper.getEntity1();
+                Navigation.toIndexPage(driver);
+                IndexPageActions.registerUser(driver, biWrapper.getEntity2());
 
-            ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
-            SkyXploreCharacterActions.submitForm(driver);
+                ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+                SkyXploreCharacterActions.submitForm(driver);
 
-            AwaitilityWrapper.createDefault()
-                .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                .assertTrue("MainMenu is not loaded.");
+                AwaitilityWrapper.createDefault()
+                    .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .assertTrue("MainMenu is not loaded.");
+            } catch (Exception e) {
+                log.error("Failed setting up user", e);
+                throw e;
+            }
         });
     }
 }

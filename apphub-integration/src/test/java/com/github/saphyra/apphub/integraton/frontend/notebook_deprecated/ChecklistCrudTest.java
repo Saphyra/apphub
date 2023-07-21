@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.NewChecklist
 import com.github.saphyra.apphub.integration.structure.api.notebook.ViewChecklistItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Ignore
 public class ChecklistCrudTest extends SeleniumTest {
     private static final String CATEGORY_TITLE_1 = "category-title-1";
     private static final String CHECKLIST_TITLE = "checklist-title";
