@@ -8,12 +8,12 @@ import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.change_username.ChUsernamePasswordValidationResult;
-import com.github.saphyra.apphub.integration.structure.user.change_username.ChangeUsernameParameters;
-import com.github.saphyra.apphub.integration.structure.user.change_username.ChangeUsernameValidationResult;
-import com.github.saphyra.apphub.integration.structure.user.change_username.UsernameValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChUsernamePasswordValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChangeUsernameParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChangeUsernameValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.change_username.UsernameValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 

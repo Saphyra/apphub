@@ -3,8 +3,9 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import ListItemType from "../../../common/ListItemType";
 import moveListItem from "../../../common/MoveListItemService";
+import UserSettings from "../../../common/UserSettings";
 
-const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setLastEvent}) => {
+const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setLastEvent, userSettings }) => {
     const hasLeaves = category.children.length > 0;
     const isOpened = openedLeaves.indexOf(category.categoryId) > -1;
 
@@ -14,6 +15,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
                 {
                     new Stream(category.children)
                         .sorted((a, b) => a.title.localeCompare(b.title))
+                        .filter(leaf => userSettings[UserSettings.SHOW_ARCHIVED] || !leaf.archived)
                         .map(leaf =>
                             <Leaf
                                 key={leaf.categoryId}
@@ -22,6 +24,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
                                 setOpenedLeaves={setOpenedLeaves}
                                 setOpenedListItem={setOpenedListItem}
                                 setLastEvent={setLastEvent}
+                                userSettings={userSettings}
                             />
                         )
                         .toList()
@@ -76,7 +79,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
             onDragOver={handleOnDragOver}
             onDrop={handleOnDrop}
         >
-            <div className="notebook-tree-leaf button">
+            <div className={"notebook-tree-leaf button" + (category.archived ? " archived" : "")}>
                 {hasLeaves && (isOpened ? closeButton() : expandButton())}
 
                 <div

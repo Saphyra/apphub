@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.utils.LogParameterVisibilityResponse;
-import com.github.saphyra.apphub.integration.structure.utils.SetLogParameterVisibilityRequest;
+import com.github.saphyra.apphub.integration.structure.api.utils.LogParameterVisibilityResponse;
+import com.github.saphyra.apphub.integration.structure.api.utils.SetLogParameterVisibilityRequest;
 import io.restassured.response.Response;
 
 import java.util.Arrays;

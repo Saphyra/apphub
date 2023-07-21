@@ -4,8 +4,11 @@
 }
 
 .notebook-content-category-content-list-item.archived {
-    text-decoration: line-through;
     opacity: 0.25;
+}
+
+.notebook-content-category-content-list-item.archived>span {
+    text-decoration: line-through;
 }
 
 .notebook-content-category-content-list-item-title {
@@ -71,9 +74,7 @@
 
 .only_title {}
 
-.checklist,
-.pinned,
-.archived.archive-button {
+.checklist {
     border-color: orange;
 }
 

@@ -6,6 +6,11 @@
     display: inline-block;
 }
 
+.notebook-tree-leaf.archived {
+    text-decoration: line-through;
+    opacity: 0.25;
+}
+
 .notebook-tree-leaf-button {
     float: left;
     margin: 0;

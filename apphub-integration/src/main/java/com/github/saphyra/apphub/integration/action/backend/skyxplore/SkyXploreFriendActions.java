@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.skyxplore.ActiveFriendResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.FriendshipResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.IncomingFriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SentFriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.ActiveFriendResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.IncomingFriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import io.restassured.response.Response;
 
 import java.util.Arrays;

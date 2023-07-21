@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.notebook_deprecate
 
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistTableRow;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableRow;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

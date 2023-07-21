@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.admin_panel.CurrentBan;
+import com.github.saphyra.apphub.integration.structure.api.admin_panel.CurrentBan;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 

@@ -17,6 +17,8 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String COMMUNITY_PAGE = "/web/community";
+    public static final String NOTEBOOK_NEW_PAGE = "/web/notebook/new/{parent}";
+    public static final String NOTEBOOK_NEW_LIST_ITEM_PAGE = "/web/notebook/new/{listItemType}/{parent}";
 
     //Training
     public static final String TRAINING_HTML_PAGE = "/web/training/html/001_introduction";

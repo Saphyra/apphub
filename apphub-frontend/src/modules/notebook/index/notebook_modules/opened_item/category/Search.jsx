@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Settings from "./category/Settings";
+import Settings from "./settings/Settings";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import "./search.css";
@@ -8,8 +8,17 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ListItem from "../../list_item/ListItem";
 import ListItemMode from "../../list_item/ListItemMode";
+import UserSettings from "../../../../common/UserSettings";
 
-const Search = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
+const Search = ({
+    localizationHandler,
+    openedListItem,
+    setOpenedListItem,
+    lastEvent,
+    setLastEvent,
+    userSettings,
+    changeUserSettings
+}) => {
     const [searchResult, setSearchResult] = useState([]);
 
     useEffect(() => loadSearchResult(), [openedListItem.id]);
@@ -67,6 +76,7 @@ const Search = ({ localizationHandler, openedListItem, setOpenedListItem, lastEv
 
         return new Stream(searchResult)
             .sorted((a, b) => compare(a, b))
+            .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
             .map(child =>
                 <ListItem
                     key={child.id}
@@ -86,6 +96,8 @@ const Search = ({ localizationHandler, openedListItem, setOpenedListItem, lastEv
                 localizationHandler={localizationHandler}
                 openedListItem={openedListItem}
                 setOpenedListItem={setOpenedListItem}
+                userSettings={userSettings}
+                changeUserSettings={changeUserSettings}
             />
 
             <div id="notebook-content-search-content">
@@ -99,7 +111,7 @@ const Search = ({ localizationHandler, openedListItem, setOpenedListItem, lastEv
                     />
                 </div>
 
-                <div>
+                <div id="notebook-category-content-list">
                     {getContent()}
                 </div>
             </div>

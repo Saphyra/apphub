@@ -264,6 +264,10 @@ const Endpoints = {
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),
     STORAGE_DOWNLOAD_FILE: new Endpoint(RequestMethod.GET, "/api/storage/{storedFileId}"),
     STORAGE_GET_METADATA: new Endpoint(RequestMethod.GET, "/api/storage/{storedFileId}/metadata"),
+
+    //User Settings
+    GET_USER_SETTINGS: new Endpoint(RequestMethod.GET, "/api/user/settings/{category}"),
+    SET_USER_SETTINGS: new Endpoint(RequestMethod.POST, "/api/user/settings"),
 }
 
 export default Endpoints;

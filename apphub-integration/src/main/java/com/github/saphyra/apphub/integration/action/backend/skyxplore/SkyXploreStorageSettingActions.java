@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingsResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingModel;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingsResponse;
 import io.restassured.response.Response;
 
 import java.util.UUID;

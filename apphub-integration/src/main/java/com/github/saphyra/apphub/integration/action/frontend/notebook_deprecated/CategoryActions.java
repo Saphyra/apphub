@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.notebook.CategoryTreeElement;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeElement;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemDetailsItem;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;

@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.frontend.notebook_deprecate
 
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.notebook.NewChecklistItem;
-import com.github.saphyra.apphub.integration.structure.notebook.NewChecklistItemData;
-import com.github.saphyra.apphub.integration.structure.notebook.ViewChecklistItem;
+import com.github.saphyra.apphub.integration.structure.api.notebook.NewChecklistItem;
+import com.github.saphyra.apphub.integration.structure.api.notebook.NewChecklistItemData;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ViewChecklistItem;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;

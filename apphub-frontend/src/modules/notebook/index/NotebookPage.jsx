@@ -13,6 +13,9 @@ import Constants from "../../../common/js/Constants";
 import OpenedListItem from "./notebook_modules/OpenedListItem";
 import ListItemType from "../common/ListItemType";
 import Utils from "../../../common/js/Utils";
+import UserSettings from "../common/UserSettings";
+import Endpoints from "../../../common/js/dao/dao";
+import MapStream from "../../../common/js/collection/MapStream";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -20,6 +23,7 @@ const NotebookPage = () => {
 
     const [openedListItem, setOpenedListItemD] = useState(sessionStorage.openedListItem ? JSON.parse(sessionStorage.openedListItem) : { id: null, type: ListItemType.CATEGORY });
     const [lastEvent, setLastEvent] = useState(null);
+    const [userSettings, setUserSettings] = useState({});
 
     const setOpenedListItem = (newListItem) => {
         if (!newListItem) {
@@ -36,6 +40,39 @@ const NotebookPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+    useEffect(() => loadUserSettings(), []);
+
+    const loadUserSettings = () => {
+        const fetch = async () => {
+            const response = await Endpoints.GET_USER_SETTINGS.createRequest(null, { category: "notebook" })
+                .send();
+
+            setSettingsFromResponse(response);
+        }
+        fetch();
+    }
+
+    const setSettingsFromResponse = (response) => {
+        const settings = {
+        }
+
+
+        settings[UserSettings.SHOW_ARCHIVED] = response[UserSettings.SHOW_ARCHIVED] === "true";
+
+        setUserSettings(settings);
+    }
+
+    const changeUserSettings = async (key, value) => {
+        const payload = {
+            category: "notebook",
+            key: key,
+            value: value
+        };
+        const response = await Endpoints.SET_USER_SETTINGS.createRequest(payload)
+            .send();
+
+        setSettingsFromResponse(response);
+    }
 
     return (
         <div id="notebook" className="main-page">
@@ -46,6 +83,7 @@ const NotebookPage = () => {
                         setOpenedListItem={setOpenedListItem}
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
+                        userSettings={userSettings}
                     />
 
                     <PinnedItems
@@ -53,6 +91,7 @@ const NotebookPage = () => {
                         setOpenedListItem={setOpenedListItem}
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
+                        userSettings={userSettings}
                     />
                 </div>
 
@@ -62,6 +101,8 @@ const NotebookPage = () => {
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     lastEvent={lastEvent}
+                    userSettings={userSettings}
+                    changeUserSettings={changeUserSettings}
                 />
             </main>
 

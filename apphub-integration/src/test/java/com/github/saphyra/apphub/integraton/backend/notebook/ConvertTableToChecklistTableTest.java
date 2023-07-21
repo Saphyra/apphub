@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistTableResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateTableRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

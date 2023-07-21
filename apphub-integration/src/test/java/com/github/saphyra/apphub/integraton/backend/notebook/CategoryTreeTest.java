@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.notebook.CategoryTreeView;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
 import java.util.List;

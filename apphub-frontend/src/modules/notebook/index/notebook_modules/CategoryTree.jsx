@@ -4,9 +4,9 @@ import "./category_tree/category_tree.css";
 import Leaf from "./category_tree/Leaf";
 import EventName from "../../../../common/js/event/EventName";
 
-const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent }) => {
+const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [tree, setTree] = useState([]);
-    const [openedLeaves, setOpenedLeavesD] = useState(sessionStorage.openedLeaves ? JSON.parse(sessionStorage.openedLeaves) : []);
+    const [openedLeaves, setOpenedLeavesD] = useState(sessionStorage.openedLeaves ? JSON.parse(sessionStorage.openedLeaves) : [null]);
 
     useEffect(() => processEvent(), [lastEvent]);
     useEffect(() => loadTree(), []);
@@ -57,6 +57,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLa
                 setOpenedLeaves={setOpenedLeaves}
                 setOpenedListItem={setOpenedListItem}
                 setLastEvent={setLastEvent}
+                userSettings={userSettings}
             />
         </div>
     );

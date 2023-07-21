@@ -7,10 +7,10 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreF
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.FriendshipResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SentFriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;

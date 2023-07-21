@@ -4,8 +4,9 @@ import Stream from "../../../../common/js/collection/Stream";
 import EventName from "../../../../common/js/event/EventName";
 import ListItem from "./list_item/ListItem";
 import ListItemMode from "./list_item/ListItemMode";
+import UserSettings from "../../common/UserSettings";
 
-const PinnedItems = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent }) => {
+const PinnedItems = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [pinned, setPinned] = useState([]);
 
     useEffect(() => loadPinnedItems(), []);
@@ -39,6 +40,7 @@ const PinnedItems = ({ localizationHandler, setOpenedListItem, lastEvent, setLas
     const getPinnedItems = () => {
         return new Stream(pinned)
             .sorted((a, b) => a.title.localeCompare(b.title))
+            .filter(item => userSettings[UserSettings.SHOW_ARCHIVED] || !item.archived)
             .map(item => (
                 <ListItem
                     key={item.id}

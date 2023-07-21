@@ -23,5 +23,6 @@ public interface UserSettingsController {
      * Saving the setting to the database after checking if the given key is applicable for the given category.
      */
     @PostMapping(Endpoints.SET_USER_SETTINGS)
-    void setUserSettings(@RequestBody SetUserSettingsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    //TODO API test - returns new user settings
+    Map<String, String> setUserSettings(@RequestBody SetUserSettingsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

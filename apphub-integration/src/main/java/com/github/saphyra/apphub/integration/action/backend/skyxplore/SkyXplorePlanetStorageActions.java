@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetStorageResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageResponse;
 import io.restassured.response.Response;
 
 import java.util.UUID;

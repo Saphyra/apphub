@@ -128,16 +128,14 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     }
 
     return (
-        <div
-            draggable
-            onDragStart={handleOnDragStart}
-            onDrop={handleOnDrop}
-            onDragOver={handleOnDragOver}
-        >
+        <div>
             <div
                 id={data.id}
-                className={"button notebook-content-category-content-list-item " + data.type.toLowerCase() + (data.archived ? " archived" : "" + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled" : ""))}
-                onClick={handleOnclick}
+                className={"button notebook-content-category-content-list-item " + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled" : "") + data.type.toLowerCase() + (data.pinned ? " pinned" : "") + (data.archived ? " archived" : "")}
+                draggable
+                onDragStart={handleOnDragStart}
+                onDrop={handleOnDrop}
+                onDragOver={handleOnDragOver}
             >
                 <span className="notebook-content-category-content-list-item-title">{data.title}</span>
 

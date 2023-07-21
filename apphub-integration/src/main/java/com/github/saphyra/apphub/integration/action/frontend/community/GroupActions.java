@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageAc
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.community.GroupInvitationType;
-import com.github.saphyra.apphub.integration.structure.community.GroupMember;
+import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
+import com.github.saphyra.apphub.integration.structure.api.community.GroupMember;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 

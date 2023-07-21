@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetQueueItem;
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetStorageOverview;
-import com.github.saphyra.apphub.integration.structure.skyxplore.Surface;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetQueueItem;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageOverview;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.Surface;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

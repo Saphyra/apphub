@@ -5,12 +5,21 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ListItemType from "../../../../common/ListItemType";
 import ListItem from "../../list_item/ListItem";
-import Settings from "./category/Settings";
+import Settings from "./settings/Settings";
 import EventName from "../../../../../../common/js/event/EventName";
 import ListItemMode from "../../list_item/ListItemMode";
 import moveListItem from "../../../../common/MoveListItemService";
+import UserSettings from "../../../../common/UserSettings";
 
-const Category = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
+const Category = ({
+    localizationHandler,
+    openedListItem,
+    setOpenedListItem,
+    lastEvent,
+    setLastEvent,
+    userSettings,
+    changeUserSettings
+}) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
 
     useEffect(() => processEvent(), [lastEvent]);
@@ -69,6 +78,7 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
 
         return new Stream(openedCategoryContent.children)
             .sorted((a, b) => compare(a, b))
+            .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
             .map(child =>
                 <ListItem
                     key={child.id}
@@ -100,6 +110,8 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
                 localizationHandler={localizationHandler}
                 openedListItem={openedListItem}
                 setOpenedListItem={setOpenedListItem}
+                userSettings={userSettings}
+                changeUserSettings={changeUserSettings}
             />
 
             <div id="notebook-content-category-content">
@@ -118,7 +130,7 @@ const Category = ({ localizationHandler, openedListItem, setOpenedListItem, last
                     />
                 </div>
 
-                <div>
+                <div id="notebook-category-content-list">
                     {getContent()}
                 </div>
             </div>

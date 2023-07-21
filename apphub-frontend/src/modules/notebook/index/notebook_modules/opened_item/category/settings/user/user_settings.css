@@ -1,0 +1,14 @@
+#notebook-settings-user {
+    z-index: 800;
+    background: black;
+    position: relative;
+    border: 2px ridge white;
+    border-top: none;
+    width: 80%;
+    margin: auto;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    top: 3px;
+    padding: 3px;
+    text-align: left;
+}

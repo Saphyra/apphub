@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook_deprecated;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.notebook.PinnedItem;
+import com.github.saphyra.apphub.integration.structure.api.notebook.PinnedItem;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
