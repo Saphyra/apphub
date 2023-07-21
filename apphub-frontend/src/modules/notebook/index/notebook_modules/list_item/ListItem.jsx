@@ -136,6 +136,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                 onDragStart={handleOnDragStart}
                 onDrop={handleOnDrop}
                 onDragOver={handleOnDragOver}
+                onClick={handleOnclick}
             >
                 <span className="notebook-content-category-content-list-item-title">{data.title}</span>
 

@@ -28,11 +28,11 @@ public class ArchiveTest extends SeleniumTest {
 
         NotebookUtils.newCategory(driver, CATEGORY_TITLE);
 
-        NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE)
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .pin(driver);
 
         //Archive item
-        NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE)
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .archive(driver);
 
         assertThat(NotebookActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isTrue();
@@ -43,7 +43,7 @@ public class ArchiveTest extends SeleniumTest {
         assertThat(leaf.isArchived()).isTrue();
 
         //Unarchive item
-        NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE)
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .unarchive(driver);
 
         assertThat(NotebookActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isFalse();

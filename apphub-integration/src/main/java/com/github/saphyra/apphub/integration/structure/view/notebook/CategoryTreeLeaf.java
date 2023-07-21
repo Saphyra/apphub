@@ -22,4 +22,14 @@ public class CategoryTreeLeaf {
         return WebElementUtils.getClasses(webElement.findElement(By.cssSelector(":scope .notebook-tree-leaf")))
             .contains("archived");
     }
+
+    public String getTitle() {
+        return webElement.findElement(By.cssSelector(":scope > .notebook-tree-leaf .notebook-tree-leaf-title"))
+            .getText();
+    }
+
+    public void expand() {
+        webElement.findElement(By.cssSelector(":scope > .notebook-tree-leaf .notebook-tree-leaf-open-button"))
+            .click();
+    }
 }

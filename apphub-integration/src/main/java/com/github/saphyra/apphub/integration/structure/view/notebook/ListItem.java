@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.integration.structure.view.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
@@ -28,7 +30,7 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookActions.findListItemByTitle(driver, title).isPinned())
+            .until(() -> NotebookActions.findListItemByTitleValidated(driver, title).isPinned())
             .assertTrue("ListItem is not pinned");
     }
 
@@ -48,7 +50,7 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> NotebookActions.findListItemByTitle(driver, title).isArchived())
+            .until(() -> NotebookActions.findListItemByTitleValidated(driver, title).isArchived())
             .assertTrue("ListItem is not archived");
     }
 
@@ -58,7 +60,7 @@ public class ListItem {
     }
 
     public void unarchive(WebDriver driver) {
-        if(!isArchived()){
+        if (!isArchived()) {
             throw new IllegalStateException("ListItem is not archived.");
         }
 
@@ -68,7 +70,29 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> !NotebookActions.findListItemByTitle(driver, title).isArchived())
+            .until(() -> !NotebookActions.findListItemByTitleValidated(driver, title).isArchived())
             .assertTrue("ListItem is still archived");
+    }
+
+    public void edit(WebDriver driver) {
+        webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-edit-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
+            .assertTrue("Edit ListItem page is not opened");
+    }
+
+    public void open() {
+        webElement.click();
+    }
+
+    public void delete(WebDriver driver) {
+        webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-delete-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-category-content-delete-list-item-confirmation-dialog"))).isPresent())
+            .assertTrue("Confirmation dialog is not opened");
     }
 }
