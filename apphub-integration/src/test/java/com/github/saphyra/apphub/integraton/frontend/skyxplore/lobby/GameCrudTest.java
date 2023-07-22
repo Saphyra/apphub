@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
@@ -11,10 +9,8 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
-import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +38,7 @@ public class GameCrudTest extends SeleniumTest {
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
         List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))
-            .map(this::registerAndNavigateToSkyXplore)
+            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
             .collect(Collectors.toList());
 
         AwaitilityWrapper.create(60, 1)
@@ -132,25 +128,5 @@ public class GameCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.create(120, 5)
             .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE));
-    }
-
-    private Future<?> registerAndNavigateToSkyXplore(BiWrapper<WebDriver, RegistrationParameters> biWrapper) {
-        return EXECUTOR_SERVICE.submit(() -> {
-            try {
-                WebDriver driver = biWrapper.getEntity1();
-                Navigation.toIndexPage(driver);
-                IndexPageActions.registerUser(driver, biWrapper.getEntity2());
-
-                ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(driver);
-
-                AwaitilityWrapper.createDefault()
-                    .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue("MainMenu is not loaded.");
-            } catch (Exception e) {
-                log.error("Failed setting up user", e);
-                throw e;
-            }
-        });
     }
 }

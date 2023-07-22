@@ -91,6 +91,12 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         DRIVER_POOL.returnObject(webDriverWrapper);
     }
 
+    @SneakyThrows
+    static void invalidate(WebDriverWrapper webDriverWrapper) {
+        DRIVER_POOL.invalidateObject(webDriverWrapper, DestroyMode.ABANDONED);
+        stopDriver(webDriverWrapper);
+    }
+
     private WebDriver createDriver() {
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {

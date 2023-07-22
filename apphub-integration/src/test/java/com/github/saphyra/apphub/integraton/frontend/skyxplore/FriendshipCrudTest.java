@@ -1,16 +1,12 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore;
 
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -19,6 +15,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FriendshipCrudTest extends SeleniumTest {
@@ -30,9 +27,9 @@ public class FriendshipCrudTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> headToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .toList();
+        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
+            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
+            .collect(Collectors.toList());
 
         for (int i = 0; i < 120; i++) {
             if (futures.stream().allMatch(Future::isDone)) {
@@ -151,15 +148,5 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getFriends(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("Friend still present."));
-    }
-
-    private Future<Void> headToMainMenu(WebDriver driver, RegistrationParameters userData) {
-        return EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver);
-            IndexPageActions.registerUser(driver, userData);
-            ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
-            SkyXploreCharacterActions.submitForm(driver);
-            return null;
-        });
     }
 }

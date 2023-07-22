@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.concurrent.Callable;
+
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.verifyInvalidFieldState;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,11 +63,15 @@ public class IndexPageActions {
     }
 
     public static void registerUser(WebDriver driver, RegistrationParameters registrationParameters) {
+        registerUser(driver, registrationParameters, () -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE));
+    }
+
+    public static void registerUser(WebDriver driver, RegistrationParameters registrationParameters, Callable<Boolean> verification) {
         fillRegistrationForm(driver, registrationParameters);
         submitRegistration(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .until(verification)
             .assertTrue("Registration failed.");
     }
 

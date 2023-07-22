@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbySettingsHelper;
@@ -44,23 +45,9 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                try {
-                    Navigation.toIndexPage(player.getEntity1());
-                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                    SkyXploreCharacterActions.submitForm(player.getEntity1());
-                    AwaitilityWrapper.createDefault()
-                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                        .assertTrue();
-                } catch (Exception e) {
-                    log.error("Failed setting up users", e);
-                    throw e;
-                }
-                return null;
-            }))
-            .toList();
+        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
+            .map(SkyXploreUtils::registerAndNavigateToMainMenu)
+            .collect(Collectors.toList());
 
         AwaitilityWrapper.create(120, 1)
             .until(() -> futures.stream().allMatch(Future::isDone))
@@ -262,19 +249,9 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                Navigation.toIndexPage(player.getEntity1());
-                IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                SkyXploreCharacterActions.submitForm(player.getEntity1());
-
-                AwaitilityWrapper.createDefault()
-                    .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
-                return null;
-            }))
-            .toList();
+        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
+            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
+            .collect(Collectors.toList());
 
         AwaitilityWrapper.create(120, 1)
             .until(() -> futures.stream().allMatch(Future::isDone))

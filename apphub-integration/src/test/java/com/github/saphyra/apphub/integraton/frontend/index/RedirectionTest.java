@@ -65,7 +65,7 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        IndexPageActions.registerUser(driver, userData, () -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))

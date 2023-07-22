@@ -36,8 +36,10 @@ public class SeleniumTest extends TestBase {
                 if (ITestResult.FAILURE == testResult.getStatus()) {
                     log.error("Current URL: {}", driver.getCurrentUrl());
                     takeScreenshot(webDriverWrapper, testResult.getName());
+                    WebDriverFactory.invalidate(webDriverWrapper);
+                }else{
+                    WebDriverFactory.release(webDriverWrapper);
                 }
-                WebDriverFactory.release(webDriverWrapper);
             });
         driverWrappers.remove();
     }

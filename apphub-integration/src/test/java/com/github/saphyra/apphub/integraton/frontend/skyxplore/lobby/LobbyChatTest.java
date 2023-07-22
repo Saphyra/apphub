@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
@@ -36,13 +37,7 @@ public class LobbyChatTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        Future<Void> driverFuture = EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver2);
-            IndexPageActions.registerUser(driver2, userData2);
-            ModulesPageActions.openModule(driver2, ModuleLocation.SKYXPLORE);
-            SkyXploreCharacterActions.submitForm(driver2);
-            return null;
-        });
+        Future<?> driverFuture = SkyXploreUtils.registerAndNavigateToMainMenu(driver2, userData2);
 
         Navigation.toIndexPage(driver1);
         IndexPageActions.registerUser(driver1, userData1);

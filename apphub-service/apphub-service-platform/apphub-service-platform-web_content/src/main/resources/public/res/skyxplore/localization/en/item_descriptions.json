@@ -4,5 +4,6 @@
   "excavator": "Produces raw minerals from the planet surface.",
   "sawmill": "Produces logs, and cuts them to planks.",
   "farm": "Produces leather and meat from livestock, and crops from agriculture.",
-  "solar_panel": "Converts the light of the sun to electricity."
+  "solar_panel": "Converts the light of the sun to electricity.",
+  "battery": "Stores electric energy."
 }
