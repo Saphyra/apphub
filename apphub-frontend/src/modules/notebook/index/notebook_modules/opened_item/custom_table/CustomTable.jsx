@@ -13,15 +13,14 @@ import CustomTableRow from "../../../../common/custom_table/CustomTableRow";
 import Utils from "../../../../../../common/js/Utils";
 import MoveDirection from "../../../../common/MoveDirection";
 import "./custom_table.css";
-import ConfirmationDialog from "../../../../../../common/component/ConfirmationDialog";
+import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
-const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
+const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
-    const [displayDiscardConfirmationDialog, setDisplayDiscardConfirmationDialog] = useState(false);
 
     useEffect(() => loadCustomTable(), []);
 
@@ -276,7 +275,29 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
     }
 
     const discard = () => {
-        setDisplayDiscardConfirmationDialog(true);
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-custom-table-discard-confirmation",
+            localizationHandler.get("confirm-discard-title"),
+            localizationHandler.get("confirm-discard-content"),
+            [
+                <Button
+                    key="discard"
+                    id="notebook-content-custom-table-discard-confirm-button"
+                    label={localizationHandler.get("discard")}
+                    onclick={() => {
+                        setEditingEnabled(false);
+                        loadCustomTable();
+                        setConfirmationDialogData(null);
+                    }}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-custom-table-discard-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
     }
 
     const save = async () => {
@@ -357,32 +378,6 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
                     />
                 }
             </div>
-
-            {displayDiscardConfirmationDialog &&
-                <ConfirmationDialog
-                    id="notebook-content-checklist-discard-confirmation"
-                    title={localizationHandler.get("confirm-discard-title")}
-                    content={localizationHandler.get("confirm-discard-content")}
-                    choices={[
-                        <Button
-                            key="discard"
-                            id="notebook-content-checklist-discard-confirm-button"
-                            label={localizationHandler.get("discard")}
-                            onclick={() => {
-                                setEditingEnabled(false);
-                                loadCustomTable();
-                                setDisplayDiscardConfirmationDialog(false);
-                            }}
-                        />,
-                        <Button
-                            key="cancel"
-                            id="notebook-content-checklist-discard-cancel-button"
-                            label={localizationHandler.get("cancel")}
-                            onclick={() => setDisplayDiscardConfirmationDialog(false)}
-                        />
-                    ]}
-                />
-            }
         </div>
     );
 }

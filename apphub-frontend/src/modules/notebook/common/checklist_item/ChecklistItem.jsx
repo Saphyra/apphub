@@ -34,7 +34,7 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
     }
 
     return (
-        <div className={"notebook-checklist-item" + (item.checked ? " checked" : "")}>
+        <div className={"notebook-checklist-item" + (item.checked ? " checked" : "") + (editingEnabled ? " editable" : "")}>
             <div className="notebook-checklist-item-checked-wrapper">
                 <InputField
                     className="notebook-checklist-item-checked"

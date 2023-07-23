@@ -3,12 +3,15 @@ package com.github.saphyra.apphub.integration.structure.view.notebook;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
 public class ListItem {
@@ -84,7 +87,18 @@ public class ListItem {
     }
 
     public void open() {
+        open(() -> {
+            SleepUtil.sleep(1000);
+            return true;
+        });
+    }
+
+    public void open(Callable<Boolean> verify) {
         webElement.click();
+
+        AwaitilityWrapper.createDefault()
+            .until(verify)
+            .assertTrue("ListItem is not opened.");
     }
 
     public void delete(WebDriver driver) {
@@ -92,7 +106,18 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-category-content-delete-list-item-confirmation-dialog"))).isPresent())
+            .until(() -> WebElementUtils.getIfPresent(() -> getDeletionConfirmationDialog(driver)).isPresent())
             .assertTrue("Confirmation dialog is not opened");
+    }
+
+    private static WebElement getDeletionConfirmationDialog(WebDriver driver) {
+        return driver.findElement(By.id("notebook-content-category-content-delete-list-item-confirmation-dialog"));
+    }
+
+    public void deleteWithConfirmation(WebDriver driver) {
+        delete(driver);
+
+        driver.findElement(By.id("notebook-content-category-content-delete-list-item-button"))
+            .click();
     }
 }

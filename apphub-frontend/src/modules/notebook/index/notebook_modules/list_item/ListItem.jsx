@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import ListItemType from "../../../common/ListItemType";
 import Utils from "../../../../../common/js/Utils";
 import "./list_item.css";
 import Button from "../../../../../common/component/input/Button";
-import ConfirmationDialog from "../../../../../common/component/ConfirmationDialog";
 import Endpoints from "../../../../../common/js/dao/dao";
 import Event from "../../../../../common/js/event/Event";
 import EventName from "../../../../../common/js/event/EventName";
@@ -11,10 +10,9 @@ import ListItemMode from "./ListItemMode";
 import Constants from "../../../../../common/js/Constants";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import moveListItem from "../../../common/MoveListItemService";
+import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
-const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode }) => {
-    const [displayDeleteListItemConfirmationDialog, setDisplayDeleteListItemConfirmationDialog] = useState(false);
-
+const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData }) => {
     const handleOnclick = () => {
         if (!data.enabled) {
             NotificationService.showError(localizationHandler.get("list-item-disabled"));
@@ -42,12 +40,35 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         }
     }
 
+    const confirmDeleteListItem = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-category-content-delete-list-item-confirmation-dialog",
+            localizationHandler.get("confirm-list-item-deletion-title"),
+            localizationHandler.get("confirm-list-item-deletion-content", { listItemTitle: data.title }),
+            [
+                <Button
+                    key="delete"
+                    id="notebook-content-category-content-delete-list-item-button"
+                    label={localizationHandler.get("delete")}
+                    onclick={deleteListItem}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-category-content-cancel-deletion-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
+    }
+
     const deleteListItem = async () => {
         await Endpoints.NOTEBOOK_DELETE_LIST_ITEM.createRequest(null, { listItemId: data.id })
             .send();
 
-        setDisplayDeleteListItemConfirmationDialog(false);
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
+        setConfirmationDialogData(null);
     }
 
     const setArchiveStatus = async (archived) => {
@@ -144,7 +165,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                     {listItemMode !== ListItemMode.PINNED_ITEM &&
                         <Button
                             className="notebook-content-category-content-list-item-delete-button"
-                            onclick={() => setDisplayDeleteListItemConfirmationDialog(true)}
+                            onclick={confirmDeleteListItem}
                             title={localizationHandler.get("delete")}
                         />
                     }
@@ -178,28 +199,6 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                     }
                 </div>
             </div>
-
-            {displayDeleteListItemConfirmationDialog &&
-                <ConfirmationDialog
-                    id="notebook-content-category-content-delete-list-item-confirmation-dialog"
-                    title={localizationHandler.get("confirm-list-item-deletion-title")}
-                    content={localizationHandler.get("confirm-list-item-deletion-content", { listItemTitle: data.title })}
-                    choices={[
-                        <Button
-                            key="delete"
-                            id="notebook-content-category-content-delete-list-item-button"
-                            label={localizationHandler.get("delete")}
-                            onclick={deleteListItem}
-                        />,
-                        <Button
-                            key="cancel"
-                            id="notebook-content-category-content-cancel-deletion-button"
-                            label={localizationHandler.get("cancel")}
-                            onclick={() => setDisplayDeleteListItemConfirmationDialog(false)}
-                        />
-                    ]}
-                />
-            }
         </div>
     );
 }

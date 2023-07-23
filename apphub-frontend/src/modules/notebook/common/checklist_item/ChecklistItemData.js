@@ -6,10 +6,11 @@ const ChecklistItemData = class {
             Utils.throwException("IllegalArgument", "order must be set. Currently it is " + order);
         }
 
-        this.checklistItemId = checklistItemId;
+        this.checklistItemId = checklistItemId || Utils.generateRandomId();
         this.order = order;
         this.content = content;
         this.checked = checked;
+        this.new = checklistItemId == null;
     }
 }
 

@@ -4,19 +4,18 @@ import Textarea from "../../../../../../common/component/input/Textarea";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
-import "./text/text.css";
+import "./text.css";
 import validateListItemTitle from "../../../../common/validator/ListItemTitleValidator";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
-import ConfirmationDialog from "../../../../../../common/component/ConfirmationDialog";
+import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
-const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
+const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [displayDiscardConfirmationDialog, setDisplayDiscardConfirmationDialog] = useState(false);
 
     useEffect(() => loadText(), []);
 
@@ -32,7 +31,29 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     }
 
     const discard = () => {
-        setDisplayDiscardConfirmationDialog(true);
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-checklist-discard-confirmation",
+            localizationHandler.get("confirm-discard-title"),
+            localizationHandler.get("confirm-discard-content"),
+            [
+                <Button
+                    key="discard"
+                    id="notebook-content-checklist-discard-confirm-button"
+                    label={localizationHandler.get("discard")}
+                    onclick={() => {
+                        setEditingEnabled(false);
+                        loadText();
+                        setConfirmationDialogData(null);
+                    }}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-checklist-discard-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
     }
 
     const save = async () => {
@@ -106,32 +127,6 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
                     />
                 }
             </div>
-
-            {displayDiscardConfirmationDialog &&
-                <ConfirmationDialog
-                    id="notebook-content-checklist-discard-confirmation"
-                    title={localizationHandler.get("confirm-discard-title")}
-                    content={localizationHandler.get("confirm-discard-content")}
-                    choices={[
-                        <Button
-                            key="discard"
-                            id="notebook-content-checklist-discard-confirm-button"
-                            label={localizationHandler.get("discard")}
-                            onclick={() => {
-                                setEditingEnabled(false);
-                                loadText();
-                                setDisplayDiscardConfirmationDialog(false);
-                            }}
-                        />,
-                        <Button
-                            key="cancel"
-                            id="notebook-content-checklist-discard-cancel-button"
-                            label={localizationHandler.get("cancel")}
-                            onclick={() => setDisplayDiscardConfirmationDialog(false)}
-                        />
-                    ]}
-                />
-            }
         </div>
     )
 }

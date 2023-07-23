@@ -4,7 +4,7 @@ import Endpoints from "../../../../common/js/dao/dao";
 import Stream from "../../../../common/js/collection/Stream";
 import Constants from "../../../../common/js/Constants";
 import SavedGame from "./saved_game/SavedGame";
-import ConfirmationDialog from "../../../../common/component/ConfirmationDialog";
+import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);

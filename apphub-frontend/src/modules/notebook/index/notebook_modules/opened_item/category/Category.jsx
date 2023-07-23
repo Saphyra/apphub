@@ -18,7 +18,8 @@ const Category = ({
     lastEvent,
     setLastEvent,
     userSettings,
-    changeUserSettings
+    changeUserSettings,
+    setConfirmationDialogData
 }) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
 
@@ -69,7 +70,11 @@ const Category = ({
                 return -1;
             }
 
-            return 1;
+            if (b.type === ListItemType.CATEGORY) {
+                return 1;
+            }
+
+            return compareByTitle(a, b);
 
             function compareByTitle(a, b) {
                 return a.title.localeCompare(b.title);
@@ -87,6 +92,7 @@ const Category = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     listItemMode={ListItemMode.CATEGORY_CONTENT}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             )
             .toList();

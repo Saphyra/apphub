@@ -16,6 +16,7 @@ import Utils from "../../../common/js/Utils";
 import UserSettings from "../common/UserSettings";
 import Endpoints from "../../../common/js/dao/dao";
 import MapStream from "../../../common/js/collection/MapStream";
+import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -24,6 +25,7 @@ const NotebookPage = () => {
     const [openedListItem, setOpenedListItemD] = useState(sessionStorage.openedListItem ? JSON.parse(sessionStorage.openedListItem) : { id: null, type: ListItemType.CATEGORY });
     const [lastEvent, setLastEvent] = useState(null);
     const [userSettings, setUserSettings] = useState({});
+    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
     const setOpenedListItem = (newListItem) => {
         if (!newListItem) {
@@ -103,6 +105,7 @@ const NotebookPage = () => {
                     lastEvent={lastEvent}
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             </main>
 
@@ -126,6 +129,14 @@ const NotebookPage = () => {
                 }
             />
 
+            {confirmationDialogData &&
+                <ConfirmationDialog
+                    id={confirmationDialogData.id}
+                    title={confirmationDialogData.title}
+                    content={confirmationDialogData.content}
+                    choices={confirmationDialogData.choices}
+                />
+            }
             <ToastContainer />
         </div>
     );

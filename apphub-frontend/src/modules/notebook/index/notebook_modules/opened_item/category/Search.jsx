@@ -17,7 +17,8 @@ const Search = ({
     lastEvent,
     setLastEvent,
     userSettings,
-    changeUserSettings
+    changeUserSettings,
+    setConfirmationDialogData
 }) => {
     const [searchResult, setSearchResult] = useState([]);
 
@@ -85,6 +86,7 @@ const Search = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     listItemMode={ListItemMode.CATEGORY_CONTENT}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             )
             .toList();

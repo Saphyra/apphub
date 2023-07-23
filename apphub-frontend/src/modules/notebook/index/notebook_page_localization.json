@@ -158,5 +158,13 @@
     "show-archived": {
         "en": "Show archived",
         "hu": "Archiváltak megjelenítése"
+    },
+    "confirm-delete-checked-title": {
+        "en": "Confirm delete checked",
+        "hu": "Kijelölt elemek törlésének megerősítése"
+    },
+    "confirm-delete-checked-content": {
+        "en": "Are you sure you want to delete all the checked items?",
+        "hu": "Biztosan törölni szeretnéd az összes kijelölt elemet?"
     }
 }

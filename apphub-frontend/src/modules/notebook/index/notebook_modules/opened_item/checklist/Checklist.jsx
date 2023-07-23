@@ -14,14 +14,13 @@ import validateListItemTitle from "../../../../common/validator/ListItemTitleVal
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
-import ConfirmationDialog from "../../../../../../common/component/ConfirmationDialog";
+import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
-const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent }) => {
+const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [items, setItems] = useState([]);
-    const [displayDiscardConfirmationDialog, setDisplayDiscardConfirmationDialog] = useState(false);
 
     useEffect(() => loadChecklist(), []);
 
@@ -50,11 +49,13 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             );
         }
 
+        console.log(items);
+
         return new Stream(items)
             .sorted((a, b) => a.order - b.order)
             .map(item =>
                 <ChecklistItem
-                    key={item.order}
+                    key={item.checklistItemId}
                     localizationHandler={localizationHandler}
                     item={item}
                     updateItem={updateItem}
@@ -139,7 +140,29 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
 
     const discard = () => {
-        setDisplayDiscardConfirmationDialog(true);
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-checklist-discard-confirmation",
+            localizationHandler.get("confirm-discard-title"),
+            localizationHandler.get("confirm-discard-content"),
+            [
+                <Button
+                    key="discard"
+                    id="notebook-content-checklist-discard-confirm-button"
+                    label={localizationHandler.get("discard")}
+                    onclick={() => {
+                        setEditingEnabled(false);
+                        loadChecklist();
+                        setConfirmationDialogData(null);
+                    }}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-checklist-discard-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
     }
 
     const save = async () => {
@@ -151,7 +174,13 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
         const payload = {
             title: title,
-            nodes: items
+            nodes: new Stream(items)
+                .peek(item => {
+                    if (item.new) {
+                        item.checklistItemId = null;
+                    }
+                })
+                .toList()
         }
 
         const response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST.createRequest(payload, { listItemId: openedListItem.id })
@@ -162,11 +191,34 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         setDataFromResponse(response);
     }
 
+    const confirmDeleteChcecked = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-checklist-delete-checked-confirmation",
+            localizationHandler.get("confirm-delete-checked-title"),
+            localizationHandler.get("confirm-delete-checked-content"),
+            [
+                <Button
+                    key="delete"
+                    id="notebook-content-checklist-delete-checked-confirm-button"
+                    label={localizationHandler.get("delete-checked")}
+                    onclick={deleteChecked}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-checklist-delete-checked-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
     const deleteChecked = async () => {
         const response = await Endpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
             .send();
 
         setDataFromResponse(response);
+        setConfirmationDialogData(null);
     }
 
     const orderItems = async () => {
@@ -212,7 +264,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-delete-checked-button"
                         label={localizationHandler.get("delete-checked")}
-                        onclick={() => deleteChecked()}
+                        onclick={() => confirmDeleteChcecked()}
                     />
                 }
 
@@ -248,32 +300,6 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     />
                 }
             </div>
-
-            {displayDiscardConfirmationDialog &&
-                <ConfirmationDialog
-                    id="notebook-content-checklist-discard-confirmation"
-                    title={localizationHandler.get("confirm-discard-title")}
-                    content={localizationHandler.get("confirm-discard-content")}
-                    choices={[
-                        <Button
-                            key="discard"
-                            id="notebook-content-checklist-discard-confirm-button"
-                            label={localizationHandler.get("discard")}
-                            onclick={() => {
-                                setEditingEnabled(false);
-                                loadChecklist();
-                                setDisplayDiscardConfirmationDialog(false);
-                            }}
-                        />,
-                        <Button
-                            key="cancel"
-                            id="notebook-content-checklist-discard-cancel-button"
-                            label={localizationHandler.get("cancel")}
-                            onclick={() => setDisplayDiscardConfirmationDialog(false)}
-                        />
-                    ]}
-                />
-            }
         </div>
     );
 }

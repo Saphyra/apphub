@@ -18,7 +18,8 @@ const OpenedListItem = ({
     lastEvent,
     setLastEvent,
     userSettings,
-    changeUserSettings
+    changeUserSettings,
+    setConfirmationDialogData
 }) => {
     console.log("Opened ListItem", openedListItem);
 
@@ -31,6 +32,7 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     lastEvent={lastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.CATEGORY:
                 return <Category
@@ -41,6 +43,7 @@ const OpenedListItem = ({
                     lastEvent={lastEvent}
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.TEXT:
                 return <Text
@@ -48,6 +51,7 @@ const OpenedListItem = ({
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.CHECKLIST:
                 return <Checklist
@@ -55,6 +59,7 @@ const OpenedListItem = ({
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.TABLE:
                 return <Table
@@ -63,6 +68,7 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     checklist={false}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.CHECKLIST_TABLE:
                 return <Table
@@ -71,6 +77,7 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     checklist={true}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.IMAGE:
                 return <Image
@@ -90,6 +97,7 @@ const OpenedListItem = ({
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);
