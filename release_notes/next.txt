@@ -1,7 +1,6 @@
 TODO set proper name
 
 ===FEATURES===
-New Notebook List Item Type: Custom Table
 
 ===BUGFIXES===
 Cloned Notebook list item inherits the "pinned" and "archived" flags of the parent
