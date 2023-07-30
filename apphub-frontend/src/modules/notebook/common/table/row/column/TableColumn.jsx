@@ -8,9 +8,9 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
     }
     if (editingEnabled) {
         return (
-            <td>
+            <td className="table-column editable">
                 <InputField
-                    className="noteabook-table-column-input"
+                    className="notebook-table-column-input"
                     type="text"
                     onchangeCallback={updateContent}
                     value={columnData.content}
@@ -19,7 +19,7 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
         )
     } else {
         return (
-            <td>
+            <td className="table-column">
                 {columnData.content}
             </td>
         );

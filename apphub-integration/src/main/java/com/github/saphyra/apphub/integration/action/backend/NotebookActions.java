@@ -273,10 +273,12 @@ public class NotebookActions {
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static void editChecklistTable(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
+    public static ChecklistTableResponse editChecklistTable(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
         Response response = getEditChecklistTableResponse(language, accessTokenId, listItemId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(ChecklistTableResponse.class);
     }
 
     public static Response getEditChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {

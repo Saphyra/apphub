@@ -71,9 +71,13 @@ public class ChecklistTableControllerImplTest {
 
     @Test
     public void editChecklistTable() {
-        underTest.editChecklistTable(editChecklistTableRequest, LIST_ITEM_ID);
+        given(checklistTableQueryService.getChecklistTable(LIST_ITEM_ID)).willReturn(checklistTableResponse);
+
+        ChecklistTableResponse result = underTest.editChecklistTable(editChecklistTableRequest, LIST_ITEM_ID);
 
         verify(checklistTableEditionService).edit(LIST_ITEM_ID, editChecklistTableRequest);
+
+        assertThat(result).isEqualTo(checklistTableResponse);
     }
 
     @Test
@@ -94,8 +98,11 @@ public class ChecklistTableControllerImplTest {
 
     @Test
     public void deleteCheckedItems() {
-        underTest.deleteCheckedItems(LIST_ITEM_ID);
+        given(checklistTableQueryService.getChecklistTable(LIST_ITEM_ID)).willReturn(checklistTableResponse);
+
+        ChecklistTableResponse result = underTest.deleteCheckedItems(LIST_ITEM_ID);
 
         verify(checkedChecklistTableItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
+        assertThat(result).isEqualTo(checklistTableResponse);
     }
 }

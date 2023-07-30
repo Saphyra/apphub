@@ -167,6 +167,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
         const columnNames = new Stream(tableHeads)
             .map(tableHead => tableHead.content)
+            .peek(content => console.log(content))
             .toList();
 
         const tableHeadNameValidationResult = validateTableHeadNames(columnNames);
@@ -228,6 +229,36 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         setEditingEnabled(false);
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
         setDataFromResponse(response);
+    }
+
+    const confirmDeleteChcecked = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-table-delete-checked-confirmation",
+            localizationHandler.get("confirm-delete-checked-title"),
+            localizationHandler.get("confirm-delete-checked-content"),
+            [
+                <Button
+                    key="delete"
+                    id="notebook-content-table-delete-checked-confirm-button"
+                    label={localizationHandler.get("delete-checked")}
+                    onclick={deleteChecked}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-table-delete-checked-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    const deleteChecked = async () => {
+        const response = await Endpoints.NOTEBOOK_CHECKLIST_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
+            .send();
+
+        setDataFromResponse(response);
+        setConfirmationDialogData(null);
     }
 
     const newRow = () => {
@@ -409,8 +440,8 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                 }
             />
 
-            <div id="notebook-content-checklist-content" className="notebook-content-view-main">
-                <table id="notebook-content-table-content" className="formatted-table">
+            <div id="notebook-content-table-content" className="notebook-content-view-main">
+                <table id="notebook-content-table-content-table" className="formatted-table">
                     <thead>
                         <tr>
                             {editingEnabled && <th></th>}
@@ -431,6 +462,14 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                         id="notebook-content-table-edit-button"
                         label={localizationHandler.get("edit")}
                         onclick={() => setEditingEnabled(true)}
+                    />
+                }
+
+                {checklist && !editingEnabled &&
+                    <Button
+                        id="notebook-content-table-delete-checked-button"
+                        label={localizationHandler.get("delete-checked")}
+                        onclick={() => confirmDeleteChcecked()}
                     />
                 }
 

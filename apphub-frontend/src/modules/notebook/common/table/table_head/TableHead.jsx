@@ -12,7 +12,7 @@ const TableHead = ({ localizationHandler, tableHeadData, updateTableHead, moveCo
 
     if (editingEnabled) {
         return (
-            <th className="table-head">
+            <th className="table-head editable">
                 <InputField
                     className="notebook-table-head-content"
                     type="text"
@@ -42,7 +42,7 @@ const TableHead = ({ localizationHandler, tableHeadData, updateTableHead, moveCo
         );
     } else {
         return (
-            <th>
+            <th className="table-head">
                 <div className="notebook-table-head-content">{tableHeadData.content}</div>
             </th>
         )

@@ -301,8 +301,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Collections.emptyList())
             .rows(Collections.emptyList())
             .build();
-        NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnDeletedRequest);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnDeletedRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads()).isEmpty();
         assertThat(tableResponse.getTableColumns()).isEmpty();
@@ -329,8 +328,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnAddedRequest);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnAddedRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -376,8 +374,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_modifyValuesRequest);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_modifyValuesRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
         assertThat(tableResponse.getTableColumns().get(0).getContent()).isEqualTo(NEW_COLUMN_VALUE);
@@ -386,7 +383,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
         //Edit - Delete checked
         Response edit_deleteCheckedResponse = NotebookActions.getDeleteCheckedChecklistTableItemsResponse(language, accessTokenId, listItemId);
         assertThat(edit_deleteCheckedResponse.getStatusCode()).isEqualTo(200);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        tableResponse = edit_deleteCheckedResponse.getBody().as(ChecklistTableResponse.class);
         assertThat(tableResponse.getTableColumns()).isEmpty();
         assertThat(tableResponse.getTableColumns()).isEmpty();
 
