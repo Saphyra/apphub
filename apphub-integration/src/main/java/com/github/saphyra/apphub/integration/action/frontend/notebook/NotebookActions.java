@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class NotebookActions {
     public static void newListItem(WebDriver driver) {
@@ -41,12 +42,18 @@ public class NotebookActions {
     }
 
     public static ListItem findPinnedItemByTitle(WebDriver driver, String title) {
-        return driver.findElements(By.cssSelector("#notebook-pinned-items .notebook-content-category-content-list-item"))
+        return getPinnedItems(driver)
             .stream()
-            .map(ListItem::new)
             .filter(listItem -> listItem.getTitle().equals(title))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No pinned listItem found by title '" + title + "'"));
+    }
+
+    public static List<ListItem> getPinnedItems(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#notebook-pinned-items .notebook-content-category-content-list-item"))
+            .stream()
+            .map(ListItem::new)
+            .collect(Collectors.toList());
     }
 
     public static CategoryTreeLeaf getCategoryTree(WebDriver driver) {
