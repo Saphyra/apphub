@@ -16,6 +16,7 @@ import validateListItemTitle from "../common/validator/ListItemTitleValidator";
 import InputField from "../../../common/component/input/InputField";
 import ListItemType from "../common/ListItemType";
 import "./resources/notebook_edit_page.css";
+import validateUrl from "../common/validator/UrlValidator";
 
 const NotebookEditListItemPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -46,10 +47,18 @@ const NotebookEditListItemPage = () => {
     }
 
     const save = async () => {
-        const result = validateListItemTitle(listItemTitle);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
+        const listItemTitleResult = validateListItemTitle(listItemTitle);
+        if (!listItemTitleResult.valid) {
+            NotificationService.showError(listItemTitleResult.message);
             return;
+        }
+
+        if (listItemType == ListItemType.LINK) {
+            const urlResult = validateUrl(value);
+            if (!urlResult.valid) {
+                NotificationService.showError(urlResult.message);
+                return;
+            }
         }
 
         const payload = {

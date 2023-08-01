@@ -14,5 +14,9 @@
     "file-too-large": {
         "en": "File too large. (Max. 2GB)",
         "hu": "Fájl túl nagy. (Max. 2GB)"
+    },
+    "url-blank": {
+        "en": "URL must not be blank.",
+        "hu": "URL nem lehet üres."
     }
 }

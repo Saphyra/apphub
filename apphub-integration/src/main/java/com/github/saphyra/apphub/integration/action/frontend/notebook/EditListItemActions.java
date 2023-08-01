@@ -13,4 +13,8 @@ public class EditListItemActions {
         driver.findElement(By.id("notebook-edit-save-button"))
             .click();
     }
+
+    public static void fillValue(WebDriver driver, String value) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-edit-content")), value);
+    }
 }

@@ -12,4 +12,9 @@ public class ParentSelectorActions {
             .orElseThrow(() -> new RuntimeException("No parent available with title " + parentTitle))
             .click();
     }
+
+    public static void up(WebDriver driver) {
+        driver.findElement(By.className("notebook-parent-selector-up-button"))
+            .click();
+    }
 }

@@ -15,6 +15,7 @@ import Endpoints from "../../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import InputField from "../../../../common/component/input/InputField";
 import "./new_link.css";
+import validateUrl from "../../common/validator/UrlValidator";
 
 const NewLinkPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -30,12 +31,18 @@ const NewLinkPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const create = async () => {
-        const result = validateListItemTitle(listItemTitle);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
+        const listItemTitleResult = validateListItemTitle(listItemTitle);
+        if (!listItemTitleResult.valid) {
+            NotificationService.showError(listItemTitleResult.message);
             return;
         }
-        
+
+        const urlResult = validateUrl(url);
+        if (!urlResult.valid) {
+            NotificationService.showError(urlResult.message);
+            return;
+        }
+
         const payload = {
             parent: parentId,
             title: listItemTitle,
