@@ -1,11 +1,11 @@
 {
     "title": {
-        "en": "New category - Notebook - Apphub",
-        "hu": "Új kategória - Jegyzetfüzet - Apphub"
+        "en": "New 'only title' - Notebook - Apphub",
+        "hu": "Új 'csak cím' - Jegyzetfüzet - Apphub"
     },
     "page-title": {
-        "en": "New category",
-        "hu": "Új kategória"
+        "en": "New 'only title'",
+        "hu": "Új 'csak cím'"
     },
     "back": {
         "en": "Back",
