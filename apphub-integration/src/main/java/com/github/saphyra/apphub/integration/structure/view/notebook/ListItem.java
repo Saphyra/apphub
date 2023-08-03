@@ -120,4 +120,11 @@ public class ListItem {
         driver.findElement(By.id("notebook-content-category-content-delete-list-item-button"))
             .click();
     }
+
+    public void openParent() {
+        webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-parent-button"))
+            .click();
+
+        SleepUtil.sleep(1000);
+    }
 }
