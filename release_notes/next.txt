@@ -12,3 +12,4 @@ System is fully operational locally, minikube is no longer required
 
 ===TECHNICAL DEBTS===
 Remove model validators from SkyXplore data
+Move factories and converters to the corresponding domain paackage in SkyXplore Game

@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
@@ -47,7 +47,7 @@ public class StorageSettingCreationServiceTest {
     private StorageSettingFactory storageSettingFactory;
 
     @Mock
-    private StorageSettingToModelConverter storageSettingToModelConverter;
+    private StorageSettingConverter storageSettingConverter;
 
     @Mock
     private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
@@ -109,7 +109,7 @@ public class StorageSettingCreationServiceTest {
         given(storageSettingFactory.create(request, PLANET_ID)).willReturn(storageSetting);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(game.getGameId()).willReturn(GAME_ID);
-        given(storageSettingToModelConverter.convert(GAME_ID, storageSetting)).willReturn(model);
+        given(storageSettingConverter.toModel(GAME_ID, storageSetting)).willReturn(model);
         given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
 
         StorageSettingApiModel result = underTest.createStorageSetting(USER_ID, PLANET_ID, request);
