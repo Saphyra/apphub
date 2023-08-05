@@ -22,9 +22,6 @@ public class GameServiceTest {
     @Mock
     private GameDao gameDao;
 
-    @Mock
-    private GameModelValidator gameModelValidator;
-
     @InjectMocks
     private GameService underTest;
 
@@ -47,7 +44,6 @@ public class GameServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(gameModelValidator).validate(model);
         verify(gameDao).saveAll(Arrays.asList(model));
     }
 

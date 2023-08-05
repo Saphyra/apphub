@@ -26,9 +26,6 @@ public class PlanetServiceTest {
     @Mock
     private PlanetDao dao;
 
-    @Mock
-    private PlanetModelValidator planetModelValidator;
-
     @InjectMocks
     private PlanetService underTest;
 
@@ -51,7 +48,6 @@ public class PlanetServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(planetModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

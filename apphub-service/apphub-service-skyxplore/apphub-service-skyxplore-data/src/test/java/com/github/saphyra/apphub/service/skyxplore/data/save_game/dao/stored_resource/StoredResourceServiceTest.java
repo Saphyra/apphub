@@ -26,9 +26,6 @@ public class StoredResourceServiceTest {
     @Mock
     private StoredResourceDao dao;
 
-    @Mock
-    private StoredResourceModelValidator storedResourceModelValidator;
-
     @InjectMocks
     private StoredResourceService underTest;
 
@@ -51,7 +48,6 @@ public class StoredResourceServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(storedResourceModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

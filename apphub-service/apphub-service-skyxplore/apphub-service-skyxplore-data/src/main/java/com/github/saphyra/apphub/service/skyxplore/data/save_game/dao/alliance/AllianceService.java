@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 public class AllianceService implements GameItemService {
     private final AllianceDao dao;
-    private final AllianceModelValidator allianceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class AllianceService implements GameItemService {
         List<AllianceModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof AllianceModel)
             .map(gameItem -> (AllianceModel) gameItem)
-            .peek(allianceModelValidator::validate)
             .collect(Collectors.toList());
 
 

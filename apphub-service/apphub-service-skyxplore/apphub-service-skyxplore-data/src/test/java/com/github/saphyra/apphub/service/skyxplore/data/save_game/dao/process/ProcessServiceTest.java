@@ -26,9 +26,6 @@ public class ProcessServiceTest {
     @Mock
     private ProcessDao dao;
 
-    @Mock
-    private ProcessModelValidator processModelValidator;
-
     @InjectMocks
     private ProcessService underTest;
 
@@ -51,7 +48,6 @@ public class ProcessServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(processModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

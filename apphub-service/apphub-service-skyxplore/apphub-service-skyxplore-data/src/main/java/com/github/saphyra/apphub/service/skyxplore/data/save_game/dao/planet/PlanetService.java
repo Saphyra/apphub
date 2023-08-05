@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PlanetService implements GameItemService {
     private final PlanetDao dao;
-    private final PlanetModelValidator planetModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class PlanetService implements GameItemService {
         List<PlanetModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof PlanetModel)
             .map(gameItem -> (PlanetModel) gameItem)
-            .peek(planetModelValidator::validate)
             .collect(Collectors.toList());
 
 

@@ -26,9 +26,6 @@ public class AllocatedResourceServiceTest {
     @Mock
     private AllocatedResourceDao dao;
 
-    @Mock
-    private AllocatedResourceModelValidator allocatedResourceModelValidator;
-
     @InjectMocks
     private AllocatedResourceService underTest;
 
@@ -52,7 +49,6 @@ public class AllocatedResourceServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(allocatedResourceModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

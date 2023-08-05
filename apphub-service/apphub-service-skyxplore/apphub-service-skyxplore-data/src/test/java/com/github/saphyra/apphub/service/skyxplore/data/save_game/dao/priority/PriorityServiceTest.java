@@ -26,9 +26,6 @@ public class PriorityServiceTest {
     @Mock
     private PriorityDao dao;
 
-    @Mock
-    private PriorityModelValidator priorityModelValidator;
-
     @InjectMocks
     private PriorityService underTest;
 
@@ -51,7 +48,6 @@ public class PriorityServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(priorityModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 
