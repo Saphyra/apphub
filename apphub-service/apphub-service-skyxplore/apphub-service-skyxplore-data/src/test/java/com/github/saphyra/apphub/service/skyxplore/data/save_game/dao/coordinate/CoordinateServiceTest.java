@@ -26,9 +26,6 @@ public class CoordinateServiceTest {
     @Mock
     private CoordinateDao dao;
 
-    @Mock
-    private CoordinateModelValidator coordinateModelValidator;
-
     @InjectMocks
     private CoordinateService underTest;
 
@@ -51,7 +48,6 @@ public class CoordinateServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(coordinateModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

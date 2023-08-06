@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StoredResourceService implements GameItemService {
     private final StoredResourceDao dao;
-    private final StoredResourceModelValidator storedResourceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class StoredResourceService implements GameItemService {
         List<StoredResourceModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof StoredResourceModel)
             .map(gameItem -> (StoredResourceModel) gameItem)
-            .peek(storedResourceModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

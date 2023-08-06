@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.PlanetConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 class RenamePlanetService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
-    private final PlanetToModelConverter planetToModelConverter;
+    private final PlanetConverter planetConverter;
 
     void rename(UUID userId, UUID planetId, String newName) {
         if (isBlank(newName)) {
@@ -40,7 +40,7 @@ class RenamePlanetService {
         planet.getCustomNames()
             .put(userId, newName);
 
-        PlanetModel model = planetToModelConverter.convert(game.getGameId(), planet);
+        PlanetModel model = planetConverter.toModel(game.getGameId(), planet);
         gameDataProxy.saveItem(model);
     }
 }

@@ -26,9 +26,6 @@ public class StorageSettingServiceTest {
     @Mock
     private StorageSettingDao dao;
 
-    @Mock
-    private StorageSettingModelValidator storageSettingModelValidator;
-
     @InjectMocks
     private StorageSettingService underTest;
 
@@ -51,7 +48,6 @@ public class StorageSettingServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(storageSettingModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

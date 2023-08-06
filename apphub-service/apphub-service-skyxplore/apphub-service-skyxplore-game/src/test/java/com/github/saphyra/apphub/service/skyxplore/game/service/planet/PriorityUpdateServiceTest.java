@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Pri
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class PriorityUpdateServiceTest {
     private PriorityValidator priorityValidator;
 
     @Mock
-    private PriorityToModelConverter priorityToModelConverter;
+    private PriorityConverter priorityConverter;
 
     @Mock
     private GameDataProxy gameDataProxy;
@@ -92,7 +92,7 @@ public class PriorityUpdateServiceTest {
         given(priorities.findByLocationAndType(PLANET_ID, PriorityType.CONSTRUCTION)).willReturn(priority);
 
         given(game.getGameId()).willReturn(GAME_ID);
-        given(priorityToModelConverter.convert(GAME_ID, priority)).willReturn(model);
+        given(priorityConverter.toModel(GAME_ID, priority)).willReturn(model);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
 

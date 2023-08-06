@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SurfaceService implements GameItemService {
     private final SurfaceDao dao;
-    private final SurfaceModelValidator surfaceModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class SurfaceService implements GameItemService {
         List<SurfaceModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof SurfaceModel)
             .map(gameItem -> (SurfaceModel) gameItem)
-            .peek(surfaceModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

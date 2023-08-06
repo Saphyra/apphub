@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
@@ -23,7 +23,7 @@ public class StorageSettingCreationService {
     private final GameDao gameDao;
     private final StorageSettingsModelValidator storageSettingsModelValidator;
     private final StorageSettingFactory storageSettingFactory;
-    private final StorageSettingToModelConverter storageSettingToModelConverter;
+    private final StorageSettingConverter storageSettingConverter;
     private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
     private final SyncCacheFactory syncCacheFactory;
     private final StorageSettingProcessFactory storageSettingProcessFactory;
@@ -45,7 +45,7 @@ public class StorageSettingCreationService {
                         .getStorageSettings()
                         .add(storageSetting);
 
-                    syncCache.saveGameItem(storageSettingToModelConverter.convert(game.getGameId(), storageSetting));
+                    syncCache.saveGameItem(storageSettingConverter.toModel(game.getGameId(), storageSetting));
 
                     return storageSettingToApiModelMapper.convert(storageSetting);
                 },

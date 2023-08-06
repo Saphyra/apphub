@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CitizenService implements GameItemService {
     private final CitizenDao dao;
-    private final CitizenModelValidator citizenModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class CitizenService implements GameItemService {
         List<CitizenModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof CitizenModel)
             .map(gameItem -> (CitizenModel) gameItem)
-            .peek(citizenModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

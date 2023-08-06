@@ -19,15 +19,11 @@ import static org.mockito.Mockito.verify;
 class DeconstructionServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
-    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer PAGE = 24;
     private static final Integer ITEMS_PER_PAGE = 34;
 
     @Mock
     private DeconstructionDao dao;
-
-    @Mock
-    private DeconstructionModelValidator validator;
 
     @InjectMocks
     private DeconstructionService underTest;
@@ -51,7 +47,6 @@ class DeconstructionServiceTest {
     void save() {
         underTest.save(List.of(model));
 
-        verify(validator).validate(model);
         verify(dao).saveAll(List.of(model));
     }
 

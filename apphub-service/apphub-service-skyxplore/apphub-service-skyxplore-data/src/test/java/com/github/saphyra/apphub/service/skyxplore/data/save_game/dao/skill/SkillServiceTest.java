@@ -26,9 +26,6 @@ public class SkillServiceTest {
     @Mock
     private SkillDao dao;
 
-    @Mock
-    private SkillModelValidator skillModelValidator;
-
     @InjectMocks
     private SkillService underTest;
 
@@ -51,7 +48,6 @@ public class SkillServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(skillModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

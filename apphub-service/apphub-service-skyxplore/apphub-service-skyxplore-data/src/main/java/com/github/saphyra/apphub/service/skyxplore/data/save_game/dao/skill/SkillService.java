@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SkillService implements GameItemService {
     private final SkillDao dao;
-    private final SkillModelValidator skillModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class SkillService implements GameItemService {
         List<SkillModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof SkillModel)
             .map(gameItem -> (SkillModel) gameItem)
-            .peek(skillModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

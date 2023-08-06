@@ -26,9 +26,6 @@ public class PlayerServiceTest {
     @Mock
     private PlayerDao dao;
 
-    @Mock
-    private PlayerModelValidator playerModelValidator;
-
     @InjectMocks
     private PlayerService underTest;
 
@@ -51,7 +48,6 @@ public class PlayerServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(playerModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 
