@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SolarSystemToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystemConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +44,7 @@ public class RenameSolarSystemServiceTest {
     private GameDataProxy gameDataProxy;
 
     @Mock
-    private SolarSystemToModelConverter solarSystemToModelConverter;
+    private SolarSystemConverter solarSystemConverter;
 
     @InjectMocks
     private RenameSolarSystemService underTest;
@@ -95,7 +95,7 @@ public class RenameSolarSystemServiceTest {
 
         OptionalMap<UUID, String> customNames = new OptionalHashMap<>();
         given(solarSystem.getCustomNames()).willReturn(customNames);
-        given(solarSystemToModelConverter.convert(GAME_ID, solarSystem)).willReturn(model);
+        given(solarSystemConverter.toModel(GAME_ID, solarSystem)).willReturn(model);
         given(gameData.getGameId()).willReturn(GAME_ID);
 
         underTest.rename(USER_ID, SOLAR_SYSTEM_ID, NEW_NAME);

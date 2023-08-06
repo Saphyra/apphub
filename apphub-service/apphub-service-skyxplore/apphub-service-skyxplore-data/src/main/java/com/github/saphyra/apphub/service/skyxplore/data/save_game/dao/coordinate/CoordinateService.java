@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CoordinateService implements GameItemService {
     private final CoordinateDao dao;
-    private final CoordinateModelValidator coordinateModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class CoordinateService implements GameItemService {
         List<CoordinateModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof CoordinateModel)
             .map(gameItem -> (CoordinateModel) gameItem)
-            .peek(coordinateModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

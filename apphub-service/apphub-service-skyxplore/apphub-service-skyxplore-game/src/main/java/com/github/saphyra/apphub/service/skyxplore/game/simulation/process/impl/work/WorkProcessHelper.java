@@ -9,8 +9,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_all
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.BuildingAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.CitizenAllocationFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target.UpdateTargetService;
 import lombok.RequiredArgsConstructor;

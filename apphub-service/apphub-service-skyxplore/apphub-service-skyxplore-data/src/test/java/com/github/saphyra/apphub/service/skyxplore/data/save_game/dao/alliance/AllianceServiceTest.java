@@ -24,9 +24,6 @@ public class AllianceServiceTest {
     @Mock
     private AllianceDao dao;
 
-    @Mock
-    private AllianceModelValidator allianceModelValidator;
-
     @InjectMocks
     private AllianceService underTest;
 
@@ -49,7 +46,6 @@ public class AllianceServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(allianceModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

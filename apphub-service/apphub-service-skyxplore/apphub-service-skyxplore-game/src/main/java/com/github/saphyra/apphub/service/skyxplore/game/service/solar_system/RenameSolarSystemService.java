@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.SolarSystemToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystemConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 class RenameSolarSystemService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
-    private final SolarSystemToModelConverter solarSystemToModelConverter;
+    private final SolarSystemConverter solarSystemConverter;
 
     void rename(UUID userId, UUID solarSystemId, String newName) {
         if (isBlank(newName)) {
@@ -43,7 +43,7 @@ class RenameSolarSystemService {
                 solarSystem.getCustomNames()
                     .put(userId, newName);
 
-                SolarSystemModel model = solarSystemToModelConverter.convert(gameData.getGameId(), solarSystem);
+                SolarSystemModel model = solarSystemConverter.toModel(gameData.getGameId(), solarSystem);
                 gameDataProxy.saveItem(model);
             })
             .getOrThrow();

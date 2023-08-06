@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PriorityService implements GameItemService {
     private final PriorityDao dao;
-    private final PriorityModelValidator priorityModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class PriorityService implements GameItemService {
         List<PriorityModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof PriorityModel)
             .map(gameItem -> (PriorityModel) gameItem)
-            .peek(priorityModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

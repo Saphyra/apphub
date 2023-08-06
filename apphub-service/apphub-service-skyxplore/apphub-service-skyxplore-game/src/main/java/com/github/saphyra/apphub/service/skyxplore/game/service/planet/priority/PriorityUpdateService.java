@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PriorityToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class PriorityUpdateService {
     private final GameDao gameDao;
     private final PriorityValidator priorityValidator;
-    private final PriorityToModelConverter priorityToModelConverter;
+    private final PriorityConverter priorityConverter;
     private final GameDataProxy gameDataProxy;
 
     public void updatePriority(UUID userId, UUID planetId, String priorityTypeString, Integer newPriority) {
@@ -40,7 +40,7 @@ public class PriorityUpdateService {
             .processWithWait(() -> {
                 priority.setValue(newPriority);
 
-                PriorityModel model = priorityToModelConverter.convert(game.getGameId(), priority);
+                PriorityModel model = priorityConverter.toModel(game.getGameId(), priority);
                 gameDataProxy.saveItem(model);
             })
             .getOrThrow();

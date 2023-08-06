@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SolarSystemService implements GameItemService {
     private final SolarSystemDao dao;
-    private final SolarSystemModelValidator solarSystemModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class SolarSystemService implements GameItemService {
         List<SolarSystemModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof SolarSystemModel)
             .map(gameItem -> (SolarSystemModel) gameItem)
-            .peek(solarSystemModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);

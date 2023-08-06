@@ -26,9 +26,6 @@ public class CitizenServiceTest {
     @Mock
     private CitizenDao dao;
 
-    @Mock
-    private CitizenModelValidator citizenModelValidator;
-
     @InjectMocks
     private CitizenService underTest;
 
@@ -52,7 +49,6 @@ public class CitizenServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(citizenModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

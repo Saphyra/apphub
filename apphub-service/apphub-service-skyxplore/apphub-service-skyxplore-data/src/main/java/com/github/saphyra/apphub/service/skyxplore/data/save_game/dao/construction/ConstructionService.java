@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 class ConstructionService implements GameItemService {
     private final ConstructionDao dao;
-    private final ConstructionModelValidator constructionModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ class ConstructionService implements GameItemService {
         List<ConstructionModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof ConstructionModel)
             .map(gameItem -> (ConstructionModel) gameItem)
-            .peek(constructionModelValidator::validate)
             .collect(Collectors.toList());
 
         dao.saveAll(models);
