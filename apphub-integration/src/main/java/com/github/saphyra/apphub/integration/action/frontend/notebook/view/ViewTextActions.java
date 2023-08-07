@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook.view;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -53,5 +54,9 @@ public class ViewTextActions {
     public static void close(WebDriver driver) {
         driver.findElement(By.id("notebook-content-text-close-button"))
             .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-text"))).isEmpty())
+            .assertTrue("Text is not closed.");
     }
 }

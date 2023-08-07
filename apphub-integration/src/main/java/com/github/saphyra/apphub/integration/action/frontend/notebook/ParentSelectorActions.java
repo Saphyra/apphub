@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -11,6 +12,8 @@ public class ParentSelectorActions {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No parent available with title " + parentTitle))
             .click();
+
+        SleepUtil.sleep(1000);
     }
 
     public static void up(WebDriver driver) {

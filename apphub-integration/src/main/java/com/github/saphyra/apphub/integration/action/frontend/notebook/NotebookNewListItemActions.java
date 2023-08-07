@@ -15,7 +15,6 @@ public class NotebookNewListItemActions {
             .click();
 
         Map<String, Object> pathVariables = Map.of(
-            "parent", "null",
             "listItemType", type.getSelector()
         );
 

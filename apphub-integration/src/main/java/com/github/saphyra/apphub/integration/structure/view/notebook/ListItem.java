@@ -140,4 +140,11 @@ public class ListItem {
             .orElseThrow(() -> new RuntimeException("Type not recognizable. ClassList: " + classes));
 
     }
+
+    public void cloneListItem() {
+        webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-clone-button"))
+            .click();
+
+        SleepUtil.sleep(1000);
+    }
 }

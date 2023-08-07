@@ -51,6 +51,8 @@ public class CategoryCrudTest extends SeleniumTest {
         //Create
         NewCategoryActions.create(driver, CATEGORY_1_TITLE);
 
+        NotebookUtils.waitForNotebookPageOpened(driver);
+
         assertThat(NotebookActions.getListItems(driver))
             .hasSize(1)
             .extracting(ListItem::getTitle)

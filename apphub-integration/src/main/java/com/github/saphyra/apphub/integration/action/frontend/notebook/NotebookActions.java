@@ -65,6 +65,8 @@ public class NotebookActions {
     public static void up(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-up-button"))
             .click();
+
+        SleepUtil.sleep(1000);
     }
 
     public static void cancelListItemDeletion(WebDriver driver) {
