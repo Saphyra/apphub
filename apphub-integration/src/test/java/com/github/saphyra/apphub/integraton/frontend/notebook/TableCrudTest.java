@@ -634,4 +634,46 @@ public class TableCrudTest extends SeleniumTest {
             .until(() -> NotebookActions.getListItems(driver).isEmpty())
             .assertTrue("Checklist table is not deleted.");
     }
+
+    @Test(groups = "notebook")
+    public void convertTableToChecklistTable() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.TABLE);
+
+        NewTableActions.fillTitle(driver, TABLE_TITLE);
+        NewTableActions.getTableHeads(driver)
+            .get(0)
+            .setValue(TABLE_HEAD_1);
+        NewTableActions.getRows(driver)
+            .get(0)
+            .getColumns()
+            .get(0)
+            .setValue(COLUMN_1);
+        NewTableActions.submit(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("Table was not saved");
+
+        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
+            .pin(driver);
+
+        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
+            .open();
+
+        ViewTableActions.convertTableToChecklistTable(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> ViewTableActions.getRows(driver).get(0).isChecklistRow())
+            .assertTrue("Table is not converted to ChecklistTable");
+
+        assertThat(NotebookActions.getPinnedItems(driver).get(0).getType()).isEqualTo(ListItemType.CHECKLIST_TABLE);
+    }
 }

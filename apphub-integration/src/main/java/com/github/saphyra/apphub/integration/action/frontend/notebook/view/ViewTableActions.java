@@ -88,4 +88,12 @@ public class ViewTableActions {
             .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-table"))).isEmpty())
             .assertTrue("Table is not closed.");
     }
+
+    public static void convertTableToChecklistTable(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-convert-button"))
+            .click();
+
+        driver.findElement(By.id("notebook-content-table-conversion-confirm-button"))
+            .click();
+    }
 }

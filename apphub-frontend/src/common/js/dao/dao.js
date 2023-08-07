@@ -260,6 +260,7 @@ const Endpoints = {
     NOTEBOOK_CREATE_CUSTOM_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/custom-table"),
     NOTEBOOK_GET_CUSTOM_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/custom-table/{listItemId}"),
     NOTEBOOK_CHECKLIST_TABLE_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist-table/{listItemId}/checked"),
+    NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/table/{listItemId}/convert-to-checklist-table"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),

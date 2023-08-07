@@ -18,6 +18,7 @@ import NotificationService from "../../../../../../common/js/notification/Notifi
 import validateTableHeadNames from "../../../../common/validator/TableHeadNameValidator";
 import EventName from "../../../../../../common/js/event/EventName";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import Event from "../../../../../../common/js/event/Event";
 
 const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -253,6 +254,37 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         ));
     }
 
+    const convertToChecklistTableDialog = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "notebook-content-table-conversion-confirmation",
+            localizationHandler.get("confirm-table-conversion-title"),
+            localizationHandler.get("confirm-table-conversion-content"),
+            [
+                <Button
+                    key="delete"
+                    id="notebook-content-table-conversion-confirm-button"
+                    label={localizationHandler.get("confirm-table-conversion")}
+                    onclick={convertToChecklistTable}
+                />,
+                <Button
+                    key="cancel"
+                    id="notebook-content-table-conversion-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    const convertToChecklistTable = async () => {
+        await Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE.createRequest(null, { listItemId: openedListItem.id })
+            .send();
+
+        setConfirmationDialogData(null);
+        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
+        setOpenedListItem({ id: openedListItem.id, type: ListItemType.CHECKLIST_TABLE });
+    }
+
     const deleteChecked = async () => {
         const response = await Endpoints.NOTEBOOK_CHECKLIST_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
             .send();
@@ -462,6 +494,14 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                         id="notebook-content-table-edit-button"
                         label={localizationHandler.get("edit")}
                         onclick={() => setEditingEnabled(true)}
+                    />
+                }
+
+                {!editingEnabled && !checklist &&
+                    <Button
+                        id="notebook-content-table-convert-button"
+                        label={localizationHandler.get("convert-to-checklist-table")}
+                        onclick={() => convertToChecklistTableDialog()}
                     />
                 }
 

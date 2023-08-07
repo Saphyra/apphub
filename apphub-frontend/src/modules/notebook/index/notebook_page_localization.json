@@ -166,5 +166,21 @@
     "confirm-delete-checked-content": {
         "en": "Are you sure you want to delete all the checked items?",
         "hu": "Biztosan törölni szeretnéd az összes kijelölt elemet?"
+    },
+    "convert-to-checklist-table": {
+        "en": "Convert to Checklist Table",
+        "hu": "Lista-táblázattá alakítás"
+    },
+    "confirm-table-conversion-title": {
+        "en": "Confirm table conversion",
+        "hu": "Táblázat átalakításának megerősítése"
+    },
+    "confirm-table-conversion-content": {
+        "en": "Are you sure you want to convert this Table to Checklist Table?",
+        "hu": "Biztosan Lista-táblázattá alakítod ezt a Táblázatot?"
+    },
+    "confirm-table-conversion": {
+        "en": "Convert",
+        "hu": "Átalakítás"
     }
 }

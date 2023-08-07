@@ -42,7 +42,7 @@ public class TableRow {
         return webElement.findElement(By.cssSelector(":scope .notebook-table-row-checked"));
     }
 
-    private boolean isChecklistRow() {
+    public boolean isChecklistRow() {
         return WebElementUtils.getIfPresent(() -> webElement.findElement(By.cssSelector(":scope .notebook-table-row-checked-cell")))
             .isPresent();
     }

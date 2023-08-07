@@ -14,7 +14,6 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,7 +84,7 @@ public class ListItemDetailsItem {
     public ListItemType getType() {
         List<String> classList = Arrays.stream(webElement.getAttribute("class")
             .split(" "))
-            .collect(Collectors.toList());
+            .toList();
         return Arrays.stream(ListItemType.values())
             .filter(type -> classList.contains(type.getSelector()))
             .findFirst()

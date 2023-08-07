@@ -6,11 +6,14 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
@@ -126,5 +129,15 @@ public class ListItem {
             .click();
 
         SleepUtil.sleep(1000);
+    }
+
+    public ListItemType getType() {
+        List<String> classes = WebElementUtils.getClasses(webElement);
+
+        return Arrays.stream(ListItemType.values())
+            .filter(type -> classes.contains(type.getClazz()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Type not recognizable. ClassList: " + classes));
+
     }
 }
