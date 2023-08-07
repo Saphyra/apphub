@@ -85,7 +85,7 @@ const Search = ({
                     data={child}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
-                    listItemMode={ListItemMode.CATEGORY_CONTENT}
+                    listItemMode={ListItemMode.SEARCH_RESULT}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
             )

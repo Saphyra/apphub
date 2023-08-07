@@ -13,7 +13,7 @@ public class NewChecklistActions {
         WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-new-checklist-title")), title);
     }
 
-    public static void submitForm(WebDriver driver) {
+    public static void submit(WebDriver driver) {
         driver.findElement(By.id("notebook-new-checklist-create-button"))
             .click();
     }

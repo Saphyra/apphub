@@ -14,9 +14,6 @@ const Settings = ({
 }) => {
     const [settingsDisplayed, setSettingsDispalyed] = useState(false);
     const [searchText, setSearchText] = useState(openedListItem.type === ListItemType.SEARCH ? openedListItem.id : "");
-    const [searchTimeout, setSearchTimeout] = useState(null);
-
-    let timeout = null;
 
     useEffect(() => searchTextModified(), [searchText]);
 
@@ -30,17 +27,12 @@ const Settings = ({
     }
 
     const searchTextModified = () => {
-        if (searchTimeout) {
-            clearTimeout(searchTimeout);
-            setSearchTimeout(null);
-        }
-
-        if (searchText.length < 3) {
-            return;
-        }
-
-        timeout = setTimeout(
+        const timeout = setTimeout(
             () => {
+                if (searchText.length < 3) {
+                    return;
+                }
+
                 setOpenedListItem({
                     id: searchText,
                     type: ListItemType.SEARCH,
@@ -50,7 +42,7 @@ const Settings = ({
             1000
         );
 
-        setSearchTimeout(timeout);
+        return () => clearTimeout(timeout);
     }
 
     return (

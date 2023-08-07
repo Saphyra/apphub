@@ -74,4 +74,16 @@ public class ChecklistItem {
         getCheckbox()
             .click();
     }
+
+    public void setChecked(boolean checked) {
+        if (checked) {
+            if (!isChecked()) {
+                check();
+            }
+        } else {
+            if (isChecked()) {
+                uncheck();
+            }
+        }
+    }
 }

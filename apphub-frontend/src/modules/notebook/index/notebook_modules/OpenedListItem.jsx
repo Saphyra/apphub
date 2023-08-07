@@ -32,6 +32,8 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     lastEvent={lastEvent}
+                    userSettings={userSettings}
+                    changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
             case ListItemType.CATEGORY:

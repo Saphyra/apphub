@@ -141,7 +141,7 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
-    @Test(groups = "skyxplore", priority = -1)
+    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

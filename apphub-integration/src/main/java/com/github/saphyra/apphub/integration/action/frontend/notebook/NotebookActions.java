@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.view.notebook.CategoryTreeLeaf;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.By;
@@ -60,12 +62,6 @@ public class NotebookActions {
         return new CategoryTreeLeaf(driver.findElement(By.cssSelector("#notebook-category-tree > .notebook-tree-leaf-wrapper")));
     }
 
-    public static void waitForPageOpened(WebDriver driver) {
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
-            .assertTrue("Notebook page is not opened");
-    }
-
     public static void up(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-up-button"))
             .click();
@@ -84,5 +80,11 @@ public class NotebookActions {
     public static String getOpenedCategoryName(WebDriver driver) {
         return driver.findElement(By.id("notebook-content-category-content-title"))
             .getText();
+    }
+
+    public static void search(WebDriver driver, String searchText) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-search")), searchText);
+
+        SleepUtil.sleep(2000);
     }
 }

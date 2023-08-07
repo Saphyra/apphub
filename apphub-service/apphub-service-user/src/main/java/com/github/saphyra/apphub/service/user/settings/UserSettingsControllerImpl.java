@@ -61,7 +61,7 @@ public class UserSettingsControllerImpl implements UserSettingsController {
 
         userSettingDao.save(setting);
 
-        return getUserSettings(request.getCategory(), accessTokenHeader); //TODO unit test
+        return getUserSettings(request.getCategory(), accessTokenHeader);
     }
 
     private Map<String, String> getDefaults(String category) {

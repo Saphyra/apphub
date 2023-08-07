@@ -75,4 +75,16 @@ public class TableRow {
 
         checkbox.click();
     }
+
+    public void setChecked(boolean checked) {
+        if (checked) {
+            if (!isChecked()) {
+                check();
+            }
+        } else {
+            if (isChecked()) {
+                uncheck();
+            }
+        }
+    }
 }

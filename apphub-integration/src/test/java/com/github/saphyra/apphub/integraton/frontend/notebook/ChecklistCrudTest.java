@@ -50,7 +50,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
         //Create - Empty title
         NewChecklistActions.fillTitle(driver, " ");
-        NewChecklistActions.submitForm(driver);
+        NewChecklistActions.submit(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
@@ -104,7 +104,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
         assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
 
-        NewChecklistActions.submitForm(driver);
+        NewChecklistActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))

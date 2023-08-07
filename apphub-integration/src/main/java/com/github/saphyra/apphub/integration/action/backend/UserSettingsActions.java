@@ -27,10 +27,12 @@ public class UserSettingsActions {
             .get(UrlFactory.create(Endpoints.GET_USER_SETTINGS, "category", category));
     }
 
-    public static void setUserSetting(Language language, UUID accessTokenId, SetUserSettingsRequest request) {
+    public static Map<String, String> setUserSetting(Language language, UUID accessTokenId, SetUserSettingsRequest request) {
         Response response = getUpdateUserSettingsResponse(language, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(StringStringMap.class);
     }
 
     public static Response getUpdateUserSettingsResponse(Language language, UUID accessTokenId, SetUserSettingsRequest request) {

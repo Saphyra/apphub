@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class MoraleRecoveryTest extends BackEndTest {
-    @Test(groups = "skyxplore", priority = -1)
+    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
     public void checkMoraleRecovery() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

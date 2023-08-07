@@ -97,7 +97,7 @@ public class StorageSettingTest extends SeleniumTest {
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
     }
 
-    @Test(groups = "skyxplore", priority = -1)
+    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

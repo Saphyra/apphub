@@ -44,7 +44,7 @@ public class CategoryCrudTest extends SeleniumTest {
 
         //Create - Blank title
         NewCategoryActions.fillTitle(driver, " ");
-        NewCategoryActions.submitForm(driver);
+        NewCategoryActions.submit(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
@@ -74,7 +74,7 @@ public class CategoryCrudTest extends SeleniumTest {
         ParentSelectorActions.selectParent(driver, CATEGORY_2_TITLE);
         EditListItemActions.submitForm(driver);
 
-        NotebookActions.waitForPageOpened(driver);
+        NotebookUtils.waitForNotebookPageOpened(driver);
 
         List<ListItem> listItems = NotebookActions.getListItems(driver);
         assertThat(listItems).hasSize(1);
