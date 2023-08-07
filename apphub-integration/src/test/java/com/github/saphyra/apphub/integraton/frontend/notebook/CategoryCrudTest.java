@@ -49,7 +49,8 @@ public class CategoryCrudTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Create
-        NewCategoryActions.create(driver, CATEGORY_1_TITLE);
+        NewCategoryActions.fillTitle(driver, CATEGORY_1_TITLE);
+        NewCategoryActions.submit(driver);
 
         NotebookUtils.waitForNotebookPageOpened(driver);
 

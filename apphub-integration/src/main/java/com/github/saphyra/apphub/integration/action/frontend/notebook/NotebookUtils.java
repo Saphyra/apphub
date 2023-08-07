@@ -25,7 +25,8 @@ public class NotebookUtils {
 
         selectParent(driver, parents);
 
-        NewCategoryActions.create(driver, title);
+        NewCategoryActions.fillTitle(driver, title);
+        NewCategoryActions.submit(driver);
 
         waitForNotebookPageOpened(driver);
     }

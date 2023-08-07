@@ -5,11 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class NewCategoryActions {
-    public static void create(WebDriver driver, String title) {
-        fillTitle(driver, title);
-        submit(driver);
-    }
-
     public static void fillTitle(WebDriver driver, String title) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-new-category-title")), title);
     }

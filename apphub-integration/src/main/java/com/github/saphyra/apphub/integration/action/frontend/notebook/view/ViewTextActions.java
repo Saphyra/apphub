@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook.view;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -49,6 +50,8 @@ public class ViewTextActions {
 
         driver.findElement(By.id("notebook-content-checklist-discard-confirm-button"))
             .click();
+
+        SleepUtil.sleep(1000);
     }
 
     public static void close(WebDriver driver) {

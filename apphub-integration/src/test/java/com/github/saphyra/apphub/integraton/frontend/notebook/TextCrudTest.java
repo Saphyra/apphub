@@ -56,7 +56,8 @@ public class TextCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
 
-        NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Text not found"))
             .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-text"))).isPresent());
 
         assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
