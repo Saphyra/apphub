@@ -164,6 +164,10 @@ input[type='checkbox']{
     cursor: pointer;
 }
 
+input[type='color']{
+    padding: 0;
+}
+
 input[type='checkbox']:disabled{
     opacity: 0.5;
     cursor: default;
@@ -300,6 +304,7 @@ textarea{
 /*=======CONFIRMATION_DIALOG=======*/
 .confirmation-dialog{
     display: block !important;
+    z-index: 100;
 }
 
     .confirmation-dialog-content-wrapper{

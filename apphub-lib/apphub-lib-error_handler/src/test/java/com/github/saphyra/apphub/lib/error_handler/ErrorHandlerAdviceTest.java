@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import feign.FeignException;
 import feign.Request;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,6 +54,9 @@ public class ErrorHandlerAdviceTest {
 
     @Mock
     private ErrorResponseWrapper errorResponseWrapper;
+
+    @Mock
+    private HttpServletRequest servletRequest;
 
     @Test
     public void feignException() {
@@ -112,7 +116,7 @@ public class ErrorHandlerAdviceTest {
         given(errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, new HashMap<>())).willReturn(wrapper);
         RuntimeException exception = new RuntimeException();
 
-        ResponseEntity<ErrorResponse> result = underTest.generalException(exception);
+        ResponseEntity<ErrorResponse> result = underTest.generalException(servletRequest, exception);
 
         verify(errorReporterService).report(HttpStatus.INTERNAL_SERVER_ERROR, errorResponse, exception);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);

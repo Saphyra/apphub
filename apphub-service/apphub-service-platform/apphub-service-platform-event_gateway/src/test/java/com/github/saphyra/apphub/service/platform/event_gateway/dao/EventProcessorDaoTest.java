@@ -37,7 +37,7 @@ public class EventProcessorDaoTest {
 
     @Test
     public void findByServiceNameAndEventName() {
-        given(repository.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(entity));
+        given(repository.findByHostAndEventName(SERVICE_NAME, EVENT_NAME)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         Optional<EventProcessor> result = underTest.findByServiceNameAndEventName(SERVICE_NAME, EVENT_NAME);
@@ -57,7 +57,7 @@ public class EventProcessorDaoTest {
 
     @Test
     public void getByServiceName() {
-        given(repository.getByServiceName(SERVICE_NAME)).willReturn(Arrays.asList(entity));
+        given(repository.getByHost(SERVICE_NAME)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
         List<EventProcessor> result = underTest.getByServiceName(SERVICE_NAME);

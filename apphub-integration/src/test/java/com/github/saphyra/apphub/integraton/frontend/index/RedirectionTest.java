@@ -13,9 +13,9 @@ import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.ErrorMessageElement;
-import com.github.saphyra.apphub.integration.structure.LoginParameters;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.ErrorMessageElement;
+import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -65,7 +65,7 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        IndexPageActions.registerUser(driver, userData, () -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))

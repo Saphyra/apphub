@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Data
@@ -13,6 +14,8 @@ import java.util.List;
 public class ChecklistResponse {
     @NonNull
     private final String title;
+
+    private final UUID parent;
 
     @NonNull
     private final List<ChecklistItemResponse> nodes;

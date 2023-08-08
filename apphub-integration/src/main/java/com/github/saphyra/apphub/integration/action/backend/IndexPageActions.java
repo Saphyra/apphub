@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.LoginRequest;
-import com.github.saphyra.apphub.integration.structure.user.LoginResponse;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.LoginResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationRequest;
 import io.restassured.response.Response;
 
 import java.util.UUID;

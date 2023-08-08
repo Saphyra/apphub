@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.StringStringMap;
-import com.github.saphyra.apphub.integration.structure.user.SetUserSettingsRequest;
+import com.github.saphyra.apphub.integration.structure.api.StringStringMap;
+import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import io.restassured.response.Response;
 
 import java.util.Map;
@@ -27,10 +27,12 @@ public class UserSettingsActions {
             .get(UrlFactory.create(Endpoints.GET_USER_SETTINGS, "category", category));
     }
 
-    public static void setUserSetting(Language language, UUID accessTokenId, SetUserSettingsRequest request) {
+    public static Map<String, String> setUserSetting(Language language, UUID accessTokenId, SetUserSettingsRequest request) {
         Response response = getUpdateUserSettingsResponse(language, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(StringStringMap.class);
     }
 
     public static Response getUpdateUserSettingsResponse(Language language, UUID accessTokenId, SetUserSettingsRequest request) {

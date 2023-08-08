@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

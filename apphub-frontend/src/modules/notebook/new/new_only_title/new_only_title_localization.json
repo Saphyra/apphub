@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "New 'only title' - Notebook - Apphub",
+        "hu": "Új 'csak cím' - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New 'only title'",
+        "hu": "Új 'csak cím'"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "only-title-title": {
+        "en": "Title",
+        "hu": "Cím"
+    }
+}

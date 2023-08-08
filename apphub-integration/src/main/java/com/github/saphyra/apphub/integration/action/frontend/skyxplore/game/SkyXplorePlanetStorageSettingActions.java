@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.RangeInput;
-import com.github.saphyra.apphub.integration.structure.SelectMenu;
-import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSetting;
+import com.github.saphyra.apphub.integration.structure.api.RangeInput;
+import com.github.saphyra.apphub.integration.structure.api.SelectMenu;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSetting;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

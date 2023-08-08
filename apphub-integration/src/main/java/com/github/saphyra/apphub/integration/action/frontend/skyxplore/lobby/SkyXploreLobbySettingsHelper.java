@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.structure.Range;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
+import com.github.saphyra.apphub.integration.structure.api.Range;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 
 public class SkyXploreLobbySettingsHelper {
     public static SkyXploreGameSettings withMaxPlayersPerSolarSystem(int maxPlayersPerSolarSystem) {

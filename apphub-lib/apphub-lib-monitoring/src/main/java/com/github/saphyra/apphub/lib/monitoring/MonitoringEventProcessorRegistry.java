@@ -11,19 +11,19 @@ import java.util.List;
 
 @Component
 public class MonitoringEventProcessorRegistry implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public MonitoringEventProcessorRegistry(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return List.of(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.ADMIN_PANEL_TRIGGER_MEMORY_STATUS_UPDATE)
                 .url(Endpoints.EVENT_MEMORY_MONITORING)
                 .build()

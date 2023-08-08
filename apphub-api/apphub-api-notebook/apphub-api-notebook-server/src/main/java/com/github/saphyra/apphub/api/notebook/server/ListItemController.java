@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ListItemController {
+    @GetMapping(Endpoints.NOTEBOOK_GET_LIST_ITEM)
+    NotebookView findListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @RequestMapping(method = RequestMethod.DELETE, path = Endpoints.NOTEBOOK_DELETE_LIST_ITEM)
     void deleteListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

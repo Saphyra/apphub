@@ -14,39 +14,39 @@ import java.util.List;
 
 @Component
 public class EventProcessorRegistryImpl implements EventProcessorRegistry {
-    private final String serviceName;
+    private final String host;
 
     public EventProcessorRegistryImpl(
-        @Value("${spring.application.name}") String serviceName
+        @Value("${event.serviceHost}") String host
     ) {
-        this.serviceName = serviceName;
+        this.host = host;
     }
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
         return Arrays.asList(
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME)
                 .url(Endpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(RefreshAccessTokenExpirationEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
                 .url(Endpoints.EVENT_DELETE_ACCOUNT)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.TRIGGER_ACCOUNT_DELETION)
                 .url(Endpoints.EVENT_TRIGGER_ACCOUNT_DELETION)
                 .build(),
             RegisterProcessorRequest.builder()
-                .serviceName(serviceName)
+                .host(host)
                 .eventName(EmptyEvent.TRIGGER_REVOKE_EXPIRED_BANS)
                 .url(Endpoints.EVENT_TRIGGER_REVOKE_EXPIRED_BANS)
                 .build()

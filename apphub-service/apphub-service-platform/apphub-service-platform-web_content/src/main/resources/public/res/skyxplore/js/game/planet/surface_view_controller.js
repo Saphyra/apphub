@@ -183,8 +183,7 @@
                                     cancelConstructionButton.classList.add("cancel-construction-button");
                                     cancelConstructionButton.innerText = "-";
                                     cancelConstructionButton.onclick = function(){
-                                        constructionController.cancelConstruction(planetId, buildingId, dataId)
-                                            .then((surface)=>{syncEngine.add(surface)});
+                                        constructionController.cancelConstruction(planetId, buildingId, dataId);
                                     }
                             progressBarContent.appendChild(cancelConstructionButton);
                         progressBar.appendChild(progressBarContent);

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

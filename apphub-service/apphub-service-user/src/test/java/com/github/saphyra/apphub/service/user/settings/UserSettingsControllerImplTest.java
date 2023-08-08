@@ -128,7 +128,7 @@ public class UserSettingsControllerImplTest {
             )
         ));
 
-        underTest.setUserSettings(request, accessTokenHeader);
+        Map<String, String> result = underTest.setUserSettings(request, accessTokenHeader);
 
         ArgumentCaptor<UserSetting> argumentCaptor = ArgumentCaptor.forClass(UserSetting.class);
         verify(userSettingDao).save(argumentCaptor.capture());
@@ -138,5 +138,8 @@ public class UserSettingsControllerImplTest {
         assertThat(userSetting.getCategory()).isEqualTo(CATEGORY);
         assertThat(userSetting.getKey()).isEqualTo(KEY);
         assertThat(userSetting.getValue()).isEqualTo(VALUE);
+
+        assertThat(result).containsEntry(KEY, "asd");
+        assertThat(result).containsEntry(DEFAULT_KEY, DEFAULT_VALUE);
     }
 }

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 class EventProcessorEntity {
     @Id
     private String eventProcessorId;
-    private String serviceName;
+    private String host;
     private String url;
     private String eventName;
     private LocalDateTime lastAccess;

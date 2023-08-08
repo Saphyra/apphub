@@ -25,4 +25,7 @@ public class TableJoin {
 
     @NonNull
     private Integer columnIndex;
+
+    @NonNull
+    private ColumnType columnType;
 }

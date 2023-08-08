@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edition;
 
+import com.github.saphyra.apphub.api.notebook.model.request.EditTableHeadRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.EditTableJoinRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.lib.common_domain.KeyValuePair;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.table_head.EditTableTableHeadService;
@@ -43,12 +44,18 @@ public class TableEditionServiceTest {
     @Mock
     private ListItem listItem;
 
+    @Mock
+    private EditTableHeadRequest editTableHeadRequest;
+
+    @Mock
+    private EditTableJoinRequest editTableJoinRequest;
+
     @Test
     public void edit() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
 
-        List<KeyValuePair<String>> columnNames = Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "ads"));
-        List<List<KeyValuePair<String>>> columns = Arrays.asList(Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "afda")));
+        List<EditTableHeadRequest> columnNames = Arrays.asList(editTableHeadRequest);
+        List<EditTableJoinRequest> columns = List.of(editTableJoinRequest);
 
         EditTableRequest request = new EditTableRequest(NEW_TITLE, columnNames, columns);
 

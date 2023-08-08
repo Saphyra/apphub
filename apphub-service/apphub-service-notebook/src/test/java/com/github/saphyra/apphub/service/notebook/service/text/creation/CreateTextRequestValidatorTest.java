@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.text.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
-import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

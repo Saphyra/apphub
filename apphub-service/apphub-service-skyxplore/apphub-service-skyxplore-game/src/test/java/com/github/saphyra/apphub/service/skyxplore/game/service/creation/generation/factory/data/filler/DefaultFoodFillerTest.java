@@ -13,7 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_sett
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.StoredResourceFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

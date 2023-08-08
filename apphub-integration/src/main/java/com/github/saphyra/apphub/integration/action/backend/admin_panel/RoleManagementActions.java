@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.RoleRequest;
-import com.github.saphyra.apphub.integration.structure.user.UserRoleResponse;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.UserRoleResponse;
 import io.restassured.response.Response;
 
 import java.util.Arrays;

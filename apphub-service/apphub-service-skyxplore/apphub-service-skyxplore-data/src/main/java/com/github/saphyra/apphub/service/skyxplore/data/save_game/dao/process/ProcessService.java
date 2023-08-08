@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProcessService implements GameItemService {
     private final ProcessDao dao;
-    private final ProcessModelValidator processModelValidator;
 
     @Override
     public void deleteByGameId(UUID gameId) {
@@ -35,7 +34,6 @@ public class ProcessService implements GameItemService {
         List<ProcessModel> models = gameItems.stream()
             .filter(gameItem -> gameItem instanceof ProcessModel)
             .map(gameItem -> (ProcessModel) gameItem)
-            .peek(processModelValidator::validate)
             .collect(Collectors.toList());
 
 

@@ -13,10 +13,10 @@ import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.structure.LoginParameters;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.delete_account.DeleteAccountPasswordValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.delete_account.DeleteAccountPasswordValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -50,14 +50,16 @@ public class DeleteAccountTest extends SeleniumTest {
 
         AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
         ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
 
         //Cancel deletion
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ACCOUNT_PAGE))
+            .assertTrue("Account page is not opened");
 
         AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
         AccountPageActions.submitDeleteAccountForm(driver);

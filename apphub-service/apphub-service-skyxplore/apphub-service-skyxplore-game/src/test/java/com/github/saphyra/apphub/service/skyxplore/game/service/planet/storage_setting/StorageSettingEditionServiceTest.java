@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_sett
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.StorageSettingToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -46,7 +46,7 @@ public class StorageSettingEditionServiceTest {
     private StorageSettingsModelValidator storageSettingsModelValidator;
 
     @Mock
-    private StorageSettingToModelConverter storageSettingToModelConverter;
+    private StorageSettingConverter storageSettingConverter;
 
     @Mock
     private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
@@ -112,7 +112,7 @@ public class StorageSettingEditionServiceTest {
 
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(storageSettingToModelConverter.convert(GAME_ID, storageSetting)).willReturn(model);
+        given(storageSettingConverter.toModel(GAME_ID, storageSetting)).willReturn(model);
         given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
 
         StorageSettingApiModel result = underTest.edit(USER_ID, request);

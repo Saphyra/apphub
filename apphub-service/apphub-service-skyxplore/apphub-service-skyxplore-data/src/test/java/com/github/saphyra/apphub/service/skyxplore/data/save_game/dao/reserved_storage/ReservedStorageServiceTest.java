@@ -26,9 +26,6 @@ public class ReservedStorageServiceTest {
     @Mock
     private ReservedStorageDao dao;
 
-    @Mock
-    private ReservedStorageModelValidator reservedStorageModelValidator;
-
     @InjectMocks
     private ReservedStorageService underTest;
 
@@ -51,7 +48,6 @@ public class ReservedStorageServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(reservedStorageModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

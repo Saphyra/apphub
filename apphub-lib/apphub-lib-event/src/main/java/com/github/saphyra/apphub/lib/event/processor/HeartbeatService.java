@@ -17,7 +17,7 @@ class HeartbeatService {
 
     @Builder
     HeartbeatService(
-        @Value("${spring.application.name}") String serviceName,
+        @Value("${event.serviceHost}") String serviceName,
         EventGatewayApiClient eventGatewayApi
     ) {
         this.serviceName = serviceName;

@@ -1,49 +1,41 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.ChecklistActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.ChecklistTableActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.LinkActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.TableActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.TextActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistTableRow;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.notebook.NewChecklistItemData;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchListItemTest extends SeleniumTest {
     private static final String CATEGORY_TITLE = "category-title";
     private static final String LINK_TITLE = "link-title";
-    private static final String LINK_URL = Endpoints.ACCOUNT_PAGE;
-    private static final String TEXT_CONTENT = "text-content";
-    private static final String CHECKLIST_ITEM_CONTENT = "checklist-item-content";
-    private static final String TABLE_COLUMN_NAME = "table-column-name";
-    private static final String TABLE_COLUMN_VALUE = "table-column-value";
+    private static final String LINK_URL = "url";
     private static final String TEXT_TITLE = "text-title";
+    private static final String TEXT_CONTENT = "text-content";
     private static final String CHECKLIST_TITLE = "checklist-title";
-    private static final String TABLE_TITLE = "table-title";
+    private static final String CHECKLIST_CONTENT = "checklist-content";
+    private static final String TABLE_TITLE = "table-title0";
+    private static final String TABLE_HEAD = "table-head0";
+    private static final String TABLE_CONTENT = "table-content0";
+    private static final String CHECKLIST_TABLE_CONTENT = "checklist-table-content";
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
-    private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
-    private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
+    private static final String ONLY_TITLE_TITLE = "only-title-title";
+    private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
 
-    @Test
+    @Test(groups = "notebook", priority = Integer.MIN_VALUE + 1)
     public void search() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -52,12 +44,13 @@ public class SearchListItemTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        CategoryActions.createCategory(driver, CATEGORY_TITLE);
-        LinkActions.createLink(driver, LINK_TITLE, LINK_URL, CATEGORY_TITLE);
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
-        ChecklistActions.createChecklist(driver, CHECKLIST_TITLE, Arrays.asList(new NewChecklistItemData(CHECKLIST_ITEM_CONTENT, true)));
-        TableActions.createTable(driver, TABLE_TITLE, Arrays.asList(TABLE_COLUMN_NAME), Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)));
-        ChecklistTableActions.createChecklistTable(driver, CHECKLIST_TABLE_TITLE, Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME), Arrays.asList(new ChecklistTableRow(true, Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))));
+        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newLink(driver, LINK_TITLE, LINK_URL);
+        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_CONTENT);
+        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)));
+        NotebookUtils.newTable(driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
+        NotebookUtils.newChecklistTable(driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(false, List.of(CHECKLIST_TABLE_CONTENT))));
+        NotebookUtils.newOnlyTitle(driver, ONLY_TITLE_TITLE);
 
         search(driver, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
         search(driver, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
@@ -65,17 +58,18 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
         search(driver, TEXT_CONTENT, TEXT_TITLE, ListItemType.TEXT);
         search(driver, CHECKLIST_TITLE, CHECKLIST_TITLE, ListItemType.CHECKLIST);
-        search(driver, CHECKLIST_ITEM_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
+        search(driver, CHECKLIST_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
         search(driver, TABLE_TITLE, TABLE_TITLE, ListItemType.TABLE);
-        search(driver, TABLE_COLUMN_NAME, TABLE_TITLE, ListItemType.TABLE);
-        search(driver, TABLE_COLUMN_VALUE, TABLE_TITLE, ListItemType.TABLE);
+        search(driver, TABLE_CONTENT, TABLE_TITLE, ListItemType.TABLE);
+        search(driver, TABLE_HEAD, TABLE_TITLE, ListItemType.TABLE);
         search(driver, CHECKLIST_TABLE_TITLE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(driver, CHECKLIST_TABLE_COLUMN_NAME, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(driver, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(driver, CHECKLIST_TABLE_CONTENT, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(driver, CHECKLIST_TABLE_HEAD, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(driver, ONLY_TITLE_TITLE, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE);
     }
 
-    @Test
-    public void sameItemShouldBeReturnedOnlyOnce() {
+    @Test(groups = "notebook")
+    public void itemsShouldBeUnique() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -83,17 +77,13 @@ public class SearchListItemTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        LinkActions.createLink(driver, LINK_TITLE, LINK_TITLE);
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT);
+        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_TITLE);
 
-        NotebookPageActions.search(driver, LINK_TITLE);
-        SleepUtil.sleep(1500);
-
-        assertThat(DetailedListActions.getDetailedListItems(driver)).hasSize(1);
+        search(driver, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
     }
 
-    @Test
-    public void openCategoryOfSearchedItem() {
+    @Test(groups = "notebook")
+    public void openParentOfSearchResult() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -101,30 +91,28 @@ public class SearchListItemTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        CategoryActions.createCategory(driver, CATEGORY_TITLE);
-        LinkActions.createLink(driver, LINK_TITLE, LINK_TITLE, CATEGORY_TITLE);
-        TextActions.createText(driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE);
+        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE);
+        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)), CATEGORY_TITLE);
 
-        NotebookPageActions.search(driver, LINK_TITLE);
-        SleepUtil.sleep(1500);
+        NotebookActions.search(driver, TEXT_TITLE);
 
-        assertThat(DetailedListActions.getDetailedListItems(driver)).hasSize(1);
-        DetailedListActions.getDetailedListItems(driver)
-            .get(0)
-            .openParentCategory();
+        NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
+            .openParent();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).size() == 2)
-            .assertTrue("Parent not loaded");
+            .until(() -> NotebookActions.getListItems(driver).size() == 2)
+            .assertTrue("Parent is not opened.");
+
+        assertThat(NotebookActions.getOpenedCategoryName(driver)).isEqualTo(CATEGORY_TITLE);
     }
 
-    private void search(WebDriver driver, String searchText, String listItemTitle, ListItemType type) {
-        NotebookPageActions.search(driver, searchText);
-        SleepUtil.sleep(1500);
+    private void search(WebDriver driver, String searchText, String resultTitle, ListItemType resultType) {
+        NotebookActions.search(driver, searchText);
 
-        ListItemDetailsItem searchResult = DetailedListActions.getDetailedListItems(driver).stream().filter(item -> item.getTitle().equals(listItemTitle)).findFirst()
-            .orElseThrow(() -> new RuntimeException("ListItem not found for searchText " + searchText + " with title " + listItemTitle));
-
-        assertThat(searchResult.getType()).isEqualTo(type);
+        List<ListItem> listItems = NotebookActions.getListItems(driver);
+        assertThat(listItems).hasSize(1);
+        assertThat(listItems.get(0).getTitle()).isEqualTo(resultTitle);
+        assertThat(listItems.get(0).getType()).isEqualTo(resultType);
     }
 }

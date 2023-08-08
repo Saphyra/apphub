@@ -43,7 +43,7 @@
         "en": "You have invited this player recently. Please wait a few seconds before trying again.",
         "hu": "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!"
     },
-    "LOBBY_MEMBER_NOT_READY":{
+    "LOBBY_MEMBER_NOT_READY": {
         "en": "No all members are ready.",
         "hu": "Még nincs kész mindenki."
     },
@@ -58,5 +58,21 @@
     "NOT_ENOUGH_ALLIANCES": {
         "en": "Every player is in the same alliance. Game is boring with no one to conquer.",
         "hu": "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani."
+    },
+    "INVALID_PARAM": {
+        "en": "Invalid parameter.",
+        "hu": "Érvénytelen paraméter."
+    },
+    "GENERAL_ERROR": {
+        "en": "General error",
+        "hu": "Hiba"
+    },
+    "LIST_ITEM_NOT_FOUND": {
+        "en": "Item not found.",
+        "hu": "Elem nem található."
+    },
+    "CATEGORY_NOT_FOUND": {
+        "en": "Category not found.",
+        "hu": "Kategória nem található."
     }
 }

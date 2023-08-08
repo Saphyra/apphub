@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.PlanetToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.PlanetConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ public class RenamePlanetServiceTest {
     private GameDataProxy gameDataProxy;
 
     @Mock
-    private PlanetToModelConverter planetToModelConverter;
+    private PlanetConverter planetConverter;
 
     @InjectMocks
     private RenamePlanetService underTest;
@@ -84,7 +84,7 @@ public class RenamePlanetServiceTest {
 
         OptionalMap<UUID, String> customNapes = new OptionalHashMap<>();
         given(planet.getCustomNames()).willReturn(customNapes);
-        given(planetToModelConverter.convert(GAME_ID, planet)).willReturn(model);
+        given(planetConverter.toModel(GAME_ID, planet)).willReturn(model);
 
         underTest.rename(USER_ID, PLANET_ID, NEW_NAME);
 

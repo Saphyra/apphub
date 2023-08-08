@@ -23,7 +23,7 @@ public class UrlAssemblerTest {
 
     @Test
     public void assemble() {
-        given(eventProcessor.getServiceName()).willReturn(SERVICE_NAME);
+        given(eventProcessor.getHost()).willReturn(SERVICE_NAME);
         given(eventProcessor.getUrl()).willReturn(URL);
 
         String result = underTest.assemble(eventProcessor);

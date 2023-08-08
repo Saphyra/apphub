@@ -38,6 +38,7 @@ public class TableJoinConverterTest {
             .parent(PARENT_STRING)
             .rowIndex(ROW_INDEX)
             .columnIndex(COLUMN_INDEX)
+            .columnType(ColumnType.EMPTY)
             .build();
         given(uuidConverter.convertEntity(TABLE_JOIN_ID_STRING)).willReturn(TABLE_JOIN_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
@@ -50,6 +51,7 @@ public class TableJoinConverterTest {
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getRowIndex()).isEqualTo(ROW_INDEX);
         assertThat(result.getColumnIndex()).isEqualTo(COLUMN_INDEX);
+        assertThat(result.getColumnType()).isEqualTo(ColumnType.EMPTY);
     }
 
     @Test
@@ -60,6 +62,7 @@ public class TableJoinConverterTest {
             .parent(PARENT)
             .rowIndex(ROW_INDEX)
             .columnIndex(COLUMN_INDEX)
+            .columnType(ColumnType.EMPTY)
             .build();
         given(uuidConverter.convertDomain(TABLE_JOIN_ID)).willReturn(TABLE_JOIN_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
@@ -72,5 +75,6 @@ public class TableJoinConverterTest {
         assertThat(result.getParent()).isEqualTo(PARENT_STRING);
         assertThat(result.getRowIndex()).isEqualTo(ROW_INDEX);
         assertThat(result.getColumnIndex()).isEqualTo(COLUMN_INDEX);
+        assertThat(result.getColumnType()).isEqualTo(ColumnType.EMPTY);
     }
 }

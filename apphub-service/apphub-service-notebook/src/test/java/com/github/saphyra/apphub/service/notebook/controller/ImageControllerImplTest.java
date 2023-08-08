@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateImageRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.image.ImageCreationService;
@@ -31,7 +31,7 @@ public class ImageControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private CreateImageRequest createImageRequest;
+    private CreateFileRequest createImageRequest;
 
     @BeforeEach
     public void setUp() {

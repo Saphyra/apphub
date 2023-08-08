@@ -2,25 +2,26 @@ package com.github.saphyra.apphub.integraton.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.OnlyTitleActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.PinnedItemActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.SettingActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookSettingActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.notebook.CategoryTreeLeaf;
+import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-public class NotebookSettingsTest extends SeleniumTest {
-    private static final String CATEGORY_TITLE = "category-title";
-    private static final String ONLY_TITLE_TITLE = "only-title-title";
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Test
-    public void notebookSettings() {
+public class NotebookSettingsTest extends SeleniumTest {
+    private static final String CATEGORY_1 = "category-1";
+    private static final String CATEGORY_2 = "category-2";
+
+    @Test(groups = "notebook")
+    void showAndHideArchived() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -28,60 +29,31 @@ public class NotebookSettingsTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        CategoryActions.createCategory(driver, CATEGORY_TITLE);
-        OnlyTitleActions.createOnlyTitle(driver, ONLY_TITLE_TITLE);
+        NotebookUtils.newCategory(driver, CATEGORY_1);
+        NotebookUtils.newCategory(driver, CATEGORY_2);
 
-        DetailedListActions.findDetailedItem(driver, CATEGORY_TITLE)
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_2)
             .archive(driver);
 
-        DetailedListActions.findDetailedItem(driver, CATEGORY_TITLE)
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_1)
+            .pin(driver);
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_2)
             .pin(driver);
 
         //Hide archived items
-        SettingActions.openSettingMenu(driver);
-        SettingActions.toggleShowArchived(driver);
+        NotebookSettingActions.openSettings(driver);
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).size() == 1)
-            .assertTrue("Archived list item is not hidden.");
+        NotebookSettingActions.hideArchived(driver);
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> PinnedItemActions.getPinnedItems(driver).isEmpty())
-            .assertTrue("Archived pinned item is not hidden.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> CategoryActions.getCategoryTreeRoot(driver).getChildren().isEmpty())
-            .assertTrue("Archived category tree item is not hidden.");
-
-        driver.navigate()
-            .refresh();
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).size() == 1)
-            .assertTrue("Archived list item is not hidden.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> PinnedItemActions.getPinnedItems(driver).isEmpty())
-            .assertTrue("Archived pinned item is not hidden.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> CategoryActions.getCategoryTreeRoot(driver).getChildren().isEmpty())
-            .assertTrue("Archived category tree item is not hidden.");
+        assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
+        assertThat(NotebookActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
+        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1);
 
         //Show archived items
-        SettingActions.openSettingMenu(driver);
-        SettingActions.toggleShowArchived(driver);
+        NotebookSettingActions.showArchived(driver);
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).size() == 2)
-            .assertTrue("Archived list item is not displayed.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> PinnedItemActions.getPinnedItems(driver).size() == 1)
-            .assertTrue("Archived pinned item is not displayed.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> CategoryActions.getCategoryTreeRoot(driver).getChildren().size() == 1)
-            .assertTrue("Archived category tree item is not displayed.");
+        assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+        assertThat(NotebookActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
     }
 }

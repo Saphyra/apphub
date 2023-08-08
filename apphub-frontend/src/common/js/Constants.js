@@ -1,3 +1,7 @@
+const KILOBYTES = 1024;
+const MEGABYTES = KILOBYTES * 1024;
+const GIGABYTES = MEGABYTES * 1024;
+
 const Constants = {
     //REQUEST
     COOKIE_LOCALE: "language",
@@ -15,7 +19,8 @@ const Constants = {
     MAX_CHARACTER_NAME_LENGTH: 30,
     MIN_GAME_NAME_LENGTH: 3,
     MAX_GAME_NAME_LENGTH: 30,
-    
+    FILE_SIZE_LIMIT: 2147483648,
+
     //PAGES
     MODULES_PAGE: "/web/modules",
     INDEX_PAGE: "/web",
@@ -23,6 +28,9 @@ const Constants = {
     SKYXPLORE_CHARACTER_PAGE: "/web/skyxplore/character",
     SKYXPLORE_LOBBY_PAGE: "/web/skyxplore/lobby",
     SKYXPLORE_GAME_PAGE: "/web/skyxplore/game",
+    NOTEBOOK_PAGE: "/web/notebook",
+    NOTEBOOK_NEW_PAGE: "/web/notebook/new",
+    NOTEBOOK_EDIT_PAGE: "/web/notebook/edit",
 
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,
@@ -33,6 +41,11 @@ const Constants = {
     PLANETS_PER_SOLAR_SYSTEM_MAX: 10,
     PLANET_SIZE_MIN: 10,
     PLANET_SIZE_MAX: 20,
+
+    //File size
+    KILOBYTES: KILOBYTES,
+    MEGABYTES: MEGABYTES,
+    GIGABYTES: GIGABYTES,
 
     SKYXPLORE_LOBBY_TYPE_NEW: "NEW_GAME",
     SKYXPLORE_LOBBY_TYPE_LOAD: "LOAD_GAME",

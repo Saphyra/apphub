@@ -14,10 +14,10 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.skyxplore.Citizen;
-import com.github.saphyra.apphub.integration.structure.skyxplore.CitizenOrder;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.Citizen;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -31,7 +31,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -69,7 +69,7 @@ public class CitizenOverviewTest extends SeleniumTest {
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
-            .collect(Collectors.toList());
+            .toList();
 
         List<String> newNames = Stream.iterate(0, integer -> integer + 1)
             .limit(citizenNames.size())

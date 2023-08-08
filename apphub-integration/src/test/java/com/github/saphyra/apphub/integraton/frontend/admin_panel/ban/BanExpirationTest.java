@@ -13,8 +13,8 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,7 +28,7 @@ import java.util.concurrent.Future;
 public class BanExpirationTest extends SeleniumTest {
     private static final String REASON = "reason";
 
-    @Test(priority = -1)
+    @Test(priority = Integer.MIN_VALUE)
     public void userCanAccessApplicationWhenBanExpired() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);

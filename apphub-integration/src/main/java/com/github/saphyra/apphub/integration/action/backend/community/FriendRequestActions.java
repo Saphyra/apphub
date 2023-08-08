@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.community.FriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.community.FriendshipResponse;
-import com.github.saphyra.apphub.integration.structure.community.SearchResultItem;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.community.FriendshipResponse;
+import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
 import io.restassured.response.Response;
 
 import java.util.Arrays;

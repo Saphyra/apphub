@@ -14,7 +14,7 @@ class EventProcessorConverter extends ConverterBase<EventProcessorEntity, EventP
     protected EventProcessor processEntityConversion(EventProcessorEntity entity) {
         return EventProcessor.builder()
             .eventProcessorId(uuidConverter.convertEntity(entity.getEventProcessorId()))
-            .serviceName(entity.getServiceName())
+            .host(entity.getHost())
             .url(entity.getUrl())
             .eventName(entity.getEventName())
             .lastAccess(entity.getLastAccess())
@@ -25,7 +25,7 @@ class EventProcessorConverter extends ConverterBase<EventProcessorEntity, EventP
     protected EventProcessorEntity processDomainConversion(EventProcessor domain) {
         return EventProcessorEntity.builder()
             .eventProcessorId(uuidConverter.convertDomain(domain.getEventProcessorId()))
-            .serviceName(domain.getServiceName())
+            .host(domain.getHost())
             .url(domain.getUrl())
             .eventName(domain.getEventName())
             .lastAccess(domain.getLastAccess())

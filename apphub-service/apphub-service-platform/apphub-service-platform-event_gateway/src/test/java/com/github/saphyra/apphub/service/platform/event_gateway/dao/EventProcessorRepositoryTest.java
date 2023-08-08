@@ -40,17 +40,17 @@ public class EventProcessorRepositoryTest {
     public void findByServiceNameAndEventName() {
         EventProcessorEntity entity1 = EventProcessorEntity.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID_1)
-            .serviceName(SERVICE_NAME_1)
+            .host(SERVICE_NAME_1)
             .eventName(EVENT_NAME_1)
             .build();
         EventProcessorEntity entity2 = EventProcessorEntity.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID_2)
-            .serviceName(SERVICE_NAME_2)
+            .host(SERVICE_NAME_2)
             .eventName(EVENT_NAME_2)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        Optional<EventProcessorEntity> result = underTest.findByServiceNameAndEventName(SERVICE_NAME_1, EVENT_NAME_1);
+        Optional<EventProcessorEntity> result = underTest.findByHostAndEventName(SERVICE_NAME_1, EVENT_NAME_1);
 
         assertThat(result).contains(entity1);
     }
@@ -76,15 +76,15 @@ public class EventProcessorRepositoryTest {
     public void getByServiceName() {
         EventProcessorEntity entity1 = EventProcessorEntity.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID_1)
-            .serviceName(SERVICE_NAME_1)
+            .host(SERVICE_NAME_1)
             .build();
         EventProcessorEntity entity2 = EventProcessorEntity.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID_2)
-            .serviceName(SERVICE_NAME_2)
+            .host(SERVICE_NAME_2)
             .build();
         underTest.saveAll(Arrays.asList(entity1, entity2));
 
-        List<EventProcessorEntity> result = underTest.getByServiceName(SERVICE_NAME_1);
+        List<EventProcessorEntity> result = underTest.getByHost(SERVICE_NAME_1);
 
         assertThat(result).containsExactly(entity1);
     }

@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -51,7 +52,7 @@ public class DeleteFileServiceTest {
 
     @Test
     public void forbiddenOperation() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
         Throwable ex = catchThrowable(() -> underTest.deleteFile(USER_ID, STORED_FILE_ID));
@@ -61,7 +62,7 @@ public class DeleteFileServiceTest {
 
     @Test
     public void deleteFile() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(ftpClientFactory.create()).willReturn(ftpClient);
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
@@ -77,7 +78,7 @@ public class DeleteFileServiceTest {
 
     @Test
     public void error() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(ftpClientFactory.create()).willReturn(ftpClient);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);

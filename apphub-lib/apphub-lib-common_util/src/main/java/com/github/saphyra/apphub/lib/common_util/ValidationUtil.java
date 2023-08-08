@@ -33,6 +33,13 @@ public class ValidationUtil {
         }
     }
 
+    public static void length(String value, int length, String field) {
+        notNull(value, field);
+        if (value.length() != length) {
+            throw ExceptionFactory.invalidParam(field, "must be " + length + " long");
+        }
+    }
+
     public static void minLength(String value, int minLength, String field) {
         notNull(value, field);
         if (value.length() < minLength) {
@@ -44,6 +51,20 @@ public class ValidationUtil {
         notNull(value, field);
         if (value.length() > maxLength) {
             throw ExceptionFactory.invalidParam(field, "too long");
+        }
+    }
+
+    public static void atLeastInclusive(Double value, double minValue, String field) {
+        notNull(value, field);
+        if (value <= minValue) {
+            throw ExceptionFactory.invalidParam(field, "too low");
+        }
+    }
+
+    public static void atLeast(Double value, double minValue, String field) {
+        notNull(value, field);
+        if (value < minValue) {
+            throw ExceptionFactory.invalidParam(field, "too low");
         }
     }
 
@@ -99,6 +120,15 @@ public class ValidationUtil {
     public static void notAllNull(List<String> fields, Object... values) {
         if (Arrays.stream(values).allMatch(Objects::isNull)) {
             throw ExceptionFactory.invalidParam(String.join(", ", fields), "all values are null");
+        }
+    }
+
+    public static <T> T parse(Object value, Function<Object, T> parser, String field) {
+        notNull(value, field);
+        try {
+            return parser.apply(value);
+        } catch (Exception e) {
+            throw ExceptionFactory.invalidParam(field, "failed to parse", e);
         }
     }
 }

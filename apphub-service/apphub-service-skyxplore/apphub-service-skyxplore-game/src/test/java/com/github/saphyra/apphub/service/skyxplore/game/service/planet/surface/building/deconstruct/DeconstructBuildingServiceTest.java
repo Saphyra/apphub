@@ -16,7 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.common.factory.DeconstructionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -55,6 +55,9 @@ class DeconstructBuildingServiceTest {
 
     @Mock
     private SyncCacheFactory syncCacheFactory;
+
+    @Mock
+    private DeconstructionPreconditions deconstructionPreconditions;
 
     @InjectMocks
     private DeconstructBuildingService underTest;
@@ -138,6 +141,8 @@ class DeconstructBuildingServiceTest {
         given(syncCacheFactory.create(game)).willReturn(syncCache);
 
         underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+
+        verify(deconstructionPreconditions).checkIfBuildingCanBeDeconstructed(gameData, building);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));

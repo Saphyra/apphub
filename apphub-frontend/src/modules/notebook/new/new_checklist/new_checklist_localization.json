@@ -1,0 +1,38 @@
+{
+    "title": {
+        "en": "New checklist - Notebook - Apphub",
+        "hu": "Új lista - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New checklist",
+        "hu": "Új lista"
+    },
+    "checklist-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "new-item": {
+        "en": "New item",
+        "hu": "Új elem"
+    },
+    "content": {
+        "en": "Content",
+        "hu": "Tartalom"
+    },
+    "no-items": {
+        "en": "No item added. Click \"New item\" to add one.",
+        "hu": "Nincs elem. Kattints az \"Új elem\" gombra a létrehozáshoz."
+    }
+}

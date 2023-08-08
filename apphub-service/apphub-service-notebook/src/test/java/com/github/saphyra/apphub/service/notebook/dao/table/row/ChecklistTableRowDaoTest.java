@@ -22,7 +22,8 @@ public class ChecklistTableRowDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final String PARENT_STRING = "parent";
     private static final UUID PARENT = UUID.randomUUID();
-    private static final int ROW_INDEX = 345;
+    private static final UUID ROW_ID = UUID.randomUUID();
+    private static final String ROW_ID_STRING = "row-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -52,17 +53,6 @@ public class ChecklistTableRowDaoTest {
     }
 
     @Test
-    public void findByParentAndRowIndex() {
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
-        given(repository.findByParentAndRowIndex(PARENT_STRING, ROW_INDEX)).willReturn(Optional.of(entity));
-        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-
-        Optional<ChecklistTableRow> result = underTest.findByParentAndRowIndex(PARENT, ROW_INDEX);
-
-        assertThat(result).contains(domain);
-    }
-
-    @Test
     public void getByParent() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
         given(repository.getByParent(PARENT_STRING)).willReturn(Arrays.asList(entity));
@@ -74,20 +64,20 @@ public class ChecklistTableRowDaoTest {
     }
 
     @Test
-    public void deleteByParentAndRowIndexGreaterThanEqual() {
-        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-
-        underTest.deleteByParentAndRowIndexGreaterThanEqual(PARENT, ROW_INDEX);
-
-        verify(repository).deleteByParentAndRowIndexGreaterThanEqual(PARENT_STRING, ROW_INDEX);
-    }
-
-    @Test
     public void deleteByParent() {
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
 
         underTest.deleteByParent(PARENT);
 
         verify(repository).deleteByParent(PARENT_STRING);
+    }
+
+    @Test
+    void findById() {
+        given(uuidConverter.convertDomain(ROW_ID)).willReturn(ROW_ID_STRING);
+        given(repository.findById(ROW_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findById(ROW_ID)).contains(domain);
     }
 }

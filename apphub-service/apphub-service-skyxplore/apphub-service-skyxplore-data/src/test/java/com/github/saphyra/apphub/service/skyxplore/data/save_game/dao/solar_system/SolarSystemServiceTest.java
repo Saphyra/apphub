@@ -26,9 +26,6 @@ public class SolarSystemServiceTest {
     @Mock
     private SolarSystemDao dao;
 
-    @Mock
-    private SolarSystemModelValidator solarSystemModelValidator;
-
     @InjectMocks
     private SolarSystemService underTest;
 
@@ -51,7 +48,6 @@ public class SolarSystemServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(solarSystemModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

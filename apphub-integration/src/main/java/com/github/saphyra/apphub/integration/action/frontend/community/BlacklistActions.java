@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.action.frontend.community;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.community.Blacklist;
+import com.github.saphyra.apphub.integration.structure.api.community.Blacklist;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 

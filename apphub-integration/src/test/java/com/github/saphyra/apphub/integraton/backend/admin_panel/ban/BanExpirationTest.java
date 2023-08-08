@@ -10,8 +10,8 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.BanRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class BanExpirationTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(priority = -1)
+    @Test(priority = Integer.MIN_VALUE)
     public void userCanAccessApplicationWhenBanExpired() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

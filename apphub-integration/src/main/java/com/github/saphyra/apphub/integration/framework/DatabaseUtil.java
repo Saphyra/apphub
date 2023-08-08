@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.structure.calendar.Occurrence;
+import com.github.saphyra.apphub.integration.structure.api.calendar.Occurrence;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Slf4j
 public class DatabaseUtil {
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String DB_URL = "jdbc:postgresql://localhost:%s/postgres";
+    private static final String DB_URL = "jdbc:postgresql://localhost:%s/%s";
 
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
     private static final String GET_USER_ID_BY_EMAIL_QUERY = "SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'";
@@ -56,7 +56,7 @@ public class DatabaseUtil {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT), "postgres", "postgres");
+        return DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT, TestBase.DATABASE_NAME), "postgres", "postgres");
     }
 
     public static void addRoleByEmail(String email, String... roles) {

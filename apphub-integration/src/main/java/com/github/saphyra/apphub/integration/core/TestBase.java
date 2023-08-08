@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.google.common.base.Stopwatch;
@@ -34,13 +33,14 @@ import static java.util.Objects.nonNull;
 @Listeners(SkipDisabledTestsInterceptor.class)
 public class TestBase {
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
+    public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
 
-    private static final int AVAILABLE_PERMITS = 30;
+    private static final int AVAILABLE_PERMITS = 10;
     private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
 
     public static int SERVER_PORT;
     public static int DATABASE_PORT;
+    public static String DATABASE_NAME;
     public static boolean REST_LOGGING_ENABLED;
     public static List<String> DISABLED_TEST_GROUPS;
     public static Connection CONNECTION;
@@ -66,6 +66,9 @@ public class TestBase {
 
         DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "serverPort is null"));
         log.info("DatabasePort: {}", DATABASE_PORT);
+
+        DATABASE_NAME = System.getProperty("databaseName", "postgres");
+        log.info("DatabaseName: {}", DATABASE_NAME);
 
         REST_LOGGING_ENABLED = Optional.ofNullable(System.getProperty("restLoggingEnabled"))
             .map(Boolean::parseBoolean)

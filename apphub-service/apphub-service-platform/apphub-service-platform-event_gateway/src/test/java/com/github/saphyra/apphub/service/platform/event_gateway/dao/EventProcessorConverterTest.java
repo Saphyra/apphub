@@ -32,7 +32,7 @@ public class EventProcessorConverterTest {
     public void convertEntity() {
         EventProcessorEntity entity = EventProcessorEntity.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID_STRING)
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .url(URL)
             .eventName(EVENT_NAME)
             .lastAccess(LAST_ACCESS)
@@ -42,7 +42,7 @@ public class EventProcessorConverterTest {
         EventProcessor result = underTest.convertEntity(entity);
 
         assertThat(result.getEventProcessorId()).isEqualTo(EVENT_PROCESSOR_ID);
-        assertThat(result.getServiceName()).isEqualTo(SERVICE_NAME);
+        assertThat(result.getHost()).isEqualTo(SERVICE_NAME);
         assertThat(result.getUrl()).isEqualTo(URL);
         assertThat(result.getEventName()).isEqualTo(EVENT_NAME);
         assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS);
@@ -52,7 +52,7 @@ public class EventProcessorConverterTest {
     public void convertDomain() {
         EventProcessor domain = EventProcessor.builder()
             .eventProcessorId(EVENT_PROCESSOR_ID)
-            .serviceName(SERVICE_NAME)
+            .host(SERVICE_NAME)
             .url(URL)
             .eventName(EVENT_NAME)
             .lastAccess(LAST_ACCESS)
@@ -62,7 +62,7 @@ public class EventProcessorConverterTest {
         EventProcessorEntity result = underTest.convertDomain(domain);
 
         assertThat(result.getEventProcessorId()).isEqualTo(EVENT_PROCESSOR_ID_STRING);
-        assertThat(result.getServiceName()).isEqualTo(SERVICE_NAME);
+        assertThat(result.getHost()).isEqualTo(SERVICE_NAME);
         assertThat(result.getUrl()).isEqualTo(URL);
         assertThat(result.getEventName()).isEqualTo(EVENT_NAME);
         assertThat(result.getLastAccess()).isEqualTo(LAST_ACCESS);

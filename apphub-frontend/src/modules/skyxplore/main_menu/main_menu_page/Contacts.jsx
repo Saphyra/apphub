@@ -5,8 +5,8 @@ import Stream from "../../../../common/js/collection/Stream";
 import Endpoints from "../../../../common/js/dao/dao";
 import "./contacts/contacts.css"
 import ContactsListItem from "./contacts/ContactsListItem";
-import ConfirmationDialog from "../../../../common/component/ConfirmationDialog";
 import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
+import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const Contacts = ({ localizationHandler, lastEvent }) => {
     const [friendQuery, setFriendQuery] = useState("");

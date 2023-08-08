@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.integration.action.backend.community.BlacklistA
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.community.FriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.community.SearchResultItem;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
 import java.util.List;

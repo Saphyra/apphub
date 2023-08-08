@@ -8,6 +8,6 @@ class UrlAssembler {
     private static final String URI_PREFIX = "http://";
 
     String assemble(EventProcessor processor) {
-        return URI_PREFIX + processor.getServiceName() + processor.getUrl();
+        return URI_PREFIX + processor.getHost() + processor.getUrl();
     }
 }

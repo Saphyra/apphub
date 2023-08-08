@@ -41,7 +41,7 @@ public class UserSettingsControllerImpl implements UserSettingsController {
     }
 
     @Override
-    public void setUserSettings(SetUserSettingsRequest request, AccessTokenHeader accessTokenHeader) {
+    public Map<String, String> setUserSettings(SetUserSettingsRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to modify his settings of category {}", accessTokenHeader.getUserId(), request.getCategory());
 
         ValidationUtil.notBlank(request.getKey(), "key");
@@ -60,6 +60,8 @@ public class UserSettingsControllerImpl implements UserSettingsController {
             .build();
 
         userSettingDao.save(setting);
+
+        return getUserSettings(request.getCategory(), accessTokenHeader);
     }
 
     private Map<String, String> getDefaults(String category) {

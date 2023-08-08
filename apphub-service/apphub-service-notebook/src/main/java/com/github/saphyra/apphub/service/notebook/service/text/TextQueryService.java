@@ -24,6 +24,7 @@ public class TextQueryService {
 
         return TextResponse.builder()
             .textId(textId)
+            .parent(listItem.getParent())
             .title(listItem.getTitle())
             .content(content.getContent())
             .build();

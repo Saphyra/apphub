@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.OneParamResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.AiPlayer;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreGameSettings;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.OneParamResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayer;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 

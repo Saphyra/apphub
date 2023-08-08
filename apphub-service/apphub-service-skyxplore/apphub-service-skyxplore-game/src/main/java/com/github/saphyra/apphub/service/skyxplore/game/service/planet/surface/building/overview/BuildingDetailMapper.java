@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewDetailedResponse;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class BuildingDetailMapper {
-    PlanetBuildingOverviewDetailedResponse createBuildingDetail(String dataId, List<Building> buildings) {
+    PlanetBuildingOverviewDetailedResponse createBuildingDetail(GameData gameData, String dataId, List<Building> buildings) {
         int levelSum = buildings.stream()
+            .filter(building -> gameData.getDeconstructions().findByExternalReference(building.getBuildingId()).isEmpty())
             .mapToInt(Building::getLevel)
             .sum();
 

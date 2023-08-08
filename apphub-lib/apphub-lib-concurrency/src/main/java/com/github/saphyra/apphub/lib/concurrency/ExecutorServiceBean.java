@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
@@ -9,7 +8,9 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.SneakyThrows;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -25,9 +26,6 @@ import java.util.stream.Collectors;
 public class ExecutorServiceBean {
     @NonNull
     private final ExecutorService executor;
-
-    @NonNull
-    private final SleepService sleepService;
 
     @NonNull
     private final ErrorReporterService errorReporterService;
@@ -79,30 +77,20 @@ public class ExecutorServiceBean {
 
         List<Future<ExecutionResult<R>>> futures = dataList.stream()
             .map(i -> executor.submit(wrap(() -> mapper.apply(i))))
-            .collect(Collectors.toList());
+            .toList();
 
-        long inProgress;
-        do {
-            inProgress = futures.stream()
-                .filter(rFuture -> !rFuture.isDone())
-                .count();
+        List<R> results = new ArrayList<>();
+        for (Future<ExecutionResult<R>> future : futures) {
+            results.add(getFutureResult(future));
+        }
 
-            if (inProgress > 0) {
-                log.debug("Incomplete tasks: {} out of {}", inProgress, dataList.size());
-                sleepService.sleep(1);
-            }
-        } while (inProgress > 0);
+        return results;
+    }
 
-        return futures.stream()
-            .map(rFuture -> {
-                try {
-                    return rFuture.get()
-                        .getOrThrow();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            })
-            .collect(Collectors.toList());
+    @SneakyThrows
+    private <R> R getFutureResult(Future<ExecutionResult<R>> future) {
+        return future.get()
+            .getOrThrow();
     }
 
     public void stop() {

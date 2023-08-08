@@ -2,6 +2,11 @@ const KILOBYTES = 1024;
 const MEGABYTES = KILOBYTES * 1024;
 const GIGABYTES = MEGABYTES * 1024;
 
+function toEnum(values){
+    return new Stream(values)
+        .toMap((value) => {return value}, (value) => {return value});
+}
+
 function formatFileSize(bytes){
     if(bytes > GIGABYTES){
         return limitDecimals(bytes / GIGABYTES, 1) + " GB";
@@ -109,9 +114,10 @@ function hasValue(obj){
     return obj != undefined && obj != null;
 }
 
-function throwException(name, message){
+function throwException(name, message, content){
     name = name == undefined ? "" : name;
     message = message == undefined ? "" : message;
+    console.log("Exception content:", content);
     throw {name: name, message: message, stackTrace: (new Error()).stack};
 }
 

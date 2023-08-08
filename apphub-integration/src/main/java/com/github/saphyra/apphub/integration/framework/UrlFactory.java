@@ -50,4 +50,8 @@ public class UrlFactory {
         }
         return urlBase;
     }
+
+    public static String createWithRedirect(String uri, String redirectUrl) {
+        return create(uri) + "?redirect=" + redirectUrl;
+    }
 }

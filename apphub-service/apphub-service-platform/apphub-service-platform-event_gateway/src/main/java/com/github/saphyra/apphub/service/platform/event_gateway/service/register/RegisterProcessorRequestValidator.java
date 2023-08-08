@@ -12,7 +12,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RequiredArgsConstructor
 class RegisterProcessorRequestValidator {
     void validate(RegisterProcessorRequest request) {
-        if (isBlank(request.getServiceName())) {
+        if (isBlank(request.getHost())) {
             throw ExceptionFactory.invalidParam("serviceName", "must not be null or blank");
         }
 

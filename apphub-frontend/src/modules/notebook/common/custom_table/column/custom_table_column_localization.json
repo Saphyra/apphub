@@ -1,0 +1,26 @@
+{
+    "select-column-type": {
+        "en": "Select type",
+        "hu": "Típus kiválasztása"
+    },
+    "change-column-type": {
+        "en": "Change type",
+        "hu": "Típus megváltoztatása"
+    },
+    "value": {
+        "en": "Value",
+        "hu": "Érték"
+    },
+    "step": {
+        "en": "Step",
+        "hu": "Léptetés"
+    },
+    "min": {
+        "en": "Minimum",
+        "hu": "Minimum"
+    },
+    "max": {
+        "en": "Maximum",
+        "hu": "Maximum"
+    }
+}

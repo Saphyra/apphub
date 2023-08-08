@@ -13,10 +13,10 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.structure.LoginParameters;
-import com.github.saphyra.apphub.integration.structure.admin_panel.CurrentBan;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
+import com.github.saphyra.apphub.integration.structure.api.admin_panel.CurrentBan;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -71,7 +71,9 @@ public class BanCrudTest extends SeleniumTest {
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        AwaitilityWrapper.createDefault()
+            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
+            .assertTrue("Ban page is not opened.");
         openUser(adminDriver, testUserData);
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
@@ -94,7 +96,9 @@ public class BanCrudTest extends SeleniumTest {
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        AwaitilityWrapper.createDefault()
+            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
+            .assertTrue("Ban page is not opened.");
         openUser(adminDriver, testUserData);
 
         revokeBan(adminDriver, adminUserData.getPassword());

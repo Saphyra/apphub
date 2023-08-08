@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.community;
 
-import com.github.saphyra.apphub.integration.structure.community.Friendship;
+import com.github.saphyra.apphub.integration.structure.api.community.Friendship;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

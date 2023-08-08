@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.AiFactory;

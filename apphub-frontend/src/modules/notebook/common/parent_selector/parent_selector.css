@@ -1,0 +1,29 @@
+.notebook-parent-selector{
+
+}
+
+.notebook-parent-selector-selected-parent{
+    text-align: center;
+    font-size: 24px;
+}
+
+.notebook-parent-selector-up-button-wrapper{
+    text-align: center;
+}
+
+.notebook-parent-selector-up-button{
+    width: 50%;
+    font-size: 20px;
+}
+
+.notebook-parent-selector-no-child{
+    text-align: center;
+    font-size: 30px;
+}
+
+.notebook-parent-selector-child{
+    border-color: springgreen;
+    width: 90%;
+    margin: 10px auto;
+    font-size: 20px;
+}

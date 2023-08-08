@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist_table;
 
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableResponse;
+import com.github.saphyra.apphub.api.notebook.model.response.ChecklistTableRowStatusResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableColumnResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableHeadResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,12 +26,17 @@ public class ChecklistTableQueryServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final String TITLE = "title";
     private static final Integer ROW_INDEX = 2345;
+    private static final UUID ROW_ID = UUID.randomUUID();
+    private static final UUID PARENT = UUID.randomUUID();
 
     @Mock
     private TableQueryService tableQueryService;
 
     @Mock
     private ChecklistTableRowDao checklistTableRowDao;
+
+    @Mock
+    private ContentTableColumnResponseProvider contentTableColumnResponseProvider;
 
     @InjectMocks
     private ChecklistTableQueryService underTest;
@@ -38,29 +45,33 @@ public class ChecklistTableQueryServiceTest {
     private TableHeadResponse tableHeadResponse;
 
     @Mock
-    private TableColumnResponse tableColumnResponse;
+    private TableColumnResponse<String> tableColumnResponse;
 
     @Mock
     private ChecklistTableRow checklistTableRow;
 
     @Test
     public void getChecklistTable() {
-        TableResponse tableResponse = TableResponse.builder()
+        TableResponse<String> tableResponse = TableResponse.<String>builder()
             .title(TITLE)
+            .parent(PARENT)
             .tableHeads(Arrays.asList(tableHeadResponse))
             .tableColumns(Arrays.asList(tableColumnResponse))
             .build();
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
 
         given(checklistTableRowDao.getByParent(LIST_ITEM_ID)).willReturn(Arrays.asList(checklistTableRow));
         given(checklistTableRow.getRowIndex()).willReturn(ROW_INDEX);
         given(checklistTableRow.isChecked()).willReturn(true);
+        given(checklistTableRow.getRowId()).willReturn(ROW_ID);
 
         ChecklistTableResponse result = underTest.getChecklistTable(LIST_ITEM_ID);
 
         assertThat(result.getTitle()).isEqualTo(TITLE);
+        assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTableHeads()).containsExactly(tableHeadResponse);
         assertThat(result.getTableColumns()).containsExactly(tableColumnResponse);
-        assertThat(result.getRowStatus().get(ROW_INDEX)).isTrue();
+        assertThat(result.getRowStatus().get(ROW_INDEX)).extracting(ChecklistTableRowStatusResponse::getChecked).isEqualTo(true);
+        assertThat(result.getRowStatus().get(ROW_INDEX)).extracting(ChecklistTableRowStatusResponse::getRowId).isEqualTo(ROW_ID);
     }
 }

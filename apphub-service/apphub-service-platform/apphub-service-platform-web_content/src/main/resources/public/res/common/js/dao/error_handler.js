@@ -44,7 +44,7 @@ function ErrorHandlerRegistry(){
                 switch(errorResponse.errorCode){
                     case "SESSION_EXPIRED":
                         sessionStorage.errorMessage = "session-expired";
-                        eventProcessor.processEvent(new Event(events.LOGOUT));
+                        window.location.href = Mapping.INDEX_PAGE + "?redirect=/" + (window.location.pathname + window.location.search).substr(1);
                     break;
                     default:
                         notificationService.showError(errorHandler.assembleLocalization(errorResponse));

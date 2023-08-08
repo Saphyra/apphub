@@ -26,9 +26,6 @@ public class ConstructionServiceTest {
     @Mock
     private ConstructionDao dao;
 
-    @Mock
-    private ConstructionModelValidator constructionModelValidator;
-
     @InjectMocks
     private ConstructionService underTest;
 
@@ -51,7 +48,6 @@ public class ConstructionServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(constructionModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

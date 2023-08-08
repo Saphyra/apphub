@@ -25,6 +25,10 @@ public class SkyXploreModifySurfaceActions {
     }
 
     public static void confirmUpgrade(WebDriver driver) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> GamePage.upgradeBuildingWindow(driver).isDisplayed())
+            .assertTrue("UpgradeBuilding window is not displayed");
+
         GamePage.upgradeBuildingButton(driver)
             .click();
     }

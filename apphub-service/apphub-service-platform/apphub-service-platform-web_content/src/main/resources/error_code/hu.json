@@ -30,6 +30,7 @@
   "NOT_ENOUGH_STORAGE": "Nincs elég {storageType} kapacitás.",
   "ROLE_ALREADY_EXISTS": "A felhasználó már rendelkezik a kiválasztott jogosultsággal.",
   "ROLE_NOT_FOUND": "A felhasználó nem rendelkezik a kiválasztott jogosultsággal.",
+  "SKYXPLORE_STORAGE_USED": "Raktár használatban. Szabadíts fel egy kis helyet, mielőtt lerombolod.",
   "TOO_FREQUENT_INVITATIONS": "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!",
   "UNKNOWN_ERROR": "Ismeretlen hiba.",
   "USER_NOT_FOUND": "Felhasználó nem található.",

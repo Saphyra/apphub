@@ -8,4 +8,6 @@ interface FileRepository extends CrudRepository<FileEntity, String> {
     Optional<FileEntity> findByParent(String parent);
 
     void deleteByUserId(String userId);
+
+    void deleteByParent(String parent);
 }

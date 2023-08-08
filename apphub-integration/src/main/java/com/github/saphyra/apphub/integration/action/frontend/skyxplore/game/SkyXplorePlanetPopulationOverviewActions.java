@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.skyxplore.Citizen;
-import com.github.saphyra.apphub.integration.structure.skyxplore.CitizenOrder;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.Citizen;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 

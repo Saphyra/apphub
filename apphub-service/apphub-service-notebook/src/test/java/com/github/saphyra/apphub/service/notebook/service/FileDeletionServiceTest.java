@@ -36,7 +36,7 @@ public class FileDeletionServiceTest {
 
         given(file.getStoredFileId()).willReturn(FILE_ID);
 
-        underTest.deleteImage(LIST_ITEM_ID);
+        underTest.deleteFile(LIST_ITEM_ID);
 
         verify(storageProxy).deleteFile(FILE_ID);
         verify(fileDao).delete(file);

@@ -26,9 +26,6 @@ public class SurfaceServiceTest {
     @Mock
     private SurfaceDao dao;
 
-    @Mock
-    private SurfaceModelValidator surfaceModelValidator;
-
     @InjectMocks
     private SurfaceService underTest;
 
@@ -51,7 +48,6 @@ public class SurfaceServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(surfaceModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

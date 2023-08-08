@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
+import com.github.saphyra.apphub.service.notebook.service.ListItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import com.github.saphyra.apphub.service.notebook.service.SearchService;
@@ -28,6 +29,12 @@ class ListItemControllerIImpl implements ListItemController {
     private final PinService pinService;
     private final SearchService searchService;
     private final ArchiveService archiveService;
+    private final ListItemQueryService listItemQueryService;
+
+    @Override
+    public NotebookView findListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
+        return listItemQueryService.findListItem(listItemId);
+    }
 
     @Override
     public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {

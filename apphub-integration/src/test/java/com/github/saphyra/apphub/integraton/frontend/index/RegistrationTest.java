@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.registration.EmailValidationResult;
-import com.github.saphyra.apphub.integration.structure.user.registration.PasswordValidationResult;
-import com.github.saphyra.apphub.integration.structure.user.registration.RegistrationValidationResult;
-import com.github.saphyra.apphub.integration.structure.user.registration.UsernameValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.registration.EmailValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.registration.PasswordValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.registration.RegistrationValidationResult;
+import com.github.saphyra.apphub.integration.structure.api.user.registration.UsernameValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 

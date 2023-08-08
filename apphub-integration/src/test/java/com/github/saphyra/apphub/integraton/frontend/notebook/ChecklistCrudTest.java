@@ -1,40 +1,40 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.ChecklistActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewChecklistActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.notebook.NewChecklistItemData;
-import com.github.saphyra.apphub.integration.structure.notebook.ViewChecklistItem;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChecklistCrudTest extends SeleniumTest {
-    private static final String CATEGORY_TITLE_1 = "category-title-1";
-    private static final String CHECKLIST_TITLE = "checklist-title";
-    private static final String CHECKLIST_ITEM_1 = "checklist-item-1";
-    private static final String CHECKLIST_ITEM_2 = "checklist-item-2";
-    private static final String NEW_CHECKLIST_TITLE = "new-checklist-title";
-    private static final String CHECKLIST_ITEM_3 = "checklist-item-3";
-    private static final String CATEGORY_TITLE_2 = "category-title-2";
-    private static final String CHECKLIST_ITEM_4 = "checklist-item-4";
+    private static final String CHECKLIST_TITLE = "checklist";
+    private static final String CATEGORY_TITLE = "category";
+    private static final String CHECKLIST_VALUE_1 = "value-1";
+    private static final String CHECKLIST_VALUE_2 = "value-2";
+    private static final String NEW_CHECKLIST_TITLE = "new-checklist";
+    private static final String NEW_VALUE = "new-value";
 
-    @Test
+    @Test(groups = "notebook")
     public void checklistCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -42,133 +42,174 @@ public class ChecklistCrudTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
+
+        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST);
 
         //Create - Empty title
-        ChecklistActions.openCreateChecklistWindow(driver);
-        ChecklistActions.submitCreateChecklistForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(ChecklistActions.isCreateChecklistWindowDisplayed(driver)).isTrue();
+        NewChecklistActions.fillTitle(driver, " ");
+        NewChecklistActions.submit(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Create
-        ChecklistActions.fillNewChecklistTitle(driver, CHECKLIST_TITLE);
-        ChecklistActions.selectCategoryForNewChecklist(driver, CATEGORY_TITLE_1);
-        ChecklistActions.newChecklistAddItems(
-            driver,
-            Arrays.asList(
-                NewChecklistItemData.builder().content(CHECKLIST_ITEM_1).checked(false).build(),
-                NewChecklistItemData.builder().content(CHECKLIST_ITEM_2).checked(true).build()
-            )
-        );
-        ChecklistActions.submitCreateChecklistForm(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Lista elmentve.");
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-        List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
-        assertThat(detailedListItems).hasSize(1);
-        ListItemDetailsItem textItem = detailedListItems.get(0);
-        assertThat(textItem.getTitle()).isEqualTo(CHECKLIST_TITLE);
-        assertThat(textItem.getType()).isEqualTo(ListItemType.CHECKLIST);
+        NewChecklistActions.fillTitle(driver, CHECKLIST_TITLE);
+        ParentSelectorActions.selectParent(driver, CATEGORY_TITLE);
 
-        NotificationUtil.clearNotifications(driver);
-        //Edit - Empty title
-        detailedListItems.get(0).open();
-        ChecklistActions.enableEditing(driver);
-        ChecklistActions.editChecklistItemTitle(driver, "");
-        ChecklistActions.saveChanges(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(ChecklistActions.isEditingEnabled(driver)).isTrue();
+        //-- Remove item
+        NewChecklistActions.getItems(driver)
+            .get(0)
+            .remove();
 
-        //Edit - Discard
-        ChecklistActions.editChecklistItemTitle(driver, NEW_CHECKLIST_TITLE);
-        ChecklistActions.editChecklistItemContent(driver, CHECKLIST_ITEM_1, NewChecklistItemData.builder().content(CHECKLIST_ITEM_2).checked(false).build());
-        ChecklistActions.discardChanges(driver);
+        assertThat(NewChecklistActions.getItems(driver)).isEmpty();
+
+        //-- Remove item
+        NewChecklistActions.addItem(driver);
+        NewChecklistActions.addItem(driver);
+        assertThat(NewChecklistActions.getItems(driver)).hasSize(2);
+
+        //-- Fill item
+        NewChecklistActions.fillItem(driver, 0, CHECKLIST_VALUE_1);
+        NewChecklistActions.fillItem(driver, 1, CHECKLIST_VALUE_2);
+
+        assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_1, CHECKLIST_VALUE_2);
+
+        //-- Move item down
+        NewChecklistActions.getItems(driver)
+            .get(0)
+            .moveDown();
+
+        assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_2, CHECKLIST_VALUE_1);
+
+        //-- Move item up
+        NewChecklistActions.getItems(driver)
+            .get(1)
+            .moveUp();
+
+        assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_1, CHECKLIST_VALUE_2);
+
+        //-- Check item
+        NewChecklistActions.getItems(driver)
+            .get(0)
+            .check();
+
+        assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(true, false);
+
+        //-- Uncheck item
+        NewChecklistActions.getItems(driver)
+            .get(0)
+            .uncheck();
+
+        assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
+
+        NewChecklistActions.submit(driver);
+
         AwaitilityWrapper.createDefault()
-            .until(() -> !ChecklistActions.isEditingEnabled(driver))
-            .assertTrue("Checklist remained editable.");
-        assertThat(ChecklistActions.getTitle(driver)).isEqualTo(CHECKLIST_TITLE);
-        List<ViewChecklistItem> newChecklistItems = ChecklistActions.getChecklistItems(driver);
-        assertThat(newChecklistItems).hasSize(2);
-        assertThat(newChecklistItems.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_1);
-        assertThat(newChecklistItems.get(0).isChecked()).isFalse();
-        assertThat(newChecklistItems.get(1).getContent()).isEqualTo(CHECKLIST_ITEM_2);
-        assertThat(newChecklistItems.get(1).isChecked()).isTrue();
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("Checklist was not created.");
+
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
+            .open();
+
+        //Edit - Empty title
+        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
+            .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-checklist"))).isPresent());
+
+        ViewChecklistActions.enableEditing(driver);
+        ViewChecklistActions.fillTitle(driver, " ");
+        ViewChecklistActions.saveChanges(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+
+        //Edit - Discard changes
+        ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);
+        ChecklistItem checklistItem = ViewChecklistActions.getItems(driver)
+            .get(0);
+        checklistItem.check();
+        checklistItem.setValue(NEW_VALUE);
+        NewChecklistActions.getItems(driver)
+            .get(1)
+            .remove();
+
+        ViewChecklistActions.discardChanges(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> ViewChecklistActions.getItems(driver).size() == 2)
+            .assertTrue("Changes were not discarded");
+
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_1, CHECKLIST_VALUE_2);
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
 
         //Edit
-        ChecklistActions.enableEditing(driver);
-        ChecklistActions.editChecklistItemTitle(driver, NEW_CHECKLIST_TITLE);
-        ChecklistActions.editChecklistItemContent(driver, CHECKLIST_ITEM_1, NewChecklistItemData.builder().content(CHECKLIST_ITEM_4).checked(true).build());
-        ChecklistActions.editChecklistRemoveItem(driver, CHECKLIST_ITEM_2);
-        ChecklistActions.editChecklistAddItems(driver, Arrays.asList(NewChecklistItemData.builder().content(CHECKLIST_ITEM_3).checked(false).build()));
-        ChecklistActions.saveChanges(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Lista elmentve.");
-        assertThat(ChecklistActions.isEditingEnabled(driver)).isFalse();
-        ChecklistActions.closeWindow(driver);
-        ChecklistActions.openChecklist(driver, NEW_CHECKLIST_TITLE);
-        List<ViewChecklistItem> items = ChecklistActions.getChecklistItems(driver);
-        assertThat(items).hasSize(2);
-        assertThat(items.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_4);
-        assertThat(items.get(0).isChecked()).isTrue();
-        assertThat(items.get(1).getContent()).isEqualTo(CHECKLIST_ITEM_3);
-        assertThat(items.get(1).isChecked()).isFalse();
+        ViewChecklistActions.enableEditing(driver);
 
-        NotificationUtil.clearNotifications(driver);
+        ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);
+        checklistItem = ViewChecklistActions.getItems(driver)
+            .get(0);
+        checklistItem.check();
+        checklistItem.setValue(NEW_VALUE);
+        ViewChecklistActions.getItems(driver)
+            .get(1)
+            .remove();
 
-        //Edit as listItem - Empty title
-        ChecklistActions.closeWindow(driver);
-        DetailedListActions.findDetailedItem(driver, NEW_CHECKLIST_TITLE)
-            .edit(driver);
-        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        ViewChecklistActions.saveChanges(driver);
+        ViewChecklistActions.close(driver);
 
-        //Edit as listItem
-        NotebookPageActions.fillEditListItemDialog(driver, CHECKLIST_TITLE, null, 1, CATEGORY_TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-        DetailedListActions.up(driver);
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
-        DetailedListActions.findDetailedItem(driver, CHECKLIST_TITLE);
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, NEW_CHECKLIST_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("ListItem not found with title " + NEW_CHECKLIST_TITLE))
+            .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-checklist"))).isPresent());
 
-        //Check item
-        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
-        ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_3).setStatus(true);
-        ChecklistActions.closeWindow(driver);
-        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
-        assertThat(ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_3).isChecked()).isTrue();
-
-        //Uncheck item
-        ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_4).setStatus(false);
-        ChecklistActions.closeWindow(driver);
-        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
-        assertThat(ChecklistActions.getChecklistItem(driver, CHECKLIST_ITEM_4).isChecked()).isFalse();
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(NEW_VALUE);
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(true);
 
         //Order items
-        ChecklistActions.orderItems(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Sorba rendezés sikeres.");
-        ChecklistActions.closeWindow(driver);
-        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
-        List<ViewChecklistItem> checklistItems = ChecklistActions.getChecklistItems(driver);
-        assertThat(checklistItems).hasSize(2);
-        assertThat(checklistItems.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_3);
-        assertThat(checklistItems.get(1).getContent()).isEqualTo(CHECKLIST_ITEM_4);
+        ViewChecklistActions.enableEditing(driver);
+        ViewChecklistActions.addItem(driver);
+        ViewChecklistActions.addItem(driver);
+        ViewChecklistActions.fillItem(driver, 1, CHECKLIST_VALUE_2);
+        ViewChecklistActions.fillItem(driver, 2, CHECKLIST_VALUE_1);
+        ViewChecklistActions.saveChanges(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> ViewChecklistActions.getItems(driver).size() == 3)
+            .assertTrue("Checklist modifications are not saved.");
+
+        ViewChecklistActions.orderItems(driver);
+
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(NEW_VALUE, CHECKLIST_VALUE_1, CHECKLIST_VALUE_2);
 
         //Delete checked
-        ChecklistActions.deleteCheckedChecklistItems(driver);
-        NotificationUtil.verifySuccessNotification(driver, "A kijelölt elemek sikeresen törölve.");
-        ChecklistActions.closeWindow(driver);
-        ChecklistActions.openChecklist(driver, CHECKLIST_TITLE);
-        checklistItems = ChecklistActions.getChecklistItems(driver);
-        assertThat(checklistItems).hasSize(1);
-        assertThat(checklistItems.get(0).getContent()).isEqualTo(CHECKLIST_ITEM_4);
+        ViewChecklistActions.deleteChecked(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> ViewChecklistActions.getItems(driver).size() == 2)
+            .assertTrue("Item was not deleted");
 
-        //Delete checklist
-        ChecklistActions.closeWindow(driver);
-        DetailedListActions.findDetailedItem(driver, CHECKLIST_TITLE)
-            .delete(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_1, CHECKLIST_VALUE_2);
+
+        //Check item
+        ViewChecklistActions.getItems(driver)
+            .get(0)
+            .check();
+
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(true, false);
+
+        //Uncheck item
+        ViewChecklistActions.getItems(driver)
+            .get(0)
+            .uncheck();
+
+        assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
+
+        //Delete
+        ViewChecklistActions.close(driver);
+
+        NotebookActions.findListItemByTitleValidated(driver, NEW_CHECKLIST_TITLE)
+            .deleteWithConfirmation(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.getListItems(driver).isEmpty())
+            .assertTrue("Checklist is not deleted.");
     }
 }

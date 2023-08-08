@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
@@ -119,6 +120,7 @@ public class NotebookEventControllerImplItTest {
             .userId(USER_ID)
             .columnIndex(234)
             .rowIndex(345)
+            .columnType(ColumnType.EMPTY)
             .build();
         save(() -> tableJoinDao.save(tableJoin));
 

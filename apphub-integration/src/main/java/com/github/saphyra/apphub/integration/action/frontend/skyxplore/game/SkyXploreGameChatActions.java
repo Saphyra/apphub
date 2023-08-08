@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameChatMessage;
-import com.github.saphyra.apphub.integration.structure.skyxplore.GameChatRoom;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatMessage;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatRoom;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

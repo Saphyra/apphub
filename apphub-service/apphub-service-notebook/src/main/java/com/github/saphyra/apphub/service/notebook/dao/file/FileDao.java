@@ -35,4 +35,8 @@ public class FileDao extends AbstractDao<FileEntity, File, String, FileRepositor
         return findByParent(parent)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Image not found by parent " + parent));
     }
+
+    public void deleteByParent(UUID parent) {
+        repository.deleteByParent(uuidConverter.convertDomain(parent));
+    }
 }

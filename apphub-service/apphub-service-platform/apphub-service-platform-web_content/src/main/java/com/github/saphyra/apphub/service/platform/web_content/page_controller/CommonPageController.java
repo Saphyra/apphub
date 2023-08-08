@@ -15,11 +15,6 @@ public class CommonPageController {
         return "calendar";
     }
 
-    @GetMapping(Endpoints.MODULES_PAGE)
-    public String modules() {
-        return "modules";
-    }
-
     @GetMapping(Endpoints.COMMUNITY_PAGE)
     ModelAndView community(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
         ModelAndView mav = new ModelAndView("community/community");

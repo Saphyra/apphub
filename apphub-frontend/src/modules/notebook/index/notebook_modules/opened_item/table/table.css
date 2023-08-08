@@ -1,0 +1,8 @@
+#notebook-content-table-content-table{
+    margin: 16px auto;
+}
+
+.notebook-table-row.checked td{
+    text-decoration: line-through;
+    opacity: 0.5;
+}

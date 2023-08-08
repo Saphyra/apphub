@@ -1,0 +1,30 @@
+.notebook-tree-leaf-wrapper {}
+
+.notebook-tree-leaf {
+    border-color: springgreen;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.notebook-tree-leaf.archived {
+    text-decoration: line-through;
+    opacity: 0.25;
+}
+
+.notebook-tree-leaf-button {
+    float: left;
+    margin: 0;
+    padding: 2px;
+    width: 20px;
+    height: 26px;
+    font-size: 16px;
+}
+
+.notebook-tree-leaf-title {
+    margin-left: 24px;
+    font-size: 24px;
+}
+
+.notebook-tree-leaf-children {
+    margin-left: 32px;
+}

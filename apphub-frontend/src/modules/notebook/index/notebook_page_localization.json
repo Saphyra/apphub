@@ -1,0 +1,186 @@
+{
+    "title": {
+        "en": "Notebook - Apphub",
+        "hu": "Jegyzetfüzet - Apphub"
+    },
+    "root": {
+        "en": "Root",
+        "hu": "Gyökér"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "up": {
+        "en": "Up",
+        "hu": "Fel"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "new": {
+        "en": "New",
+        "hu": "Új"
+    },
+    "category-empty": {
+        "en": "Empty",
+        "hu": "Üres"
+    },
+    "list-item-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "content": {
+        "en": "Content",
+        "hu": "Tartalom"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Módosít"
+    },
+    "discard": {
+        "en": "Discard",
+        "hu": "Elvetés"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "confirm-list-item-deletion-title": {
+        "en": "Delete list item?",
+        "hu": "Elem törlése?"
+    },
+    "confirm-list-item-deletion-content": {
+        "en": "Are you sure you want to delete list item {listItemTitle}?",
+        "hu": "Biztosan törölni szeretnéd a {listItemTitle} elemet?"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "archive": {
+        "en": "Archive",
+        "hu": "Archiválás"
+    },
+    "unarchive": {
+        "en": "Unarchive",
+        "hu": "Archiválás visszavonása"
+    },
+    "pin": {
+        "en": "Pin",
+        "hu": "Kitűzés"
+    },
+    "unpin": {
+        "en": "Unpin",
+        "hu": "Kitűzés visszavonása"
+    },
+    "open-parent": {
+        "en": "Open parent",
+        "hu": "Szülő megnyitása"
+    },
+    "clone": {
+        "en": "Clone",
+        "hu": "Duplikálás"
+    },
+    "checklist-empty": {
+        "en": "Checklist is empty.",
+        "hu": "A lista üres."
+    },
+    "delete-checked": {
+        "en": "Delete checked",
+        "hu": "Kijelöltek törlése"
+    },
+    "order-items": {
+        "en": "Order items",
+        "hu": "Sorba rendezés"
+    },
+    "add-item": {
+        "en": "New item",
+        "hu": "Új elem"
+    },
+    "table-head-title": {
+        "en": "Name of the column",
+        "hu": "Oszlop neve"
+    },
+    "new-column": {
+        "en": "New column",
+        "hu": "Új oszlop"
+    },
+    "new-row": {
+        "en": "New row",
+        "hu": "Új sor"
+    },
+    "checked": {
+        "en": "Checked",
+        "hu": "Jelölés"
+    },
+    "list-item-disabled": {
+        "en": "Item not available for technical reasons.",
+        "hu": "Elem technikai okokból nem elérhető."
+    },
+    "download": {
+        "en": "Download",
+        "hu": "Letöltés"
+    },
+    "file-name": {
+        "en": "File name",
+        "hu": "Fájlnév"
+    },
+    "file-size": {
+        "en": "Size",
+        "hu": "Méret"
+    },
+    "created-at": {
+        "en": "Created at",
+        "hu": "Létrehozva"
+    },
+    "search-result": {
+        "en": "Search result",
+        "hu": "Keresés eredménye"
+    },
+    "no-search-result": {
+        "en": "No result found.",
+        "hu": "Nincs találat."
+    },
+    "confirm-discard-title": {
+        "en": "Confirm discard",
+        "hu": "Elvetés megerősítése"
+    },
+    "confirm-discard-content": {
+        "en": "Are you sure you want to discard the changes you made?",
+        "hu": "Biztosan el szeretnéd vetni a változtatásokat?"
+    },
+    "show-archived": {
+        "en": "Show archived",
+        "hu": "Archiváltak megjelenítése"
+    },
+    "confirm-delete-checked-title": {
+        "en": "Confirm delete checked",
+        "hu": "Kijelölt elemek törlésének megerősítése"
+    },
+    "confirm-delete-checked-content": {
+        "en": "Are you sure you want to delete all the checked items?",
+        "hu": "Biztosan törölni szeretnéd az összes kijelölt elemet?"
+    },
+    "convert-to-checklist-table": {
+        "en": "Convert to Checklist Table",
+        "hu": "Lista-táblázattá alakítás"
+    },
+    "confirm-table-conversion-title": {
+        "en": "Confirm table conversion",
+        "hu": "Táblázat átalakításának megerősítése"
+    },
+    "confirm-table-conversion-content": {
+        "en": "Are you sure you want to convert this Table to Checklist Table?",
+        "hu": "Biztosan Lista-táblázattá alakítod ezt a Táblázatot?"
+    },
+    "confirm-table-conversion": {
+        "en": "Convert",
+        "hu": "Átalakítás"
+    }
+}

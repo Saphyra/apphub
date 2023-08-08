@@ -255,6 +255,7 @@ public class SyncCache {
         queueItemModified(recipient, location, context.getBuildingDeconstructionToQueueItemConverter().convert(game.getData(), deconstruction));
         buildingDetailsModified(recipient, location);
         surfaceModified(recipient, location, surface);
+        storageModified(recipient, location);
     }
 
     //Storage

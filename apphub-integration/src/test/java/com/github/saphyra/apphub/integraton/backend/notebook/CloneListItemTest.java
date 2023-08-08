@@ -7,23 +7,23 @@ import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.ErrorResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistTableResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistTableRowRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.ChildrenOfCategoryResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistTableRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateLinkRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateOnlyTitleyRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateTableRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.notebook.NotebookView;
-import com.github.saphyra.apphub.integration.structure.notebook.TableResponse;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.structure.api.notebook.TableResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -120,6 +120,9 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
+        NotebookActions.archive(language, accessTokenId, parentId, true);
+        NotebookActions.pin(language, accessTokenId, parentId, true);
+
         Response cloneResponse = NotebookActions.getCloneListItemResponse(language, accessTokenId, parentId);
 
         assertThat(cloneResponse.getStatusCode()).isEqualTo(200);
@@ -128,12 +131,16 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(rootItems.getChildren()).hasSize(2);
         assertThat(rootItems.getChildren().stream().allMatch(notebookView -> notebookView.getTitle().equals(PARENT_TITLE))).isTrue();
 
-        UUID clonedParentId = rootItems.getChildren()
+        NotebookView clonedItem = rootItems.getChildren()
             .stream()
             .filter(notebookView -> !notebookView.getId().equals(parentId))
             .findFirst()
-            .map(NotebookView::getId)
             .orElseThrow(() -> new RuntimeException("Clone not found"));
+
+        assertThat(clonedItem.isArchived()).isTrue();
+        assertThat(clonedItem.isPinned()).isTrue();
+
+        UUID clonedParentId = clonedItem.getId();
 
         ChildrenOfCategoryResponse clonedParentItems = NotebookActions.getChildrenOfCategory(language, accessTokenId, clonedParentId);
         assertThat(clonedParentItems.getChildren()).hasSize(6);
@@ -184,7 +191,7 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(checklistTableData.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);
         assertThat(checklistTableData.getTableColumns().get(0).getRowIndex()).isEqualTo(0);
         assertThat(checklistTableData.getTableColumns().get(0).getContent()).isEqualTo(CHECKLIST_TABLE_COLUMN_VALUE);
-        assertThat(checklistTableData.getRowStatus().get(0)).isTrue();
+        assertThat(checklistTableData.getRowStatus().get(0).getChecked()).isTrue();
     }
 
     private NotebookView findByTitle(String title, List<NotebookView> views) {

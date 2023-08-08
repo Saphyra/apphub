@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.GameToGameItemListConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameConverter;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class GameSaverService {
-    private final GameToGameItemListConverter converter;
+    private final GameConverter converter;
     private final GameProperties gameProperties;
     private final SkyXploreSavedGameClient gameClient;
     private final CustomLocaleProvider customLocaleProvider;

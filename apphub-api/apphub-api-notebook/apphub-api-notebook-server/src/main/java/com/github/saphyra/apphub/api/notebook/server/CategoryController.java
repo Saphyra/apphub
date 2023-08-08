@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryController {
-    @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_CATEGORY)
+    @PutMapping(Endpoints.NOTEBOOK_CREATE_CATEGORY)
     OneParamResponse<UUID> createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_CATEGORY_TREE)

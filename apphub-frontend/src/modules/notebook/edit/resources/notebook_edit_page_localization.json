@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Edit - Notebook - Apphub",
+        "hu": "Szerkesztés - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "edit-list-item-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "url": {
+        "en": "URL",
+        "hu": "URL"
+    }
+}

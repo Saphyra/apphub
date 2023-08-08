@@ -4,8 +4,6 @@ if [ "$1" != "skipBuild" ]; then
 
   if [ "$1" == "skipTests" ]; then
     mvn -T 24 clean install -DskipTests -fae
-  elif [ "$1" == "skipUnitTests" ]; then
-    mvn -T 24 clean install -DskipTests -fae
   else
     mvn -T 6 clean install -fae
   fi

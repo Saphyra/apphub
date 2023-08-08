@@ -26,9 +26,6 @@ public class LineServiceTest {
     @Mock
     private LineDao dao;
 
-    @Mock
-    private LineModelValidator lineModelValidator;
-
     @InjectMocks
     private LineService underTest;
 
@@ -51,7 +48,6 @@ public class LineServiceTest {
     public void save() {
         underTest.save(Arrays.asList(model));
 
-        verify(lineModelValidator).validate(model);
         verify(dao).saveAll(Arrays.asList(model));
     }
 

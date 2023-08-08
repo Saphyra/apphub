@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.web_utils.CustomLocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.service.save.converter.GameToGameItemListConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ public class GameSaverServiceTest {
     private static final String LOCALE = "locale";
 
     @Mock
-    private GameToGameItemListConverter converter;
+    private GameConverter converter;
 
     @Mock
     private GameProperties gameProperties;

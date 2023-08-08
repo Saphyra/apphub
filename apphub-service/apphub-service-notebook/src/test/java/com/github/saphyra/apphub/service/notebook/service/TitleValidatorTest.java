@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

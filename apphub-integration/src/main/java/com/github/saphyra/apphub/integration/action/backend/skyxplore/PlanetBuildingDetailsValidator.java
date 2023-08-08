@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetBuildingOverviewDetailedResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetBuildingOverviewDetailedResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetBuildingOverviewResponse;
 
 import java.util.Map;
 import java.util.Optional;
