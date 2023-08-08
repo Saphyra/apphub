@@ -21,7 +21,7 @@ public class NotebookSettingsTest extends SeleniumTest {
     private static final String CATEGORY_2 = "category-2";
 
     @Test(groups = "notebook")
-    void showAndHideArchived(){
+    void showAndHideArchived() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

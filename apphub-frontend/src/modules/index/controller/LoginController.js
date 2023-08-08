@@ -5,7 +5,7 @@ import NotificationService from "../../../common/js/notification/NotificationSer
 import Utils from "../../../common/js/Utils";
 
 const login = async (email, password, rememberMe) => {
-    if(email.length === 0 || password.length === 0){
+    if (email.length === 0 || password.length === 0) {
         NotificationService.showErrorCode(NotificationKey.EMPTY_CREDENTIALS);
         return;
     }
@@ -20,6 +20,10 @@ const login = async (email, password, rememberMe) => {
         .send();
 
     Utils.setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);
+    if (sessionStorage.userEmail !== email) {
+        sessionStorage.clear();
+    }
+    sessionStorage.userEmail = email;
     window.location.href = Utils.getQueryParam("redirect") || Constants.MODULES_PAGE;
 }
 

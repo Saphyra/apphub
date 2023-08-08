@@ -17,6 +17,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.html5.WebStorage;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -77,7 +78,10 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
             AwaitilityWrapper.createDefault()
                 .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ERROR_PAGE))
                 .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
-            driver.manage().deleteAllCookies();
+            driver.manage()
+                .deleteAllCookies();
+            ((WebStorage) driver).getSessionStorage()
+                .clear();
         } catch (Exception e) {
             log.error("Failed releasing driver. Removing from cache...");
             try {

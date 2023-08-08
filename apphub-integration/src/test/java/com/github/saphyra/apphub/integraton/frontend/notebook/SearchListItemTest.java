@@ -83,7 +83,7 @@ public class SearchListItemTest extends SeleniumTest {
     }
 
     @Test(groups = "notebook")
-    public void openParentOfSearchResult(){
+    public void openParentOfSearchResult() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

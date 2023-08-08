@@ -1,16 +1,26 @@
 package com.github.saphyra.apphub.integration.core;
 
+import com.google.gson.GsonBuilder;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +31,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class SeleniumTest extends TestBase {
     static final boolean HEADLESS_MODE;
+    public static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
     static {
         HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless"));
@@ -30,29 +41,61 @@ public class SeleniumTest extends TestBase {
 
     @AfterMethod(alwaysRun = true)
     public synchronized void afterMethod(ITestResult testResult) {
-        driverWrappers.get()
-            .forEach(webDriverWrapper -> {
-                WebDriver driver = webDriverWrapper.getDriver();
-                if (ITestResult.FAILURE == testResult.getStatus()) {
-                    log.error("Current URL: {}", driver.getCurrentUrl());
-                    takeScreenshot(webDriverWrapper, testResult.getName());
-                    WebDriverFactory.invalidate(webDriverWrapper);
-                }else{
-                    WebDriverFactory.release(webDriverWrapper);
-                }
-            });
-        driverWrappers.remove();
+        try {
+            driverWrappers.get()
+                .forEach(webDriverWrapper -> {
+                    WebDriver driver = webDriverWrapper.getDriver();
+                    if (ITestResult.FAILURE == testResult.getStatus()) {
+                        log.error("Current URL: {}", driver.getCurrentUrl());
+                        reportFailure(webDriverWrapper, testResult.getName());
+                        WebDriverFactory.invalidate(webDriverWrapper);
+                    } else {
+                        WebDriverFactory.release(webDriverWrapper);
+                    }
+                });
+        } finally {
+            driverWrappers.remove();
+        }
     }
 
-    private void takeScreenshot(WebDriverWrapper driver, String method) {
+    @SneakyThrows
+    private void reportFailure(WebDriverWrapper driver, String method) {
+        String directory = "d:/screenshots/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
+        takeScreenshot(driver, directory);
+        saveLogs(driver, directory);
+    }
+
+    private static void takeScreenshot(WebDriverWrapper driver, String directory) throws IOException {
+        String fileName = directory + "/screenshot.png";
+        log.info("Screenshot fileName: {}", fileName);
+
         TakesScreenshot scrShot = ((TakesScreenshot) driver.getDriver());
-        File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
-        File target = new File("d:/screenshots/" + method + "/" + driver.getId() + ".png");
-        try {
-            FileUtils.copyFile(SrcFile, target);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        File srcFile = scrShot.getScreenshotAs(OutputType.FILE);
+        File target = new File(fileName);
+        FileUtils.copyFile(srcFile, target);
+    }
+
+    private static void saveLogs(WebDriverWrapper driver, String directory) throws IOException {
+        List<String> entries = new ArrayList<>();
+        LogEntries logEntries = driver.getDriver().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            String logEntry = entry.getMessage();
+            log.debug(logEntry);
+            entries.add(logEntry);
         }
+
+        String fileContent = new GsonBuilder()
+            .setPrettyPrinting()
+            .create()
+            .toJson(entries);
+        log.info(fileContent);
+        String fileName = directory + "/console_log.json";
+        log.info("Console log fileName: {}", fileName);
+
+        Path path = Paths.get(fileName);
+        File file = new File(fileName);
+        file.createNewFile();
+        Files.writeString(path, fileContent);
     }
 
     protected static WebDriver extractDriver() {

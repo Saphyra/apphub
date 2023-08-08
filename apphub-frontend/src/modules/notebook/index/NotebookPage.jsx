@@ -15,7 +15,6 @@ import ListItemType from "../common/ListItemType";
 import Utils from "../../../common/js/Utils";
 import UserSettings from "../common/UserSettings";
 import Endpoints from "../../../common/js/dao/dao";
-import MapStream from "../../../common/js/collection/MapStream";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const NotebookPage = () => {
@@ -118,10 +117,10 @@ const NotebookPage = () => {
                     />
                 }
                 centerButtons={
-                    openedListItem.type === ListItemType.CATEGORY ?
+                    openedListItem.type === ListItemType.CATEGORY || openedListItem.type === ListItemType.SEARCH ?
                         <Button
                             id="notebook-new-button"
-                            onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + openedListItem.id}
+                            onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
                             label={localizationHandler.get("new")}
                         />
                         :
