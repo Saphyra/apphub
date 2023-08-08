@@ -84,4 +84,13 @@ public class FileDaoTest {
 
         assertThat(result).isEqualTo(file);
     }
+
+    @Test
+    void deleteByParent() {
+        given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
+
+        underTest.deleteByParent(PARENT);
+
+        verify(repository).deleteByParent(PARENT_STRING);
+    }
 }

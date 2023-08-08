@@ -13,6 +13,7 @@ const LoginForm = ({ localizationHandler }) => {
         id="login-remember-me"
         type="checkbox"
         onchangeCallback={setRememberMe}
+        checked={rememberMe}
     />
 
     return (

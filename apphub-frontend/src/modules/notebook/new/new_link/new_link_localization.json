@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "New link - Notebook - Apphub",
+        "hu": "Új hivatkozás - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New text",
+        "hu": "Új hivatkozás"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "link-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "url": {
+        "en": "URL",
+        "hu": "URL"
+    }
+}

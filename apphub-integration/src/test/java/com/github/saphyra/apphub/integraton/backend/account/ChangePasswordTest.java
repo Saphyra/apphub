@@ -8,10 +8,10 @@ import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.ErrorResponse;
-import com.github.saphyra.apphub.integration.structure.user.ChangePasswordRequest;
-import com.github.saphyra.apphub.integration.structure.user.LoginRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.ChangePasswordRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

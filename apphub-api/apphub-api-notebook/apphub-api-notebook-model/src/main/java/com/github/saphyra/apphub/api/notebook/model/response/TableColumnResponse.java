@@ -8,12 +8,14 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class TableColumnResponse {
+public class TableColumnResponse<T> {
     @NonNull
     private final UUID tableJoinId;
 
     @NonNull
-    private final String content;
+    private final String type;
+
+    private final T content;
 
     @NonNull
     private final Integer rowIndex;

@@ -9,6 +9,7 @@ Cloned Notebook list item inherits the "pinned" and "archived" flags of the pare
 Removed deprecated frontend code of Modules module from WebContent resources
 Removed SleepService from ExecutorServiceBean, using the built-in waiting mechanism of the Future<T> interface
 System is fully operational locally, minikube is no longer required
+Notebook migrated to React
 
 ===TECHNICAL DEBTS===
 Remove model validators from SkyXplore data

@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistItemResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.notebook.EditChecklistItemRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -232,7 +232,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .nodes(Collections.emptyList())
             .build();
-        NotebookActions.editChecklistItem(language, accessTokenId, edit_checklistItemDeletedRequest, listItemId);
+        NotebookActions.editChecklist(language, accessTokenId, edit_checklistItemDeletedRequest, listItemId);
         ChecklistResponse deletedChecklistItemResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         assertThat(deletedChecklistItemResponse.getNodes()).isEmpty();
         assertThat(deletedChecklistItemResponse.getTitle()).isEqualTo(NEW_TITLE);
@@ -247,7 +247,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .nodes(Arrays.asList(edit_checklistItemAddedNodeRequest))
             .build();
-        NotebookActions.editChecklistItem(language, accessTokenId, edit_checklistItemAddedRequest, listItemId);
+        NotebookActions.editChecklist(language, accessTokenId, edit_checklistItemAddedRequest, listItemId);
         ChecklistResponse checklistItemAddedResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         assertThat(checklistItemAddedResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(checklistItemAddedResponse.getNodes()).hasSize(1);
@@ -282,7 +282,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(TITLE)
             .nodes(Arrays.asList(edit_checklistItemModifiedNodeRequest))
             .build();
-        NotebookActions.editChecklistItem(language, accessTokenId, edit_checklistItemModifiedRequest, listItemId);
+        NotebookActions.editChecklist(language, accessTokenId, edit_checklistItemModifiedRequest, listItemId);
         ChecklistResponse modifiedChecklistItemResponse = NotebookActions.getChecklist(language, accessTokenId, listItemId);
         assertThat(modifiedChecklistItemResponse.getTitle()).isEqualTo(TITLE);
         assertThat(modifiedChecklistItemResponse.getNodes()).hasSize(1);
@@ -323,6 +323,14 @@ public class ChecklistCrudTest extends BackEndTest {
         assertThat(checklistResponse.getNodes()).hasSize(2);
         assertThat(findByOrder(checklistResponse.getNodes(), 0).getContent()).isEqualTo("A");
         assertThat(findByOrder(checklistResponse.getNodes(), 1).getContent()).isEqualTo("B");
+
+        //Delete row
+        response = NotebookActions.getDeleteChecklistItemResponse(language, accessTokenId, checklistResponse.getNodes().get(0).getChecklistItemId());
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(NotebookActions.getChecklist(language, accessTokenId, listItemId).getNodes())
+            .extracting(ChecklistItemResponse::getChecklistItemId)
+            .containsExactly(checklistResponse.getNodes().get(1).getChecklistItemId());
     }
 
     private ChecklistItemResponse findByOrder(List<ChecklistItemResponse> nodes, int order) {

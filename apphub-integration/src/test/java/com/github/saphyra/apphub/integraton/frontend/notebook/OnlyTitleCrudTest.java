@@ -2,28 +2,26 @@ package com.github.saphyra.apphub.integraton.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewOnlyTitleActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class OnlyTitleCrudTest extends SeleniumTest {
-    private static final String TITLE = "title";
-    private static final String CATEGORY_TITLE = "category-title";
-    private static final String NEW_TITLE = "new-title";
+    private static final String ONLY_TITLE_TITLE = "only-title";
+    private static final String NEW_ONLY_TITLE_TITLE = "new-only-title";
 
-    @Test
+    @Test(groups = "notebook")
     public void onlyTitleCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -32,52 +30,47 @@ public class OnlyTitleCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        //Create - Empty title
-        OnlyTitleActions.openCreateOnlyTitleWindow(driver);
-        OnlyTitleActions.submitCreateOnlyTitleForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(OnlyTitleActions.isCreateOnlyTitleWindowDisplayed(driver)).isTrue();
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.ONLY_TITLE);
+
+        //Create - Blank title
+        NewOnlyTitleActions.fillTitle(driver, " ");
+        NewOnlyTitleActions.submit(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Create
-        OnlyTitleActions.fillNewOnlyTitleTitle(driver, TITLE);
-        OnlyTitleActions.submitCreateOnlyTitleForm(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Sikeresen létrehozva.");
-        assertThat(OnlyTitleActions.isCreateOnlyTitleWindowDisplayed(driver)).isFalse();
+        NewOnlyTitleActions.fillTitle(driver, ONLY_TITLE_TITLE);
+        NewOnlyTitleActions.submit(driver);
+
         AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).stream().anyMatch(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(TITLE)))
-            .assertTrue();
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("OnlyTitle is not created");
 
-        //Edit - Empty title
-        ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE);
-        detailsItem.edit(driver);
-        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        DetailedListActions.closeEditListItemWindow(driver);
+        //Edit - Blank title
+        NotebookActions.findListItemByTitleValidated(driver, ONLY_TITLE_TITLE)
+            .edit(driver);
+        EditListItemActions.fillTitle(driver, " ");
 
-        NotificationUtil.clearNotifications(driver);
+        EditListItemActions.submitForm(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Edit
-        CategoryActions.createCategory(driver, CATEGORY_TITLE);
-        detailsItem = DetailedListActions.findDetailedItem(driver, TITLE);
-        detailsItem.edit(driver);
+        EditListItemActions.fillTitle(driver, NEW_ONLY_TITLE_TITLE);
 
-        NotebookPageActions.fillEditListItemDialog(driver, NEW_TITLE, null, 0, CATEGORY_TITLE);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
-
-        AwaitilityWrapper.getListWithWait(() -> DetailedListActions.getDetailedListItems(driver), items -> items.size() == 1)
-            .get(0)
-            .open();
-
-        detailsItem = DetailedListActions.findDetailedItem(driver, NEW_TITLE);
-
-        //Delete
-        detailsItem.delete(driver);
+        EditListItemActions.submitForm(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).isEmpty())
-            .assertTrue("OnlyTitle is not deleted.");
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("Modifications are not saved.");
+
+        //Delete
+        NotebookActions.findListItemByTitleValidated(driver, NEW_ONLY_TITLE_TITLE)
+            .deleteWithConfirmation(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, NEW_ONLY_TITLE_TITLE).isEmpty())
+            .assertTrue("Link is not deleted.");
     }
 }

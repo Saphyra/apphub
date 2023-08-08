@@ -1,37 +1,35 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.LinkActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewLinkActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LinkCrudTest extends SeleniumTest {
-    private static final String URL = Endpoints.ACCOUNT_PAGE;
-    private static final String TITLE = "title";
-    private static final String CATEGORY_TITLE_1 = "category-title-1";
-    private static final String CATEGORY_TITLE_2 = "category-title-2";
-    private static final String NEW_URL = Endpoints.NOTEBOOK_PAGE;
-    private static final String NEW_TITLE = "new-title";
+    private static final String LINK_TITLE = "link";
+    private static final String CATEGORY = "category";
+    private static final String NEW_LINK_TITLE = "new-link";
 
-    @Test
+    @Test(groups = "notebook")
     public void linkCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -39,87 +37,91 @@ public class LinkCrudTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        NotebookUtils.newCategory(driver, CATEGORY);
 
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.LINK);
 
-        //Create link
-        LinkActions.openCreateLinkWindow(driver);
+        //Create - Blank title
+        NewLinkActions.fillTitle(driver, "");
+        NewLinkActions.submit(driver);
 
-        //Empty title
-        LinkActions.fillCreateLinkForm(driver, "", URL);
-        LinkActions.submitCreateLinkForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
-        //Empty URL
-        LinkActions.fillCreateLinkForm(driver, TITLE, "");
-        LinkActions.submitCreateLinkForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "URL nem lehet üres.");
+        //Create - Blank URL
+        NewLinkActions.fillTitle(driver, LINK_TITLE);
+        NewLinkActions.fillUrl(driver, " ");
+        NewLinkActions.submit(driver);
 
-        //Valid
-        LinkActions.fillCreateLinkForm(driver, TITLE, URL, CATEGORY_TITLE_1);
-        LinkActions.submitCreateLinkForm(driver);
+        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
 
-        NotificationUtil.verifySuccessNotification(driver, "Hivatkozás elmentve.");
-        assertThat(LinkActions.isCreateLinkWindowDisplayed(driver)).isFalse();
+        //Create
+        NewLinkActions.fillUrl(driver, UrlFactory.create(Endpoints.MODULES_PAGE));
+        ParentSelectorActions.selectParent(driver, CATEGORY);
 
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
+        NewLinkActions.submit(driver);
 
-        List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
-        assertThat(detailedListItems).hasSize(1);
-        ListItemDetailsItem textItem = detailedListItems.get(0);
-        assertThat(textItem.getTitle()).isEqualTo(TITLE);
-        assertThat(textItem.getType()).isEqualTo(ListItemType.LINK);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("Link is not created");
 
-        textItem.open();
-        assertThat(driver.getWindowHandles()).hasSize(2);
+        //Open
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY)
+            .open(() -> NotebookActions.findListItemByTitle(driver, LINK_TITLE).isPresent());
+
+        NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
+            .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(URL));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
-        NotificationUtil.clearNotifications(driver);
-
-        //Edit link
-        DetailedListActions.findDetailedItem(driver, TITLE)
+        //Edit - Blank title
+        NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
             .edit(driver);
+        EditListItemActions.fillTitle(driver, " ");
 
-        //Empty title
-        NotebookPageActions.fillEditListItemDialog(driver, "", NEW_URL, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        EditListItemActions.submitForm(driver);
 
-        //Empty URL
-        NotebookPageActions.fillEditListItemDialog(driver, NEW_TITLE, "", 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "URL nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
-        //Valid
-        NotebookPageActions.fillEditListItemDialog(driver, NEW_TITLE, NEW_URL, 1, CATEGORY_TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
+        //Edit - Blank URL
+        EditListItemActions.fillTitle(driver, NEW_LINK_TITLE);
+        EditListItemActions.fillValue(driver, " ");
 
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
+        EditListItemActions.submitForm(driver);
 
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
 
-        DetailedListActions.up(driver);
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
+        //Edit
+        EditListItemActions.fillValue(driver, UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        ParentSelectorActions.up(driver);
 
-        ListItemDetailsItem item = DetailedListActions.findDetailedItem(driver, NEW_TITLE);
-        item.open();
+        EditListItemActions.submitForm(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .assertTrue("Modifications are not saved.");
+
+        //Open edited
+        NotebookActions.up(driver);
+
+        AwaitilityWrapper.findWithWait(() -> NotebookActions.getListItems(driver), listItem -> listItem.getTitle().equals(NEW_LINK_TITLE))
+            .orElseThrow(() -> new RuntimeException("Modified Link not found"))
+            .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(NEW_URL));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
-        //Delete link
-        DetailedListActions.findDetailedItem(driver, NEW_TITLE)
-            .delete(driver);
+        //Delete
+        NotebookActions.findListItemByTitleValidated(driver, NEW_LINK_TITLE)
+            .deleteWithConfirmation(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, NEW_LINK_TITLE).isEmpty())
+            .assertTrue("Link is not deleted.");
     }
 }

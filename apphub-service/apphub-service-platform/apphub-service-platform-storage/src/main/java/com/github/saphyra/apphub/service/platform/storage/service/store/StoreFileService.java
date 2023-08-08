@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -27,12 +28,12 @@ public class StoreFileService {
     private final StoredFileDao storedFileDao;
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
-    private final StoreFileProperties storeFileProperties;
+    private final CommonConfigProperties properties;
 
     public UUID createFile(UUID userId, String fileName,  Long size) {
         ValidationUtil.notNull(fileName, "fileName");
         ValidationUtil.atLeast(size, 0, "size");
-        ValidationUtil.maximum(size, storeFileProperties.getMaxFileSize(), "size");
+        ValidationUtil.maximum(size, properties.getMaxUploadedFileSize(), "size");
 
         StoredFile storedFile = storedFileFactory.create(userId, fileName, size);
 
@@ -44,7 +45,7 @@ public class StoreFileService {
     @SneakyThrows
     @Transactional
     public void uploadFile(UUID userId, UUID storedFileId, InputStream file, Long size) {
-        ValidationUtil.maximum(size, storeFileProperties.getMaxFileSize(), "size");
+        ValidationUtil.maximum(size, properties.getMaxUploadedFileSize(), "size");
 
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 

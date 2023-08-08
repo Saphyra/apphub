@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ConfirmationDialog from "../../../../common/component/ConfirmationDialog";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import ValidatedInputField from "../../../../common/component/input/ValidatedInputField";
 import ValidatedField from "../../../../common/js/validation/ValidatedField"
@@ -7,6 +6,7 @@ import validate from "../../../../common/js/validation/Validator";
 import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
 import Button from "../../../../common/component/input/Button";
+import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 
 const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {

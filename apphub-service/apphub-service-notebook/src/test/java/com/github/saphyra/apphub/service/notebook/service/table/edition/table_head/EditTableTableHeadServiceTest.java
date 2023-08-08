@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edition.table_head;
 
-import com.github.saphyra.apphub.lib.common_domain.KeyValuePair;
+import com.github.saphyra.apphub.api.notebook.model.request.EditTableHeadRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +23,7 @@ public class EditTableTableHeadServiceTest {
     private EditTableTableHeadDeletionService editTableTableHeadDeletionService;
 
     @Mock
-    private EditTableTableHeadUpdateService editTableTableHeadUpdateService;
-
-    @Mock
-    private EditTableTableHeadCreationService editTableTableHeadCreationService;
+    private CreateAndEditTableTableHeadUpdateService createAndEditTableTableHeadUpdateService;
 
     @InjectMocks
     private EditTableTableHeadService underTest;
@@ -34,17 +31,19 @@ public class EditTableTableHeadServiceTest {
     @Mock
     private ListItem listItem;
 
+    @Mock
+    private EditTableHeadRequest editTableHeadRequest;
+
     @Test
     public void process() {
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
-        List<KeyValuePair<String>> columnNames = Arrays.asList(new KeyValuePair<>(UUID.randomUUID(), "asd"));
+        List<EditTableHeadRequest> columnNames = Arrays.asList(editTableHeadRequest);
 
 
         underTest.processEditions(columnNames, listItem);
 
         verify(editTableTableHeadDeletionService).process(columnNames, LIST_ITEM_ID);
-        verify(editTableTableHeadUpdateService).process(columnNames, LIST_ITEM_ID);
-        verify(editTableTableHeadCreationService).process(columnNames, listItem);
+        verify(createAndEditTableTableHeadUpdateService).process(columnNames, listItem);
     }
 }

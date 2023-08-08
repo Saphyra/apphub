@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.RandomDataProvider;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.ChangeUsernameRequest;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.ChangeUsernameRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

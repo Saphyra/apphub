@@ -36,10 +36,12 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    public void editChecklistTable(EditChecklistTableRequest request, UUID listItemId) {
+    public ChecklistTableResponse editChecklistTable(EditChecklistTableRequest request, UUID listItemId) {
         log.info("Editing checklistTable {}", listItemId);
         log.debug("EditChecklistTableRequest: {}", request);
         checklistTableEditionService.edit(listItemId, request);
+
+        return getChecklistTable(listItemId);
     }
 
     @Override
@@ -49,14 +51,15 @@ public class ChecklistTableControllerImpl implements ChecklistTableController {
     }
 
     @Override
-    public void setChecklistTableRowStatus(UUID listItemId, Integer rowIndex, OneParamRequest<Boolean> status) {
-        log.info("Setting checklistTable row status for table {}", listItemId);
-        checklistTableStatusUpdateService.updateStatus(listItemId, rowIndex, status.getValue());
+    public void setChecklistTableRowStatus(UUID rowId, OneParamRequest<Boolean> status) {
+        log.info("Setting checklistTable row status for row {}", rowId);
+        checklistTableStatusUpdateService.updateStatus( rowId, status.getValue());
     }
 
     @Override
-    public void deleteCheckedItems(UUID listItemId) {
+    public ChecklistTableResponse deleteCheckedItems(UUID listItemId) {
         log.info("Deleting checked items of checklistTable {}", listItemId);
         checkedChecklistTableItemDeletionService.deleteCheckedItems(listItemId);
+        return getChecklistTable(listItemId);
     }
 }

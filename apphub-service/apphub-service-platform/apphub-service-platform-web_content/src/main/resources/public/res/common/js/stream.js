@@ -148,6 +148,11 @@ function Stream(a){
         return this;
     }
 
+    this.skip = function(shouldSkip){
+        array.splice(0, shouldSkip);
+        return this;
+    }
+
     this.sorted = function(comparator){
         array.sort(comparator);
         return this;
@@ -250,6 +255,26 @@ function MapStream(i){
 
     this.toMap = function(){
         return items;
+    }
+}
+
+function Sequence(numberOfItems, startNumber, step){
+    startNumber = startNumber || 0;
+    step = step || 1;
+
+    const array = [];
+    for(let i = 0; i < numberOfItems; i++){
+        array.push(startNumber + i * step);
+    }
+
+    this.map = function(mapper){
+        return new Stream(array)
+            .map(mapper);
+    }
+
+    this.peek = function(consumer){
+        return new Stream(array)
+            .peek(consumer);
     }
 }
 

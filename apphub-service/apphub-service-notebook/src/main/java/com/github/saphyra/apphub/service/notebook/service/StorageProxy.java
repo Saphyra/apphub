@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -36,6 +38,17 @@ public class StorageProxy {
     }
 
     public StoredFileResponse getFileMetadata(UUID storedFileId) {
-        return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        try {
+            return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        } catch (FeignException e) {
+            if (e.status() == HttpStatus.NOT_FOUND.value()) {
+                log.warn("StoredFile not found with id {}", storedFileId);
+                return StoredFileResponse.builder()
+                    .fileUploaded(false)
+                    .build();
+            }
+
+            throw e;
+        }
     }
 }

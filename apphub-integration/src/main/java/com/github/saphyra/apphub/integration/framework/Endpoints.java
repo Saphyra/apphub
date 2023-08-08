@@ -17,6 +17,9 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
     public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String COMMUNITY_PAGE = "/web/community";
+    public static final String NOTEBOOK_NEW_PAGE = "/web/notebook/new/{parent}";
+    public static final String NOTEBOOK_NEW_LIST_ITEM_PAGE = "/web/notebook/new/{listItemType}/"; //{parent}
+    public static final String NOTEBOOK_EDIT_LIST_ITEM_PAGE = "/web/notebook/edit";
 
     //Training
     public static final String TRAINING_HTML_PAGE = "/web/training/html/001_introduction";
@@ -88,7 +91,7 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_CHECKLIST_TABLE = "/api/notebook/checklist-table";
     public static final String NOTEBOOK_EDIT_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
     public static final String NOTEBOOK_GET_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
-    public static final String NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{listItemId}/{rowIndex}";
+    public static final String NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{rowId}/status";
     public static final String NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST = "/api/notebook/checklist/{listItemId}/checked";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}/checked";
@@ -96,6 +99,7 @@ public class Endpoints {
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
     public static final String NOTEBOOK_ARCHIVE_LIST_ITEM = "/api/notebook/item/{listItemId}/archive";
     public static final String NOTEBOOK_CREATE_ONLY_TITLE = "/api/notebook/only-title";
+    public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

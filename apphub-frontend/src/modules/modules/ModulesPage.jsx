@@ -12,7 +12,6 @@ import logout from "./controller/LogoutController";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

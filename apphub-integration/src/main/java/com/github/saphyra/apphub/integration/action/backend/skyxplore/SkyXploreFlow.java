@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
-import com.github.saphyra.apphub.integration.structure.skyxplore.Player;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberStatus;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;

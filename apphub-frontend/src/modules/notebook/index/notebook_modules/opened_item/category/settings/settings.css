@@ -1,0 +1,12 @@
+#notebook-settings {
+    text-align: center;
+    border-bottom: 2px ridge white;
+}
+
+#notebook-search {
+    width: calc(100% - 40px);
+}
+
+#notebook-toggle-display-settings-button.active {
+    border-color: red;
+}

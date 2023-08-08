@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ValidationUtilTest {
@@ -199,6 +201,86 @@ public class ValidationUtilTest {
     @Test
     public void contains() {
         ValidationUtil.contains("asd", List.of("asd"), FIELD);
+    }
+
+    @Test
+    void exactLengthTest_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.length(null, 3, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    void exactLengthTest_differentLength() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.length("d", 3, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 long");
+    }
+
+    @Test
+    void exactLengthTest() {
+        ValidationUtil.length("asd", 3, FIELD);
+    }
+
+    @Test
+    void atLeastInclusive_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(null, 2d, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    void atLeastInclusive_tooLow() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(2d, 2d, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+    }
+
+    @Test
+    void atLeastInclusive() {
+        ValidationUtil.atLeastInclusive(3d, 2d, FIELD);
+    }
+
+    @Test
+    void atLeastDouble_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(null, 2d, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    void atLeastDouble_tooLow() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(1d, 2d, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+    }
+
+    @Test
+    void atLeastDouble() {
+        ValidationUtil.atLeast(2d, 2d, FIELD);
+    }
+
+    @Test
+    void parse_null() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.parse(null, Function.identity(), FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+    }
+
+    @Test
+    void parse_failed() {
+        Throwable ex = catchThrowable(() -> ValidationUtil.parse("asd", o -> {
+            throw new RuntimeException();
+        }, FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "failed to parse");
+    }
+
+    @Test
+    void parse() {
+        Function<Object, Integer> parser = o -> ((String) o).length();
+
+        assertThat(ValidationUtil.parse("asd", parser, FIELD)).isEqualTo(3);
     }
 
     enum TestEnum {

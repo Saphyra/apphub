@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "New category - Notebook - Apphub",
+        "hu": "Új kategória - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New category",
+        "hu": "Új kategória"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "category-title": {
+        "en": "Title",
+        "hu": "Cím"
+    }
+}

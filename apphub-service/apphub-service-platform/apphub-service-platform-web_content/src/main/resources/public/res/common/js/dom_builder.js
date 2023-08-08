@@ -31,8 +31,20 @@
             return this;
         }
 
+        this.addClassIf = function(predicate, clazz){
+            if(predicate(node)){
+                node.classList.add(clazz);
+            }
+            return this;
+        }
+
         this.attr = function(attribute, value){
             node[attribute] = value;
+            return this;
+        }
+
+        this.style = function(attribute, value){
+            node.style[attribute] = value;
             return this;
         }
 
@@ -48,6 +60,11 @@
 
         this.onclick = function(callback){
             node.onclick = callback;
+            return this;
+        }
+
+        this.onchange = function(callbackSupplier){
+            node.onchange = callbackSupplier(node);
             return this;
         }
 
@@ -68,11 +85,15 @@
         }
 
         this.appendChildren = function(childrenFactory){
-            const children = (typeof childFactory == "function") ? childrenFactory() : childrenFactory;
+            let children = (typeof childrenFactory == "function") ? childrenFactory() : childrenFactory;
 
-            if(!children instanceof Stream && !Array.isArray(children)){
-                console.log(children);
-                throwException("IllegalArgument", "Children is not a collection.");
+            if(!(children instanceof Stream) && !Array.isArray(children)){
+
+                if(!hasValue(children)){
+                    children = [];
+                }else{
+                    children = [children];
+                }
             }
 
             new ((children instanceof Stream) ? children : new Stream(children))
@@ -84,6 +105,20 @@
         this.appendTo = function(parent){
             parent.appendChild(node);
             return this;
+        }
+
+        this.type = function(type){
+            node.type = type;
+            return this;
+        }
+
+        this.value = function(value){
+            node.value = value;
+            return this;
+        }
+
+        this.getValue = function(){
+            return node.value;
         }
     }
 

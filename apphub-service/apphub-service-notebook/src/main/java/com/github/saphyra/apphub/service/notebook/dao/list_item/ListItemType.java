@@ -9,5 +9,6 @@ public enum ListItemType {
     LINK,
     ONLY_TITLE,
     IMAGE,
-    FILE
+    FILE,
+    CUSTOM_TABLE
 }

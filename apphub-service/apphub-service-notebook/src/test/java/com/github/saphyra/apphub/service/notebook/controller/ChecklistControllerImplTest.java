@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.checklist.CheckedChecklistItemDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemsOrderService;
@@ -43,7 +43,7 @@ public class ChecklistControllerImplTest {
     private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
 
     @Mock
-    private CheckedChecklistItemDeletionService checkedChecklistItemDeletionService;
+    private ChecklistItemDeletionService checklistItemDeletionService;
 
     @Mock
     private ChecklistItemsOrderService checklistItemsOrderService;
@@ -55,7 +55,7 @@ public class ChecklistControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private CreateChecklistItemRequest createChecklistItemRequest;
+    private CreateChecklistRequest createChecklistRequest;
 
     @Mock
     private ChecklistResponse checklistResponse;
@@ -65,26 +65,30 @@ public class ChecklistControllerImplTest {
 
     @Test
     public void createChecklistItem() {
-        given(checklistCreationService.create(createChecklistItemRequest, USER_ID)).willReturn(LIST_ITEM_ID);
+        given(checklistCreationService.create(createChecklistRequest, USER_ID)).willReturn(LIST_ITEM_ID);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
-        OneParamResponse<UUID> result = underTest.createChecklistItem(createChecklistItemRequest, accessTokenHeader);
+        OneParamResponse<UUID> result = underTest.createChecklist(createChecklistRequest, accessTokenHeader);
 
         assertThat(result.getValue()).isEqualTo(LIST_ITEM_ID);
     }
 
     @Test
     public void editChecklistItem() {
-        underTest.editChecklistItem(editChecklistItemRequest, LIST_ITEM_ID);
+        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        ChecklistResponse result = underTest.editChecklist(editChecklistItemRequest, LIST_ITEM_ID);
 
         verify(editChecklistItemService).edit(editChecklistItemRequest, LIST_ITEM_ID);
+
+        assertThat(result).isEqualTo(checklistResponse);
     }
 
     @Test
     public void getChecklistItem() {
         given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
 
-        ChecklistResponse result = underTest.getChecklistItem(LIST_ITEM_ID);
+        ChecklistResponse result = underTest.getChecklist(LIST_ITEM_ID);
 
         assertThat(result).isEqualTo(checklistResponse);
     }
@@ -98,15 +102,30 @@ public class ChecklistControllerImplTest {
 
     @Test
     public void deleteCheckedItems() {
-        underTest.deleteCheckedItems(LIST_ITEM_ID);
+        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
 
-        verify(checkedChecklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
+        ChecklistResponse result = underTest.deleteCheckedItems(LIST_ITEM_ID);
+
+        verify(checklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
+
+        assertThat(result).isEqualTo(checklistResponse);
     }
 
     @Test
     public void orderItems() {
-        underTest.orderItems(LIST_ITEM_ID);
+        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        ChecklistResponse result = underTest.orderItems(LIST_ITEM_ID);
 
         verify(checklistItemsOrderService).orderChecklistItems(LIST_ITEM_ID);
+
+        assertThat(result).isEqualTo(checklistResponse);
+    }
+
+    @Test
+    void deleteChecklistItem() {
+        underTest.deleteChecklistItem(CHECKLIST_ITEM_ID, accessTokenHeader);
+
+        verify(checklistItemDeletionService).delete(CHECKLIST_ITEM_ID);
     }
 }

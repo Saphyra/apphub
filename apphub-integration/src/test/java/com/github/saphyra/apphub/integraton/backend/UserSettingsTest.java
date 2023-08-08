@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.SetUserSettingsRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -27,7 +27,7 @@ public class UserSettingsTest extends BackEndTest {
         //Query - Category not found
         Response query_categoryNotFoundResponse = UserSettingsActions.getQueryUserSettingsResponse(language, accessTokenId, "asd");
 
-        ResponseValidator.verifyErrorResponse(language, query_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+        ResponseValidator.verifyErrorResponse(query_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
 
         //Query - Defaults
         Map<String, String> settings = UserSettingsActions.getUserSettings(language, accessTokenId, Constants.USER_SETTING_CATEGORY_NOTEBOOK);
@@ -43,7 +43,7 @@ public class UserSettingsTest extends BackEndTest {
 
         Response update_blankKeyResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, blankKeyRequest);
 
-        ResponseValidator.verifyInvalidParam(language, update_blankKeyResponse, "key", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(update_blankKeyResponse, "key", "must not be null or blank");
 
         //Update - Category not found
         SetUserSettingsRequest categoryNotFoundRequest = SetUserSettingsRequest.builder()
@@ -54,7 +54,7 @@ public class UserSettingsTest extends BackEndTest {
 
         Response update_categoryNotFoundResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, categoryNotFoundRequest);
 
-        ResponseValidator.verifyErrorResponse(language, update_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+        ResponseValidator.verifyErrorResponse(update_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
 
         //Update - Key not supported
         SetUserSettingsRequest unsupportedKeyRequest = SetUserSettingsRequest.builder()
@@ -65,7 +65,7 @@ public class UserSettingsTest extends BackEndTest {
 
         Response update_keyNotSupportedResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, unsupportedKeyRequest);
 
-        ResponseValidator.verifyInvalidParam(language, update_keyNotSupportedResponse, "key", "not supported");
+        ResponseValidator.verifyInvalidParam(update_keyNotSupportedResponse, "key", "not supported");
 
         //Update
         SetUserSettingsRequest setUserSettingsRequest = SetUserSettingsRequest.builder()
@@ -74,8 +74,8 @@ public class UserSettingsTest extends BackEndTest {
             .value(String.valueOf(false))
             .build();
 
-        UserSettingsActions.setUserSetting(language, accessTokenId, setUserSettingsRequest);
+        Map<String, String> modifiedSettings = UserSettingsActions.setUserSetting(language, accessTokenId, setUserSettingsRequest);
 
-        assertThat(UserSettingsActions.getUserSettings(language, accessTokenId, Constants.USER_SETTING_CATEGORY_NOTEBOOK)).containsEntry(Constants.USER_SETTING_KEY_SHOW_ARCHIVED, String.valueOf(false));
+        assertThat(modifiedSettings).containsEntry(Constants.USER_SETTING_KEY_SHOW_ARCHIVED, String.valueOf(false));
     }
 }

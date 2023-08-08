@@ -97,6 +97,11 @@ window.Mapping = new function(){
         NOTEBOOK_MOVE_LIST_ITEM: new Endpoint("/api/notebook/{listItemId}/move", HttpMethod.POST),
         NOTEBOOK_CREATE_IMAGE: new Endpoint("/api/notebook/image", HttpMethod.PUT),
         NOTEBOOK_CREATE_FILE: new Endpoint("/api/notebook/file", HttpMethod.PUT),
+        NOTEBOOK_CREATE_CUSTOM_TABLE: new Endpoint("/api/notebook/custom-table", HttpMethod.PUT),
+        NOTEBOOK_EDIT_CUSTOM_TABLE: new Endpoint("/api/notebook/custom-table/{listItemId}", HttpMethod.POST),
+        NOTEBOOK_GET_CUSTOM_TABLE: new Endpoint("/api/notebook/custom-table/{listItemId}", HttpMethod.GET),
+        NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS: new Endpoint("/api/notebook/custom-table/{listItemId}/{rowIndex}", HttpMethod.POST),
+        NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE: new Endpoint("/api/notebook/custom-table/{listItemId}/checked", HttpMethod.DELETE),
 
         //Utils
         UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),

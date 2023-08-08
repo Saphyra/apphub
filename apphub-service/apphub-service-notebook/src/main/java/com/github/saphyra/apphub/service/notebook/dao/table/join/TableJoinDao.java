@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -28,5 +29,13 @@ public class TableJoinDao extends AbstractDao<TableJoinEntity, TableJoin, String
 
     public List<TableJoin> getByParent(UUID parent) {
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
+    }
+
+    public void deleteById(UUID tableJoinId) {
+        deleteById(uuidConverter.convertDomain(tableJoinId));
+    }
+
+    public Optional<TableJoin> findById(UUID tableJoinId) {
+        return findById(uuidConverter.convertDomain(tableJoinId));
     }
 }

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.custom_table.CustomTableDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class ListItemDeletionService {
     private final TableDeletionService tableDeletionService;
     private final ChecklistTableDeletionService checklistTableDeletionService;
     private final FileDeletionService fileDeletionService;
+    private final CustomTableDeletionService customTableDeletionService;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -35,34 +37,18 @@ public class ListItemDeletionService {
 
     private void deleteChild(ListItem listItem, UUID userId) {
         switch (listItem.getType()) {
-            case CATEGORY:
-                deleteChildren(listItem, userId);
-                break;
-            case CHECKLIST:
-                checklistItemDao.getByParent(listItem.getListItemId())
-                    .stream()
-                    .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getChecklistItemId()))
-                    .forEach(checklistItemDao::delete);
-                break;
-            case TEXT:
-            case LINK:
-                contentDao.deleteByParent(listItem.getListItemId());
-                break;
-            case TABLE:
-                tableDeletionService.deleteByListItemId(listItem.getListItemId());
-                break;
-            case CHECKLIST_TABLE:
-                checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
-                break;
-            case ONLY_TITLE:
-                log.info("OnlyTitle is handled by default.");
-                break;
-            case IMAGE:
-            case FILE:
-                fileDeletionService.deleteImage(listItem.getListItemId());
-                break;
-            default:
-                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
+            case CATEGORY -> deleteChildren(listItem, userId);
+            case CHECKLIST -> checklistItemDao.getByParent(listItem.getListItemId())
+                .stream()
+                .peek(checklistItem -> contentDao.deleteByParent(checklistItem.getChecklistItemId()))
+                .forEach(checklistItemDao::delete);
+            case TEXT, LINK -> contentDao.deleteByParent(listItem.getListItemId());
+            case TABLE -> tableDeletionService.deleteByListItemId(listItem.getListItemId());
+            case CHECKLIST_TABLE -> checklistTableDeletionService.deleteByListItemId(listItem.getListItemId());
+            case ONLY_TITLE -> log.info("OnlyTitle is handled by default.");
+            case IMAGE, FILE -> fileDeletionService.deleteFile(listItem.getListItemId());
+            case CUSTOM_TABLE -> customTableDeletionService.delete(listItem);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }
 
         listItemDao.delete(listItem);

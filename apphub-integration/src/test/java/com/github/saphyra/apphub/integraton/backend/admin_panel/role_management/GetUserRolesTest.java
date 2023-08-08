@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.RoleMana
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.user.UserRoleResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.UserRoleResponse;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

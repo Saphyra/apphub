@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.FriendshipResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SentFriendRequestResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

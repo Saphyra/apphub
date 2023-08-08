@@ -17,9 +17,9 @@ import java.util.UUID;
 public class ChecklistTableStatusUpdateService {
     private final ChecklistTableRowDao checklistTableRowDao;
 
-    public void updateStatus(UUID listItemId, Integer rowIndex, Boolean status) {
-        ChecklistTableRow row = checklistTableRowDao.findByParentAndRowIndex(listItemId, rowIndex)
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ChecklistTableRow not found with id " + listItemId + " and rowIndex " + rowIndex));
+    public void updateStatus(UUID rowId, Boolean status) {
+        ChecklistTableRow row = checklistTableRowDao.findById(rowId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ChecklistTableRow not found with rowId " + rowId));
         row.setChecked(status);
         checklistTableRowDao.save(row);
     }

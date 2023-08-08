@@ -1,35 +1,35 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.TextActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewTextActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextCrudTest extends SeleniumTest {
-    private static final String CATEGORY_TITLE_1 = "category-title-1";
-    private static final String CATEGORY_TITLE_2 = "category-title-2";
-    private static final String TEXT_TITLE = "text-title";
-    private static final String TEXT_CONTENT = "text-content";
-    private static final String NEW_TEXT_TITLE = "new-text-title";
-    private static final String NEW_TEXT_CONTENT = "new-text-content";
+    private static final String TEXT_TITLE = "text";
+    private static final String TEXT_CONTENT = "content";
+    private static final String NEW_TEXT_TITLE = "new-text";
+    private static final String NEW_TEXT_CONTENT = "new-content";
 
-    @Test
+    @Test(groups = "notebook")
     public void textCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -37,86 +37,71 @@ public class TextCrudTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_1);
-        CategoryActions.createCategory(driver, CATEGORY_TITLE_2);
 
-        //Create - Empty title
-        TextActions.openCreateTextWindow(driver);
-        TextActions.submitCreateTextForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(TextActions.isCreateTextWindowDisplayed(driver)).isTrue();
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.TEXT);
+
+        //Create - Empty Title
+        NewTextActions.fillTitle(driver, " ");
+        NewTextActions.submit(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Create
-        TextActions.fillNewTextTitle(driver, TEXT_TITLE);
-        TextActions.fillNewTextContent(driver, TEXT_CONTENT);
-        TextActions.selectCategoryForNewText(driver, CATEGORY_TITLE_1);
-        TextActions.submitCreateTextForm(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_1);
-        List<ListItemDetailsItem> detailedListItems = DetailedListActions.getDetailedListItems(driver);
-        assertThat(detailedListItems).hasSize(1);
-        ListItemDetailsItem textItem = detailedListItems.get(0);
-        assertThat(textItem.getTitle()).isEqualTo(TEXT_TITLE);
-        assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT);
+        NewTextActions.fillTitle(driver, TEXT_TITLE);
+        NewTextActions.fillContent(driver, TEXT_CONTENT);
 
-        NotificationUtil.clearNotifications(driver);
+        NewTextActions.submit(driver);
 
-        //Edit - Empty title
-        TextActions.openText(driver, TEXT_TITLE);
-        TextActions.enableEditing(driver);
-        TextActions.editTitle(driver, "");
-        TextActions.saveChanges(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(TextActions.isEditingEnabled(driver)).isTrue();
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
+
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Text not found"))
+            .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-text"))).isPresent());
+
+        assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+        assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+
+        //Edit - Empty Title
+        ViewTextActions.enableEditing(driver);
+
+        ViewTextActions.setTitle(driver, " ");
+        ViewTextActions.saveChanges(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Edit - Discard
-        TextActions.editTitle(driver, NEW_TEXT_TITLE);
-        TextActions.editContent(driver, NEW_TEXT_CONTENT);
-        TextActions.discardChanges(driver);
-        AwaitilityWrapper.createDefault()
-            .until(() -> !TextActions.isEditingEnabled(driver))
-            .assertTrue();
-        assertThat(TextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
-        assertThat(TextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+        ViewTextActions.setTitle(driver, NEW_TEXT_TITLE);
+        ViewTextActions.setContent(driver, NEW_TEXT_CONTENT);
+
+        ViewTextActions.discardChanges(driver);
+
+        assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+        assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
 
         //Edit
-        TextActions.enableEditing(driver);
-        TextActions.editTitle(driver, NEW_TEXT_TITLE);
-        TextActions.editContent(driver, NEW_TEXT_CONTENT);
-        TextActions.saveChanges(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Szöveg elmentve.");
-        AwaitilityWrapper.createDefault()
-            .until(() -> !TextActions.isEditingEnabled(driver))
-            .assertTrue("Editing remained enabled.");
-        TextActions.closeView(driver);
-        TextActions.openText(driver, NEW_TEXT_TITLE);
-        assertThat(TextActions.getTitle(driver)).isEqualTo(NEW_TEXT_TITLE);
-        assertThat(TextActions.getContent(driver)).isEqualTo(NEW_TEXT_CONTENT);
+        ViewTextActions.enableEditing(driver);
+        ViewTextActions.setTitle(driver, NEW_TEXT_TITLE);
+        ViewTextActions.setContent(driver, NEW_TEXT_CONTENT);
 
-        NotificationUtil.clearNotifications(driver);
-        TextActions.closeView(driver);
+        ViewTextActions.saveChanges(driver);
 
-        //Edit as listItem - Empty title
-        DetailedListActions.findDetailedItem(driver, NEW_TEXT_TITLE)
-            .edit(driver);
-        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-
-        //Edit as listItem
-        NotebookPageActions.fillEditListItemDialog(driver, TEXT_TITLE, null, 1, CATEGORY_TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-        DetailedListActions.up(driver);
-        CategoryActions.openCategory(driver, CATEGORY_TITLE_2);
-        DetailedListActions.findDetailedItem(driver, TEXT_TITLE);
+        assertThat(ViewTextActions.getContent(driver)).isEqualTo(NEW_TEXT_CONTENT);
+        assertThat(ViewTextActions.getTitle(driver)).isEqualTo(NEW_TEXT_TITLE);
 
         //Delete
-        DetailedListActions.findDetailedItem(driver, TEXT_TITLE)
+        ViewTextActions.close(driver);
+
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, NEW_TEXT_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Text with the new title not found"))
             .delete(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem törölve.");
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+
+        driver.findElement(By.id("notebook-content-category-content-delete-list-item-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.getListItems(driver).isEmpty())
+            .assertTrue("Text is not deleted.");
     }
 }

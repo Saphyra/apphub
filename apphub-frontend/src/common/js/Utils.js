@@ -1,3 +1,5 @@
+import Constants from "./Constants";
+
 const getCookie = (key) => {
     const cookies = document.cookie.split('; ');
     for (let cIndex in cookies) {
@@ -35,12 +37,56 @@ const getQueryParam = (paramName) => {
     return new URLSearchParams(window.location.search).get(paramName);
 }
 
+const isBlank = (str) => {
+    return "&nbsp;" == str || (!str || /^\s*$/.test(str));
+}
+
+const generateRandomId = () => {
+    var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
+const hasValue = (value) =>{
+    return value !== null && value !== undefined;
+}
+
+const formatFileSize =(bytes) =>{
+    if(bytes > Constants.GIGABYTES){
+        return limitDecimals(bytes / Constants.GIGABYTES, 1) + " GB";
+    }
+
+    if(bytes > Constants.MEGABYTES){
+        return limitDecimals(bytes / Constants.MEGABYTES, 1) + " MB";
+    }
+
+    if(bytes > Constants.KILOBYTES){
+        return limitDecimals(bytes / Constants.KILOBYTES, 1) + " KB";
+    }
+
+    return bytes + " B";
+
+    function limitDecimals(value, limit){
+        if(value % 1 == 0){
+            return value;
+        }
+
+        return parseFloat(value)
+            .toFixed(limit);
+    }
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
     getBrowserLanguage: getBrowserLanguage,
     throwException: throwException,
     getQueryParam: getQueryParam,
+    isBlank: isBlank,
+    generateRandomId: generateRandomId,
+    hasValue: hasValue,
+    formatFileSize: formatFileSize,
 }
 
 export default Utils;

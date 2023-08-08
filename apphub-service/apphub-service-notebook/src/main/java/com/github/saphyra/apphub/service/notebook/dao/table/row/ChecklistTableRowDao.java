@@ -25,19 +25,15 @@ public class ChecklistTableRowDao extends AbstractDao<ChecklistTableRowEntity, C
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
-    public Optional<ChecklistTableRow> findByParentAndRowIndex(UUID parent, int rowIndex) {
-        return converter.convertEntity(repository.findByParentAndRowIndex(uuidConverter.convertDomain(parent), rowIndex));
-    }
-
     public List<ChecklistTableRow> getByParent(UUID parent) {
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
-    public void deleteByParentAndRowIndexGreaterThanEqual(UUID parent, int rowIndex) {
-        repository.deleteByParentAndRowIndexGreaterThanEqual(uuidConverter.convertDomain(parent), rowIndex);
-    }
-
     public void deleteByParent(UUID listItemId) {
         repository.deleteByParent(uuidConverter.convertDomain(listItemId));
+    }
+
+    public Optional<ChecklistTableRow> findById(UUID rowId) {
+        return findById(uuidConverter.convertDomain(rowId));
     }
 }

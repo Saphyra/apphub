@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.service.notebook.service.ListItemRequestValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table.RowValidator;
 import org.junit.jupiter.api.Test;

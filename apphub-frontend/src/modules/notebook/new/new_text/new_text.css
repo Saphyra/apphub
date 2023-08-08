@@ -1,0 +1,15 @@
+#notebook-new-text-main{
+    display: flex;
+    flex-direction: column;
+}
+
+#notebook-new-text-content-wrapper{
+    flex-grow: 1;
+}
+
+#notebook-new-text-content{
+    width: 95%;
+    height: calc(100% - 20px);
+    margin: 10px auto;
+    display: block;
+}

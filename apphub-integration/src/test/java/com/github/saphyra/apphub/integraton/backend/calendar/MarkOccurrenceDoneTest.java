@@ -7,12 +7,12 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceA
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.calendar.CalendarResponse;
-import com.github.saphyra.apphub.integration.structure.calendar.CreateEventRequest;
-import com.github.saphyra.apphub.integration.structure.calendar.OccurrenceResponse;
-import com.github.saphyra.apphub.integration.structure.calendar.ReferenceDate;
-import com.github.saphyra.apphub.integration.structure.calendar.RepetitionType;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.ReferenceDate;
+import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

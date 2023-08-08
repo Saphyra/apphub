@@ -6,11 +6,11 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.LanguageResponse;
-import com.github.saphyra.apphub.integration.structure.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.user.ChangeEmailRequest;
-import com.github.saphyra.apphub.integration.structure.user.ChangePasswordRequest;
-import com.github.saphyra.apphub.integration.structure.user.ChangeUsernameRequest;
+import com.github.saphyra.apphub.integration.structure.api.LanguageResponse;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.ChangeEmailRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.ChangePasswordRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.ChangeUsernameRequest;
 import io.restassured.response.Response;
 
 import java.util.List;

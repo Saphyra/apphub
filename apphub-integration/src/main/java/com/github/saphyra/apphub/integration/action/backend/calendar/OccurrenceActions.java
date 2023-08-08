@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.calendar.CalendarResponse;
-import com.github.saphyra.apphub.integration.structure.calendar.EditOccurrenceRequest;
-import com.github.saphyra.apphub.integration.structure.calendar.ReferenceDate;
+import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.EditOccurrenceRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.ReferenceDate;
 import io.restassured.response.Response;
 
 import java.util.List;

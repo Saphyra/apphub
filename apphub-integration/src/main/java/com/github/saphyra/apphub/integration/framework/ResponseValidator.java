@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.framework;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.ErrorResponse;
+import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import io.restassured.response.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,5 +81,12 @@ public class ResponseValidator {
 
     private static void verifyParam(ErrorResponse errorResponse, String field, String value) {
         assertThat(errorResponse.getParams()).containsEntry(field, value);
+    }
+
+    public static void verifyListItemNotFound(Response edit_columnHeadNotFoundResponse) {
+        assertThat(edit_columnHeadNotFoundResponse.getStatusCode()).isEqualTo(404);
+
+        ErrorResponse errorResponse = edit_columnHeadNotFoundResponse.getBody().as(ErrorResponse.class);
+        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
     }
 }

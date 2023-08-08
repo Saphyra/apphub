@@ -21,8 +21,8 @@ import Members from "./lobby_page/Members";
 import Friends from "./lobby_page/Friends";
 import Constants from "../../../common/js/Constants";
 import Spinner from "../../../common/component/Spinner";
-import ConfirmationDialog from "../../../common/component/ConfirmationDialog";
 import Stream from "../../../common/js/collection/Stream";
+import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

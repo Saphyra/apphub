@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +24,7 @@ class TableJoinEntity {
     private String parent;
     private Integer rowIndex;
     private Integer columnIndex;
+
+    @Enumerated(EnumType.STRING)
+    private ColumnType columnType;
 }

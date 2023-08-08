@@ -2,6 +2,7 @@ import MapStream from "../collection/MapStream";
 import ValidatedField from "./ValidatedField";
 import Constants from "../Constants";
 import Utils from "../Utils";
+import ValidationResult from "./ValidationResult"
 
 const validate = (fields, localizationHandler) => {
     return new MapStream(fields)
@@ -90,13 +91,6 @@ const validateGameName = (gameName, localizationHandler) => {
     }
 
     return new ValidationResult();
-}
-
-const ValidationResult = class {
-    constructor(valid = true, message) {
-        this.valid = valid;
-        this.message = message;
-    }
 }
 
 export default validate;

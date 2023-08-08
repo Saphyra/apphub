@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.admin_panel.disabled_roles;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.structure.admin_panel.DisabledRole;
+import com.github.saphyra.apphub.integration.structure.api.admin_panel.DisabledRole;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;

@@ -141,10 +141,11 @@ public class Endpoints {
     public static final String NOTEBOOK_GET_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_EDIT_TEXT = "/api/notebook/text/{listItemId}";
     public static final String NOTEBOOK_CREATE_LINK = "/api/notebook/link";
-    public static final String NOTEBOOK_CREATE_CHECKLIST_ITEM = "/api/notebook/checklist";
-    public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
-    public static final String NOTEBOOK_GET_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
+    public static final String NOTEBOOK_CREATE_CHECKLIST = "/api/notebook/checklist";
+    public static final String NOTEBOOK_EDIT_CHECKLIST = "/api/notebook/checklist/{listItemId}";
+    public static final String NOTEBOOK_GET_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
+    public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_GET_TABLE = "/api/notebook/table/{listItemId}";
@@ -152,9 +153,9 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_CHECKLIST_TABLE = "/api/notebook/checklist-table";
     public static final String NOTEBOOK_EDIT_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
     public static final String NOTEBOOK_GET_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
-    public static final String NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{listItemId}/{rowIndex}";
+    public static final String NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{rowId}/status";
     public static final String NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
-    public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST = "/api/notebook/checklist/{listItemId}/checked";
+    public static final String NOTEBOOK_CHECKLIST_DELETE_CHECKED = "/api/notebook/checklist/{listItemId}/checked";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}/checked";
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
@@ -163,6 +164,12 @@ public class Endpoints {
     public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
     public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
     public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
+    public static final String NOTEBOOK_CREATE_CUSTOM_TABLE = "/api/notebook/custom-table";
+    public static final String NOTEBOOK_EDIT_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
+    public static final String NOTEBOOK_GET_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
+    public static final String NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS = "/api/notebook/custom-table/{rowId}";
+    public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}/checked";
+    public static final String NOTEBOOK_GET_LIST_ITEM = "/api/notebook/list-item/{listItemId}";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

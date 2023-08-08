@@ -15,13 +15,13 @@ import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.localization.LocalizationKey;
 import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.ErrorResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.PlanetLocationResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.Player;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.structure.skyxplore.StorageSettingsResponse;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingModel;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingsResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
@@ -141,7 +141,7 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
-    @Test(groups = "skyxplore", priority = -1)
+    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

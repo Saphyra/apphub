@@ -1,30 +1,36 @@
 package com.github.saphyra.apphub.integraton.frontend.notebook;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.CategoryActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.DetailedListActions;
-import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNewListItemActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewCategoryActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.notebook.CategoryTreeElement;
-import com.github.saphyra.apphub.integration.structure.notebook.ListItemDetailsItem;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.notebook.CategoryTreeLeaf;
+import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryCrudTest extends SeleniumTest {
-    private static final String TITLE_1 = "title-1";
-    private static final String TITLE_2 = "title-2";
-    private static final String TITLE_3 = "title-3";
-    private static final String TITLE_4 = "title-4";
+    private static final String CATEGORY_1_TITLE = "category-1";
+    private static final String CATEGORY_2_TITLE = "category-2";
+    private static final String NEW_CATEGORY_TITLE = "new-category-title";
 
-    @Test
+    @Test(groups = "notebook")
     public void categoryCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -33,52 +39,88 @@ public class CategoryCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        //Create - Empty title
-        CategoryActions.openCreateCategoryWindow(driver);
-        CategoryActions.submitCreateCategoryForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        assertThat(CategoryActions.isCreateCategoryWindowDisplayed(driver)).isTrue();
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItem(driver, ListItemType.CATEGORY);
+
+        //Create - Blank title
+        NewCategoryActions.fillTitle(driver, " ");
+        NewCategoryActions.submit(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
 
         //Create
-        CategoryActions.fillNewCategoryTitle(driver, TITLE_1);
-        CategoryActions.submitCreateCategoryForm(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Kategória elmentve.");
-        assertThat(CategoryActions.isCreateCategoryWindowDisplayed(driver)).isFalse();
-        AwaitilityWrapper.createDefault()
-            .until(() -> CategoryActions.getCategoryTreeRoot(driver).getChildren().stream().anyMatch(categoryTreeElement -> categoryTreeElement.getTitle().equals(TITLE_1)))
-            .assertTrue();
-        AwaitilityWrapper.createDefault()
-            .until(() -> DetailedListActions.getDetailedListItems(driver).stream().anyMatch(listItemDetailsItem -> listItemDetailsItem.getTitle().equals(TITLE_1)))
-            .assertTrue();
+        NewCategoryActions.fillTitle(driver, CATEGORY_1_TITLE);
+        NewCategoryActions.submit(driver);
+
+        NotebookUtils.waitForNotebookPageOpened(driver);
+
+        assertThat(NotebookActions.getListItems(driver))
+            .hasSize(1)
+            .extracting(ListItem::getTitle)
+            .containsExactly(CATEGORY_1_TITLE);
+
+        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1_TITLE);
 
         //Edit - Empty title
-        ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_1);
-        detailsItem.edit(driver);
-        NotebookPageActions.fillEditListItemDialog(driver, "", null, 0);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
-        DetailedListActions.closeEditListItemWindow(driver);
+        NotebookUtils.newCategory(driver, CATEGORY_2_TITLE);
 
-        NotificationUtil.clearNotifications(driver);
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_1_TITLE)
+            .edit(driver);
+
+        EditListItemActions.fillTitle(driver, " ");
+        EditListItemActions.submitForm(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+
         //Edit
-        CategoryActions.createCategory(driver, TITLE_2);
-        CategoryActions.createCategory(driver, TITLE_3, TITLE_1);
+        EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
+        ParentSelectorActions.selectParent(driver, CATEGORY_2_TITLE);
+        EditListItemActions.submitForm(driver);
 
-        CategoryActions.openCategory(driver, TITLE_1);
-        detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
-        detailsItem.edit(driver);
-        NotebookPageActions.fillEditListItemDialog(driver, TITLE_4, null, 1, TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-        DetailedListActions.up(driver);
-        CategoryActions.openCategory(driver, TITLE_2);
-        DetailedListActions.findDetailedItem(driver, TITLE_4);
+        NotebookUtils.waitForNotebookPageOpened(driver);
+
+        List<ListItem> listItems = NotebookActions.getListItems(driver);
+        assertThat(listItems).hasSize(1);
+        listItems.get(0)
+            .open();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE).isPresent())
+            .assertTrue("Category not opened");
+
+        CategoryTreeLeaf leaf = NotebookActions.getCategoryTree(driver);
+        assertThat(leaf.getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_2_TITLE);
+        CategoryTreeLeaf child = leaf.getChildren()
+            .get(0);
+        child.open();
+
+        assertThat(child.getChildren()).hasSize(1)
+            .extracting(CategoryTreeLeaf::getTitle)
+            .containsExactly(NEW_CATEGORY_TITLE);
+
+        //Delete category
+        NotebookActions.up(driver);
+
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_2_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Category not found with name " + CATEGORY_2_TITLE))
+            .delete(driver);
+
+        NotebookActions.cancelListItemDeletion(driver);
+
+        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_2_TITLE)
+            .delete(driver);
+
+        NotebookActions.confirmListItemDeletion(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.getListItems(driver).isEmpty())
+            .assertTrue("ListItem is not deleted.");
+
+        assertThat(NotebookActions.getCategoryTree(driver).hasChildren()).isFalse();
     }
 
-    @Test
-    public void deleteCategory() {
+    @Test(groups = "notebook")
+    public void categoryTreeTest() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -86,51 +128,49 @@ public class CategoryCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
-        CategoryActions.createCategory(driver, TITLE_1);
-        CategoryActions.createCategory(driver, TITLE_2, TITLE_1);
-        CategoryActions.createCategory(driver, TITLE_3, TITLE_1, TITLE_2);
+        NotebookUtils.newCategory(driver, CATEGORY_1_TITLE);
+        NotebookUtils.newCategory(driver, CATEGORY_2_TITLE, CATEGORY_1_TITLE);
 
-        CategoryActions.openCategory(driver, TITLE_1);
-        CategoryActions.deleteCategory(driver, TITLE_2);
-
-        NotificationUtil.verifySuccessNotification(driver, "Kategória törölve.");
-
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
-
-        CategoryTreeElement root = CategoryActions.getCategoryTreeRoot(driver);
+        //Check initial state
+        CategoryTreeLeaf root = NotebookActions.getCategoryTree(driver);
+        assertThat(root.hasChildren()).isTrue();
+        assertThat(root.isOpened()).isTrue();
         assertThat(root.getChildren()).hasSize(1);
-        assertThat(root.getChildren().get(0).getChildren()).isEmpty();
-    }
 
-    @Test
-    public void editCategory() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
+        CategoryTreeLeaf child = root.getChildren()
+            .get(0);
+        assertThat(child.getTitle()).isEqualTo(CATEGORY_1_TITLE);
+        assertThat(child.hasChildren()).isTrue();
+        assertThat(child.isOpened()).isFalse();
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        //Open child
+        child.open();
+        assertThat(child.isOpened()).isTrue();
+        assertThat(child.getChildren()).hasSize(1);
 
-        CategoryActions.createCategory(driver, TITLE_1);
-        CategoryActions.createCategory(driver, TITLE_2);
-        CategoryActions.createCategory(driver, TITLE_3, TITLE_1);
+        CategoryTreeLeaf grandchild = child.getChildren()
+            .get(0);
+        assertThat(grandchild.hasChildren()).isFalse();
 
-        CategoryActions.openCategory(driver, TITLE_1);
+        //Open categories
+        grandchild.openCategory(driver);
 
-        ListItemDetailsItem detailsItem = DetailedListActions.findDetailedItem(driver, TITLE_3);
-        detailsItem.edit(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.getListItems(driver).isEmpty())
+            .assertTrue("Category content is not loaded.");
 
-        NotebookPageActions.fillEditListItemDialog(driver, TITLE_4, null, 1, TITLE_2);
-        NotebookPageActions.submitEditListItemDialog(driver);
+        child.openCategory(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_2_TITLE).isPresent())
+            .assertTrue("Category content is not loaded.");
 
-        NotificationUtil.verifySuccessNotification(driver, "Elem elmentve.");
-        NotebookPageActions.verifyEditListItemDialogClosed(driver);
+        root.openCategory(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_1_TITLE).isPresent())
+            .assertTrue("Category content is not loaded.");
 
-        assertThat(DetailedListActions.getDetailedListItems(driver)).isEmpty();
+        root.close();
 
-        DetailedListActions.up(driver);
-        CategoryActions.openCategory(driver, TITLE_2);
-
-        DetailedListActions.findDetailedItem(driver, TITLE_4);
+        assertThat(root.isOpened()).isFalse();
     }
 }

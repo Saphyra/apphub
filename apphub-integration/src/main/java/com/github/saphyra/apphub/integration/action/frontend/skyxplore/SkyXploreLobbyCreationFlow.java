@@ -12,17 +12,16 @@ import org.openqa.selenium.WebDriver;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @Slf4j
 public class SkyXploreLobbyCreationFlow {
     @SafeVarargs
     public static void setUpLobbyWithMembers(String gameName, WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... members) {
         log.debug("Setting up lobby...");
 
-        boolean allInMainMenu = Stream.concat(Stream.of(hostDriver), Arrays.stream(members).map(BiWrapper::getEntity1))
-            .allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE));
-        assertThat(allInMainMenu).isTrue();
+        Stream<WebDriver> players = Stream.concat(Stream.of(hostDriver), Arrays.stream(members).map(BiWrapper::getEntity1));
+        AwaitilityWrapper.createDefault()
+            .until(() -> players.allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)))
+            .assertTrue("Not all players loaded the MainMenu page.");
 
         Arrays.stream(members)
             .forEach(biWrapper -> SkyXploreFriendshipActions.setUpFriendship(hostDriver, biWrapper.getEntity1(), hostName, biWrapper.getEntity2()));

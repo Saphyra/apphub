@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
+import com.github.saphyra.apphub.api.notebook.model.response.TableColumnResponse;
 import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
@@ -7,8 +8,8 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableColumnResponseProvider;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,14 +28,10 @@ public class TableQueryServiceTest {
     private static final String TITLE = "title";
     private static final UUID TABLE_HEAD_ID = UUID.randomUUID();
     private static final String COLUMN_NAME = "column-name";
-    private static final UUID TABLE_JOIN_ID = UUID.randomUUID();
-    private static final String COLUMN_VALUE = "column-value";
+    private static final UUID PARENT = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
-
-    @Mock
-    private TableJoinDao tableJoinDao;
 
     @Mock
     private TableHeadDao tableHeadDao;
@@ -42,6 +39,8 @@ public class TableQueryServiceTest {
     @Mock
     private ContentDao contentDao;
 
+    @Mock
+    private TableColumnResponseProvider<String> tableColumnResponseProvider;
 
     @InjectMocks
     private TableQueryService underTest;
@@ -53,18 +52,16 @@ public class TableQueryServiceTest {
     private TableHead tableHead;
 
     @Mock
-    private TableJoin tableJoin;
-
-    @Mock
     private Content tableHeadContent;
 
     @Mock
-    private Content tableJoinContent;
+    private TableColumnResponse<String> tableColumnResponse;
 
     @Test
     public void getTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
         given(listItem.getTitle()).willReturn(TITLE);
+        given(listItem.getParent()).willReturn(PARENT);
 
         given(tableHeadDao.getByParent(LIST_ITEM_ID)).willReturn(Arrays.asList(tableHead));
         given(tableHead.getTableHeadId()).willReturn(TABLE_HEAD_ID);
@@ -73,27 +70,18 @@ public class TableQueryServiceTest {
         given(contentDao.findByParentValidated(TABLE_HEAD_ID)).willReturn(tableHeadContent);
         given(tableHeadContent.getContent()).willReturn(COLUMN_NAME);
 
-        given(tableJoinDao.getByParent(LIST_ITEM_ID)).willReturn(Arrays.asList(tableJoin));
-        given(tableJoin.getTableJoinId()).willReturn(TABLE_JOIN_ID);
-        given(tableJoin.getRowIndex()).willReturn(0);
-        given(tableJoin.getColumnIndex()).willReturn(0);
+        given(tableColumnResponseProvider.fetchTableColumns(LIST_ITEM_ID)).willReturn(Arrays.asList(tableColumnResponse));
 
-        given(contentDao.findByParentValidated(TABLE_JOIN_ID)).willReturn(tableJoinContent);
-        given(tableJoinContent.getContent()).willReturn(COLUMN_VALUE);
-
-        TableResponse tableResponse = underTest.getTable(LIST_ITEM_ID);
+        TableResponse<String> tableResponse = underTest.getTable(LIST_ITEM_ID, tableColumnResponseProvider);
 
         assertThat(tableResponse.getTitle()).isEqualTo(TITLE);
+        assertThat(tableResponse.getParent()).isEqualTo(PARENT);
 
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getTableHeadId()).isEqualTo(TABLE_HEAD_ID);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(COLUMN_NAME);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
 
-        assertThat(tableResponse.getTableColumns()).hasSize(1);
-        assertThat(tableResponse.getTableColumns().get(0).getTableJoinId()).isEqualTo(TABLE_JOIN_ID);
-        assertThat(tableResponse.getTableColumns().get(0).getContent()).isEqualTo(COLUMN_VALUE);
-        assertThat(tableResponse.getTableColumns().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableResponse.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getTableColumns()).containsExactly(tableColumnResponse);
     }
 }

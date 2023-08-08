@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -28,7 +28,7 @@ public class ChecklistCreationService {
     private final ChecklistItemDao checklistItemDao;
 
     @Transactional
-    public UUID create(CreateChecklistItemRequest request, UUID userId) {
+    public UUID create(CreateChecklistRequest request, UUID userId) {
         createChecklistItemRequestValidator.validate(request);
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.CHECKLIST);

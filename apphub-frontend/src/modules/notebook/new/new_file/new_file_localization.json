@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "New file - Notebook - Apphub",
+        "hu": "Új fájl - Jegyzetfüzet - Apphub"
+    },
+    "page-title": {
+        "en": "New file",
+        "hu": "Új fájl"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "file-title": {
+        "en": "Title",
+        "hu": "Cím"
+    }
+}

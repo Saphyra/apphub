@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.TitleValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

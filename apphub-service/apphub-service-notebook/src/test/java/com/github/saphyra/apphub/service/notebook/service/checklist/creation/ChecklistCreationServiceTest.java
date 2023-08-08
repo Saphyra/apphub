@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
@@ -71,7 +71,7 @@ public class ChecklistCreationServiceTest {
             .checked(true)
             .order(ORDER)
             .build();
-        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest request = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(PARENT)
             .nodes(Arrays.asList(nodeRequest))

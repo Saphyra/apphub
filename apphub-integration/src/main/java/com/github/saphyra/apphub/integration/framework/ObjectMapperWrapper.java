@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.framework;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -13,10 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Slf4j
 public class ObjectMapperWrapper {
     private final ObjectMapper objectMapper;
+
+    public ObjectMapperWrapper() {
+        objectMapper = new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT);
+    }
 
     public <T> T readValue(InputStream in, TypeReference<T> type) {
         try {
@@ -60,7 +64,8 @@ public class ObjectMapperWrapper {
 
     public String writeValueAsPrettyString(Object value) {
         try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+            return objectMapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

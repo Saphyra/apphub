@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.lib.exception.RestException;
 import feign.FeignException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -73,8 +74,8 @@ class ErrorHandlerAdvice {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<ErrorResponse> generalException(RuntimeException exception) {
-        log.error("Unknown exception occurred:", exception);
+    ResponseEntity<ErrorResponse> generalException(HttpServletRequest request, RuntimeException exception) {
+        log.error("Unknown exception occurred when calling {} - {}:",request.getMethod(), request.getRequestURI(), exception);
         ErrorResponseWrapper errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, new HashMap<>());
 
         errorReporterService.report(errorResponse.getStatus(), errorResponse.getErrorResponse(), exception);

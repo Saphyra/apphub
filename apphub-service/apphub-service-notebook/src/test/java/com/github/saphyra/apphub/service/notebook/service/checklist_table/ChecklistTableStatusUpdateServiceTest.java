@@ -20,8 +20,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ChecklistTableStatusUpdateServiceTest {
-    private static final int ROW_INDEX = 134;
-    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID ROW_ID = UUID.randomUUID();
 
     @Mock
     private ChecklistTableRowDao checklistTableRowDao;
@@ -34,18 +33,18 @@ public class ChecklistTableStatusUpdateServiceTest {
 
     @Test
     public void rowNotFound() {
-        given(checklistTableRowDao.findByParentAndRowIndex(LIST_ITEM_ID, ROW_INDEX)).willReturn(Optional.empty());
+        given(checklistTableRowDao.findById(ROW_ID)).willReturn(Optional.empty());
 
-        Throwable ex = catchThrowable(() -> underTest.updateStatus(LIST_ITEM_ID, ROW_INDEX, true));
+        Throwable ex = catchThrowable(() -> underTest.updateStatus(ROW_ID, true));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     @Test
     public void updateStatus() {
-        given(checklistTableRowDao.findByParentAndRowIndex(LIST_ITEM_ID, ROW_INDEX)).willReturn(Optional.of(checklistTableRow));
+        given(checklistTableRowDao.findById(ROW_ID)).willReturn(Optional.of(checklistTableRow));
 
-        underTest.updateStatus(LIST_ITEM_ID, ROW_INDEX, true);
+        underTest.updateStatus(ROW_ID, true);
 
         verify(checklistTableRow).setChecked(true);
         verify(checklistTableRowDao).save(checklistTableRow);

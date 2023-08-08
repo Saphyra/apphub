@@ -1,8 +1,8 @@
 NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
 DISABLED_GROUPS=${3:-}
-SERVER_PORT=${4:-8100}
-DATABASE_PORT=${4:-8101}
+SERVER_PORT=${4:-8070}
+DATABASE_PORT=${4:-8071}
 
 echo "Running Integration tests against namespace $NAMESPACE_NAME"
 

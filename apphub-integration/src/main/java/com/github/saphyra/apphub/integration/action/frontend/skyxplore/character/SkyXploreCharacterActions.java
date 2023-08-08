@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.character;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.WebDriver;
@@ -36,6 +38,9 @@ public class SkyXploreCharacterActions {
 
     public static void createCharacter(WebDriver driver) {
         submitForm(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+            .assertTrue("Player is not redirected to main menu.");
         ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
     }
 }

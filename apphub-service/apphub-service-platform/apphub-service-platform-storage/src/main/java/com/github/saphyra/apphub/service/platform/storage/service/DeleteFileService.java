@@ -23,9 +23,8 @@ public class DeleteFileService {
     private final UuidConverter uuidConverter;
 
     public void deleteFile(UUID userId, UUID storedFileId) {
-        StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
-
-        deleteFile(userId, storedFile);
+        storedFileDao.findById(storedFileId)
+            .ifPresent(storedFile -> deleteFile(userId, storedFile));
     }
 
     public void deleteFile(UUID userId, StoredFile storedFile) {

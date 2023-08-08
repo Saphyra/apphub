@@ -8,10 +8,10 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.BanDetailsResponse;
-import com.github.saphyra.apphub.integration.structure.user.BanRequest;
-import com.github.saphyra.apphub.integration.structure.user.BanResponse;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.user.BanDetailsResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.BanResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

@@ -1,0 +1,34 @@
+#notebook{
+    border: none;
+}
+
+#notebook-main{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+#notebook-nav-bar{
+    display: flex;
+    flex-direction: column;
+    border-right: 3px ridge white;
+}
+
+#notebook-category-tree{
+    border-bottom: 2px ridge white;
+}
+
+#notebook-pinned-items{
+
+}
+
+.notebook-content{
+    flex-grow: 1;
+}
+
+.notebook-close-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+}

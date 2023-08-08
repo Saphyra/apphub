@@ -4,5 +4,6 @@
   "excavator": "Nyersanyagokat állít elő a bolygófelszínből",
   "sawmill": "Fakitermelést folytat, és a kitermelt fát deszkává vágja.",
   "farm": "Az állattenyésztés bőrt és húst, míg a mezőgazdaság gabonát biztosít.",
-  "solar_panel": "Energiát termel a napfényből."
+  "solar_panel": "Árammá alakítja a napfényt.",
+  "battery": "Elektromos energiát tárol."
 }

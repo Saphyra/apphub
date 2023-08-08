@@ -1,13 +1,22 @@
+import Utils from "../Utils";
 import MapStream from "./MapStream";
 import Optional from "./Optional";
 
 const Stream = class {
     constructor(items) {
-        this.items = items === null ? [] : items.slice();
+        this.items = Utils.hasValue(items) ? items.slice() : [];
     }
 
     add(item) {
         this.items.push(item);
+
+        return this;
+    }
+
+    addAll(items) {
+        for (let i in items) {
+            this.items.push(items[i]);
+        }
 
         return this;
     }
@@ -36,6 +45,15 @@ const Stream = class {
         return new Optional(this.items[0]);
     }
 
+    flatMap(mapper) {
+        const result = new Stream();
+
+        this.map(item => mapper(item))
+            .forEach(items => result.addAll(items.toList()));
+
+        return result;
+    }
+
     forEach(consumer) {
         this.items.forEach(consumer);
     }
@@ -44,10 +62,34 @@ const Stream = class {
         return new Stream(this.items.map(mapper));
     }
 
+    max() {
+        if (this.items.length === 0) {
+            return new Optional(null);
+        }
+
+        let currentMax = Number.MIN_SAFE_INTEGER;
+
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            }
+
+            if (item > currentMax) {
+                currentMax = item;
+            }
+        });
+
+        return new Optional(currentMax);
+    }
+
     peek(consumer) {
         this.forEach(consumer);
 
         return this;
+    }
+
+    remove(predicate) {
+        return this.filter(item => !predicate(item));
     }
 
     sorted(comparator) {

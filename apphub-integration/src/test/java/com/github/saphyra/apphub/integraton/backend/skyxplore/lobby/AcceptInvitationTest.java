@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreL
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberResponse;
-import com.github.saphyra.apphub.integration.structure.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

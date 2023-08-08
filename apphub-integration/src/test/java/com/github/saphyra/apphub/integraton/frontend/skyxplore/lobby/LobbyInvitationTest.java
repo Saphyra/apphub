@@ -11,11 +11,11 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
-import com.github.saphyra.apphub.integration.structure.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMember;
-import com.github.saphyra.apphub.integration.structure.skyxplore.LobbyMemberStatus;
-import com.github.saphyra.apphub.integration.structure.skyxplore.OnlineFriend;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberStatus;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.OnlineFriend;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 

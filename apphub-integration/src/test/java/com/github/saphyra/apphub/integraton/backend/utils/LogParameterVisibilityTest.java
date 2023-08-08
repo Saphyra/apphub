@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.UtilsActions;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.utils.LogParameterVisibilityResponse;
-import com.github.saphyra.apphub.integration.structure.utils.SetLogParameterVisibilityRequest;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.utils.LogParameterVisibilityResponse;
+import com.github.saphyra.apphub.integration.structure.api.utils.SetLogParameterVisibilityRequest;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;

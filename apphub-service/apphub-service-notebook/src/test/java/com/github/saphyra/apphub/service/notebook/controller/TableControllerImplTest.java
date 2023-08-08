@@ -7,7 +7,8 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ConvertTableToChecklistTableService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ public class TableControllerImplTest {
     @Mock
     private ConvertTableToChecklistTableService convertTableToChecklistTableService;
 
+    @Mock
+    private ContentTableColumnResponseProvider contentTableColumnResponseProvider;
+
     @InjectMocks
     private TableControllerImpl underTest;
 
@@ -52,7 +56,7 @@ public class TableControllerImplTest {
     private EditTableRequest editTableRequest;
 
     @Mock
-    private TableResponse tableResponse;
+    private TableResponse<String> tableResponse;
 
     @Test
     public void createTable() {
@@ -66,16 +70,20 @@ public class TableControllerImplTest {
 
     @Test
     public void editTable() {
-        underTest.editTable(editTableRequest, LIST_ITEM_ID);
+        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
+
+        TableResponse<String> result = underTest.editTable(editTableRequest, LIST_ITEM_ID);
 
         verify(tableEditionService).edit(LIST_ITEM_ID, editTableRequest);
+
+        assertThat(result).isEqualTo(tableResponse);
     }
 
     @Test
     public void getTable() {
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
 
-        TableResponse result = underTest.getTable(LIST_ITEM_ID);
+        TableResponse<String> result = underTest.getTable(LIST_ITEM_ID);
 
         assertThat(result).isEqualTo(tableResponse);
     }
