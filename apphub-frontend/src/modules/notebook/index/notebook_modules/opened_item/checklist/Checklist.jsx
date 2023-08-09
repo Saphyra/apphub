@@ -22,7 +22,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [title, setTitle] = useState("");
     const [items, setItems] = useState([]);
 
-    useEffect(() => loadChecklist(), []);
+    useEffect(() => loadChecklist(), [openedListItem]);
 
     const loadChecklist = () => {
         const fetch = async () => {

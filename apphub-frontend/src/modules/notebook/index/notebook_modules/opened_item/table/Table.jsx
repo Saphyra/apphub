@@ -27,7 +27,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
 
-    useEffect(() => loadTable(), []);
+    useEffect(() => loadTable(), [openedListItem]);
 
     //System
     const loadTable = () => {

@@ -22,7 +22,7 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
 
-    useEffect(() => loadCustomTable(), []);
+    useEffect(() => loadCustomTable(), [openedListItem]);
 
     //System
     const loadCustomTable = () => {
