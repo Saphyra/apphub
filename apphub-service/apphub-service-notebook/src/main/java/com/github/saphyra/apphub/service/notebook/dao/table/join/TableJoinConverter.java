@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class TableJoinConverter extends ConverterBase<TableJoinEntity, TableJoin> {
@@ -18,7 +20,7 @@ public class TableJoinConverter extends ConverterBase<TableJoinEntity, TableJoin
             .parent(uuidConverter.convertEntity(entity.getParent()))
             .rowIndex(entity.getRowIndex())
             .columnIndex(entity.getColumnIndex())
-            .columnType(entity.getColumnType())
+            .columnType(Optional.ofNullable(entity.getColumnType()).orElse(ColumnType.TEXT))
             .build();
     }
 
