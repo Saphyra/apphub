@@ -49,8 +49,6 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             );
         }
 
-        console.log(items);
-
         return new Stream(items)
             .sorted((a, b) => a.order - b.order)
             .map(item =>
@@ -92,15 +90,42 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         setItems(copy);
     }
 
-    const removeItem = (item) => {
-        if (!editingEnabled) {
-            Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
-                .send();
+    const removeItem = async (item) => {
+        const doRemoveItem = (item) => {
+            const copy = new Stream(items)
+                .remove(i => i === item)
+                .toList();
+            setItems(copy);
         }
-        const copy = new Stream(items)
-            .remove(i => i === item)
-            .toList();
-        setItems(copy);
+
+        if (!editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-checklist-item-deletion-confirmation",
+                localizationHandler.get("confirm-checklist-item-deletion-title"),
+                localizationHandler.get("confirm-checklist-item-deletion-content"),
+                [
+                    <Button
+                        key="delete"
+                        id="notebook-content-checklist-item-deletion-confirm-button"
+                        label={localizationHandler.get("delete")}
+                        onclick={async () => {
+                            await Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
+                                .send();
+                            setConfirmationDialogData(null);
+                            doRemoveItem(item);
+                        }}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-checklist-item-deletion-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doRemoveItem(item);
+        }
     }
 
     const moveItem = (item, moveDirection) => {

@@ -4,6 +4,7 @@
 Notebook - List Item buttons are not moved to new line when the space is tight
 Notebook - Overflow handling in main panels to scroll separately
 Notebook - Increase font-size of the currently focused checklist item during editing
+Notebook - Confirmation dialog for deleting row
 
 ===PLATFORM CHANGES===
 
