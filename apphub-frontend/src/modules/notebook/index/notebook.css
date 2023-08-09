@@ -1,32 +1,32 @@
-#notebook{
+#notebook {
     border: none;
 }
 
-#notebook-main{
+#notebook-main {
     display: flex;
     flex-direction: row;
     padding: 0;
 }
 
-#notebook-nav-bar{
+#notebook-nav-bar {
     display: flex;
     flex-direction: column;
     border-right: 3px ridge white;
+    overflow: auto;
 }
 
-#notebook-category-tree{
+#notebook-category-tree {
     border-bottom: 2px ridge white;
 }
 
-#notebook-pinned-items{
+#notebook-pinned-items {}
 
-}
-
-.notebook-content{
+.notebook-content {
     flex-grow: 1;
+    overflow: auto;
 }
 
-.notebook-close-button{
+.notebook-close-button {
     position: absolute;
     top: 0;
     right: 0;

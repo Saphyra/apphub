@@ -1,0 +1,13 @@
+===FEATURES===
+
+===BUGFIXES===
+Notebook - List Item buttons are not moved to new line when the space is tight
+Notebook - Overflow handling in main panels to scroll separately
+Notebook - Increase font-size of the currently focused checklist item during editing
+Notebook - Confirmation dialog for deleting row
+Notebook - Pinned item is not opened if the type of the item is the same as the currently opened item
+Notebook - Existing user's table cannot be opened because of null columnType
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===

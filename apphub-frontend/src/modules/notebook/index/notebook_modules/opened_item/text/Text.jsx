@@ -17,7 +17,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-    useEffect(() => loadText(), []);
+    useEffect(() => loadText(), [openedListItem]);
 
     const loadText = () => {
         const fetch = async () => {

@@ -16,6 +16,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 public class CollectionUtils {
     @SafeVarargs
     public static <T> Set<T> toSet(T... elements) {
@@ -72,6 +74,9 @@ public class CollectionUtils {
 
     public static <K, V> MultiValueMap<K, V> toMultiValueMap(Map<K, Collection<V>> in) {
         MultiValueMap<K, V> result = new LinkedMultiValueMap<>();
+        if (isNull(in)) {
+            return result;
+        }
         in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
     }

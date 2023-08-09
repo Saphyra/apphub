@@ -1,6 +1,8 @@
 .notebook-content-category-content-list-item {
     margin: 6px;
     text-align: left;
+    position: relative;
+    padding-right: 60px;
 }
 
 .notebook-content-category-content-list-item.archived {
@@ -16,7 +18,9 @@
 }
 
 .notebook-content-category-content-list-item-buttons {
-    float: right;
+    position: absolute;
+    top: 3px;
+    right: 0;
 }
 
 .notebook-content-category-content-list-item-buttons button {

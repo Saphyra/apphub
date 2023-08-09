@@ -182,5 +182,13 @@
     "confirm-table-conversion": {
         "en": "Convert",
         "hu": "Átalakítás"
+    },
+    "confirm-checklist-item-deletion-title": {
+        "en": "Are you sure?",
+        "hu": "Biztos vagy benne?"
+    },
+    "confirm-checklist-item-deletion-content": {
+        "en": "Are you sure you want to delete this checklist item?",
+        "hu": "Biztosan ki szeretnéd törölni ezt a lista elemet?"
     }
 }
