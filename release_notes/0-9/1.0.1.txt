@@ -2,6 +2,7 @@
 
 ===BUGFIXES===
 Notebook - List Item buttons are not moved to new line when the space is tight
+Notebook - Overflow handling in main panels to scroll separately
 
 ===PLATFORM CHANGES===
 
