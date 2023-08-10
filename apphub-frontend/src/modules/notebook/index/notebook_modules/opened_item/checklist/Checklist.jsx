@@ -69,6 +69,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         const order = new Stream(items)
             .map(item => item.order)
             .max()
+            .orElse(0)
             + 1
 
         const newRow = new ChecklistItemData(order);
