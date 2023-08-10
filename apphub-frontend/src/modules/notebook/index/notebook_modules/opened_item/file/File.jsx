@@ -65,7 +65,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
             <div id="notebook-content-file-content" className="notebook-content-view-main">
                 {fileMetadata &&
-                    <table id="notebook-content-file-content-table" className="formatted-table">
+                    <table id="notebook-content-file-content-table" className="formatted-table content-selectable">
                         <tbody>
                             <tr>
                                 <td id="notebook-content-file-name-label">{localizationHandler.get("file-name")}</td>

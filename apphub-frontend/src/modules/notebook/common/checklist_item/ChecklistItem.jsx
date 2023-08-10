@@ -7,8 +7,10 @@ import MoveDirection from "../MoveDirection";
 
 const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true }) => {
     const toggleChecked = () => {
-        item.checked = !item.checked;
-        updateItem(item, UpdateType.TOGGLE_CHECKED);
+        if (window.getSelection().toString().length === 0) {
+            item.checked = !item.checked;
+            updateItem(item, UpdateType.TOGGLE_CHECKED);
+        }
     }
 
     const updateChecked = (checked) => {
@@ -56,7 +58,7 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
                     />
                     :
                     <div
-                        className={"notebook-checklist-item-content-not-editable" + (item.checked ? " checked" : "")}
+                        className={"notebook-checklist-item-content-not-editable content-selectable" + (item.checked ? " checked" : "")}
                         onClick={toggleChecked}
                     >
                         {item.content}
