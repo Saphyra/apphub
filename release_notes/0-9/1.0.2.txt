@@ -2,6 +2,8 @@
 
 ===BUGFIXES===
 Notebook - New item in checklist should always be added to the last place, index counting should be based on last index, not size
+Notebook - Set minimum width for nav bar
+Notebook - Make content selectable
 
 ===PLATFORM CHANGES===
 

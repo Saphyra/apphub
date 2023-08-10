@@ -4,6 +4,7 @@
     border: 2px ridge white;
     margin: 10px;
     border-radius: 5px;
+    overflow: auto;
 }
 
 .notebook-checklist-item-checked-wrapper {

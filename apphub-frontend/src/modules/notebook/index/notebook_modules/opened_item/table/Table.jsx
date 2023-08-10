@@ -473,7 +473,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
             />
 
             <div id="notebook-content-table-content" className="notebook-content-view-main">
-                <table id="notebook-content-table-content-table" className="formatted-table">
+                <table id="notebook-content-table-content-table" className="formatted-table content-selectable">
                     <thead>
                         <tr>
                             {editingEnabled && <th></th>}
