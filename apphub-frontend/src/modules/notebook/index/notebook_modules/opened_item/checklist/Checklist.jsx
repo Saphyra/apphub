@@ -66,7 +66,12 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     }
 
     const addItem = () => {
-        const newRow = new ChecklistItemData(items.length);
+        const order = new Stream(items)
+            .map(item => item.order)
+            .max()
+            + 1
+
+        const newRow = new ChecklistItemData(order);
         const copy = new Stream(items)
             .add(newRow)
             .toList();
