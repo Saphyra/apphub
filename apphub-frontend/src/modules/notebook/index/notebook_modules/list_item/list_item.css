@@ -3,6 +3,7 @@
     text-align: left;
     position: relative;
     padding-right: 60px;
+    overflow: hidden;
 }
 
 .notebook-content-category-content-list-item.archived {
