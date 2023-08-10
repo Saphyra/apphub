@@ -4,6 +4,7 @@ git pull
 eval "$(minikube docker-env)"
 
 ./infra/deployment/script/build.sh
+./infra/deployment/script/build_frontend.sh
 
 echo "Logging in to docker with username $1..."
 docker login -u "$1" -p "$2"
