@@ -313,6 +313,37 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
         //TODO
     }
 
+    const close = () => {
+        if (editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-custom-table-close-confirmation",
+                localizationHandler.get("confirm-close-title"),
+                localizationHandler.get("confirm-close-content"),
+                [
+                    <Button
+                        key="close"
+                        id="notebook-content-custom-table-close-confirm-button"
+                        label={localizationHandler.get("close")}
+                        onclick={doClose}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-custom-table-close-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doClose();
+        }
+    }
+
+    const doClose = () => {
+        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="notebook-content-custom-table" className="notebook-content notebook-content-view">
             <ListItemTitle
@@ -326,12 +357,12 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
                         id="notebook-content-custom-table-close-button"
                         className="notebook-close-button"
                         label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                        onclick={close}
                     />
                 }
             />
 
-            <div id="notebook-content-checklist-content" className="notebook-content-view-main">
+            <div id="notebook-content-custom-table-content" className="notebook-content-view-main">
                 <table id="notebook-content-table-content" className="formatted-table">
                     <thead>
                         <tr>

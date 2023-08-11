@@ -463,6 +463,37 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         updateRow();
     }
 
+    const close = () => {
+        if (editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-table-close-confirmation",
+                localizationHandler.get("confirm-close-title"),
+                localizationHandler.get("confirm-close-content"),
+                [
+                    <Button
+                        key="close"
+                        id="notebook-content-table-close-confirm-button"
+                        label={localizationHandler.get("close")}
+                        onclick={doClose}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-table-close-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doClose();
+        }
+    }
+
+    const doClose = () => {
+        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="notebook-content-table" className="notebook-content notebook-content-view">
             <ListItemTitle
@@ -476,7 +507,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                         id="notebook-content-table-close-button"
                         className="notebook-close-button"
                         label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                        onclick={close}
                     />
                 }
             />

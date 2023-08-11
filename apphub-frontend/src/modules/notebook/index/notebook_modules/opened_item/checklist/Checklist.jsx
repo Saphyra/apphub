@@ -268,6 +268,37 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         setDataFromResponse(response);
     }
 
+    const close = () => {
+        if (editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-checklist-close-confirmation",
+                localizationHandler.get("confirm-close-title"),
+                localizationHandler.get("confirm-close-content"),
+                [
+                    <Button
+                        key="close"
+                        id="notebook-content-checklist-close-confirm-button"
+                        label={localizationHandler.get("close")}
+                        onclick={doClose}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-checklist-close-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doClose();
+        }
+    }
+
+    const doClose = () => {
+        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="notebook-content-checklist" className="notebook-content notebook-content-view">
             <ListItemTitle
@@ -281,7 +312,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                         id="notebook-content-checklist-close-button"
                         className="notebook-close-button"
                         label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                        onclick={close}
                     />
                 }
             />
