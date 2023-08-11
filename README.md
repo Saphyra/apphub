@@ -31,6 +31,11 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Log formatter
 * Games
     * SkyXplore (In progress, not enabled on production)
+* Community
+    * Chat
+    * Event feed
+    * Setting up groups
+    * Not enabled on production
 * Training
     * HTML
     * CSS
@@ -53,7 +58,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 
 * CPU: AMD Ryzen R5 2600
 * RAM: 24 GB
-* Empty Disk Space: 2GB
+* Empty Disk Space: 20GB
 * maven installed
 * JDK17 installed
 * npm installed

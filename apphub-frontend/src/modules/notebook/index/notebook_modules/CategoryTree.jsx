@@ -3,6 +3,8 @@ import Endpoints from "../../../../common/js/dao/dao";
 import "./category_tree/category_tree.css";
 import Leaf from "./category_tree/Leaf";
 import EventName from "../../../../common/js/event/EventName";
+import useHasFocus from "../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [tree, setTree] = useState([]);
@@ -10,6 +12,13 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLa
 
     useEffect(() => processEvent(), [lastEvent]);
     useEffect(() => loadTree(), []);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            loadTree();
+        }
+    }, [isInFocus]);
 
     const setOpenedLeaves = (newOpenedLeaves) => {
         sessionStorage.openedLeaves = JSON.stringify(newOpenedLeaves);

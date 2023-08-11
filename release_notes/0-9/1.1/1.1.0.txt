@@ -1,0 +1,14 @@
+===FEATURES===
+Index
+    Add language selector to login page
+Notebook
+    Periodically reload the opened item, so parallel modifications are loaded automatically
+    Confirmation for closing listItem when editing enabled
+Platform
+    Do not log connection error for session check
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===

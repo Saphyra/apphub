@@ -15,6 +15,8 @@ import NotificationService from "../../../../../../common/js/notification/Notifi
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -23,6 +25,13 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [items, setItems] = useState([]);
 
     useEffect(() => loadChecklist(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus && !editingEnabled) {
+            loadChecklist();
+        }
+    }, [isInFocus]);
 
     const loadChecklist = () => {
         const fetch = async () => {
@@ -259,10 +268,41 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         setDataFromResponse(response);
     }
 
+    const close = () => {
+        if (editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-checklist-close-confirmation",
+                localizationHandler.get("confirm-close-title"),
+                localizationHandler.get("confirm-close-content"),
+                [
+                    <Button
+                        key="close"
+                        id="notebook-content-checklist-close-confirm-button"
+                        label={localizationHandler.get("close")}
+                        onclick={doClose}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-checklist-close-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doClose();
+        }
+    }
+
+    const doClose = () => {
+        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="notebook-content-checklist" className="notebook-content notebook-content-view">
             <ListItemTitle
-                id="notebook-content-checklist-title"
+                inputId="notebook-content-checklist-title"
                 placeholder={localizationHandler.get("list-item-title")}
                 value={title}
                 setListItemTitle={setTitle}
@@ -272,7 +312,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                         id="notebook-content-checklist-close-button"
                         className="notebook-close-button"
                         label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                        onclick={close}
                     />
                 }
             />
@@ -323,7 +363,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     />
                 }
 
-                {editingEnabled &&
+                {
                     <Button
                         id="notebook-content-checklist-add-item-button"
                         label={localizationHandler.get("add-item")}

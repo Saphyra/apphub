@@ -19,6 +19,8 @@ import validateTableHeadNames from "../../../../common/validator/TableHeadNameVa
 import EventName from "../../../../../../common/js/event/EventName";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Event from "../../../../../../common/js/event/Event";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -28,6 +30,13 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     const [rows, setRows] = useState([]);
 
     useEffect(() => loadTable(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus && !editingEnabled) {
+            loadTable();
+        }
+    }, [isInFocus]);
 
     //System
     const loadTable = () => {
@@ -454,10 +463,41 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         updateRow();
     }
 
+    const close = () => {
+        if (editingEnabled) {
+            setConfirmationDialogData(new ConfirmationDialogData(
+                "notebook-content-table-close-confirmation",
+                localizationHandler.get("confirm-close-title"),
+                localizationHandler.get("confirm-close-content"),
+                [
+                    <Button
+                        key="close"
+                        id="notebook-content-table-close-confirm-button"
+                        label={localizationHandler.get("close")}
+                        onclick={doClose}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-content-table-close-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setConfirmationDialogData(null)}
+                    />
+                ]
+            ));
+        } else {
+            doClose();
+        }
+    }
+
+    const doClose = () => {
+        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="notebook-content-table" className="notebook-content notebook-content-view">
             <ListItemTitle
-                id="notebook-content-table-title"
+                inputId="notebook-content-table-title"
                 placeholder={localizationHandler.get("list-item-title")}
                 value={title}
                 setListItemTitle={setTitle}
@@ -467,7 +507,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                         id="notebook-content-table-close-button"
                         className="notebook-close-button"
                         label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                        onclick={close}
                     />
                 }
             />
