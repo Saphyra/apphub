@@ -11,6 +11,8 @@ import Endpoints, { ResponseStatus } from "../../common/js/dao/dao";
 import ErrorHandler from "../../common/js/dao/ErrorHandler";
 import { useSearchParams } from "react-router-dom";
 import Constants from "../../common/js/Constants";
+import Footer from "../../common/component/Footer";
+import LanguageSelector from "../../common/component/language_selector/LanguageSelector";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -31,8 +33,8 @@ const IndexPage = () => {
                 ))
                 .send();
 
-                const location = searchParams.get("redirect") || Constants.MODULES_PAGE;
-            
+            const location = searchParams.get("redirect") || Constants.MODULES_PAGE;
+
             window.location.href = location;
         }
         queryAndRedirect();
@@ -41,11 +43,16 @@ const IndexPage = () => {
     return (
         <div className="main-page">
             <Header label={localizationHandler.get("title")} />
+
             <main>
                 <LoginForm localizationHandler={localizationHandler} />
 
                 <RegistrationForm localizationHandler={localizationHandler} />
             </main>
+
+            <Footer
+                centerButtons={<LanguageSelector />}
+            />
 
             <ToastContainer />
         </div>

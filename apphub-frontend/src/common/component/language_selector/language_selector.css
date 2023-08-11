@@ -1,0 +1,18 @@
+#language-selector .language {
+    width: 36px;
+    height: 36px;
+    background-position: center;
+    background-size: 36px;
+}
+
+#language-selector .language.current {
+    border-color: orange;
+}
+
+#language-selector .language.en {
+    background-image: url("./img/en.png");
+}
+
+#language-selector .language.hu {
+    background-image: url("./img/hu.png");
+}

@@ -1,4 +1,5 @@
 ===FEATURES===
+Index - Add language selector to login page
 
 ===BUGFIXES===
 
