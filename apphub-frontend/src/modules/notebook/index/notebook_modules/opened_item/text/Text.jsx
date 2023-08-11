@@ -10,6 +10,8 @@ import NotificationService from "../../../../../../common/js/notification/Notifi
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -18,6 +20,13 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     const [content, setContent] = useState("");
 
     useEffect(() => loadText(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus && !editingEnabled) {
+            loadText();
+        }
+    }, [isInFocus]);
 
     const loadText = () => {
         const fetch = async () => {
@@ -78,7 +87,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     return (
         <div id="notebook-content-text" className="notebook-content notebook-content-view">
             <ListItemTitle
-                id="notebook-content-text-title"
+                inputId="notebook-content-text-title"
                 placeholder={localizationHandler.get("list-item-title")}
                 value={title}
                 setListItemTitle={setTitle}

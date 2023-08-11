@@ -5,12 +5,21 @@ import EventName from "../../../../common/js/event/EventName";
 import ListItem from "./list_item/ListItem";
 import ListItemMode from "./list_item/ListItemMode";
 import UserSettings from "../../common/UserSettings";
+import useHasFocus from "../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const PinnedItems = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [pinned, setPinned] = useState([]);
 
     useEffect(() => loadPinnedItems(), []);
     useEffect(() => processEvent(), [lastEvent]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            loadPinnedItems();
+        }
+    }, [isInFocus]);
 
     const processEvent = () => {
         if (lastEvent === null) {

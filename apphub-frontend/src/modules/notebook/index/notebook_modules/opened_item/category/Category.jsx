@@ -10,6 +10,8 @@ import EventName from "../../../../../../common/js/event/EventName";
 import ListItemMode from "../../list_item/ListItemMode";
 import moveListItem from "../../../../common/MoveListItemService";
 import UserSettings from "../../../../common/UserSettings";
+import { useUpdateEffect } from "react-use";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
 
 const Category = ({
     localizationHandler,
@@ -22,9 +24,15 @@ const Category = ({
     setConfirmationDialogData
 }) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
-
     useEffect(() => processEvent(), [lastEvent]);
     useEffect(() => loadCategory(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            loadCategory();
+        }
+    }, [isInFocus]);
 
     const processEvent = () => {
         if (lastEvent === null) {

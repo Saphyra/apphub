@@ -14,6 +14,8 @@ import Utils from "../../../../../../common/js/Utils";
 import MoveDirection from "../../../../common/MoveDirection";
 import "./custom_table.css";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { useUpdateEffect } from "react-use";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
 
 const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -23,6 +25,13 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
     const [rows, setRows] = useState([]);
 
     useEffect(() => loadCustomTable(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus && !editingEnabled) {
+            loadCustomTable();
+        }
+    }, [isInFocus]);
 
     //System
     const loadCustomTable = () => {

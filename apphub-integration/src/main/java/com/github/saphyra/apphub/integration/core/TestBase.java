@@ -56,9 +56,16 @@ public class TestBase {
 
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) throws Exception {
-        TOTAL_TEST_COUNT = context.getSuite()
+        DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
+            .orElse("")
+            .split(","));
+        log.info("Disabled test groups: {}", DISABLED_TEST_GROUPS);
+
+        TOTAL_TEST_COUNT = (int) context.getSuite()
             .getAllMethods()
-            .size();
+            .stream()
+            .filter(TestBase::isEnabled)
+            .count();
         log.info("Total test count: {}", TOTAL_TEST_COUNT);
 
         SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
@@ -82,13 +89,16 @@ public class TestBase {
             }
         }
 
-        DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
-            .orElse("")
-            .split(","));
-
         System.setProperty("testng.show.stack.frames", "true");
 
         CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
+    }
+
+    public static boolean isEnabled(ITestNGMethod method) {
+        List<String> groups = Arrays.asList(method.getGroups());
+
+        return TestBase.DISABLED_TEST_GROUPS.stream()
+            .noneMatch(groups::contains);
     }
 
     @AfterSuite(alwaysRun = true)

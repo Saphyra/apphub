@@ -9,6 +9,8 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import ListItem from "../../list_item/ListItem";
 import ListItemMode from "../../list_item/ListItemMode";
 import UserSettings from "../../../../common/UserSettings";
+import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const Search = ({
     localizationHandler,
@@ -24,6 +26,13 @@ const Search = ({
 
     useEffect(() => loadSearchResult(), [openedListItem.id]);
     useEffect(() => processEvent(), [lastEvent]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            loadSearchResult();
+        }
+    }, [isInFocus]);
 
     const loadSearchResult = () => {
         const fetch = async () => {

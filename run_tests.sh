@@ -1,6 +1,6 @@
 NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
-DISABLED_GROUPS=${3:-}
+DISABLED_GROUPS=${3:-headed-only}
 SERVER_PORT=${4:-8070}
 DATABASE_PORT=${4:-8071}
 

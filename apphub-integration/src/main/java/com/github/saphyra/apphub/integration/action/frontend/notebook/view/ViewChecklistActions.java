@@ -74,4 +74,9 @@ public class ViewChecklistActions {
         driver.findElement(By.id("notebook-content-checklist-delete-checked-confirm-button"))
             .click();
     }
+
+    public static String getTitle(WebDriver driver) {
+        return driver.findElement(By.id("notebook-content-checklist-title"))
+            .getAttribute("value");
+    }
 }

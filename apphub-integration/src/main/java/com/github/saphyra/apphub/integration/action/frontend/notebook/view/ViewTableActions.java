@@ -96,4 +96,8 @@ public class ViewTableActions {
         driver.findElement(By.id("notebook-content-table-conversion-confirm-button"))
             .click();
     }
+
+    public static void fillTitle(WebDriver driver, String title) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-table-title")), title);
+    }
 }

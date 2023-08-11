@@ -1,5 +1,6 @@
 ===FEATURES===
 Index - Add language selector to login page
+Notebook - Periodically reload the opened item, so parallel modifications are loaded automatically
 
 ===BUGFIXES===
 

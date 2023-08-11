@@ -62,4 +62,8 @@ public class ViewTextActions {
             .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-text"))).isEmpty())
             .assertTrue("Text is not closed.");
     }
+
+    public static void fillTitle(WebDriver driver, String title) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-text-title")), title);
+    }
 }

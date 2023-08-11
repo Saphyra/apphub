@@ -26,7 +26,7 @@ public class AwaitilityWrapper {
     private final ConditionFactory conditionFactory;
 
     public static AwaitilityWrapper createDefault() {
-        return create(15, 1);
+        return create(15, TimeUnit.SECONDS, 250, TimeUnit.MILLISECONDS);
     }
 
     public static AwaitilityWrapper create(int timeout, int pollInterval) {
@@ -66,6 +66,10 @@ public class AwaitilityWrapper {
             .until(helper::get);
 
         return helper.getResult(Optional::ofNullable);
+    }
+
+    public static <T> Optional<T> getOptionalWithWait(Supplier<Optional<T>> supplier) {
+        return getOptionalWithWait(supplier, Optional::isPresent);
     }
 
     public static <T> Optional<T> getOptionalWithWait(Supplier<Optional<T>> supplier, Predicate<Optional<T>> predicate) {
