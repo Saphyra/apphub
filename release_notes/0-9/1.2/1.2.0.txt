@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+Notebook
+    Accidentally enabled "Add new item" button for checklist
 
 ===PLATFORM CHANGES===
 
