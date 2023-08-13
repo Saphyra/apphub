@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -14,9 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FriendshipCrudTest extends SeleniumTest {
     @Test(groups = "skyxplore")
@@ -27,17 +23,7 @@ public class FriendshipCrudTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        for (int i = 0; i < 120; i++) {
-            if (futures.stream().allMatch(Future::isDone)) {
-                break;
-            }
-
-            SleepUtil.sleep(1000);
-        }
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         //Send friend request
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());

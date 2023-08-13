@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,13 +44,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(SkyXploreUtils::registerAndNavigateToMainMenu)
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
@@ -89,27 +82,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                try {
-                    Navigation.toIndexPage(player.getEntity1());
-                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                    SkyXploreCharacterActions.submitForm(player.getEntity1());
-                    AwaitilityWrapper.createDefault()
-                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                        .assertTrue();
-                } catch (Exception e) {
-                    log.error("Failed setting up users", e);
-                    throw e;
-                }
-                return null;
-            }))
-            .toList();
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
@@ -249,13 +222,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 

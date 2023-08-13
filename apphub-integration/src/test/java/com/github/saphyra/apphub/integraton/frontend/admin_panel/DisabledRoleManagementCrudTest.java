@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.disabled_roles.DisabledRolesActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
@@ -59,6 +59,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
 
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .assertTrue("User is not logged out.");
+
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
 
@@ -103,6 +107,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
         NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
+
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .assertTrue("User is not logged out.");
 
         //Enable role
         DatabaseUtil.unlockUserByEmail(userData.getEmail());

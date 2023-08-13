@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -20,7 +19,6 @@ import org.testng.annotations.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,22 +38,12 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        Future<Void> testUserSetup = TestBase.EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(testDriver);
-            IndexPageActions.registerUser(testDriver, testUserData);
-            return null;
-        });
+        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
-        Navigation.toIndexPage(adminDriver);
-        IndexPageActions.registerUser(adminDriver, adminUserData);
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
         ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
-
-        AwaitilityWrapper.createDefault()
-            .until(testUserSetup::isDone)
-            .assertTrue("Test user is not registered.");
 
         openUser(adminDriver, testUserData);
 

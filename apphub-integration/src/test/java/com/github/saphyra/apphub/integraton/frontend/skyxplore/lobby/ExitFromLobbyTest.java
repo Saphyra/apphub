@@ -15,9 +15,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 public class ExitFromLobbyTest extends SeleniumTest {
@@ -36,13 +33,12 @@ public class ExitFromLobbyTest extends SeleniumTest {
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         RegistrationParameters userData4 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3), new BiWrapper<>(driver4, userData4))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(120, 5)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(
+            new BiWrapper<>(driver1, userData1),
+            new BiWrapper<>(driver2, userData2),
+            new BiWrapper<>(driver3, userData3),
+            new BiWrapper<>(driver4, userData4))
+        );
 
         SkyXploreFriendshipActions.setUpFriendship(driver2, driver4, userData2.getUsername(), userData4.getUsername());
         SkyXploreFriendshipActions.setUpFriendship(driver3, driver4, userData3.getUsername(), userData4.getUsername());

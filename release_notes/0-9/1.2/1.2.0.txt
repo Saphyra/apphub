@@ -6,5 +6,6 @@ Notebook
 
 ===PLATFORM CHANGES===
 Default language is set to English
+Add error handling to integration tests executor service
 
 ===TECHNICAL DEBTS===

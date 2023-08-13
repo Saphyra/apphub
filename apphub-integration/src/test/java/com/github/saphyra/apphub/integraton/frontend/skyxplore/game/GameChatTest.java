@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.ExecutionResult;
+import com.github.saphyra.apphub.integration.core.FutureWrapper;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
@@ -23,7 +25,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,27 +54,18 @@ public class GameChatTest extends SeleniumTest {
         BiWrapper<WebDriver, RegistrationParameters> player1 = new BiWrapper<>(driver1, userData1);
         BiWrapper<WebDriver, RegistrationParameters> player2 = new BiWrapper<>(driver2, userData2);
         BiWrapper<WebDriver, RegistrationParameters> player3 = new BiWrapper<>(driver3, userData3);
-        List<Future<Object>> futures = Stream.of(player1, player2, player3)
-            .map(biWrapper -> EXECUTOR_SERVICE.submit(() -> {
-                try {
-                    Navigation.toIndexPage(biWrapper.getEntity1());
-                    IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
-                    ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
-                    SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
-                    AwaitilityWrapper.createDefault()
-                        .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                        .assertTrue();
-                } catch (Exception e) {
-                    log.error("Failed setting up users", e);
-                    throw e;
-                }
-                return null;
+        Stream.of(player1, player2, player3)
+            .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
+                Navigation.toIndexPage(biWrapper.getEntity1());
+                IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
+                ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
+                SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
+                AwaitilityWrapper.createDefault()
+                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .assertTrue();
             }))
-            .toList();
-
-        AwaitilityWrapper.create(120, 5)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Failed to set up character(s).");
+            .map(FutureWrapper::get)
+            .forEach(ExecutionResult::getOrThrow);
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
 

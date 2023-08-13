@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.integraton.frontend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
@@ -21,7 +20,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,25 +32,10 @@ public class LobbyInvitationTest extends SeleniumTest {
         WebDriver driver1 = drivers.get(0);
         WebDriver driver2 = drivers.get(1);
 
-        RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        Future<Void> driverFuture = EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver2);
-            IndexPageActions.registerUser(driver2, userData2);
-            ModulesPageActions.openModule(driver2, ModuleLocation.SKYXPLORE);
-            SkyXploreCharacterActions.submitForm(driver2);
-            return null;
-        });
-
-        Navigation.toIndexPage(driver1);
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver1, userData1);
+        RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        ModulesPageActions.openModule(driver1, ModuleLocation.SKYXPLORE);
-        SkyXploreCharacterActions.submitForm(driver1);
-
-        AwaitilityWrapper.create(120, 5)
-            .until(driverFuture::isDone)
-            .assertTrue("Member player is not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
 

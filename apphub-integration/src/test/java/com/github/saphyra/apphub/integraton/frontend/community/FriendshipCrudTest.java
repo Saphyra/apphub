@@ -1,17 +1,15 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.FriendshipActions;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequest;
 import com.github.saphyra.apphub.integration.structure.api.community.Friendship;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -21,8 +19,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,17 +32,10 @@ public class FriendshipCrudTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> headToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .toList();
-
-        for (int i = 0; i < 120; i++) {
-            if (futures.stream().allMatch(Future::isDone)) {
-                break;
-            }
-
-            SleepUtil.sleep(1000);
-        }
+        RegistrationUtils.registerUsers(
+            List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)),
+            (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
+        );
 
         //Search - User not found
         FriendRequestActions.fillSearchForm(driver1, UUID.randomUUID().toString());
@@ -167,14 +156,5 @@ public class FriendshipCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> FriendshipActions.getFriendships(driver1).isEmpty())
             .assertTrue("Friendship is not deleted.");
-    }
-
-    private Future<Void> headToMainMenu(WebDriver driver, RegistrationParameters userData) {
-        return EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver);
-            IndexPageActions.registerUser(driver, userData);
-            ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
-            return null;
-        });
     }
 }

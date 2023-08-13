@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.GroupActions;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupMember;
@@ -20,8 +19,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,17 +36,10 @@ public class GroupMemberCrudTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
-        List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))
-            .map(biWrapper -> headToCommunity(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .toList();
-
-        for (int i = 0; i < 120; i++) {
-            if (futures.stream().allMatch(Future::isDone)) {
-                break;
-            }
-
-            SleepUtil.sleep(1000);
-        }
+        RegistrationUtils.registerUsers(
+            List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)),
+            (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
+        );
 
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData2.getUsername(), driver2);
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData3.getUsername(), driver3);
@@ -218,14 +208,5 @@ public class GroupMemberCrudTest extends SeleniumTest {
         GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
 
         assertThat(GroupActions.getMembers(driver2)).hasSize(1);
-    }
-
-    private Future<Void> headToCommunity(WebDriver driver, RegistrationParameters userData) {
-        return EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver);
-            IndexPageActions.registerUser(driver, userData);
-            ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
-            return null;
-        });
     }
 }
