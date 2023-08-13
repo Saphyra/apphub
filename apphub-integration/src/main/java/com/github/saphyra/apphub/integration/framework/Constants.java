@@ -19,11 +19,11 @@ public class Constants {
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
 
-    public final String TEST_ROLE_NAME = "Teszt";
+    public final String TEST_ROLE_NAME = "Test";
     public final String GENERAL_CHAT_ROOM_NAME = "general";
-    public static final String NEW_ALLIANCE_LABEL = "Új szövetség";
+    public static final String NEW_ALLIANCE_LABEL = "New alliance";
     public static final String NEW_ALLIANCE_VALUE = "new-alliance";
-    public final String NO_ALLIANCE_LABEL = "Nincs szövetség";
+    public final String NO_ALLIANCE_LABEL = "No alliance";
     public static final String NO_ALLIANCE_VALUE = "no-alliance";
 
     //SurfaceTypes

@@ -30,7 +30,7 @@ public class SkyXplorePlanetStorageSettingActions {
 
         GamePage.createStorageSettingButton(driver).click();
 
-        NotificationUtil.verifySuccessNotification(driver, "Raktár beállítás létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Storage setting created.");
     }
 
     public static SelectMenu createStorageSettingResourceSelectMenu(WebDriver driver) {

@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum NewPasswordValidationResult {
     VALID(null),
-    TOO_SHORT("Jelszó túl rövid (Minimum 6 karakter)."),
-    TOO_LONG("Jelszó túl hosszú (Maximum 30 karakter).");
+    TOO_SHORT("Password too short (6 characters min.)."),
+    TOO_LONG("Password too long (30 characters max.).");
 
     private final String errorMessage;
 }

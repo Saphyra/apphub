@@ -26,7 +26,7 @@ public class FilterTest extends SeleniumTest {
             .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
 
         //Search category
-        ModulesPageActions.search(driver, "fiók");
+        ModulesPageActions.search(driver, "account");
         Category categoryResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()
@@ -35,13 +35,13 @@ public class FilterTest extends SeleniumTest {
         assertThat(categoryResult.getModules()).hasSize(1);
 
         //Search by module
-        ModulesPageActions.search(driver, "ó");
+        ModulesPageActions.search(driver, "a");
         AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() != 1)
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Failed resetting search result."));
 
-        ModulesPageActions.search(driver, "ók");
+        ModulesPageActions.search(driver, "manage");
         Category moduleResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()

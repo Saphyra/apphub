@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.GroupActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +41,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
         List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))
             .map(biWrapper -> headToCommunity(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
+            .toList();
 
         for (int i = 0; i < 120; i++) {
             if (futures.stream().allMatch(Future::isDone)) {
@@ -88,7 +87,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
         //Add member
         GroupActions.addMember(driver1, userData2.getUsername());
 
-        NotificationUtil.verifySuccessNotification(driver1, "Tag hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Group member added.");
 
         groupMembers = GroupActions.getMembers(driver1);
         assertThat(groupMembers).hasSize(2);
@@ -166,7 +165,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
         GroupActions.addMember(driver2, userData3.getUsername());
 
-        NotificationUtil.verifySuccessNotification(driver2, "Tag hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Group member added.");
 
         groupMembers = GroupActions.getMembers(driver2);
         assertThat(groupMembers).hasSize(3);
@@ -190,7 +189,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
         groupMember.getKickButton()
             .click();
         CommonPageActions.confirmConfirmationDialog(driver2, "kick-group-member-confirmation-dialog");
-        NotificationUtil.verifySuccessNotification(driver2, "Tag eltávolítva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Group member kicked.");
 
         groupMembers = GroupActions.getMembers(driver2);
         assertThat(groupMembers).hasSize(2);
@@ -203,13 +202,13 @@ public class GroupMemberCrudTest extends SeleniumTest {
             .orElseThrow(() -> new NullPointerException("Transfer ownership button not present or not enabled."))
             .click();
         CommonPageActions.confirmConfirmationDialog(driver1, "transfer-ownership-confirmation-dialog");
-        NotificationUtil.verifySuccessNotification(driver1, "Vezetés átadva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Ownership transferred.");
 
         //Leave group
         GroupActions.openGroup(driver1, GroupActions.getGroups(driver1).get(0));
 
         GroupActions.leaveGroup(driver1);
-        NotificationUtil.verifySuccessNotification(driver1, "Csapat elhagyva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Group left.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> GroupActions.getGroups(driver1).isEmpty())

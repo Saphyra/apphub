@@ -261,10 +261,10 @@ public class LobbySettingsTest extends SeleniumTest {
 
         //Validation
         SkyXploreLobbyActions.fillNewAiName(driver1, "aa");
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Karakter név túl rövid. (Minimum 3 karakter)");
+        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too short. (Minimum 3 characters)");
 
         SkyXploreLobbyActions.fillNewAiName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Karakter név túl hosszú. (Maximum 30 karakter)");
+        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too long. (Maximum 30 characters)");
 
         //Create and Remove
         assertThat(SkyXploreLobbyActions.isCreateAiPanelPresent(driver2)).isFalse();
@@ -288,7 +288,7 @@ public class LobbySettingsTest extends SeleniumTest {
             .map(Optional::get)
             .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + AI_NAME));
 
-        aiPlayer.setAlliance("Új szövetség");
+        aiPlayer.setAlliance(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.findAiByNameValidated(driver1, AI_NAME).getAlliance().equals("1"))
@@ -354,6 +354,6 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani.");
+        ToastMessageUtil.verifyErrorToast(driver, "Every player is in the same alliance. Game is boring with no one to conquer.");
     }
 }

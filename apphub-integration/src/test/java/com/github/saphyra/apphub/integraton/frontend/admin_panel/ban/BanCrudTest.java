@@ -60,14 +60,14 @@ public class BanCrudTest extends SeleniumTest {
 
         openUser(adminDriver, testUserData);
 
-        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Válaszd ki a kitiltandó jogosultságot!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Időtartam túl kevés (minimum 1)");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), "Válassz időegységet!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "A kitiltás oka nem lehet üres.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "A jelszó nem lehet üres.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Fiók zárolva. Próbáld újra később!");
+        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Select role to ban!");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Duration too low (min. 1)");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), "Select time unit!");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "Reason must not be blank.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "Password must not be empty");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -78,7 +78,7 @@ public class BanCrudTest extends SeleniumTest {
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
-        NotificationUtil.verifySuccessNotification(adminDriver, "Felhasználó kitiltva.");
+        NotificationUtil.verifySuccessNotification(adminDriver, "User banned.");
 
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
@@ -89,10 +89,10 @@ public class BanCrudTest extends SeleniumTest {
         new WebDriverWait(testDriver, Duration.ofSeconds(5))
             .until(ExpectedConditions.presenceOfElementLocated(By.id("message-content")));
 
-        revokeBan_runValidation(adminDriver, "", "A jelszó nem lehet üres.");
-        revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
-        revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
-        revokeBan_runValidation(adminDriver, "asd", "Fiók zárolva. Próbáld újra később!");
+        revokeBan_runValidation(adminDriver, "", "Password must not be empty");
+        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
+        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
+        revokeBan_runValidation(adminDriver, "asd", "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -102,7 +102,7 @@ public class BanCrudTest extends SeleniumTest {
         openUser(adminDriver, testUserData);
 
         revokeBan(adminDriver, adminUserData.getPassword());
-        NotificationUtil.verifySuccessNotification(adminDriver, "Tiltás visszavonva.");
+        NotificationUtil.verifySuccessNotification(adminDriver, "Ban revoked.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.getCurrentBans(adminDriver).isEmpty())

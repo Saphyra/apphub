@@ -52,7 +52,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         NewChecklistActions.fillTitle(driver, " ");
         NewChecklistActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewChecklistActions.fillTitle(driver, CHECKLIST_TITLE);
@@ -121,7 +121,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         ViewChecklistActions.fillTitle(driver, " ");
         ViewChecklistActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Discard changes
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);

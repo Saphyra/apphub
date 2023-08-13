@@ -46,7 +46,7 @@ public class CategoryCrudTest extends SeleniumTest {
         NewCategoryActions.fillTitle(driver, " ");
         NewCategoryActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewCategoryActions.fillTitle(driver, CATEGORY_1_TITLE);
@@ -70,7 +70,7 @@ public class CategoryCrudTest extends SeleniumTest {
         EditListItemActions.fillTitle(driver, " ");
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);

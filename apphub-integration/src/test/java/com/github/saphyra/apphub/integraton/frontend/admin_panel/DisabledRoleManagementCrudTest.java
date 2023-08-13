@@ -51,13 +51,13 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .forEach(s -> {
                 DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
                 DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
                 assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
             });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
@@ -77,7 +77,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság letiltva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role disabled.");
 
         DisabledRole disabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
@@ -96,13 +96,13 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .forEach(s -> {
                 DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
                 DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
                 assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
             });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
 
         //Enable role
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
@@ -123,7 +123,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság engedélyezve.");
+        NotificationUtil.verifySuccessNotification(driver, "Role enabled.");
 
         DisabledRole enabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()

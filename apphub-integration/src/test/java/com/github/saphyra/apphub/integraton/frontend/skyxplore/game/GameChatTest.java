@@ -31,10 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameChatTest extends SeleniumTest {
-    public static final String GENERAL_ROOM_NAME = "Általános";
+    public static final String GENERAL_ROOM_NAME = "General";
     private static final String GAME_NAME = "game-name";
     private static final String MESSAGE_1 = "message-1";
-    private static final String ALLIANCE_ROOM_NAME = "Szövetség";
+    private static final String ALLIANCE_ROOM_NAME = "Alliance";
     private static final String MESSAGE_2 = "message-2";
     private static final String CUSTOM_ROOM_NAME = "custom-room";
     private static final String MESSAGE_3 = "message-3";

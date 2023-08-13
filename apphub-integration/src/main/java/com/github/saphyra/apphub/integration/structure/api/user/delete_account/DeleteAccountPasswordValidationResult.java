@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum DeleteAccountPasswordValidationResult {
     VALID(null),
-    EMPTY_PASSWORD("A jelszó megadása kötelező.");
+    EMPTY_PASSWORD("Password is empty.");
 
     private final String errorMessage;
 }

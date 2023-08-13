@@ -52,12 +52,12 @@ public class TableCrudTest extends SeleniumTest {
         //Create - Blank title
         NewTableActions.fillTitle(driver, " ");
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create - Has Blank column name
         NewTableActions.fillTitle(driver, TABLE_TITLE);
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Az oszlop neve nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
 
         //-- Add row
         NewTableActions.newRow(driver);
@@ -175,7 +175,7 @@ public class TableCrudTest extends SeleniumTest {
         ViewTableActions.setTitle(driver, " ");
 
         ViewTableActions.saveChanges(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Blank column name
         ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
@@ -186,7 +186,7 @@ public class TableCrudTest extends SeleniumTest {
 
         ViewTableActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Az oszlop neve nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
 
         //Edit - Discard
         ViewTableActions.discardChanges(driver);
@@ -375,12 +375,12 @@ public class TableCrudTest extends SeleniumTest {
         //Create - Blank title
         NewTableActions.fillTitle(driver, " ");
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create - Has Blank column name
         NewTableActions.fillTitle(driver, TABLE_TITLE);
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Az oszlop neve nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
 
         //-- Add row
         NewTableActions.newRow(driver);
@@ -490,7 +490,7 @@ public class TableCrudTest extends SeleniumTest {
         ViewTableActions.setTitle(driver, " ");
 
         ViewTableActions.saveChanges(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Blank column name
         ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
@@ -501,7 +501,7 @@ public class TableCrudTest extends SeleniumTest {
 
         ViewTableActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Az oszlop neve nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
 
         //Edit - Discard
         ViewTableActions.discardChanges(driver);

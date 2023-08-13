@@ -38,14 +38,14 @@ public class RoleManagementTest extends SeleniumTest {
         //Add role
         RoleManagementUser user = RoleManagementPageActions.searchForUser(driver, testUserData.getEmail());
         user.addRole(Constants.ROLE_TEST);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role added.");
         assertThat(user.getCurrentRoleNames()).contains(Constants.ROLE_TEST);
         assertThat(user.getAvailableRoleNames()).doesNotContain(Constants.ROLE_TEST);
 
         //Remove role
         user = RoleManagementPageActions.searchForUser(driver, testUserData.getEmail());
         user.removeRole(Constants.ROLE_TEST);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság eltávolítva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role removed.");
         assertThat(user.getCurrentRoleNames()).doesNotContain(Constants.ROLE_TEST);
         assertThat(user.getAvailableRoleNames()).contains(Constants.ROLE_TEST);
     }

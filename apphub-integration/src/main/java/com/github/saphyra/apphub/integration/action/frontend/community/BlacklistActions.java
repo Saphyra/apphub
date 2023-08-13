@@ -27,7 +27,7 @@ public class BlacklistActions {
             .until(() -> !CommunityPage.createBlacklistPage(driver).isDisplayed())
             .assertTrue("Create Blacklist page is not closed");
 
-        NotificationUtil.verifySuccessNotification(driver, "Felhasználó tiltva.");
+        NotificationUtil.verifySuccessNotification(driver, "User blocked.");
     }
 
     public static void fillSearchForm(WebDriver driver, String query) {

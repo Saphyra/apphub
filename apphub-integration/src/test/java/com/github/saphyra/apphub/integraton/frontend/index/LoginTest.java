@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 
 public class LoginTest extends SeleniumTest {
     private static final String INCORRECT_PASSWORD = "incorrect-password";
-    private static final String EMPTY_CREDENTIALS_MESSAGE = "E-mail és jelszó megadása kötelező!";
-    private static final String BAD_CREDENTIALS_MESSAGE = "Az email cím és jelszó kombinációja ismeretlen.";
+    private static final String EMPTY_CREDENTIALS_MESSAGE = "Please fill e-mail address and password!";
+    private static final String BAD_CREDENTIALS_MESSAGE = "Unknown combination of e-mail address and password.";
 
     @Test
     public void login() {
@@ -64,10 +64,10 @@ public class LoginTest extends SeleniumTest {
             });
 
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
 
         IndexPageActions.submitLogin(driver, loginParameters);
-        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 

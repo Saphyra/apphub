@@ -45,14 +45,14 @@ public class DeleteAccountTest extends SeleniumTest {
             .limit(2)
             .forEach(s -> {
                 AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
-                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
             });
 
         AccountPageActions.deleteAccount(driver, DataConstants.INCORRECT_PASSWORD);
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
-        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
 
         //Cancel deletion
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
@@ -73,6 +73,6 @@ public class DeleteAccountTest extends SeleniumTest {
         //NotificationUtil.verifySuccessNotification(driver, "Account törölve."); TODO restore when account page is migrated to React
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
-        ToastMessageUtil.verifyErrorToast(driver, "Az email cím és jelszó kombinációja ismeretlen.");
+        ToastMessageUtil.verifyErrorToast(driver, "Unknown combination of e-mail address and password.");
     }
 }

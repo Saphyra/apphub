@@ -46,14 +46,14 @@ public class LinkCrudTest extends SeleniumTest {
         NewLinkActions.fillTitle(driver, "");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create - Blank URL
         NewLinkActions.fillTitle(driver, LINK_TITLE);
         NewLinkActions.fillUrl(driver, " ");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
 
         //Create
         NewLinkActions.fillUrl(driver, UrlFactory.create(Endpoints.MODULES_PAGE));
@@ -84,7 +84,7 @@ public class LinkCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Blank URL
         EditListItemActions.fillTitle(driver, NEW_LINK_TITLE);
@@ -92,7 +92,7 @@ public class LinkCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
 
         //Edit
         EditListItemActions.fillValue(driver, UrlFactory.create(Endpoints.ACCOUNT_PAGE));

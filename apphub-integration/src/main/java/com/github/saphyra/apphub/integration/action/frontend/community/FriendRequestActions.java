@@ -27,7 +27,7 @@ public class FriendRequestActions {
             .until(() -> !CommunityPage.createFriendRequestPage(driver).isDisplayed())
             .assertTrue("Create FriendRequest page is not closed");
 
-        NotificationUtil.verifySuccessNotification(driver, "Barátkérelem elküldve.");
+        NotificationUtil.verifySuccessNotification(driver, "Friend request sent.");
     }
 
     public static void fillSearchForm(WebDriver driver, String query) {

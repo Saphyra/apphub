@@ -74,7 +74,7 @@ public class LobbyInvitationTest extends SeleniumTest {
         assertThat(invitedMember.getStatus()).isEqualTo(LobbyMemberStatus.INVITED);
 
         onlineFriend.invite();
-        ToastMessageUtil.verifyErrorToast(driver1, "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!");
+        ToastMessageUtil.verifyErrorToast(driver1, "You have invited this player recently. Please wait a few seconds before trying again.");
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 

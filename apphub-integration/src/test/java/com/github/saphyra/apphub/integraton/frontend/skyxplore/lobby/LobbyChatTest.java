@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LobbyChatTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
-    private static final String USER_JOINED_TO_LOBBY_TEMPLATE = "%s csatlakozott.";
+    private static final String USER_JOINED_TO_LOBBY_TEMPLATE = "%s connected.";
     private static final String MESSAGE_TEXT_1 = "message-1";
     private static final String MESSAGE_TEXT_2 = "message-2";
-    private static final String USER_LEFT_LOBBY_TEMPLATE = "%s elhagyta az előszobát.";
+    private static final String USER_LEFT_LOBBY_TEMPLATE = "%s left the lobby.";
 
     @Test(groups = "skyxplore")
     public void sendAndReceiveMessages() {

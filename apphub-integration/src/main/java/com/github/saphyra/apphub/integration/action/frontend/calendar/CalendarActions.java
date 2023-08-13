@@ -29,7 +29,7 @@ public class CalendarActions {
         fillEventTitle(driver, title);
         pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
     }
 
     public static void selectDay(WebDriver driver, LocalDate currentDate) {
@@ -185,7 +185,7 @@ public class CalendarActions {
 
         CommonPageActions.confirmConfirmationDialog(driver, "delete-event-confirmation-dialog");
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény törölve.");
+        NotificationUtil.verifySuccessNotification(driver, "Event deleted.");
     }
 
     public static void setCreateEventRepetitionType(WebDriver driver, RepetitionType repetitionType) {

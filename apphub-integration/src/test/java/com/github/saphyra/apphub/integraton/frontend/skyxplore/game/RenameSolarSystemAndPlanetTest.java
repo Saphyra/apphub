@@ -57,7 +57,7 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         //SolarSystem - Too long
         SkyXploreSolarSystemActions.renameSolarSystem(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(oldSolarSystemName);
-        NotificationUtil.verifyErrorNotification(driver, "Csillagrendszer név túl hosszú (Maximum 30 karakter).");
+        NotificationUtil.verifyErrorNotification(driver, "Solar System name too long (Max. 30 characters).");
         NotificationUtil.clearNotifications(driver);
 
         //SolarSystem - Rename
@@ -84,7 +84,7 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         //Planet - Too long
         SkyXplorePlanetActions.renamePlanet(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(oldPlanetName);
-        NotificationUtil.verifyErrorNotification(driver, "Bolygó név túl hosszú (Maximum 30 karakter).");
+        NotificationUtil.verifyErrorNotification(driver, "Planet name too long (Max. 30 characters).");
         NotificationUtil.clearNotifications(driver);
 
         //Planet - Rename

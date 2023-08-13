@@ -40,12 +40,12 @@ public class GroupCrudTest extends SeleniumTest {
 
         GroupActions.fillCreateGroupNameInput(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         SleepUtil.sleep(2000);
-        GroupActions.verifyCreateGroupNameError(driver, "Csoport neve túl hosszú (Maximum 30 karakter)");
+        GroupActions.verifyCreateGroupNameError(driver, "Group name too long (Maximum 30 characters)");
 
         //Create group - name too short
         GroupActions.fillCreateGroupNameInput(driver, "as");
         SleepUtil.sleep(2000);
-        GroupActions.verifyCreateGroupNameError(driver, "Csoport neve túl rövid (Minimum 3 karakter)");
+        GroupActions.verifyCreateGroupNameError(driver, "Group name too short (Minimum 3 characters)");
 
         //Create group
         GroupActions.fillCreateGroupNameInput(driver, GROUP_NAME);
@@ -53,7 +53,7 @@ public class GroupCrudTest extends SeleniumTest {
         GroupActions.verifyCreateGroupNameCorrect(driver);
         GroupActions.submitCreateGroupForm(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Csoport létrehozva");
+        NotificationUtil.verifySuccessNotification(driver, "Group created.");
 
         GroupActions.closeGroupDetails(driver);
 
@@ -66,21 +66,21 @@ public class GroupCrudTest extends SeleniumTest {
 
         GroupActions.setGroupName(driver, "as");
 
-        NotificationUtil.verifyErrorNotification(driver, "Csoport neve túl rövid (Minimum 3 karakter)");
+        NotificationUtil.verifyErrorNotification(driver, "Group name too short (Minimum 3 characters)");
 
         assertThat(GroupActions.getGroupName(driver)).isEqualTo(GROUP_NAME);
 
         //Rename group - name too long
         GroupActions.setGroupName(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
-        NotificationUtil.verifyErrorNotification(driver, "Csoport neve túl hosszú (Maximum 30 karakter)");
+        NotificationUtil.verifyErrorNotification(driver, "Group name too long (Maximum 30 characters)");
 
         assertThat(GroupActions.getGroupName(driver)).isEqualTo(GROUP_NAME);
 
         //Rename group
         GroupActions.setGroupName(driver, NEW_GROUP_NAME);
 
-        NotificationUtil.verifySuccessNotification(driver, "Csoport átnevezve.");
+        NotificationUtil.verifySuccessNotification(driver, "Group renamed.");
 
         GroupActions.closeGroupDetails(driver);
 
@@ -93,12 +93,12 @@ public class GroupCrudTest extends SeleniumTest {
 
         GroupActions.changeInvitationType(driver, GroupInvitationType.FRIENDS_OF_FRIENDS);
 
-        NotificationUtil.verifySuccessNotification(driver, "Meghívás módja megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Invitation type changed.");
 
         //Disband group
         GroupActions.disbandGroup(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Csapat feloszlatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Group disbanded.");
 
         assertThat(GroupActions.getGroups(driver)).isEmpty();
     }

@@ -66,7 +66,7 @@ public class BanExpirationTest extends SeleniumTest {
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
-        NotificationUtil.verifySuccessNotification(adminDriver, "Felhasználó kitiltva.");
+        NotificationUtil.verifySuccessNotification(adminDriver, "User banned.");
 
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();

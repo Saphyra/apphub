@@ -62,14 +62,14 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         //Empty date
         BanActions.submitDeleteAccountForm(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "A dátum nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Date must not be empty.");
 
         //Empty time
         BanActions.fillDeleteUserDate(adminDriver, DATE);
 
         BanActions.submitDeleteAccountForm(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Az idő nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Time must not be empty.");
 
         //Empty password
         BanActions.fillDeleteUserTime(adminDriver, HOURS, MINUTES);
@@ -77,7 +77,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Írd be a jelszavad.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Please enter your password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
 
         //Incorrect password
@@ -85,7 +85,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Incorrect password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
 
         //Schedule deletion
@@ -98,7 +98,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
             .assertTrue("User deletion is not scheduled.");
 
         assertThat(BanActions.isUserMarkedForDeletion(adminDriver)).isTrue();
-        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE.toString() + " " + (HOURS + 2) + ":" + MINUTES + ":00");
+        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE + " " + (HOURS + 2) + ":" + MINUTES + ":00");
 
         //Delete schedule
         BanActions.unmarkForDeletion(adminDriver);

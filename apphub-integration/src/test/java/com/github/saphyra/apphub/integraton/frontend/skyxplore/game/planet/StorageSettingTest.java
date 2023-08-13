@@ -67,7 +67,7 @@ public class StorageSettingTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
         assertThat(storageSetting.getAmount()).isEqualTo(10);
         assertThat(storageSetting.getBatchSize()).isEqualTo(5);
         assertThat(storageSetting.getPriority()).isEqualTo(3);
@@ -82,7 +82,7 @@ public class StorageSettingTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(editedSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(editedSetting.getResourceName()).isEqualTo("Ore");
         assertThat(editedSetting.getAmount()).isEqualTo(20);
         assertThat(editedSetting.getBatchSize()).isEqualTo(7);
         assertThat(editedSetting.getPriority()).isEqualTo(8);
@@ -138,7 +138,7 @@ public class StorageSettingTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
 
         SkyXplorePlanetActions.closeStorageSettingsWindow(driver);
 

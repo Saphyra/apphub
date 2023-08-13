@@ -41,6 +41,6 @@ public class SkyXploreCharacterActions {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Player is not redirected to main menu.");
-        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
     }
 }

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ConfirmPasswordValidationResult {
     VALID(null),
-    INVALID_CONFIRM_PASSWORD("A jelszavak nem egyeznek.");
+    INVALID_CONFIRM_PASSWORD("Incorrect confirm password.");
 
     private final String errorMessage;
 }

@@ -52,7 +52,7 @@ public class ChangeUsernameTest extends SeleniumTest {
             .username(existingUserData.getUsername())
             .build();
         AccountPageActions.changeUsername(driver, usernameAlreadyExistsParameters);
-        NotificationUtil.verifyErrorNotification(driver, "A felhasználónév foglalt.");
+        NotificationUtil.verifyErrorNotification(driver, "Username already in use.");
 
         //Incorrect password
         ChangeUsernameParameters incorrectPasswordParameters = ChangeUsernameParameters.valid()
@@ -60,12 +60,12 @@ public class ChangeUsernameTest extends SeleniumTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changeUsername(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
 
         //Change
         ChangeUsernameParameters changeParameters = ChangeUsernameParameters.valid();
         AccountPageActions.changeUsername(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Felhasználónév megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Username changed successfully.");
     }
 
     private ChangeUsernameValidationResult valid() {

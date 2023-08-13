@@ -1,6 +1,6 @@
 const COOKIE_LOCALE = "language";
 const HEADER_BROWSER_LANGUAGE = "BrowserLanguage";
-const DEFAULT_LOCALE = "hu";
+const DEFAULT_LOCALE = "en";
 const LINE_SEPARATOR = "\n";
 
 (function ScriptLoader(){

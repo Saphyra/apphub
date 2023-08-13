@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum UsernameValidationResult {
     VALID(null),
-    TOO_SHORT("Felhasználónév túl rövid (Minimum 3 karakter)."),
-    TOO_LONG("Felhasználónév túl hosszú (Maximum 30 karakter).");
+    TOO_SHORT("Username too short (3 character min.)."),
+    TOO_LONG("Username too long (30 characters max.).");
 
     private final String errorMessage;
 }

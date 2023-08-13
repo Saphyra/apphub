@@ -70,9 +70,9 @@ public class BanActions {
         String text = BanPage.userMarkedForDeletion(driver)
             .getText();
 
-        assertThat(text).isIn("Igen", "Nem");
+        assertThat(text).isIn("Yes", "No");
 
-        return text.equals("Igen");
+        return text.equals("Yes");
     }
 
     public static String getUserMarkedForDeletionAt(WebDriver driver) {

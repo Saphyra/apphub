@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +36,7 @@ public class BlacklistCrudTest extends SeleniumTest {
 
         List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
             .map(biWrapper -> headToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
+            .toList();
 
         for (int i = 0; i < 120; i++) {
             if (futures.stream().allMatch(Future::isDone)) {
@@ -75,7 +74,7 @@ public class BlacklistCrudTest extends SeleniumTest {
 
         CommonPageActions.confirmConfirmationDialog(driver1, "delete-blacklist-confirmation-dialog");
 
-        NotificationUtil.verifySuccessNotification(driver1, "Tiltás feloldva.");
+        NotificationUtil.verifySuccessNotification(driver1, "User unblocked");
 
         AwaitilityWrapper.createDefault()
             .until(() -> BlacklistActions.getBlacklist(driver1).isEmpty())

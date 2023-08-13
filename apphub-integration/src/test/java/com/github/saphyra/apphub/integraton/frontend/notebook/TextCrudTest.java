@@ -45,7 +45,7 @@ public class TextCrudTest extends SeleniumTest {
         NewTextActions.fillTitle(driver, " ");
         NewTextActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewTextActions.fillTitle(driver, TEXT_TITLE);
@@ -69,7 +69,7 @@ public class TextCrudTest extends SeleniumTest {
         ViewTextActions.setTitle(driver, " ");
         ViewTextActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Discard
         ViewTextActions.setTitle(driver, NEW_TEXT_TITLE);

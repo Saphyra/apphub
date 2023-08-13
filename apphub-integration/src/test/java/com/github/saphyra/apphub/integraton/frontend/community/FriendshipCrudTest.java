@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.FriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +38,7 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
             .map(biWrapper -> headToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
+            .toList();
 
         for (int i = 0; i < 120; i++) {
             if (futures.stream().allMatch(Future::isDone)) {
@@ -79,7 +78,7 @@ public class FriendshipCrudTest extends SeleniumTest {
         //Cancel friend request by sender
         friendRequest.delete();
 
-        NotificationUtil.verifySuccessNotification(driver1, "Barátkérelem törölve.");
+        NotificationUtil.verifySuccessNotification(driver1, "Friend request deleted.");
 
         assertThat(FriendRequestActions.getSentFriendRequests(driver1)).isEmpty();
 
@@ -96,7 +95,7 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         receivedFriendRequests.get(0).delete();
 
-        NotificationUtil.verifySuccessNotification(driver2, "Barátkérelem törölve.");
+        NotificationUtil.verifySuccessNotification(driver2, "Friend request deleted.");
         assertThat(FriendRequestActions.getReceivedFriendRequests(driver2)).isEmpty();
 
         CommunityActions.openFriendsTab(driver1);
@@ -111,7 +110,7 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         receivedFriendRequests.get(0).accept();
 
-        NotificationUtil.verifySuccessNotification(driver2, "Barátkérelem elfogadva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Friend request accepted.");
         assertThat(FriendRequestActions.getReceivedFriendRequests(driver2)).isEmpty();
 
         List<Friendship> receiverFriendships = FriendshipActions.getFriendships(driver2);
@@ -135,7 +134,7 @@ public class FriendshipCrudTest extends SeleniumTest {
         friendship.delete();
         CommonPageActions.confirmConfirmationDialog(driver1, "delete-friendship-confirmation-dialog");
 
-        NotificationUtil.verifySuccessNotification(driver1, "Barátság megszakítva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Friendship ended.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> FriendshipActions.getFriendships(driver1).isEmpty())
@@ -158,7 +157,7 @@ public class FriendshipCrudTest extends SeleniumTest {
             .delete();
         CommonPageActions.confirmConfirmationDialog(driver2, "delete-friendship-confirmation-dialog");
 
-        NotificationUtil.verifySuccessNotification(driver2, "Barátság megszakítva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Friendship ended.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> FriendshipActions.getFriendships(driver2).isEmpty())

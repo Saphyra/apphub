@@ -39,7 +39,7 @@ public class RegistrationTest extends SeleniumTest {
         IndexPageActions.fillRegistrationForm(driver, usernameAlreadyExists);
         IndexPageActions.submitRegistration(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "A felhasználónév foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "Username already in use.");
 
         //Email already exists
         RegistrationParameters emailAlreadyExists = RegistrationParameters.validParameters().toBuilder()
@@ -47,7 +47,7 @@ public class RegistrationTest extends SeleniumTest {
             .build();
         IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
         IndexPageActions.submitRegistration(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Az email foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "E-mail address is already in use.");
     }
 
     private void executeValidationTest(WebDriver driver, RegistrationParameters parameters, RegistrationValidationResult validationResult) {

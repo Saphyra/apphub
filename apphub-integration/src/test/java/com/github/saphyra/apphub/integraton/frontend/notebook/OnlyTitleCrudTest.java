@@ -37,7 +37,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
         NewOnlyTitleActions.fillTitle(driver, " ");
         NewOnlyTitleActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewOnlyTitleActions.fillTitle(driver, ONLY_TITLE_TITLE);
@@ -54,7 +54,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit
         EditListItemActions.fillTitle(driver, NEW_ONLY_TITLE_TITLE);

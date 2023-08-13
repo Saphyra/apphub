@@ -52,11 +52,11 @@ public class GameCrudTest extends SeleniumTest {
 
         //Create lobby - Game name too short
         SkyXploreMainMenuActions.fillGameName(driver1, "aa");
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl rövid. (Minimum 3 karakter)");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Game name too short. (Minimum 3 characters)");
 
         //Create lobby - Game name too long
         SkyXploreMainMenuActions.fillGameName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl hosszú. (Maximum 30 karakter)");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Game name too long. (Maximum 30 characters)");
 
         //Create lobby
         SkyXploreMainMenuActions.fillGameName(driver1, "game-name");
@@ -71,7 +71,7 @@ public class GameCrudTest extends SeleniumTest {
         //Start game - not ready
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
+        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
 
         //Start game
         SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
@@ -108,7 +108,7 @@ public class GameCrudTest extends SeleniumTest {
         //Start game - Not all members ready
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
+        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
 
         //Check if not-member friend is not available to invite
         assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();

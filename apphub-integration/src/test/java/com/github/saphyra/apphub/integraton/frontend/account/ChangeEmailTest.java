@@ -52,7 +52,7 @@ public class ChangeEmailTest extends SeleniumTest {
             .email(existingUserData.getEmail())
             .build();
         AccountPageActions.changeEmail(driver, emailAlreadyExistsParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
+        NotificationUtil.verifyErrorNotification(driver, "E-mail address is already in use.");
 
         //Incorrect password
         ChangeEmailParameters incorrectPasswordParameters = ChangeEmailParameters.valid()
@@ -60,16 +60,16 @@ public class ChangeEmailTest extends SeleniumTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changeEmail(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
 
         //Change
         ChangeEmailParameters changeParameters = ChangeEmailParameters.valid();
         AccountPageActions.changeEmail(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Email cím megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Email changed successfully.");
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ToastMessageUtil.verifyErrorToast(driver, "Az email cím és jelszó kombinációja ismeretlen.");
+        ToastMessageUtil.verifyErrorToast(driver, "Unknown combination of e-mail address and password.");
         IndexPageActions.submitLogin(driver, LoginParameters.builder().email(changeParameters.getEmail()).password(userData.getPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))

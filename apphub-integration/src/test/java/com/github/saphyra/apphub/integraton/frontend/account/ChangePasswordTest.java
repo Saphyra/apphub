@@ -59,16 +59,16 @@ public class ChangePasswordTest extends SeleniumTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changePassword(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
 
         //Change
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
         AccountPageActions.changePassword(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Jelszó megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Password Changed.");
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ToastMessageUtil.verifyErrorToast(driver, "Az email cím és jelszó kombinációja ismeretlen.");
+        ToastMessageUtil.verifyErrorToast(driver, "Unknown combination of e-mail address and password.");
         IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))

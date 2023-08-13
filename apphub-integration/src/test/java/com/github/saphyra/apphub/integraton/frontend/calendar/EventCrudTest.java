@@ -48,7 +48,7 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(driver, "Title must not be empty.");
 
         //Create - No Hours
         CalendarActions.fillEventTitle(driver, TITLE);
@@ -59,7 +59,7 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+        NotificationUtil.verifyErrorNotification(driver, "Both or neither hours and minutes need to be filled.");
 
         //Create - No Minutes
         CalendarActions.setCreateEventMinutes(driver, "");
@@ -67,14 +67,14 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+        NotificationUtil.verifyErrorNotification(driver, "Both or neither hours and minutes need to be filled.");
 
         //Create
         CalendarActions.setCreateEventHours(driver, "");
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -194,14 +194,14 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
+        NotificationUtil.verifyErrorNotification(driver, "No day selected.");
 
         //Create
         CalendarActions.selectDayOfWeek(driver, FIRST_OF_MONTH.getDayOfWeek());
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -237,7 +237,7 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.saveModifications(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(driver, "Title must not be empty.");
 
         //Edit event
         CalendarActions.editTitle(driver, NEW_TITLE);
@@ -286,14 +286,14 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
+        NotificationUtil.verifyErrorNotification(driver, "No day selected.");
 
         //Create
         CalendarActions.selectDayOfMonth(driver, 21);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -334,14 +334,14 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Napok száma túl alacsony (minimum 1)");
+        NotificationUtil.verifyErrorNotification(driver, "Days too low (minimum 1).");
 
         //Create
         CalendarActions.fillRepetitionDays(driver, 5);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         for (int i = 0; i <= 25; i += 5) {
             LocalDate date = FIRST_OF_MONTH.plusDays(i);

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class SkyXploreUtils {
                 IndexPageActions.registerUser(driver, userData);
 
                 ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+                SleepUtil.sleep(1000);
                 SkyXploreCharacterActions.submitForm(driver);
 
                 AwaitilityWrapper.createDefault()

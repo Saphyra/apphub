@@ -42,31 +42,32 @@ public class SeleniumTest extends TestBase {
     @AfterMethod(alwaysRun = true)
     public synchronized void afterMethod(ITestResult testResult) {
         try {
-            driverWrappers.get()
-                .forEach(webDriverWrapper -> {
-                    WebDriver driver = webDriverWrapper.getDriver();
-                    if (ITestResult.FAILURE == testResult.getStatus()) {
-                        log.error("Current URL: {}", driver.getCurrentUrl());
-                        reportFailure(webDriverWrapper, testResult.getName());
-                        WebDriverFactory.invalidate(webDriverWrapper);
-                    } else {
-                        WebDriverFactory.release(webDriverWrapper);
-                    }
-                });
+            List<WebDriverWrapper> wrappers = driverWrappers.get();
+            for (int i = 0; i < wrappers.size(); i++) {
+                WebDriverWrapper webDriverWrapper = wrappers.get(i);
+                WebDriver driver = webDriverWrapper.getDriver();
+                if (ITestResult.FAILURE == testResult.getStatus()) {
+                    log.error("Current URL: {}", driver.getCurrentUrl());
+                    reportFailure(webDriverWrapper, testResult.getName(), i);
+                    WebDriverFactory.invalidate(webDriverWrapper);
+                } else {
+                    WebDriverFactory.release(webDriverWrapper);
+                }
+            }
         } finally {
             driverWrappers.remove();
         }
     }
 
     @SneakyThrows
-    private void reportFailure(WebDriverWrapper driver, String method) {
+    private void reportFailure(WebDriverWrapper driver, String method, int driverIndex) {
         String directory = "d:/screenshots/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
-        takeScreenshot(driver, directory);
-        saveLogs(driver, directory);
+        takeScreenshot(driver, directory, driverIndex);
+        saveLogs(driver, directory, driverIndex);
     }
 
-    private static void takeScreenshot(WebDriverWrapper driver, String directory) throws IOException {
-        String fileName = directory + "/screenshot.png";
+    private static void takeScreenshot(WebDriverWrapper driver, String directory, int driverIndex) throws IOException {
+        String fileName = directory + String.format("/screenshot_%s.png", driverIndex);
         log.info("Screenshot fileName: {}", fileName);
 
         TakesScreenshot scrShot = ((TakesScreenshot) driver.getDriver());
@@ -75,7 +76,7 @@ public class SeleniumTest extends TestBase {
         FileUtils.copyFile(srcFile, target);
     }
 
-    private static void saveLogs(WebDriverWrapper driver, String directory) throws IOException {
+    private static void saveLogs(WebDriverWrapper driver, String directory, int driverIndex) throws IOException {
         List<String> entries = new ArrayList<>();
         LogEntries logEntries = driver.getDriver().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
@@ -89,7 +90,7 @@ public class SeleniumTest extends TestBase {
             .create()
             .toJson(entries);
         log.info(fileContent);
-        String fileName = directory + "/console_log.json";
+        String fileName = directory + String.format("/console_log_%s.json", driverIndex);
         log.info("Console log fileName: {}", fileName);
 
         Path path = Paths.get(fileName);

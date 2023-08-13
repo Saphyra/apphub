@@ -58,7 +58,7 @@ public class DeconstructionTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_DEPOT);
         surface.deconstructBuilding(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Raktár használatban. Szabadíts fel egy kis helyet, mielőtt lerombolod.");
+        NotificationUtil.verifyErrorNotification(driver, "Storage still in use. Free up some space before you deconstruct it.");
 
         //Deconstruct
         surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_BATTERY);
