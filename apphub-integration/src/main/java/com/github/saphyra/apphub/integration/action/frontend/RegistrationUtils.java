@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.core.ExecutionResult;
-import com.github.saphyra.apphub.integration.core.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
+import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;

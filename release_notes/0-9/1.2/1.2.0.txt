@@ -1,4 +1,6 @@
 ===FEATURES===
+Platform
+    Log the order of integration tests ran (+ add the method name to status bar)
 
 ===BUGFIXES===
 Notebook

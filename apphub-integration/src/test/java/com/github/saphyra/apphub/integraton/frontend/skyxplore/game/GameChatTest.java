@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
-import com.github.saphyra.apphub.integration.core.ExecutionResult;
-import com.github.saphyra.apphub.integration.core.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
+import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;

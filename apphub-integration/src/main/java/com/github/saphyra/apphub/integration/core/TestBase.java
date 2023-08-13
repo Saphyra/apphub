@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
+import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -21,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -46,6 +49,7 @@ public class TestBase {
 
     private static int TOTAL_TEST_COUNT;
     private static final Set<String> FINISHED_TESTS = ConcurrentHashMap.newKeySet();
+    private static final List<String> TEST_START_ORDER = new Vector<>();
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
 
@@ -107,6 +111,10 @@ public class TestBase {
         if (nonNull(CONNECTION)) {
             CONNECTION.close();
         }
+
+        for (int i = 0; i < TEST_START_ORDER.size(); i++) {
+            log.info("{} - {}", i, TEST_START_ORDER.get(i));
+        }
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -119,6 +127,7 @@ public class TestBase {
         acquirePermit(method, stopwatch);
 
         EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
+        TEST_START_ORDER.add(getTestCaseName(method));
     }
 
     private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
@@ -159,7 +168,12 @@ public class TestBase {
             }
         }
 
-        log.info("{} {}% {}/{}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT);
+        log.info("{} {}% {}/{} - {}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, getTestCaseName(method));
+    }
+
+    private static String getTestCaseName(Method method) {
+        Class<?> declaringClass = method.getDeclaringClass();
+        return String.format("%s %s.%s", TestType.getLabel(declaringClass.getSuperclass()), declaringClass.getSimpleName(), method.getName());
     }
 
     private static String getMethodIdentifier(Method method) {
@@ -169,5 +183,22 @@ public class TestBase {
     private synchronized static void deleteTestUsers(String method) {
         log.debug("Deleting testUsers for method {}...", method);
         DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
+    }
+
+    @RequiredArgsConstructor
+    private enum TestType {
+        BE(BackEndTest.class, "[BE]"),
+        FE(SeleniumTest.class, "[FE]");
+
+        private final Class<? extends TestBase> clazz;
+        private final String label;
+
+        public static String getLabel(Class<?> declaringClass) {
+            return Arrays.stream(values())
+                .filter(testType -> testType.clazz.equals(declaringClass))
+                .findFirst()
+                .map(testType -> testType.label)
+                .orElseThrow(() -> new RuntimeException("No TestType present for " + declaringClass.getName()));
+        }
     }
 }

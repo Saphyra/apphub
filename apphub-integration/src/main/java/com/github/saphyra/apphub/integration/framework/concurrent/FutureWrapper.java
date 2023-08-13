@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.framework.concurrent;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;

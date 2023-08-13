@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.framework.concurrent;
 
 import com.google.common.collect.Lists;
 import lombok.Builder;
