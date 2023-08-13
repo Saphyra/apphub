@@ -11,3 +11,4 @@ Default language is set to English
 Add error handling to integration tests executor service
 
 ===TECHNICAL DEBTS===
+Extract config and logging from TestBase

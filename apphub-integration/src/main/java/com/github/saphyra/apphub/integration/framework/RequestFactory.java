@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.HttpClientConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -38,7 +38,7 @@ public class RequestFactory {
             requestSpecification.cookie(Constants.LOCALE_COOKIE, locale.getLocale());
         }
 
-        if (TestBase.REST_LOGGING_ENABLED) {
+        if (TestConfiguration.REST_LOGGING_ENABLED) {
             requestSpecification.filter(new ResponseLoggingFilter()) .log().all();
         }
         return requestSpecification;

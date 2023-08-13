@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 
-import com.github.saphyra.apphub.integration.core.TestBase;
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +11,11 @@ import static java.util.Objects.isNull;
 
 public class UrlFactory {
     public static String create(String url) {
-        return create(TestBase.SERVER_PORT, url);
+        return create(TestConfiguration.SERVER_PORT, url);
     }
 
     public static String create(String url, Map<String, ?> uriParams) {
-        return create(TestBase.SERVER_PORT, url, uriParams);
+        return create(TestConfiguration.SERVER_PORT, url, uriParams);
     }
 
     public static String create(int serverPort, String url) {

@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -15,21 +14,13 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import static java.util.Objects.nonNull;
 
 @Slf4j
 @Listeners(SkipDisabledTestsInterceptor.class)
@@ -37,19 +28,7 @@ public class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
 
-    private static final int AVAILABLE_PERMITS = 10;
-    private static final Semaphore SEMAPHORE = new Semaphore(AVAILABLE_PERMITS);
-
-    public static int SERVER_PORT;
-    public static int DATABASE_PORT;
-    public static String DATABASE_NAME;
-    public static boolean REST_LOGGING_ENABLED;
-    public static List<String> DISABLED_TEST_GROUPS;
-    public static Connection CONNECTION;
-
-    private static int TOTAL_TEST_COUNT;
-    private static final Set<String> FINISHED_TESTS = ConcurrentHashMap.newKeySet();
-    private static final List<String> TEST_START_ORDER = new Vector<>();
+    private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS);
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
 
@@ -58,49 +37,32 @@ public class TestBase {
     }
 
     @BeforeSuite(alwaysRun = true)
-    public void setUpSuite(ITestContext context) throws Exception {
-        DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
-            .orElse("")
-            .split(","));
-        log.info("Disabled test groups: {}", DISABLED_TEST_GROUPS);
+    public void setUpSuite(ITestContext context) {
+        log.info("Disabled test groups: {}", TestConfiguration.DISABLED_TEST_GROUPS);
+        log.info("ServerPort: {}", TestConfiguration.SERVER_PORT);
+        log.info("DatabasePort: {}", TestConfiguration.DATABASE_PORT);
+        log.info("DatabaseName: {}", TestConfiguration.DATABASE_NAME);
+        log.info("RestLoggingEnabled: {}", TestConfiguration.REST_LOGGING_ENABLED);
 
-        TOTAL_TEST_COUNT = (int) context.getSuite()
-            .getAllMethods()
-            .stream()
-            .filter(TestBase::isEnabled)
-            .count();
-        log.info("Total test count: {}", TOTAL_TEST_COUNT);
-
-        SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
-        log.info("ServerPort: {}", SERVER_PORT);
-
-        DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "serverPort is null"));
-        log.info("DatabasePort: {}", DATABASE_PORT);
-
-        DATABASE_NAME = System.getProperty("databaseName", "postgres");
-        log.info("DatabaseName: {}", DATABASE_NAME);
-
-        REST_LOGGING_ENABLED = Optional.ofNullable(System.getProperty("restLoggingEnabled"))
-            .map(Boolean::parseBoolean)
-            .orElse(true);
-        log.info("RestLoggingEnabled: {}", REST_LOGGING_ENABLED);
+        StatusLogger.setTotalTestCount(context);
 
         for (ITestNGMethod method : context.getAllTestMethods()) {
-            method.getXmlTest().getSuite().addListener(SkipDisabledTestsInterceptor.class.getName());
+            method.getXmlTest()
+                .getSuite()
+                .addListener(SkipDisabledTestsInterceptor.class.getName());
+
             if (Boolean.parseBoolean(System.getProperty("retryEnabled"))) {
                 method.setRetryAnalyzerClass(RetryAnalyzerImpl.class);
             }
         }
 
         System.setProperty("testng.show.stack.frames", "true");
-
-        CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
     }
 
     public static boolean isEnabled(ITestNGMethod method) {
         List<String> groups = Arrays.asList(method.getGroups());
 
-        return TestBase.DISABLED_TEST_GROUPS.stream()
+        return TestConfiguration.DISABLED_TEST_GROUPS.stream()
             .noneMatch(groups::contains);
     }
 
@@ -108,18 +70,14 @@ public class TestBase {
     public void tearDownSuite() throws SQLException {
         WebDriverFactory.stopDrivers();
 
-        if (nonNull(CONNECTION)) {
-            CONNECTION.close();
-        }
+        TestConfiguration.CONNECTION.close();
 
-        for (int i = 0; i < TEST_START_ORDER.size(); i++) {
-            log.info("{} - {}", i, TEST_START_ORDER.get(i));
-        }
+        StatusLogger.logTestStartOrder();
     }
 
     @BeforeMethod(alwaysRun = true)
     public void setUpMethod(Method method) throws InterruptedException {
-        FINISHED_TESTS.remove(getMethodIdentifier(method));
+        StatusLogger.removeFinishedTest(method);
         String testMethod = method.getDeclaringClass().getSimpleName() + "-" + method.getName();
 
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
@@ -127,7 +85,7 @@ public class TestBase {
         acquirePermit(method, stopwatch);
 
         EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
-        TEST_START_ORDER.add(getTestCaseName(method));
+        StatusLogger.addToStartOrder(method);
     }
 
     private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
@@ -144,7 +102,7 @@ public class TestBase {
         SEMAPHORE.release(1);
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
-        incrementFinishedTestCount(method);
+        StatusLogger.incrementFinishedTestCount(method);
         deleteTestUsers(methodName);
 
         EMAIL_DOMAIN.remove();
@@ -152,53 +110,8 @@ public class TestBase {
         log.debug("Test {} completed", methodName);
     }
 
-    private synchronized void incrementFinishedTestCount(Method method) {
-        String methodIdentifier = getMethodIdentifier(method);
-        FINISHED_TESTS.add(methodIdentifier);
-
-        int finishedPercentage = (int) Math.floor((double) FINISHED_TESTS.size() / TOTAL_TEST_COUNT * 100);
-
-        StringBuilder progressBar = new StringBuilder();
-
-        for (int i = 0; i < 100; i += 2) {
-            if (i < finishedPercentage) {
-                progressBar.append("=");
-            } else {
-                progressBar.append("_");
-            }
-        }
-
-        log.info("{} {}% {}/{} - {}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, getTestCaseName(method));
-    }
-
-    private static String getTestCaseName(Method method) {
-        Class<?> declaringClass = method.getDeclaringClass();
-        return String.format("%s %s.%s", TestType.getLabel(declaringClass.getSuperclass()), declaringClass.getSimpleName(), method.getName());
-    }
-
-    private static String getMethodIdentifier(Method method) {
-        return method.getDeclaringClass().getName() + method.getName();
-    }
-
     private synchronized static void deleteTestUsers(String method) {
         log.debug("Deleting testUsers for method {}...", method);
         DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
-    }
-
-    @RequiredArgsConstructor
-    private enum TestType {
-        BE(BackEndTest.class, "[BE]"),
-        FE(SeleniumTest.class, "[FE]");
-
-        private final Class<? extends TestBase> clazz;
-        private final String label;
-
-        public static String getLabel(Class<?> declaringClass) {
-            return Arrays.stream(values())
-                .filter(testType -> testType.clazz.equals(declaringClass))
-                .findFirst()
-                .map(testType -> testType.label)
-                .orElseThrow(() -> new RuntimeException("No TestType present for " + declaringClass.getName()));
-        }
     }
 }

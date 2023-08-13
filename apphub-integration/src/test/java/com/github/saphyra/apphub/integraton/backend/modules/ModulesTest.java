@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.core.TestConfiguration.DISABLED_TEST_GROUPS;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 

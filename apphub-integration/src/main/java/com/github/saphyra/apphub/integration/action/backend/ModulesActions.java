@@ -26,7 +26,7 @@ public class ModulesActions {
 
     public static Response getLogoutResponse(Language locale, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.LOGOUT));
+            .post(UrlFactory.create(Endpoints.LOGOUT));
     }
 
     public static Map<String, List<ModulesResponse>> getModules(Language locale, UUID accessTokenId) {
@@ -34,7 +34,7 @@ public class ModulesActions {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<Map<String, List<ModulesResponse>>>() {
+        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<>() {
         };
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }

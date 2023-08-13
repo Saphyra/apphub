@@ -32,7 +32,7 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.MODULES_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.MODULES_PAGE));
 
         //THEN
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.MODULES_PAGE)));
@@ -46,7 +46,7 @@ public class RedirectionTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
         ModulesPageActions.logout(driver);
 
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
 
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
@@ -61,7 +61,7 @@ public class RedirectionTest extends SeleniumTest {
     public void redirectToUrlAfterRegistration() {
         WebDriver driver = extractDriver();
 
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -78,9 +78,9 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, "/"));
+        driver.navigate().to(UrlFactory.create("/"));
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
     @Test

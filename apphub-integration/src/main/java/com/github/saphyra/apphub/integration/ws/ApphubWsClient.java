@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.ws;
 
 import com.github.saphyra.apphub.integration.core.TestBase;
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
@@ -35,12 +36,12 @@ public class ApphubWsClient extends WebSocketClient {
 
     private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
         super(
-            new URI(String.format("ws://localhost:%s%s", TestBase.SERVER_PORT, endpoint)),
+            new URI(String.format("ws://localhost:%s%s", TestConfiguration.SERVER_PORT, endpoint)),
             new Draft_6455(),
             CollectionUtils.toMap(
                 new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessTokenId + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),
-                new BiWrapper<>("Host", "localhost:" + TestBase.SERVER_PORT),
-                new BiWrapper<>("Origin", "http://localhost:" + TestBase.SERVER_PORT)
+                new BiWrapper<>("Host", "localhost:" + TestConfiguration.SERVER_PORT),
+                new BiWrapper<>("Origin", "http://localhost:" + TestConfiguration.SERVER_PORT)
             ),
             10000
         );
@@ -98,7 +99,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        if (TestBase.REST_LOGGING_ENABLED) {
+        if (TestConfiguration.REST_LOGGING_ENABLED) {
             log.info("WebSocketMessage arrived to {}: {}", endpoint, message);
         }
         WebSocketEvent event = TestBase.OBJECT_MAPPER_WRAPPER.readValue(message, WebSocketEvent.class);
