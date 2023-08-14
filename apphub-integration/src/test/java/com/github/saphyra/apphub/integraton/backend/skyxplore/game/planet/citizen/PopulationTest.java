@@ -32,7 +32,7 @@ public class PopulationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String NEW_NAME = "new-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void getAndRenameCitizens(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

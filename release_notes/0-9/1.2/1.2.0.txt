@@ -11,6 +11,7 @@ Default language is set to English
 Add error handling to integration tests executor service
 Store Selenium test error reports at a common place
 Feature Switch for WebDriver cache
+Add groups for all the integration tests
 
 ===TECHNICAL DEBTS===
 Extract config and logging from TestBase

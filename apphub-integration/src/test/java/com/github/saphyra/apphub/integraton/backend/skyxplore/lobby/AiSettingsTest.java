@@ -31,7 +31,7 @@ public class AiSettingsTest extends BackEndTest {
         .build();
     private static final String NEW_AI_NAME = "new-ai-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     void aiCrud() {
         Language language = Language.ENGLISH;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

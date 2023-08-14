@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GroupMemberCrudTest extends SeleniumTest {
     private static final String GROUP_NAME = "group-name";
 
-    @Test(groups = "community")
+    @Test(groups = {"fe", "community"})
     public void groupMemberCrud() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);

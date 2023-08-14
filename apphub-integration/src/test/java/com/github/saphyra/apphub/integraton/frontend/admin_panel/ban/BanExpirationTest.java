@@ -26,7 +26,7 @@ import java.util.List;
 public class BanExpirationTest extends SeleniumTest {
     private static final String REASON = "reason";
 
-    @Test(priority = Integer.MIN_VALUE)
+    @Test(priority = Integer.MIN_VALUE, groups = {"fe", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);

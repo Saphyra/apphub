@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BanCrudTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void banCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

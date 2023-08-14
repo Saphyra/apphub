@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PlanetQueueTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void queueTest() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

@@ -31,7 +31,7 @@ public class EventCrudTest extends SeleniumTest {
     private static final String NOTE = "note";
     private static final String NEW_CONTENT = "new-content";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void oneTimeEvent_changeStatuses() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -175,7 +175,7 @@ public class EventCrudTest extends SeleniumTest {
         assertThat(CalendarActions.getEventsOfDay(driver, CURRENT_DATE)).isEmpty();
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void daysOfWeekEvent_editEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -267,7 +267,7 @@ public class EventCrudTest extends SeleniumTest {
         }
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void daysOfMonthEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -313,7 +313,7 @@ public class EventCrudTest extends SeleniumTest {
         assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void everyXDaysEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

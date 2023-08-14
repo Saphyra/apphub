@@ -18,7 +18,7 @@ public class CategoryTreeTest extends BackEndTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
 
-    @Test
+    @Test(groups = {"be", "notebook"})
     public void getCategoryTree() {
         Language language = Language.HUNGARIAN;
 

@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendCandidatesTest extends BackEndTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void getFriendCandidates() {
         String characterIdentifier = UUID.randomUUID().toString().substring(0, 6);
 

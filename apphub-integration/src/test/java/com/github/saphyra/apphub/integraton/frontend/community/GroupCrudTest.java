@@ -25,7 +25,7 @@ public class GroupCrudTest extends SeleniumTest {
     private static final String GROUP_NAME = "group-name";
     private static final String NEW_GROUP_NAME = "new-group-name";
 
-    @Test(groups = "community")
+    @Test(groups = {"fe", "community"})
     public void groupCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

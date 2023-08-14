@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArchiveTest extends SeleniumTest {
     private static final String CATEGORY_TITLE = "category";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void archiveListItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

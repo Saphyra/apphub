@@ -35,7 +35,7 @@ public class SearchListItemTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title-title";
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
 
-    @Test(groups = "notebook", priority = Integer.MIN_VALUE + 1)
+    @Test(groups = {"fe", "notebook"}, priority = Integer.MIN_VALUE + 1)
     public void search() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -68,7 +68,7 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, ONLY_TITLE_TITLE, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE);
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void itemsShouldBeUnique() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -82,7 +82,7 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void openParentOfSearchResult() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

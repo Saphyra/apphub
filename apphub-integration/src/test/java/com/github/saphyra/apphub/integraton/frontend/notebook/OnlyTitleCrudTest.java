@@ -21,7 +21,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title";
     private static final String NEW_ONLY_TITLE_TITLE = "new-only-title";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void onlyTitleCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

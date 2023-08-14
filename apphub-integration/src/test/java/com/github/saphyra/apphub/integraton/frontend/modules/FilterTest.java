@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "modules"})
     public void searchModule() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OnlyTitleCrudTest extends BackEndTest {
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void onlyTitleCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

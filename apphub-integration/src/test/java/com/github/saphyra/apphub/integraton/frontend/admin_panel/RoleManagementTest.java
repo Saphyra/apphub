@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void addRole() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

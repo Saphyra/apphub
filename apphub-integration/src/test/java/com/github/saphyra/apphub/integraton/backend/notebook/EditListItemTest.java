@@ -24,7 +24,7 @@ public class EditListItemTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String ORIGINAL_URL = "original-url";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void editListITem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

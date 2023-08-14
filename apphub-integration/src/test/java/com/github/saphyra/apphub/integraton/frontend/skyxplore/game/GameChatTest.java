@@ -40,7 +40,7 @@ public class GameChatTest extends SeleniumTest {
     private static final String CUSTOM_ROOM_NAME = "custom-room";
     private static final String MESSAGE_3 = "message-3";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void chatInGame() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);

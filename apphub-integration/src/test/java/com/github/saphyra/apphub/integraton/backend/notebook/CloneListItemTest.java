@@ -52,7 +52,7 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
     private static final String ONLY_TITLE_TITLE = "only-title-title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void listItemNotFound(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -62,7 +62,7 @@ public class CloneListItemTest extends BackEndTest {
         ResponseValidator.verifyListItemNotFound(language, response);
     }
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void cloneListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

@@ -48,7 +48,7 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title-title";
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
 
-    @Test(groups = "notebook", priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "notebook"}, priority = Integer.MIN_VALUE)
     public void cloneListItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

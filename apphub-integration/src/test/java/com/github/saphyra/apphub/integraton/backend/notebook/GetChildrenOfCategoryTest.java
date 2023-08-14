@@ -30,7 +30,7 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
     private static final String TITLE_4 = "title-4";
     private static final String TITLE_5 = "title-5";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void getChildrenOfCategory(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

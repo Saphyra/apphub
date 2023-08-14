@@ -29,7 +29,7 @@ public class LinkCrudTest extends SeleniumTest {
     private static final String CATEGORY = "category";
     private static final String NEW_LINK_TITLE = "new-link";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void linkCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

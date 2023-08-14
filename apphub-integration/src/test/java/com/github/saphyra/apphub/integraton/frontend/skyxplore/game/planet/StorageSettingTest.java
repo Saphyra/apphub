@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void storageSettingCrud() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -97,7 +97,7 @@ public class StorageSettingTest extends SeleniumTest {
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
     }
 
-    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

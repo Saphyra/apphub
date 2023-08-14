@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendshipCrudTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "community")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "community"})
     public void friendshipCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

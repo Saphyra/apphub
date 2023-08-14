@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class RegistrationTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "index"})
     public void verifyValidation() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

@@ -39,7 +39,7 @@ public class EventCrudTest extends BackEndTest {
     private static final Integer HOURS = 23;
     private static final Integer MINUTES = 24;
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void createEvent_validation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -314,7 +314,7 @@ public class EventCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, hoursTooHighResponse, "hours", "too high");
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void createOneTimeEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -365,7 +365,7 @@ public class EventCrudTest extends BackEndTest {
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void createDaysOfWeekEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -391,7 +391,7 @@ public class EventCrudTest extends BackEndTest {
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void createDaysOfMonthEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -416,7 +416,7 @@ public class EventCrudTest extends BackEndTest {
         verifyDatabaseIntegrity(responses, userData.getEmail());
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void createEveryXDaysEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

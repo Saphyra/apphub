@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void storageSettingCrud(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -141,7 +141,7 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
-    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
+    @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

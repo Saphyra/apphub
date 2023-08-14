@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PriorityTest extends BackEndTest {
     private static final String GAME_NAME = "game";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void testPriorities(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

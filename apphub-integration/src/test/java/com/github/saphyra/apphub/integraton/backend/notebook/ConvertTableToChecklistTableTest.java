@@ -24,7 +24,7 @@ public class ConvertTableToChecklistTableTest extends BackEndTest {
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void convertTableToChecklistTable_validation(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -39,7 +39,7 @@ public class ConvertTableToChecklistTableTest extends BackEndTest {
         verifyErrorResponse(language, invalidTypeResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
-    @Test
+    @Test(groups = {"be", "notebook"})
     public void convertTableToChecklistTable() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

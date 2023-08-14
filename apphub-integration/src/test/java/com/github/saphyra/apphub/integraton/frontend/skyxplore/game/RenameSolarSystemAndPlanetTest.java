@@ -28,7 +28,7 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new-solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void renameSolarSystemAndPlanet() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

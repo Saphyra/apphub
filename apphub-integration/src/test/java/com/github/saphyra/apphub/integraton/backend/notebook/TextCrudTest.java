@@ -28,7 +28,7 @@ public class TextCrudTest extends BackEndTest {
     private static final String NEW_CONTENT = "new-content";
     private static final String NEW_TITLE = "new-title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void blankTitle(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

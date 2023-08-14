@@ -20,7 +20,7 @@ public class LoginTest extends SeleniumTest {
     private static final String EMPTY_CREDENTIALS_MESSAGE = "Please fill e-mail address and password!";
     private static final String BAD_CREDENTIALS_MESSAGE = "Unknown combination of e-mail address and password.";
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void login() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

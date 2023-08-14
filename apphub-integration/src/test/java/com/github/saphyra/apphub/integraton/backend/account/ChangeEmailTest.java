@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "account"})
     public void changeEmail(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);

@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class RedirectionTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToIndexWhenNoAccessToken() {
         //GIVEN
         WebDriver driver = extractDriver();
@@ -38,7 +38,7 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.MODULES_PAGE)));
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterLogin() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -57,7 +57,7 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterRegistration() {
         WebDriver driver = extractDriver();
 
@@ -72,7 +72,7 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToWebWhenCalledRoot() {
         //GIVEN
         WebDriver driver = extractDriver();
@@ -83,7 +83,7 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void autoLogin() {
         WebDriver driver = extractDriver();
 
@@ -97,7 +97,7 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue();
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToErrorPage() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

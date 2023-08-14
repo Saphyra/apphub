@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GroupMemberCrudTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "community")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "community"})
     public void groupMemberCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

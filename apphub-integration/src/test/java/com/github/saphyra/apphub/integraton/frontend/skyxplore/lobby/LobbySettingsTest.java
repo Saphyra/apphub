@@ -36,7 +36,7 @@ public class LobbySettingsTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-%s";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void allianceSettings() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -74,7 +74,7 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void gameSettings() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -214,7 +214,7 @@ public class LobbySettingsTest extends SeleniumTest {
         }
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void ais() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -292,7 +292,7 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue("Ai with name " + aiName + " is still present.");
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     void gameDoesNotStartWithOnlyOneAlliance() {
         WebDriver driver = extractDriver();
 

@@ -21,7 +21,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrud extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void disabledRoleCrud(Language language) {
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());

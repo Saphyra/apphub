@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConstructionTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -93,7 +93,7 @@ public class ConstructionTest extends SeleniumTest {
         assertThat(surface.isConstructionInProgress()).isFalse();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void finishConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

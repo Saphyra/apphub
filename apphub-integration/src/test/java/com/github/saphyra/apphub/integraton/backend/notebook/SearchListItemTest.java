@@ -40,7 +40,7 @@ public class SearchListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void searchTextTooShort(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -50,7 +50,7 @@ public class SearchListItemTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, response, "search", "too short");
     }
 
-    @Test
+    @Test(groups = {"be", "notebook"})
     public void search() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -110,7 +110,7 @@ public class SearchListItemTest extends BackEndTest {
         search(language, accessTokenId, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
     }
 
-    @Test
+    @Test(groups = {"be", "notebook"})
     public void sameItemShouldBeReturnedOnlyOnce() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

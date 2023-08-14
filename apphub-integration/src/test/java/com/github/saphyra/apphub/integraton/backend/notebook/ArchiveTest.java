@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArchiveTest extends BackEndTest {
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void archiveListItem(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

@@ -23,7 +23,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "index"})
     public void loginAndOut(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
 

@@ -29,7 +29,7 @@ public class DeleteEventTest extends BackEndTest {
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void deleteEvent(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

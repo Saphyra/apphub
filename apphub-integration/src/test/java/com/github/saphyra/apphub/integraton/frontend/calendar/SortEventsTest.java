@@ -28,7 +28,7 @@ public class SortEventsTest extends SeleniumTest {
     private static final String LATER_PENDING_TITLE = "later-pending-title";
     private static final String NO_TIME_PENDING_TITLE = "no-time-pending-title";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void orderOfEvents() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

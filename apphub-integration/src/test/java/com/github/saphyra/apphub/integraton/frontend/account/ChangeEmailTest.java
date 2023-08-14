@@ -23,7 +23,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class ChangeEmailTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "account"})
     public void changeEmail() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

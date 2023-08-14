@@ -29,7 +29,7 @@ public class AllianceSettingsTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     void allianceCrud() {
         Language language = Language.ENGLISH;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -135,7 +135,7 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(aiPlayer.getAllianceId()).isEqualTo(allianceId1);
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     void gameDoesNotStartWithOneAlliance(){
         Language language = Language.ENGLISH;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

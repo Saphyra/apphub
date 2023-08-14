@@ -30,7 +30,7 @@ public class CategoryCrudTest extends SeleniumTest {
     private static final String CATEGORY_2_TITLE = "category-2";
     private static final String NEW_CATEGORY_TITLE = "new-category-title";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void categoryCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -119,7 +119,7 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(NotebookActions.getCategoryTree(driver).hasChildren()).isFalse();
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void categoryTreeTest() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

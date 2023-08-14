@@ -24,7 +24,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class ChangePasswordTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "account"})
     public void changePassword() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

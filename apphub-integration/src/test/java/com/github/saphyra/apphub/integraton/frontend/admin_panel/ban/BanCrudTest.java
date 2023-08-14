@@ -31,7 +31,7 @@ import java.util.List;
 public class BanCrudTest extends SeleniumTest {
     private static final String REASON = "reason";
 
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void banCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);

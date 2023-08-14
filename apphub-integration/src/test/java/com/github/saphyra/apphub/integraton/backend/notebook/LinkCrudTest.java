@@ -29,7 +29,7 @@ public class LinkCrudTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_URL = "new-url";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
     public void linkCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

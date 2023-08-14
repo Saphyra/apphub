@@ -30,7 +30,7 @@ public class RenameSolarSystemAndPlanet extends BackEndTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new_solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void renameSolarSystemAndPlanet(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

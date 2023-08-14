@@ -29,7 +29,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
     private static final Integer MINUTES = 54;
     private static final String TIME = HOURS + ":" + MINUTES;
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void scheduleUserDeletionCd(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

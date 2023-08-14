@@ -24,7 +24,7 @@ public class CalendarSearchTest extends SeleniumTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final String TITLE = "title";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void searchInCalendar() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

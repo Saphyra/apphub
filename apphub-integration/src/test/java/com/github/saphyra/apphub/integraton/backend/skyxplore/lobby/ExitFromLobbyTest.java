@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExitFromLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void hostLeftTheLobby() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

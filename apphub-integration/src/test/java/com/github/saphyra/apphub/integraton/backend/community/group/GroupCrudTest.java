@@ -24,7 +24,7 @@ public class GroupCrudTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
     private static final String NEW_GROUP_NAME = "new-group-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "community")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "community"})
     public void groupCrud(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);

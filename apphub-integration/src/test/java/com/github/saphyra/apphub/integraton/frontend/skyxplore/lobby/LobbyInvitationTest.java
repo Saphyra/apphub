@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LobbyInvitationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void inviteFriendToLobby() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);

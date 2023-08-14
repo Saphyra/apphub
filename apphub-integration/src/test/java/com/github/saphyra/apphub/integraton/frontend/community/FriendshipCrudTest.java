@@ -23,7 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendshipCrudTest extends SeleniumTest {
-    @Test(groups = "community")
+    @Test(groups = {"fe", "community"})
     public void friendRequestCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);

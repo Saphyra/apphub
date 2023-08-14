@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeconstructionTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelDeconstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -76,7 +76,7 @@ public class DeconstructionTest extends SeleniumTest {
             .assertTrue("Deconstruction not cancelled");
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void finishDeconstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

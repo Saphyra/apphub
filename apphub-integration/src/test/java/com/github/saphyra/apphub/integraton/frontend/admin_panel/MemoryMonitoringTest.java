@@ -42,7 +42,7 @@ public class MemoryMonitoringTest extends SeleniumTest {
         "storage"
     );
 
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void memoryMonitoring() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

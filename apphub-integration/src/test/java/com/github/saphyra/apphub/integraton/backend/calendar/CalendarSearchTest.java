@@ -39,7 +39,7 @@ public class CalendarSearchTest extends BackEndTest {
         .withNano(0)
         .withSecond(0);
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void searchInCalendar(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

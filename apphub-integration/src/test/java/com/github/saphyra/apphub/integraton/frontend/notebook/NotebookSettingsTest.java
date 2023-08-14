@@ -20,7 +20,7 @@ public class NotebookSettingsTest extends SeleniumTest {
     private static final String CATEGORY_1 = "category-1";
     private static final String CATEGORY_2 = "category-2";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     void showAndHideArchived() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendRequestsTest extends BackEndTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void getFriendRequests() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

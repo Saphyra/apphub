@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistCrudTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "community")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "community"})
     public void blacklistCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -72,7 +72,7 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(BlacklistActions.getBlacklists(language, accessTokenId)).isEmpty();
     }
 
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendship() {
         Language language = Language.HUNGARIAN;
 
@@ -90,7 +90,7 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(FriendRequestActions.getSentFriendRequests(language, accessTokenId)).isEmpty();
     }
 
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendRequest() {
         Language language = Language.HUNGARIAN;
 

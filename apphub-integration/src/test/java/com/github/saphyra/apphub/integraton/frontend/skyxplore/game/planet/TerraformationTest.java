@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void terraformationCD() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -72,7 +72,7 @@ public class TerraformationTest extends SeleniumTest {
         assertThat(surface.isTerraformationInProgress()).isFalse();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void finishTerraformation() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

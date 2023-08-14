@@ -18,7 +18,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class ChangeUsernameTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "account"})
     public void changeUsername() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

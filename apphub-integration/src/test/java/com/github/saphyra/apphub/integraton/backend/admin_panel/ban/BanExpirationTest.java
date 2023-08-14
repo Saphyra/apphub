@@ -23,7 +23,7 @@ import java.util.UUID;
 public class BanExpirationTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(priority = Integer.MIN_VALUE)
+    @Test(priority = Integer.MIN_VALUE, groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

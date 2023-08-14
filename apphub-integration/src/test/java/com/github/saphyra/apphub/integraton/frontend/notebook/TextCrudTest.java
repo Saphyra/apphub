@@ -29,7 +29,7 @@ public class TextCrudTest extends SeleniumTest {
     private static final String NEW_TEXT_TITLE = "new-text";
     private static final String NEW_TEXT_CONTENT = "new-content";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void textCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

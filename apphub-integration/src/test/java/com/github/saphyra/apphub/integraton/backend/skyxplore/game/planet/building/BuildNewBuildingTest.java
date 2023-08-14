@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BuildNewBuildingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void constructNewBuilding(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -140,7 +140,7 @@ public class BuildNewBuildingTest extends BackEndTest {
         PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     void finishConstruction() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

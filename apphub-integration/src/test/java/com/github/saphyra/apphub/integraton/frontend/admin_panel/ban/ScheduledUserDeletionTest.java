@@ -29,7 +29,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
     private static final Integer MINUTES = 45;
     public static final String USER_DELETION_CONFIRMATION_DIALOG_ID = "user-deletion-confirmation-dialog";
 
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void scheduleUserDeletionCd() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);

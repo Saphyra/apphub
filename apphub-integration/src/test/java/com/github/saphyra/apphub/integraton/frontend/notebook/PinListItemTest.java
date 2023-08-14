@@ -16,7 +16,7 @@ public class PinListItemTest extends SeleniumTest {
     private static final String CATEGORY_1 = "category-1";
     private static final String CATEGORY_2 = "category-2";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     void openParentOfPinnedItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

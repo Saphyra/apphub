@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.integration.core;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -33,15 +31,15 @@ public class StatusLogger {
     }
 
     public static void removeFinishedTest(Method method) {
-        FINISHED_TESTS.remove(getMethodIdentifier(method));
+        FINISHED_TESTS.remove(TestUtils.getMethodIdentifier(method));
     }
 
     public static void addToStartOrder(Method method) {
-        TEST_START_ORDER.add(getTestCaseName(method));
+        TEST_START_ORDER.add(TestUtils.getTestCaseName(method));
     }
 
     public static synchronized void incrementFinishedTestCount(Method method) {
-        String methodIdentifier = getMethodIdentifier(method);
+        String methodIdentifier = TestUtils.getMethodIdentifier(method);
         FINISHED_TESTS.add(methodIdentifier);
 
         int finishedPercentage = (int) Math.floor((double) FINISHED_TESTS.size() / TOTAL_TEST_COUNT * 100);
@@ -56,32 +54,6 @@ public class StatusLogger {
             }
         }
 
-        log.info("{} {}% {}/{} - {}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, getTestCaseName(method));
-    }
-
-    private static String getMethodIdentifier(Method method) {
-        return method.getDeclaringClass().getName() + method.getName();
-    }
-
-    private static String getTestCaseName(Method method) {
-        Class<?> declaringClass = method.getDeclaringClass();
-        return String.format("%s %s.%s", TestType.getLabel(declaringClass.getSuperclass()), declaringClass.getSimpleName(), method.getName());
-    }
-
-    @RequiredArgsConstructor
-    private enum TestType {
-        BE(BackEndTest.class, "[BE]"),
-        FE(SeleniumTest.class, "[FE]");
-
-        private final Class<? extends TestBase> clazz;
-        private final String label;
-
-        public static String getLabel(Class<?> declaringClass) {
-            return Arrays.stream(values())
-                .filter(testType -> testType.clazz.equals(declaringClass))
-                .findFirst()
-                .map(testType -> testType.label)
-                .orElseThrow(() -> new RuntimeException("No TestType present for " + declaringClass.getName()));
-        }
+        log.info("{} {}% {}/{} - {}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, TestUtils.getTestCaseName(method));
     }
 }

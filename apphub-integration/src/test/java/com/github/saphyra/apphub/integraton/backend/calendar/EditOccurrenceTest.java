@@ -34,7 +34,7 @@ public class EditOccurrenceTest extends BackEndTest {
     private static final String NEW_CONTENT = "new-content";
     private static final String NOTE = "NOTE";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void editOccurrence(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

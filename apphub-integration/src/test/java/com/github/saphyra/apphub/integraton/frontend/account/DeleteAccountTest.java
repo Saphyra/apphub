@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "account"})
     public void deleteAccount() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

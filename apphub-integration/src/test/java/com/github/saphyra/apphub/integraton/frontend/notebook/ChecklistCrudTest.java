@@ -34,7 +34,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     private static final String NEW_CHECKLIST_TITLE = "new-checklist";
     private static final String NEW_VALUE = "new-value";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void checklistCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

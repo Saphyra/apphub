@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemoryMonitoringTest extends BackEndTest {
-    @Test
+    @Test(groups = {"be", "admin-panel"})
     public void memoryMonitoring() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

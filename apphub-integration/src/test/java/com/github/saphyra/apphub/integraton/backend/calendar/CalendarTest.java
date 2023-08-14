@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarTest extends BackEndTest {
     private static final LocalDate DATE = LocalDate.parse("2022-07-01");
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void getCalendar() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

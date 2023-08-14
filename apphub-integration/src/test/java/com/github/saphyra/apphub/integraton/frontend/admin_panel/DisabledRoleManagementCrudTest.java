@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleManagementCrudTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void disableAndEnableRole() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

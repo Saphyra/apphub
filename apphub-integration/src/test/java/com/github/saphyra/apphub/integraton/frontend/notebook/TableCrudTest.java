@@ -35,7 +35,7 @@ public class TableCrudTest extends SeleniumTest {
     private static final String COLUMN_2 = "column-2";
     private static final String NEW_TABLE_TITLE = "new-table";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void checklistTableCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -358,7 +358,7 @@ public class TableCrudTest extends SeleniumTest {
             .assertTrue("Checklist table is not deleted.");
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void tableCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -635,7 +635,7 @@ public class TableCrudTest extends SeleniumTest {
             .assertTrue("Checklist table is not deleted.");
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void convertTableToChecklistTable() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

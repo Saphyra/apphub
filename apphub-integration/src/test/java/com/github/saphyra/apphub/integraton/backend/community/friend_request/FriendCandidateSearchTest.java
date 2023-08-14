@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendCandidateSearchTest extends BackEndTest {
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void searchFriendCandidates() {
         Language language = Language.HUNGARIAN;
 

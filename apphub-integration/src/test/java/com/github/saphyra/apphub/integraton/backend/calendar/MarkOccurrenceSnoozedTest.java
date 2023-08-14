@@ -29,7 +29,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void markOccurrenceSnoozed(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);

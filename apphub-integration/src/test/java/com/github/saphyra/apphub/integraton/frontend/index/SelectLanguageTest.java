@@ -14,7 +14,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelectLanguageTest extends SeleniumTest {
-    @Test(groups = "index")
+    @Test(groups = {"fe", "index"})
     public void selectLanguageOnIndexPage() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

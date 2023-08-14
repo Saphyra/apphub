@@ -20,7 +20,7 @@ import java.util.List;
 public class ExitFromLobbyTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void exitFromLobby() {
         List<WebDriver> drivers = extractDrivers(4);
         WebDriver driver1 = drivers.get(0);

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogParameterVisibilityTest extends BackEndTest {
     private static final String PARAMETER = "parameter";
 
-    @Test
+    @Test(groups = {"be", "utils"})
     public void crudTest() {
         Language language = Language.HUNGARIAN;
 

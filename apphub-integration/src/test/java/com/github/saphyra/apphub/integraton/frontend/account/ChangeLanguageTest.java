@@ -24,7 +24,7 @@ public class ChangeLanguageTest extends SeleniumTest {
         };
     }
 
-    @Test(dataProvider = "languages")
+    @Test(dataProvider = "languages", groups = {"fe", "account"})
     public void changeLanguage(Language language) {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

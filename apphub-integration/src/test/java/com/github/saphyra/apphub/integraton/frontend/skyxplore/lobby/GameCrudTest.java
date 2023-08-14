@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameCrudTest extends SeleniumTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void gameCrud() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);

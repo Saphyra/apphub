@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class FriendshipCrudTest extends SeleniumTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void friendshipCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);

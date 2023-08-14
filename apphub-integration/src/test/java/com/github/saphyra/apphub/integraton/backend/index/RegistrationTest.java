@@ -18,7 +18,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "index"})
     public void register(Language language) {
         //Invalid e-mail
         RegistrationRequest invalidEmailRequest = RegistrationParameters.invalidEmailParameters()

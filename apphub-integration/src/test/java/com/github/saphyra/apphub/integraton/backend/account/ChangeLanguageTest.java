@@ -26,7 +26,7 @@ public class ChangeLanguageTest extends BackEndTest {
         };
     }
 
-    @Test(dataProvider = "bilanguageDataProvider")
+    @Test(dataProvider = "bilanguageDataProvider", groups = {"be", "account"})
     public void changeLanguage(Language registerLanguage, Language changeLanguage) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(registerLanguage, userData);

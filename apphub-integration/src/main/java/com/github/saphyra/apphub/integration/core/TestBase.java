@@ -77,6 +77,8 @@ public class TestBase {
 
     @BeforeMethod(alwaysRun = true)
     public void setUpMethod(Method method) throws InterruptedException {
+        TestGroupValidator.validateTestGroups(method);
+
         StatusLogger.removeFinishedTest(method);
         String testMethod = method.getDeclaringClass().getSimpleName() + "-" + method.getName();
 

@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FavoriteTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "modules"})
     public void addToFavorites() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
