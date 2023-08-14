@@ -39,6 +39,7 @@ public class TestBase {
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) {
         log.info("Disabled test groups: {}", TestConfiguration.DISABLED_TEST_GROUPS);
+        log.info("Enabled test groups: {}", TestConfiguration.ENABLED_TEST_GROUPS);
         log.info("ServerPort: {}", TestConfiguration.SERVER_PORT);
         log.info("DatabasePort: {}", TestConfiguration.DATABASE_PORT);
         log.info("DatabaseName: {}", TestConfiguration.DATABASE_NAME);
@@ -63,7 +64,9 @@ public class TestBase {
         List<String> groups = Arrays.asList(method.getGroups());
 
         return TestConfiguration.DISABLED_TEST_GROUPS.stream()
-            .noneMatch(groups::contains);
+            .noneMatch(groups::contains)
+            && TestConfiguration.ENABLED_TEST_GROUPS.stream()
+            .anyMatch(groups::contains);
     }
 
     @AfterSuite(alwaysRun = true)

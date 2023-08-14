@@ -17,6 +17,9 @@ public class TestConfiguration {
     public static final List<String> DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
         .orElse("")
         .split(","));
+    public static final List<String> ENABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("enabledGroups"))
+        .orElse("be,fe")
+        .split(","));
 
     //Connection
     public static final int SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
