@@ -30,12 +30,9 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 public class SeleniumTest extends TestBase {
-    static final boolean HEADLESS_MODE;
-    public static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
-    static {
-        HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless"));
-    }
+
+    public static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
     private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 

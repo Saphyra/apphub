@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.saphyra.apphub.integration.core.SeleniumTest.HEADLESS_MODE;
 import static java.util.Objects.isNull;
 
 @Slf4j
@@ -61,15 +60,27 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @SneakyThrows
     private static WebDriverWrapper getDriver() {
-        return DRIVER_POOL.borrowObject();
+        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED) {
+            return DRIVER_POOL.borrowObject();
+        } else {
+            return createNewDriver();
+        }
     }
 
-    private WebDriverWrapper createNewDriver() {
-        Future<WebDriver> future = EXECUTOR.submit(this::createDriver);
+    private static WebDriverWrapper createNewDriver() {
+        Future<WebDriver> future = EXECUTOR.submit(WebDriverFactory::createDriver);
         return new WebDriverWrapper(future);
     }
 
     static void release(WebDriverWrapper webDriverWrapper) {
+        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED) {
+            returnDriverToCache(webDriverWrapper);
+        } else {
+            stopDriver(webDriverWrapper);
+        }
+    }
+
+    private static void returnDriverToCache(WebDriverWrapper webDriverWrapper) {
         log.debug("Releasing webDriver with id {}", webDriverWrapper.getId());
         try {
             WebDriver driver = webDriverWrapper.getDriver();
@@ -97,18 +108,20 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @SneakyThrows
     static void invalidate(WebDriverWrapper webDriverWrapper) {
-        DRIVER_POOL.invalidateObject(webDriverWrapper, DestroyMode.ABANDONED);
+        if(TestConfiguration.WEB_DRIVER_CACHE_ENABLED){
+            DRIVER_POOL.invalidateObject(webDriverWrapper, DestroyMode.ABANDONED);
+        }
         stopDriver(webDriverWrapper);
     }
 
-    private WebDriver createDriver() {
+    private static WebDriver createDriver() {
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
             try {
                 WebDriverManager.chromedriver().setup();
 
                 ChromeOptions options = new ChromeOptions();
-                options.setHeadless(HEADLESS_MODE);
+                options.setHeadless(TestConfiguration.WEB_DRIVER_HEADLESS_MODE);
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);

@@ -12,6 +12,8 @@ public class TestConfiguration {
     //Platform
     public static final int AVAILABLE_PERMITS = 10;
     public static final boolean REST_LOGGING_ENABLED = Boolean.parseBoolean(System.getProperty("restLoggingEnabled", "true"));
+    public static final boolean WEB_DRIVER_CACHE_ENABLED = Boolean.parseBoolean(System.getProperty("webDriverCacheEnabled", "true"));
+    public static final boolean WEB_DRIVER_HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless", "false"));
     public static final List<String> DISABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("disabledGroups"))
         .orElse("")
         .split(","));
