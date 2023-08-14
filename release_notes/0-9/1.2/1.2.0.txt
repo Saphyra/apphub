@@ -9,6 +9,7 @@ Notebook
 ===PLATFORM CHANGES===
 Default language is set to English
 Add error handling to integration tests executor service
+Store Selenium test error reports at a common place
 
 ===TECHNICAL DEBTS===
 Extract config and logging from TestBase

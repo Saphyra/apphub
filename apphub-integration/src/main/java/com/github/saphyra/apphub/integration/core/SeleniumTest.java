@@ -61,7 +61,7 @@ public class SeleniumTest extends TestBase {
 
     @SneakyThrows
     private void reportFailure(WebDriverWrapper driver, String method, int driverIndex) {
-        String directory = "d:/screenshots/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
+        String directory = "screenshots/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
         takeScreenshot(driver, directory, driverIndex);
         saveLogs(driver, directory, driverIndex);
     }
