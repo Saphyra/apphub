@@ -44,7 +44,11 @@ public class ExitFromLobbyTest extends SeleniumTest {
         SkyXploreFriendshipActions.setUpFriendship(driver3, driver4, userData3.getUsername(), userData4.getUsername());
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
 
-        //Member left
+        memberLeft(driver3, driver4, userData4);
+        hostLeft(driver1, driver2, driver4, userData4);
+    }
+
+    private static void memberLeft(WebDriver driver3, WebDriver driver4, RegistrationParameters userData4) {
         SkyXploreLobbyActions.inviteFriend(driver3, userData4.getUsername());
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
@@ -55,8 +59,9 @@ public class ExitFromLobbyTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
             .assertTrue("Invitation is still present.");
+    }
 
-        //Host left
+    private static void hostLeft(WebDriver driver1, WebDriver driver2, WebDriver driver4, RegistrationParameters userData4) {
         SkyXploreLobbyActions.inviteFriend(driver2, userData4.getUsername());
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())

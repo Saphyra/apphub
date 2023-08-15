@@ -28,24 +28,35 @@ public class FriendCandidateSearchTest extends BackEndTest {
         UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(language, testUserData);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUserData.getEmail());
 
+        search(language, accessTokenId, testUserData, testUserId);
+        FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(language, accessTokenId, testUserId);
+        friendshipAlreadyExists(language, accessTokenId, testUserAccessTokenId, friendRequestResponse);
+        blacklisted(language, accessTokenId, testUserId);
+    }
+
+    private static void search(Language language, UUID accessTokenId, RegistrationParameters testUserData, UUID testUserId) {
         List<SearchResultItem> searchResult = FriendRequestActions.search(language, accessTokenId, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.get(0).getUserId()).isEqualTo(testUserId);
         assertThat(searchResult.get(0).getUsername()).isEqualTo(testUserData.getUsername());
         assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
+    }
 
-        //FriendRequest already sent
+    private static FriendRequestResponse friendRequestAlreadySent(Language language, UUID accessTokenId, UUID testUserId) {
         FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(language, accessTokenId, testUserId);
 
         assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+        return friendRequestResponse;
+    }
 
-        //Friendship already exists
+    private static void friendshipAlreadyExists(Language language, UUID accessTokenId, UUID testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
         FriendRequestActions.acceptFriendRequest(language, testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
         assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+    }
 
-        //Blacklisted
+    private static void blacklisted(Language language, UUID accessTokenId, UUID testUserId) {
         BlacklistActions.createBlacklist(language, accessTokenId, testUserId);
 
         assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();

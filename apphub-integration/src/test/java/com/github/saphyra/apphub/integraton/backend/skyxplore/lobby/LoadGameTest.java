@@ -54,19 +54,34 @@ public class LoadGameTest extends BackEndTest {
             .values()
             .forEach(WebSocketClient::close);
 
-        //Create lobby - Game not found
+        createLobby_gameNotFound(language, accessTokenId1);
+        UUID gameId = createLobby_notHost(language, accessTokenId1, accessTokenId2);
+        ApphubWsClient mainMenuClient = createLobby(language, characterModel1, accessTokenId1, userId1, accessTokenId2, gameId);
+        startGane_notAllReady(language, accessTokenId1);
+        ApphubWsClient hostLobbyClient = startGame_notHost(language, accessTokenId1, accessTokenId2);
+        inviteAgainMember(language, accessTokenId1, accessTokenId2, userId2, mainMenuClient);
+        inviteNotMember(language, accessTokenId1, accessTokenId3, userId3);
+        loadGame(language, accessTokenId1, hostLobbyClient);
+        checkGameLoadingProcess(hostLobbyClient);
+        createLobby_gameMarkedForDeletion(language, accessTokenId1, gameId);
+    }
+
+    private static void createLobby_gameNotFound(Language language, UUID accessTokenId1) {
         Response createLobby_gameNotFoundResponse = SkyXploreLobbyActions.getLoadGameResponse(language, accessTokenId1, UUID.randomUUID());
         ResponseValidator.verifyErrorResponse(language, createLobby_gameNotFoundResponse, 404, ErrorCode.GAME_NOT_FOUND);
+    }
 
-        //Create lobby - Not host
+    private static UUID createLobby_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2) {
         UUID gameId = SkyXploreSavedGameActions.getSavedGames(language, accessTokenId1)
             .get(0)
             .getGameId();
 
         Response createLobby_notHostResponse = SkyXploreLobbyActions.getLoadGameResponse(language, accessTokenId2, gameId);
         ResponseValidator.verifyForbiddenOperation(language, createLobby_notHostResponse);
+        return gameId;
+    }
 
-        //Create lobby
+    private static ApphubWsClient createLobby(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, UUID gameId) {
         ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
         SkyXploreLobbyActions.loadGame(language, accessTokenId1, gameId);
 
@@ -76,12 +91,15 @@ public class LoadGameTest extends BackEndTest {
         assertThat(invitationMessage.getSenderId()).isEqualTo(userId1);
         assertThat(invitationMessage.getSenderName()).isEqualTo(characterModel1.getName());
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
+        return mainMenuClient;
+    }
 
-        //Start game - Not all ready
+    private static void startGane_notAllReady(Language language, UUID accessTokenId1) {
         Response startGame_notAllReadyResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId1);
         ResponseValidator.verifyErrorResponse(language, startGame_notAllReadyResponse, 412, ErrorCode.LOBBY_MEMBER_NOT_READY);
+    }
 
-        //Start game - Not host
+    private static ApphubWsClient startGame_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2) {
         ApphubWsClient hostLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
         ApphubWsClient memberLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
         WebSocketEvent readyEvent = WebSocketEvent.builder()
@@ -92,28 +110,34 @@ public class LoadGameTest extends BackEndTest {
         memberLobbyClient.send(readyEvent);
         Response startGame_notHostResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId2);
         ResponseValidator.verifyForbiddenOperation(language, startGame_notHostResponse);
+        return hostLobbyClient;
+    }
 
-        //Invite again member
+    private static void inviteAgainMember(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID userId2, ApphubWsClient mainMenuClient) {
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId2);
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
             .orElseThrow(() -> new RuntimeException("Invitation did not arrive."));
+    }
 
-        //Invite not member
+    private static void inviteNotMember(Language language, UUID accessTokenId1, UUID accessTokenId3, UUID userId3) {
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId3, userId3);
         Response inviteNotMemberResponse = SkyXploreLobbyActions.getInviteToLobbyResponse(language, accessTokenId1, userId3);
         ResponseValidator.verifyForbiddenOperation(language, inviteNotMemberResponse);
+    }
 
-        //Load game
+    private static void loadGame(Language language, UUID accessTokenId1, ApphubWsClient hostLobbyClient) {
         SkyXploreLobbyActions.startGame(language, accessTokenId1);
         hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .orElseThrow(() -> new RuntimeException("Game creation not started."));
+    }
 
-        //Check game loading process
+    private static void checkGameLoadingProcess(ApphubWsClient hostLobbyClient) {
         hostLobbyClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED, 120)
             .orElseThrow(() -> new RuntimeException("Game not loaded."));
+    }
 
-        //Create lobby - Game marked for deletion
+    private static void createLobby_gameMarkedForDeletion(Language language, UUID accessTokenId1, UUID gameId) {
         SkyXploreSavedGameActions.deleteGame(language, accessTokenId1, gameId);
         Response loadGameResponse = SkyXploreLobbyActions.getLoadGameResponse(language, accessTokenId1, gameId);
 

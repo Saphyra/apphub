@@ -34,13 +34,20 @@ public class DeleteAccountTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        //Empty password
+        emptyPassword(driver);
+        incorrectPassword(driver);
+        cancelDeletion(driver, userData);
+        delete(driver, userData);
+    }
+
+    private static void emptyPassword(WebDriver driver) {
         AccountPageActions.fillDeleteAccountForm(driver, "asd");
         AccountPageActions.fillDeleteAccountForm(driver, "");
         SleepUtil.sleep(3000);
         AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver driver) {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
@@ -53,8 +60,9 @@ public class DeleteAccountTest extends SeleniumTest {
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
         ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
+    }
 
-        //Cancel deletion
+    private static void cancelDeletion(WebDriver driver, RegistrationParameters userData) {
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
@@ -65,8 +73,9 @@ public class DeleteAccountTest extends SeleniumTest {
         AccountPageActions.submitDeleteAccountForm(driver);
         AccountPageActions.cancelAccountDeletion(driver);
         NotificationUtil.verifyZeroNotifications(driver);
+    }
 
-        //Delete
+    private static void delete(WebDriver driver, RegistrationParameters userData) {
         AccountPageActions.deleteAccount(driver, DataConstants.VALID_PASSWORD);
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)));

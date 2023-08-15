@@ -47,13 +47,13 @@ public class BanExpirationTest extends BackEndTest {
 
         BanActions.ban(language, accessTokenId, banRequest);
 
-        Response response = ModulesActions.getModulesResponse(language, testAccessTokenId);
+        Response response = ModulesActions.getModulesResponse(testAccessTokenId);
         ResponseValidator.verifyErrorResponse(language, response, 403, ErrorCode.MISSING_ROLE);
 
         AwaitilityWrapper.create(300, 10)
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
-                return ModulesActions.getModulesResponse(language, testAccessTokenId).getStatusCode() == 200;
+                return ModulesActions.getModulesResponse(testAccessTokenId).getStatusCode() == 200;
             })
             .assertTrue("Ban was not revoked in the given time.");
     }

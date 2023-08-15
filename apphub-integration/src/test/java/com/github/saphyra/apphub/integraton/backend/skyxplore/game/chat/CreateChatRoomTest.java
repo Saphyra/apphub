@@ -48,55 +48,70 @@ public class CreateChatRoomTest extends BackEndTest {
 
         Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
 
-        //Null members
+        nullMembers(language, accessTokenId1);
+        membersContainsNull(language, accessTokenId1);
+        memberNotInGame(language, accessTokenId1);
+        nullRoomTitle(language, accessTokenId1);
+        roomTitleTooShort(language, accessTokenId1);
+        roomTitleTooLong(language, accessTokenId1);
+        create(language, accessTokenId1, userId2, gameWsClients);
+    }
+
+    private static void nullMembers(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest nullMembersRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(null)
             .build();
         Response nullMembersResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, nullMembersRequest);
         verifyInvalidParam(language, nullMembersResponse, "members", "must not be null");
+    }
 
-        //Members contains null
+    private static void membersContainsNull(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest membersContainsNullRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(new UUID[]{null}))
             .build();
         Response membersContainsNullResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, membersContainsNullRequest);
         verifyInvalidParam(language, membersContainsNullResponse, "members", "must not contain null");
+    }
 
-        //Member not in game
+    private static void memberNotInGame(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest memberNotInGameRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(UUID.randomUUID()))
             .build();
         Response memberNotInGameResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, memberNotInGameRequest);
         verifyForbiddenOperation(language, memberNotInGameResponse);
+    }
 
-        //Null room title
+    private static void nullRoomTitle(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest nullRoomTitleRequest = CreateChatRoomRequest.builder()
             .roomTitle(null)
             .members(Collections.emptyList())
             .build();
         Response nullRoomTitleResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, nullRoomTitleRequest);
         verifyInvalidParam(language, nullRoomTitleResponse, "roomTitle", "must not be null");
+    }
 
-        //Room title too short
+    private static void roomTitleTooShort(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest roomTitleTooShortRequest = CreateChatRoomRequest.builder()
             .roomTitle("a")
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooShortRequest);
         verifyInvalidParam(language, roomTitleTooShortResponse, "roomTitle", "too short");
+    }
 
-        //Room title too long
+    private static void roomTitleTooLong(Language language, UUID accessTokenId1) {
         CreateChatRoomRequest roomTitleTooLongRequest = CreateChatRoomRequest.builder()
             .roomTitle(Stream.generate(() -> "a").limit(21).collect(Collectors.joining()))
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(language, accessTokenId1, roomTitleTooLongRequest);
         verifyInvalidParam(language, roomTitleTooLongResponse, "roomTitle", "too long");
+    }
 
-        //Create
+    private static void create(Language language, UUID accessTokenId1, UUID userId2, Map<UUID, ApphubWsClient> gameWsClients) {
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(userId2))
@@ -109,7 +124,5 @@ public class CreateChatRoomTest extends BackEndTest {
             .map(webSocketEvent -> webSocketEvent.orElseThrow(() -> new RuntimeException("ChatRoomCreated message has not arrived")))
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getTitle()).isEqualTo(ROOM_TITLE));
-
-        ApphubWsClient.cleanUpConnections();
     }
 }

@@ -54,21 +54,29 @@ public class DeconstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Storage in use
+        storageInUse(driver);
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_BATTERY);
+        String surfaceId = surface.getSurfaceId();
+        surface = deconstruct(driver, surface, surfaceId);
+        cancelDeconstruction(driver, surface, surfaceId);
+    }
+
+    private static void storageInUse(WebDriver driver) {
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_DEPOT);
         surface.deconstructBuilding(driver);
 
         NotificationUtil.verifyErrorNotification(driver, "Storage still in use. Free up some space before you deconstruct it.");
+    }
 
-        //Deconstruct
-        surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_BATTERY);
-        String surfaceId = surface.getSurfaceId();
+    private static Surface deconstruct(WebDriver driver, Surface surface, String surfaceId) {
         surface.deconstructBuilding(driver);
 
         surface = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Surface::isDeconstructionInProgress)
             .orElseThrow(() -> new RuntimeException("Deconstruction not started"));
+        return surface;
+    }
 
-        //Cancel deconstruction
+    private static void cancelDeconstruction(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelDeconstruction(driver);
 
         AwaitilityWrapper.createDefault()
@@ -105,7 +113,6 @@ public class DeconstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Deconstruct
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
         String surfaceId = surface.getSurfaceId();
         surface.deconstructBuilding(driver);

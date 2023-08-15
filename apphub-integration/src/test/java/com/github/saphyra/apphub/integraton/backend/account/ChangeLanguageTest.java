@@ -31,15 +31,22 @@ public class ChangeLanguageTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(registerLanguage, userData);
 
-        //Null language
+        nullLanguage(registerLanguage, accessTokenId);
+        unsupportedLanguage(registerLanguage, accessTokenId);
+        changeLanguage(registerLanguage, changeLanguage, accessTokenId);
+    }
+
+    private static void nullLanguage(Language registerLanguage, UUID accessTokenId) {
         Response nullLanguageResponse = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, null);
         ResponseValidator.verifyInvalidParam(registerLanguage, nullLanguageResponse, "value", "must not be null");
+    }
 
-        //Not supported language
+    private static void unsupportedLanguage(Language registerLanguage, UUID accessTokenId) {
         Response response = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, "asd");
         ResponseValidator.verifyInvalidParam(registerLanguage, response, "value", "not supported");
+    }
 
-        //Change language
+    private static void changeLanguage(Language registerLanguage, Language changeLanguage, UUID accessTokenId) {
         AccountActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
 
         List<LanguageResponse> languageResponses = AccountActions.getLanguages(registerLanguage, accessTokenId);

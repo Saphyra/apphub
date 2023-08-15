@@ -36,126 +36,167 @@ public class GroupCrudTest extends BackEndTest {
 
         CommunityActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
 
-        //Create - Name null
+        create_nameNull(language, accessTokenId1);
+        rename_nameTooShort(language, accessTokenId1);
+        create_nameTooLong(language, accessTokenId1);
+        GroupListResponse group = create(language, accessTokenId1, userId1);
+        rename_nameNull(language, accessTokenId1, group);
+        rename_nameTooShort(language, accessTokenId1, group);
+        rename_nameTooLong(language, accessTokenId1, group);
+        GroupMemberResponse groupMember = rename_notOwner(language, accessTokenId1, accessTokenId2, userId2, group);
+        group = rename(language, accessTokenId1, group);
+        changeInvitationType_null(language, accessTokenId1, group);
+        changeInvitationType_notOwner(language, accessTokenId2, group);
+        group = changeInvitationType(language, accessTokenId1, group);
+        changeOwner_null(language, accessTokenId1, group);
+        changeOwner_notOwner(language, accessTokenId2, group, groupMember);
+        changeOwner_alreadyOwner(language, accessTokenId1, userId1, group);
+        changeOwner(language, accessTokenId1, group, groupMember);
+        deleteGroup_notOwner(language, accessTokenId1, group);
+        deleteGroup(language, accessTokenId1, accessTokenId2, group);
+    }
+
+    private static void create_nameNull(Language language, UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getCreateGroupResponse(language, accessTokenId1, null),
             "groupName",
             "must not be null"
         );
+    }
 
-        //Create - Name too short
+    private static void rename_nameTooShort(Language language, UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getCreateGroupResponse(language, accessTokenId1, "as"),
             "groupName",
             "too short"
         );
+    }
 
-        //Create - Name too long
+    private static void create_nameTooLong(Language language, UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getCreateGroupResponse(language, accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
             "too long"
         );
+    }
 
-        //Create
+    private static GroupListResponse create(Language language, UUID accessTokenId1, UUID userId1) {
         GroupListResponse group = GroupActions.createGroup(language, accessTokenId1, GROUP_NAME);
 
         assertThat(group.getName()).isEqualTo(GROUP_NAME);
         assertThat(group.getOwnerId()).isEqualTo(userId1);
         assertThat(group.getInvitationType()).isEqualTo(GroupInvitationType.FRIENDS);
+        return group;
+    }
 
-        //Rename - Name null
+    private static void rename_nameNull(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getRenameGroupResponse(language, accessTokenId1, group.getGroupId(), null),
             "groupName",
             "must not be null"
         );
+    }
 
-        //Rename - Name too short
+    private static void rename_nameTooShort(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getRenameGroupResponse(language, accessTokenId1, group.getGroupId(), "as"),
             "groupName",
             "too short"
         );
+    }
 
-        //Rename - Name too long
+    private static void rename_nameTooLong(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getRenameGroupResponse(language, accessTokenId1, group.getGroupId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
             "too long"
         );
+    }
 
-        //Rename - Not owner
+    private static GroupMemberResponse rename_notOwner(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID userId2, GroupListResponse group) {
         GroupMemberResponse groupMember = GroupActions.createMember(language, accessTokenId1, group.getGroupId(), userId2);
         ResponseValidator.verifyForbiddenOperation(
             language,
             GroupActions.getRenameGroupResponse(language, accessTokenId2, group.getGroupId(), NEW_GROUP_NAME)
         );
+        return groupMember;
+    }
 
-        //Rename
+    private static GroupListResponse rename(Language language, UUID accessTokenId1, GroupListResponse group) {
         group = GroupActions.renameGroup(language, accessTokenId1, group.getGroupId(), NEW_GROUP_NAME);
 
         assertThat(group.getName()).isEqualTo(NEW_GROUP_NAME);
+        return group;
+    }
 
-        //Change invitationType - null
+    private static void changeInvitationType_null(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getChangeInvitationTypeResponse(language, accessTokenId1, group.getGroupId(), null),
             "invitationType",
             "must not be null"
         );
+    }
 
-        //Change invitationType - Not owner
+    private static void changeInvitationType_notOwner(Language language, UUID accessTokenId2, GroupListResponse group) {
         ResponseValidator.verifyForbiddenOperation(
             language,
             GroupActions.getChangeInvitationTypeResponse(language, accessTokenId2, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS)
         );
+    }
 
-        //Change invitationType
+    private static GroupListResponse changeInvitationType(Language language, UUID accessTokenId1, GroupListResponse group) {
         group = GroupActions.changeInvitationType(language, accessTokenId1, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
 
         assertThat(group.getInvitationType()).isEqualTo(GroupInvitationType.FRIENDS_OF_FRIENDS);
+        return group;
+    }
 
-        //Change owner - null
+    private static void changeOwner_null(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
             language,
             GroupActions.getChangeOwnerResponse(language, accessTokenId1, group.getGroupId(), null),
             "groupMemberId",
             "must not be null"
         );
+    }
 
-        //Change owner - Not owner
+    private static void changeOwner_notOwner(Language language, UUID accessTokenId2, GroupListResponse group, GroupMemberResponse groupMember) {
         ResponseValidator.verifyForbiddenOperation(
             language,
             GroupActions.getChangeOwnerResponse(language, accessTokenId2, group.getGroupId(), groupMember.getGroupMemberId())
         );
+    }
 
-        //Change owner - Already owner
+    private void changeOwner_alreadyOwner(Language language, UUID accessTokenId1, UUID userId1, GroupListResponse group) {
         ResponseValidator.verifyErrorResponse(
             language,
             GroupActions.getChangeOwnerResponse(language, accessTokenId1, group.getGroupId(), getOwnMember(language, accessTokenId1, group.getGroupId(), userId1).getGroupMemberId()),
             409,
             ErrorCode.GENERAL_ERROR
         );
+    }
 
-        //Change owner
+    private static void changeOwner(Language language, UUID accessTokenId1, GroupListResponse group, GroupMemberResponse groupMember) {
         GroupActions.changeOwner(language, accessTokenId1, group.getGroupId(), groupMember.getGroupMemberId());
 
         assertThat(GroupActions.getGroups(language, accessTokenId1).get(0).getOwnerId());
+    }
 
-        //Delete group - Not owner
+    private static void deleteGroup_notOwner(Language language, UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyForbiddenOperation(
             language,
             GroupActions.getDeleteGroupResponse(language, accessTokenId1, group.getGroupId())
         );
+    }
 
-        //Delete group
+    private static void deleteGroup(Language language, UUID accessTokenId1, UUID accessTokenId2, GroupListResponse group) {
         GroupActions.deleteGroup(language, accessTokenId2, group.getGroupId());
 
         assertThat(GroupActions.getGroups(language, accessTokenId1)).isEmpty();

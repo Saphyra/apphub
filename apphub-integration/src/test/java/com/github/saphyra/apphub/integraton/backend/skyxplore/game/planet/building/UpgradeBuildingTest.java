@@ -50,16 +50,22 @@ public class UpgradeBuildingTest extends BackEndTest {
 
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
-        //Building at max level
+        buildingAtMaxLevel(language, accessTokenId, planetId);
+        UUID upgradableBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
+        UUID constructionId = upgradeBuilding(language, accessTokenId, gameWsClient, planetId, upgradableBuildingId);
+        constructionAlreadyInProgress(language, accessTokenId, planetId, upgradableBuildingId);
+        cancel(language, accessTokenId, gameWsClient, planetId, upgradableBuildingId, constructionId);
+    }
+
+    private void buildingAtMaxLevel(Language language, UUID accessTokenId, UUID planetId) {
         UUID maxLevelBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_WATER_PUMP);
 
         Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, maxLevelBuildingId);
 
         ResponseValidator.verifyForbiddenOperation(language, maxLevelResponse);
+    }
 
-        //Upgrade building
-        UUID upgradableBuildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
-
+    private static UUID upgradeBuilding(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID upgradableBuildingId) {
         SkyXploreBuildingActions.upgradeBuilding(language, accessTokenId, planetId, upgradableBuildingId);
         SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)
             .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
@@ -82,13 +88,17 @@ public class UpgradeBuildingTest extends BackEndTest {
         assertThat(queueItemModifiedEvent.getType()).isEqualTo(Constants.QUEUE_TYPE_CONSTRUCTION);
         assertThat(queueItemModifiedEvent.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
         assertThat(queueItemModifiedEvent.getData()).containsEntry("currentLevel", 1);
+        return constructionId;
+    }
 
-        //Construction already in progress
+    private static void constructionAlreadyInProgress(Language language, UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
         Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, upgradableBuildingId);
 
         ResponseValidator.verifyErrorResponse(language, inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+    }
 
-        //Cancel
+    private void cancel(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID upgradableBuildingId, UUID constructionId) {
+        SurfaceResponse modifiedSurface;
         gameWsClient.clearMessages();
         SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, upgradableBuildingId);
         modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)

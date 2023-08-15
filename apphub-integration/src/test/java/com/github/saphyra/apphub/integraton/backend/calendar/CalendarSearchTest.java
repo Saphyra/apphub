@@ -77,27 +77,41 @@ public class CalendarSearchTest extends BackEndTest {
             .build();
         OccurrenceActions.editOccurrence(language, accessTokenId, occurrenceId, editOccurrenceRequest);
 
-        //Query too short
+        queryTooShort(language, accessTokenId);
+        searchByEvent(language, accessTokenId);
+        searchByOccurrence(language, accessTokenId);
+        searchByDate(language, accessTokenId);
+        searchByTime(language, accessTokenId);
+    }
+
+    private static void queryTooShort(Language language, UUID accessTokenId) {
         Response queryTooShortResponse = CalendarSearchActions.getSearchResponse(language, accessTokenId, "as");
 
         ResponseValidator.verifyInvalidParam(language, queryTooShortResponse, "value", "too short");
+    }
 
-        //Search by event
+    private void searchByEvent(Language language, UUID accessTokenId) {
         List<EventSearchResponse> searchResult = CalendarSearchActions.search(language, accessTokenId, TITLE);
 
         verifySearchResult(searchResult);
+    }
 
-        //Search by occurrence
+    private void searchByOccurrence(Language language, UUID accessTokenId) {
+        List<EventSearchResponse> searchResult;
         searchResult = CalendarSearchActions.search(language, accessTokenId, NOTE);
 
         verifySearchResult(searchResult);
+    }
 
-        //Search by date
+    private void searchByDate(Language language, UUID accessTokenId) {
+        List<EventSearchResponse> searchResult;
         searchResult = CalendarSearchActions.search(language, accessTokenId, EVENT_DATE.toString());
 
         verifySearchResult(searchResult);
+    }
 
-        //Search by time
+    private void searchByTime(Language language, UUID accessTokenId) {
+        List<EventSearchResponse> searchResult;
         searchResult = CalendarSearchActions.search(language, accessTokenId, EVENT_TIME.toString());
 
         verifySearchResult(searchResult);

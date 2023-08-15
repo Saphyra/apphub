@@ -39,7 +39,16 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
-        //Null password
+        nullPassword(language, accessTokenId, testUserId);
+        incorrectPassword(language, accessTokenId, testUserId);
+        nullDate(language, userData, accessTokenId, testUserId);
+        nullTime(language, userData, accessTokenId, testUserId);
+        incorrectTime(language, userData, accessTokenId, testUserId);
+        markUserForDeletion(language, userData, accessTokenId, testUserId);
+        unmarkUserForDeletion(language, accessTokenId, testUserId);
+    }
+
+    private static void nullPassword(Language language, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest nullPasswordRequest = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(TIME)
@@ -49,8 +58,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         Response nullPasswordResponse = BanActions.getMarkForDeletionResponse(language, accessTokenId, testUserId, nullPasswordRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(Language language, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest incorrectPasswordRequest = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(TIME)
@@ -60,8 +70,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         Response incorrectPasswordResponse = BanActions.getMarkForDeletionResponse(language, accessTokenId, testUserId, incorrectPasswordRequest);
 
         ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+    }
 
-        //Null date
+    private static void nullDate(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest nullDateRequest = MarkUserForDeletionRequest.builder()
             .date(null)
             .time(TIME)
@@ -71,8 +82,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         Response nullDateResponse = BanActions.getMarkForDeletionResponse(language, accessTokenId, testUserId, nullDateRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullDateResponse, "date", "must not be null");
+    }
 
-        //Null time
+    private static void nullTime(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest nullTimeRequest = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(null)
@@ -82,8 +94,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         Response nullTimeResponse = BanActions.getMarkForDeletionResponse(language, accessTokenId, testUserId, nullTimeRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullTimeResponse, "time", "must not be null");
+    }
 
-        //Incorrect time
+    private static void incorrectTime(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest incorrectTimeRequest = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time("asd")
@@ -93,8 +106,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         Response incorrectTimeResponse = BanActions.getMarkForDeletionResponse(language, accessTokenId, testUserId, incorrectTimeRequest);
 
         ResponseValidator.verifyInvalidParam(language, incorrectTimeResponse, "time", "invalid value");
+    }
 
-        //Mark user for deletion
+    private static void markUserForDeletion(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest markUserForDeletionRequest = MarkUserForDeletionRequest.builder()
             .date(DATE)
             .time(TIME)
@@ -105,9 +119,9 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
         assertThat(markUserForDeletionResponse.getMarkedForDeletion()).isTrue();
         assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(LocalDateTime.of(DATE, LocalTime.of(HOURS, MINUTES, 0)).toEpochSecond(ZoneOffset.UTC));
+    }
 
-        //Unmark user for deletion
-
+    private static void unmarkUserForDeletion(Language language, UUID accessTokenId, UUID testUserId) {
         BanResponse unmarkUserForDeletionResponse = BanActions.unmarkUserForDeletion(language, accessTokenId, testUserId);
 
         assertThat(unmarkUserForDeletionResponse.getMarkedForDeletion()).isFalse();

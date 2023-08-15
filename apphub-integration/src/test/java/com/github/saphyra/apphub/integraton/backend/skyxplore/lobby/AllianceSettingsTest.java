@@ -50,14 +50,25 @@ public class AllianceSettingsTest extends BackEndTest {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
 
-        //Set alliance of player - not host
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+
+        setAllianceOfPlayer_notHost(language, userId1, accessTokenId2);
+        UUID allianceId1 = setAllianceOfPlayer_newAlliance(language, accessTokenId1, userId1, wsClient);
+        setAllianceOfPlayer_noAlliance(language, accessTokenId1, userId1, wsClient);
+        setAllianceOfPlayer_existingAlliance(language, accessTokenId1, userId2, wsClient, allianceId1);
+        UUID aiId = setAllianceOfAi_notHost(language, accessTokenId1, accessTokenId2, wsClient);
+        setAllianceOfAi_newAlliance(language, accessTokenId1, wsClient, aiId);
+        setAllianceOfAi_noAlliance(language, accessTokenId1, wsClient, aiId);
+        setAllianceOfAi_existingAlliance(language, accessTokenId1, wsClient, allianceId1, aiId);
+    }
+
+    private static void setAllianceOfPlayer_notHost(Language language, UUID userId1, UUID accessTokenId2) {
         Response response = SkyXploreLobbyActions.getChangeAllianceOfPlayerResponse(language, accessTokenId2, userId1, Constants.NEW_ALLIANCE_VALUE);
 
         ResponseValidator.verifyForbiddenOperation(response);
+    }
 
-        //Set alliance of player - New alliance
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-
+    private static UUID setAllianceOfPlayer_newAlliance(Language language, UUID accessTokenId1, UUID userId1, ApphubWsClient wsClient) {
         SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId1, Constants.NEW_ALLIANCE_VALUE);
 
         AllianceCreatedResponse allianceCreatedResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
@@ -68,8 +79,10 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(allianceCreatedResponse.getMember().getAllianceId()).isEqualTo(allianceId1);
         assertThat(allianceCreatedResponse.getMember().getUserId()).isEqualTo(userId1);
         assertThat(allianceCreatedResponse.getAi()).isNull();
+        return allianceId1;
+    }
 
-        //Set alliance of player - No alliance
+    private static void setAllianceOfPlayer_noAlliance(Language language, UUID accessTokenId1, UUID userId1, ApphubWsClient wsClient) {
         SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId1, Constants.NO_ALLIANCE_VALUE);
 
         LobbyMemberResponse lobbyMemberResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
@@ -77,8 +90,10 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(LobbyMemberResponse.class);
         assertThat(lobbyMemberResponse.getUserId()).isEqualTo(userId1);
         assertThat(lobbyMemberResponse.getAllianceId()).isNull();
+    }
 
-        //Set alliance of player - Existing alliance
+    private static void setAllianceOfPlayer_existingAlliance(Language language, UUID accessTokenId1, UUID userId2, ApphubWsClient wsClient, UUID allianceId1) {
+        LobbyMemberResponse lobbyMemberResponse;
         wsClient.clearMessages();
 
         SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId2, allianceId1);
@@ -88,8 +103,10 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(LobbyMemberResponse.class);
         assertThat(lobbyMemberResponse.getUserId()).isEqualTo(userId2);
         assertThat(lobbyMemberResponse.getAllianceId()).isEqualTo(allianceId1);
+    }
 
-        //Set alliance of AI - not host
+    private static UUID setAllianceOfAi_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2, ApphubWsClient wsClient) {
+        Response response;
         SkyXploreLobbyActions.createOrModifyAi(language, accessTokenId1, AiPlayer.builder().name(AI_NAME).build());
         UUID aiId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
@@ -99,8 +116,11 @@ public class AllianceSettingsTest extends BackEndTest {
         response = SkyXploreLobbyActions.getChangeAllianceOfAiResponse(language, accessTokenId2, aiId, Constants.NEW_ALLIANCE_VALUE);
 
         ResponseValidator.verifyForbiddenOperation(response);
+        return aiId;
+    }
 
-        //Set alliance of AI - New alliance
+    private static void setAllianceOfAi_newAlliance(Language language, UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
+        AllianceCreatedResponse allianceCreatedResponse;
         SkyXploreLobbyActions.changeAllianceOfAI(language, accessTokenId1, aiId, Constants.NEW_ALLIANCE_VALUE);
 
         allianceCreatedResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
@@ -111,8 +131,9 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(allianceCreatedResponse.getMember()).isNull();
         assertThat(allianceCreatedResponse.getAi().getUserId()).isEqualTo(aiId);
         assertThat(allianceCreatedResponse.getAi().getAllianceId()).isEqualTo(allianceId2);
+    }
 
-        //Set alliance of AI - No alliance
+    private static void setAllianceOfAi_noAlliance(Language language, UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
         wsClient.clearMessages();
 
         SkyXploreLobbyActions.changeAllianceOfAI(language, accessTokenId1, aiId, Constants.NO_ALLIANCE_VALUE);
@@ -122,8 +143,10 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(AiPlayer.class);
         assertThat(aiPlayer.getUserId()).isEqualTo(aiId);
         assertThat(aiPlayer.getAllianceId()).isNull();
+    }
 
-        //Set alliance of AI - Existing alliance
+    private static void setAllianceOfAi_existingAlliance(Language language, UUID accessTokenId1, ApphubWsClient wsClient, UUID allianceId1, UUID aiId) {
+        AiPlayer aiPlayer;
         wsClient.clearMessages();
 
         SkyXploreLobbyActions.changeAllianceOfAI(language, accessTokenId1, aiId, allianceId1);
@@ -136,7 +159,7 @@ public class AllianceSettingsTest extends BackEndTest {
     }
 
     @Test(groups = {"be", "skyxplore"})
-    void gameDoesNotStartWithOneAlliance(){
+    void gameDoesNotStartWithOneAlliance() {
         Language language = Language.ENGLISH;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();

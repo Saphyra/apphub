@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integraton.frontend.notebook;
+package com.github.saphyra.apphub.integraton.frontend.notebook.table;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -19,7 +19,6 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.notebook.TableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -36,329 +35,6 @@ public class TableCrudTest extends SeleniumTest {
     private static final String NEW_TABLE_TITLE = "new-table";
 
     @Test(groups = {"fe", "notebook"})
-    public void checklistTableCrud() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
-
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST_TABLE);
-
-        //Create - Blank title
-        NewTableActions.fillTitle(driver, " ");
-        NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
-
-        //Create - Has Blank column name
-        NewTableActions.fillTitle(driver, TABLE_TITLE);
-        NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
-
-        //-- Add row
-        NewTableActions.newRow(driver);
-
-        assertThat(NewTableActions.getRows(driver)).hasSize(2);
-
-        //-- Remove row
-        NewTableActions.getRows(driver)
-            .get(0)
-            .remove();
-
-        assertThat(NewTableActions.getRows(driver)).hasSize(1);
-
-        //-- Add column
-        NewTableActions.newColumn(driver);
-
-        assertThat(NewTableActions.getTableHeads(driver)).hasSize(2);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
-
-        //-- Remove column
-        NewTableActions.getTableHeads(driver)
-            .get(0)
-            .remove();
-
-        assertThat(NewTableActions.getTableHeads(driver)).hasSize(1);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
-
-        //-- Check row
-        NewTableActions.getRows(driver)
-            .get(0)
-            .check();
-
-        assertThat(NewTableActions.getRows(driver).get(0).isChecked()).isTrue();
-
-        //-- Move column - Right
-        NewTableActions.newColumn(driver);
-        NewTableActions.getTableHeads(driver)
-            .get(0)
-            .setValue(TABLE_HEAD_1);
-        NewTableActions.getTableHeads(driver)
-            .get(1)
-            .setValue(TABLE_HEAD_2);
-        NewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_1);
-        NewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(1)
-            .setValue(COLUMN_2);
-
-        NewTableActions.getTableHeads(driver)
-            .get(0)
-            .moveRight();
-
-        assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
-
-        //-- Move column - Left
-        NewTableActions.getTableHeads(driver)
-            .get(1)
-            .moveLeft();
-
-        assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
-
-        //-- Move row - Down
-        NewTableActions.getTableHeads(driver)
-            .get(1)
-            .remove();
-
-        NewTableActions.newRow(driver);
-        NewTableActions.getRows(driver)
-            .get(1)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_2);
-
-        NewTableActions.getRows(driver)
-            .get(0)
-            .moveDown();
-
-        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
-
-        //-- Move row - Up
-        NewTableActions.getRows(driver)
-            .get(1)
-            .moveUp();
-
-        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
-
-        //Create
-        ParentSelectorActions.selectParent(driver, CATEGORY_TITLE);
-        NewTableActions.submit(driver);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
-
-        NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
-            .open(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE).isPresent());
-
-        //View
-        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
-            .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-table"))).isPresent());
-
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
-
-        //Edit - Blank title
-        ViewTableActions.enableEditing(driver);
-
-        ViewTableActions.setTitle(driver, " ");
-
-        ViewTableActions.saveChanges(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
-
-        //Edit - Blank column name
-        ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
-
-        ViewTableActions.getTableHeads(driver)
-            .get(0)
-            .setValue(" ");
-
-        ViewTableActions.saveChanges(driver);
-
-        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
-
-        //Edit - Discard
-        ViewTableActions.discardChanges(driver);
-
-        assertThat(ViewTableActions.isEditingEnabled(driver)).isFalse();
-        AwaitilityWrapper.createDefault()
-            .until(() -> ViewTableActions.getTitle(driver).equals(TABLE_TITLE))
-            .assertTrue("Title is not reset");
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
-
-        //-- Add row
-        ViewTableActions.enableEditing(driver);
-
-        ViewTableActions.newRow(driver);
-
-        assertThat(ViewTableActions.getRows(driver)).hasSize(3);
-
-        //-- Remove row
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .remove();
-
-        assertThat(ViewTableActions.getRows(driver)).hasSize(2);
-
-        //-- Add column
-        ViewTableActions.newColumn(driver);
-
-        assertThat(ViewTableActions.getTableHeads(driver)).hasSize(2);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
-
-        //-- Check row
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
-
-        //-- Move column - Right
-        ViewTableActions.getTableHeads(driver)
-            .get(0)
-            .setValue(TABLE_HEAD_1);
-        ViewTableActions.getTableHeads(driver)
-            .get(1)
-            .setValue(TABLE_HEAD_2);
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_1);
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(1)
-            .setValue(COLUMN_2);
-
-        ViewTableActions.getTableHeads(driver)
-            .get(0)
-            .moveRight();
-
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
-
-        //-- Move column - Left
-        ViewTableActions.getTableHeads(driver)
-            .get(1)
-            .moveLeft();
-
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
-
-        //-- Remove column
-        ViewTableActions.getTableHeads(driver)
-            .get(0)
-            .remove();
-
-        assertThat(ViewTableActions.getTableHeads(driver)).hasSize(1);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
-
-        //-- Move row - Down
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_1);
-        ViewTableActions.getRows(driver)
-            .get(1)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_2);
-
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .moveDown();
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
-
-        //-- Move row - Up
-        ViewTableActions.getRows(driver)
-            .get(1)
-            .moveUp();
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
-
-        //Edit
-        ViewTableActions.getTableHeads(driver)
-            .get(0)
-            .setValue(TABLE_HEAD_2);
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .uncheck();
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_2);
-        ViewTableActions.getRows(driver)
-            .get(1)
-            .getColumns()
-            .get(0)
-            .setValue(COLUMN_1);
-        ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
-
-        ViewTableActions.saveChanges(driver);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> !ViewTableActions.isEditingEnabled(driver))
-            .assertTrue("Editing is still enabled");
-
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2);
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(false, false);
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
-
-        //Check row
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
-
-        //Uncheck row
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .uncheck();
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(false, false);
-
-        //Delete checked
-        ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
-
-        ViewTableActions.deleteChecked(driver);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> ViewTableActions.getRows(driver).size() == 1)
-            .assertTrue("Checked row is not deleted.");
-
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1);
-
-        //Delete
-        ViewTableActions.close(driver);
-
-        NotebookActions.findListItemByTitleValidated(driver, NEW_TABLE_TITLE)
-            .delete(driver);
-        NotebookActions.confirmListItemDeletion(driver);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> NotebookActions.getListItems(driver).isEmpty())
-            .assertTrue("Checklist table is not deleted.");
-    }
-
-    @Test(groups = {"fe", "notebook"})
     public void tableCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -372,43 +48,76 @@ public class TableCrudTest extends SeleniumTest {
         NotebookActions.newListItem(driver);
         NotebookNewListItemActions.selectListItem(driver, ListItemType.TABLE);
 
-        //Create - Blank title
+        create_blankTitle(driver);
+        create_hasBlankColumnName(driver);
+        create_addRow(driver);
+        create_removeRow(driver);
+        create_addColumn(driver);
+        create_removeColumn(driver);
+        create_moveColumnRight(driver);
+        create_moveColumnLeft(driver);
+        create_moveRowDown(driver);
+        create_moveRowUp(driver);
+        create(driver);
+        view(driver);
+        edit_blankTitle(driver);
+        edit_blankColumnName(driver);
+        edit_discard(driver);
+        edit_addRow(driver);
+        edit_removeRow(driver);
+        edit_addColumn(driver);
+        edit_moveColumnRight(driver);
+        edit_moveColumnLeft(driver);
+        edit_removeColumn(driver);
+        edit_moveRowDown(driver);
+        edit_moveRowUp(driver);
+        edit(driver);
+        delete(driver);
+    }
+
+    private static void create_blankTitle(WebDriver driver) {
         NewTableActions.fillTitle(driver, " ");
         NewTableActions.submit(driver);
         ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Create - Has Blank column name
+    private static void create_hasBlankColumnName(WebDriver driver) {
         NewTableActions.fillTitle(driver, TABLE_TITLE);
         NewTableActions.submit(driver);
         ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
+    }
 
-        //-- Add row
+    private static void create_addRow(WebDriver driver) {
         NewTableActions.newRow(driver);
 
         assertThat(NewTableActions.getRows(driver)).hasSize(2);
+    }
 
-        //-- Remove row
+    private static void create_removeRow(WebDriver driver) {
         NewTableActions.getRows(driver)
             .get(0)
             .remove();
 
         assertThat(NewTableActions.getRows(driver)).hasSize(1);
+    }
 
-        //-- Add column
+    private static void create_addColumn(WebDriver driver) {
         NewTableActions.newColumn(driver);
 
         assertThat(NewTableActions.getTableHeads(driver)).hasSize(2);
         assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
+    }
 
-        //-- Remove column
+    private static void create_removeColumn(WebDriver driver) {
         NewTableActions.getTableHeads(driver)
             .get(0)
             .remove();
 
         assertThat(NewTableActions.getTableHeads(driver)).hasSize(1);
         assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
+    }
 
-        //-- Move column - Right
+    private static void create_moveColumnRight(WebDriver driver) {
         NewTableActions.newColumn(driver);
         NewTableActions.getTableHeads(driver)
             .get(0)
@@ -433,16 +142,18 @@ public class TableCrudTest extends SeleniumTest {
 
         assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
         assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
+    }
 
-        //-- Move column - Left
+    private static void create_moveColumnLeft(WebDriver driver) {
         NewTableActions.getTableHeads(driver)
             .get(1)
             .moveLeft();
 
         assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
         assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
+    }
 
-        //-- Move row - Down
+    private static void create_moveRowDown(WebDriver driver) {
         NewTableActions.getTableHeads(driver)
             .get(1)
             .remove();
@@ -459,15 +170,17 @@ public class TableCrudTest extends SeleniumTest {
             .moveDown();
 
         assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+    }
 
-        //-- Move row - Up
+    private static void create_moveRowUp(WebDriver driver) {
         NewTableActions.getRows(driver)
             .get(1)
             .moveUp();
 
         assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+    }
 
-        //Create
+    private static void create(WebDriver driver) {
         ParentSelectorActions.selectParent(driver, CATEGORY_TITLE);
         NewTableActions.submit(driver);
 
@@ -476,23 +189,26 @@ public class TableCrudTest extends SeleniumTest {
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .open(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE).isPresent());
+    }
 
-        //View
+    private static void view(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
             .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-table"))).isPresent());
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
         assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+    }
 
-        //Edit - Blank title
+    private static void edit_blankTitle(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
 
         ViewTableActions.setTitle(driver, " ");
 
         ViewTableActions.saveChanges(driver);
         ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Edit - Blank column name
+    private static void edit_blankColumnName(WebDriver driver) {
         ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
 
         ViewTableActions.getTableHeads(driver)
@@ -502,8 +218,9 @@ public class TableCrudTest extends SeleniumTest {
         ViewTableActions.saveChanges(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
+    }
 
-        //Edit - Discard
+    private static void edit_discard(WebDriver driver) {
         ViewTableActions.discardChanges(driver);
 
         assertThat(ViewTableActions.isEditingEnabled(driver)).isFalse();
@@ -511,28 +228,32 @@ public class TableCrudTest extends SeleniumTest {
             .until(() -> ViewTableActions.getTitle(driver).equals(TABLE_TITLE))
             .assertTrue("Title is not reset");
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
+    }
 
-        //-- Add row
+    private static void edit_addRow(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
 
         ViewTableActions.newRow(driver);
 
         assertThat(ViewTableActions.getRows(driver)).hasSize(3);
+    }
 
-        //-- Remove row
+    private static void edit_removeRow(WebDriver driver) {
         ViewTableActions.getRows(driver)
             .get(0)
             .remove();
 
         assertThat(ViewTableActions.getRows(driver)).hasSize(2);
+    }
 
-        //-- Add column
+    private static void edit_addColumn(WebDriver driver) {
         ViewTableActions.newColumn(driver);
 
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(2);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
+    }
 
-        //-- Move column - Right
+    private static void edit_moveColumnRight(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
             .get(0)
             .setValue(TABLE_HEAD_1);
@@ -556,24 +277,27 @@ public class TableCrudTest extends SeleniumTest {
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
+    }
 
-        //-- Move column - Left
+    private static void edit_moveColumnLeft(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
             .get(1)
             .moveLeft();
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
+    }
 
-        //-- Remove column
+    private static void edit_removeColumn(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
             .get(0)
             .remove();
 
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(1);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
+    }
 
-        //-- Move row - Down
+    private static void edit_moveRowDown(WebDriver driver) {
         ViewTableActions.getRows(driver)
             .get(0)
             .getColumns()
@@ -590,15 +314,17 @@ public class TableCrudTest extends SeleniumTest {
             .moveDown();
 
         assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+    }
 
-        //-- Move row - Up
+    private static void edit_moveRowUp(WebDriver driver) {
         ViewTableActions.getRows(driver)
             .get(1)
             .moveUp();
 
         assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+    }
 
-        //Edit
+    private static void edit(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
             .get(0)
             .setValue(TABLE_HEAD_2);
@@ -622,8 +348,9 @@ public class TableCrudTest extends SeleniumTest {
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2);
         assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+    }
 
-        //Delete
+    private static void delete(WebDriver driver) {
         ViewTableActions.close(driver);
 
         NotebookActions.findListItemByTitleValidated(driver, NEW_TABLE_TITLE)

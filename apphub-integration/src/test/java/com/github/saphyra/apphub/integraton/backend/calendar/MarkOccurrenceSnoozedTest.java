@@ -53,7 +53,13 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
         OccurrenceResponse occurrenceResponse = calendarResponse.getEvents()
             .get(0);
 
-        //Null referenceDate day
+        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
+        ReferenceDate referenceDate = markOccurrenceSnoozed(language, accessTokenId, occurrenceResponse);
+        markDoneSnoozed(language, accessTokenId, occurrenceResponse, referenceDate);
+    }
+
+    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
@@ -62,8 +68,9 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
         Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+    }
 
-        //Null referenceDate month
+    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
@@ -72,8 +79,10 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
         Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+    }
 
-        //Mark occurrence snoozed
+    private static ReferenceDate markOccurrenceSnoozed(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+        List<CalendarResponse> responses;
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)
@@ -88,8 +97,10 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Occurrence not found"));
 
         assertThat(occurrence.getStatus()).isEqualTo(Constants.CALENDAR_OCCURRENCE_STATUS_SNOOZED);
+        return referenceDate;
+    }
 
-        //Mark done snoozed
+    private static void markDoneSnoozed(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
         OccurrenceActions.markOccurrenceDone(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         Response markDoneSnoozedResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);

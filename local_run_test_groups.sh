@@ -1,6 +1,6 @@
 ENABLED_GROUPS=$1
-HEADLESS=${2:-true}
-DISABLED_GROUPS=${3:-headed-only}
+DISABLED_GROUPS=${2:-headed-only}
+HEADLESS=${3:-true}
 SERVER_PORT=${4:-8080}
 DATABASE_PORT=${5:-5432}
 

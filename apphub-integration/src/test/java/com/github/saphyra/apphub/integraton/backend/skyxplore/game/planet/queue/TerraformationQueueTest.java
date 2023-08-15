@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreF
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetQueueActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
@@ -49,7 +50,18 @@ public class TerraformationQueueTest extends BackEndTest {
 
         SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        //Get queue
+        QueueResponse queueResponse = getQueueResponse(language, accessTokenId, planetId);
+        updatePriority_invalidType(language, accessTokenId, planetId, queueResponse);
+        updatePriority_priorityTooLow(language, accessTokenId, planetId, queueResponse);
+        updatePriority_priorityTooHigh(language, accessTokenId, planetId, queueResponse);
+        BiWrapper<QueueResponse, QueueResponse> updateResult = updatePriority(language, accessTokenId, planetId, queueResponse, gameWsClient);
+        queueResponse = updateResult.getEntity1();
+        QueueResponse queueItemModifiedEvent = updateResult.getEntity2();
+        cancelConstruction_invalidType(language, accessTokenId, planetId, queueResponse);
+        cancelConstruction(language, accessTokenId, gameWsClient, planetId, queueResponse, queueItemModifiedEvent);
+    }
+
+    private static QueueResponse getQueueResponse(Language language, UUID accessTokenId, UUID planetId) {
         List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);
 
         assertThat(queue).hasSize(1);
@@ -58,23 +70,28 @@ public class TerraformationQueueTest extends BackEndTest {
         assertThat(queueResponse.getOwnPriority()).isEqualTo(Constants.DEFAULT_PRIORITY);
         assertThat(queueResponse.getData()).containsEntry("currentSurfaceType", Constants.SURFACE_TYPE_DESERT);
         assertThat(queueResponse.getData()).containsEntry("targetSurfaceType", Constants.SURFACE_TYPE_LAKE);
+        return queueResponse;
+    }
 
-        //Update priority - Invalid type
+    private static void updatePriority_invalidType(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
 
         ResponseValidator.verifyInvalidParam(language, setPriority_invalidTypeResponse, "type", "invalid value");
+    }
 
-        //Update priority - Priority too low
+    private static void updatePriority_priorityTooLow(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
 
         ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooLowResponse, "priority", "too low");
+    }
 
-        //Update priority - Priority too high
+    private static void updatePriority_priorityTooHigh(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
 
         ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooHighResponse, "priority", "too high");
+    }
 
-        //Update priority
+    private BiWrapper<QueueResponse, QueueResponse> updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse, ApphubWsClient gameWsClient) {
         gameWsClient.clearMessages();
         SkyXplorePlanetQueueActions.setPriority(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
@@ -89,12 +106,16 @@ public class TerraformationQueueTest extends BackEndTest {
 
         assertThat(queueItemModifiedEvent.getOwnPriority()).isEqualTo(7);
 
-        //Cancel construction - Invalid type
+        return new BiWrapper<>(queueResponse, queueItemModifiedEvent);
+    }
+
+    private static void cancelConstruction_invalidType(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         Response cancelConstruction_invalidTypeResponse = SkyXplorePlanetQueueActions.getCancelItemResponse(language, accessTokenId, planetId, "asd", queueResponse.getItemId());
 
         ResponseValidator.verifyInvalidParam(language, cancelConstruction_invalidTypeResponse, "type", "invalid value");
+    }
 
-        //Cancel construction
+    private static void cancelConstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, QueueResponse queueResponse, QueueResponse queueItemModifiedEvent) {
         SkyXplorePlanetQueueActions.cancelItem(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
         assertThat(SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)).isEmpty();

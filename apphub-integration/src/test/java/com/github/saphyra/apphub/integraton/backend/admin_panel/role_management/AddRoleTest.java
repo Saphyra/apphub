@@ -31,39 +31,50 @@ public class AddRoleTest extends BackEndTest {
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
         UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
-        //Null userId
+        nullUserId(language, accessTokenId);
+        blankRole(language, accessTokenId);
+        userNotFound(language, accessTokenId);
+        roleAlreadyExists(language, accessTokenId, userId);
+        addRole(language, accessTokenId, testUser, userId);
+    }
+
+    private static void nullUserId(Language language, UUID accessTokenId) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(null)
             .role(Constants.ROLE_ADMIN)
             .build();
         Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, nullUserIdRequest);
         verifyInvalidParam(language, nullUserIdResponse, "userId", "must not be null");
+    }
 
-        //Blank role
+    private static void blankRole(Language language, UUID accessTokenId) {
         RoleRequest blankRoleRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(" ")
             .build();
         Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, blankRoleRequest);
         verifyInvalidParam(language, blankRoleResponse, "role", "must not be null or blank");
+    }
 
-        //User not found
+    private static void userNotFound(Language language, UUID accessTokenId) {
         RoleRequest userNotFoundRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(Constants.ROLE_ADMIN)
             .build();
         Response userNotFoundResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, userNotFoundRequest);
         verifyErrorResponse(language, userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
+    }
 
-        //Role already exists
+    private static void roleAlreadyExists(Language language, UUID accessTokenId, UUID userId) {
         RoleRequest roleAlreadyExistsRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_NOTEBOOK)
             .build();
         Response roleAlreadyExistsResponse = RoleManagementActions.getAddRoleResponse(language, accessTokenId, roleAlreadyExistsRequest);
         verifyErrorResponse(language, roleAlreadyExistsResponse, 409, ErrorCode.ROLE_ALREADY_EXISTS);
+    }
 
-        //Add role
+    private static void addRole(Language language, UUID accessTokenId, RegistrationParameters testUser, UUID userId) {
         RoleRequest addRoleRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_TEST)

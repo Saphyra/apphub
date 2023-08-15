@@ -13,6 +13,7 @@ Add error handling to integration tests executor service
 Store Selenium test error reports at a common place
 Feature Switch for WebDriver cache
 Add groups for all the integration tests
+Extract the steps of the integration tests to private methods
 
 ===TECHNICAL DEBTS===
 Extract config and logging from TestBase

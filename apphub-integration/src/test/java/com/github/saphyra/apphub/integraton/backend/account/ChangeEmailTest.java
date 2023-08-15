@@ -26,39 +26,51 @@ public class ChangeEmailTest extends BackEndTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
 
-        //Null e-mail
+        nullEmail(language, userData1, accessTokenId1);
+        invalidEmail(language, userData1, accessTokenId1);
+        nullPassword(language, accessTokenId1);
+        incorrectPassword(language, accessTokenId1);
+        emailAlreadyExists(language, userData1, accessTokenId1);
+        successfulChange(language, userData1, accessTokenId1);
+    }
+
+    private static void nullEmail(Language language, RegistrationParameters userData1, UUID accessTokenId1) {
         ChangeEmailRequest nullEmailRequest = ChangeEmailRequest.builder()
             .email(null)
             .password(userData1.getPassword())
             .build();
         Response nullEmailResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, nullEmailRequest);
         ResponseValidator.verifyInvalidParam(language, nullEmailResponse, "email", "must not be null");
+    }
 
-        //Invalid e-mail
+    private static void invalidEmail(Language language, RegistrationParameters userData1, UUID accessTokenId1) {
         ChangeEmailRequest invalidEmailRequest = ChangeEmailRequest.builder()
             .email("a@a.a")
             .password(userData1.getPassword())
             .build();
         Response invalidEmailResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, invalidEmailRequest);
         ResponseValidator.verifyInvalidParam(language, invalidEmailResponse, "email", "invalid format");
+    }
 
-        //Null password
+    private static void nullPassword(Language language, UUID accessTokenId1) {
         ChangeEmailRequest nullPasswordRequest = ChangeEmailRequest.builder()
             .email(RandomDataProvider.generateEmail())
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, nullPasswordRequest);
         ResponseValidator.verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(Language language, UUID accessTokenId1) {
         ChangeEmailRequest incorrectPasswordRequest = ChangeEmailRequest.builder()
             .email(RandomDataProvider.generateEmail())
             .password("incorrect-password")
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(language, accessTokenId1, incorrectPasswordRequest);
         ResponseValidator.verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+    }
 
-        //E-mail already exists
+    private static void emailAlreadyExists(Language language, RegistrationParameters userData1, UUID accessTokenId1) {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(language, userData2);
         ChangeEmailRequest emailAlreadyExistsRequest = ChangeEmailRequest.builder()
@@ -70,8 +82,9 @@ public class ChangeEmailTest extends BackEndTest {
         ErrorResponse emailAlreadyExistsErrorResponse = emailAlreadyExistsResponse.getBody().as(ErrorResponse.class);
         assertThat(emailAlreadyExistsErrorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
         assertThat(emailAlreadyExistsErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.EMAIL_ALREADY_EXISTS));
+    }
 
-        //Successful change
+    private static void successfulChange(Language language, RegistrationParameters userData1, UUID accessTokenId1) {
         String newEmail = RandomDataProvider.generateEmail();
         ChangeEmailRequest request = ChangeEmailRequest.builder()
             .email(newEmail)

@@ -37,17 +37,29 @@ public class FriendshipCrudTest extends SeleniumTest {
             (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
         );
 
-        //Search - User not found
+        search_userNotFound(driver1);
+        search_queryTooShort(driver1);
+        FriendRequest friendRequest = sendFriendRequest(driver1, driver2, userData1, userData2);
+        cancelFriendRequestBySender(driver1, driver2, friendRequest);
+        cancelFriendRequestByReceiver(driver1, driver2, userData2);
+        Friendship friendship = acceptFriendRequest(driver1, driver2, userData1, userData2);
+        removeFriendshipBySender(driver1, driver2, friendship);
+        removeFriendshipByFriend(driver1, driver2, userData1, userData2);
+    }
+
+    private static void search_userNotFound(WebDriver driver1) {
         FriendRequestActions.fillSearchForm(driver1, UUID.randomUUID().toString());
 
         FriendRequestActions.verifyUserNotFound(driver1);
+    }
 
-        //Search - Query too short
+    private static void search_queryTooShort(WebDriver driver1) {
         FriendRequestActions.fillSearchForm(driver1, "as");
 
         FriendRequestActions.verifyQueryTooShort(driver1);
+    }
 
-        //Send friend request
+    private static FriendRequest sendFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         FriendRequestActions.sendFriendRequest(driver1, userData2.getUsername());
 
         List<FriendRequest> sentFriendRequests = FriendRequestActions.getSentFriendRequests(driver1);
@@ -63,8 +75,10 @@ public class FriendshipCrudTest extends SeleniumTest {
         assertThat(receivedFriendRequests).hasSize(1);
         assertThat(receivedFriendRequests.get(0).getUsername()).isEqualTo(userData1.getUsername());
         assertThat(receivedFriendRequests.get(0).getEmail()).isEqualTo(userData1.getEmail());
+        return friendRequest;
+    }
 
-        //Cancel friend request by sender
+    private static void cancelFriendRequestBySender(WebDriver driver1, WebDriver driver2, FriendRequest friendRequest) {
         friendRequest.delete();
 
         NotificationUtil.verifySuccessNotification(driver1, "Friend request deleted.");
@@ -75,8 +89,10 @@ public class FriendshipCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> FriendRequestActions.getReceivedFriendRequests(driver2).isEmpty())
             .assertTrue("FriendRequest not deleted.");
+    }
 
-        //Cancel friend request by receiver
+    private static void cancelFriendRequestByReceiver(WebDriver driver1, WebDriver driver2, RegistrationParameters userData2) {
+        List<FriendRequest> receivedFriendRequests;
         FriendRequestActions.sendFriendRequest(driver1, userData2.getUsername());
 
         CommunityActions.openFriendsTab(driver2);
@@ -91,8 +107,10 @@ public class FriendshipCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> FriendRequestActions.getSentFriendRequests(driver1).isEmpty())
             .assertTrue("FriendRequest not deleted.");
+    }
 
-        //Accept friend request
+    private static Friendship acceptFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
+        List<FriendRequest> receivedFriendRequests;
         FriendRequestActions.sendFriendRequest(driver1, userData2.getUsername());
         CommunityActions.openFriendsTab(driver2);
         receivedFriendRequests = AwaitilityWrapper.getListWithWait(() -> FriendRequestActions.getReceivedFriendRequests(driver2), fr -> !fr.isEmpty());
@@ -118,8 +136,10 @@ public class FriendshipCrudTest extends SeleniumTest {
         Friendship friendship = senderFriendship.get(0);
         assertThat(friendship.getUsername()).isEqualTo(userData2.getUsername());
         assertThat(friendship.getEmail()).isEqualTo(userData2.getEmail());
+        return friendship;
+    }
 
-        //Remove friendship by sender
+    private static void removeFriendshipBySender(WebDriver driver1, WebDriver driver2, Friendship friendship) {
         friendship.delete();
         CommonPageActions.confirmConfirmationDialog(driver1, "delete-friendship-confirmation-dialog");
 
@@ -134,8 +154,9 @@ public class FriendshipCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> FriendshipActions.getFriendships(driver2).isEmpty())
             .assertTrue("Friendship is not deleted.");
+    }
 
-        //Remove friendship by friend
+    private static void removeFriendshipByFriend(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData2.getUsername(), driver2);
         CommunityActions.openFriendsTab(driver1);
 

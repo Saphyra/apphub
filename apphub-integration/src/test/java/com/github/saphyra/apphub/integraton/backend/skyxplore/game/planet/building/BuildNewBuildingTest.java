@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreP
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
@@ -51,28 +52,41 @@ public class BuildNewBuildingTest extends BackEndTest {
             .getPlanetId();
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
-        //Invalid dataId
+        UUID emptyDesertSurfaceId = invalidDataId(language, accessTokenId, planetId);
+        buildingAlreadyExists(language, accessTokenId, planetId);
+        incompatibleSurfaceType(language, accessTokenId, planetId);
+        BiWrapper<SurfaceResponse, UUID> buildResult = build(language, accessTokenId, planetId, emptyDesertSurfaceId, gameWsClient);
+        SurfaceResponse modifiedSurface = buildResult.getEntity1();
+        UUID constructionId = buildResult.getEntity2();
+        cancel(language, accessTokenId, gameWsClient, planetId, emptyDesertSurfaceId, modifiedSurface, constructionId);
+    }
+
+    private static UUID invalidDataId(Language language, UUID accessTokenId, UUID planetId) {
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         Response invalidDataIdResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyDesertSurfaceId, "asd");
 
         ResponseValidator.verifyInvalidParam(language, invalidDataIdResponse, "dataId", "invalid value");
+        return emptyDesertSurfaceId;
+    }
 
-        //Building already exists
+    private void buildingAlreadyExists(Language language, UUID accessTokenId, UUID planetId) {
         UUID occupiedDesertSurfaceId = findOccupiedDesert(language, accessTokenId, planetId);
 
         Response buildingAlreadyExistsResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, occupiedDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         ResponseValidator.verifyErrorResponse(language, buildingAlreadyExistsResponse, 409, ErrorCode.ALREADY_EXISTS);
+    }
 
-        //Incompatible surfaceType
+    private static void incompatibleSurfaceType(Language language, UUID accessTokenId, UUID planetId) {
         UUID emptyLakeSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
 
         Response incompatibleSurfaceTypeResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(language, accessTokenId, planetId, emptyLakeSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
+    }
 
-        //Build
+    private BiWrapper<SurfaceResponse, UUID> build(Language language, UUID accessTokenId, UUID planetId, UUID emptyDesertSurfaceId, ApphubWsClient gameWsClient) {
         SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
         SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
             .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
@@ -107,7 +121,12 @@ public class BuildNewBuildingTest extends BackEndTest {
 
         PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 2, 1);
 
-        //Cancel
+        return new BiWrapper<>(modifiedSurface, constructionId);
+    }
+
+    private void cancel(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID emptyDesertSurfaceId, SurfaceResponse modifiedSurface, UUID constructionId) {
+        PlanetStorageResponse storageResponse;
+        Object buildingDetails;
         gameWsClient.clearMessages();
         SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
         modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)

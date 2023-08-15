@@ -60,7 +60,14 @@ public class EditOccurrenceTest extends BackEndTest {
         OccurrenceResponse occurrenceResponse = calendarResponse.getEvents()
             .get(0);
 
-        //Null referenceDate
+        nullReferenceDate(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
+        blankTitle(language, accessTokenId, occurrenceResponse);
+        editOccurrence(language, accessTokenId, occurrenceResponse);
+    }
+
+    private static void nullReferenceDate(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         EditOccurrenceRequest nullReferenceDateRequest = EditOccurrenceRequest.builder()
             .referenceDate(null)
             .title(NEW_TITLE)
@@ -71,8 +78,9 @@ public class EditOccurrenceTest extends BackEndTest {
         Response nullReferenceDateResponse = OccurrenceActions.getEditOccurrenceResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateResponse, "referenceDate", "must not be null");
+    }
 
-        //Null referenceDateDay
+    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         EditOccurrenceRequest nullReferenceDateDayRequest = EditOccurrenceRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(null)
@@ -86,8 +94,9 @@ public class EditOccurrenceTest extends BackEndTest {
         Response nullReferenceDateDayResponse = OccurrenceActions.getEditOccurrenceResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDayRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+    }
 
-        //Null referenceDateMonth
+    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         EditOccurrenceRequest nullReferenceDateMonthRequest = EditOccurrenceRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -101,8 +110,9 @@ public class EditOccurrenceTest extends BackEndTest {
         Response nullReferenceDateMonthResponse = OccurrenceActions.getEditOccurrenceResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonthRequest);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+    }
 
-        //Blank title
+    private static void blankTitle(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         EditOccurrenceRequest blankTitleRequest = EditOccurrenceRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -116,8 +126,10 @@ public class EditOccurrenceTest extends BackEndTest {
         Response blankTitleResponse = OccurrenceActions.getEditOccurrenceResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), blankTitleRequest);
 
         ResponseValidator.verifyInvalidParam(language, blankTitleResponse, "title", "must not be null or blank");
+    }
 
-        //Edit Occurrence
+    private static void editOccurrence(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+        List<CalendarResponse> responses;
         EditOccurrenceRequest editOccurrenceRequest = EditOccurrenceRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)

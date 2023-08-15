@@ -45,27 +45,39 @@ public class PopulationTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
-        //Get
+        CitizenResponse citizen = getCitizenResponse(language, accessTokenId1, planet);
+        blankName(language, accessTokenId1, citizen);
+        tooLongName(language, accessTokenId1, citizen);
+        notFound(language, accessTokenId1);
+        rename(language, accessTokenId1, citizen);
+    }
+
+    private CitizenResponse getCitizenResponse(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         List<CitizenResponse> citizens = SkyXplorePopulationActions.getPopulation(language, accessTokenId1, planet.getPlanetId());
 
         assertThat(citizens.size()).isEqualTo(10);
         citizens.forEach(this::validate);
 
         CitizenResponse citizen = citizens.get(0);
+        return citizen;
+    }
 
-        //Blank name
+    private static void blankName(Language language, UUID accessTokenId1, CitizenResponse citizen) {
         Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, citizen.getCitizenId(), " ");
         verifyInvalidParam(language, blankNameResponse, "value", "must not be null or blank");
+    }
 
-        //Too long name
+    private static void tooLongName(Language language, UUID accessTokenId1, CitizenResponse citizen) {
         Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         verifyInvalidParam(language, tooLongNameResponse, "value", "too long");
+    }
 
-        //Not found
+    private static void notFound(Language language, UUID accessTokenId1) {
         Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(language, accessTokenId1, UUID.randomUUID(), NEW_NAME);
         assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
+    }
 
-        //Rename
+    private static void rename(Language language, UUID accessTokenId1, CitizenResponse citizen) {
         CitizenResponse citizenResponse = SkyXplorePopulationActions.renameCitizen(language, accessTokenId1, citizen.getCitizenId(), NEW_NAME);
 
         assertThat(citizenResponse.getName()).isEqualTo(NEW_NAME);

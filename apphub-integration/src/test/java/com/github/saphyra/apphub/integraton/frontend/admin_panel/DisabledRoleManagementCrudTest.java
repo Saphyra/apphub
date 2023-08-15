@@ -35,15 +35,24 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
-        //Initial check
+        DisabledRole initialRole = initialCheck(driver);
+        disableRole_incorrectPassword(driver, userData, initialRole);
+        DisabledRole disabledRole = getDisabledRole(driver, userData);
+        enableRole_incorrectPassword(driver, disabledRole);
+        enableRole(driver, userData);
+    }
+
+    private static DisabledRole initialCheck(WebDriver driver) {
         DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Test role not found"));
         assertThat(initialRole.isEnabled()).isTrue();
+        return initialRole;
+    }
 
-        //Disable role - Incorrect password
+    private static void disableRole_incorrectPassword(WebDriver driver, RegistrationParameters userData, DisabledRole initialRole) {
         initialRole.toggle(driver);
 
         Stream.generate(() -> "")
@@ -69,9 +78,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");
+    }
 
-        //Disable role
-        initialRole = DisabledRolesActions.getDisabledRoles(driver)
+    private static DisabledRole getDisabledRole(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
@@ -91,8 +101,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         assertThat(disabledRole.isEnabled()).isFalse();
 
         NotificationUtil.clearNotifications(driver);
+        return disabledRole;
+    }
 
-        //Enable role - Incorrect password
+    private static void enableRole_incorrectPassword(WebDriver driver, DisabledRole disabledRole) {
         disabledRole.toggle(driver);
 
         Stream.generate(() -> "")
@@ -111,8 +123,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         AwaitilityWrapper.create(15, 1)
             .until(() -> IndexPageActions.isLoginPageLoaded(driver))
             .assertTrue("User is not logged out.");
+    }
 
-        //Enable role
+    private static void enableRole(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole disabledRole;
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()

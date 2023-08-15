@@ -1,12 +1,9 @@
 package com.github.saphyra.apphub.integraton.backend.notebook;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
-import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
-import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
@@ -20,7 +17,6 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.localization.LocalizationKey.INVALID_PARAM;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetChildrenOfCategoryTest extends BackEndTest {
@@ -30,53 +26,53 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
     private static final String TITLE_4 = "title-4";
     private static final String TITLE_5 = "title-5";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
-    public void getChildrenOfCategory(Language language) {
+    @Test(groups = {"be", "notebook"})
+    public void getChildrenOfCategory() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        //Invalid type
-        Response response = NotebookActions.getChildrenOfCategoryResponse(language, accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
+        invalidType(accessTokenId);
+        get(accessTokenId);
+    }
 
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
-        assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM.name());
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, INVALID_PARAM));
-        assertThat(errorResponse.getParams().get("type")).isEqualTo("contains invalid argument");
+    private static void invalidType(UUID accessTokenId) {
+        Response response = NotebookActions.getChildrenOfCategoryResponse(accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
+        ResponseValidator.verifyInvalidParam(response, "type", "contains invalid argument");
+    }
 
-        //Get
+    private static void get(UUID accessTokenId) {
         CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();
-        UUID parentId = NotebookActions.createCategory(language, accessTokenId, parentRequest);
+        UUID parentId = NotebookActions.createCategory(accessTokenId, parentRequest);
 
         CreateCategoryRequest childCategoryRequest = CreateCategoryRequest.builder()
             .title(TITLE_2)
             .parent(parentId)
             .build();
-        UUID childCategoryId = NotebookActions.createCategory(language, accessTokenId, childCategoryRequest);
+        UUID childCategoryId = NotebookActions.createCategory(accessTokenId, childCategoryRequest);
 
         CreateCategoryRequest excludedCategoryRequest = CreateCategoryRequest.builder()
             .title(TITLE_5)
             .parent(parentId)
             .build();
-        UUID excludedCategoryId = NotebookActions.createCategory(language, accessTokenId, excludedCategoryRequest);
+        UUID excludedCategoryId = NotebookActions.createCategory(accessTokenId, excludedCategoryRequest);
 
         CreateTextRequest childTextRequest = CreateTextRequest.builder()
             .title(TITLE_3)
             .content("content")
             .parent(parentId)
             .build();
-        UUID childTextId = NotebookActions.createText(language, accessTokenId, childTextRequest);
+        UUID childTextId = NotebookActions.createText(accessTokenId, childTextRequest);
 
         CreateLinkRequest createLinkRequest = CreateLinkRequest.builder()
             .title(TITLE_4)
             .parent(parentId)
             .url("asd")
             .build();
-        NotebookActions.createLink(language, accessTokenId, createLinkRequest);
+        NotebookActions.createLink(accessTokenId, createLinkRequest);
 
-        ChildrenOfCategoryResponse result = NotebookActions.getChildrenOfCategory(language, accessTokenId, parentId, Arrays.asList(ListItemType.CATEGORY.name(), ListItemType.TEXT.name()), excludedCategoryId);
+        ChildrenOfCategoryResponse result = NotebookActions.getChildrenOfCategory(accessTokenId, parentId, Arrays.asList(ListItemType.CATEGORY.name(), ListItemType.TEXT.name()), excludedCategoryId);
 
         NotebookView categoryView = NotebookView.builder()
             .id(childCategoryId)

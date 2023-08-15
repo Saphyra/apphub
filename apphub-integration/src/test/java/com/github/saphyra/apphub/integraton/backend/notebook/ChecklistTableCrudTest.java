@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.integraton.backend.notebook;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.KeyValuePair;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
@@ -36,10 +35,10 @@ public class ChecklistTableCrudTest extends BackEndTest {
     private static final String NEW_COLUMN_VALUE = "new-column-value";
     private static final String NEW_TITLE = "new-title";
 
-    @Test(dataProvider = "languageDataProvider")
-    public void checklistCrud(Language language) {
+    @Test
+    public void checklistCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         //Create - blank title
         CreateChecklistTableRequest create_blankTitleRequest = CreateChecklistTableRequest.builder()
@@ -47,8 +46,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Arrays.asList(COLUMN_NAME))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE)).build()))
             .build();
-        Response create_blankTitleResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_blankTitleRequest);
-        verifyInvalidParam(language, create_blankTitleResponse, "title", "must not be null or blank");
+        Response create_blankTitleResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_blankTitleRequest);
+        verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
 
         //Create - Parent not found
         CreateChecklistTableRequest create_parentNotFoundRequest = CreateChecklistTableRequest.builder()
@@ -57,19 +56,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Arrays.asList(COLUMN_NAME))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE)).build()))
             .build();
-        Response create_parentNotFoundResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_parentNotFoundRequest);
-        verifyErrorResponse(language, create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
+        Response create_parentNotFoundResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_parentNotFoundRequest);
+        verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
 
         //Create - Parent not category
-        UUID notCategoryParentId = NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID notCategoryParentId = NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
         CreateChecklistTableRequest create_parentNotCategoryRequest = CreateChecklistTableRequest.builder()
             .title(TITLE)
             .parent(notCategoryParentId)
             .columnNames(Arrays.asList(COLUMN_NAME))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE)).build()))
             .build();
-        Response create_parentNotCategoryResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_parentNotCategoryRequest);
-        verifyErrorResponse(language, create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
+        Response create_parentNotCategoryResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_parentNotCategoryRequest);
+        verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
 
         //Create - Blank column name
         CreateChecklistTableRequest create_blankColumnNameRequest = CreateChecklistTableRequest.builder()
@@ -77,8 +76,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Arrays.asList(" "))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE)).build()))
             .build();
-        Response create_blankColumnNameResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_blankColumnNameRequest);
-        verifyInvalidParam(language, create_blankColumnNameResponse, "columnName", "must not be null or blank");
+        Response create_blankColumnNameResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_blankColumnNameRequest);
+        verifyInvalidParam(create_blankColumnNameResponse, "columnName", "must not be null or blank");
 
         //Create - Incorrect column amount
         CreateChecklistTableRequest create_incorrectColumnAmountRequest = CreateChecklistTableRequest.builder()
@@ -86,8 +85,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Arrays.asList(COLUMN_NAME))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE, COLUMN_VALUE)).build()))
             .build();
-        Response create_incorrectColumnAmountResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_incorrectColumnAmountRequest);
-        verifyInvalidParam(language, create_incorrectColumnAmountResponse, "columns", "amount different");
+        Response create_incorrectColumnAmountResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_incorrectColumnAmountRequest);
+        verifyInvalidParam(create_incorrectColumnAmountResponse, "columns", "amount different");
 
         //Create - Null column value
         CreateChecklistTableRequest create_nullColumnValueRequest = CreateChecklistTableRequest.builder()
@@ -95,8 +94,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Arrays.asList(COLUMN_NAME))
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList((String) null)).build()))
             .build();
-        Response create_nullColumnValueResponse = NotebookActions.getCreateChecklistTableResponse(language, accessTokenId, create_nullColumnValueRequest);
-        verifyInvalidParam(language, create_nullColumnValueResponse, "columnValue", "must not be null");
+        Response create_nullColumnValueResponse = NotebookActions.getCreateChecklistTableResponse(accessTokenId, create_nullColumnValueRequest);
+        verifyInvalidParam(create_nullColumnValueResponse, "columnValue", "must not be null");
 
         //Create
         CreateChecklistTableRequest createRequest = CreateChecklistTableRequest.builder()
@@ -105,10 +104,10 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder().checked(true).columns(Arrays.asList(COLUMN_VALUE)).build()))
             .build();
 
-        UUID listItemId = NotebookActions.createChecklistTable(language, accessTokenId, createRequest);
+        UUID listItemId = NotebookActions.createChecklistTable(accessTokenId, createRequest);
 
         //Get
-        ChecklistTableResponse tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        ChecklistTableResponse tableResponse = NotebookActions.getChecklistTable(accessTokenId, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -120,8 +119,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
         assertThat(tableResponse.getRowStatus().get(0).getChecked()).isTrue();
 
         //Get - Not found
-        Response get_notFoundResponse = NotebookActions.getChecklistTableResponse(language, accessTokenId, UUID.randomUUID());
-        verifyListItemNotFound(language, get_notFoundResponse);
+        Response get_notFoundResponse = NotebookActions.getChecklistTableResponse(accessTokenId, UUID.randomUUID());
+        verifyListItemNotFound(get_notFoundResponse);
 
         //Edit - Blank title
         EditChecklistTableRequest edit_blankTitleRequest = EditChecklistTableRequest.builder()
@@ -144,8 +143,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_blankTitleResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_blankTitleRequest);
-        verifyInvalidParam(language, edit_blankTitleResponse, "title", "must not be null or blank");
+        Response edit_blankTitleResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_blankTitleRequest);
+        verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
 
         //Edit - Blank column name
         EditChecklistTableRequest edit_blankColumnNameRequest = EditChecklistTableRequest.builder()
@@ -168,8 +167,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_blankColumnValueResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_blankColumnNameRequest);
-        verifyInvalidParam(language, edit_blankColumnValueResponse, "columnName", "must not be null or blank");
+        Response edit_blankColumnValueResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_blankColumnNameRequest);
+        verifyInvalidParam(edit_blankColumnValueResponse, "columnName", "must not be null or blank");
 
         //Edit - Different column amount
         EditChecklistTableRequest edit_differentColumnAmountRequest = EditChecklistTableRequest.builder()
@@ -196,8 +195,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_differentColumnAmountResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_differentColumnAmountRequest);
-        verifyInvalidParam(language, edit_differentColumnAmountResponse, "columns", "amount different");
+        Response edit_differentColumnAmountResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_differentColumnAmountRequest);
+        verifyInvalidParam(edit_differentColumnAmountResponse, "columns", "amount different");
 
         //Edit - Null column value
         EditChecklistTableRequest edit_nullColumnValueRequest = EditChecklistTableRequest.builder()
@@ -220,8 +219,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_nullColumnValueResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(language, edit_nullColumnValueResponse, "columnValue", "must not be null");
+        Response edit_nullColumnValueResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_nullColumnValueRequest);
+        verifyInvalidParam(edit_nullColumnValueResponse, "columnValue", "must not be null");
 
         //Edit - TableHead not found
         EditChecklistTableRequest edit_tableHeadNotFoundRequest = EditChecklistTableRequest.builder()
@@ -244,8 +243,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_tableHeadNotFoundResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_tableHeadNotFoundRequest);
-        verifyListItemNotFound(language, edit_tableHeadNotFoundResponse);
+        Response edit_tableHeadNotFoundResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_tableHeadNotFoundRequest);
+        verifyListItemNotFound(edit_tableHeadNotFoundResponse);
 
         //Edit - TableJoin not found
         EditChecklistTableRequest edit_tableJoinNotFoundRequest = EditChecklistTableRequest.builder()
@@ -268,8 +267,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_tableJoinNotFoundResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, listItemId, edit_tableJoinNotFoundRequest);
-        verifyListItemNotFound(language, edit_tableJoinNotFoundResponse);
+        Response edit_tableJoinNotFoundResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, listItemId, edit_tableJoinNotFoundRequest);
+        verifyListItemNotFound(edit_tableJoinNotFoundResponse);
 
         //Edit - ListItem not found
         EditChecklistTableRequest edit_listItemNotFoundRequest = EditChecklistTableRequest.builder()
@@ -292,8 +291,8 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        Response edit_listItemNotFoundResponse = NotebookActions.getEditChecklistTableResponse(language, accessTokenId, UUID.randomUUID(), edit_listItemNotFoundRequest);
-        verifyListItemNotFound(language, edit_listItemNotFoundResponse);
+        Response edit_listItemNotFoundResponse = NotebookActions.getEditChecklistTableResponse(accessTokenId, UUID.randomUUID(), edit_listItemNotFoundRequest);
+        verifyListItemNotFound(edit_listItemNotFoundResponse);
 
         //Edit - Column deleted
         EditChecklistTableRequest edit_columnDeletedRequest = EditChecklistTableRequest.builder()
@@ -301,7 +300,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .columnNames(Collections.emptyList())
             .rows(Collections.emptyList())
             .build();
-        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnDeletedRequest);
+        tableResponse = NotebookActions.editChecklistTable(accessTokenId, listItemId, edit_columnDeletedRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads()).isEmpty();
         assertThat(tableResponse.getTableColumns()).isEmpty();
@@ -328,7 +327,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_columnAddedRequest);
+        tableResponse = NotebookActions.editChecklistTable(accessTokenId, listItemId, edit_columnAddedRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -340,17 +339,17 @@ public class ChecklistTableCrudTest extends BackEndTest {
         assertThat(tableResponse.getRowStatus().get(0).getChecked()).isFalse();
 
         //Check - ListItem not found
-        Response check_listItemNotFoundResponse = NotebookActions.getUpdateChecklistTableRowStatusResponse(language, accessTokenId, null, false);
-        verifyListItemNotFound(language, check_listItemNotFoundResponse);
+        Response check_listItemNotFoundResponse = NotebookActions.getUpdateChecklistTableRowStatusResponse(accessTokenId, null, false);
+        verifyListItemNotFound(check_listItemNotFoundResponse);
 
         //Check
-        NotebookActions.updateChecklistTableRowStatus(language, accessTokenId, null, true);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        NotebookActions.updateChecklistTableRowStatus(accessTokenId, null, true);
+        tableResponse = NotebookActions.getChecklistTable(accessTokenId, listItemId);
         assertThat(tableResponse.getRowStatus().get(0).getChecked()).isTrue();
 
         //Uncheck
-        NotebookActions.updateChecklistTableRowStatus(language, accessTokenId, null, false);
-        tableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        NotebookActions.updateChecklistTableRowStatus(accessTokenId, null, false);
+        tableResponse = NotebookActions.getChecklistTable(accessTokenId, listItemId);
         assertThat(tableResponse.getRowStatus().get(0).getChecked()).isFalse();
 
         //Edit - Modify values
@@ -374,22 +373,22 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
             )))
             .build();
-        tableResponse = NotebookActions.editChecklistTable(language, accessTokenId, listItemId, edit_modifyValuesRequest);
+        tableResponse = NotebookActions.editChecklistTable(accessTokenId, listItemId, edit_modifyValuesRequest);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
         assertThat(tableResponse.getTableColumns().get(0).getContent()).isEqualTo(NEW_COLUMN_VALUE);
         assertThat(tableResponse.getRowStatus().get(0).getChecked()).isTrue();
 
         //Edit - Delete checked
-        Response edit_deleteCheckedResponse = NotebookActions.getDeleteCheckedChecklistTableItemsResponse(language, accessTokenId, listItemId);
+        Response edit_deleteCheckedResponse = NotebookActions.getDeleteCheckedChecklistTableItemsResponse(accessTokenId, listItemId);
         assertThat(edit_deleteCheckedResponse.getStatusCode()).isEqualTo(200);
         tableResponse = edit_deleteCheckedResponse.getBody().as(ChecklistTableResponse.class);
         assertThat(tableResponse.getTableColumns()).isEmpty();
         assertThat(tableResponse.getTableColumns()).isEmpty();
 
         //Delete
-        NotebookActions.deleteListItem(language, accessTokenId, listItemId);
-        List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(language, accessTokenId);
+        NotebookActions.deleteListItem(accessTokenId, listItemId);
+        List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(accessTokenId);
         assertThat(categoryTreeViews).isEmpty();
     }
 }

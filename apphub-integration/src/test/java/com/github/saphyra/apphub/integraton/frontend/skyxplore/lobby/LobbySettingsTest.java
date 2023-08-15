@@ -48,7 +48,6 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //Alliance settings
         SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
@@ -86,7 +85,13 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //MaxPlayersPerSolarSystems
+        maxPlayersPerSolarSystemsSettings(driver1, driver2);
+        additionalSolarSystemsSettings(driver1, driver2);
+        planetsPerSolarSystemSettings(driver1, driver2);
+        planetSizeSettings(driver1, driver2);
+    }
+
+    private void maxPlayersPerSolarSystemsSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "maxPlayersPerSolarSystems cannot be lower than 1",
             driver1,
@@ -102,8 +107,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withMaxPlayersPerSolarSystem(6),
             SkyXploreLobbySettingsHelper.withMaxPlayersPerSolarSystem(5)
         );
+    }
 
-        //additionalSolarSystems
+    private void additionalSolarSystemsSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "additionalSolarSystems.min must not be negative",
             driver1,
@@ -135,8 +141,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withAdditionalSolarSystems(new Range<>(2, 31)),
             SkyXploreLobbySettingsHelper.withAdditionalSolarSystems(new Range<>(2, 30))
         );
+    }
 
-        //planetsPerSolarSystem
+    private void planetsPerSolarSystemSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "planetsPerSolarSystem.min must not be negative",
             driver1,
@@ -168,8 +175,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withPlanetsPerSolarSystem(new Range<>(0, 11)),
             SkyXploreLobbySettingsHelper.withPlanetsPerSolarSystem(new Range<>(0, 10))
         );
+    }
 
-        //planetSize
+    private void planetSizeSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "planetSize.min must not be lower than 10",
             driver1,
@@ -226,14 +234,20 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //Validation
+        aiValidation(driver1);
+        createAndRemoveAi(driver1, driver2);
+        setAlliance(driver1, driver2);
+    }
+
+    private static void aiValidation(WebDriver driver1) {
         SkyXploreLobbyActions.fillNewAiName(driver1, "aa");
         SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too short. (Minimum 3 characters)");
 
         SkyXploreLobbyActions.fillNewAiName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too long. (Maximum 30 characters)");
+    }
 
-        //Create and Remove
+    private void createAndRemoveAi(WebDriver driver1, WebDriver driver2) {
         assertThat(SkyXploreLobbyActions.isCreateAiPanelPresent(driver2)).isFalse();
 
         Stream.iterate(0, integer -> integer + 1)
@@ -247,8 +261,9 @@ public class LobbySettingsTest extends SeleniumTest {
             .limit(10)
             .map(integer -> String.format(AI_NAME, integer))
             .forEach(aiName -> removeAi(driver1, driver2, aiName));
+    }
 
-        //Set alliance
+    private static void setAlliance(WebDriver driver1, WebDriver driver2) {
         SkyXploreLobbyActions.createAi(driver1, AI_NAME);
 
         AiPlayerElement aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findAiByName(driver1, AI_NAME), Optional::isPresent)

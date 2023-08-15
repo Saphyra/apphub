@@ -100,21 +100,28 @@ public class GameChatTest extends SeleniumTest {
         SkyXploreGameChatActions.openChat(driver2);
         SkyXploreGameChatActions.openChat(driver3);
 
-        //Chat in general room
+        chatInGeneralRoom(driver1, driver2, driver3, userData1);
+        chatInAllianceRoom(driver1, driver2, driver3, userData1);
+        chatInCustomRoom(driver1, driver2, driver3, userData1, userData3);
+    }
+
+    private void chatInGeneralRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1) {
         SkyXploreGameChatActions.postMessageToRoom(driver1, GENERAL_ROOM_NAME, MESSAGE_1);
 
         verifyMessageArrived(driver1, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, true);
         verifyMessageArrived(driver2, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, false);
         verifyMessageArrived(driver3, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, false);
+    }
 
-        //Chat in alliance room
+    private void chatInAllianceRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1) {
         SkyXploreGameChatActions.postMessageToRoom(driver1, ALLIANCE_ROOM_NAME, MESSAGE_2);
 
         verifyMessageArrived(driver1, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, true);
         verifyMessageArrived(driver2, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, false);
         verifyMessageNotArrived(driver3, ALLIANCE_ROOM_NAME);
+    }
 
-        //Chat in custom room
+    private void chatInCustomRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1, RegistrationParameters userData3) {
         SkyXploreGameChatActions.createChatRoom(driver1, CUSTOM_ROOM_NAME, userData3.getUsername());
         SkyXploreGameChatActions.postMessageToRoom(driver1, CUSTOM_ROOM_NAME, MESSAGE_3);
 

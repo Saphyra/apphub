@@ -33,35 +33,48 @@ public class ChangePasswordTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        //Too short password
+        tooShortPassword(driver);
+        tooLongPassword(driver);
+        incorrectConfirmPassword(driver);
+        emptyPassword(driver);
+        incorrectPassword(driver);
+        change(driver, userData);
+    }
+
+    private static void tooShortPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, tooShortPassword());
+    }
 
-        //Too long password
+    private static void tooLongPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, tooLongPassword());
+    }
 
-        //Incorrect confirm password
+    private static void incorrectConfirmPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
+    }
 
-        //Empty password
+    private static void emptyPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, emptyPassword());
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver driver) {
         ChangePasswordParameters incorrectPasswordParameters = ChangePasswordParameters.valid()
             .toBuilder()
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changePassword(driver, incorrectPasswordParameters);
         NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
+    }
 
-        //Change
+    private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
         AccountPageActions.changePassword(driver, changeParameters);
         NotificationUtil.verifySuccessNotification(driver, "Password Changed.");
@@ -75,7 +88,7 @@ public class ChangePasswordTest extends SeleniumTest {
             .assertTrue();
     }
 
-    private ChangePasswordValidationResult valid() {
+    private static ChangePasswordValidationResult valid() {
         return ChangePasswordValidationResult.builder()
             .newPassword(NewPasswordValidationResult.VALID)
             .confirmPassword(ConfirmPasswordValidationResult.VALID)
@@ -83,28 +96,28 @@ public class ChangePasswordTest extends SeleniumTest {
             .build();
     }
 
-    private ChangePasswordValidationResult tooShortPassword() {
+    private static ChangePasswordValidationResult tooShortPassword() {
         return valid()
             .toBuilder()
             .newPassword(NewPasswordValidationResult.TOO_SHORT)
             .build();
     }
 
-    private ChangePasswordValidationResult tooLongPassword() {
+    private static ChangePasswordValidationResult tooLongPassword() {
         return valid()
             .toBuilder()
             .newPassword(NewPasswordValidationResult.TOO_LONG)
             .build();
     }
 
-    private ChangePasswordValidationResult incorrectConfirmPassword() {
+    private static ChangePasswordValidationResult incorrectConfirmPassword() {
         return valid()
             .toBuilder()
             .confirmPassword(ConfirmPasswordValidationResult.INVALID_CONFIRM_PASSWORD)
             .build();
     }
 
-    private ChangePasswordValidationResult emptyPassword() {
+    private static ChangePasswordValidationResult emptyPassword() {
         return valid()
             .toBuilder()
             .password(ChPasswordPasswordValidationResult.EMPTY_PASSWORD)

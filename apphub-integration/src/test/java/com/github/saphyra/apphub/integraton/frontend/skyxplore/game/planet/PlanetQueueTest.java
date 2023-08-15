@@ -59,7 +59,12 @@ public class PlanetQueueTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
 
-        //Construction item
+        constructionItem(driver);
+        terraformationItem(driver);
+        deconstructionItem(driver);
+    }
+
+    private static void constructionItem(WebDriver driver) {
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
 
         PlanetQueueItem queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
@@ -74,8 +79,11 @@ public class PlanetQueueTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Queue is not empty.");
+    }
 
-        //Terraformation item
+    private static void terraformationItem(WebDriver driver) {
+        PlanetQueueItem queueItem;
+        Surface surface;
         surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
@@ -92,8 +100,11 @@ public class PlanetQueueTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Queue is not empty.");
+    }
 
-        //Deconstruction item
+    private static void deconstructionItem(WebDriver driver) {
+        PlanetQueueItem queueItem;
+        Surface surface;
         surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
         surface.deconstructBuilding(driver);
 

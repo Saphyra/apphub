@@ -35,36 +35,51 @@ public class FriendshipCrudTest extends BackEndTest {
         FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(language, accessTokenId, friendUserId);
         FriendshipResponse friendshipResponse = FriendRequestActions.acceptFriendRequest(language, friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        //Query by sender
+        queryBySender(language, accessTokenId, friendUserData, friendshipResponse);
+        queryByReceiver(language, friendUserAccessTokenId, friendshipResponse);
+        delete_notFound(language, accessTokenId);
+        delete_forbiddenOperation(language, testUserAccessTokenId, friendshipResponse);
+        deleteBySender(language, accessTokenId, friendUserAccessTokenId, friendshipResponse);
+        deleteByReceiver(language, accessTokenId, friendUserAccessTokenId, friendUserId);
+    }
+
+    private static void queryBySender(Language language, UUID accessTokenId, RegistrationParameters friendUserData, FriendshipResponse friendshipResponse) {
         List<FriendshipResponse> friendshipsOfSender = FriendshipActions.getFriendships(language, accessTokenId);
 
         assertThat(friendshipsOfSender).hasSize(1);
         assertThat(friendshipsOfSender.get(0).getFriendshipId()).isEqualTo(friendshipResponse.getFriendshipId());
         assertThat(friendshipsOfSender.get(0).getUsername()).isEqualTo(friendUserData.getUsername());
         assertThat(friendshipsOfSender.get(0).getEmail()).isEqualTo(friendUserData.getEmail());
+    }
 
-        //Query by receiver
+    private static void queryByReceiver(Language language, UUID friendUserAccessTokenId, FriendshipResponse friendshipResponse) {
         List<FriendshipResponse> friendshipsOfReceiver = FriendshipActions.getFriendships(language, friendUserAccessTokenId);
 
         assertThat(friendshipsOfReceiver).containsExactly(friendshipResponse);
+    }
 
-        //Delete - Not found
+    private static void delete_notFound(Language language, UUID accessTokenId) {
         Response delete_notFoundResponse = FriendshipActions.getDeleteFriendshipResponse(language, accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(language, delete_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        //Delete - Forbidden operation
+    private static void delete_forbiddenOperation(Language language, UUID testUserAccessTokenId, FriendshipResponse friendshipResponse) {
         Response delete_forbiddenOperationResponse = FriendshipActions.getDeleteFriendshipResponse(language, testUserAccessTokenId, friendshipResponse.getFriendshipId());
 
         ResponseValidator.verifyForbiddenOperation(language, delete_forbiddenOperationResponse);
+    }
 
-        //Delete by sender
+    private static void deleteBySender(Language language, UUID accessTokenId, UUID friendUserAccessTokenId, FriendshipResponse friendshipResponse) {
         FriendshipActions.deleteFriendship(language, accessTokenId, friendshipResponse.getFriendshipId());
 
         assertThat(FriendshipActions.getFriendships(language, accessTokenId)).isEmpty();
         assertThat(FriendshipActions.getFriendships(language, friendUserAccessTokenId)).isEmpty();
+    }
 
-        //Delete by receiver
+    private static void deleteByReceiver(Language language, UUID accessTokenId, UUID friendUserAccessTokenId, UUID friendUserId) {
+        FriendRequestResponse friendRequestResponse;
+        FriendshipResponse friendshipResponse;
         friendRequestResponse = FriendRequestActions.createFriendRequest(language, accessTokenId, friendUserId);
         friendshipResponse = FriendRequestActions.acceptFriendRequest(language, friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 

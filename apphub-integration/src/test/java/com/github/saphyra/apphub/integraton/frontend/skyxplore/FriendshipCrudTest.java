@@ -25,7 +25,15 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
-        //Send friend request
+        SentFriendRequest sentFriendRequest = sendFriendRequest(driver1, driver2, userData1, userData2);
+        cancelFriendRequestBySender(driver1, driver2, sentFriendRequest);
+        cancelFriendRequestByFriend(driver1, driver2, userData1, userData2);
+        Friend friend = acceptFriendRequest(driver1, driver2, userData1, userData2);
+        removeFriendshipBySender(driver1, driver2, friend);
+        removeFriendshipByFriend(driver1, driver2, userData1, userData2);
+    }
+
+    private static SentFriendRequest sendFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -41,8 +49,10 @@ public class FriendshipCrudTest extends SeleniumTest {
             .filter(incomingFriendRequest -> incomingFriendRequest.getSenderName().equals(userData1.getUsername()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest not found."));
+        return sentFriendRequest;
+    }
 
-        //Cancel friend request by sender
+    private static void cancelFriendRequestBySender(WebDriver driver1, WebDriver driver2, SentFriendRequest sentFriendRequest) {
         sentFriendRequest.cancel();
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), List::isEmpty)
@@ -50,8 +60,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getIncomingFriendRequests(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest still present."));
+    }
 
-        //Cancel friend request by friend
+    private static void cancelFriendRequestByFriend(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -68,8 +79,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getIncomingFriendRequests(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest still present."));
+    }
 
-        //Accept friend request
+    private static Friend acceptFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -98,8 +110,10 @@ public class FriendshipCrudTest extends SeleniumTest {
             .filter(fr -> fr.getName().equals(userData1.getUsername()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Friend not found."));
+        return friend;
+    }
 
-        //Remove friendship by sender
+    private static void removeFriendshipBySender(WebDriver driver1, WebDriver driver2, Friend friend) {
         friend.remove();
         SkyXploreMainMenuActions.confirmFriendDeletion(driver1);
 
@@ -108,8 +122,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getFriends(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("Friend still present."));
+    }
 
-        //Remove friendship by friend
+    private static void removeFriendshipByFriend(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();

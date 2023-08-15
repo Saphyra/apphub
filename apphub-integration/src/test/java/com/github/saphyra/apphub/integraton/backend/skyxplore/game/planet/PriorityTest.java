@@ -41,27 +41,38 @@ public class PriorityTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
-        //Get
+        get(language, accessTokenId1, planet);
+        unknownValue(language, accessTokenId1, planet);
+        tooLow(language, accessTokenId1, planet);
+        tooHigh(language, accessTokenId1, planet);
+        update(language, accessTokenId1, planet);
+    }
+
+    private static void get(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response getResponse = SkyXplorePriorityActions.getPrioritiesResponse(language, accessTokenId1, planet.getPlanetId());
         assertThat(getResponse.getStatusCode()).isEqualTo(200);
         Map<String, Integer> priorities = getResponse.getBody().as(StringIntMap.class);
         assertThat(priorities).hasSize(PriorityType.values().length);
         Arrays.stream(PriorityType.values())
             .forEach(priorityType -> assertThat(priorities).containsEntry(priorityType.name().toLowerCase(), 5));
+    }
 
-        //Unknown value
+    private static void unknownValue(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response unknownValueResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(language, accessTokenId1, planet.getPlanetId(), "asfaed", 4);
         verifyInvalidParam(language, unknownValueResponse, "priorityType", "unknown value");
+    }
 
-        //Too low
+    private static void tooLow(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response tooLowResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(language, accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 0);
         verifyInvalidParam(language, tooLowResponse, "priority", "too low");
+    }
 
-        //Too high
+    private static void tooHigh(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response tooHighResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(language, accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 11);
         verifyInvalidParam(language, tooHighResponse, "priority", "too high");
+    }
 
-        //Update
+    private static void update(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response updateResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(language, accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 7);
         assertThat(updateResponse.getStatusCode()).isEqualTo(200);
         Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(language, accessTokenId1, planet.getPlanetId());

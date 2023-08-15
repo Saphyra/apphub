@@ -27,47 +27,60 @@ public class ChangePasswordTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        //Null new password
+        nullNewPassword(language, userData, accessTokenId);
+        tooShortPassword(language, userData, accessTokenId);
+        tooLongPassword(language, userData, accessTokenId);
+        nullPassword(language, accessTokenId);
+        incorrectPassword(language, accessTokenId);
+        successfulPasswordChange(language, userData, accessTokenId);
+    }
+
+    private static void nullNewPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         ChangePasswordRequest nullNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(null)
             .password(userData.getPassword())
             .build();
         Response nullNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, nullNewPasswordRequest);
         verifyInvalidParam(language, nullNewPasswordResponse, "newPassword", "must not be null");
+    }
 
-        //Too short new password
+    private static void tooShortPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         ChangePasswordRequest tooShortNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.TOO_SHORT_PASSWORD)
             .password(userData.getPassword())
             .build();
         Response tooShortNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, tooShortNewPasswordRequest);
         verifyInvalidParam(language, tooShortNewPasswordResponse, "password", "too short");
+    }
 
-        //Too long new password
+    private static void tooLongPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         ChangePasswordRequest tooLongNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.TOO_LONG_PASSWORD)
             .password(userData.getPassword())
             .build();
         Response tooLongNewPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, tooLongNewPasswordRequest);
         verifyInvalidParam(language, tooLongNewPasswordResponse, "password", "too long");
+    }
 
-        //Null password
+    private static void nullPassword(Language language, UUID accessTokenId) {
         ChangePasswordRequest nullPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, nullPasswordRequest);
         verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(Language language, UUID accessTokenId) {
         ChangePasswordRequest incorrectPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response incorrectPasswordResponse = AccountActions.getChangePasswordResponse(language, accessTokenId, incorrectPasswordRequest);
         verifyBadRequest(language, incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
+    }
 
-        //Successful password change
+    private static void successfulPasswordChange(Language language, RegistrationParameters userData, UUID accessTokenId) {
         ChangePasswordRequest successfulPasswordChangeRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(DataConstants.VALID_PASSWORD)

@@ -47,19 +47,29 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         openUser(adminDriver, testUserData);
 
-        //Empty date
+        emptyDate(adminDriver);
+        emptyTime(adminDriver);
+        emptyPassword(adminDriver);
+        incorrectPassword(adminDriver);
+        scheduleDeletion(adminDriver, adminUserData);
+        deleteSchedule(adminDriver);
+    }
+
+    private static void emptyDate(WebDriver adminDriver) {
         BanActions.submitDeleteAccountForm(adminDriver);
 
         NotificationUtil.verifyErrorNotification(adminDriver, "Date must not be empty.");
+    }
 
-        //Empty time
+    private static void emptyTime(WebDriver adminDriver) {
         BanActions.fillDeleteUserDate(adminDriver, DATE);
 
         BanActions.submitDeleteAccountForm(adminDriver);
 
         NotificationUtil.verifyErrorNotification(adminDriver, "Time must not be empty.");
+    }
 
-        //Empty password
+    private static void emptyPassword(WebDriver adminDriver) {
         BanActions.fillDeleteUserTime(adminDriver, HOURS, MINUTES);
         BanActions.submitDeleteAccountForm(adminDriver);
 
@@ -67,16 +77,18 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         NotificationUtil.verifyErrorNotification(adminDriver, "Please enter your password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver adminDriver) {
         BanActions.fillDeleteUserPassword(adminDriver, "asd");
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
 
         NotificationUtil.verifyErrorNotification(adminDriver, "Incorrect password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+    }
 
-        //Schedule deletion
+    private static void scheduleDeletion(WebDriver adminDriver, RegistrationParameters adminUserData) {
         BanActions.fillDeleteUserPassword(adminDriver, adminUserData.getPassword());
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
@@ -87,8 +99,9 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         assertThat(BanActions.isUserMarkedForDeletion(adminDriver)).isTrue();
         assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE + " " + (HOURS + 2) + ":" + MINUTES + ":00");
+    }
 
-        //Delete schedule
+    private static void deleteSchedule(WebDriver adminDriver) {
         BanActions.unmarkForDeletion(adminDriver);
 
         AwaitilityWrapper.createDefault()

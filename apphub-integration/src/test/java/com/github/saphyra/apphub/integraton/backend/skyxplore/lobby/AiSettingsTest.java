@@ -52,31 +52,51 @@ public class AiSettingsTest extends BackEndTest {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
 
-        //Create - null name
+        create_nullName(language, accessTokenId1);
+        create_tooShortName(language, accessTokenId1);
+        create_tooLongName(language, accessTokenId1);
+        create_allianceDoesNotExist(language, accessTokenId1);
+        ApphubWsClient wsClient = createByNotHost(language, accessTokenId1, accessTokenId2);
+        create(language, accessTokenId1, wsClient);
+        create_exceedLimit(language, accessTokenId1);
+        UUID aiId = rename(language, accessTokenId1, wsClient);
+        remove(language, accessTokenId1, wsClient, aiId);
+    }
+
+    private static void create_nullName(Language language, UUID accessTokenId1) {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(null)
             .build();
         Response response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "must not be null");
+    }
 
-        //Create - too short name
+    private static void create_tooShortName(Language language, UUID accessTokenId1) {
+        Response response;
+        AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name("aa")
             .build();
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "too short");
+    }
 
-        //Create - too long name
+    private static void create_tooLongName(Language language, UUID accessTokenId1) {
+        Response response;
+        AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "too long");
+    }
 
-        //Create - alliance does not exist
+    private static void create_allianceDoesNotExist(Language language, UUID accessTokenId1) {
+        Response response;
+        AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name(AI_NAME)
             .allianceId(UUID.randomUUID())
@@ -84,27 +104,35 @@ public class AiSettingsTest extends BackEndTest {
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "allianceId", "does not exist");
+    }
 
-        //Create by not host
+    private static ApphubWsClient createByNotHost(Language language, UUID accessTokenId1, UUID accessTokenId2) {
+        Response response;
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId2, AI_PLAYER);
 
         ResponseValidator.verifyForbiddenOperation(response);
 
         ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        return wsClient;
+    }
 
-        //Create
+    private static void create(Language language, UUID accessTokenId1, ApphubWsClient wsClient) {
         Stream.generate(() -> AI_PLAYER)
             .limit(10)
             .forEach(ai -> SkyXploreLobbyActions.createOrModifyAi(language, accessTokenId1, ai));
 
         assertThat(wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)).isNotEmpty();
+    }
 
-        //Create - exceed limit
+    private static void create_exceedLimit(Language language, UUID accessTokenId1) {
+        Response response;
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(language, accessTokenId1, AI_PLAYER);
 
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.TOO_MANY_AIS);
+    }
 
-        //Rename
+    private UUID rename(Language language, UUID accessTokenId1, ApphubWsClient wsClient) {
+        AiPlayer aiPlayer;
         wsClient.clearMessages();
         UUID aiId = findRandomAi(language, accessTokenId1);
         aiPlayer = AiPlayer.builder()
@@ -119,8 +147,10 @@ public class AiSettingsTest extends BackEndTest {
             .orElseThrow()
             .getPayloadAs(AiPlayer.class);
         assertThat(aiPlayer.getName()).isEqualTo(NEW_AI_NAME);
+        return aiId;
+    }
 
-        //Remove
+    private static void remove(Language language, UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
         SkyXploreLobbyActions.removeAi(language, accessTokenId1, aiId);
 
         assertThat(SkyXploreLobbyActions.getAis(language, accessTokenId1)).hasSize(9);

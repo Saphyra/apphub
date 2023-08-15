@@ -41,13 +41,22 @@ public class TextCrudTest extends SeleniumTest {
         NotebookActions.newListItem(driver);
         NotebookNewListItemActions.selectListItem(driver, ListItemType.TEXT);
 
-        //Create - Empty Title
+        create_emptyTitle(driver);
+        create(driver);
+        edit_emptyTitle(driver);
+        edit_discard(driver);
+        edit(driver);
+        delete(driver);
+    }
+
+    private static void create_emptyTitle(WebDriver driver) {
         NewTextActions.fillTitle(driver, " ");
         NewTextActions.submit(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Create
+    private static void create(WebDriver driver) {
         NewTextActions.fillTitle(driver, TEXT_TITLE);
         NewTextActions.fillContent(driver, TEXT_CONTENT);
 
@@ -62,16 +71,18 @@ public class TextCrudTest extends SeleniumTest {
 
         assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
         assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+    }
 
-        //Edit - Empty Title
+    private static void edit_emptyTitle(WebDriver driver) {
         ViewTextActions.enableEditing(driver);
 
         ViewTextActions.setTitle(driver, " ");
         ViewTextActions.saveChanges(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Edit - Discard
+    private static void edit_discard(WebDriver driver) {
         ViewTextActions.setTitle(driver, NEW_TEXT_TITLE);
         ViewTextActions.setContent(driver, NEW_TEXT_CONTENT);
 
@@ -79,8 +90,9 @@ public class TextCrudTest extends SeleniumTest {
 
         assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
         assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+    }
 
-        //Edit
+    private static void edit(WebDriver driver) {
         ViewTextActions.enableEditing(driver);
         ViewTextActions.setTitle(driver, NEW_TEXT_TITLE);
         ViewTextActions.setContent(driver, NEW_TEXT_CONTENT);
@@ -89,8 +101,9 @@ public class TextCrudTest extends SeleniumTest {
 
         assertThat(ViewTextActions.getContent(driver)).isEqualTo(NEW_TEXT_CONTENT);
         assertThat(ViewTextActions.getTitle(driver)).isEqualTo(NEW_TEXT_TITLE);
+    }
 
-        //Delete
+    private static void delete(WebDriver driver) {
         ViewTextActions.close(driver);
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, NEW_TEXT_TITLE), Optional::isPresent)

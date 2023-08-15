@@ -31,38 +31,51 @@ public class ChangeUsernameTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        //Too short username
+        tooShortUsername(driver);
+        tooLongUsername(driver);
+        emptyPassword(driver);
+        usernameAlreadyExists(driver, existingUserData);
+        incorrectPassword(driver);
+        change(driver);
+    }
+
+    private void tooShortUsername(WebDriver driver) {
         AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooShortUsername());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeUsernameForm(driver, tooShortUsername());
+    }
 
-        //Too long username
+    private void tooLongUsername(WebDriver driver) {
         AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooLongUsername());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeUsernameForm(driver, tooLongUsername());
+    }
 
-        //Empty password
+    private void emptyPassword(WebDriver driver) {
         AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.emptyPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeUsernameForm(driver, emptyPassword());
+    }
 
-        //Username already exists
+    private static void usernameAlreadyExists(WebDriver driver, RegistrationParameters existingUserData) {
         ChangeUsernameParameters usernameAlreadyExistsParameters = ChangeUsernameParameters.valid()
             .toBuilder()
             .username(existingUserData.getUsername())
             .build();
         AccountPageActions.changeUsername(driver, usernameAlreadyExistsParameters);
         NotificationUtil.verifyErrorNotification(driver, "Username already in use.");
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver driver) {
         ChangeUsernameParameters incorrectPasswordParameters = ChangeUsernameParameters.valid()
             .toBuilder()
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changeUsername(driver, incorrectPasswordParameters);
         NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
+    }
 
-        //Change
+    private static void change(WebDriver driver) {
         ChangeUsernameParameters changeParameters = ChangeUsernameParameters.valid();
         AccountPageActions.changeUsername(driver, changeParameters);
         NotificationUtil.verifySuccessNotification(driver, "Username changed successfully.");

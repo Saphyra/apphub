@@ -65,7 +65,12 @@ public class CitizenOverviewTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetPopulationOverviewActions.isLoaded(driver))
             .assertTrue("PopulationOverview is not opened.");
 
-        //Rename citizens
+        List<String> newNames = renameCitizens(driver);
+        orderCitizens(driver, newNames);
+        displayAndHideSkills(driver);
+    }
+
+    private List<String> renameCitizens(WebDriver driver) {
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
@@ -79,15 +84,18 @@ public class CitizenOverviewTest extends SeleniumTest {
         for (int i = 0; i < citizenNames.size(); i++) {
             renameCitizen(driver, citizenNames.get(i), newNames.get(i));
         }
+        return newNames;
+    }
 
-        //Order citizens
+    private void orderCitizens(WebDriver driver, List<String> newNames) {
         SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.DESCENDING);
         verifyCitizenOrder(driver, CitizenOrder.DESCENDING, newNames);
 
         SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.ASCENDING);
         verifyCitizenOrder(driver, CitizenOrder.ASCENDING, newNames);
+    }
 
-        //Display/Hide skills
+    private void displayAndHideSkills(WebDriver driver) {
         SkyXplorePlanetPopulationOverviewActions.toggleSkillDisplay(driver, "AIMING");
         verifyDisplayedSkillCount(driver);
 

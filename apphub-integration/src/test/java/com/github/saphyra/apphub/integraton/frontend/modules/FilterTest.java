@@ -20,12 +20,18 @@ public class FilterTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        //No result
+        noResult(driver);
+        searchCategory(driver);
+        searchByModule(driver);
+    }
+
+    private static void noResult(WebDriver driver) {
         ModulesPageActions.search(driver, "asd");
         AwaitilityWrapper.createDefault()
             .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
+    }
 
-        //Search category
+    private static void searchCategory(WebDriver driver) {
         ModulesPageActions.search(driver, "account");
         Category categoryResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
@@ -33,8 +39,9 @@ public class FilterTest extends SeleniumTest {
             .orElseThrow(() -> new IllegalStateException("There is not only one category."));
 
         assertThat(categoryResult.getModules()).hasSize(1);
+    }
 
-        //Search by module
+    private static void searchByModule(WebDriver driver) {
         ModulesPageActions.search(driver, "a");
         AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() != 1)
             .stream()

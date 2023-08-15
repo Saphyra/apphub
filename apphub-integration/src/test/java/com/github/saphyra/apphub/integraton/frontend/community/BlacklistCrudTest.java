@@ -37,17 +37,25 @@ public class BlacklistCrudTest extends SeleniumTest {
 
         CommunityActions.openBlacklistTab(driver1);
 
-        //Search - User not found
+        search_userNotFound(driver1);
+        search_queryTooShort(driver1);
+        Blacklist blacklist = blacklistUser(driver1, userData2);
+        deleteBlacklist(driver1, blacklist);
+    }
+
+    private static void search_userNotFound(WebDriver driver1) {
         BlacklistActions.fillSearchForm(driver1, UUID.randomUUID().toString());
 
         BlacklistActions.verifyUserNotFound(driver1);
+    }
 
-        //Search - Query too short
+    private static void search_queryTooShort(WebDriver driver1) {
         BlacklistActions.fillSearchForm(driver1, "as");
 
         BlacklistActions.verifyQueryTooShort(driver1);
+    }
 
-        //Blacklist user
+    private static Blacklist blacklistUser(WebDriver driver1, RegistrationParameters userData2) {
         BlacklistActions.createBlacklist(driver1, userData2.getUsername());
 
         List<Blacklist> blacklists = BlacklistActions.getBlacklist(driver1);
@@ -57,8 +65,10 @@ public class BlacklistCrudTest extends SeleniumTest {
         Blacklist blacklist = blacklists.get(0);
         assertThat(blacklist.getUsername()).isEqualTo(userData2.getUsername());
         assertThat(blacklist.getEmail()).isEqualTo(userData2.getEmail());
+        return blacklist;
+    }
 
-        //Delete blacklist
+    private static void deleteBlacklist(WebDriver driver1, Blacklist blacklist) {
         blacklist.delete();
 
         CommonPageActions.confirmConfirmationDialog(driver1, "delete-blacklist-confirmation-dialog");

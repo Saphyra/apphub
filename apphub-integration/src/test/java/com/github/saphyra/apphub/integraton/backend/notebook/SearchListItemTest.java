@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.integraton.backend.notebook;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableRowRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -40,28 +39,16 @@ public class SearchListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "notebook"})
-    public void searchTextTooShort(Language language) {
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
-
-        Response response = NotebookActions.getSearchResponse(language, accessTokenId, "as");
-
-        ResponseValidator.verifyInvalidParam(language, response, "search", "too short");
-    }
-
     @Test(groups = {"be", "notebook"})
     public void search() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        UUID categoryId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
+        UUID categoryId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
 
-        NotebookActions.createLink(language, accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
-        NotebookActions.createText(language, accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
+        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
+        NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
         NotebookActions.createChecklist(
-            language,
             accessTokenId,
             CreateChecklistItemRequest.builder()
                 .title(CHECKLIST_TITLE)
@@ -73,7 +60,6 @@ public class SearchListItemTest extends BackEndTest {
                 .build()
         );
         NotebookActions.createTable(
-            language,
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
@@ -83,7 +69,6 @@ public class SearchListItemTest extends BackEndTest {
         );
 
         NotebookActions.createChecklistTable(
-            language,
             accessTokenId,
             CreateChecklistTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
@@ -95,36 +80,42 @@ public class SearchListItemTest extends BackEndTest {
                 .build()
         );
 
-        search(language, accessTokenId, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
-        search(language, accessTokenId, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
-        search(language, accessTokenId, LINK_URL, LINK_TITLE, ListItemType.LINK);
-        search(language, accessTokenId, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
-        search(language, accessTokenId, TEXT_CONTENT, TEXT_TITLE, ListItemType.TEXT);
-        search(language, accessTokenId, CHECKLIST_TITLE, CHECKLIST_TITLE, ListItemType.CHECKLIST);
-        search(language, accessTokenId, CHECKLIST_ITEM_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
-        search(language, accessTokenId, TABLE_TITLE, TABLE_TITLE, ListItemType.TABLE);
-        search(language, accessTokenId, TABLE_COLUMN_NAME, TABLE_TITLE, ListItemType.TABLE);
-        search(language, accessTokenId, TABLE_COLUMN_VALUE, TABLE_TITLE, ListItemType.TABLE);
-        search(language, accessTokenId, CHECKLIST_TABLE_TITLE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(language, accessTokenId, CHECKLIST_TABLE_COLUMN_NAME, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(language, accessTokenId, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        searchTextTooShort(accessTokenId);
+
+        search(accessTokenId, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
+        search(accessTokenId, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
+        search(accessTokenId, LINK_URL, LINK_TITLE, ListItemType.LINK);
+        search(accessTokenId, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
+        search(accessTokenId, TEXT_CONTENT, TEXT_TITLE, ListItemType.TEXT);
+        search(accessTokenId, CHECKLIST_TITLE, CHECKLIST_TITLE, ListItemType.CHECKLIST);
+        search(accessTokenId, CHECKLIST_ITEM_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
+        search(accessTokenId, TABLE_TITLE, TABLE_TITLE, ListItemType.TABLE);
+        search(accessTokenId, TABLE_COLUMN_NAME, TABLE_TITLE, ListItemType.TABLE);
+        search(accessTokenId, TABLE_COLUMN_VALUE, TABLE_TITLE, ListItemType.TABLE);
+        search(accessTokenId, CHECKLIST_TABLE_TITLE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(accessTokenId, CHECKLIST_TABLE_COLUMN_NAME, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(accessTokenId, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+    }
+
+    private static void searchTextTooShort(UUID accessTokenId) {
+        Response response = NotebookActions.getSearchResponse(accessTokenId, "as");
+        ResponseValidator.verifyInvalidParam(response, "search", "too short");
     }
 
     @Test(groups = {"be", "notebook"})
     public void sameItemShouldBeReturnedOnlyOnce() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        NotebookActions.createLink(language, accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
+        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
 
-        List<NotebookView> searchResult = NotebookActions.search(language, accessTokenId, LINK_TITLE);
+        List<NotebookView> searchResult = NotebookActions.search(accessTokenId, LINK_TITLE);
 
         assertThat(searchResult).hasSize(1);
     }
 
-    private void search(Language language, UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
-        List<NotebookView> searchResult = NotebookActions.search(language, accessTokenId, search);
+    private void search(UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
+        List<NotebookView> searchResult = NotebookActions.search(accessTokenId, search);
 
         NotebookView expected = searchResult.stream()
             .filter(notebookView -> notebookView.getTitle().equals(listItemTitle))

@@ -46,7 +46,17 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
         GroupActions.createGroup(driver1, GROUP_NAME);
 
-        //Check owner roles
+        checkOwnerRoles(driver1, userData1);
+        search_userNotFound(driver1);
+        search_queryTooShort(driver1);
+        addMember(driver1, driver2, userData2);
+        modifyRoles(driver1, userData2);
+        GroupMember groupMember = inviteMember(driver2, userData3);
+        kickMember(driver1, driver2, groupMember);
+        leaveGroup(driver1, driver2);
+    }
+
+    private static void checkOwnerRoles(WebDriver driver1, RegistrationParameters userData1) {
         List<GroupMember> groupMembers = GroupActions.getMembers(driver1);
         assertThat(groupMembers).hasSize(1);
         GroupMember groupMember = groupMembers.get(0);
@@ -61,20 +71,25 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getKickButton().isEnabled()).isFalse();
         assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
         assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isFalse();
+    }
 
-        //Search - User not found
+    private static void search_userNotFound(WebDriver driver1) {
         GroupActions.openAddGroupMemberWindow(driver1);
 
         GroupActions.fillAddGroupMemberInput(driver1, UUID.randomUUID().toString());
         SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberUserNotFound(driver1);
+    }
 
-        //Search - Query too short
+    private static void search_queryTooShort(WebDriver driver1) {
         GroupActions.fillAddGroupMemberInput(driver1, "as");
         SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberQueryTooShort(driver1);
+    }
 
-        //Add member
+    private static void addMember(WebDriver driver1, WebDriver driver2, RegistrationParameters userData2) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.addMember(driver1, userData2.getUsername());
 
         NotificationUtil.verifySuccessNotification(driver1, "Group member added.");
@@ -111,8 +126,11 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isFalse();
         assertThat(groupMember.getKickButton().isEnabled()).isFalse();
         assertThat(groupMember.getTransferLeadershipButton()).isEmpty();
+    }
 
-        //Modify roles
+    private static void modifyRoles(WebDriver driver1, RegistrationParameters userData2) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.getMembers(driver1)
             .get(1)
             .getCanInviteCheckbox()
@@ -148,8 +166,11 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getKickButton().isEnabled()).isTrue();
         assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
         assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isTrue();
+    }
 
-        //Invite member
+    private static GroupMember inviteMember(WebDriver driver2, RegistrationParameters userData3) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.closeGroupDetails(driver2);
         GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
 
@@ -174,8 +195,11 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isFalse();
         assertThat(groupMember.getKickButton().isEnabled()).isTrue();
         assertThat(groupMember.getTransferLeadershipButton()).isEmpty();
+        return groupMember;
+    }
 
-        //Kick member
+    private static void kickMember(WebDriver driver1, WebDriver driver2, GroupMember groupMember) {
+        List<GroupMember> groupMembers;
         groupMember.getKickButton()
             .click();
         CommonPageActions.confirmConfirmationDialog(driver2, "kick-group-member-confirmation-dialog");
@@ -193,8 +217,9 @@ public class GroupMemberCrudTest extends SeleniumTest {
             .click();
         CommonPageActions.confirmConfirmationDialog(driver1, "transfer-ownership-confirmation-dialog");
         NotificationUtil.verifySuccessNotification(driver1, "Ownership transferred.");
+    }
 
-        //Leave group
+    private static void leaveGroup(WebDriver driver1, WebDriver driver2) {
         GroupActions.openGroup(driver1, GroupActions.getGroups(driver1).get(0));
 
         GroupActions.leaveGroup(driver1);

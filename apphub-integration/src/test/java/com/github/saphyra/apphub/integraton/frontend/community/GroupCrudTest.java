@@ -35,19 +35,31 @@ public class GroupCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
         CommunityActions.openGroupsTab(driver);
 
-        //Create group - name too long
+        createGroup_nameTooLong(driver);
+        createGroup_nameTooShort(driver);
+        List<WebElement> groups = createGroup(driver);
+        renameGroup_nameTooShort(driver, groups);
+        renameGroup_nameTooLong(driver);
+        groups = renameGroup(driver);
+        changeInvitationType(driver, groups);
+        disbandGroup(driver);
+    }
+
+    private static void createGroup_nameTooLong(WebDriver driver) {
         GroupActions.openCreateGroupWindow(driver);
 
         GroupActions.fillCreateGroupNameInput(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         SleepUtil.sleep(2000);
         GroupActions.verifyCreateGroupNameError(driver, "Group name too long (Maximum 30 characters)");
+    }
 
-        //Create group - name too short
+    private static void createGroup_nameTooShort(WebDriver driver) {
         GroupActions.fillCreateGroupNameInput(driver, "as");
         SleepUtil.sleep(2000);
         GroupActions.verifyCreateGroupNameError(driver, "Group name too short (Minimum 3 characters)");
+    }
 
-        //Create group
+    private static List<WebElement> createGroup(WebDriver driver) {
         GroupActions.fillCreateGroupNameInput(driver, GROUP_NAME);
         SleepUtil.sleep(2000);
         GroupActions.verifyCreateGroupNameCorrect(driver);
@@ -60,8 +72,10 @@ public class GroupCrudTest extends SeleniumTest {
         List<WebElement> groups = GroupActions.getGroups(driver);
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0).getText()).isEqualTo(GROUP_NAME);
+        return groups;
+    }
 
-        //Rename group - name too short
+    private static void renameGroup_nameTooShort(WebDriver driver, List<WebElement> groups) {
         GroupActions.openGroup(driver, groups.get(0));
 
         GroupActions.setGroupName(driver, "as");
@@ -69,15 +83,18 @@ public class GroupCrudTest extends SeleniumTest {
         NotificationUtil.verifyErrorNotification(driver, "Group name too short (Minimum 3 characters)");
 
         assertThat(GroupActions.getGroupName(driver)).isEqualTo(GROUP_NAME);
+    }
 
-        //Rename group - name too long
+    private static void renameGroup_nameTooLong(WebDriver driver) {
         GroupActions.setGroupName(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         NotificationUtil.verifyErrorNotification(driver, "Group name too long (Maximum 30 characters)");
 
         assertThat(GroupActions.getGroupName(driver)).isEqualTo(GROUP_NAME);
+    }
 
-        //Rename group
+    private static List<WebElement> renameGroup(WebDriver driver) {
+        List<WebElement> groups;
         GroupActions.setGroupName(driver, NEW_GROUP_NAME);
 
         NotificationUtil.verifySuccessNotification(driver, "Group renamed.");
@@ -87,15 +104,18 @@ public class GroupCrudTest extends SeleniumTest {
         groups = GroupActions.getGroups(driver);
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0).getText()).isEqualTo(NEW_GROUP_NAME);
+        return groups;
+    }
 
-        //Change invitationType
+    private static void changeInvitationType(WebDriver driver, List<WebElement> groups) {
         GroupActions.openGroup(driver, groups.get(0));
 
         GroupActions.changeInvitationType(driver, GroupInvitationType.FRIENDS_OF_FRIENDS);
 
         NotificationUtil.verifySuccessNotification(driver, "Invitation type changed.");
+    }
 
-        //Disband group
+    private static void disbandGroup(WebDriver driver) {
         GroupActions.disbandGroup(driver);
 
         NotificationUtil.verifySuccessNotification(driver, "Group disbanded.");

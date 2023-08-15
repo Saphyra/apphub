@@ -59,7 +59,12 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
 
         OccurrenceActions.markOccurrenceDone(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
-        //Null referenceDate day
+        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
+        markOccurrenceSnoozed(language, accessTokenId, occurrenceResponse, referenceDate);
+    }
+
+    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
@@ -68,8 +73,9 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
         Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+    }
 
-        //Null referenceDate month
+    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
@@ -78,8 +84,10 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
         Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+    }
 
-        //Mark occurrence snoozed
+    private static void markOccurrenceSnoozed(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
+        List<CalendarResponse> responses;
         responses = OccurrenceActions.markOccurrenceDefault(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         OccurrenceResponse occurrence = responses.stream()
