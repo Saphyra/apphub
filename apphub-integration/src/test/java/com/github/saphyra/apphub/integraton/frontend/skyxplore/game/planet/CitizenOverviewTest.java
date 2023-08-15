@@ -31,7 +31,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
-    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -65,7 +65,12 @@ public class CitizenOverviewTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetPopulationOverviewActions.isLoaded(driver))
             .assertTrue("PopulationOverview is not opened.");
 
-        //Rename citizens
+        List<String> newNames = renameCitizens(driver);
+        orderCitizens(driver, newNames);
+        displayAndHideSkills(driver);
+    }
+
+    private List<String> renameCitizens(WebDriver driver) {
         List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
@@ -79,15 +84,18 @@ public class CitizenOverviewTest extends SeleniumTest {
         for (int i = 0; i < citizenNames.size(); i++) {
             renameCitizen(driver, citizenNames.get(i), newNames.get(i));
         }
+        return newNames;
+    }
 
-        //Order citizens
+    private void orderCitizens(WebDriver driver, List<String> newNames) {
         SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.DESCENDING);
         verifyCitizenOrder(driver, CitizenOrder.DESCENDING, newNames);
 
         SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.ASCENDING);
         verifyCitizenOrder(driver, CitizenOrder.ASCENDING, newNames);
+    }
 
-        //Display/Hide skills
+    private void displayAndHideSkills(WebDriver driver) {
         SkyXplorePlanetPopulationOverviewActions.toggleSkillDisplay(driver, "AIMING");
         verifyDisplayedSkillCount(driver);
 

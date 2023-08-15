@@ -28,7 +28,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void acceptFriendRequest(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
@@ -50,11 +50,17 @@ public class AcceptFriendRequestTest extends BackEndTest {
         SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId3, model3);
 
-        //FriendRequest not found
+        friendRequestNotFound(language, accessTokenId1);
+        UUID friendRequestId = forbiddenOperation(language, accessTokenId1, accessTokenId3, userId2);
+        accept(language, accessTokenId1, userId1, accessTokenId2, model1, model2, userId2, friendRequestId);
+    }
+
+    private static void friendRequestNotFound(Language language, UUID accessTokenId1) {
         Response friendRequestNotFoundResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(language, accessTokenId1, UUID.randomUUID());
         verifyErrorResponse(language, friendRequestNotFoundResponse, 404, ErrorCode.FRIEND_REQUEST_NOT_FOUND);
+    }
 
-        //Forbidden operation
+    private static UUID forbiddenOperation(Language language, UUID accessTokenId1, UUID accessTokenId3, UUID userId2) {
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId1, userId2);
 
         UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)
@@ -64,8 +70,10 @@ public class AcceptFriendRequestTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
         Response forbiddenOperationResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(language, accessTokenId3, friendRequestId);
         verifyForbiddenOperation(language, forbiddenOperationResponse);
+        return friendRequestId;
+    }
 
-        //Accept
+    private static void accept(Language language, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, SkyXploreCharacterModel model1, SkyXploreCharacterModel model2, UUID userId2, UUID friendRequestId) {
         ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId1);
 
         FriendshipResponse acceptResponse = SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
@@ -87,8 +95,6 @@ public class AcceptFriendRequestTest extends BackEndTest {
         assertThat(payload.getFriendRequestId()).isEqualTo(friendRequestId);
         assertThat(payload.getFriendship().getFriendId()).isEqualTo(userId2);
         assertThat(payload.getFriendship().getFriendName()).isEqualTo(model2.getName());
-
-        ApphubWsClient.cleanUpConnections();
     }
 
     @Data

@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.integration.framework;
 
-import com.github.saphyra.apphub.integration.core.TestBase;
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Occurrence;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -32,8 +33,7 @@ public class DatabaseUtil {
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
-        Connection connection = TestBase.CONNECTION;
-        Statement statement = connection.createStatement();
+        Statement statement = TestConfiguration.CONNECTION.createStatement();
 
         ResultSet resultSet = statement.executeQuery(sql);
 
@@ -47,16 +47,16 @@ public class DatabaseUtil {
     private static void execute(String sql) throws Exception {
         Class.forName(JDBC_DRIVER);
 
-        Connection connection = TestBase.CONNECTION;
-        Statement statement = connection.createStatement();
+        Statement statement = TestConfiguration.CONNECTION.createStatement();
 
         statement.execute(sql);
 
         statement.close();
     }
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(String.format(DB_URL, TestBase.DATABASE_PORT, TestBase.DATABASE_NAME), "postgres", "postgres");
+    @SneakyThrows
+    public static Connection getConnection() {
+        return DriverManager.getConnection(String.format(DB_URL, TestConfiguration.DATABASE_PORT, TestConfiguration.DATABASE_NAME), "postgres", "postgres");
     }
 
     public static void addRoleByEmail(String email, String... roles) {

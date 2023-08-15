@@ -30,7 +30,7 @@ public class CategoryCrudTest extends SeleniumTest {
     private static final String CATEGORY_2_TITLE = "category-2";
     private static final String NEW_CATEGORY_TITLE = "new-category-title";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void categoryCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -46,7 +46,7 @@ public class CategoryCrudTest extends SeleniumTest {
         NewCategoryActions.fillTitle(driver, " ");
         NewCategoryActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewCategoryActions.fillTitle(driver, CATEGORY_1_TITLE);
@@ -70,7 +70,7 @@ public class CategoryCrudTest extends SeleniumTest {
         EditListItemActions.fillTitle(driver, " ");
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
@@ -119,7 +119,7 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(NotebookActions.getCategoryTree(driver).hasChildren()).isFalse();
     }
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void categoryTreeTest() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

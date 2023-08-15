@@ -10,13 +10,13 @@ import java.util.List;
 @Slf4j
 public class ToastMessageUtil {
     public static void verifyErrorToast(WebDriver driver, String message) {
-        AwaitilityWrapper.createDefault()
+        AwaitilityWrapper.create(5, 1)
             .until(() -> !getErrorToasts(driver, message).isEmpty())
             .assertTrue("No error toast found with message " + message);
     }
 
     public static void verifySuccessToast(WebDriver driver, String message) {
-        AwaitilityWrapper.createDefault()
+        AwaitilityWrapper.create(10, 1)
             .until(() -> !getSuccessToasts(driver, message).isEmpty())
             .assertTrue("No success toast found with message " + message);
     }

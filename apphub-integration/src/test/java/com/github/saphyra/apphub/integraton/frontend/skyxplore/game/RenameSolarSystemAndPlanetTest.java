@@ -28,7 +28,7 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new-solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void renameSolarSystemAndPlanet() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -50,17 +50,28 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
 
         String oldSolarSystemName = AwaitilityWrapper.getWithWait(() -> SkyXploreSolarSystemActions.getSolarSystemName(driver), s -> s.length() > 0)
             .orElseThrow(() -> new RuntimeException("SolarSystem name not loaded."));
-        //SolarSystem - Blank
+
+        solarSystem_blank(driver, oldSolarSystemName);
+        solarSystem_tooLong(driver, oldSolarSystemName);
+        solarSystem_rename(driver);
+        String oldPlanetName = planet_blank(driver);
+        planet_tooLong(driver, oldPlanetName);
+        planet_rename(driver);
+    }
+
+    private static void solarSystem_blank(WebDriver driver, String oldSolarSystemName) {
         SkyXploreSolarSystemActions.renameSolarSystem(driver, " ");
         assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(oldSolarSystemName);
+    }
 
-        //SolarSystem - Too long
+    private static void solarSystem_tooLong(WebDriver driver, String oldSolarSystemName) {
         SkyXploreSolarSystemActions.renameSolarSystem(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(oldSolarSystemName);
-        NotificationUtil.verifyErrorNotification(driver, "Csillagrendszer név túl hosszú (Maximum 30 karakter).");
+        NotificationUtil.verifyErrorNotification(driver, "Solar System name too long (Max. 30 characters).");
         NotificationUtil.clearNotifications(driver);
+    }
 
-        //SolarSystem - Rename
+    private static void solarSystem_rename(WebDriver driver) {
         SkyXploreSolarSystemActions.renameSolarSystem(driver, NEW_SOLAR_SYSTEM_NAME);
         assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(NEW_SOLAR_SYSTEM_NAME);
         SkyXploreSolarSystemActions.closeSolarSystem(driver);
@@ -69,8 +80,9 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreSolarSystemActions.getSolarSystemName(driver).equals(NEW_SOLAR_SYSTEM_NAME))
             .assertTrue("SolarSystem name is not changed.");
+    }
 
-        //Planet - Blank
+    private static String planet_blank(WebDriver driver) {
         SkyXploreSolarSystemActions.getPlanet(driver)
             .click();
         String oldPlanetName = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.getPlanetName(driver), s -> s.length() > 0)
@@ -80,14 +92,17 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getPlanetName(driver).equals(oldPlanetName))
             .assertTrue(String.format("Planet name changed. It was '%s'", SkyXplorePlanetActions.getPlanetName(driver)));
+        return oldPlanetName;
+    }
 
-        //Planet - Too long
+    private static void planet_tooLong(WebDriver driver, String oldPlanetName) {
         SkyXplorePlanetActions.renamePlanet(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(oldPlanetName);
-        NotificationUtil.verifyErrorNotification(driver, "Bolygó név túl hosszú (Maximum 30 karakter).");
+        NotificationUtil.verifyErrorNotification(driver, "Planet name too long (Max. 30 characters).");
         NotificationUtil.clearNotifications(driver);
+    }
 
-        //Planet - Rename
+    private static void planet_rename(WebDriver driver) {
         SkyXplorePlanetActions.renamePlanet(driver, NEW_PLANET_NAME);
         assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(NEW_PLANET_NAME);
         SkyXplorePlanetActions.closePlanet(driver);

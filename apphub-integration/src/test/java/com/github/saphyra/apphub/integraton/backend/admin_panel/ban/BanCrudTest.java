@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BanCrudTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void banCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -36,7 +36,22 @@ public class BanCrudTest extends BackEndTest {
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
-        //Ban - Null bannedUserId
+        ban_nullBannedUserId(language, userData, accessTokenId);
+        ban_blankBannedRole(language, userData, accessTokenId, testUserId);
+        ban_nullPermanent(language, userData, accessTokenId, testUserId);
+        ban_blankReason(language, userData, accessTokenId, testUserId);
+        ban_blankPassword(language, accessTokenId, testUserId);
+        ban_nullDuration(language, userData, accessTokenId, testUserId);
+        ban_durationTooLow(language, userData, accessTokenId, testUserId);
+        ban_unknownChronoUnit(language, userData, accessTokenId, testUserId);
+        accessTokenId = ban_incorrectPassword(language, userData, accessTokenId, testUserId);
+        ban(language, userData, accessTokenId, testUserId);
+        BanDetailsResponse ban = getBans(language, userData, accessTokenId, adminUserId, testUser, testUserId);
+        revokeBan_blankPassword(language, accessTokenId, ban);
+        revokeBan_incorrectPassword(language, userData, accessTokenId, testUserId, ban);
+    }
+
+    private static void ban_nullBannedUserId(Language language, RegistrationParameters userData, UUID accessTokenId) {
         BanRequest ban_nullBannedUserIdRequest = BanRequest.builder()
             .bannedUserId(null)
             .bannedRole(Constants.ROLE_TEST)
@@ -50,8 +65,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_nullBannedUserIdResponse = BanActions.getBanResponse(language, accessTokenId, ban_nullBannedUserIdRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_nullBannedUserIdResponse, "bannedUserId", "must not be null");
+    }
 
-        //Ban - Blank bannedRole
+    private static void ban_blankBannedRole(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_blankBannedRoleRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(" ")
@@ -65,8 +81,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_blankBannedRoleResponse = BanActions.getBanResponse(language, accessTokenId, ban_blankBannedRoleRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_blankBannedRoleResponse, "bannedRole", "must not be null or blank");
+    }
 
-        //Ban - Null permanent
+    private static void ban_nullPermanent(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_nullPermanentRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -80,8 +97,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_nullPermanentResponse = BanActions.getBanResponse(language, accessTokenId, ban_nullPermanentRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_nullPermanentResponse, "permanent", "must not be null");
+    }
 
-        //Ban - Blank reason
+    private static void ban_blankReason(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_blankReasonRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -95,8 +113,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_blankReasonResponse = BanActions.getBanResponse(language, accessTokenId, ban_blankReasonRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_blankReasonResponse, "reason", "must not be null or blank");
+    }
 
-        //Ban - Blank password
+    private static void ban_blankPassword(Language language, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_blankPasswordRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -110,8 +129,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_blankPasswordResponse = BanActions.getBanResponse(language, accessTokenId, ban_blankPasswordRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_blankPasswordResponse, "password", "must not be null or blank");
+    }
 
-        //Ban - Null duration
+    private static void ban_nullDuration(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_nullDurationRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -125,8 +145,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_nullDurationResponse = BanActions.getBanResponse(language, accessTokenId, ban_nullDurationRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_nullDurationResponse, "duration", "must not be null");
+    }
 
-        //Ban - Duration too low
+    private static void ban_durationTooLow(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_durationTooLowRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -140,8 +161,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_durationTooLowResponse = BanActions.getBanResponse(language, accessTokenId, ban_durationTooLowRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_durationTooLowResponse, "duration", "too low");
+    }
 
-        //Ban - Unknown chronoUnit
+    private static void ban_unknownChronoUnit(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_unknownChronoUnitRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -155,8 +177,9 @@ public class BanCrudTest extends BackEndTest {
         Response ban_unknownChronoUnitResponse = BanActions.getBanResponse(language, accessTokenId, ban_unknownChronoUnitRequest);
 
         ResponseValidator.verifyInvalidParam(language, ban_unknownChronoUnitResponse, "chronoUnit", "invalid value");
+    }
 
-        //Ban - Incorrect password
+    private static UUID ban_incorrectPassword(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest ban_incorrectPasswordRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -182,8 +205,10 @@ public class BanCrudTest extends BackEndTest {
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
+        return accessTokenId;
+    }
 
-        //Ban
+    private static void ban(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         BanRequest banRequest = BanRequest.builder()
             .bannedUserId(testUserId)
             .bannedRole(Constants.ROLE_TEST)
@@ -195,8 +220,9 @@ public class BanCrudTest extends BackEndTest {
             .build();
 
         BanActions.ban(language, accessTokenId, banRequest);
+    }
 
-        //Get bans
+    private static BanDetailsResponse getBans(Language language, RegistrationParameters userData, UUID accessTokenId, UUID adminUserId, RegistrationParameters testUser, UUID testUserId) {
         BanResponse bans = BanActions.getBans(language, accessTokenId, testUserId);
 
         assertThat(bans.getUserId()).isEqualTo(testUserId);
@@ -210,13 +236,17 @@ public class BanCrudTest extends BackEndTest {
         assertThat(ban.getBannedById()).isEqualTo(adminUserId);
         assertThat(ban.getBannedByUsername()).isEqualTo(userData.getUsername());
         assertThat(ban.getBannedByEmail()).isEqualTo(userData.getEmail());
+        return ban;
+    }
 
-        //Revoke ban - Blank password
+    private static void revokeBan_blankPassword(Language language, UUID accessTokenId, BanDetailsResponse ban) {
         Response revokeBan_blankPasswordResponse = BanActions.getRevokeBanResponse(language, accessTokenId, ban.getId(), " ");
 
         ResponseValidator.verifyInvalidParam(language, revokeBan_blankPasswordResponse, "password", "must not be null or blank");
+    }
 
-        //Revoke ban - Incorrect password
+    private static void revokeBan_incorrectPassword(Language language, RegistrationParameters userData, UUID accessTokenId, UUID testUserId, BanDetailsResponse ban) {
+        BanResponse bans;
         UUID ati2 = accessTokenId;
         Stream.generate(() -> "")
             .limit(2)

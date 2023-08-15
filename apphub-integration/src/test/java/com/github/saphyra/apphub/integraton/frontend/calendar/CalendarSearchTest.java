@@ -24,7 +24,7 @@ public class CalendarSearchTest extends SeleniumTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
     private static final String TITLE = "title";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void searchInCalendar() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -39,12 +39,12 @@ public class CalendarSearchTest extends SeleniumTest {
         //Search in footer - Query too short
         CalendarActions.searchInFooter(driver, "as");
 
-        NotificationUtil.verifyErrorNotification(driver, "A kereséshez írj be legalább 3 karaktert!");
+        NotificationUtil.verifyErrorNotification(driver, "Enter at least 3 characters to search.");
 
         //Search in footer - No result
         CalendarActions.searchInFooter(driver, "asd");
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs találat.");
+        NotificationUtil.verifyErrorNotification(driver, "No result.");
 
         //Search - Success
         CalendarActions.searchInFooter(driver, TITLE);
@@ -61,12 +61,12 @@ public class CalendarSearchTest extends SeleniumTest {
         //Search in result - Query too short
         CalendarActions.searchInResult(driver, "as");
 
-        NotificationUtil.verifyErrorNotification(driver, "A kereséshez írj be legalább 3 karaktert!");
+        NotificationUtil.verifyErrorNotification(driver, "Enter at least 3 characters to search.");
 
         //Search in result - No result
         CalendarActions.searchInResult(driver, "asd");
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs találat.");
+        NotificationUtil.verifyErrorNotification(driver, "No result.");
 
         //Search in result - Success
         CalendarActions.searchInResult(driver, CURRENT_DATE.toString());

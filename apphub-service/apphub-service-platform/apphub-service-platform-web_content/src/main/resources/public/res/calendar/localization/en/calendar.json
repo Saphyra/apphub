@@ -274,7 +274,7 @@
   },
   "additionalContent": {
     "empty-title": "Title must not be empty.",
-    "repetition-type-days-too-low": "Days to low (minimum 1).",
+    "repetition-type-days-too-low": "Days too low (minimum 1).",
     "no-day-selected": "No day selected.",
     "event-created": "Event created.",
     "delete-event-confirmation-dialog-title": "Do you want to delete the event?",
@@ -282,7 +282,7 @@
     "delete-event-confirmation-dialog-confirm-button": "Delete event",
     "delete-event-confirmation-dialog-cancel-button": "Cancel",
     "event-deleted": "Event deleted.",
-    "empty-time": "Both of neither hours and minutes needs to be filled.",
+    "empty-time": "Both or neither hours and minutes need to be filled.",
     "search-text-too-short": "Enter at least 3 characters to search.",
     "search-result-empty": "No result."
   }

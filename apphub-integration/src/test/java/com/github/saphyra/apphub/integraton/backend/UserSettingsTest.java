@@ -19,22 +19,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserSettingsTest extends BackEndTest {
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "misc"})
     public void userSettingsTest(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        //Query - Category not found
+        query_categoryNotFound(language, accessTokenId);
+        query_defaults(language, accessTokenId);
+        update_blankKey(language, accessTokenId);
+        update_categoryNotFound(language, accessTokenId);
+        update_keyNotSupported(language, accessTokenId);
+        update(language, accessTokenId);
+    }
+
+    private static void query_categoryNotFound(Language language, UUID accessTokenId) {
         Response query_categoryNotFoundResponse = UserSettingsActions.getQueryUserSettingsResponse(language, accessTokenId, "asd");
 
         ResponseValidator.verifyErrorResponse(query_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        //Query - Defaults
+    private static void query_defaults(Language language, UUID accessTokenId) {
         Map<String, String> settings = UserSettingsActions.getUserSettings(language, accessTokenId, Constants.USER_SETTING_CATEGORY_NOTEBOOK);
 
         assertThat(settings).containsEntry(Constants.USER_SETTING_KEY_SHOW_ARCHIVED, String.valueOf(true));
+    }
 
-        //Update - Blank key
+    private static void update_blankKey(Language language, UUID accessTokenId) {
         SetUserSettingsRequest blankKeyRequest = SetUserSettingsRequest.builder()
             .category(Constants.USER_SETTING_CATEGORY_NOTEBOOK)
             .key(" ")
@@ -44,8 +54,9 @@ public class UserSettingsTest extends BackEndTest {
         Response update_blankKeyResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, blankKeyRequest);
 
         ResponseValidator.verifyInvalidParam(update_blankKeyResponse, "key", "must not be null or blank");
+    }
 
-        //Update - Category not found
+    private static void update_categoryNotFound(Language language, UUID accessTokenId) {
         SetUserSettingsRequest categoryNotFoundRequest = SetUserSettingsRequest.builder()
             .category("asd")
             .key(Constants.USER_SETTING_KEY_SHOW_ARCHIVED)
@@ -55,8 +66,9 @@ public class UserSettingsTest extends BackEndTest {
         Response update_categoryNotFoundResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, categoryNotFoundRequest);
 
         ResponseValidator.verifyErrorResponse(update_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        //Update - Key not supported
+    private static void update_keyNotSupported(Language language, UUID accessTokenId) {
         SetUserSettingsRequest unsupportedKeyRequest = SetUserSettingsRequest.builder()
             .category(Constants.USER_SETTING_CATEGORY_NOTEBOOK)
             .key("asd")
@@ -66,8 +78,9 @@ public class UserSettingsTest extends BackEndTest {
         Response update_keyNotSupportedResponse = UserSettingsActions.getUpdateUserSettingsResponse(language, accessTokenId, unsupportedKeyRequest);
 
         ResponseValidator.verifyInvalidParam(update_keyNotSupportedResponse, "key", "not supported");
+    }
 
-        //Update
+    private static void update(Language language, UUID accessTokenId) {
         SetUserSettingsRequest setUserSettingsRequest = SetUserSettingsRequest.builder()
             .category(Constants.USER_SETTING_CATEGORY_NOTEBOOK)
             .key(Constants.USER_SETTING_KEY_SHOW_ARCHIVED)

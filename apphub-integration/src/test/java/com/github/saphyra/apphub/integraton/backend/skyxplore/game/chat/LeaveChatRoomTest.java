@@ -30,7 +30,7 @@ public class LeaveChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void leaveAllianceRoom(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -46,19 +46,28 @@ public class LeaveChatRoomTest extends BackEndTest {
 
         Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
 
-        //Leave alliance room
+        leaveAllianceRoom(language, accessTokenId1);
+        leaveGeneralRoom(language, accessTokenId1);
+        chatRoomNotFound(language, accessTokenId1);
+        leaveChatRoom(language, characterModel1, accessTokenId1, userId1, accessTokenId2, gameWsClients);
+    }
+
+    private static void leaveAllianceRoom(Language language, UUID accessTokenId1) {
         Response leaveAllianceRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "alliance");
         verifyForbiddenOperation(language, leaveAllianceRoomResponse);
+    }
 
-        //Leave general room
+    private static void leaveGeneralRoom(Language language, UUID accessTokenId1) {
         Response leaveGeneralRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "general");
         verifyForbiddenOperation(language, leaveGeneralRoomResponse);
+    }
 
-        //Chat room not found
+    private static void chatRoomNotFound(Language language, UUID accessTokenId1) {
         Response chatRoomNotFoundResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, "unknown-chat-room");
         verifyNotTranslatedNotFound(chatRoomNotFoundResponse, 404);
+    }
 
-        //Leave chat room
+    private static void leaveChatRoom(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, Map<UUID, ApphubWsClient> gameWsClients) {
         CreateChatRoomRequest createChatRoomRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(userId1))
@@ -79,7 +88,5 @@ public class LeaveChatRoomTest extends BackEndTest {
         assertThat(message.getUserId()).isEqualTo(userId1);
         assertThat(message.getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(message.getRoom()).isEqualTo(roomId);
-
-        ApphubWsClient.cleanUpConnections();
     }
 }

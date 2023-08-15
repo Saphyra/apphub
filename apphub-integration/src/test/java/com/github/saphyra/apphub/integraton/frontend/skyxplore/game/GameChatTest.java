@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
+import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
@@ -23,7 +25,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,15 +32,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameChatTest extends SeleniumTest {
-    public static final String GENERAL_ROOM_NAME = "Általános";
+    public static final String GENERAL_ROOM_NAME = "General";
     private static final String GAME_NAME = "game-name";
     private static final String MESSAGE_1 = "message-1";
-    private static final String ALLIANCE_ROOM_NAME = "Szövetség";
+    private static final String ALLIANCE_ROOM_NAME = "Alliance";
     private static final String MESSAGE_2 = "message-2";
     private static final String CUSTOM_ROOM_NAME = "custom-room";
     private static final String MESSAGE_3 = "message-3";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void chatInGame() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
@@ -53,27 +54,18 @@ public class GameChatTest extends SeleniumTest {
         BiWrapper<WebDriver, RegistrationParameters> player1 = new BiWrapper<>(driver1, userData1);
         BiWrapper<WebDriver, RegistrationParameters> player2 = new BiWrapper<>(driver2, userData2);
         BiWrapper<WebDriver, RegistrationParameters> player3 = new BiWrapper<>(driver3, userData3);
-        List<Future<Object>> futures = Stream.of(player1, player2, player3)
-            .map(biWrapper -> EXECUTOR_SERVICE.submit(() -> {
-                try {
-                    Navigation.toIndexPage(biWrapper.getEntity1());
-                    IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
-                    ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
-                    SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
-                    AwaitilityWrapper.createDefault()
-                        .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                        .assertTrue();
-                } catch (Exception e) {
-                    log.error("Failed setting up users", e);
-                    throw e;
-                }
-                return null;
+        Stream.of(player1, player2, player3)
+            .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
+                Navigation.toIndexPage(biWrapper.getEntity1());
+                IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
+                ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
+                SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
+                AwaitilityWrapper.createDefault()
+                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .assertTrue();
             }))
-            .toList();
-
-        AwaitilityWrapper.create(120, 5)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Failed to set up character(s).");
+            .map(FutureWrapper::get)
+            .forEach(ExecutionResult::getOrThrow);
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
 
@@ -108,21 +100,28 @@ public class GameChatTest extends SeleniumTest {
         SkyXploreGameChatActions.openChat(driver2);
         SkyXploreGameChatActions.openChat(driver3);
 
-        //Chat in general room
+        chatInGeneralRoom(driver1, driver2, driver3, userData1);
+        chatInAllianceRoom(driver1, driver2, driver3, userData1);
+        chatInCustomRoom(driver1, driver2, driver3, userData1, userData3);
+    }
+
+    private void chatInGeneralRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1) {
         SkyXploreGameChatActions.postMessageToRoom(driver1, GENERAL_ROOM_NAME, MESSAGE_1);
 
         verifyMessageArrived(driver1, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, true);
         verifyMessageArrived(driver2, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, false);
         verifyMessageArrived(driver3, GENERAL_ROOM_NAME, userData1.getUsername(), MESSAGE_1, false);
+    }
 
-        //Chat in alliance room
+    private void chatInAllianceRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1) {
         SkyXploreGameChatActions.postMessageToRoom(driver1, ALLIANCE_ROOM_NAME, MESSAGE_2);
 
         verifyMessageArrived(driver1, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, true);
         verifyMessageArrived(driver2, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, false);
         verifyMessageNotArrived(driver3, ALLIANCE_ROOM_NAME);
+    }
 
-        //Chat in custom room
+    private void chatInCustomRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1, RegistrationParameters userData3) {
         SkyXploreGameChatActions.createChatRoom(driver1, CUSTOM_ROOM_NAME, userData3.getUsername());
         SkyXploreGameChatActions.postMessageToRoom(driver1, CUSTOM_ROOM_NAME, MESSAGE_3);
 

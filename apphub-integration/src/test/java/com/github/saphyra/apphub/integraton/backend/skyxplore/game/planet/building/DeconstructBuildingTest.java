@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeconstructBuildingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void deconstructBuilding(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -53,13 +53,23 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
-        //Storage in use
+        storageInUse(language, accessTokenId, planetId);
+        buildingUnderConstruction(language, accessTokenId, gameWsClient, planetId);
+        gameWsClient.clearMessages();
+        UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_BATTERY);
+        DeconstructionResponse deconstruction = deconstructBuilding(language, accessTokenId, gameWsClient, planetId, buildingId);
+        cancelDeconstruction(language, accessTokenId, gameWsClient, planetId, buildingId, deconstruction);
+    }
+
+    private void storageInUse(Language language, UUID accessTokenId, UUID planetId) {
         UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_DEPOT);
         Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
 
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.SKYXPLORE_STORAGE_USED);
+    }
 
-        //Building under construction
+    private static void buildingUnderConstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId) {
+        UUID buildingId;
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
         SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
         buildingId = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
@@ -71,12 +81,9 @@ public class DeconstructBuildingTest extends BackEndTest {
         Response constructionInProgressResponse = SkyXploreBuildingActions.getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
 
         ResponseValidator.verifyForbiddenOperation(language, constructionInProgressResponse);
+    }
 
-        //Deconstruct building
-        gameWsClient.clearMessages();
-
-        buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_BATTERY);
-
+    private static DeconstructionResponse deconstructBuilding(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID buildingId) {
         SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
         SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
             .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
@@ -105,8 +112,12 @@ public class DeconstructBuildingTest extends BackEndTest {
             .getPayloadAs(PlanetStorageResponse.class);
 
         assertThat(planetStorageResponse.getEnergy().getCapacity()).isEqualTo(0);
+        return deconstruction;
+    }
 
-        //Cancel deconstruction
+    private static void cancelDeconstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID buildingId, DeconstructionResponse deconstruction) {
+        Object buildingDetails;
+        SurfaceResponse surfaceResponse;
         gameWsClient.clearMessages();
 
         SkyXploreBuildingActions.cancelDeconstruction(language, accessTokenId, planetId, buildingId);
@@ -129,7 +140,7 @@ public class DeconstructBuildingTest extends BackEndTest {
         PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void finishDeconstruction() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

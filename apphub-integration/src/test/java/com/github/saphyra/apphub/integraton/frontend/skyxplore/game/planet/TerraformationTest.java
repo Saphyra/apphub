@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void terraformationCD() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -54,9 +54,13 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Start terraformation
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
         String surfaceId = surface.getSurfaceId();
+        surface = startTerraformation(driver, surface, surfaceId);
+        cancelTerraformation(driver, surface, surfaceId);
+    }
+
+    private static Surface startTerraformation(WebDriver driver, Surface surface, String surfaceId) {
         surface.openModifySurfaceWindow(driver);
 
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
@@ -64,15 +68,17 @@ public class TerraformationTest extends SeleniumTest {
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
 
         assertThat(surface.isTerraformationInProgress()).isTrue();
+        return surface;
+    }
 
-        //Cancel terraformation
+    private static void cancelTerraformation(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelTerraformation(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isTerraformationInProgress()).isFalse();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void finishTerraformation() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

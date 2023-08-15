@@ -17,27 +17,38 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FavoriteTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "modules"})
     public void addToFavorites() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        //Add to favorite
+        Favorite favorite = addToFavorite(driver);
+        removeByFavoriteButton(driver, favorite);
+        removeByModuleButton(driver);
+    }
+
+    private static Favorite addToFavorite(WebDriver driver) {
         Module module = getModule(driver);
         module.addFavorite();
         Favorite favorite = getFavorite(driver);
         assertThat(module.getModuleName()).isEqualTo(favorite.getModuleName());
+        return favorite;
+    }
 
-        //Remove by favorite button
+    private static void removeByFavoriteButton(WebDriver driver, Favorite favorite) {
+        Module module;
         favorite.removeFromFavorites();
         List<Favorite> favorites = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getFavorites(driver), List::isEmpty);
         assertThat(favorites).isEmpty();
         module = getModule(driver);
         assertThat(module.isFavorite()).isFalse();
+    }
 
-        //Remove by module button
+    private static void removeByModuleButton(WebDriver driver) {
+        List<Favorite> favorites;
+        Module module;
         module = getModule(driver);
         module.addFavorite();
         module = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getModules(driver), r -> r.stream().anyMatch(Module::isFavorite))
@@ -52,14 +63,14 @@ public class FavoriteTest extends SeleniumTest {
         assertThat(module.isFavorite()).isFalse();
     }
 
-    private Module getModule(WebDriver driver) {
+    private static Module getModule(WebDriver driver) {
         return AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getModules(driver), modules -> !modules.isEmpty())
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("No module found"));
     }
 
-    private Favorite getFavorite(WebDriver driver) {
+    private static Favorite getFavorite(WebDriver driver) {
         return AwaitilityWrapper.getWithWait(() -> ModulesPageActions.getFavorites(driver), favorites -> favorites.size() == 1)
             .orElse(Collections.emptyList())
             .stream()

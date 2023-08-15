@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CharacterCrudTest extends SeleniumTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void createAndEditCharacter() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -27,21 +27,21 @@ public class CharacterCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
-        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Új karakter");
+        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("New character");
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
 
         SkyXploreCharacterActions.fillCharacterName(driver, "aa");
-        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakter név túl rövid. (Minimum 3 karakter)");
+        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Character name too short. (Minimum 3 characters)");
 
         SkyXploreCharacterActions.fillCharacterName(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Karakter név túl hosszú. (Maximum 30 karakter)");
+        SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Character name too long. (Maximum 30 characters)");
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
         SkyXploreCharacterActions.verifyValidCharacterName(driver);
 
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
 
         SkyXploreMainMenuActions.back(driver);
         ModulesPageActions.logout(driver);
@@ -54,16 +54,16 @@ public class CharacterCrudTest extends SeleniumTest {
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Ez a karakternév már foglalt.");
+        ToastMessageUtil.verifyErrorToast(driver, "Character name already exists.");
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData2.getUsername());
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
 
         SkyXploreMainMenuActions.editCharacter(driver);
 
-        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Karakter szerkesztése");
+        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Edit character");
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData2.getUsername());
 
         String newCharacterName = RegistrationParameters.validParameters()
@@ -71,7 +71,7 @@ public class CharacterCrudTest extends SeleniumTest {
         SkyXploreCharacterActions.fillCharacterName(driver, newCharacterName);
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Karakter elmentve.");
+        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
 
         SkyXploreMainMenuActions.editCharacter(driver);
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);

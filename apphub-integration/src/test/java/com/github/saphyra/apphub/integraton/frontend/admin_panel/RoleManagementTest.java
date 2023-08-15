@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void addRole() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -35,17 +35,23 @@ public class RoleManagementTest extends SeleniumTest {
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.ROLE_MANAGEMENT);
 
-        //Add role
+        addRole(driver, testUserData);
+        removeRole(driver, testUserData);
+    }
+
+    private static void addRole(WebDriver driver, RegistrationParameters testUserData) {
         RoleManagementUser user = RoleManagementPageActions.searchForUser(driver, testUserData.getEmail());
         user.addRole(Constants.ROLE_TEST);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role added.");
         assertThat(user.getCurrentRoleNames()).contains(Constants.ROLE_TEST);
         assertThat(user.getAvailableRoleNames()).doesNotContain(Constants.ROLE_TEST);
+    }
 
-        //Remove role
+    private static void removeRole(WebDriver driver, RegistrationParameters testUserData) {
+        RoleManagementUser user;
         user = RoleManagementPageActions.searchForUser(driver, testUserData.getEmail());
         user.removeRole(Constants.ROLE_TEST);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság eltávolítva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role removed.");
         assertThat(user.getCurrentRoleNames()).doesNotContain(Constants.ROLE_TEST);
         assertThat(user.getAvailableRoleNames()).contains(Constants.ROLE_TEST);
     }

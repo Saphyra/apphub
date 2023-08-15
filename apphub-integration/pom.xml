@@ -131,7 +131,7 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>20</threadCount>
+                    <threadCount>10</threadCount>
                 </configuration>
             </plugin>
         </plugins>

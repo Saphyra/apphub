@@ -20,7 +20,7 @@ public class NotebookSettingsTest extends SeleniumTest {
     private static final String CATEGORY_1 = "category-1";
     private static final String CATEGORY_2 = "category-2";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     void showAndHideArchived() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -41,6 +41,13 @@ public class NotebookSettingsTest extends SeleniumTest {
             .pin(driver);
 
         //Hide archived items
+        hideArchivedItems(driver);
+
+        //Show archived items
+        showArchivedItems(driver);
+    }
+
+    private static void hideArchivedItems(WebDriver driver) {
         NotebookSettingActions.openSettings(driver);
 
         NotebookSettingActions.hideArchived(driver);
@@ -48,8 +55,9 @@ public class NotebookSettingsTest extends SeleniumTest {
         assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
         assertThat(NotebookActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
         assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1);
+    }
 
-        //Show archived items
+    private static void showArchivedItems(WebDriver driver) {
         NotebookSettingActions.showArchived(driver);
 
         assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);

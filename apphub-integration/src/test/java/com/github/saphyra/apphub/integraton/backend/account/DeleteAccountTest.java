@@ -24,17 +24,22 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "account"})
     public void deleteAccount(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
 
-        //Null password
+        nullPassword(language, accessTokenId);
+        accessTokenId = incorrectPassword(language, userData, accessTokenId);
+        successfulDeletion(language, userData, accessTokenId);
+    }
+
+    private static void nullPassword(Language language, UUID accessTokenId) {
         Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(null));
         verifyInvalidParam(language, nullPasswordResponse, "password", "must not be null");
+    }
 
-        //Incorrect password
-
+    private static UUID incorrectPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         UUID ati = accessTokenId;
         Stream.generate(() -> "")
             .limit(2)
@@ -48,8 +53,10 @@ public class DeleteAccountTest extends BackEndTest {
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
+        return accessTokenId;
+    }
 
-        //Successful deletion
+    private static void successfulDeletion(Language language, RegistrationParameters userData, UUID accessTokenId) {
         Response response = AccountActions.getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(userData.getPassword()));
         assertThat(response.getStatusCode()).isEqualTo(200);
         Response loginResponse = IndexPageActions.getLoginResponse(language, userData.toLoginRequest());

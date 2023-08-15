@@ -29,7 +29,7 @@ public class LinkCrudTest extends SeleniumTest {
     private static final String CATEGORY = "category";
     private static final String NEW_LINK_TITLE = "new-link";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void linkCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -42,20 +42,33 @@ public class LinkCrudTest extends SeleniumTest {
         NotebookActions.newListItem(driver);
         NotebookNewListItemActions.selectListItem(driver, ListItemType.LINK);
 
-        //Create - Blank title
+        create_blankTitle(driver);
+        create_blankUrl(driver);
+        create(driver);
+        open(driver);
+        edit_blankTitle(driver);
+        edit_blankUrl(driver);
+        edit(driver);
+        openEdited(driver);
+        delete(driver);
+    }
+
+    private static void create_blankTitle(WebDriver driver) {
         NewLinkActions.fillTitle(driver, "");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Create - Blank URL
+    private static void create_blankUrl(WebDriver driver) {
         NewLinkActions.fillTitle(driver, LINK_TITLE);
         NewLinkActions.fillUrl(driver, " ");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
+    }
 
-        //Create
+    private static void create(WebDriver driver) {
         NewLinkActions.fillUrl(driver, UrlFactory.create(Endpoints.MODULES_PAGE));
         ParentSelectorActions.selectParent(driver, CATEGORY);
 
@@ -64,8 +77,9 @@ public class LinkCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
             .assertTrue("Link is not created");
+    }
 
-        //Open
+    private static void open(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY)
             .open(() -> NotebookActions.findListItemByTitle(driver, LINK_TITLE).isPresent());
 
@@ -76,25 +90,28 @@ public class LinkCrudTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+    }
 
-        //Edit - Blank title
+    private static void edit_blankTitle(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
             .edit(driver);
         EditListItemActions.fillTitle(driver, " ");
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Edit - Blank URL
+    private static void edit_blankUrl(WebDriver driver) {
         EditListItemActions.fillTitle(driver, NEW_LINK_TITLE);
         EditListItemActions.fillValue(driver, " ");
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
+    }
 
-        //Edit
+    private static void edit(WebDriver driver) {
         EditListItemActions.fillValue(driver, UrlFactory.create(Endpoints.ACCOUNT_PAGE));
         ParentSelectorActions.up(driver);
 
@@ -103,8 +120,9 @@ public class LinkCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
             .assertTrue("Modifications are not saved.");
+    }
 
-        //Open edited
+    private static void openEdited(WebDriver driver) {
         NotebookActions.up(driver);
 
         AwaitilityWrapper.findWithWait(() -> NotebookActions.getListItems(driver), listItem -> listItem.getTitle().equals(NEW_LINK_TITLE))
@@ -115,8 +133,9 @@ public class LinkCrudTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+    }
 
-        //Delete
+    private static void delete(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, NEW_LINK_TITLE)
             .deleteWithConfirmation(driver);
 

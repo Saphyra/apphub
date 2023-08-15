@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PlanetQueueTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void queueTest() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -59,7 +59,12 @@ public class PlanetQueueTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
 
-        //Construction item
+        constructionItem(driver);
+        terraformationItem(driver);
+        deconstructionItem(driver);
+    }
+
+    private static void constructionItem(WebDriver driver) {
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
 
         PlanetQueueItem queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
@@ -67,15 +72,18 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Vízszivattyú lvl 0 => 1");
+        assertThat(queueItem.getTitle()).isEqualTo("Water pump lvl 0 => 1");
 
         queueItem.cancelItem(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Queue is not empty.");
+    }
 
-        //Terraformation item
+    private static void terraformationItem(WebDriver driver) {
+        PlanetQueueItem queueItem;
+        Surface surface;
         surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
@@ -85,15 +93,18 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Tó => Sivatag");
+        assertThat(queueItem.getTitle()).isEqualTo("Lake => Desert");
 
         queueItem.cancelItem(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Queue is not empty.");
+    }
 
-        //Deconstruction item
+    private static void deconstructionItem(WebDriver driver) {
+        PlanetQueueItem queueItem;
+        Surface surface;
         surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
         surface.deconstructBuilding(driver);
 
@@ -102,7 +113,7 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Lerombol: Napelem");
+        assertThat(queueItem.getTitle()).isEqualTo("Deconstruct: Solar panel");
 
         queueItem.cancelItem(driver);
 

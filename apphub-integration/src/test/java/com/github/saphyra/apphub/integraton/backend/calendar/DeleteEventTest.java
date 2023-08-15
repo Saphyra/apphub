@@ -29,7 +29,7 @@ public class DeleteEventTest extends BackEndTest {
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void deleteEvent(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -56,7 +56,12 @@ public class DeleteEventTest extends BackEndTest {
             .map(OccurrenceResponse::getEventId)
             .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        //Null referenceDateDay
+        nullReferenceDateDay(language, accessTokenId, eventId);
+        nullReferenceDateMonth(language, accessTokenId, eventId);
+        deleteEvent(language, accessTokenId, eventId);
+    }
+
+    private static void nullReferenceDateDay(Language language, UUID accessTokenId, UUID eventId) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
@@ -65,8 +70,9 @@ public class DeleteEventTest extends BackEndTest {
         Response nullReferenceDateDayResponse = EventActions.getDeleteEventResponse(language, accessTokenId, eventId, nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+    }
 
-        //Null referenceDateMonth
+    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, UUID eventId) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
@@ -75,8 +81,9 @@ public class DeleteEventTest extends BackEndTest {
         Response nullReferenceDateMonthResponse = EventActions.getDeleteEventResponse(language, accessTokenId, eventId, nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+    }
 
-        //Delete event
+    private static void deleteEvent(Language language, UUID accessTokenId, UUID eventId) {
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)

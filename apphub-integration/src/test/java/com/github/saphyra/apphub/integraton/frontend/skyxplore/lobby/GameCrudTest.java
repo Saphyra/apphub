@@ -18,7 +18,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameCrudTest extends SeleniumTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void gameCrud() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
@@ -37,28 +36,36 @@ public class GameCrudTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(60, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue();
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)));
 
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver3, userData1.getUsername(), userData3.getUsername());
 
         SkyXploreMainMenuActions.openCreateGameDialog(driver1);
 
-        //Create lobby - Game name too short
+        createLobby_gameNameTooShort(driver1);
+        createLobby_gameNameTooLong(driver1);
+        createLobby(driver1);
+        startGame_notReady(driver1);
+        startGame(driver1, driver2, userData1, userData2);
+        createLobbyFromExistingGame(driver1, driver2, userData1);
+        startGame_notAllMembersReady(driver1);
+        checkIfNotMemberFriendIsNotAvailableToInvite(driver1);
+        checkIfMemberFriendIsAvailableToInvite(driver1, driver2);
+        startGame_notAllMembersPresent(driver1);
+    }
+
+    private static void createLobby_gameNameTooShort(WebDriver driver1) {
         SkyXploreMainMenuActions.fillGameName(driver1, "aa");
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl rövid. (Minimum 3 karakter)");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Game name too short. (Minimum 3 characters)");
+    }
 
-        //Create lobby - Game name too long
+    private static void createLobby_gameNameTooLong(WebDriver driver1) {
         SkyXploreMainMenuActions.fillGameName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Játék név túl hosszú. (Maximum 30 karakter)");
+        SkyXploreMainMenuActions.verifyInvalidGameName(driver1, "Game name too long. (Maximum 30 characters)");
+    }
 
-        //Create lobby
+    private static void createLobby(WebDriver driver1) {
         SkyXploreMainMenuActions.fillGameName(driver1, "game-name");
         SkyXploreMainMenuActions.verifyValidGameName(driver1);
 
@@ -67,13 +74,15 @@ public class GameCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE))
             .assertTrue("SkyXplore Lobby page is not loaded.");
+    }
 
-        //Start game - not ready
+    private static void startGame_notReady(WebDriver driver1) {
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
+        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
+    }
 
-        //Start game
+    private static void startGame(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 
@@ -93,8 +102,9 @@ public class GameCrudTest extends SeleniumTest {
         AwaitilityWrapper.create(60, 1)
             .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE))
             .assertTrue("SkyXplore Game page is not loaded for member.");
+    }
 
-        //Create lobby from existing game
+    private static void createLobbyFromExistingGame(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1) {
         SkyXploreGameActions.exit(driver1);
         SkyXploreGameActions.exit(driver2);
 
@@ -104,22 +114,26 @@ public class GameCrudTest extends SeleniumTest {
             .load(driver1);
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
+    }
 
-        //Start game - Not all members ready
+    private static void startGame_notAllMembersReady(WebDriver driver1) {
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Még nincs kész mindenki.");
+        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
+    }
 
-        //Check if not-member friend is not available to invite
+    private static void checkIfNotMemberFriendIsNotAvailableToInvite(WebDriver driver1) {
         assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
+    }
 
-        //Check if member friend is available to invite
+    private static void checkIfMemberFriendIsAvailableToInvite(WebDriver driver1, WebDriver driver2) {
         SkyXploreLobbyActions.exitLobby(driver2);
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreLobbyActions.getOnlineFriends(driver1).isEmpty())
             .assertTrue("Exited lobby member not invitable");
+    }
 
-        //Start game - Not all members present
+    private static void startGame_notAllMembersPresent(WebDriver driver1) {
         SkyXploreLobbyActions.setReady(driver1);
 
         SkyXploreLobbyActions.startGameCreation(driver1);

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
@@ -37,22 +36,22 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotebookActions {
-    public static UUID createCategory(Language language, UUID accessTokenId, CreateCategoryRequest request) {
-        Response response = getCreateCategoryResponse(language, accessTokenId, request);
+    public static UUID createCategory(UUID accessTokenId, CreateCategoryRequest request) {
+        Response response = getCreateCategoryResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateCategoryResponse(Language language, UUID accessTokenId, CreateCategoryRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateCategoryResponse(UUID accessTokenId, CreateCategoryRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CATEGORY));
     }
 
-    public static List<CategoryTreeView> getCategoryTree(Language language, UUID accessTokenId) {
+    public static List<CategoryTreeView> getCategoryTree(UUID accessTokenId) {
         return Arrays.stream(
-                RequestFactory.createAuthorizedRequest(language, accessTokenId)
+                RequestFactory.createAuthorizedRequest(accessTokenId)
                     .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE))
                     .getBody()
                     .as(CategoryTreeView[].class)
@@ -60,191 +59,191 @@ public class NotebookActions {
             .collect(Collectors.toList());
     }
 
-    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId) {
-        return getChildrenOfCategory(language, accessTokenId, categoryId, Collections.emptyList(), null);
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(UUID accessTokenId, UUID categoryId) {
+        return getChildrenOfCategory(accessTokenId, categoryId, Collections.emptyList(), null);
     }
 
-    public static ChildrenOfCategoryResponse getChildrenOfCategory(Language language, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
-        Response response = getChildrenOfCategoryResponse(language, accessTokenId, categoryId, types, exclude);
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
+        Response response = getChildrenOfCategoryResponse(accessTokenId, categoryId, types, exclude);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(ChildrenOfCategoryResponse.class);
     }
 
-    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, List<String> types) {
-        return getChildrenOfCategoryResponse(language, accessTokenId, categoryId, types, null);
+    public static Response getChildrenOfCategoryResponse(UUID accessTokenId, UUID categoryId, List<String> types) {
+        return getChildrenOfCategoryResponse(accessTokenId, categoryId, types, null);
     }
 
-    public static Response getChildrenOfCategoryResponse(Language language, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
+    public static Response getChildrenOfCategoryResponse(UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("categoryId", categoryId);
         queryParams.put("type", String.join(",", types));
         queryParams.put("exclude", exclude);
 
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
     }
 
-    public static void deleteListItem(Language language, UUID accessTokenId, UUID listItemId) {
-        Response response = getDeleteListItemResponse(language, accessTokenId, listItemId);
+    public static void deleteListItem(UUID accessTokenId, UUID listItemId) {
+        Response response = getDeleteListItemResponse(accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteListItemResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getDeleteListItemResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static UUID createText(Language language, UUID accessTokenId, CreateTextRequest request) {
-        Response response = getCreateTextResponse(language, accessTokenId, request);
+    public static UUID createText(UUID accessTokenId, CreateTextRequest request) {
+        Response response = getCreateTextResponse(accessTokenId, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateTextResponse(Language language, UUID accessTokenId, CreateTextRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateTextResponse(UUID accessTokenId, CreateTextRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_TEXT));
     }
 
-    public static TextResponse getText(Language language, UUID accessTokenId, UUID textId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static TextResponse getText(UUID accessTokenId, UUID textId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TextResponse.class);
     }
 
-    public static void editText(Language language, UUID accessTokenId, UUID textId, EditTextRequest request) {
-        Response response = getEditTextResponse(language, accessTokenId, textId, request);
+    public static void editText(UUID accessTokenId, UUID textId, EditTextRequest request) {
+        Response response = getEditTextResponse(accessTokenId, textId, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditTextResponse(Language language, UUID accessTokenId, UUID textId, EditTextRequest editTextRequest) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditTextResponse(UUID accessTokenId, UUID textId, EditTextRequest editTextRequest) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editTextRequest)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_TEXT, "listItemId", textId));
     }
 
-    public static UUID createLink(Language language, UUID accessTokenId, CreateLinkRequest request) {
-        Response response = getCreateLinkResponse(language, accessTokenId, request);
+    public static UUID createLink(UUID accessTokenId, CreateLinkRequest request) {
+        Response response = getCreateLinkResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateLinkResponse(Language language, UUID accessTokenId, CreateLinkRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateLinkResponse(UUID accessTokenId, CreateLinkRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_LINK));
     }
 
-    public static UUID createChecklist(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
-        Response response = getCreateChecklistItemResponse(language, accessTokenId, request);
+    public static UUID createChecklist(UUID accessTokenId, CreateChecklistItemRequest request) {
+        Response response = getCreateChecklistItemResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateChecklistItemResponse(Language language, UUID accessTokenId, CreateChecklistItemRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateChecklistItemResponse(UUID accessTokenId, CreateChecklistItemRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
     }
 
-    public static void editListItem(Language language, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
-        Response response = getEditListItemResponse(language, accessTokenId, editListItemRequest, listItemId);
+    public static void editListItem(UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+        Response response = getEditListItemResponse(accessTokenId, editListItemRequest, listItemId);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditListItemResponse(Language language, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditListItemResponse(UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editListItemRequest)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static ChecklistResponse getChecklist(Language language, UUID accessTokenId, UUID listItemId) {
-        Response response = getChecklistResponse(language, accessTokenId, listItemId);
+    public static ChecklistResponse getChecklist(UUID accessTokenId, UUID listItemId) {
+        Response response = getChecklistResponse(accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(ChecklistResponse.class);
     }
 
-    public static Response getChecklistResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getChecklistResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", listItemId));
     }
 
-    public static void editChecklist(Language language, UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
-        Response response = getEditChecklistResponse(language, accessTokenId, editRequest, listItemId);
+    public static void editChecklist(UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
+        Response response = getEditChecklistResponse(accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditChecklistResponse(Language language, UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditChecklistResponse(UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editRequest)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
     }
 
-    public static void updateChecklistItemStatus(Language language, UUID accessTokenId, UUID checklistItemId, boolean status) {
-        Response response = getUpdateChecklistItemStatusResponse(language, accessTokenId, checklistItemId, status);
+    public static void updateChecklistItemStatus(UUID accessTokenId, UUID checklistItemId, boolean status) {
+        Response response = getUpdateChecklistItemStatusResponse(accessTokenId, checklistItemId, status);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistItemStatusResponse(Language language, UUID accessTokenId, UUID checklistItemId, boolean status) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getUpdateChecklistItemStatusResponse(UUID accessTokenId, UUID checklistItemId, boolean status) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
     }
 
-    public static UUID createTable(Language language, UUID accessTokenId, CreateTableRequest request) {
-        Response response = getCreateTableResponse(language, accessTokenId, request);
+    public static UUID createTable(UUID accessTokenId, CreateTableRequest request) {
+        Response response = getCreateTableResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateTableResponse(Language language, UUID accessTokenId, CreateTableRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateTableResponse(UUID accessTokenId, CreateTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_TABLE));
     }
 
-    public static void editTable(Language language, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
-        Response response = getEditTableResponse(language, accessTokenId, listItemId, editTableRequest);
+    public static void editTable(UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+        Response response = getEditTableResponse(accessTokenId, listItemId, editTableRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditTableResponse(Language language, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditTableResponse(UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editTableRequest)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
     }
 
-    public static TableResponse getTable(Language language, UUID accessTokenId, UUID listItemId) {
-        Response response = getTableResponse(language, accessTokenId, listItemId);
+    public static TableResponse getTable(UUID accessTokenId, UUID listItemId) {
+        Response response = getTableResponse(accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TableResponse.class);
     }
 
-    public static Response getTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getTableResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TABLE, "listItemId", listItemId));
     }
 
-    public static Response getCloneListItemResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCloneListItemResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static UUID createChecklistTable(Language language, UUID accessTokenId, CreateChecklistTableRequest request) {
-        Response response = getCreateChecklistTableResponse(language, accessTokenId, request);
+    public static UUID createChecklistTable(UUID accessTokenId, CreateChecklistTableRequest request) {
+        Response response = getCreateChecklistTableResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -253,14 +252,14 @@ public class NotebookActions {
             .getUUID("value");
     }
 
-    public static Response getCreateChecklistTableResponse(Language language, UUID accessTokenId, CreateChecklistTableRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateChecklistTableResponse(UUID accessTokenId, CreateChecklistTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE));
     }
 
-    public static ChecklistTableResponse getChecklistTable(Language language, UUID accessTokenId, UUID listItemId) {
-        Response response = getChecklistTableResponse(language, accessTokenId, listItemId);
+    public static ChecklistTableResponse getChecklistTable(UUID accessTokenId, UUID listItemId) {
+        Response response = getChecklistTableResponse(accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -268,72 +267,72 @@ public class NotebookActions {
             .as(ChecklistTableResponse.class);
     }
 
-    public static Response getChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getChecklistTableResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static ChecklistTableResponse editChecklistTable(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
-        Response response = getEditChecklistTableResponse(language, accessTokenId, listItemId, request);
+    public static ChecklistTableResponse editChecklistTable(UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
+        Response response = getEditChecklistTableResponse(accessTokenId, listItemId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(ChecklistTableResponse.class);
     }
 
-    public static Response getEditChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditChecklistTableResponse(UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static void updateChecklistTableRowStatus(Language language, UUID accessTokenId, UUID rowId, boolean status) {
-        Response response = getUpdateChecklistTableRowStatusResponse(language, accessTokenId, rowId, status);
+    public static void updateChecklistTableRowStatus(UUID accessTokenId, UUID rowId, boolean status) {
+        Response response = getUpdateChecklistTableRowStatusResponse(accessTokenId, rowId, status);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistTableRowStatusResponse(Language language, UUID accessTokenId, UUID rowId, boolean status) {
+    public static Response getUpdateChecklistTableRowStatusResponse(UUID accessTokenId, UUID rowId, boolean status) {
         Map<String, Object> pathVariables = Map.of("rowId", rowId);
 
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
     }
 
-    public static Response getConvertTableToChecklistTableResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getConvertTableToChecklistTableResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static Response getDeleteCheckedChecklistItemsResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getDeleteCheckedChecklistItemsResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST, "listItemId", listItemId));
     }
 
-    public static Response getDeleteCheckedChecklistTableItemsResponse(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getDeleteCheckedChecklistTableItemsResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
-    public static Response orderChecklistItems(Language language, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response orderChecklistItems(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }
 
-    public static Response getPinResponse(Language language, UUID accessTokenId, UUID listItemId, Boolean pinned) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getPinResponse(UUID accessTokenId, UUID listItemId, Boolean pinned) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(pinned))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_PIN_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static void pin(Language language, UUID accessTokenId, UUID listItemId, Boolean pinned) {
-        Response response = getPinResponse(language, accessTokenId, listItemId, pinned);
+    public static void pin(UUID accessTokenId, UUID listItemId, Boolean pinned) {
+        Response response = getPinResponse(accessTokenId, listItemId, pinned);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<NotebookView> getPinnedItems(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<NotebookView> getPinnedItems(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PINNED_ITEMS));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -342,48 +341,48 @@ public class NotebookActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getSearchResponse(Language language, UUID accessTokenId, String searchText) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getSearchResponse(UUID accessTokenId, String searchText) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(searchText))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_SEARCH));
     }
 
-    public static List<NotebookView> search(Language language, UUID accessTokenId, String search) {
-        Response response = getSearchResponse(language, accessTokenId, search);
+    public static List<NotebookView> search(UUID accessTokenId, String search) {
+        Response response = getSearchResponse(accessTokenId, search);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(NotebookView[].class));
     }
 
-    public static void archive(Language language, UUID accessTokenId, UUID listItemId, boolean archived) {
-        Response response = getArchiveResponse(language, accessTokenId, listItemId, archived);
+    public static void archive(UUID accessTokenId, UUID listItemId, boolean archived) {
+        Response response = getArchiveResponse(accessTokenId, listItemId, archived);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getArchiveResponse(Language language, UUID accessTokenId, UUID listItemId, Boolean archived) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getArchiveResponse(UUID accessTokenId, UUID listItemId, Boolean archived) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(archived))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static UUID createOnlyTitle(Language language, UUID accessTokenId, CreateOnlyTitleyRequest request) {
-        Response response = getCreateOnlyTitleResponse(language, accessTokenId, request);
+    public static UUID createOnlyTitle(UUID accessTokenId, CreateOnlyTitleyRequest request) {
+        Response response = getCreateOnlyTitleResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateOnlyTitleResponse(Language language, UUID accessTokenId, CreateOnlyTitleyRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateOnlyTitleResponse(UUID accessTokenId, CreateOnlyTitleyRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_ONLY_TITLE));
     }
 
-    public static Response getDeleteChecklistItemResponse(Language language, UUID accessTokenId, UUID checklistItemId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getDeleteChecklistItemResponse(UUID accessTokenId, UUID checklistItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
 }

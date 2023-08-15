@@ -23,19 +23,29 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "index"})
     public void loginAndOut(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
 
-        //Unknown email
+        unknownEmail(language, userData);
+        LoginRequest incorrectPasswordRequest = incorrectPassword(language, userData);
+        successfulLogin_rememberMe(language, userData);
+
+        LoginResponse oneTimeLoginResponse = oneTimeLogin(language, userData);
+        logout(language, oneTimeLoginResponse);
+        lockUser(language, userData, incorrectPasswordRequest);
+    }
+
+    private static void unknownEmail(Language language, RegistrationParameters userData) {
         LoginRequest unknownEmailRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
             .build();
         Response unknownEmailResponse = IndexPageActions.getLoginResponse(language, unknownEmailRequest);
         verifyErrorResponse(language, unknownEmailResponse, 401, ErrorCode.BAD_CREDENTIALS);
+    }
 
-        //Incorrect password
+    private static LoginRequest incorrectPassword(Language language, RegistrationParameters userData) {
         IndexPageActions.registerUser(language, userData.toRegistrationRequest());
 
         LoginRequest incorrectPasswordRequest = LoginRequest.builder()
@@ -44,8 +54,10 @@ public class LoginTest extends BackEndTest {
             .build();
         Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(language, incorrectPasswordRequest);
         verifyErrorResponse(language, incorrectPasswordResponse, 401, ErrorCode.BAD_CREDENTIALS);
+        return incorrectPasswordRequest;
+    }
 
-        //Successful login - remember me
+    private static void successfulLogin_rememberMe(Language language, RegistrationParameters userData) {
         LoginRequest rememberMeLoginRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
@@ -58,10 +70,11 @@ public class LoginTest extends BackEndTest {
         LocalDateTime newLastAccess = LocalDateTime.now().minusDays(100);
         DatabaseUtil.updateAccessTokenLastAccess(rememberMeLoginResponse.getAccessTokenId(), newLastAccess);
 
-        Response modulesResponse = ModulesActions.getModulesResponse(language, rememberMeLoginResponse.getAccessTokenId());
+        Response modulesResponse = ModulesActions.getModulesResponse(rememberMeLoginResponse.getAccessTokenId());
         assertThat(modulesResponse.getStatusCode()).isEqualTo(200);
+    }
 
-        //One time login
+    private static LoginResponse oneTimeLogin(Language language, RegistrationParameters userData) {
         LoginRequest oneTimeLoginRequest = LoginRequest.builder()
             .email(userData.getEmail())
             .password(userData.getPassword())
@@ -70,8 +83,10 @@ public class LoginTest extends BackEndTest {
 
         LoginResponse oneTimeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(language, oneTimeLoginRequest);
         assertThat(oneTimeLoginResponse.getExpirationDays()).isNull();
+        return oneTimeLoginResponse;
+    }
 
-        //Logout
+    private static void logout(Language language, LoginResponse oneTimeLoginResponse) {
         UUID accessTokenId = oneTimeLoginResponse.getAccessTokenId();
         ModulesActions.logout(language, accessTokenId);
 
@@ -82,8 +97,15 @@ public class LoginTest extends BackEndTest {
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
         assertThat(errorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.SESSION_EXPIRED));
+    }
 
-        //Lock user
+    private static void lockUser(Language language, RegistrationParameters userData, LoginRequest incorrectPasswordRequest) {
+        LoginRequest oneTimeLoginRequest = LoginRequest.builder()
+            .email(userData.getEmail())
+            .password(userData.getPassword())
+            .rememberMe(false)
+            .build();
+
         Stream.generate(() -> "")
             .limit(2)
             .map(s -> IndexPageActions.getLoginResponse(language, incorrectPasswordRequest))

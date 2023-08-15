@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExitFromLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void hostLeftTheLobby() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -68,7 +68,11 @@ public class ExitFromLobbyTest extends BackEndTest {
 
         ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
 
-        //Member left
+        ApphubWsClient mainMenuClient = memberLeft(language, characterModel3, accessTokenId3, userId3, accessTokenId4, userId4, wsClient);
+        hostLeft(language, characterModel1, accessTokenId1, userId1, accessTokenId2, userId2, userId4, wsClient, mainMenuClient);
+    }
+
+    private static ApphubWsClient memberLeft(Language language, SkyXploreCharacterModel characterModel3, UUID accessTokenId3, UUID userId3, UUID accessTokenId4, UUID userId4, ApphubWsClient wsClient) {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId3, userId4);
         ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId4);
 
@@ -86,8 +90,11 @@ public class ExitFromLobbyTest extends BackEndTest {
 
         wsClient.clearMessages();
         mainMenuClient.clearMessages();
+        return mainMenuClient;
+    }
 
-        //Host left
+    private static void hostLeft(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, UUID userId2, UUID userId4, ApphubWsClient wsClient, ApphubWsClient mainMenuClient) {
+        WebSocketEvent rejectInvitationEvent;
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId2, userId4);
 
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId1);

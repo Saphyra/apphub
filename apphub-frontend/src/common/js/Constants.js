@@ -5,7 +5,7 @@ const GIGABYTES = MEGABYTES * 1024;
 const Constants = {
     //REQUEST
     COOKIE_LOCALE: "language",
-    DEFAULT_LOCALE: "hu",
+    DEFAULT_LOCALE: "en",
     HEADER_BROWSER_LANGUAGE: "BrowserLanguage",
     HEADER_REQUEST_TYPE_NAME: "Request-Type",
     HEADER_REQUEST_TYPE_VALUE: "rest",

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum EmailValidationResult {
     VALID(null),
-    INVALID("Érvénytelen e-mail cím.");
+    INVALID("Invalid e-mail address.");
 
     private final String errorMessage;
 }

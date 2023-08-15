@@ -17,7 +17,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameDataTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void getGameData(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -25,11 +25,16 @@ public class SkyXploreGameDataTest extends BackEndTest {
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, model);
 
-        //Not found
+        notFound(language, accessTokenId);
+        get(language, accessTokenId);
+    }
+
+    private static void notFound(Language language, UUID accessTokenId) {
         Response notFoundResponse = SkyXploreGameDataActions.getGameDateResponse(language, accessTokenId, "asd");
         verifyErrorResponse(language, notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        //Get
+    private static void get(Language language, UUID accessTokenId) {
         Response getResponse = SkyXploreGameDataActions.getGameDateResponse(language, accessTokenId, "community_center");
         assertThat(getResponse.getStatusCode()).isEqualTo(200);
         assertThat(getResponse.getBody().jsonPath().getString("id")).isEqualTo("community_center");

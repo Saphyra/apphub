@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -21,8 +20,19 @@ public class IndexPageActions {
         return login(locale, userData.toLoginRequest());
     }
 
+    public static UUID registerAndLogin(RegistrationParameters userData) {
+        registerUser(userData.toRegistrationRequest());
+        return login(userData.toLoginRequest());
+    }
+
     public static void registerUser(Language locale, RegistrationRequest registrationRequest) {
         Response response = getRegistrationResponse(locale, registrationRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static void registerUser(RegistrationRequest registrationRequest) {
+        Response response = getRegistrationResponse(registrationRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
@@ -30,11 +40,23 @@ public class IndexPageActions {
     public static Response getRegistrationResponse(Language locale, RegistrationRequest registrationRequest) {
         return RequestFactory.createRequest(locale)
             .body(registrationRequest)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.ACCOUNT_REGISTER));
+            .post(UrlFactory.create(Endpoints.ACCOUNT_REGISTER));
     }
 
-    public static UUID login(Language locale, String email, String password) {
-        return login(locale, LoginRequest.builder().email(email).password(password).build());
+    public static Response getRegistrationResponse(RegistrationRequest registrationRequest) {
+        return RequestFactory.createRequest()
+            .body(registrationRequest)
+            .post(UrlFactory.create(Endpoints.ACCOUNT_REGISTER));
+    }
+
+    public static UUID login(LoginRequest loginRequest) {
+        Response response = getLoginResponse(loginRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody()
+            .as(LoginResponse.class)
+            .getAccessTokenId();
     }
 
     public static UUID login(Language locale, LoginRequest loginRequest) {
@@ -59,6 +81,12 @@ public class IndexPageActions {
     public static Response getLoginResponse(Language locale, LoginRequest loginRequest) {
         return RequestFactory.createRequest(locale)
             .body(loginRequest)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.LOGIN));
+            .post(UrlFactory.create(Endpoints.LOGIN));
+    }
+
+    public static Response getLoginResponse(LoginRequest loginRequest) {
+        return RequestFactory.createRequest()
+            .body(loginRequest)
+            .post(UrlFactory.create(Endpoints.LOGIN));
     }
 }

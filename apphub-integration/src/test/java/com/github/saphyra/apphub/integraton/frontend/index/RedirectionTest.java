@@ -26,19 +26,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class RedirectionTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToIndexWhenNoAccessToken() {
         //GIVEN
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.MODULES_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.MODULES_PAGE));
 
         //THEN
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.MODULES_PAGE)));
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterLogin() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -46,7 +46,7 @@ public class RedirectionTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
         ModulesPageActions.logout(driver);
 
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
 
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
@@ -57,11 +57,11 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterRegistration() {
         WebDriver driver = extractDriver();
 
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -72,18 +72,18 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToWebWhenCalledRoot() {
         //GIVEN
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(SERVER_PORT, "/"));
+        driver.navigate().to(UrlFactory.create("/"));
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(SERVER_PORT, Endpoints.INDEX_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void autoLogin() {
         WebDriver driver = extractDriver();
 
@@ -97,7 +97,7 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue();
     }
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void redirectToErrorPage() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -112,6 +112,6 @@ public class RedirectionTest extends SeleniumTest {
 
         ErrorMessageElement errorMessageElement = ErrorPageActions.getErrorMessage(driver);
         assertThat(errorMessageElement.getErrorCode()).isEqualTo(ErrorCode.MISSING_ROLE.name());
-        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizationProperties.getProperty(Language.HUNGARIAN, LocalizationKey.MISSING_ROLE));
+        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizationProperties.getProperty(Language.ENGLISH, LocalizationKey.MISSING_ROLE));
     }
 }

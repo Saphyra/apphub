@@ -26,39 +26,39 @@ public class ModulesActions {
 
     public static Response getLogoutResponse(Language locale, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
-            .post(UrlFactory.create(TestBase.SERVER_PORT, Endpoints.LOGOUT));
+            .post(UrlFactory.create(Endpoints.LOGOUT));
     }
 
-    public static Map<String, List<ModulesResponse>> getModules(Language locale, UUID accessTokenId) {
-        Response response = getModulesResponse(locale, accessTokenId);
+    public static Map<String, List<ModulesResponse>> getModules(UUID accessTokenId) {
+        Response response = getModulesResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<Map<String, List<ModulesResponse>>>() {
+        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<>() {
         };
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Response getModulesResponse(Language locale, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+    public static Response getModulesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.MODULES_GET_MODULES_OF_USER));
     }
 
-    public static Map<String, List<ModulesResponse>> setAsFavorite(Language locale, UUID accessTokenId, String module, Boolean favorite) {
-        Response response = getSetAsFavoriteResponse(locale, accessTokenId, module, favorite);
+    public static Map<String, List<ModulesResponse>> setAsFavorite(UUID accessTokenId, String module, Boolean favorite) {
+        Response response = getSetAsFavoriteResponse(accessTokenId, module, favorite);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<Map<String, List<ModulesResponse>>>() {
+        TypeReference<Map<String, List<ModulesResponse>>> ref = new TypeReference<>() {
         };
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Response getSetAsFavoriteResponse(Language locale, UUID accessTokenId, String module, Boolean favorite) {
+    public static Response getSetAsFavoriteResponse(UUID accessTokenId, String module, Boolean favorite) {
         Map<String, Object> pathVariables = new HashMap<>();
         pathVariables.put("module", module);
 
-        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(favorite))
             .post(UrlFactory.create(Endpoints.MODULES_SET_FAVORITE, pathVariables));
     }

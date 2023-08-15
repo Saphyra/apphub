@@ -23,11 +23,10 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void createFriendRequest(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(language, userData2);
@@ -39,11 +38,18 @@ public class CreateFriendRequestTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        //Character not found
+        characterNotFound(language, accessTokenId1);
+        createFriendRequest(language, accessTokenId1, accessTokenId2, model1, model2, userId2);
+        friendRequestAlreadyExists(language, accessTokenId1, userId2);
+        friendshipAlreadyExists(language, accessTokenId1, accessTokenId2, userId2);
+    }
+
+    private static void characterNotFound(Language language, UUID accessTokenId1) {
         Response characterNotFoundResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId1, UUID.randomUUID());
         verifyErrorResponse(language, characterNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
+    }
 
-        //Create friend request
+    private static void createFriendRequest(Language language, UUID accessTokenId1, UUID accessTokenId2, SkyXploreCharacterModel model1, SkyXploreCharacterModel model2, UUID userId2) {
         ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
 
         SentFriendRequestResponse sentFriendRequestResponse = SkyXploreFriendActions.createFriendRequest(language, accessTokenId1, userId2);
@@ -62,12 +68,14 @@ public class CreateFriendRequestTest extends BackEndTest {
             .getPayloadAs(IncomingFriendRequestResponse.class);
 
         assertThat(incomingFriendRequestResponse.getSenderName()).isEqualTo(model1.getName());
+    }
 
-        //Friend request already exists
+    private static void friendRequestAlreadyExists(Language language, UUID accessTokenId1, UUID userId2) {
         Response friendRequestAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId1, userId2);
         verifyErrorResponse(language, friendRequestAlreadyExistsResponse, 409, ErrorCode.FRIEND_REQUEST_ALREADY_EXISTS);
+    }
 
-        //Friendship already exists
+    private static void friendshipAlreadyExists(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID userId2) {
         UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
@@ -76,7 +84,5 @@ public class CreateFriendRequestTest extends BackEndTest {
         SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
         Response friendshipAlreadyExistsResponse = SkyXploreFriendActions.getCreateFriendRequestResponse(language, accessTokenId1, userId2);
         verifyErrorResponse(language, friendshipAlreadyExistsResponse, 409, ErrorCode.FRIENDSHIP_ALREADY_EXISTS);
-
-        ApphubWsClient.cleanUpConnections();
     }
 }

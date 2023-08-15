@@ -25,7 +25,7 @@ public class Citizen {
         WebElementUtils.clearAndFillContentEditable(driver, nameInput, newName);
         webElement.click();
 
-        NotificationUtil.verifySuccessNotification(driver, "Átnevezés sikeres.");
+        NotificationUtil.verifySuccessNotification(driver, "Rename successful.");
     }
 
     public int getDisplayedSkillCount() {

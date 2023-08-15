@@ -21,7 +21,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoveRoleTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void removeRole(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -31,39 +31,50 @@ public class RemoveRoleTest extends BackEndTest {
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
         UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
-        //Null userId
+        nullUserId(language, accessTokenId);
+        blankRole(language, accessTokenId);
+        userNotFound(language, accessTokenId);
+        roleNotFound(language, accessTokenId, userId);
+        removeRole(language, accessTokenId, testUser, userId);
+    }
+
+    private static void nullUserId(Language language, UUID accessTokenId) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(null)
             .role(Constants.ROLE_ADMIN)
             .build();
         Response nullUserIdResponse = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, nullUserIdRequest);
         verifyInvalidParam(language, nullUserIdResponse, "userId", "must not be null");
+    }
 
-        //Blank role
+    private static void blankRole(Language language, UUID accessTokenId) {
         RoleRequest blankRoleRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(" ")
             .build();
         Response blankRoleResponse = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, blankRoleRequest);
         verifyInvalidParam(language, blankRoleResponse, "role", "must not be null or blank");
+    }
 
-        //User not found
+    private static void userNotFound(Language language, UUID accessTokenId) {
         RoleRequest userNotFoundRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
             .role(Constants.ROLE_ADMIN)
             .build();
         Response userNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, userNotFoundRequest);
         verifyErrorResponse(language, userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
+    }
 
-        //Role not found
+    private static void roleNotFound(Language language, UUID accessTokenId, UUID userId) {
         RoleRequest roleNotFoundRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_ADMIN)
             .build();
         Response roleNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(language, accessTokenId, roleNotFoundRequest);
         verifyErrorResponse(language, roleNotFoundResponse, 404, ErrorCode.ROLE_NOT_FOUND);
+    }
 
-        //Remove role
+    private static void removeRole(Language language, UUID accessTokenId, RegistrationParameters testUser, UUID userId) {
         RoleRequest removeRoleRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_NOTEBOOK)

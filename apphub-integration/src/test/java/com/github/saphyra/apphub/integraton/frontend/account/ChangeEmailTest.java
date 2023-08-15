@@ -23,7 +23,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class ChangeEmailTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "account"})
     public void changeEmail() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -37,60 +37,80 @@ public class ChangeEmailTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
         //Invalid email
+        invalidEmail(driver);
+
+        //Empty password
+        emptyPassword(driver);
+
+        //Email already exists
+        emailAlreadyExists(driver, existingUserData);
+
+        //Incorrect password
+        incorrectPassword(driver);
+
+        //Change
+        change(driver, userData);
+    }
+
+    private static void invalidEmail(WebDriver driver) {
         AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.invalidEmail());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeEmailForm(driver, invalidEmail());
+    }
 
-        //Empty password
+    private static void emptyPassword(WebDriver driver) {
         AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.emptyPassword());
         SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeEmailForm(driver, emptyPassword());
+    }
 
-        //Email already exists
+    private static void emailAlreadyExists(WebDriver driver, RegistrationParameters existingUserData) {
         ChangeEmailParameters emailAlreadyExistsParameters = ChangeEmailParameters.valid()
             .toBuilder()
             .email(existingUserData.getEmail())
             .build();
         AccountPageActions.changeEmail(driver, emailAlreadyExistsParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Az email foglalt.");
+        NotificationUtil.verifyErrorNotification(driver, "E-mail address is already in use.");
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver driver) {
         ChangeEmailParameters incorrectPasswordParameters = ChangeEmailParameters.valid()
             .toBuilder()
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         AccountPageActions.changeEmail(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
+    }
 
-        //Change
+    private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangeEmailParameters changeParameters = ChangeEmailParameters.valid();
         AccountPageActions.changeEmail(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Email cím megváltoztatva.");
+        NotificationUtil.verifySuccessNotification(driver, "Email changed successfully.");
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        ToastMessageUtil.verifyErrorToast(driver, "Az email cím és jelszó kombinációja ismeretlen.");
+        ToastMessageUtil.verifyErrorToast(driver, "Unknown combination of e-mail address and password.");
         IndexPageActions.submitLogin(driver, LoginParameters.builder().email(changeParameters.getEmail()).password(userData.getPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();
     }
 
-    private ChangeEmailValidationResult valid() {
+    private static ChangeEmailValidationResult valid() {
         return ChangeEmailValidationResult.builder()
             .email(EmailValidationResult.VALID)
             .password(ChEmailPasswordValidationResult.VALID)
             .build();
     }
 
-    private ChangeEmailValidationResult invalidEmail() {
+    private static ChangeEmailValidationResult invalidEmail() {
         return valid()
             .toBuilder()
             .email(EmailValidationResult.INVALID)
             .build();
     }
 
-    private ChangeEmailValidationResult emptyPassword() {
+    private static ChangeEmailValidationResult emptyPassword() {
         return valid()
             .toBuilder()
             .password(ChEmailPasswordValidationResult.EMPTY_PASSWORD)

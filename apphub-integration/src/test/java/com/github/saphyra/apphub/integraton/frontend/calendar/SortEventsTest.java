@@ -28,7 +28,7 @@ public class SortEventsTest extends SeleniumTest {
     private static final String LATER_PENDING_TITLE = "later-pending-title";
     private static final String NO_TIME_PENDING_TITLE = "no-time-pending-title";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void orderOfEvents() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -38,15 +38,23 @@ public class SortEventsTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
 
-        //Create Expired event
+        createExpiredEvent(driver);
+        createSnoozedEvent(driver);
+        createDoneEvent(driver);
+        createPendingEvent(driver);
+        checkOrder(driver);
+    }
+
+    private static void createExpiredEvent(WebDriver driver) {
         CalendarActions.previousMonth(driver);
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH.minusMonths(1));
         CalendarActions.fillEventTitle(driver, EXPIRED_TITLE);
         CalendarActions.pushCreateEventButton(driver);
 
         SleepUtil.sleep(1000);
+    }
 
-        //Create Snoozed event
+    private static void createSnoozedEvent(WebDriver driver) {
         CalendarActions.nextMonth(driver);
         CalendarActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         CalendarActions.fillEventTitle(driver, SNOOZED_TITLE);
@@ -54,16 +62,18 @@ public class SortEventsTest extends SeleniumTest {
         CalendarActions.openEvent(driver, SNOOZED_TITLE);
         CalendarActions.markAsSnoozed(driver);
         CalendarActions.closeViewEventPage(driver);
+    }
 
-        //Create Done event
+    private static void createDoneEvent(WebDriver driver) {
         CalendarActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         CalendarActions.fillEventTitle(driver, DONE_TITLE);
         CalendarActions.pushCreateEventButton(driver);
         CalendarActions.openEvent(driver, DONE_TITLE);
         CalendarActions.markAsDone(driver);
         CalendarActions.closeViewEventPage(driver);
+    }
 
-        //Create Pending event
+    private static void createPendingEvent(WebDriver driver) {
         CalendarActions.openCreateEventWindowAt(driver, CURRENT_DATE);
         CalendarActions.fillEventTitle(driver, PENDING_TITLE);
         CalendarActions.setCreateEventHours(driver, "10");
@@ -81,8 +91,9 @@ public class SortEventsTest extends SeleniumTest {
         CalendarActions.pushCreateEventButton(driver);
 
         SleepUtil.sleep(1000);
+    }
 
-        //Check order
+    private static void checkOrder(WebDriver driver) {
         List<String> dailyTasks = CalendarActions.getDailyTasks(driver)
             .stream()
             .map(WebElement::getText)

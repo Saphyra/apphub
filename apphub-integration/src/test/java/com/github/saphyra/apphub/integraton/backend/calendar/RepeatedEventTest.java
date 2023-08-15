@@ -28,7 +28,7 @@ public class RepeatedEventTest extends BackEndTest {
     private static final String CONTENT = "content";
     private static final Integer REPETITION_DAYS = 5;
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void oneTimeEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -53,7 +53,7 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(2))).isNotEmpty();
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void daysOfWeekEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -85,7 +85,7 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, firstThursday.plusDays(1))).isNotEmpty();
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void daysOfMonthEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -121,7 +121,7 @@ public class RepeatedEventTest extends BackEndTest {
         assertThat(findByDate(responses, date.plusDays(2))).isNotEmpty();
     }
 
-    @Test
+    @Test(groups = {"be", "calendar"})
     public void everyXDaysEvent() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();

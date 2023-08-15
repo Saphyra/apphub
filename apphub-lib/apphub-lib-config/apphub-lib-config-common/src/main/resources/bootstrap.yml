@@ -66,7 +66,7 @@ event:
 supportedLocales:
 - hu
 - en
-defaultLocale: hu
+defaultLocale: en
 fileUpload:
   maxFileSize: 2147483648 #2 GB
 

@@ -1,0 +1,19 @@
+===FEATURES===
+Platform
+    Log the order of integration tests ran (+ add the method name to status bar)
+    Run only specified test groups
+
+===BUGFIXES===
+Notebook
+    Accidentally enabled "Add new item" button for checklist
+
+===PLATFORM CHANGES===
+Default language is set to English
+Add error handling to integration tests executor service
+Store Selenium test error reports at a common place
+Feature Switch for WebDriver cache
+Add groups for all the integration tests
+Extract the steps of the integration tests to private methods
+
+===TECHNICAL DEBTS===
+Extract config and logging from TestBase

@@ -33,7 +33,7 @@ Date.prototype.minusMonths = function(months){
 }
 
 function formatDate(date){
-    return date.getFullYear() + "-" + withLeadingZeros((date.getMonth() + 1), 2) + "-" + withLeadingZeros(date.getDate(), 2) + " " + date.toLocaleTimeString(getLocale());
+    return date.getFullYear() + "-" + withLeadingZeros((date.getMonth() + 1), 2) + "-" + withLeadingZeros(date.getDate(), 2) + " " + date.toLocaleTimeString("hu");
 }
 
 window.LocalDateTime = new function(){

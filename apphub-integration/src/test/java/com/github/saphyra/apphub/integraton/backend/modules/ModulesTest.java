@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.integraton.backend.modules;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
-import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.structure.api.ModulesResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -15,24 +14,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.core.TestConfiguration.DISABLED_TEST_GROUPS;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
-    public void getModules(Language locale) {
+    @Test(groups = {"be", "modules"})
+    public void getModules() {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        IndexPageActions.registerUser(locale, registrationRequest);
+        IndexPageActions.registerUser(registrationRequest);
         UUID accessTokenId = IndexPageActions.login(
-            locale,
             LoginRequest.builder()
                 .email(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(locale, accessTokenId);
+        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(accessTokenId);
 
         assertThat(result).containsKeys("accounts", "office", "development-utils");
 
@@ -117,21 +116,28 @@ public class ModulesTest extends BackEndTest {
         }
     }
 
-    @Test(dataProvider = "languageDataProvider")
-    public void setAsFavorite(Language locale) {
+    @Test(groups = {"be", "modules"})
+    public void setAsFavorite() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(locale, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        //Unknown module
-        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "unknown-module", true);
-        verifyInvalidParam(locale, unknownModuleResponse, "module", "does not exist");
+        unknownModule(accessTokenId);
+        favoriteNull(accessTokenId);
+        setAsFavorite(accessTokenId);
+    }
 
-        //Favorite null
-        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(locale, accessTokenId, "account", null);
-        verifyInvalidParam(locale, favoriteNullResponse, "value", "must not be null");
+    private static void unknownModule(UUID accessTokenId) {
+        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(accessTokenId, "unknown-module", true);
+        verifyInvalidParam(unknownModuleResponse, "module", "does not exist");
+    }
 
-        //Set as favorite
-        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(locale, accessTokenId, "account", true);
+    private static void favoriteNull(UUID accessTokenId) {
+        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(accessTokenId, "account", null);
+        verifyInvalidParam(favoriteNullResponse, "value", "must not be null");
+    }
+
+    private static void setAsFavorite(UUID accessTokenId) {
+        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(accessTokenId, "account", true);
 
         assertThat(setAsFavoriteResponse).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()

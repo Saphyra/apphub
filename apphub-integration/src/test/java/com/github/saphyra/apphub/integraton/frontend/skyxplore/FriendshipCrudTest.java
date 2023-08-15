@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -14,12 +13,9 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FriendshipCrudTest extends SeleniumTest {
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void friendshipCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -27,19 +23,17 @@ public class FriendshipCrudTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
-        for (int i = 0; i < 120; i++) {
-            if (futures.stream().allMatch(Future::isDone)) {
-                break;
-            }
+        SentFriendRequest sentFriendRequest = sendFriendRequest(driver1, driver2, userData1, userData2);
+        cancelFriendRequestBySender(driver1, driver2, sentFriendRequest);
+        cancelFriendRequestByFriend(driver1, driver2, userData1, userData2);
+        Friend friend = acceptFriendRequest(driver1, driver2, userData1, userData2);
+        removeFriendshipBySender(driver1, driver2, friend);
+        removeFriendshipByFriend(driver1, driver2, userData1, userData2);
+    }
 
-            SleepUtil.sleep(1000);
-        }
-
-        //Send friend request
+    private static SentFriendRequest sendFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -55,8 +49,10 @@ public class FriendshipCrudTest extends SeleniumTest {
             .filter(incomingFriendRequest -> incomingFriendRequest.getSenderName().equals(userData1.getUsername()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest not found."));
+        return sentFriendRequest;
+    }
 
-        //Cancel friend request by sender
+    private static void cancelFriendRequestBySender(WebDriver driver1, WebDriver driver2, SentFriendRequest sentFriendRequest) {
         sentFriendRequest.cancel();
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getSentFriendRequests(driver1), List::isEmpty)
@@ -64,8 +60,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getIncomingFriendRequests(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest still present."));
+    }
 
-        //Cancel friend request by friend
+    private static void cancelFriendRequestByFriend(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -82,8 +79,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getIncomingFriendRequests(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("IncomingFriendRequest still present."));
+    }
 
-        //Accept friend request
+    private static Friend acceptFriendRequest(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();
@@ -112,8 +110,10 @@ public class FriendshipCrudTest extends SeleniumTest {
             .filter(fr -> fr.getName().equals(userData1.getUsername()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Friend not found."));
+        return friend;
+    }
 
-        //Remove friendship by sender
+    private static void removeFriendshipBySender(WebDriver driver1, WebDriver driver2, Friend friend) {
         friend.remove();
         SkyXploreMainMenuActions.confirmFriendDeletion(driver1);
 
@@ -122,8 +122,9 @@ public class FriendshipCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.getWithWait(() -> SkyXploreFriendshipActions.getFriends(driver2), List::isEmpty)
             .orElseThrow(() -> new RuntimeException("Friend still present."));
+    }
 
-        //Remove friendship by friend
+    private static void removeFriendshipByFriend(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
         SkyXploreFriendshipActions.fillSearchCharacterForm(driver1, userData2.getUsername());
         SkyXploreFriendshipActions.findFriendCandidate(driver1, userData2.getUsername())
             .click();

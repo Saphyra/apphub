@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void terraformCD(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -49,24 +49,35 @@ public class TerraformTest extends BackEndTest {
 
         UUID emptySurfaceId = findEmptySurface(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        //Invalid surfaceType
+        invalidSurfaceType(language, accessTokenId, planetId, emptySurfaceId);
+        surfaceNotEmpty(language, accessTokenId, planetId);
+        incompatibleSurfaceType(language, accessTokenId, planetId, emptySurfaceId);
+        UUID constructionId = terraform(language, accessTokenId, gameWsClient, planetId, emptySurfaceId);
+        terraformationAlreadyInProgress(language, accessTokenId, planetId, emptySurfaceId);
+        cancel(language, accessTokenId, gameWsClient, planetId, emptySurfaceId, constructionId);
+    }
+
+    private static void invalidSurfaceType(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
         Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, "asd");
 
         ResponseValidator.verifyInvalidParam(language, invalidSurfaceTypeResponse, "surfaceType", "invalid value");
+    }
 
-        //Surface not empty
+    private void surfaceNotEmpty(Language language, UUID accessTokenId, UUID planetId) {
         UUID occupiedSurfaceId = findOccupiedDesert(language, accessTokenId, planetId);
 
         Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
 
         ResponseValidator.verifyForbiddenOperation(language, surfaceOccupiedResponse);
+    }
 
-        //Incompatible surfaceType
+    private static void incompatibleSurfaceType(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
         Response incompatibleSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_OIL_FIELD);
 
         ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
+    }
 
-        //Terraform
+    private UUID terraform(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID emptySurfaceId) {
         SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
         SurfaceResponse modifiedSurfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(emptySurfaceId))
             .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
@@ -88,13 +99,17 @@ public class TerraformTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED + " event not arrived"));
 
         assertThat(findBySurfaceId(language, accessTokenId, planetId, emptySurfaceId).getTerraformation()).isNotNull();
+        return constructionId;
+    }
 
-        //Terraformation already in progress
+    private static void terraformationAlreadyInProgress(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
         Response alreadyInProgressResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
 
         ResponseValidator.verifyErrorResponse(language, alreadyInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+    }
 
-        //Cancel
+    private void cancel(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, UUID emptySurfaceId, UUID constructionId) {
+        SurfaceResponse modifiedSurfaceResponse;
         gameWsClient.clearMessages();
         SkyXploreSurfaceActions.cancelTerraformation(language, accessTokenId, planetId, emptySurfaceId);
         modifiedSurfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(emptySurfaceId))
@@ -114,7 +129,7 @@ public class TerraformTest extends BackEndTest {
         assertThat(findBySurfaceId(language, accessTokenId, planetId, emptySurfaceId).getTerraformation()).isNull();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void finishTerraformation() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

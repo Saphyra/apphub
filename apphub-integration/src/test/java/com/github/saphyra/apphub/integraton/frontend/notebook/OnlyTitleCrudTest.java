@@ -21,7 +21,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title";
     private static final String NEW_ONLY_TITLE_TITLE = "new-only-title";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void onlyTitleCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -33,30 +33,40 @@ public class OnlyTitleCrudTest extends SeleniumTest {
         NotebookActions.newListItem(driver);
         NotebookNewListItemActions.selectListItem(driver, ListItemType.ONLY_TITLE);
 
-        //Create - Blank title
+        create_blankTitle(driver);
+        create(driver);
+        edit_blankTitle(driver);
+        edit(driver);
+        delete(driver);
+    }
+
+    private static void create_blankTitle(WebDriver driver) {
         NewOnlyTitleActions.fillTitle(driver, " ");
         NewOnlyTitleActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Create
+    private static void create(WebDriver driver) {
         NewOnlyTitleActions.fillTitle(driver, ONLY_TITLE_TITLE);
         NewOnlyTitleActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
             .assertTrue("OnlyTitle is not created");
+    }
 
-        //Edit - Blank title
+    private static void edit_blankTitle(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, ONLY_TITLE_TITLE)
             .edit(driver);
         EditListItemActions.fillTitle(driver, " ");
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+    }
 
-        //Edit
+    private static void edit(WebDriver driver) {
         EditListItemActions.fillTitle(driver, NEW_ONLY_TITLE_TITLE);
 
         EditListItemActions.submitForm(driver);
@@ -64,8 +74,9 @@ public class OnlyTitleCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
             .assertTrue("Modifications are not saved.");
+    }
 
-        //Delete
+    private static void delete(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, NEW_ONLY_TITLE_TITLE)
             .deleteWithConfirmation(driver);
 

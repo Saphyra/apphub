@@ -29,7 +29,7 @@ public class GameSettingsTest extends BackEndTest {
 
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void gameSettings() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

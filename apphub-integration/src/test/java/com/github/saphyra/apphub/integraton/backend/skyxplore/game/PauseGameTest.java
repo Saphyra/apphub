@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PauseGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"be", "skyxplore"})
     public void pauseAndResumeGame() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

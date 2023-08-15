@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AcceptInvitationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void acceptInvitation(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -46,11 +46,16 @@ public class AcceptInvitationTest extends BackEndTest {
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
 
-        //Forbidden operation
+        forbiddenOperation(language, userId1, accessTokenId3);
+        acceptInvitation(language, userId1, accessTokenId2, userId2);
+    }
+
+    private static void forbiddenOperation(Language language, UUID userId1, UUID accessTokenId3) {
         Response forbiddenOperationResponse = SkyXploreLobbyActions.getAcceptInvitationResponse(language, accessTokenId3, userId1);
         verifyForbiddenOperation(language, forbiddenOperationResponse);
+    }
 
-        //Accept invitation
+    private static void acceptInvitation(Language language, UUID userId1, UUID accessTokenId2, UUID userId2) {
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
         List<UUID> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId2)
             .stream()

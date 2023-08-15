@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -24,29 +23,31 @@ public class ConvertTableToChecklistTableTest extends BackEndTest {
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";
 
-    @Test(dataProvider = "languageDataProvider")
-    public void convertTableToChecklistTable_validation(Language language) {
+    @Test(groups = {"be", "notebook"})
+    public void convertTableToChecklistTable() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        //Item not found
-        Response itemNotFoundResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, UUID.randomUUID());
-        verifyListItemNotFound(language, itemNotFoundResponse);
+        UUID parent = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
 
-        //Invalid type
-        UUID listItemId = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
-        Response invalidTypeResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, listItemId);
-        verifyErrorResponse(language, invalidTypeResponse, 422, ErrorCode.INVALID_TYPE);
+        itemNotFound(accessTokenId);
+        invalidType(accessTokenId);
+        convert(accessTokenId, parent);
     }
 
-    @Test
-    public void convertTableToChecklistTable() {
-        Language language = Language.HUNGARIAN;
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+    private static void itemNotFound(UUID accessTokenId) {
+        Response itemNotFoundResponse = NotebookActions.getConvertTableToChecklistTableResponse(accessTokenId, UUID.randomUUID());
+        verifyListItemNotFound(itemNotFoundResponse);
+    }
 
-        UUID parent = NotebookActions.createCategory(language, accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
+    private static void invalidType(UUID accessTokenId) {
+        UUID listItemId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(TITLE).build());
+        Response invalidTypeResponse = NotebookActions.getConvertTableToChecklistTableResponse(accessTokenId, listItemId);
+        verifyErrorResponse(invalidTypeResponse, 422, ErrorCode.INVALID_TYPE);
+    }
 
+    private static void convert(UUID accessTokenId, UUID parent) {
+        UUID listItemId;
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TITLE)
             .parent(parent)
@@ -54,22 +55,22 @@ public class ConvertTableToChecklistTableTest extends BackEndTest {
             .columns(Arrays.asList(Arrays.asList(COLUMN_VALUE)))
             .build();
 
-        UUID listItemId = NotebookActions.createTable(language, accessTokenId, request);
+        listItemId = NotebookActions.createTable(accessTokenId, request);
 
-        Response conversionResponse = NotebookActions.getConvertTableToChecklistTableResponse(language, accessTokenId, listItemId);
+        Response conversionResponse = NotebookActions.getConvertTableToChecklistTableResponse(accessTokenId, listItemId);
 
         assertThat(conversionResponse.getStatusCode()).isEqualTo(200);
 
-        UUID rowId = NotebookActions.getChecklistTable(language, accessTokenId, listItemId)
+        UUID rowId = NotebookActions.getChecklistTable(accessTokenId, listItemId)
             .getRowStatus()
             .get(0)
             .getRowId();
 
-        Response response = NotebookActions.getUpdateChecklistTableRowStatusResponse(language, accessTokenId, rowId, true);
+        Response response = NotebookActions.getUpdateChecklistTableRowStatusResponse(accessTokenId, rowId, true);
 
-        assertThat( response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getStatusCode()).isEqualTo(200);
 
-        ChecklistTableResponse checklistTableResponse = NotebookActions.getChecklistTable(language, accessTokenId, listItemId);
+        ChecklistTableResponse checklistTableResponse = NotebookActions.getChecklistTable(accessTokenId, listItemId);
 
         assertThat(checklistTableResponse.getTitle()).isEqualTo(TITLE);
         assertThat(checklistTableResponse.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);

@@ -28,7 +28,7 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
     public void markOccurrenceDone(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -52,7 +52,12 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
         OccurrenceResponse occurrenceResponse = calendarResponse.getEvents()
             .get(0);
 
-        //Null referenceDate day
+        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
+        markOccurrenceDone(language, accessTokenId, occurrenceResponse);
+    }
+
+    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
@@ -61,8 +66,9 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
         Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+    }
 
-        //Null referenceDate month
+    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
@@ -71,8 +77,10 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
         Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+    }
 
-        //Mark occurrence done
+    private static void markOccurrenceDone(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+        List<CalendarResponse> responses;
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)

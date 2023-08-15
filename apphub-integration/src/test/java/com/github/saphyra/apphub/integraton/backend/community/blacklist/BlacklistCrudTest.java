@@ -21,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistCrudTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "community")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "community"})
     public void blacklistCrud(Language language) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
@@ -30,23 +30,36 @@ public class BlacklistCrudTest extends BackEndTest {
         UUID blockedUserAccessTokenId = IndexPageActions.registerAndLogin(language, blockedUserData);
         UUID blockedUserId = DatabaseUtil.getUserIdByEmail(blockedUserData.getEmail());
 
-        //Create - User does not exist
+        create_userDoesNotExist(language, accessTokenId);
+        BlacklistResponse blacklistResponse = create(language, accessTokenId, blockedUserData, blockedUserId);
+        create_alreadyBlocked(language, accessTokenId, blockedUserId);
+        UUID blacklistId = query(language, accessTokenId, blockedUserData, blockedUserId, blacklistResponse);
+        delete_notFound(language, accessTokenId);
+        delete_forbiddenOperation(language, blockedUserAccessTokenId, blacklistId);
+        delete(language, accessTokenId, blacklistId);
+    }
+
+    private static void create_userDoesNotExist(Language language, UUID accessTokenId) {
         Response create_userDoesNotExistResponse = BlacklistActions.getCreateResponse(language, accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(language, create_userDoesNotExistResponse, 404, ErrorCode.USER_NOT_FOUND);
+    }
 
-        //Create
+    private static BlacklistResponse create(Language language, UUID accessTokenId, RegistrationParameters blockedUserData, UUID blockedUserId) {
         BlacklistResponse blacklistResponse = BlacklistActions.createBlacklist(language, accessTokenId, blockedUserId);
         assertThat(blacklistResponse.getBlockedUserId()).isEqualTo(blockedUserId);
         assertThat(blacklistResponse.getUsername()).isEqualTo(blockedUserData.getUsername());
         assertThat(blacklistResponse.getEmail()).isEqualTo(blockedUserData.getEmail());
+        return blacklistResponse;
+    }
 
-        //Create - Already blocked
+    private static void create_alreadyBlocked(Language language, UUID accessTokenId, UUID blockedUserId) {
         Response create_alreadyBlockedResponse = BlacklistActions.getCreateResponse(language, accessTokenId, blockedUserId);
 
         ResponseValidator.verifyErrorResponse(language, create_alreadyBlockedResponse, 409, ErrorCode.ALREADY_EXISTS);
+    }
 
-        //Query
+    private static UUID query(Language language, UUID accessTokenId, RegistrationParameters blockedUserData, UUID blockedUserId, BlacklistResponse blacklistResponse) {
         List<BlacklistResponse> blacklists = BlacklistActions.getBlacklists(language, accessTokenId);
 
         assertThat(blacklists).hasSize(1);
@@ -55,24 +68,28 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(blacklists.get(0).getBlockedUserId()).isEqualTo(blockedUserId);
         assertThat(blacklists.get(0).getUsername()).isEqualTo(blockedUserData.getUsername());
         assertThat(blacklists.get(0).getEmail()).isEqualTo(blockedUserData.getEmail());
+        return blacklistId;
+    }
 
-        //Delete - Not found
+    private static void delete_notFound(Language language, UUID accessTokenId) {
         Response delete_notFoundResponse = BlacklistActions.getDeleteBlacklistResponse(language, accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(language, delete_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        //Delete - Forbidden operation
+    private static void delete_forbiddenOperation(Language language, UUID blockedUserAccessTokenId, UUID blacklistId) {
         Response delete_forbiddenOperationResponse = BlacklistActions.getDeleteBlacklistResponse(language, blockedUserAccessTokenId, blacklistId);
 
         ResponseValidator.verifyForbiddenOperation(language, delete_forbiddenOperationResponse);
+    }
 
-        //Delete
+    private static void delete(Language language, UUID accessTokenId, UUID blacklistId) {
         BlacklistActions.deleteBlacklist(language, accessTokenId, blacklistId);
 
         assertThat(BlacklistActions.getBlacklists(language, accessTokenId)).isEmpty();
     }
 
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendship() {
         Language language = Language.HUNGARIAN;
 
@@ -90,7 +107,7 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(FriendRequestActions.getSentFriendRequests(language, accessTokenId)).isEmpty();
     }
 
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendRequest() {
         Language language = Language.HUNGARIAN;
 

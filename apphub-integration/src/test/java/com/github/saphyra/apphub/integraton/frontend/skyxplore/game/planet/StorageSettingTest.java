@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void storageSettingCrud() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -59,7 +59,12 @@ public class StorageSettingTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetStorageSettingActions.isLoaded(driver))
             .assertTrue("StorageSettings is not opened.");
 
-        //Create storage setting
+        StorageSetting storageSetting = createStorageSettingForCrud(driver);
+        StorageSetting editedSetting = editStorageSetting(driver, storageSetting);
+        deleteStorageSetting(driver, editedSetting);
+    }
+
+    private static StorageSetting createStorageSettingForCrud(WebDriver driver) {
         SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 5, 3);
 
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
@@ -67,12 +72,14 @@ public class StorageSettingTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
         assertThat(storageSetting.getAmount()).isEqualTo(10);
         assertThat(storageSetting.getBatchSize()).isEqualTo(5);
         assertThat(storageSetting.getPriority()).isEqualTo(3);
+        return storageSetting;
+    }
 
-        //Edit storage setting
+    private static StorageSetting editStorageSetting(WebDriver driver, StorageSetting storageSetting) {
         storageSetting.setAmount(20);
         storageSetting.setBatchSize(7);
         storageSetting.setPriority(8);
@@ -82,12 +89,14 @@ public class StorageSettingTest extends SeleniumTest {
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(editedSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(editedSetting.getResourceName()).isEqualTo("Ore");
         assertThat(editedSetting.getAmount()).isEqualTo(20);
         assertThat(editedSetting.getBatchSize()).isEqualTo(7);
         assertThat(editedSetting.getPriority()).isEqualTo(8);
+        return editedSetting;
+    }
 
-        //Delete storage setting
+    private static void deleteStorageSetting(WebDriver driver, StorageSetting editedSetting) {
         editedSetting.delete(driver);
 
         AwaitilityWrapper.createDefault()
@@ -97,7 +106,7 @@ public class StorageSettingTest extends SeleniumTest {
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
     }
 
-    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -131,25 +140,32 @@ public class StorageSettingTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetStorageSettingActions.isLoaded(driver))
             .assertTrue("StorageSettings is not opened.");
 
-        //Create storage setting
+        createStorageSetting(driver);
+        checkStorageReserved(driver);
+        checkResourceProduced(driver);
+    }
+
+    private static void createStorageSetting(WebDriver driver) {
         SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 5, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Érc");
+        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
 
         SkyXplorePlanetActions.closeStorageSettingsWindow(driver);
 
         SkyXploreGameActions.resumeGame(driver);
+    }
 
-        //Check storage reserved
+    private static void checkStorageReserved(WebDriver driver) {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getReservedAmount() > 0)
             .assertTrue("Storage not reserved.");
+    }
 
-        //Check resource produced
+    private static void checkResourceProduced(WebDriver driver) {
         AwaitilityWrapper.create(60, 10)
             .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 400)
             .assertTrue("Resource not produced.");

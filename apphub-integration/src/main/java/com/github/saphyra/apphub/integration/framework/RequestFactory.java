@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.HttpClientConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -16,9 +16,19 @@ import static io.restassured.RestAssured.given;
 import static java.util.Objects.isNull;
 
 public class RequestFactory {
+    @Deprecated
     public static RequestSpecification createAuthorizedRequest(Language locale, UUID accessTokenId) {
         return createRequest(locale)
             .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);
+    }
+
+    public static RequestSpecification createAuthorizedRequest(UUID accessTokenId) {
+        return createRequest()
+            .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);
+    }
+
+    public static RequestSpecification createRequest() {
+        return createRequest(TestConfiguration.DEFAULT_LANGUAGE);
     }
 
     public static RequestSpecification createRequest(Language locale) {
@@ -38,8 +48,8 @@ public class RequestFactory {
             requestSpecification.cookie(Constants.LOCALE_COOKIE, locale.getLocale());
         }
 
-        if (TestBase.REST_LOGGING_ENABLED) {
-            requestSpecification.filter(new ResponseLoggingFilter()) .log().all();
+        if (TestConfiguration.REST_LOGGING_ENABLED) {
+            requestSpecification.filter(new ResponseLoggingFilter()).log().all();
         }
         return requestSpecification;
     }

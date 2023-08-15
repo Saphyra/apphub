@@ -30,7 +30,7 @@ public class RenameSolarSystemAndPlanet extends BackEndTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new_solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void renameSolarSystemAndPlanet(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -41,36 +41,51 @@ public class RenameSolarSystemAndPlanet extends BackEndTest {
         SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId1, userId1))
             .get(accessTokenId1);
 
-        //SolarSystem - Blank
+        MapSolarSystemResponse solarSystemResponse = solarSystem_blank(language, accessTokenId1);
+        solarSystem_tooLong(language, accessTokenId1, solarSystemResponse);
+        solarSystem_rename(language, accessTokenId1, solarSystemResponse);
+        PlanetLocationResponse planetLocationResponse = planet_blank(language, accessTokenId1);
+        planet_tooLong(language, accessTokenId1, planetLocationResponse);
+        planet_rename(language, accessTokenId1, solarSystemResponse, planetLocationResponse);
+    }
+
+    private static MapSolarSystemResponse solarSystem_blank(Language language, UUID accessTokenId1) {
         MapSolarSystemResponse solarSystemResponse = SkyXploreMapActions.getSolarSystem(language, accessTokenId1);
 
         Response solarSystem_blankResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(language, accessTokenId1, solarSystemResponse.getSolarSystemId(), " ");
 
         ResponseValidator.verifyInvalidParam(language, solarSystem_blankResponse, "newName", "must not be null or blank");
+        return solarSystemResponse;
+    }
 
-        //SolarSystem - Too long
+    private static void solarSystem_tooLong(Language language, UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse) {
         Response solarSystem_tooLongResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(language, accessTokenId1, solarSystemResponse.getSolarSystemId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(language, solarSystem_tooLongResponse, "newName", "too long");
+    }
 
-        //SolarSystem - Rename
+    private static void solarSystem_rename(Language language, UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse) {
         SkyXploreSolarSystemActions.renameSolarSystem(language, accessTokenId1, solarSystemResponse.getSolarSystemId(), NEW_SOLAR_SYSTEM_NAME);
 
         assertThat(SkyXploreMapActions.getSolarSystem(language, accessTokenId1, solarSystemResponse.getSolarSystemId()).getSolarSystemName()).isEqualTo(NEW_SOLAR_SYSTEM_NAME);
+    }
 
-        //Planet - Blank
+    private static PlanetLocationResponse planet_blank(Language language, UUID accessTokenId1) {
         PlanetLocationResponse planetLocationResponse = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
         Response planet_blankResponse = SkyXplorePlanetActions.getRenamePlanetResponse(language, accessTokenId1, planetLocationResponse.getPlanetId(), " ");
 
         ResponseValidator.verifyInvalidParam(language, planet_blankResponse, "newName", "must not be null or blank");
+        return planetLocationResponse;
+    }
 
-        //Planet - Too long
+    private static void planet_tooLong(Language language, UUID accessTokenId1, PlanetLocationResponse planetLocationResponse) {
         Response planet_tooLongResponse = SkyXplorePlanetActions.getRenamePlanetResponse(language, accessTokenId1, planetLocationResponse.getPlanetId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(language, planet_tooLongResponse, "newName", "too long");
+    }
 
-        //Planet - Rename
+    private static void planet_rename(Language language, UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse, PlanetLocationResponse planetLocationResponse) {
         SkyXplorePlanetActions.renamePlanet(language, accessTokenId1, planetLocationResponse.getPlanetId(), NEW_PLANET_NAME);
 
         assertThat(SkyXploreSolarSystemActions.findPlanet(language, accessTokenId1, solarSystemResponse.getSolarSystemId(), planetLocationResponse.getPlanetId()).getPlanetName()).isEqualTo(NEW_PLANET_NAME);

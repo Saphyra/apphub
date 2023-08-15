@@ -31,7 +31,7 @@ public class ModulesPageActions {
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue();
 
-        ToastMessageUtil.verifySuccessToast(driver, "Sikeres kijelentkezés.");
+        ToastMessageUtil.verifySuccessToast(driver, "Successfully logged out.");
     }
 
     public static List<Module> getModules(WebDriver driver) {
@@ -78,12 +78,12 @@ public class ModulesPageActions {
     public static Optional<Module> getModule(WebDriver driver, ModuleLocation moduleLocation) {
         return AwaitilityWrapper.getListWithWait(() -> getCategories(driver), categories -> !categories.isEmpty())
             .stream()
-            .filter(category -> category.getCategoryId().endsWith(moduleLocation.getCategoryId()))
+            .filter(category -> category.getCategoryId().equals(moduleLocation.getCategoryId()))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Category not found for moduleLocation " + moduleLocation))
             .getModules()
             .stream()
-            .filter(module -> module.getModuleId().endsWith(moduleLocation.getModuleId()))
+            .filter(module -> module.getModuleId().equals(moduleLocation.getModuleId()))
             .findFirst();
     }
 }

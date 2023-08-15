@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConstructionTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -57,9 +57,17 @@ public class ConstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        //Construct new building
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         String surfaceId = surface.getSurfaceId();
+        surface = constructNewBuilding(driver, surface, surfaceId);
+        cancelConstruction(driver, surface, surfaceId);
+        surface = SkyXplorePlanetActions.findSurfaceWithUpgradableBuilding(driver);
+        surfaceId = surface.getSurfaceId();
+        surface = upgradeBuilding(driver, surface, surfaceId);
+        cancelUpgrade(driver, surface, surfaceId);
+    }
+
+    private static Surface constructNewBuilding(WebDriver driver, Surface surface, String surfaceId) {
         surface.openModifySurfaceWindow(driver);
 
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
@@ -69,31 +77,32 @@ public class ConstructionTest extends SeleniumTest {
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_WATER_PUMP);
         assertThat(surface.getBuildingLevel()).isZero();
         assertThat(surface.isConstructionInProgress()).isTrue();
+        return surface;
+    }
 
-        //Cancel construction
+    private static void cancelConstruction(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelConstruction(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isEmpty()).isTrue();
+    }
 
-        //Upgrade building
-        surface = SkyXplorePlanetActions.findSurfaceWithUpgradableBuilding(driver);
-        surfaceId = surface.getSurfaceId();
-
+    private static Surface upgradeBuilding(WebDriver driver, Surface surface, String surfaceId) {
         surface.upgradeBuilding(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isConstructionInProgress()).isTrue();
+        return surface;
+    }
 
-        //Cancel upgrade
-
+    private static void cancelUpgrade(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelConstruction(driver);
 
         surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
         assertThat(surface.isConstructionInProgress()).isFalse();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void finishConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();

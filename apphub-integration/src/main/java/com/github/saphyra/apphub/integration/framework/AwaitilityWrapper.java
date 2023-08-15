@@ -26,7 +26,7 @@ public class AwaitilityWrapper {
     private final ConditionFactory conditionFactory;
 
     public static AwaitilityWrapper createDefault() {
-        return create(15, TimeUnit.SECONDS, 250, TimeUnit.MILLISECONDS);
+        return create(5, TimeUnit.SECONDS, 250, TimeUnit.MILLISECONDS);
     }
 
     public static AwaitilityWrapper create(int timeout, int pollInterval) {

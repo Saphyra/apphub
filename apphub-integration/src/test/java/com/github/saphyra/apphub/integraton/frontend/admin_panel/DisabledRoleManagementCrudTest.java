@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.disabled_roles.DisabledRolesActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleManagementCrudTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void disableAndEnableRole() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -35,15 +35,24 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
-        //Initial check
+        DisabledRole initialRole = initialCheck(driver);
+        disableRole_incorrectPassword(driver, userData, initialRole);
+        DisabledRole disabledRole = getDisabledRole(driver, userData);
+        enableRole_incorrectPassword(driver, disabledRole);
+        enableRole(driver, userData);
+    }
+
+    private static DisabledRole initialCheck(WebDriver driver) {
         DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Test role not found"));
         assertThat(initialRole.isEnabled()).isTrue();
+        return initialRole;
+    }
 
-        //Disable role - Incorrect password
+    private static void disableRole_incorrectPassword(WebDriver driver, RegistrationParameters userData, DisabledRole initialRole) {
         initialRole.toggle(driver);
 
         Stream.generate(() -> "")
@@ -51,13 +60,17 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .forEach(s -> {
                 DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
                 DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
                 assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
             });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
+
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
@@ -65,9 +78,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");
+    }
 
-        //Disable role
-        initialRole = DisabledRolesActions.getDisabledRoles(driver)
+    private static DisabledRole getDisabledRole(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
             .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
             .findFirst()
@@ -77,7 +91,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság letiltva.");
+        NotificationUtil.verifySuccessNotification(driver, "Role disabled.");
 
         DisabledRole disabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()
@@ -87,8 +101,10 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         assertThat(disabledRole.isEnabled()).isFalse();
 
         NotificationUtil.clearNotifications(driver);
+        return disabledRole;
+    }
 
-        //Enable role - Incorrect password
+    private static void enableRole_incorrectPassword(WebDriver driver, DisabledRole disabledRole) {
         disabledRole.toggle(driver);
 
         Stream.generate(() -> "")
@@ -96,15 +112,21 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .forEach(s -> {
                 DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
                 DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Hibás jelszó.");
+                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
                 assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
             });
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Fiók zárolva. Próbáld újra később!");
+        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
 
-        //Enable role
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .assertTrue("User is not logged out.");
+    }
+
+    private static void enableRole(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole disabledRole;
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
@@ -123,7 +145,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
         DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Jogosultság engedélyezve.");
+        NotificationUtil.verifySuccessNotification(driver, "Role enabled.");
 
         DisabledRole enabledRole = DisabledRolesActions.getDisabledRoles(driver)
             .stream()

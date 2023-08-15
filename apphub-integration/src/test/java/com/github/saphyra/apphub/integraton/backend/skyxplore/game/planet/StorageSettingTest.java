@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void storageSettingCrud(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -48,7 +48,16 @@ public class StorageSettingTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
-        //Create - Validation
+        create_validation(language, accessTokenId1, planet);
+        StorageSettingModel createModel = createForCrud(language, accessTokenId1, planet);
+        get(language, accessTokenId1, planet, createModel);
+        create_alreadyExists(language, accessTokenId1, planet);
+        UUID storageSettingId = edit_validation(language, accessTokenId1, planet);
+        edit(language, accessTokenId1, planet, createModel, storageSettingId);
+        delete(language, accessTokenId1, planet, storageSettingId);
+    }
+
+    private void create_validation(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(null).build(), "priority", "must not be null");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(0).build(), "priority", "too low");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(11).build(), "priority", "too high");
@@ -58,8 +67,9 @@ public class StorageSettingTest extends BackEndTest {
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(null).build(), "batchSize", "must not be null");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(0).build(), "batchSize", "too low");
+    }
 
-        //Create
+    private static StorageSettingModel createForCrud(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
         StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel);
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
@@ -67,8 +77,11 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
         assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
         assertThat(created.getStorageSettingId()).isNotNull();
+        return createModel;
+    }
 
-        //Get
+    private static void get(Language language, UUID accessTokenId1, PlanetLocationResponse planet, StorageSettingModel createModel) {
+        StorageSettingModel created;
         List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
             .getCurrentSettings()
             .stream()
@@ -82,11 +95,13 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
         assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
         assertThat(created.getStorageSettingId()).isNotNull();
+    }
 
-        //Create - Already exists
+    private void create_alreadyExists(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         create_runValidationTest(409, ErrorCode.ALREADY_EXISTS, language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid());
+    }
 
-        //Edit - Validation
+    private UUID edit_validation(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
             .getCurrentSettings()
             .stream()
@@ -104,8 +119,10 @@ public class StorageSettingTest extends BackEndTest {
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(null).build(), "batchSize", "must not be null");
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(0).build(), "batchSize", "too low");
+        return storageSettingId;
+    }
 
-        //Edit
+    private static void edit(Language language, UUID accessTokenId1, PlanetLocationResponse planet, StorageSettingModel createModel, UUID storageSettingId) {
         StorageSettingModel editModel = StorageSettingModel.builder()
             .storageSettingId(storageSettingId)
             .batchSize(132)
@@ -132,8 +149,9 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());
         assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
+    }
 
-        //Delete
+    private static void delete(Language language, UUID accessTokenId1, PlanetLocationResponse planet, UUID storageSettingId) {
         SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, storageSettingId);
         StorageSettingsResponse storageSettingsResponse = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId());
         assertThat(storageSettingsResponse.getCurrentSettings()).hasSize(1);
@@ -141,7 +159,7 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
-    @Test(groups = "skyxplore", priority = Integer.MIN_VALUE)
+    @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void produceResourcesForStorageSetting() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -155,12 +173,19 @@ public class StorageSettingTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId);
 
-        //Create
+        StorageSettingModel createModel = create(language, accessTokenId, planet);
+        checkStorageReserved(language, accessTokenId, wsClient, planet);
+        checkResourceProduced(language, accessTokenId, planet, createModel);
+    }
+
+    private static StorageSettingModel create(Language language, UUID accessTokenId, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
         StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId, planet.getPlanetId(), createModel);
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
+        return createModel;
+    }
 
-        //Check storage reserved
+    private static void checkStorageReserved(Language language, UUID accessTokenId, ApphubWsClient wsClient, PlanetLocationResponse planet) {
         wsClient.clearMessages();
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
 
@@ -170,8 +195,9 @@ public class StorageSettingTest extends BackEndTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getReservedStorageAmount() > 0)
             .assertTrue("Storage not reserved.");
+    }
 
-        //Check resource produced
+    private static void checkResourceProduced(Language language, UUID accessTokenId, PlanetLocationResponse planet, StorageSettingModel createModel) {
         AwaitilityWrapper.create(60, 10)
             .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
             .assertTrue("Resource not produced.");

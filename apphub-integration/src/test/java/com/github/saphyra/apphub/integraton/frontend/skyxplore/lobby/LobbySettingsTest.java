@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +36,7 @@ public class LobbySettingsTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-%s";
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void allianceSettings() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -45,17 +44,10 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(SkyXploreUtils::registerAndNavigateToMainMenu)
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //Alliance settings
         SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
@@ -81,7 +73,7 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue();
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void gameSettings() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -89,31 +81,17 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<Object>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(player -> EXECUTOR_SERVICE.submit(() -> {
-                try {
-                    Navigation.toIndexPage(player.getEntity1());
-                    IndexPageActions.registerUser(player.getEntity1(), player.getEntity2());
-                    ModulesPageActions.openModule(player.getEntity1(), ModuleLocation.SKYXPLORE);
-                    SkyXploreCharacterActions.submitForm(player.getEntity1());
-                    AwaitilityWrapper.createDefault()
-                        .until(() -> player.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                        .assertTrue();
-                } catch (Exception e) {
-                    log.error("Failed setting up users", e);
-                    throw e;
-                }
-                return null;
-            }))
-            .toList();
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //MaxPlayersPerSolarSystems
+        maxPlayersPerSolarSystemsSettings(driver1, driver2);
+        additionalSolarSystemsSettings(driver1, driver2);
+        planetsPerSolarSystemSettings(driver1, driver2);
+        planetSizeSettings(driver1, driver2);
+    }
+
+    private void maxPlayersPerSolarSystemsSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "maxPlayersPerSolarSystems cannot be lower than 1",
             driver1,
@@ -129,8 +107,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withMaxPlayersPerSolarSystem(6),
             SkyXploreLobbySettingsHelper.withMaxPlayersPerSolarSystem(5)
         );
+    }
 
-        //additionalSolarSystems
+    private void additionalSolarSystemsSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "additionalSolarSystems.min must not be negative",
             driver1,
@@ -162,8 +141,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withAdditionalSolarSystems(new Range<>(2, 31)),
             SkyXploreLobbySettingsHelper.withAdditionalSolarSystems(new Range<>(2, 30))
         );
+    }
 
-        //planetsPerSolarSystem
+    private void planetsPerSolarSystemSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "planetsPerSolarSystem.min must not be negative",
             driver1,
@@ -195,8 +175,9 @@ public class LobbySettingsTest extends SeleniumTest {
             SkyXploreLobbySettingsHelper.withPlanetsPerSolarSystem(new Range<>(0, 11)),
             SkyXploreLobbySettingsHelper.withPlanetsPerSolarSystem(new Range<>(0, 10))
         );
+    }
 
-        //planetSize
+    private void planetSizeSettings(WebDriver driver1, WebDriver driver2) {
         setAndVerifyLobbySettings(
             "planetSize.min must not be lower than 10",
             driver1,
@@ -241,7 +222,7 @@ public class LobbySettingsTest extends SeleniumTest {
         }
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     public void ais() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver driver1 = drivers.get(0);
@@ -249,24 +230,24 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        List<Future<?>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2))
-            .map(biWrapper -> SkyXploreUtils.registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> futures.stream().allMatch(Future::isDone))
-            .assertTrue("Players not created.");
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        //Validation
+        aiValidation(driver1);
+        createAndRemoveAi(driver1, driver2);
+        setAlliance(driver1, driver2);
+    }
+
+    private static void aiValidation(WebDriver driver1) {
         SkyXploreLobbyActions.fillNewAiName(driver1, "aa");
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Karakter név túl rövid. (Minimum 3 karakter)");
+        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too short. (Minimum 3 characters)");
 
         SkyXploreLobbyActions.fillNewAiName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Karakter név túl hosszú. (Maximum 30 karakter)");
+        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too long. (Maximum 30 characters)");
+    }
 
-        //Create and Remove
+    private void createAndRemoveAi(WebDriver driver1, WebDriver driver2) {
         assertThat(SkyXploreLobbyActions.isCreateAiPanelPresent(driver2)).isFalse();
 
         Stream.iterate(0, integer -> integer + 1)
@@ -280,15 +261,16 @@ public class LobbySettingsTest extends SeleniumTest {
             .limit(10)
             .map(integer -> String.format(AI_NAME, integer))
             .forEach(aiName -> removeAi(driver1, driver2, aiName));
+    }
 
-        //Set alliance
+    private static void setAlliance(WebDriver driver1, WebDriver driver2) {
         SkyXploreLobbyActions.createAi(driver1, AI_NAME);
 
         AiPlayerElement aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findAiByName(driver1, AI_NAME), Optional::isPresent)
             .map(Optional::get)
             .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + AI_NAME));
 
-        aiPlayer.setAlliance("Új szövetség");
+        aiPlayer.setAlliance(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.findAiByNameValidated(driver1, AI_NAME).getAlliance().equals("1"))
@@ -325,7 +307,7 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue("Ai with name " + aiName + " is still present.");
     }
 
-    @Test(groups = "skyxplore")
+    @Test(groups = {"fe", "skyxplore"})
     void gameDoesNotStartWithOnlyOneAlliance() {
         WebDriver driver = extractDriver();
 
@@ -354,6 +336,6 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani.");
+        ToastMessageUtil.verifyErrorToast(driver, "Every player is in the same alliance. Game is boring with no one to conquer.");
     }
 }

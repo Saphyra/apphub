@@ -31,7 +31,7 @@ public class EventCrudTest extends SeleniumTest {
     private static final String NOTE = "note";
     private static final String NEW_CONTENT = "new-content";
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void oneTimeEvent_changeStatuses() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -43,14 +43,27 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.openCreateEventWindowAt(driver, CURRENT_DATE);
 
-        //Create - Empty title
+        oneTimeEvent_create_emptyTitle(driver);
+        oneTimeEvent_create_noHours(driver);
+        oneTimeEvent_create_noMinutes(driver);
+        WebElement dailyTask = oneTimeEvent_create(driver);
+        oneTimeEvent_viewEvent(driver, dailyTask);
+        oneTimeEvent_markAsDone(driver);
+        oneTimeEvent_markAsUndone(driver);
+        oneTimeEvent_markAsSnoozed(driver);
+        oneTimeEvent_markAsUnsnoozed(driver);
+        oneTimeEvent_delete(driver);
+    }
+
+    private static void oneTimeEvent_create_emptyTitle(WebDriver driver) {
         CalendarActions.fillEventTitle(driver, " ");
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(driver, "Title must not be empty.");
+    }
 
-        //Create - No Hours
+    private static void oneTimeEvent_create_noHours(WebDriver driver) {
         CalendarActions.fillEventTitle(driver, TITLE);
         CalendarActions.fillEventContent(driver, CONTENT);
 
@@ -59,22 +72,24 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+        NotificationUtil.verifyErrorNotification(driver, "Both or neither hours and minutes need to be filled.");
+    }
 
-        //Create - No Minutes
+    private static void oneTimeEvent_create_noMinutes(WebDriver driver) {
         CalendarActions.setCreateEventMinutes(driver, "");
         CalendarActions.setCreateEventHours(driver, "10");
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Az órát és a percet is ki kell tölteni, vagy egyiket sem.");
+        NotificationUtil.verifyErrorNotification(driver, "Both or neither hours and minutes need to be filled.");
+    }
 
-        //Create
+    private static WebElement oneTimeEvent_create(WebDriver driver) {
         CalendarActions.setCreateEventHours(driver, "");
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -87,13 +102,18 @@ public class EventCrudTest extends SeleniumTest {
         assertThat(calendarEvent.getText()).isEqualTo(TITLE);
         assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
         assertThat(WebElementUtils.getClasses(calendarEvent)).contains(Constants.CALENDAR_OCCURRENCE_STATUS_PENDING.toLowerCase());
+        return dailyTask;
+    }
 
-        //View event
+    private static void oneTimeEvent_viewEvent(WebDriver driver, WebElement dailyTask) {
         CalendarActions.openEvent(driver, dailyTask);
 
         CalendarActions.verifyViewEventPage(driver, TITLE, CONTENT, "", Constants.CALENDAR_OCCURRENCE_STATUS_PENDING, false);
+    }
 
-        //Mark as done
+    private static void oneTimeEvent_markAsDone(WebDriver driver) {
+        WebElement dailyTask;
+        WebElement calendarEvent;
         CalendarActions.markAsDone(driver);
 
         SleepUtil.sleep(1000);
@@ -110,8 +130,11 @@ public class EventCrudTest extends SeleniumTest {
         dailyTask.click();
 
         CalendarActions.verifyViewEventPage(driver, TITLE, CONTENT, "", Constants.CALENDAR_OCCURRENCE_STATUS_DONE, false);
+    }
 
-        //Mark as undone
+    private static void oneTimeEvent_markAsUndone(WebDriver driver) {
+        WebElement calendarEvent;
+        WebElement dailyTask;
         CalendarActions.markAsNotDone(driver);
 
         SleepUtil.sleep(1000);
@@ -128,8 +151,11 @@ public class EventCrudTest extends SeleniumTest {
         dailyTask.click();
 
         CalendarActions.verifyViewEventPage(driver, TITLE, CONTENT, "", Constants.CALENDAR_OCCURRENCE_STATUS_PENDING, false);
+    }
 
-        //Mark as snoozed
+    private static void oneTimeEvent_markAsSnoozed(WebDriver driver) {
+        WebElement calendarEvent;
+        WebElement dailyTask;
         CalendarActions.markAsSnoozed(driver);
 
         SleepUtil.sleep(1000);
@@ -146,8 +172,11 @@ public class EventCrudTest extends SeleniumTest {
         dailyTask.click();
 
         CalendarActions.verifyViewEventPage(driver, TITLE, CONTENT, "", Constants.CALENDAR_OCCURRENCE_STATUS_SNOOZED, false);
+    }
 
-        //Mark as unsnoozed
+    private static void oneTimeEvent_markAsUnsnoozed(WebDriver driver) {
+        WebElement calendarEvent;
+        WebElement dailyTask;
         CalendarActions.markAsUnsnoozed(driver);
 
         SleepUtil.sleep(1000);
@@ -164,8 +193,9 @@ public class EventCrudTest extends SeleniumTest {
         dailyTask.click();
 
         CalendarActions.verifyViewEventPage(driver, TITLE, CONTENT, "", Constants.CALENDAR_OCCURRENCE_STATUS_PENDING, false);
+    }
 
-        //Delete
+    private static void oneTimeEvent_delete(WebDriver driver) {
         CalendarActions.deleteEvent(driver);
 
         AwaitilityWrapper.createDefault()
@@ -175,7 +205,7 @@ public class EventCrudTest extends SeleniumTest {
         assertThat(CalendarActions.getEventsOfDay(driver, CURRENT_DATE)).isEmpty();
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void daysOfWeekEvent_editEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -187,21 +217,28 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 
-        //Create - No days set
+        daysOfWeekEvent_create_noDaysSet(driver);
+        WebElement dailyTask = daysOfWeekEvent_create(driver);
+        daysOfWeekEvent_editEvent_emptyTitle(driver, dailyTask);
+        daysOfWeekEvent_editEvent(driver);
+    }
+
+    private static void daysOfWeekEvent_create_noDaysSet(WebDriver driver) {
         CalendarActions.fillEventTitle(driver, TITLE);
         CalendarActions.fillEventContent(driver, CONTENT);
         CalendarActions.setCreateEventRepetitionType(driver, RepetitionType.DAYS_OF_WEEK);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
+        NotificationUtil.verifyErrorNotification(driver, "No day selected.");
+    }
 
-        //Create
+    private WebElement daysOfWeekEvent_create(WebDriver driver) {
         CalendarActions.selectDayOfWeek(driver, FIRST_OF_MONTH.getDayOfWeek());
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -218,8 +255,10 @@ public class EventCrudTest extends SeleniumTest {
             assertThat(calendarEvent.getAttribute("title")).endsWith(CONTENT);
             assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
         }
+        return dailyTask;
+    }
 
-        //Edit event - Empty Title
+    private static void daysOfWeekEvent_editEvent_emptyTitle(WebDriver driver, WebElement dailyTask) {
         CalendarActions.openEvent(driver, dailyTask);
 
         CalendarActions.enableEditing(driver);
@@ -237,9 +276,10 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.saveModifications(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "A cím nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(driver, "Title must not be empty.");
+    }
 
-        //Edit event
+    private static void daysOfWeekEvent_editEvent(WebDriver driver) {
         CalendarActions.editTitle(driver, NEW_TITLE);
         CalendarActions.editContent(driver, NEW_CONTENT);
         CalendarActions.editNote(driver, NOTE);
@@ -267,7 +307,7 @@ public class EventCrudTest extends SeleniumTest {
         }
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void daysOfMonthEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -279,21 +319,26 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 
-        //Create - No days set
+        daysOfMonthEvent_noDaySet(driver);
+        daysOfMonthEvent_create(driver);
+    }
+
+    private static void daysOfMonthEvent_noDaySet(WebDriver driver) {
         CalendarActions.fillEventTitle(driver, TITLE);
         CalendarActions.fillEventContent(driver, CONTENT);
         CalendarActions.setCreateEventRepetitionType(driver, RepetitionType.DAYS_OF_MONTH);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Nincs nap kiválasztva.");
+        NotificationUtil.verifyErrorNotification(driver, "No day selected.");
+    }
 
-        //Create
+    private void daysOfMonthEvent_create(WebDriver driver) {
         CalendarActions.selectDayOfMonth(driver, 21);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         WebElement dailyTask = AwaitilityWrapper.getListWithWait(() -> CalendarActions.getDailyTasks(driver), ts -> !ts.isEmpty())
             .get(0);
@@ -313,7 +358,7 @@ public class EventCrudTest extends SeleniumTest {
         assertThat(WebElementUtils.getClasses(calendarEvent)).containsAnyElementsOf(getStatusOfDay(date));
     }
 
-    @Test
+    @Test(groups = {"fe", "calendar"})
     public void everyXDaysEvent() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -325,7 +370,11 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 
-        //Create - No days set
+        everyXDaysEvent_noDaysSet(driver);
+        everyXDaysEvent_create(driver);
+    }
+
+    private static void everyXDaysEvent_noDaysSet(WebDriver driver) {
         CalendarActions.fillEventTitle(driver, TITLE);
         CalendarActions.fillEventContent(driver, CONTENT);
         CalendarActions.setCreateEventRepetitionType(driver, RepetitionType.EVERY_X_DAYS);
@@ -334,14 +383,15 @@ public class EventCrudTest extends SeleniumTest {
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Napok száma túl alacsony (minimum 1)");
+        NotificationUtil.verifyErrorNotification(driver, "Days too low (minimum 1).");
+    }
 
-        //Create
+    private void everyXDaysEvent_create(WebDriver driver) {
         CalendarActions.fillRepetitionDays(driver, 5);
 
         CalendarActions.pushCreateEventButton(driver);
 
-        NotificationUtil.verifySuccessNotification(driver, "Esemény létrehozva.");
+        NotificationUtil.verifySuccessNotification(driver, "Event created.");
 
         for (int i = 0; i <= 25; i += 5) {
             LocalDate date = FIRST_OF_MONTH.plusDays(i);

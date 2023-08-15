@@ -22,7 +22,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CancelFriendRequestTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = "skyxplore")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
     public void cancelFriendRequest(Language language) {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
@@ -45,11 +45,17 @@ public class CancelFriendRequestTest extends BackEndTest {
 
         SkyXploreFriendActions.createFriendRequest(language, accessTokenId1, userId2);
 
-        //FriendRequest not found
+        friendRequestNotFound(language, accessTokenId1);
+        UUID friendRequestId = forbiddenOperation(language, accessTokenId1, accessTokenId2, accessTokenId3);
+        cancel(language, accessTokenId1, accessTokenId2, friendRequestId);
+    }
+
+    private static void friendRequestNotFound(Language language, UUID accessTokenId1) {
         Response friendRequestNotFoundResponse = SkyXploreFriendActions.getCancelFriendRequestResponse(language, accessTokenId1, UUID.randomUUID());
         verifyErrorResponse(language, friendRequestNotFoundResponse, 404, ErrorCode.FRIEND_REQUEST_NOT_FOUND);
+    }
 
-        //Forbidden operation
+    private static UUID forbiddenOperation(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID accessTokenId3) {
         UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
@@ -59,8 +65,10 @@ public class CancelFriendRequestTest extends BackEndTest {
         verifyForbiddenOperation(language, forbiddenOperationResponse);
         assertThat(SkyXploreFriendActions.getSentFriendRequests(language, accessTokenId1)).hasSize(1);
         assertThat(SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2)).hasSize(1);
+        return friendRequestId;
+    }
 
-        //Cancel
+    private static void cancel(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID friendRequestId) {
         ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
 
         SkyXploreFriendActions.cancelFriendRequest(language, accessTokenId1, friendRequestId);
@@ -69,7 +77,5 @@ public class CancelFriendRequestTest extends BackEndTest {
         assertThat(SkyXploreFriendActions.getIncomingFriendRequests(language, accessTokenId2)).isEmpty();
 
         assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED).get().getPayloadAs(UUID.class)).isEqualTo(friendRequestId);
-
-        ApphubWsClient.cleanUpConnections();
     }
 }

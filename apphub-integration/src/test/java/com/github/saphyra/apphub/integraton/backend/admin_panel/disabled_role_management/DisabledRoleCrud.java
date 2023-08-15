@@ -21,7 +21,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrud extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider")
+    @Test(dataProvider = "languageDataProvider", groups = {"be", "admin-panel"})
     public void disabledRoleCrud(Language language) {
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(language, testUser.toRegistrationRequest());
@@ -34,11 +34,19 @@ public class DisabledRoleCrud extends BackEndTest {
         //Initial check
         assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
 
-        //Disable role - Unknown role
+        disableRole_unknownRole(language, testUser, accessTokenId);
+        accessTokenId = disableRole_incorrectPassword(language, userData, accessTokenId);
+        disableRole(language, testUser, accessTokenId);
+        accessTokenId = enableRole_incorrectPassword(language, userData, accessTokenId);
+        enableRole(language, testUser, accessTokenId);
+    }
+
+    private static void disableRole_unknownRole(Language language, RegistrationParameters testUser, UUID accessTokenId) {
         Response unknownRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), "asd");
         verifyInvalidParam(language, unknownRoleResponse, "role", "unknown or cannot be disabled");
+    }
 
-        //Disable role - Incorrect password
+    private static UUID disableRole_incorrectPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         UUID ati = accessTokenId;
         Stream.generate(() -> "")
             .limit(2)
@@ -52,13 +60,16 @@ public class DisabledRoleCrud extends BackEndTest {
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
+        return accessTokenId;
+    }
 
-        //Disable role
+    private static void disableRole(Language language, RegistrationParameters testUser, UUID accessTokenId) {
         Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(disableRoleResponse.getStatusCode()).isEqualTo(200);
         assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, true));
+    }
 
-        //Enable role - Incorrect password
+    private static UUID enableRole_incorrectPassword(Language language, RegistrationParameters userData, UUID accessTokenId) {
         UUID ati2 = accessTokenId;
         Stream.generate(() -> "")
             .limit(2)
@@ -72,8 +83,10 @@ public class DisabledRoleCrud extends BackEndTest {
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         accessTokenId = IndexPageActions.login(language, userData.toLoginRequest());
+        return accessTokenId;
+    }
 
-        //Enable role
+    private static void enableRole(Language language, RegistrationParameters testUser, UUID accessTokenId) {
         Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(language, accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(enableRoleResponse.getStatusCode()).isEqualTo(200);
         assertThat(DisabledRoleActions.getDisabledRoles(language, accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));

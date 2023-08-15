@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistSearchTest extends BackEndTest {
-    @Test(groups = "community")
+    @Test(groups = {"be", "community"})
     public void searchUsersToBlacklist() {
         Language language = Language.HUNGARIAN;
 

@@ -38,7 +38,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
     private static final String TEXT_TITLE = "text-title";
     private static final String NEW_TEXT_TITLE = "new-text-title";
 
-    @Test(groups = {"notebook", "headed-only"})
+    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshCategory() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -73,7 +73,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
         assertThat(NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE)).isNotEmpty();
     }
 
-    @Test(groups = {"notebook", "headed-only"})
+    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshSearchResult() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -110,7 +110,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
             .assertTrue("Search result is not updated.");
     }
 
-    @Test(groups = {"notebook", "headed-only"})
+    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -145,7 +145,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
             .assertTrue("Checklist is not refreshed.");
     }
 
-    @Test(groups = {"notebook", "headed-only"})
+    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshTable() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -180,7 +180,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
             .assertTrue("Checklist is not refreshed.");
     }
 
-    @Test(groups = {"notebook", "headed-only"})
+    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshText() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -27,12 +27,11 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.Future;
 
 public class BanCrudTest extends SeleniumTest {
     private static final String REASON = "reason";
 
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void banCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);
@@ -41,33 +40,23 @@ public class BanCrudTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        Future<Void> testUserSetup = TestBase.EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(testDriver);
-            IndexPageActions.registerUser(testDriver, testUserData);
-            return null;
-        });
+        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
-        Navigation.toIndexPage(adminDriver);
-        IndexPageActions.registerUser(adminDriver, adminUserData);
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
         ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
 
-        AwaitilityWrapper.createDefault()
-            .until(testUserSetup::isDone)
-            .assertTrue("Test user is not registered.");
-
         openUser(adminDriver, testUserData);
 
-        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Válaszd ki a kitiltandó jogosultságot!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Időtartam túl kevés (minimum 1)");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), "Válassz időegységet!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "A kitiltás oka nem lehet üres.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "A jelszó nem lehet üres.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Hibás jelszó.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Fiók zárolva. Próbáld újra később!");
+        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Select role to ban!");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Duration too low (min. 1)");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), "Select time unit!");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "Reason must not be blank.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "Password must not be empty");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -78,7 +67,7 @@ public class BanCrudTest extends SeleniumTest {
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
-        NotificationUtil.verifySuccessNotification(adminDriver, "Felhasználó kitiltva.");
+        NotificationUtil.verifySuccessNotification(adminDriver, "User banned.");
 
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
@@ -89,10 +78,10 @@ public class BanCrudTest extends SeleniumTest {
         new WebDriverWait(testDriver, Duration.ofSeconds(5))
             .until(ExpectedConditions.presenceOfElementLocated(By.id("message-content")));
 
-        revokeBan_runValidation(adminDriver, "", "A jelszó nem lehet üres.");
-        revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
-        revokeBan_runValidation(adminDriver, "asd", "Hibás jelszó.");
-        revokeBan_runValidation(adminDriver, "asd", "Fiók zárolva. Próbáld újra később!");
+        revokeBan_runValidation(adminDriver, "", "Password must not be empty");
+        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
+        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
+        revokeBan_runValidation(adminDriver, "asd", "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -102,7 +91,7 @@ public class BanCrudTest extends SeleniumTest {
         openUser(adminDriver, testUserData);
 
         revokeBan(adminDriver, adminUserData.getPassword());
-        NotificationUtil.verifySuccessNotification(adminDriver, "Tiltás visszavonva.");
+        NotificationUtil.verifySuccessNotification(adminDriver, "Ban revoked.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.getCurrentBans(adminDriver).isEmpty())

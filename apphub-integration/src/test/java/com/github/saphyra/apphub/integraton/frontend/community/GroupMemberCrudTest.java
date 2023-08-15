@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.integraton.frontend.community;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.frontend.community.GroupActions;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupMember;
@@ -20,16 +19,13 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GroupMemberCrudTest extends SeleniumTest {
     private static final String GROUP_NAME = "group-name";
 
-    @Test(groups = "community")
+    @Test(groups = {"fe", "community"})
     public void groupMemberCrud() {
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
@@ -40,24 +36,27 @@ public class GroupMemberCrudTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
-        List<Future<Void>> futures = Stream.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3))
-            .map(biWrapper -> headToCommunity(biWrapper.getEntity1(), biWrapper.getEntity2()))
-            .collect(Collectors.toList());
-
-        for (int i = 0; i < 120; i++) {
-            if (futures.stream().allMatch(Future::isDone)) {
-                break;
-            }
-
-            SleepUtil.sleep(1000);
-        }
+        RegistrationUtils.registerUsers(
+            List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)),
+            (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
+        );
 
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData2.getUsername(), driver2);
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData3.getUsername(), driver3);
 
         GroupActions.createGroup(driver1, GROUP_NAME);
 
-        //Check owner roles
+        checkOwnerRoles(driver1, userData1);
+        search_userNotFound(driver1);
+        search_queryTooShort(driver1);
+        addMember(driver1, driver2, userData2);
+        modifyRoles(driver1, userData2);
+        GroupMember groupMember = inviteMember(driver2, userData3);
+        kickMember(driver1, driver2, groupMember);
+        leaveGroup(driver1, driver2);
+    }
+
+    private static void checkOwnerRoles(WebDriver driver1, RegistrationParameters userData1) {
         List<GroupMember> groupMembers = GroupActions.getMembers(driver1);
         assertThat(groupMembers).hasSize(1);
         GroupMember groupMember = groupMembers.get(0);
@@ -72,23 +71,28 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getKickButton().isEnabled()).isFalse();
         assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
         assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isFalse();
+    }
 
-        //Search - User not found
+    private static void search_userNotFound(WebDriver driver1) {
         GroupActions.openAddGroupMemberWindow(driver1);
 
         GroupActions.fillAddGroupMemberInput(driver1, UUID.randomUUID().toString());
         SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberUserNotFound(driver1);
+    }
 
-        //Search - Query too short
+    private static void search_queryTooShort(WebDriver driver1) {
         GroupActions.fillAddGroupMemberInput(driver1, "as");
         SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberQueryTooShort(driver1);
+    }
 
-        //Add member
+    private static void addMember(WebDriver driver1, WebDriver driver2, RegistrationParameters userData2) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.addMember(driver1, userData2.getUsername());
 
-        NotificationUtil.verifySuccessNotification(driver1, "Tag hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Group member added.");
 
         groupMembers = GroupActions.getMembers(driver1);
         assertThat(groupMembers).hasSize(2);
@@ -122,8 +126,11 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isFalse();
         assertThat(groupMember.getKickButton().isEnabled()).isFalse();
         assertThat(groupMember.getTransferLeadershipButton()).isEmpty();
+    }
 
-        //Modify roles
+    private static void modifyRoles(WebDriver driver1, RegistrationParameters userData2) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.getMembers(driver1)
             .get(1)
             .getCanInviteCheckbox()
@@ -159,14 +166,17 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getKickButton().isEnabled()).isTrue();
         assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
         assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isTrue();
+    }
 
-        //Invite member
+    private static GroupMember inviteMember(WebDriver driver2, RegistrationParameters userData3) {
+        List<GroupMember> groupMembers;
+        GroupMember groupMember;
         GroupActions.closeGroupDetails(driver2);
         GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
 
         GroupActions.addMember(driver2, userData3.getUsername());
 
-        NotificationUtil.verifySuccessNotification(driver2, "Tag hozzáadva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Group member added.");
 
         groupMembers = GroupActions.getMembers(driver2);
         assertThat(groupMembers).hasSize(3);
@@ -185,12 +195,15 @@ public class GroupMemberCrudTest extends SeleniumTest {
         assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isFalse();
         assertThat(groupMember.getKickButton().isEnabled()).isTrue();
         assertThat(groupMember.getTransferLeadershipButton()).isEmpty();
+        return groupMember;
+    }
 
-        //Kick member
+    private static void kickMember(WebDriver driver1, WebDriver driver2, GroupMember groupMember) {
+        List<GroupMember> groupMembers;
         groupMember.getKickButton()
             .click();
         CommonPageActions.confirmConfirmationDialog(driver2, "kick-group-member-confirmation-dialog");
-        NotificationUtil.verifySuccessNotification(driver2, "Tag eltávolítva.");
+        NotificationUtil.verifySuccessNotification(driver2, "Group member kicked.");
 
         groupMembers = GroupActions.getMembers(driver2);
         assertThat(groupMembers).hasSize(2);
@@ -203,13 +216,14 @@ public class GroupMemberCrudTest extends SeleniumTest {
             .orElseThrow(() -> new NullPointerException("Transfer ownership button not present or not enabled."))
             .click();
         CommonPageActions.confirmConfirmationDialog(driver1, "transfer-ownership-confirmation-dialog");
-        NotificationUtil.verifySuccessNotification(driver1, "Vezetés átadva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Ownership transferred.");
+    }
 
-        //Leave group
+    private static void leaveGroup(WebDriver driver1, WebDriver driver2) {
         GroupActions.openGroup(driver1, GroupActions.getGroups(driver1).get(0));
 
         GroupActions.leaveGroup(driver1);
-        NotificationUtil.verifySuccessNotification(driver1, "Csapat elhagyva.");
+        NotificationUtil.verifySuccessNotification(driver1, "Group left.");
 
         AwaitilityWrapper.createDefault()
             .until(() -> GroupActions.getGroups(driver1).isEmpty())
@@ -219,14 +233,5 @@ public class GroupMemberCrudTest extends SeleniumTest {
         GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
 
         assertThat(GroupActions.getMembers(driver2)).hasSize(1);
-    }
-
-    private Future<Void> headToCommunity(WebDriver driver, RegistrationParameters userData) {
-        return EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(driver);
-            IndexPageActions.registerUser(driver, userData);
-            ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
-            return null;
-        });
     }
 }

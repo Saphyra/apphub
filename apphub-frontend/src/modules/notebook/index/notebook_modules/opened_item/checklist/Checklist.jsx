@@ -363,7 +363,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     />
                 }
 
-                {
+                {editingEnabled &&
                     <Button
                         id="notebook-content-checklist-add-item-button"
                         label={localizationHandler.get("add-item")}

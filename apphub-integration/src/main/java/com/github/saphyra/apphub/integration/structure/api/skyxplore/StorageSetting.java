@@ -59,7 +59,7 @@ public class StorageSetting {
     public void saveChanges(WebDriver driver) {
         webElement.findElement(By.cssSelector(":scope button:first-child")).click();
 
-        NotificationUtil.verifySuccessNotification(driver, "Raktár beállítás elmentve.");
+        NotificationUtil.verifySuccessNotification(driver, "Storage setting saved.");
     }
 
     public void delete(WebDriver driver) {
@@ -67,6 +67,6 @@ public class StorageSetting {
 
         CommonPageActions.confirmConfirmationDialog(driver, "delete-storage-setting-confirmation-dialog");
 
-        NotificationUtil.verifySuccessNotification(driver, "Raktár beállítás törölve.");
+        NotificationUtil.verifySuccessNotification(driver, "Storage setting deleted.");
     }
 }

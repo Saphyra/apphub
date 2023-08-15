@@ -17,10 +17,10 @@ import java.util.stream.Stream;
 
 public class LoginTest extends SeleniumTest {
     private static final String INCORRECT_PASSWORD = "incorrect-password";
-    private static final String EMPTY_CREDENTIALS_MESSAGE = "E-mail és jelszó megadása kötelező!";
-    private static final String BAD_CREDENTIALS_MESSAGE = "Az email cím és jelszó kombinációja ismeretlen.";
+    private static final String EMPTY_CREDENTIALS_MESSAGE = "Please fill e-mail address and password!";
+    private static final String BAD_CREDENTIALS_MESSAGE = "Unknown combination of e-mail address and password.";
 
-    @Test
+    @Test(groups = {"fe", "index"})
     public void login() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -29,31 +29,45 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, registrationParameters);
         ModulesPageActions.logout(driver);
 
-        //Empty email
+        emptyEmail(driver);
+        emptyPassword(driver);
+        incorrectEmail(driver, registrationParameters);
+        incorrectPassword(driver, registrationParameters);
+        LoginParameters loginParameters = successfulLogin(driver, registrationParameters);
+        lockUser(driver, registrationParameters, loginParameters);
+    }
+
+    private static void emptyEmail(WebDriver driver) {
         IndexPageActions.submitLogin(driver, emptyEmail());
         ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
+    }
 
-        //Empty password
+    private static void emptyPassword(WebDriver driver) {
         IndexPageActions.submitLogin(driver, emptyPassword());
         ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
+    }
 
-        //Incorrect e-mail
+    private static void incorrectEmail(WebDriver driver, RegistrationParameters registrationParameters) {
         IndexPageActions.submitLogin(driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
         ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
+    }
 
-        //Incorrect-password
+    private static void incorrectPassword(WebDriver driver, RegistrationParameters registrationParameters) {
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
         ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
+    }
 
-        //Successful login
+    private static LoginParameters successfulLogin(WebDriver driver, RegistrationParameters registrationParameters) {
         LoginParameters loginParameters = LoginParameters.fromRegistrationParameters(registrationParameters);
         IndexPageActions.submitLogin(driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
             .assertTrue("Login failed.");
+        return loginParameters;
+    }
 
-        //Lock user
+    private static void lockUser(WebDriver driver, RegistrationParameters registrationParameters, LoginParameters loginParameters) {
         ModulesPageActions.logout(driver);
 
         Stream.generate(() -> "")
@@ -64,10 +78,10 @@ public class LoginTest extends SeleniumTest {
             });
 
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
 
         IndexPageActions.submitLogin(driver, loginParameters);
-        ToastMessageUtil.verifyErrorToast(driver, "Fiók zárolva. Próbáld újra később!");
+        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 
@@ -78,13 +92,13 @@ public class LoginTest extends SeleniumTest {
             .assertTrue("Login failed.");
     }
 
-    private LoginParameters emptyEmail() {
+    private static LoginParameters emptyEmail() {
         return LoginParameters.builder()
             .password(INCORRECT_PASSWORD)
             .build();
     }
 
-    private LoginParameters emptyPassword() {
+    private static LoginParameters emptyPassword() {
         return LoginParameters.builder()
             .password(INCORRECT_PASSWORD)
             .build();

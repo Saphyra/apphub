@@ -23,7 +23,7 @@ import java.util.UUID;
 public class BanExpirationTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(priority = Integer.MIN_VALUE)
+    @Test(priority = Integer.MIN_VALUE, groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -47,13 +47,13 @@ public class BanExpirationTest extends BackEndTest {
 
         BanActions.ban(language, accessTokenId, banRequest);
 
-        Response response = ModulesActions.getModulesResponse(language, testAccessTokenId);
+        Response response = ModulesActions.getModulesResponse(testAccessTokenId);
         ResponseValidator.verifyErrorResponse(language, response, 403, ErrorCode.MISSING_ROLE);
 
         AwaitilityWrapper.create(300, 10)
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
-                return ModulesActions.getModulesResponse(language, testAccessTokenId).getStatusCode() == 200;
+                return ModulesActions.getModulesResponse(testAccessTokenId).getStatusCode() == 200;
             })
             .assertTrue("Ban was not revoked in the given time.");
     }

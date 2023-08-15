@@ -34,7 +34,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     private static final String NEW_CHECKLIST_TITLE = "new-checklist";
     private static final String NEW_VALUE = "new-value";
 
-    @Test(groups = "notebook")
+    @Test(groups = {"fe", "notebook"})
     public void checklistCrud() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
@@ -52,7 +52,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         NewChecklistActions.fillTitle(driver, " ");
         NewChecklistActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Create
         NewChecklistActions.fillTitle(driver, CHECKLIST_TITLE);
@@ -121,7 +121,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         ViewChecklistActions.fillTitle(driver, " ");
         ViewChecklistActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Cím nem lehet üres.");
+        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
 
         //Edit - Discard changes
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);

@@ -13,35 +13,42 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterTest extends SeleniumTest {
-    @Test
+    @Test(groups = {"fe", "modules"})
     public void searchModule() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        //No result
+        noResult(driver);
+        searchCategory(driver);
+        searchByModule(driver);
+    }
+
+    private static void noResult(WebDriver driver) {
         ModulesPageActions.search(driver, "asd");
         AwaitilityWrapper.createDefault()
             .until(() -> ModulesPageActions.getCategories(driver).isEmpty());
+    }
 
-        //Search category
-        ModulesPageActions.search(driver, "fiók");
+    private static void searchCategory(WebDriver driver) {
+        ModulesPageActions.search(driver, "account");
         Category categoryResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("There is not only one category."));
 
         assertThat(categoryResult.getModules()).hasSize(1);
+    }
 
-        //Search by module
-        ModulesPageActions.search(driver, "ó");
+    private static void searchByModule(WebDriver driver) {
+        ModulesPageActions.search(driver, "a");
         AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() != 1)
             .stream()
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Failed resetting search result."));
 
-        ModulesPageActions.search(driver, "ók");
+        ModulesPageActions.search(driver, "manage");
         Category moduleResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()

@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.integraton.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -20,7 +19,6 @@ import org.testng.annotations.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +29,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
     private static final Integer MINUTES = 45;
     public static final String USER_DELETION_CONFIRMATION_DIALOG_ID = "user-deletion-confirmation-dialog";
 
-    @Test
+    @Test(groups = {"fe", "admin-panel"})
     public void scheduleUserDeletionCd() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);
@@ -40,55 +38,57 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        Future<Void> testUserSetup = TestBase.EXECUTOR_SERVICE.submit(() -> {
-            Navigation.toIndexPage(testDriver);
-            IndexPageActions.registerUser(testDriver, testUserData);
-            return null;
-        });
+        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
-        Navigation.toIndexPage(adminDriver);
-        IndexPageActions.registerUser(adminDriver, adminUserData);
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
         ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
 
-        AwaitilityWrapper.createDefault()
-            .until(testUserSetup::isDone)
-            .assertTrue("Test user is not registered.");
-
         openUser(adminDriver, testUserData);
 
-        //Empty date
+        emptyDate(adminDriver);
+        emptyTime(adminDriver);
+        emptyPassword(adminDriver);
+        incorrectPassword(adminDriver);
+        scheduleDeletion(adminDriver, adminUserData);
+        deleteSchedule(adminDriver);
+    }
+
+    private static void emptyDate(WebDriver adminDriver) {
         BanActions.submitDeleteAccountForm(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "A dátum nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Date must not be empty.");
+    }
 
-        //Empty time
+    private static void emptyTime(WebDriver adminDriver) {
         BanActions.fillDeleteUserDate(adminDriver, DATE);
 
         BanActions.submitDeleteAccountForm(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Az idő nem lehet üres.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Time must not be empty.");
+    }
 
-        //Empty password
+    private static void emptyPassword(WebDriver adminDriver) {
         BanActions.fillDeleteUserTime(adminDriver, HOURS, MINUTES);
         BanActions.submitDeleteAccountForm(adminDriver);
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Írd be a jelszavad.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Please enter your password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+    }
 
-        //Incorrect password
+    private static void incorrectPassword(WebDriver adminDriver) {
         BanActions.fillDeleteUserPassword(adminDriver, "asd");
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Hibás jelszó.");
+        NotificationUtil.verifyErrorNotification(adminDriver, "Incorrect password.");
         assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+    }
 
-        //Schedule deletion
+    private static void scheduleDeletion(WebDriver adminDriver, RegistrationParameters adminUserData) {
         BanActions.fillDeleteUserPassword(adminDriver, adminUserData.getPassword());
 
         CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
@@ -98,9 +98,10 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
             .assertTrue("User deletion is not scheduled.");
 
         assertThat(BanActions.isUserMarkedForDeletion(adminDriver)).isTrue();
-        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE.toString() + " " + (HOURS + 2) + ":" + MINUTES + ":00");
+        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE + " " + (HOURS + 2) + ":" + MINUTES + ":00");
+    }
 
-        //Delete schedule
+    private static void deleteSchedule(WebDriver adminDriver) {
         BanActions.unmarkForDeletion(adminDriver);
 
         AwaitilityWrapper.createDefault()
