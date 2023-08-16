@@ -1,4 +1,6 @@
 ===FEATURES===
+Platform
+    Integration Server for integration test measurements
 
 ===BUGFIXES===
 
