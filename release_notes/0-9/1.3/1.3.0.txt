@@ -3,5 +3,6 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+Feature switch for parallel unit test execution
 
 ===TECHNICAL DEBTS===
