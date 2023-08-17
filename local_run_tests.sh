@@ -3,6 +3,8 @@ DISABLED_GROUPS=${2:-headed-only}
 SERVER_PORT=${3:-8080}
 DATABASE_PORT=${4:-5432}
 
+./infra/deployment/script/start_integration_server.sh
+
 function waitStartup(){
   echo "Pinging $1"
   curl -s -o nul --head -X GET --silent --retry 20 --retry-connrefused --retry-delay 1 localhost:$1/platform/health
@@ -20,7 +22,7 @@ do
 done < ./infra/deployment/service/service_list
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DdatabaseName=apphub" clean test
+mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DdatabaseName=apphub -DintegrationServerEnabled=true" clean test
 cd .. || exit
 
 taskkill //F //IM chromedriver.exe //T

@@ -54,4 +54,8 @@ public class UrlFactory {
     public static String createWithRedirect(String uri, String redirectUrl) {
         return create(uri) + "?redirect=" + redirectUrl;
     }
+
+    public static String create(int port, String uri, String pathVariableName, Object pathVariableValue) {
+        return create(port, uri, Map.of(pathVariableName, pathVariableValue));
+    }
 }

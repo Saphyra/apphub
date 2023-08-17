@@ -100,9 +100,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-    </build>
-
     <modules>
         <module>apphub-service</module>
         <module>apphub-api</module>

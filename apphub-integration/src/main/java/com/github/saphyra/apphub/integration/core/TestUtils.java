@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class TestUtils {
     public static String getMethodIdentifier(Method method) {
-        return method.getDeclaringClass().getName() + method.getName();
+        return String.format("%s.%s", method.getDeclaringClass().getName(), method.getName());
     }
 
     public static String getTestCaseName(Method method) {

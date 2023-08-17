@@ -6,10 +6,12 @@ DATABASE_PORT=${4:-8071}
 
 echo "Running Integration tests against namespace $NAMESPACE_NAME"
 
+./infra/deployment/script/start_integration_server.sh
+
 start ./port_forward.sh $NAMESPACE_NAME $SERVER_PORT $DATABASE_PORT
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS" clean test
+mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DintegrationServerEnabled=true" clean test
 if [[ "$TEST_RESULT" -ne 0 ]]; then
   echo "Tests failed"
   cd .. || exit
