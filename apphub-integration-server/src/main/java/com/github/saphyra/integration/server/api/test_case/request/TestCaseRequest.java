@@ -13,5 +13,6 @@ import java.util.List;
 @Builder
 public class TestCaseRequest {
     private String id;
+    private String name;
     private List<String> groups;
 }

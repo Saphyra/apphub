@@ -11,6 +11,7 @@
             <column name="id" type="text">
                 <constraints nullable="false"/>
             </column>
+            <column name="name" type="text"/>
             <column name="first_run" type="timestamp"/>
             <column name="last_run" type="timestamp"/>
             <column name="groups" type="text"/>
@@ -54,5 +55,7 @@
             <column name="duration" type="number"/>
             <column name="status" type="text"/>
         </createTable>
+
+        <addPrimaryKey tableName="test_case_run" columnNames="id"/>
     </changeSet>
 </databaseChangeLog>

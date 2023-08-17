@@ -1,4 +1,4 @@
-package com.github.saphyra.integration.server.domain.test_run;
+package com.github.saphyra.integration.server.api.test_run;
 
 public enum TestRunStatus {
     PENDING,

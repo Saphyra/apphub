@@ -1,4 +1,4 @@
-package com.github.saphyra.integration.server.domain.test_method;
+package com.github.saphyra.integration.server.domain.test_case;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,7 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,11 +22,13 @@ public class TestCase {
     @Id
     private String id;
 
+    private String name;
+
     @CreationTimestamp
     private OffsetDateTime firstRun;
 
     @UpdateTimestamp
     private OffsetDateTime lastRun;
 
-    private List<String> groups;
+    private String groups;
 }

@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.integration.core;
 
+import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
@@ -7,6 +9,7 @@ import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
@@ -31,6 +34,7 @@ public class TestBase {
     private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS);
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
+    private static final ThreadLocal<Stopwatch> DURATION_STOPWATCH = new ThreadLocal<>();
 
     public static String getEmailDomain() {
         return EMAIL_DOMAIN.get();
@@ -44,6 +48,8 @@ public class TestBase {
         log.info("DatabasePort: {}", TestConfiguration.DATABASE_PORT);
         log.info("DatabaseName: {}", TestConfiguration.DATABASE_NAME);
         log.info("RestLoggingEnabled: {}", TestConfiguration.REST_LOGGING_ENABLED);
+        log.info("IntegrationServerEnabled: {}", TestConfiguration.INTEGRATION_SERVER_ENABLED);
+        log.info("IntegrationServerPort: {}", TestConfiguration.INTEGRATION_SERVER_PORT);
 
         StatusLogger.setTotalTestCount(context);
 
@@ -58,6 +64,8 @@ public class TestBase {
         }
 
         System.setProperty("testng.show.stack.frames", "true");
+
+        IntegrationServer.start();
     }
 
     public static boolean isEnabled(ITestNGMethod method) {
@@ -70,12 +78,14 @@ public class TestBase {
     }
 
     @AfterSuite(alwaysRun = true)
-    public void tearDownSuite() throws SQLException {
+    public void tearDownSuite(ITestContext context) throws SQLException {
         WebDriverFactory.stopDrivers();
 
         TestConfiguration.CONNECTION.close();
 
         StatusLogger.logTestStartOrder();
+
+        IntegrationServer.stop(context.getFailedTests().size() == 0 ? Constants.PASSED : Constants.FAILED);
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -88,6 +98,7 @@ public class TestBase {
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
         Stopwatch stopwatch = Stopwatch.createStarted();
         acquirePermit(method, stopwatch);
+        DURATION_STOPWATCH.set(Stopwatch.createStarted());
 
         EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
         StatusLogger.addToStartOrder(method);
@@ -100,17 +111,24 @@ public class TestBase {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDownMethod(Method method) {
+    public void tearDownMethod(Method method, ITestResult testResult) {
         String methodName = method.getName();
+
+        long duration = DURATION_STOPWATCH.get()
+            .stop()
+            .elapsed(TimeUnit.MILLISECONDS);
+
+        IntegrationServer.reportTestCaseRun(method, duration, testResult.getStatus() == ITestResult.SUCCESS);
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
         SEMAPHORE.release(1);
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
-        StatusLogger.incrementFinishedTestCount(method);
+        StatusLogger.incrementFinishedTestCount(method, duration);
         deleteTestUsers(methodName);
 
         EMAIL_DOMAIN.remove();
+        DURATION_STOPWATCH.remove();
 
         log.debug("Test {} completed", methodName);
     }

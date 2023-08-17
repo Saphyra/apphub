@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@ToString(exclude = "testCase")
 public class ReportTestCaseRequest {
     private TestCaseRequest testCase;
     private TestCaseRunRequest testCaseRun;

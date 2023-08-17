@@ -22,6 +22,10 @@ public class TestConfiguration {
         .orElse("be,fe")
         .split(","));
 
+    //Integration server
+    public static final boolean INTEGRATION_SERVER_ENABLED = Boolean.parseBoolean(System.getProperty("integrationServerEnabled", "false"));
+    public static final int INTEGRATION_SERVER_PORT = Integer.parseInt(System.getProperty("integrationServerPort", "8072"));
+
     //Connection
     public static final int SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
     public static final int DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "databasePort is null"));

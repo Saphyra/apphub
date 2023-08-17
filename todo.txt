@@ -1,3 +1,0 @@
-TODO Add functionality to integration tests
-TODO Extend scripts with integration server start
-TODO Enable integration server for script runs

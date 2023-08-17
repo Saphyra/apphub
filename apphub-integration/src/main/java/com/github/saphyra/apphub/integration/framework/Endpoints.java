@@ -204,4 +204,10 @@ public class Endpoints {
     public static final String CALENDAR_OCCURRENCE_SNOOZED = "/api/calendar/occurrence/{occurrenceId}/snoozed";
     public static final String CALENDAR_EVENT_DELETE = "/api/calendar/event/{eventId}";
     public static final String CALENDAR_SEARCH = "/api/calendar/search";
+
+    //INTEGRATION SERVER
+    public static final String INTEGRATION_SERVER_CREATE_TEST_RUN = "/test-run";
+    public static final String INTEGRATION_SERVER_REPORT_TEST_CASE = "/test-case/{testRunId}";
+    public static final String INTEGRATION_SERVER_GET_AVERAGE_RUN_TIME = "/test-case/run-time/average";
+    public static final String INTEGRATION_SERVER_FINISH_TEST_RUN = "/test-run/{testRunId}";
 }

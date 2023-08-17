@@ -1,4 +1,4 @@
-package com.github.saphyra.integration.server.domain.test_method;
+package com.github.saphyra.integration.server.domain.test_case;
 
 import org.springframework.data.repository.CrudRepository;
 

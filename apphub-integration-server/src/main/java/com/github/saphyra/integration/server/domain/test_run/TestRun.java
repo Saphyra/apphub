@@ -1,5 +1,6 @@
 package com.github.saphyra.integration.server.domain.test_run;
 
+import com.github.saphyra.integration.server.api.test_run.TestRunStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -27,6 +29,7 @@ public class TestRun {
     @CreationTimestamp
     private OffsetDateTime startTime;
 
+    @UpdateTimestamp
     private OffsetDateTime endTime;
 
     @Enumerated(EnumType.STRING)
