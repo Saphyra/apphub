@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -41,7 +42,7 @@ public class CharacterCrudTest extends SeleniumTest {
 
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
 
         SkyXploreMainMenuActions.back(driver);
         ModulesPageActions.logout(driver);
@@ -54,12 +55,12 @@ public class CharacterCrudTest extends SeleniumTest {
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Character name already exists.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_CHARACTER_NAME_ALREADY_EXISTS);
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData2.getUsername());
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
 
         SkyXploreMainMenuActions.editCharacter(driver);
 
@@ -71,7 +72,7 @@ public class CharacterCrudTest extends SeleniumTest {
         SkyXploreCharacterActions.fillCharacterName(driver, newCharacterName);
         SkyXploreCharacterActions.submitForm(driver);
 
-        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
 
         SkyXploreMainMenuActions.editCharacter(driver);
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);

@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -52,7 +53,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         NewChecklistActions.fillTitle(driver, " ");
         NewChecklistActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
 
         //Create
         NewChecklistActions.fillTitle(driver, CHECKLIST_TITLE);
@@ -121,7 +122,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         ViewChecklistActions.fillTitle(driver, " ");
         ViewChecklistActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
 
         //Edit - Discard changes
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);

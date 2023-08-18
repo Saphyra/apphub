@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -59,7 +60,7 @@ public class DeleteAccountTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
-        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
     }
 
     private static void cancelDeletion(WebDriver driver, RegistrationParameters userData) {
@@ -82,6 +83,6 @@ public class DeleteAccountTest extends SeleniumTest {
         //NotificationUtil.verifySuccessNotification(driver, "Account törölve."); TODO restore when account page is migrated to React
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
-        ToastMessageUtil.verifyErrorToast(driver, "Unknown combination of e-mail address and password.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 }

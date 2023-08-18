@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.EmailValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.PasswordValidationResult;
@@ -48,7 +49,7 @@ public class RegistrationTest extends SeleniumTest {
         IndexPageActions.fillRegistrationForm(driver, usernameAlreadyExists);
         IndexPageActions.submitRegistration(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Username already in use.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_USERNAME_ALREADY_IN_USE);
     }
 
     private static void emailAlreadyExists(WebDriver driver, RegistrationParameters existingUser) {
@@ -57,7 +58,7 @@ public class RegistrationTest extends SeleniumTest {
             .build();
         IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
         IndexPageActions.submitRegistration(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "E-mail address is already in use.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMAIL_ALREADY_IN_USE);
     }
 
     private static void executeValidationTest(WebDriver driver, RegistrationParameters parameters, RegistrationValidationResult validationResult) {

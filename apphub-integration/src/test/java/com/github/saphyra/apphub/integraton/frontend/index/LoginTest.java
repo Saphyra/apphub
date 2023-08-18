@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -17,8 +18,6 @@ import java.util.stream.Stream;
 
 public class LoginTest extends SeleniumTest {
     private static final String INCORRECT_PASSWORD = "incorrect-password";
-    private static final String EMPTY_CREDENTIALS_MESSAGE = "Please fill e-mail address and password!";
-    private static final String BAD_CREDENTIALS_MESSAGE = "Unknown combination of e-mail address and password.";
 
     @Test(groups = {"fe", "index"})
     public void login() {
@@ -39,22 +38,22 @@ public class LoginTest extends SeleniumTest {
 
     private static void emptyEmail(WebDriver driver) {
         IndexPageActions.submitLogin(driver, emptyEmail());
-        ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void emptyPassword(WebDriver driver) {
         IndexPageActions.submitLogin(driver, emptyPassword());
-        ToastMessageUtil.verifyErrorToast(driver, EMPTY_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void incorrectEmail(WebDriver driver, RegistrationParameters registrationParameters) {
         IndexPageActions.submitLogin(driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
-        ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static void incorrectPassword(WebDriver driver, RegistrationParameters registrationParameters) {
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static LoginParameters successfulLogin(WebDriver driver, RegistrationParameters registrationParameters) {
@@ -74,14 +73,14 @@ public class LoginTest extends SeleniumTest {
             .limit(2)
             .forEach(s -> {
                 IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-                ToastMessageUtil.verifyErrorToast(driver, BAD_CREDENTIALS_MESSAGE);
+                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
             });
 
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
 
         IndexPageActions.submitLogin(driver, loginParameters);
-        ToastMessageUtil.verifyErrorToast(driver, "Account locked. Try again later.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 

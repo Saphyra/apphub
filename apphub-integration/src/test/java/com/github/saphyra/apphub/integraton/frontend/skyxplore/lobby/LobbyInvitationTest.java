@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberStatus;
@@ -57,7 +58,7 @@ public class LobbyInvitationTest extends SeleniumTest {
         assertThat(invitedMember.getStatus()).isEqualTo(LobbyMemberStatus.INVITED);
 
         onlineFriend.invite();
-        ToastMessageUtil.verifyErrorToast(driver1, "You have invited this player recently. Please wait a few seconds before trying again.");
+        ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_LOBBY_INVITATION_SENT_RECENTLY);
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 

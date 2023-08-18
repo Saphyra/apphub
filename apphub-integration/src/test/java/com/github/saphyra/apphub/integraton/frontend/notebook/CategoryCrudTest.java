@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -46,7 +47,7 @@ public class CategoryCrudTest extends SeleniumTest {
         NewCategoryActions.fillTitle(driver, " ");
         NewCategoryActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
 
         //Create
         NewCategoryActions.fillTitle(driver, CATEGORY_1_TITLE);
@@ -70,7 +71,7 @@ public class CategoryCrudTest extends SeleniumTest {
         EditListItemActions.fillTitle(driver, " ");
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
 
         //Edit
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);

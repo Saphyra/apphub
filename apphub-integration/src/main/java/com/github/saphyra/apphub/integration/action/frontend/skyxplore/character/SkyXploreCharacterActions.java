@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import org.openqa.selenium.WebDriver;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
@@ -41,6 +42,6 @@ public class SkyXploreCharacterActions {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Player is not redirected to main menu.");
-        ToastMessageUtil.verifySuccessToast(driver, "Character saved.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
     }
 }

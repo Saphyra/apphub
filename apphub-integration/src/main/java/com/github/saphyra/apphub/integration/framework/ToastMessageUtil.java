@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,13 +10,21 @@ import java.util.List;
 
 @Slf4j
 public class ToastMessageUtil {
-    public static void verifyErrorToast(WebDriver driver, String message) {
+    public static void verifyErrorToast(WebDriver driver, LocalizedText localizedText) {
+        verifyErrorToast(driver, localizedText.getText());
+    }
+
+    public static void verifySuccessToast(WebDriver driver, LocalizedText localizedText) {
+        verifySuccessToast(driver, localizedText.getText());
+    }
+
+    private static void verifyErrorToast(WebDriver driver, String message) {
         AwaitilityWrapper.create(5, 1)
             .until(() -> !getErrorToasts(driver, message).isEmpty())
             .assertTrue("No error toast found with message " + message);
     }
 
-    public static void verifySuccessToast(WebDriver driver, String message) {
+    private static void verifySuccessToast(WebDriver driver, String message) {
         AwaitilityWrapper.create(10, 1)
             .until(() -> !getSuccessToasts(driver, message).isEmpty())
             .assertTrue("No success toast found with message " + message);

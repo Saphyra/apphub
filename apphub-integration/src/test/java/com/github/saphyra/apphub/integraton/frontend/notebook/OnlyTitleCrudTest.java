@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -44,7 +45,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
         NewOnlyTitleActions.fillTitle(driver, " ");
         NewOnlyTitleActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void create(WebDriver driver) {
@@ -63,7 +64,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void edit(WebDriver driver) {

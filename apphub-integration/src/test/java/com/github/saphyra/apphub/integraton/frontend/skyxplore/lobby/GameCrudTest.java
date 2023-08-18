@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ public class GameCrudTest extends SeleniumTest {
     private static void startGame_notReady(WebDriver driver1) {
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
+        ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_LOBBY_MEMBERS_NOT_READY);
     }
 
     private static void startGame(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
@@ -119,7 +120,7 @@ public class GameCrudTest extends SeleniumTest {
     private static void startGame_notAllMembersReady(WebDriver driver1) {
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        ToastMessageUtil.verifyErrorToast(driver1, "Not all the members are ready.");
+        ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_LOBBY_MEMBERS_NOT_READY);
     }
 
     private static void checkIfNotMemberFriendIsNotAvailableToInvite(WebDriver driver1) {

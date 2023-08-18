@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -78,13 +79,13 @@ public class TableCrudTest extends SeleniumTest {
     private static void create_blankTitle(WebDriver driver) {
         NewTableActions.fillTitle(driver, " ");
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void create_hasBlankColumnName(WebDriver driver) {
         NewTableActions.fillTitle(driver, TABLE_TITLE);
         NewTableActions.submit(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_COLUMN_NAME_MUST_NOT_BE_BLANK);
     }
 
     private static void create_addRow(WebDriver driver) {
@@ -205,7 +206,7 @@ public class TableCrudTest extends SeleniumTest {
         ViewTableActions.setTitle(driver, " ");
 
         ViewTableActions.saveChanges(driver);
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void edit_blankColumnName(WebDriver driver) {
@@ -217,7 +218,7 @@ public class TableCrudTest extends SeleniumTest {
 
         ViewTableActions.saveChanges(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Name of the column must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_COLUMN_NAME_MUST_NOT_BE_BLANK);
     }
 
     private static void edit_discard(WebDriver driver) {

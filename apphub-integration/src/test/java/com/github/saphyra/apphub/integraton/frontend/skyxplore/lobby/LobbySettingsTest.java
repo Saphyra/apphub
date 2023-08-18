@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.Range;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayerElement;
@@ -336,6 +337,6 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Every player is in the same alliance. Game is boring with no one to conquer.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_LOBBY_ONLY_ONE_ALLIANCE);
     }
 }

@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -57,7 +58,7 @@ public class LinkCrudTest extends SeleniumTest {
         NewLinkActions.fillTitle(driver, "");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void create_blankUrl(WebDriver driver) {
@@ -65,7 +66,7 @@ public class LinkCrudTest extends SeleniumTest {
         NewLinkActions.fillUrl(driver, " ");
         NewLinkActions.submit(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_URL_MUST_NOT_BE_BLANK);
     }
 
     private static void create(WebDriver driver) {
@@ -99,7 +100,7 @@ public class LinkCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "Title must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
     }
 
     private static void edit_blankUrl(WebDriver driver) {
@@ -108,7 +109,7 @@ public class LinkCrudTest extends SeleniumTest {
 
         EditListItemActions.submitForm(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, "URL must not be blank.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_URL_MUST_NOT_BE_BLANK);
     }
 
     private static void edit(WebDriver driver) {
