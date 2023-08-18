@@ -26,7 +26,6 @@ class StorageSettingLoaderTest {
     private static final String DATA_ID = "data-id";
     private static final Integer TARGET_AMOUNT = 365;
     private static final Integer PRIORITY = 365;
-    private static final Integer BATCH_SIZE = 357;
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -72,7 +71,6 @@ class StorageSettingLoaderTest {
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
         given(model.getPriority()).willReturn(PRIORITY);
-        given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
         StorageSetting result = underTest.convert(model);
 
@@ -81,6 +79,5 @@ class StorageSettingLoaderTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
-        assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);
     }
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ProductionOrderModel extends GameItem {
     private UUID location;
-    private String locationType;
     private UUID assignee;
     private UUID externalReference;
     private String dataId;

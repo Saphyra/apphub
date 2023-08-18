@@ -29,7 +29,6 @@ public class StorageSettingsModelValidatorTest {
     private static final Integer PRIORITY = 325;
     private static final String DATA_ID = "data-id";
     private static final Integer TARGET_AMOUNT = 42362;
-    private static final Integer BATCH_SIZE = 425;
     private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
@@ -111,40 +110,11 @@ public class StorageSettingsModelValidatorTest {
     }
 
     @Test
-    public void nullBatchSize() {
-        given(model.getPriority()).willReturn(PRIORITY);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
-        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-
-        given(model.getBatchSize()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
-
-        ExceptionValidator.validateInvalidParam(ex, "batchSize", "must not be null");
-    }
-
-    @Test
-    public void tooLowBatchSize() {
-        given(model.getPriority()).willReturn(PRIORITY);
-        given(model.getDataId()).willReturn(DATA_ID);
-        given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
-        given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-
-        given(model.getBatchSize()).willReturn(0);
-
-        Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
-
-        ExceptionValidator.validateInvalidParam(ex, "batchSize", "too low");
-    }
-
-    @Test
     public void settingAlreadyExists() {
         given(model.getPriority()).willReturn(PRIORITY);
         given(model.getDataId()).willReturn(DATA_ID);
         given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
         given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storageSetting));
@@ -160,7 +130,6 @@ public class StorageSettingsModelValidatorTest {
         given(model.getDataId()).willReturn(DATA_ID);
         given(resourceDataService.containsKey(DATA_ID)).willReturn(true);
         given(model.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(model.getBatchSize()).willReturn(BATCH_SIZE);
 
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.empty());

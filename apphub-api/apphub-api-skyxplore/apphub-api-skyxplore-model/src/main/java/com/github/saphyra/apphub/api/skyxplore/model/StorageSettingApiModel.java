@@ -16,5 +16,4 @@ public class StorageSettingApiModel {
     private String dataId;
     private Integer targetAmount;
     private Integer priority;
-    private Integer batchSize;
 }

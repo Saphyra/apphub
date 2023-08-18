@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
@@ -56,13 +55,7 @@ public class ReservedStorageQueryService {
             .getByLocation(location)
             .stream()
             .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId())) //TODO filter reserved storage for production - if needed
-            .map(this::getReservedStorageCapacity)
-            .mapToInt(Integer::intValue)
+            .mapToInt(ReservedStorage::getAmount)
             .sum();
-    }
-
-    private int getReservedStorageCapacity(ReservedStorage reservedResource) {
-        ResourceData resourceData = resourceDataService.get(reservedResource.getDataId());
-        return reservedResource.getAmount() * resourceData.getMass();
     }
 }

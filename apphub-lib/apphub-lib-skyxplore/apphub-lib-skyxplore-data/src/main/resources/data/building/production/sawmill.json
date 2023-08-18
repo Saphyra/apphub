@@ -6,7 +6,6 @@
       "placed": [
         "forest"
       ],
-      "maxBatchSize": 50,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -20,7 +19,6 @@
         "forest",
         "concrete"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

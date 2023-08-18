@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
@@ -23,6 +24,7 @@ import java.util.UUID;
 class StorageSettingTickTask implements TickTask {
     private final StorageSettingProcessFactory storageSettingProcessFactory;
     private final FreeStorageQueryService freeStorageQueryService;
+    private final ResourceDataService resourceDataService ;
 
     @Override
     public TickTaskOrder getOrder() {
@@ -56,7 +58,6 @@ class StorageSettingTickTask implements TickTask {
             .mapToInt(StorageSettingProcess::getAmount)
             .sum();
 
-
         if (inProgressAmount + storedAmount >= storageSetting.getTargetAmount()) {
             log.info("Resources already ordered.");
             return;
@@ -70,8 +71,11 @@ class StorageSettingTickTask implements TickTask {
         }
 
         int orderedAmount = Math.min(missingAmount, freeStorage);
+        int maxProductionBatchSize = resourceDataService.get(storageSetting.getDataId())
+            .getMaxProductionBatchSize();
+        int amountToDeliver = Math.min(orderedAmount, maxProductionBatchSize);
 
-        StorageSettingProcess process = storageSettingProcessFactory.create(gameData, storageSetting, orderedAmount);
+        StorageSettingProcess process = storageSettingProcessFactory.create(gameData, storageSetting, amountToDeliver);
 
         gameData.getProcesses()
             .add(process);

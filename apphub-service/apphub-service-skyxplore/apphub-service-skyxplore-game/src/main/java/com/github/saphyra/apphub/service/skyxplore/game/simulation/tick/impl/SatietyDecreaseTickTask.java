@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTask;
@@ -28,10 +27,10 @@ class SatietyDecreaseTickTask implements TickTask {
 
         game.getData()
             .getCitizens()
-            .forEach(citizen -> processCitizen(syncCache, game.getData(), citizen));
+            .forEach(citizen -> processCitizen(syncCache, citizen));
     }
 
-    private void processCitizen(SyncCache syncCache, GameData gameData, Citizen citizen) {
+    private void processCitizen(SyncCache syncCache, Citizen citizen) {
         int decrease = gameProperties.getCitizen()
             .getSatiety()
             .getSatietyDecreasedPerTick();

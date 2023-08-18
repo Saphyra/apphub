@@ -24,7 +24,6 @@ public class StorageSettingToApiModelMapper {
             .storageSettingId(storageSetting.getStorageSettingId())
             .dataId(storageSetting.getDataId())
             .targetAmount(storageSetting.getTargetAmount())
-            .batchSize(storageSetting.getBatchSize())
             .priority(storageSetting.getPriority())
             .build();
     }

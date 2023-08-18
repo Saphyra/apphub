@@ -31,4 +31,14 @@
             <column name="location_type"/>
         </dropColumn>
     </changeSet>
+
+    <changeSet id="remove-batch_size from storage_setting" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="storage_setting" columnName="batch_size"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="storage_setting">
+            <column name="batch_size"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

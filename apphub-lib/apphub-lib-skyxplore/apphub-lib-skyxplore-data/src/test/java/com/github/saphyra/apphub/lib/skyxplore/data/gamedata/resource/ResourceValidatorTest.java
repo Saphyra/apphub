@@ -63,30 +63,7 @@ public class ResourceValidatorTest {
     }
 
     @Test
-    public void nullMaxBatchSize() {
-        given(resourceData.getMass()).willReturn(32);
-        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
-        Map<String, ResourceData> map = new HashMap<>();
-        map.put(KEY, resourceData);
-        given(resourceData.getMaxProductionBatchSize()).willReturn(null);
-
-        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void nullMass() {
-        given(resourceData.getMass()).willReturn(32);
-        given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
-        Map<String, ResourceData> map = new HashMap<>();
-        map.put(KEY, resourceData);
-        given(resourceData.getMass()).willReturn(null);
-
-        assertThat(catchThrowable(() -> underTest.validate(map))).isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
     public void noProducer() {
-        given(resourceData.getMass()).willReturn(32);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);
@@ -98,7 +75,6 @@ public class ResourceValidatorTest {
 
     @Test
     public void valid() {
-        given(resourceData.getMass()).willReturn(32);
         given(resourceData.getStorageType()).willReturn(StorageType.CITIZEN);
         Map<String, ResourceData> map = new HashMap<>();
         map.put(KEY, resourceData);

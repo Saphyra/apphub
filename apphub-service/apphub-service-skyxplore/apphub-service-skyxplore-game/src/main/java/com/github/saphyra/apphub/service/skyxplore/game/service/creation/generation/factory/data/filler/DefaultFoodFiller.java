@@ -36,8 +36,7 @@ public class DefaultFoodFiller {
             GameConstants.DATA_ID_RAW_FOOD,
             planet.getPlanetId(),
             targetAmount,
-            GameConstants.DEFAULT_PRIORITY,
-            targetAmount
+            GameConstants.DEFAULT_PRIORITY
         );
 
         gameData.getStorageSettings()

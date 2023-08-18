@@ -23,7 +23,6 @@ public class StorageSettingConverterTest {
     private static final String DATA_ID = "data-id";
     private static final Integer TARGET_AMOUNT = 345;
     private static final Integer PRIORITY = 254;
-    private static final Integer BATCH_SIZE = 65163;
     private static final String STORAGE_SETTING_ID_STRING = "storage-setting-id";
     private static final String GAME_ID_STRING = "game-id";
     private static final String LOCATION_STRING = "location";
@@ -43,7 +42,6 @@ public class StorageSettingConverterTest {
         model.setDataId(DATA_ID);
         model.setTargetAmount(TARGET_AMOUNT);
         model.setPriority(PRIORITY);
-        model.setBatchSize(BATCH_SIZE);
 
         given(uuidConverter.convertDomain(STORAGE_SETTING_ID)).willReturn(STORAGE_SETTING_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -57,7 +55,6 @@ public class StorageSettingConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
-        assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);
     }
 
     @Test
@@ -69,7 +66,6 @@ public class StorageSettingConverterTest {
             .dataId(DATA_ID)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
-            .batchSize(BATCH_SIZE)
             .build();
 
         given(uuidConverter.convertEntity(STORAGE_SETTING_ID_STRING)).willReturn(STORAGE_SETTING_ID);
@@ -85,6 +81,5 @@ public class StorageSettingConverterTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
-        assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);
     }
 }

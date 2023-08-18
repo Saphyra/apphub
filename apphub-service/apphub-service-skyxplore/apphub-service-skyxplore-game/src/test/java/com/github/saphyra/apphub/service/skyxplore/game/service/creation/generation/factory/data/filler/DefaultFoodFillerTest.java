@@ -80,7 +80,7 @@ class DefaultFoodFillerTest {
         given(gameProperties.getPlanet()).willReturn(planetProperties);
         given(planetProperties.getDefaultRawFoodAmount()).willReturn(DEFAULT_FOOD_AMOUNT);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
-        given(storageSettingFactory.create(GameConstants.DATA_ID_RAW_FOOD, PLANET_ID, DEFAULT_FOOD_AMOUNT, GameConstants.DEFAULT_PRIORITY, DEFAULT_FOOD_AMOUNT)).willReturn(storageSetting);
+        given(storageSettingFactory.create(GameConstants.DATA_ID_RAW_FOOD, PLANET_ID, DEFAULT_FOOD_AMOUNT, GameConstants.DEFAULT_PRIORITY)).willReturn(storageSetting);
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storedResourceFactory.create(PLANET_ID, GameConstants.DATA_ID_RAW_FOOD, DEFAULT_FOOD_AMOUNT)).willReturn(storedResource);

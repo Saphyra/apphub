@@ -20,7 +20,6 @@ public class RequiredEmptyStorageCalculatorTest {
     private static final String DATA_ID_1 = "data-id-1";
     private static final String DATA_ID_2 = "data-id-2";
     private static final Integer AMOUNT = 324;
-    private static final Integer MASS = 245;
 
     @Mock
     private ResourceDataService resourceDataService;
@@ -65,12 +64,11 @@ public class RequiredEmptyStorageCalculatorTest {
 
         given(resourceData1.getStorageType()).willReturn(StorageType.CITIZEN);
         given(resourceData2.getStorageType()).willReturn(StorageType.BULK);
-        given(resourceData2.getMass()).willReturn(MASS);
 
         given(reservedStorage2.getAmount()).willReturn(AMOUNT);
 
         int result = underTest.getRequiredStorageAmount(StorageType.BULK, consumptions);
 
-        assertThat(result).isEqualTo(MASS * AMOUNT);
+        assertThat(result).isEqualTo(AMOUNT);
     }
 }

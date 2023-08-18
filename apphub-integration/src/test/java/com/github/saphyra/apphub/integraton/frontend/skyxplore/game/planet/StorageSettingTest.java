@@ -65,7 +65,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static StorageSetting createStorageSettingForCrud(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 5, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 3);
 
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
@@ -74,14 +74,12 @@ public class StorageSettingTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
         assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
         assertThat(storageSetting.getAmount()).isEqualTo(10);
-        assertThat(storageSetting.getBatchSize()).isEqualTo(5);
         assertThat(storageSetting.getPriority()).isEqualTo(3);
         return storageSetting;
     }
 
     private static StorageSetting editStorageSetting(WebDriver driver, StorageSetting storageSetting) {
         storageSetting.setAmount(20);
-        storageSetting.setBatchSize(7);
         storageSetting.setPriority(8);
         storageSetting.saveChanges(driver);
 
@@ -91,7 +89,6 @@ public class StorageSettingTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
         assertThat(editedSetting.getResourceName()).isEqualTo("Ore");
         assertThat(editedSetting.getAmount()).isEqualTo(20);
-        assertThat(editedSetting.getBatchSize()).isEqualTo(7);
         assertThat(editedSetting.getPriority()).isEqualTo(8);
         return editedSetting;
     }
@@ -146,7 +143,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static void createStorageSetting(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 5, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()

@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -43,12 +45,16 @@ class StorageSettingTickTaskTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final Integer FREE_STORAGE = 23;
     private static final UUID OWNER_ID = UUID.randomUUID();
+    private static final Integer MAX_BATCH_SIZE = FREE_STORAGE - 1;
 
     @Mock
     private StorageSettingProcessFactory storageSettingProcessFactory;
 
     @Mock
     private FreeStorageQueryService freeStorageQueryService;
+
+    @Mock
+    private ResourceDataService resourceDataService;
 
     @InjectMocks
     private StorageSettingTickTask underTest;
@@ -82,6 +88,9 @@ class StorageSettingTickTaskTest {
 
     @Mock
     private Planet planet;
+
+    @Mock
+    private ResourceData resourceData;
 
     @Test
     void getOrder() {
@@ -158,10 +167,12 @@ class StorageSettingTickTaskTest {
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Collections.emptyList());
         given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(FREE_STORAGE);
-        given(storageSettingProcessFactory.create(gameData, storageSetting, FREE_STORAGE)).willReturn(storageSettingProcess);
+        given(storageSettingProcessFactory.create(gameData, storageSetting, MAX_BATCH_SIZE)).willReturn(storageSettingProcess);
         given(storageSettingProcess.toModel()).willReturn(processModel);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
         given(planet.getOwner()).willReturn(OWNER_ID);
+        given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
+        given(resourceData.getMaxProductionBatchSize()).willReturn(MAX_BATCH_SIZE);
 
         underTest.process(game, syncCache);
 

@@ -15,5 +15,4 @@ public class StorageSetting {
     private final String dataId;
     private Integer targetAmount;
     private Integer priority;
-    private Integer batchSize;
 }

@@ -27,28 +27,16 @@ public class StorageSetting {
         return webElement.findElement(By.cssSelector(":scope label:first-child input"));
     }
 
-    public int getBatchSize() {
-        return Integer.parseInt(getBatchSizeInput().getAttribute("value"));
-    }
-
-    private WebElement getBatchSizeInput() {
-        return webElement.findElement(By.cssSelector(":scope label:nth-child(2) input"));
-    }
-
     public int getPriority() {
         return Integer.parseInt(getPriorityInput().getAttribute("value"));
     }
 
     private WebElement getPriorityInput() {
-        return webElement.findElement(By.cssSelector(":scope label:nth-child(3) input"));
+        return webElement.findElement(By.cssSelector(":scope label:nth-child(2) input"));
     }
 
     public void setAmount(int amount) {
         clearAndFill(getAmountInput(), String.valueOf(amount));
-    }
-
-    public void setBatchSize(int batchSize) {
-        clearAndFill(getBatchSizeInput(), String.valueOf(batchSize));
     }
 
     public void setPriority(int priority) {

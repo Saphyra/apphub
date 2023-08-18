@@ -169,12 +169,6 @@
         "message": "Mennyiség"
       }
     ],
-    "storage-settings-batch-size-label": [
-      {
-        "key": "innerHTML",
-        "message": "Darabolás"
-      }
-    ],
     "storage-settings-priority-label": [
       {
         "key": "innerHTML",
@@ -346,7 +340,6 @@
     "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 0)",
     "storage-setting-created": "Raktár beállítás létrehozva.",
     "storage-setting-amount": "Mennyiség",
-    "storage-setting-batch-size": "Darabolás",
     "storage-setting-priority": "Prioritás",
     "save-storage-setting": "Mentés",
     "delete-storage-setting": "Törlés",

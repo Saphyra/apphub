@@ -9,3 +9,5 @@ Feature switch for parallel unit test execution
 ToastMessageUtil accepts enum based localization
 
 ===TECHNICAL DEBTS===
+SkyXplore
+    Get rid of locationType and batchSize

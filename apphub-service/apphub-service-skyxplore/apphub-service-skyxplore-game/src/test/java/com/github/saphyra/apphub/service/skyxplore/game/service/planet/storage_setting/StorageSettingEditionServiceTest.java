@@ -35,7 +35,6 @@ public class StorageSettingEditionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final int PRIORITY = 2;
-    private static final int BATCH_SIZE = 245;
     private static final int TARGET_AMOUNT = 2456;
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -107,7 +106,6 @@ public class StorageSettingEditionServiceTest {
 
         given(request.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(request.getPriority()).willReturn(PRIORITY);
-        given(request.getBatchSize()).willReturn(BATCH_SIZE);
         given(request.getTargetAmount()).willReturn(TARGET_AMOUNT);
 
         given(gameData.getStorageSettings()).willReturn(storageSettings);
@@ -123,7 +121,6 @@ public class StorageSettingEditionServiceTest {
 
         verify(storageSettingsModelValidator).validate(request);
         verify(storageSetting).setPriority(PRIORITY);
-        verify(storageSetting).setBatchSize(BATCH_SIZE);
         verify(storageSetting).setTargetAmount(TARGET_AMOUNT);
         verify(syncCache).saveGameItem(model);
         assertThat(result).isEqualTo(response);

@@ -65,8 +65,6 @@ public class StorageSettingTest extends BackEndTest {
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId("asd").build(), "dataId", "unknown resource");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
         create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
-        create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(null).build(), "batchSize", "must not be null");
-        create_runValidationTest(language, accessTokenId1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().batchSize(0).build(), "batchSize", "too low");
     }
 
     private static StorageSettingModel createForCrud(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
@@ -74,7 +72,6 @@ public class StorageSettingTest extends BackEndTest {
         StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel);
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
         assertThat(created.getTargetAmount()).isEqualTo(createModel.getTargetAmount());
-        assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
         assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
         assertThat(created.getStorageSettingId()).isNotNull();
         return createModel;
@@ -92,7 +89,6 @@ public class StorageSettingTest extends BackEndTest {
         created = createModels.get(0);
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
         assertThat(created.getTargetAmount()).isEqualTo(createModel.getTargetAmount());
-        assertThat(created.getBatchSize()).isEqualTo(createModel.getBatchSize());
         assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
         assertThat(created.getStorageSettingId()).isNotNull();
     }
@@ -117,15 +113,12 @@ public class StorageSettingTest extends BackEndTest {
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId("asd").build(), "dataId", "unknown resource");
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
         edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
-        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(null).build(), "batchSize", "must not be null");
-        edit_runValidationTest(language, accessTokenId1, StorageSettingModel.valid(storageSettingId).toBuilder().batchSize(0).build(), "batchSize", "too low");
         return storageSettingId;
     }
 
     private static void edit(Language language, UUID accessTokenId1, PlanetLocationResponse planet, StorageSettingModel createModel, UUID storageSettingId) {
         StorageSettingModel editModel = StorageSettingModel.builder()
             .storageSettingId(storageSettingId)
-            .batchSize(132)
             .targetAmount(325)
             .priority(2)
             .dataId(createModel.getDataId())
@@ -133,7 +126,6 @@ public class StorageSettingTest extends BackEndTest {
         StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, editModel);
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
         assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
-        assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());
         assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
 
@@ -146,7 +138,6 @@ public class StorageSettingTest extends BackEndTest {
         edited = editModels.get(0);
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
         assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
-        assertThat(edited.getBatchSize()).isEqualTo(editModel.getBatchSize());
         assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
     }

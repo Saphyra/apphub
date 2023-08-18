@@ -7,7 +7,6 @@
         "desert",
         "forest"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -21,7 +20,6 @@
         "desert",
         "forest"
       ],
-      "maxBatchSize": 2,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -36,7 +34,6 @@
         "desert",
         "forest"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

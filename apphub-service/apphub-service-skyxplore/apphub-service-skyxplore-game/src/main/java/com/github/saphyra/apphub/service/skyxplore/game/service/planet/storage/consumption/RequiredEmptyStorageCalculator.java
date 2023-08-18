@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ class RequiredEmptyStorageCalculator {
             .stream()
             .map(ConsumptionResult::getReservation)
             .filter(reservedStorage -> resourceDataService.get(reservedStorage.getDataId()).getStorageType() == storageType)
-            .mapToInt(value -> value.getAmount() * resourceDataService.get(value.getDataId()).getMass())
+            .mapToInt(ReservedStorage::getAmount)
             .sum();
     }
 }

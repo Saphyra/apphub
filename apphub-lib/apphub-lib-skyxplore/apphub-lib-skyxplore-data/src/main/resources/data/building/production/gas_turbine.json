@@ -6,7 +6,6 @@
       "placed": [
         "concrete"
       ],
-      "maxBatchSize": 2,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

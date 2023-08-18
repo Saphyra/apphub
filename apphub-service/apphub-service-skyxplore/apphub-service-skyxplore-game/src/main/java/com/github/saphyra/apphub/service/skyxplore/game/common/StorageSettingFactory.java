@@ -16,17 +16,16 @@ public class StorageSettingFactory {
     private final IdGenerator idGenerator;
 
     public StorageSetting create(StorageSettingApiModel request, UUID location) {
-        return create(request.getDataId(), location, request.getTargetAmount(), request.getPriority(), request.getBatchSize());
+        return create(request.getDataId(), location, request.getTargetAmount(), request.getPriority());
     }
 
-    public StorageSetting create(String dataId, UUID location, int targetAmount, int priority, int batchSize) {
+    public StorageSetting create(String dataId, UUID location, int targetAmount, int priority) {
         return StorageSetting.builder()
             .storageSettingId(idGenerator.randomUuid())
             .dataId(dataId)
             .location(location)
             .targetAmount(targetAmount)
             .priority(priority)
-            .batchSize(batchSize)
             .build();
     }
 }

@@ -6,7 +6,6 @@
       "placed": [
         "volcano"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

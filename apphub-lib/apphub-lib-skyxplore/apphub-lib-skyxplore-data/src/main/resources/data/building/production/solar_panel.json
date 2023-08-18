@@ -7,7 +7,6 @@
         "desert",
         "concrete"
       ],
-      "maxBatchSize": 1000,
       "constructionRequirements": {
         "requiredWorkPoints": 5,
         "requiredResources": {

@@ -169,12 +169,6 @@
         "message": "Amount"
       }
     ],
-    "storage-settings-batch-size-label": [
-      {
-        "key": "innerHTML",
-        "message": "Batch size"
-      }
-    ],
     "storage-settings-priority-label": [
       {
         "key": "innerHTML",
@@ -346,7 +340,6 @@
     "storage-setting-amount-too-low": "Amount too low. (Minimum 0)",
     "storage-setting-created": "Storage setting created.",
     "storage-setting-amount": "Amount",
-    "storage-setting-batch-size": "Batch size",
     "storage-setting-priority": "Priority",
     "save-storage-setting": "Save",
     "delete-storage-setting": "Delete",
