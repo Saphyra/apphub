@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +19,6 @@ public class ConstructionFactoryTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 4567;
-    private static final int PARALLEL_WORKERS = 254;
     private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
@@ -34,13 +31,12 @@ public class ConstructionFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(CONSTRUCTION_ID);
 
-        Construction result = underTest.create(EXTERNAL_REFERENCE, ConstructionType.CONSTRUCTION, LOCATION, PARALLEL_WORKERS, REQUIRED_WORK_POINTS);
+        Construction result = underTest.create(EXTERNAL_REFERENCE, ConstructionType.CONSTRUCTION, LOCATION, REQUIRED_WORK_POINTS);
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(0);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);

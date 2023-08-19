@@ -9,7 +9,6 @@ game:
   tickTimeMillis: 100
   deconstruction:
     requiredWorkPoints: 20000
-    parallelWorkers: 1
   itemSaverMaxChunkSize: 500
   creationQueueSize: 100
   solarSystem:

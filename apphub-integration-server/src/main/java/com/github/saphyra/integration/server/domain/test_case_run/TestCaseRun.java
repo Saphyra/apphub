@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +30,6 @@ public class TestCaseRun {
     private Long duration;
     @Enumerated(EnumType.STRING)
     private TestCaseRunStatus status;
+    @CreationTimestamp
+    private OffsetDateTime createdAt;
 }

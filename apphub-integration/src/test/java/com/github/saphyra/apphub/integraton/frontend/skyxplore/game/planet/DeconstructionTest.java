@@ -122,7 +122,7 @@ public class DeconstructionTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver);
 
-        AwaitilityWrapper.create(120, 5)
+        AwaitilityWrapper.create(180, 5)
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Deconstruction is not finished.");
 

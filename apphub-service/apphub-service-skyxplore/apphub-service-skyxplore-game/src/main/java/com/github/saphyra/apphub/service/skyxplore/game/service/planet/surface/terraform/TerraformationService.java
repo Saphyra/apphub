@@ -66,7 +66,6 @@ class TerraformationService {
             surfaceId,
             ConstructionType.TERRAFORMATION,
             planetId,
-            constructionRequirements.getParallelWorkers(),
             constructionRequirements.getRequiredWorkPoints(),
             surfaceTypeString
         );

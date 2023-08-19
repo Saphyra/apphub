@@ -11,3 +11,4 @@ ToastMessageUtil accepts enum based localization
 ===TECHNICAL DEBTS===
 SkyXplore
     Get rid of locationType and batchSize
+    Get rid of parallelWorkers

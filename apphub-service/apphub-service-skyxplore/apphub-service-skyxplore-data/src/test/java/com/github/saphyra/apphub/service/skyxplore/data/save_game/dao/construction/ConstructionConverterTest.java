@@ -27,7 +27,6 @@ public class ConstructionConverterTest {
     private static final String GAME_ID_STRING = "game-id";
     private static final String LOCATION_STRING = "location";
     private static final String DATA = "data";
-    private static final Integer PARALLEL_WORKERS = 6435;
     private static final UUID LOCATION = UUID.randomUUID();
     private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
 
@@ -44,7 +43,6 @@ public class ConstructionConverterTest {
         model.setGameId(GAME_ID);
         model.setExternalReference(EXTERNAL_REFERENCE);
         model.setLocation(LOCATION);
-        model.setParallelWorkers(PARALLEL_WORKERS);
         model.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
         model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
@@ -63,7 +61,6 @@ public class ConstructionConverterTest {
         assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION.name());
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
@@ -77,7 +74,6 @@ public class ConstructionConverterTest {
         entity.setGameId(GAME_ID_STRING);
         entity.setExternalReference(EXTERNAL_REFERENCE_STRING);
         entity.setLocation(LOCATION_STRING);
-        entity.setParallelWorkers(PARALLEL_WORKERS);
         entity.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
         entity.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         entity.setPriority(PRIORITY);
@@ -97,7 +93,6 @@ public class ConstructionConverterTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
-        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);

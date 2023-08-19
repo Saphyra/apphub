@@ -67,7 +67,6 @@ public class UpgradeBuildingService {
             building.getBuildingId(),
             ConstructionType.CONSTRUCTION,
             planetId,
-            constructionRequirements.getParallelWorkers(),
             constructionRequirements.getRequiredWorkPoints()
         );
 

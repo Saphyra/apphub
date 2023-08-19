@@ -58,4 +58,16 @@
 
         <addPrimaryKey tableName="test_case_run" columnNames="id"/>
     </changeSet>
+
+    <changeSet id="add-column-created_at-to-test_case_run" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="test_case_run" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="test_case_run">
+            <column name="created_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

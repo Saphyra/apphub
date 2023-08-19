@@ -31,7 +31,6 @@ public class ConstructionConverter {
         model.setExternalReference(construction.getExternalReference());
         model.setLocation(construction.getLocation());
         model.setExternalReference(construction.getExternalReference());
-        model.setParallelWorkers(construction.getParallelWorkers());
         model.setRequiredWorkPoints(construction.getRequiredWorkPoints());
         model.setCurrentWorkPoints(construction.getCurrentWorkPoints());
         model.setPriority(construction.getPriority());

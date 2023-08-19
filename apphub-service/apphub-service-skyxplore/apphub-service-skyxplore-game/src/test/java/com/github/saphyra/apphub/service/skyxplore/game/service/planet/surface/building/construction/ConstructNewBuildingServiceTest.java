@@ -57,7 +57,6 @@ public class ConstructNewBuildingServiceTest {
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 2314;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
-    private static final int PARALLEL_WORKERS = 42;
 
     @Mock
     private GameDao gameDao;
@@ -204,8 +203,7 @@ public class ConstructNewBuildingServiceTest {
         given(buildingFactory.create(DATA_ID, PLANET_ID, SURFACE_ID, 0)).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(game.getEventLoop()).willReturn(eventLoop);

@@ -16,7 +16,6 @@ public class Construction {
     private final UUID externalReference;
     private final ConstructionType constructionType;
     private final UUID location;
-    private final Integer parallelWorkers;
     private final Integer requiredWorkPoints;
     private final String data;
     private Integer currentWorkPoints;

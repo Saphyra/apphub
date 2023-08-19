@@ -57,7 +57,6 @@ public class UpgradeBuildingServiceTest {
     private static final Integer LEVEL = 234;
     private static final Integer REQUIRED_WORK_POINTS = 324;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
-    private static final int PARALLEL_WORKERS = 245;
     private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
@@ -208,8 +207,7 @@ public class UpgradeBuildingServiceTest {
         given(buildingData.getConstructionRequirements()).willReturn(CollectionUtils.singleValueMap(LEVEL + 1, constructionRequirements));
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
-        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(BUILDING_ID, ConstructionType.CONSTRUCTION, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         given(gameData.getProcesses()).willReturn(processes);
