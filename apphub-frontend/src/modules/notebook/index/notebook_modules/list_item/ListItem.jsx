@@ -149,55 +149,53 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     }
 
     return (
-        <div>
-            <div
-                id={data.id}
-                className={"button notebook-content-category-content-list-item " + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled " : "") + data.type.toLowerCase() + (data.pinned ? " pinned" : "") + (data.archived ? " archived" : "")}
-                draggable
-                onDragStart={handleOnDragStart}
-                onDrop={handleOnDrop}
-                onDragOver={handleOnDragOver}
-                onClick={handleOnclick}
-            >
-                <span className="notebook-content-category-content-list-item-title">{data.title}</span>
+        <div
+            id={data.id}
+            className={"button notebook-content-category-content-list-item " + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled " : "") + data.type.toLowerCase() + (data.pinned ? " pinned" : "") + (data.archived ? " archived" : "")}
+            draggable
+            onDragStart={handleOnDragStart}
+            onDrop={handleOnDrop}
+            onDragOver={handleOnDragOver}
+            onClick={handleOnclick}
+        >
+            <span className="notebook-content-category-content-list-item-title">{data.title}</span>
 
-                <div className="notebook-content-category-content-list-item-buttons">
-                    {listItemMode !== ListItemMode.PINNED_ITEM &&
-                        <Button
-                            className="notebook-content-category-content-list-item-delete-button"
-                            onclick={confirmDeleteListItem}
-                            title={localizationHandler.get("delete")}
-                        />
-                    }
+            <div className="notebook-content-category-content-list-item-buttons">
+                {listItemMode !== ListItemMode.PINNED_ITEM &&
+                    <Button
+                        className="notebook-content-category-content-list-item-delete-button"
+                        onclick={confirmDeleteListItem}
+                        title={localizationHandler.get("delete")}
+                    />
+                }
 
-                    {listItemMode !== ListItemMode.PINNED_ITEM && (data.archived ? unarchiveButton() : archiveButton())}
+                {listItemMode !== ListItemMode.PINNED_ITEM && (data.archived ? unarchiveButton() : archiveButton())}
 
-                    {data.pinned ? unpinButton() : pinButton()}
+                {data.pinned ? unpinButton() : pinButton()}
 
-                    {listItemMode !== ListItemMode.CATEGORY_CONTENT &&
-                        <Button
-                            className="notebook-content-category-content-list-item-parent-button"
-                            onclick={() => setOpenedListItem({ id: data.parentId, type: ListItemType.CATEGORY })}
-                            title={localizationHandler.get("open-parent")}
-                        />
-                    }
+                {listItemMode !== ListItemMode.CATEGORY_CONTENT &&
+                    <Button
+                        className="notebook-content-category-content-list-item-parent-button"
+                        onclick={() => setOpenedListItem({ id: data.parentId, type: ListItemType.CATEGORY })}
+                        title={localizationHandler.get("open-parent")}
+                    />
+                }
 
-                    {listItemMode !== ListItemMode.PINNED_ITEM &&
-                        <Button
-                            className="notebook-content-category-content-list-item-clone-button"
-                            onclick={() => cloneListItem()}
-                            title={localizationHandler.get("clone")}
-                        />
-                    }
+                {listItemMode !== ListItemMode.PINNED_ITEM &&
+                    <Button
+                        className="notebook-content-category-content-list-item-clone-button"
+                        onclick={() => cloneListItem()}
+                        title={localizationHandler.get("clone")}
+                    />
+                }
 
-                    {listItemMode !== ListItemMode.PINNED_ITEM &&
-                        <Button
-                            className="notebook-content-category-content-list-item-edit-button"
-                            onclick={() => window.location.href = Constants.NOTEBOOK_EDIT_PAGE + "/" + data.id}
-                            title={localizationHandler.get("edit")}
-                        />
-                    }
-                </div>
+                {listItemMode !== ListItemMode.PINNED_ITEM &&
+                    <Button
+                        className="notebook-content-category-content-list-item-edit-button"
+                        onclick={() => window.location.href = Constants.NOTEBOOK_EDIT_PAGE + "/" + data.id}
+                        title={localizationHandler.get("edit")}
+                    />
+                }
             </div>
         </div>
     );
