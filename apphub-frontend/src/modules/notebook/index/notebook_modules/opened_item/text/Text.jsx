@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Textarea from "../../../../../../common/component/input/Textarea";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
@@ -12,6 +11,7 @@ import Event from "../../../../../../common/js/event/Event";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import OpenedListItemHeader from "../OpenedListItemHeader";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -117,20 +117,12 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
 
     return (
         <div id="notebook-content-text" className="notebook-content notebook-content-view">
-            <ListItemTitle
-                inputId="notebook-content-text-title"
-                placeholder={localizationHandler.get("list-item-title")}
-                value={title}
-                setListItemTitle={setTitle}
-                disabled={!editingEnabled}
-                closeButton={
-                    <Button
-                        id="notebook-content-text-close-button"
-                        className="notebook-close-button"
-                        label="X"
-                        onclick={close}
-                    />
-                }
+            <OpenedListItemHeader
+                localizationHandler={localizationHandler}
+                title={title}
+                setTitle={setTitle}
+                editingEnabled={editingEnabled}
+                close={close}
             />
 
             <Textarea

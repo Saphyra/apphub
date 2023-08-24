@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import Endpoints from "../../../../../../common/js/dao/dao";
@@ -17,6 +16,7 @@ import Event from "../../../../../../common/js/event/Event";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import OpenedListItemHeader from "../OpenedListItemHeader";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -301,20 +301,12 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
     return (
         <div id="notebook-content-checklist" className="notebook-content notebook-content-view">
-            <ListItemTitle
-                inputId="notebook-content-checklist-title"
-                placeholder={localizationHandler.get("list-item-title")}
-                value={title}
-                setListItemTitle={setTitle}
-                disabled={!editingEnabled}
-                closeButton={
-                    <Button
-                        id="notebook-content-checklist-close-button"
-                        className="notebook-close-button"
-                        label="X"
-                        onclick={close}
-                    />
-                }
+            <OpenedListItemHeader
+                localizationHandler={localizationHandler}
+                title={title}
+                setTitle={setTitle}
+                editingEnabled={editingEnabled}
+                close={close}
             />
 
             <div id="notebook-content-checklist-content" className="notebook-content-view-main">

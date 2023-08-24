@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import "./image.css";
+import OpenedListItemHeader from "../OpenedListItemHeader";
 
 const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
@@ -30,20 +30,12 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
     return (
         <div id="notebook-content-image" className="notebook-content notebook-content-view">
-            <ListItemTitle
-                id="notebook-content-image-title"
-                placeholder={localizationHandler.get("list-item-title")}
-                value={title}
-                setListItemTitle={setTitle}
-                disabled={true}
-                closeButton={
-                    <Button
-                        id="notebook-content-image-close-button"
-                        className="notebook-close-button"
-                        label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
-                    />
-                }
+            <OpenedListItemHeader
+                localizationHandler={localizationHandler}
+                title={title}
+                setTitle={setTitle}
+                editingEnabled={false}
+                close={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
             />
 
             <div id="notebook-content-image-content" className="notebook-content-view-main">

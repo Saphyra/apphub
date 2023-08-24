@@ -41,7 +41,7 @@ public class ViewChecklistActions {
     }
 
     public static void close(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-checklist-close-button"))
+        driver.findElement(By.id("notebook-content-list-item-close-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
