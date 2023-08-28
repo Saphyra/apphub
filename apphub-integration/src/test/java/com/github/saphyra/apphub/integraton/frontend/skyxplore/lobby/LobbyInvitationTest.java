@@ -70,4 +70,49 @@ public class LobbyInvitationTest extends SeleniumTest {
             .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData2.getUsername()).getStatus() == LobbyMemberStatus.NOT_READY)
             .assertTrue("Lobby member status is not 'NOT_READY'");
     }
+
+    @Test(groups = {"fe", "skyxplore"})
+    public void invitationCancelledWhenInviterLeftLobby() {
+        List<WebDriver> drivers = extractDrivers(3);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+        WebDriver driver3 = drivers.get(2);
+
+        RegistrationParameters userData1 = RegistrationParameters.validParameters();
+        RegistrationParameters userData2 = RegistrationParameters.validParameters();
+        RegistrationParameters userData3 = RegistrationParameters.validParameters();
+
+        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(
+            new BiWrapper<>(driver1, userData1),
+            new BiWrapper<>(driver2, userData2),
+            new BiWrapper<>(driver3, userData3))
+        );
+
+        SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
+        SkyXploreFriendshipActions.setUpFriendship(driver2, driver3, userData2.getUsername(), userData3.getUsername());
+
+        SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
+
+        SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
+        SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
+        SkyXploreLobbyActions.inviteFriend(driver2, userData3.getUsername());
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreMainMenuActions.getInvitations(driver3).size() == 1)
+            .assertTrue("Invitation not arrived");
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.getMember(driver1, userData3.getUsername()).getStatus() == LobbyMemberStatus.INVITED)
+            .assertTrue("Invitation did not appear for host");
+
+        SkyXploreLobbyActions.exitLobby(driver2);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.findMember(driver1, userData3.getUsername()).isEmpty())
+            .assertTrue("Invitation did not disappear for host");
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreMainMenuActions.getInvitations(driver3).isEmpty())
+            .assertTrue("Invitation not disappeared");
+    }
 }

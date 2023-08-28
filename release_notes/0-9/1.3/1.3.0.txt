@@ -5,6 +5,8 @@ Platform
 ===BUGFIXES===
 Notebook
     Clicking on the border of a ListItem did not open it
+SkyXplore
+    Update LobbyMembers in Lobby page when the invitor is left lobby
 
 ===PLATFORM CHANGES===
 Feature switch for parallel unit test execution

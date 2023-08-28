@@ -28,6 +28,10 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
 
             setMessages(copy);
         } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
+            if (lastEvent.payload.onlyInvited) {
+                return;
+            }
+
             const message = {
                 type: MessageType.SYSTEM_MESSAGE,
                 message: localizationHandler.get("player-left-lobby", { name: lastEvent.payload.characterName }),
