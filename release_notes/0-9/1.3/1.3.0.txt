@@ -5,6 +5,7 @@ Platform
 ===BUGFIXES===
 Notebook
     Clicking on the border of a ListItem did not open it
+    Increase font size in text
 SkyXplore
     Update LobbyMembers in Lobby page when the invitor is left lobby
 
