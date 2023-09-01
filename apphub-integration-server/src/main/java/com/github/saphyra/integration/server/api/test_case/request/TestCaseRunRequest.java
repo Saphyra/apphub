@@ -13,4 +13,9 @@ public class TestCaseRunRequest {
     private String testCaseId;
     private Long duration;
     private TestCaseRunStatus status;
+
+    @Override
+    public String toString() {
+        return String.format("TestCase %s %s in %s ms", testCaseId.replace("com.github.saphyra.apphub.integration.", ""), status, duration);
+    }
 }

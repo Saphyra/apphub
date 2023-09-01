@@ -31,8 +31,8 @@ public class TestRunController {
 
     @PostMapping(Endpoints.FINISH_TEST_RUN)
     void finishTestRun(@PathVariable("testRunId") UUID testRunId, @RequestBody OneParam<TestRunStatus> status) {
-        log.info("Finishing TestRun {} with status {}", testRunId, status);
+        log.info("Finishing TestRun {} with status {}", testRunId, status.getValue());
         finishTestRunService.finishTestRun(testRunId, status.getValue());
-        log.info("TestRun {} is finished.", testRunId);
+        log.debug("TestRun {} is finished.", testRunId);
     }
 }
