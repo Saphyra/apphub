@@ -13,4 +13,5 @@ public class ExitFromLobbyWsMessage {
     private String characterName;
     private boolean expectedPlayer;
     private Long createdAt;
+    private boolean onlyInvited;
 }

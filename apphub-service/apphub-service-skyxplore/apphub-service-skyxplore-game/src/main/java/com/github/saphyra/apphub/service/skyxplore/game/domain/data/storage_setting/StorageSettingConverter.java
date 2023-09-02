@@ -30,7 +30,6 @@ public class StorageSettingConverter {
         model.setDataId(storageSetting.getDataId());
         model.setTargetAmount(storageSetting.getTargetAmount());
         model.setPriority(storageSetting.getPriority());
-        model.setBatchSize(storageSetting.getBatchSize());
         return model;
     }
 }

@@ -23,5 +23,4 @@ class StorageSettingEntity {
     private String dataId;
     private int targetAmount;
     private int priority;
-    private int batchSize;
 }

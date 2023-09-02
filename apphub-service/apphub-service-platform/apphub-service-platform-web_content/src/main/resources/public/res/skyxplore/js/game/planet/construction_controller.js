@@ -122,7 +122,6 @@
                     .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                     .forEach(function(node){tbody.appendChild(node)});
 
-                tbody.appendChild(createRow(localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
                 tbody.appendChild(createRow(localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
         container.appendChild(tbody);
 
@@ -286,7 +285,6 @@
                                 .toListStream((requiredItemId, amount) => {return createElementWithText("DIV", dataCaches.itemDataNames.get(requiredItemId) + ": " + amount)})
                                 .forEach((node) => constructionRequirementsCell.appendChild(node));
 
-                        constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("parallel-workers") + ": " + (gives.constructionRequirements.parallelWorkers * level)));
                         constructionRequirementsCell.appendChild(createElementWithText("DIV", localization.getAdditionalContent("required-work-points") + ": " + gives.constructionRequirements.requiredWorkPoints));
 
                     row.appendChild(constructionRequirementsCell);

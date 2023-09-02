@@ -5,7 +5,6 @@ import TableHeadData from "../../../../common/table/table_head/TableHeadData";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import CustomTableColumnData from "../../../../common/custom_table/column/CustomTableColumnData";
 import TableRowData from "../../../../common/table/row/TableRowData";
-import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import TableHead from "../../../../common/table/table_head/TableHead";
@@ -16,6 +15,7 @@ import "./custom_table.css";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import OpenedListItemHeader from "../OpenedListItemHeader";
 
 const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -346,20 +346,12 @@ const CustomTable = ({ localizationHandler, openedListItem, setOpenedListItem, s
 
     return (
         <div id="notebook-content-custom-table" className="notebook-content notebook-content-view">
-            <ListItemTitle
-                id="notebook-content-custom-table-title"
-                placeholder={localizationHandler.get("list-item-title")}
-                value={title}
-                setListItemTitle={setTitle}
-                disabled={!editingEnabled}
-                closeButton={
-                    <Button
-                        id="notebook-content-custom-table-close-button"
-                        className="notebook-close-button"
-                        label="X"
-                        onclick={close}
-                    />
-                }
+            <OpenedListItemHeader
+                localizationHandler={localizationHandler}
+                title={title}
+                setTitle={setTitle}
+                editingEnabled={editingEnabled}
+                close={close}
             />
 
             <div id="notebook-content-custom-table-content" className="notebook-content-view-main">

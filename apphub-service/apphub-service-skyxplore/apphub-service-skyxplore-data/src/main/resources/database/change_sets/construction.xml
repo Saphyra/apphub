@@ -67,4 +67,14 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="remove-column-parallel_workers-from-construction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="parallel_workers"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="parallel_workers"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

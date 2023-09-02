@@ -6,7 +6,6 @@
       "placed": [
         "lake"
       ],
-      "maxBatchSize": 1000,
       "constructionRequirements": {
         "requiredWorkPoints": 10,
         "requiredResources": {

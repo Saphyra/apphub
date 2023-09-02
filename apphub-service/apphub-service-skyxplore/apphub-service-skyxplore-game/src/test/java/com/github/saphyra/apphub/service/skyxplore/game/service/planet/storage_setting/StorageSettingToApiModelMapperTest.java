@@ -18,7 +18,6 @@ public class StorageSettingToApiModelMapperTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int TARGET_AMOUNT = 123;
-    private static final int BATCH_SIZE = 45;
     private static final int PRIORITY = 36;
 
     @InjectMocks
@@ -30,7 +29,6 @@ public class StorageSettingToApiModelMapperTest {
             .storageSettingId(STORAGE_SETTING_ID)
             .dataId(DATA_ID)
             .targetAmount(TARGET_AMOUNT)
-            .batchSize(BATCH_SIZE)
             .priority(PRIORITY)
             .build();
 
@@ -41,7 +39,6 @@ public class StorageSettingToApiModelMapperTest {
         assertThat(model.getStorageSettingId()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(model.getDataId()).isEqualTo(DATA_ID);
         assertThat(model.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
-        assertThat(model.getBatchSize()).isEqualTo(BATCH_SIZE);
         assertThat(model.getPriority()).isEqualTo(PRIORITY);
     }
 }

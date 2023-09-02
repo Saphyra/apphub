@@ -52,13 +52,5 @@ class StorageSettingsModelValidator {
         if (model.getTargetAmount() < 0) {
             throw ExceptionFactory.invalidParam("targetAmount", "too low");
         }
-
-        if (isNull(model.getBatchSize())) {
-            throw ExceptionFactory.invalidParam("batchSize", "must not be null");
-        }
-
-        if (model.getBatchSize() < 1) {
-            throw ExceptionFactory.invalidParam("batchSize", "too low");
-        }
     }
 }

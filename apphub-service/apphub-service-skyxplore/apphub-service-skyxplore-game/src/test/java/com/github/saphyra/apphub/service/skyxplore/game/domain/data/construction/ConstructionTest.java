@@ -16,7 +16,6 @@ class ConstructionTest {
         .externalReference(UUID.randomUUID())
         .constructionType(ConstructionType.CONSTRUCTION)
         .location(UUID.randomUUID())
-        .parallelWorkers(0)
         .requiredWorkPoints(34)
         .data("")
         .currentWorkPoints(CURRENT_WORK_POINTS)

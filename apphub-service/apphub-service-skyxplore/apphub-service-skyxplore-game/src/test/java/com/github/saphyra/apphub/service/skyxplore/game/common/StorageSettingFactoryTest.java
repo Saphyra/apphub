@@ -21,7 +21,6 @@ public class StorageSettingFactoryTest {
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer PRIORITY = 26357;
-    private static final Integer BATCH_SIZE = 5875;
 
     @Mock
     private IdGenerator idGenerator;
@@ -34,7 +33,6 @@ public class StorageSettingFactoryTest {
         StorageSettingApiModel request = StorageSettingApiModel.builder()
             .dataId(DATA_ID)
             .priority(PRIORITY)
-            .batchSize(BATCH_SIZE)
             .targetAmount(TARGET_AMOUNT)
             .build();
 
@@ -47,6 +45,5 @@ public class StorageSettingFactoryTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
-        assertThat(result.getBatchSize()).isEqualTo(BATCH_SIZE);
     }
 }

@@ -169,12 +169,6 @@
         "message": "Mennyiség"
       }
     ],
-    "storage-settings-batch-size-label": [
-      {
-        "key": "innerHTML",
-        "message": "Darabolás"
-      }
-    ],
     "storage-settings-priority-label": [
       {
         "key": "innerHTML",
@@ -346,7 +340,6 @@
     "storage-setting-amount-too-low": "Mennyiség túl kicsi. (Minimum 0)",
     "storage-setting-created": "Raktár beállítás létrehozva.",
     "storage-setting-amount": "Mennyiség",
-    "storage-setting-batch-size": "Darabolás",
     "storage-setting-priority": "Prioritás",
     "save-storage-setting": "Mentés",
     "delete-storage-setting": "Törlés",
@@ -389,7 +382,6 @@
     "building-effect-title-storage": "Tárol",
     "building-effect-production-header-produced-item": "Termék",
     "building-effect-production-header-production-requirements": "Összetevők",
-    "parallel-workers": "Munkások",
     "required-work-points": "Munkapontok",
     "reset": "Visszaállít",
     "seats": "Ülések",

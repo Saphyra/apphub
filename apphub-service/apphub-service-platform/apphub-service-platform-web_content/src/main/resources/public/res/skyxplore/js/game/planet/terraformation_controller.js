@@ -55,7 +55,6 @@
                             .toListStream((resourceDataId, amount) => {return createRow(dataCaches.itemDataNames.get(resourceDataId), amount)})
                             .forEach(function(node){tbody.appendChild(node)});
 
-                    tbody.appendChild(createRow(localization.getAdditionalContent("parallel-workers"), constructionRequirements.parallelWorkers));
                     tbody.appendChild(createRow(localization.getAdditionalContent("required-work-points"), constructionRequirements.requiredWorkPoints));
                 container.appendChild(tbody);
 

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.Category;
 import com.github.saphyra.apphub.integration.structure.api.modules.Favorite;
 import com.github.saphyra.apphub.integration.structure.api.modules.Module;
@@ -31,7 +32,7 @@ public class ModulesPageActions {
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
             .assertTrue();
 
-        ToastMessageUtil.verifySuccessToast(driver, "Successfully logged out.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.INDEX_SUCCESSFULLY_LOGGED_OUT);
     }
 
     public static List<Module> getModules(WebDriver driver) {

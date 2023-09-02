@@ -1,4 +1,5 @@
 if [ "$1" != "skipBuild" ]; then
+  ./local_stop.sh
   ./infra/deployment/script/clean_up_space.sh
   eval "$(minikube docker-env)"
 

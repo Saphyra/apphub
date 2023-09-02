@@ -16,5 +16,4 @@ public class StorageSettingModel extends GameItem {
     private String dataId;
     private Integer targetAmount;
     private Integer priority;
-    private Integer batchSize;
 }

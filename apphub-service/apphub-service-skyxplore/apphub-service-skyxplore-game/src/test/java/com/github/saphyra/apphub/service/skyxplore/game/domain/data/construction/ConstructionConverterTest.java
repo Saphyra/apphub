@@ -11,7 +11,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConstructionConverterTest {
-    private static final Integer PARALLEL_WORKERS = 324;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
@@ -30,7 +29,6 @@ class ConstructionConverterTest {
             .externalReference(EXTERNAL_REFERENCE)
             .constructionType(ConstructionType.CONSTRUCTION)
             .location(LOCATION)
-            .parallelWorkers(PARALLEL_WORKERS)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .data(DATA)
             .currentWorkPoints(CURRENT_WORK_POINTS)
@@ -45,7 +43,6 @@ class ConstructionConverterTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getParallelWorkers()).isEqualTo(PARALLEL_WORKERS);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getData()).isEqualTo(DATA);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
@@ -59,7 +56,6 @@ class ConstructionConverterTest {
             .externalReference(EXTERNAL_REFERENCE)
             .constructionType(ConstructionType.CONSTRUCTION)
             .location(LOCATION)
-            .parallelWorkers(PARALLEL_WORKERS)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .data(DATA)
             .currentWorkPoints(CURRENT_WORK_POINTS)

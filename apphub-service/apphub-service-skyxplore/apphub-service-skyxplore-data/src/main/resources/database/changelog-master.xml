@@ -26,7 +26,6 @@
     <include file="database/change_sets/game.xml"/>
     <include file="database/change_sets/player.xml"/>
     <include file="database/change_sets/alliance.xml"/>
-    <include file="database/change_sets/universe.xml"/>
     <include file="database/change_sets/solar_system.xml"/>
     <include file="database/change_sets/coordinate.xml"/>
     <include file="database/change_sets/planet.xml"/>
@@ -35,13 +34,11 @@
     <include file="database/change_sets/surface.xml"/>
     <include file="database/change_sets/building.xml"/>
     <include file="database/change_sets/line.xml"/>
-    <include file="database/change_sets/system_connection.xml"/>
     <include file="database/change_sets/allocated_resource.xml"/>
     <include file="database/change_sets/reserved_storage.xml"/>
     <include file="database/change_sets/stored_resource.xml"/>
     <include file="database/change_sets/storage_setting.xml"/>
     <include file="database/change_sets/priority.xml"/>
-    <include file="database/change_sets/durability_item.xml"/>
     <include file="database/change_sets/construction.xml"/>
     <include file="database/change_sets/process.xml"/>
     <include file="database/change_sets/deconstruction.xml"/>

@@ -38,8 +38,10 @@ import static org.mockito.Mockito.verify;
 public class ExitFromLobbyServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID MEMBER_ID = UUID.randomUUID();
+    private static final UUID INVITED_CHARACTER_ID = UUID.randomUUID();
     private static final String PLAYER_NAME = "player-name";
     private static final long CREATED_AT = 32423L;
+    private static final String INVITED_PLAYER_NAME = "invited-player-name";
 
     @Mock
     private CharacterProxy characterProxy;
@@ -76,10 +78,11 @@ public class ExitFromLobbyServiceTest {
             new BiWrapper<>(MEMBER_ID, null)
         ));
         given(lobby.getHost()).willReturn(USER_ID);
-        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(MEMBER_ID).characterId(USER_ID).build()));
+        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(MEMBER_ID).characterId(INVITED_CHARACTER_ID).build()));
         given(lobby.getExpectedPlayers()).willReturn(Arrays.asList(MEMBER_ID));
 
         given(characterProxy.getCharacter(MEMBER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(characterProxy.getCharacter(INVITED_CHARACTER_ID)).willReturn(SkyXploreCharacterModel.builder().name(INVITED_PLAYER_NAME).build());
         given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(MEMBER_ID);
@@ -87,19 +90,37 @@ public class ExitFromLobbyServiceTest {
         assertThat(lobby.getMembers()).containsOnlyKeys(USER_ID);
 
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
+        verify(messageSenderProxy, times(2)).sendToLobby(argumentCaptor.capture());
 
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+        WebSocketMessage message1 = argumentCaptor.getAllValues()
+            .get(0);
+        assertThat(message1.getRecipients()).containsExactly(USER_ID);
 
-        ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
-        assertThat(payload.getUserId()).isEqualTo(MEMBER_ID);
-        assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
-        assertThat(payload.isHost()).isFalse();
-        assertThat(payload.isExpectedPlayer()).isTrue();
-        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
+        WebSocketEvent event1 = message1.getEvent();
+        assertThat(event1.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+
+        ExitFromLobbyService.ExitMessage payload1 = (ExitFromLobbyService.ExitMessage) event1.getPayload();
+        assertThat(payload1.getUserId()).isEqualTo(INVITED_CHARACTER_ID);
+        assertThat(payload1.getCharacterName()).isEqualTo(INVITED_PLAYER_NAME);
+        assertThat(payload1.isHost()).isFalse();
+        assertThat(payload1.isExpectedPlayer()).isFalse();
+        assertThat(payload1.getCreatedAt()).isEqualTo(CREATED_AT);
+        assertThat(payload1.isOnlyInvited()).isTrue();
+
+        WebSocketMessage message2 = argumentCaptor.getAllValues()
+            .get(1);
+        assertThat(message2.getRecipients()).containsExactly(USER_ID);
+
+        WebSocketEvent event2 = message2.getEvent();
+        assertThat(event2.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+
+        ExitFromLobbyService.ExitMessage payload2 = (ExitFromLobbyService.ExitMessage) event2.getPayload();
+        assertThat(payload2.getUserId()).isEqualTo(MEMBER_ID);
+        assertThat(payload2.getCharacterName()).isEqualTo(PLAYER_NAME);
+        assertThat(payload2.isHost()).isFalse();
+        assertThat(payload2.isExpectedPlayer()).isTrue();
+        assertThat(payload2.getCreatedAt()).isEqualTo(CREATED_AT);
+        assertThat(payload2.isOnlyInvited()).isFalse();
 
         verify(lobbyDao, times(0)).delete(any());
 
@@ -107,7 +128,7 @@ public class ExitFromLobbyServiceTest {
         verify(messageSenderProxy).sendToMainMenu(invitationArgumentCaptor.capture());
         WebSocketMessage invitationMessage = invitationArgumentCaptor.getValue();
 
-        assertThat(invitationMessage.getRecipients()).containsExactly(USER_ID);
+        assertThat(invitationMessage.getRecipients()).containsExactly(INVITED_CHARACTER_ID);
         assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
         assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(MEMBER_ID);
         assertThat(lobby.getInvitations()).isEmpty();
@@ -124,9 +145,10 @@ public class ExitFromLobbyServiceTest {
         Invitation remainingInvitation = Invitation.builder()
             .invitorId(UUID.randomUUID())
             .build();
-        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(MEMBER_ID).build(), remainingInvitation));
+        given(lobby.getInvitations()).willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(INVITED_CHARACTER_ID).build(), remainingInvitation));
 
         given(characterProxy.getCharacter(USER_ID)).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(characterProxy.getCharacter(INVITED_CHARACTER_ID)).willReturn(SkyXploreCharacterModel.builder().name(INVITED_PLAYER_NAME).build());
         given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
         underTest.exit(USER_ID);
@@ -134,18 +156,35 @@ public class ExitFromLobbyServiceTest {
         assertThat(lobby.getMembers()).containsOnlyKeys(MEMBER_ID);
 
         ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(MEMBER_ID);
+        verify(messageSenderProxy, times(2)).sendToLobby(argumentCaptor.capture());
 
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+        WebSocketMessage message1 = argumentCaptor.getAllValues()
+            .get(0);
+        assertThat(message1.getRecipients()).containsExactly(MEMBER_ID);
 
-        ExitFromLobbyService.ExitMessage payload = (ExitFromLobbyService.ExitMessage) event.getPayload();
-        assertThat(payload.getUserId()).isEqualTo(USER_ID);
-        assertThat(payload.getCharacterName()).isEqualTo(PLAYER_NAME);
-        assertThat(payload.isHost()).isTrue();
-        assertThat(payload.getCreatedAt()).isEqualTo(CREATED_AT);
+        WebSocketEvent event1 = message1.getEvent();
+        assertThat(event1.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+
+        ExitFromLobbyService.ExitMessage payload1 = (ExitFromLobbyService.ExitMessage) event1.getPayload();
+        assertThat(payload1.getUserId()).isEqualTo(INVITED_CHARACTER_ID);
+        assertThat(payload1.getCharacterName()).isEqualTo(INVITED_PLAYER_NAME);
+        assertThat(payload1.isHost()).isFalse();
+        assertThat(payload1.getCreatedAt()).isEqualTo(CREATED_AT);
+        assertThat(payload1.isOnlyInvited()).isTrue();
+
+        WebSocketMessage message2 = argumentCaptor.getAllValues()
+            .get(1);
+        assertThat(message2.getRecipients()).containsExactly(MEMBER_ID);
+
+        WebSocketEvent event2 = message2.getEvent();
+        assertThat(event2.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_EXIT);
+
+        ExitFromLobbyService.ExitMessage payload2 = (ExitFromLobbyService.ExitMessage) event2.getPayload();
+        assertThat(payload2.getUserId()).isEqualTo(USER_ID);
+        assertThat(payload2.getCharacterName()).isEqualTo(PLAYER_NAME);
+        assertThat(payload2.isHost()).isTrue();
+        assertThat(payload2.getCreatedAt()).isEqualTo(CREATED_AT);
+        assertThat(payload2.isOnlyInvited()).isFalse();
 
         verify(lobbyDao).delete(lobby);
 
@@ -153,7 +192,7 @@ public class ExitFromLobbyServiceTest {
         verify(messageSenderProxy).sendToMainMenu(invitationArgumentCaptor.capture());
         WebSocketMessage invitationMessage = invitationArgumentCaptor.getValue();
 
-        assertThat(invitationMessage.getRecipients()).containsExactly(MEMBER_ID);
+        assertThat(invitationMessage.getRecipients()).containsExactly(INVITED_CHARACTER_ID);
         assertThat(invitationMessage.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
         assertThat(invitationMessage.getEvent().getPayload()).isEqualTo(USER_ID);
         assertThat(lobby.getInvitations()).containsExactly(remainingInvitation);

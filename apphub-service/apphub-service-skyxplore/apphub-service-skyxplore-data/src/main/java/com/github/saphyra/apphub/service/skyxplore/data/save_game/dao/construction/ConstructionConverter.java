@@ -24,7 +24,6 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
         model.setConstructionType(ConstructionType.valueOf(entity.getConstructionType()));
-        model.setParallelWorkers(entity.getParallelWorkers());
         model.setRequiredWorkPoints(entity.getRequiredWorkPoints());
         model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
         model.setPriority(entity.getPriority());
@@ -40,7 +39,6 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
             .constructionType(domain.getConstructionType().name())
-            .parallelWorkers(domain.getParallelWorkers())
             .requiredWorkPoints(domain.getRequiredWorkPoints())
             .currentWorkPoints(domain.getCurrentWorkPoints())
             .priority(domain.getPriority())

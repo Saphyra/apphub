@@ -24,7 +24,6 @@ public class ReservedStorageQueryServiceTest {
     private static final String DATA_ID_1 = "data-id-1";
     private static final String DATA_ID_2 = "data-id-2";
     private static final Integer AMOUNT = 3214;
-    private static final Integer MASS = 25;
     private static final UUID LOCATION = UUID.randomUUID();
 
     @Mock
@@ -89,12 +88,10 @@ public class ReservedStorageQueryServiceTest {
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
         given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
         given(resourceData.getId()).willReturn(DATA_ID_1);
-        given(resourceData.getMass()).willReturn(MASS);
-        given(resourceDataService.get(DATA_ID_1)).willReturn(resourceData);
         given(reservedStorage3.getDataId()).willReturn(DATA_ID_1);
 
         int result = underTest.getReservedStorageCapacity(gameData, LOCATION, StorageType.BULK);
 
-        assertThat(result).isEqualTo(AMOUNT * MASS);
+        assertThat(result).isEqualTo(AMOUNT);
     }
 }

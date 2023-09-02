@@ -20,16 +20,6 @@ public class ConstructionRequirementsValidatorTest {
     private ConstructionRequirementsValidator underTest;
 
     @Test
-    public void nullParallelWorkers() {
-        ConstructionRequirements constructionRequirements = validConstructionRequirements()
-            .toBuilder()
-            .parallelWorkers(null)
-            .build();
-
-        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
-    }
-
-    @Test
     public void nullRequiredWorkPoints() {
         ConstructionRequirements constructionRequirements = validConstructionRequirements()
             .toBuilder()

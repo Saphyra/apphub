@@ -61,7 +61,6 @@ const ids = {
     storageSettingsPriorityValue: "storage-settings-priority-value",
     storageSettings: "storage-settings",
     storageSettingsResourceInput: "storage-settings-resource-input",
-    storageSettingsBatchSizeInput: "storage-settings-batch-size-input",
     storageSettingsAmountInput: "storage-settings-amount-input",
     storageSettingsCreateButton: "create-storage-settings-button",
     noStorageSettings: "no-storage-settings",

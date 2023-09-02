@@ -10,7 +10,6 @@ import static java.util.Objects.requireNonNull;
 public class ConstructionRequirementsValidator implements DataValidator<ConstructionRequirements> {
     @Override
     public void validate(ConstructionRequirements item) {
-        requireNonNull(item.getParallelWorkers(), "parallelWorkers must not be null.");
         requireNonNull(item.getRequiredWorkPoints(), "requiredWorkPoints must not be null.");
         if (item.getRequiredWorkPoints() < 1) {
             throw new IllegalStateException("requiredWorkPoints must be higher than 0");

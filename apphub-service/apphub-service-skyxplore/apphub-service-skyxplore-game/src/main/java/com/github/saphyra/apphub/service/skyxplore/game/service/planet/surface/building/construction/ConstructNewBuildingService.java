@@ -72,7 +72,6 @@ public class ConstructNewBuildingService {
             building.getBuildingId(),
             ConstructionType.CONSTRUCTION,
             planetId,
-            constructionRequirements.getParallelWorkers(),
             constructionRequirements.getRequiredWorkPoints()
         );
 

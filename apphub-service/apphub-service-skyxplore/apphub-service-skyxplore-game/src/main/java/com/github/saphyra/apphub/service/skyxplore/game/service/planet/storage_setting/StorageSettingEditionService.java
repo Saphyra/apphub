@@ -39,7 +39,6 @@ public class StorageSettingEditionService {
                         .findByStorageSettingIdValidated(request.getStorageSettingId());
 
                     storageSetting.setPriority(request.getPriority());
-                    storageSetting.setBatchSize(request.getBatchSize());
                     storageSetting.setTargetAmount(request.getTargetAmount());
 
                     syncCache.saveGameItem(storageSettingConverter.toModel(game.getGameId(), storageSetting));

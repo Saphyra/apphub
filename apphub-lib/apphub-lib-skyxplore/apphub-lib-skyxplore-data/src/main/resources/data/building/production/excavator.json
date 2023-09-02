@@ -6,7 +6,6 @@
       "placed": [
         "coal_field"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -19,7 +18,6 @@
       "placed": [
         "desert"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -32,7 +30,6 @@
       "placed": [
         "ore_field"
       ],
-      "maxBatchSize": 1,
       "constructionRequirements": {
         "requiredWorkPoints": 5,
         "requiredResources": {
@@ -45,7 +42,6 @@
       "placed": [
         "mountain"
       ],
-      "maxBatchSize": 1000,
       "constructionRequirements": {
         "requiredWorkPoints": 10,
         "requiredResources": {

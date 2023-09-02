@@ -38,7 +38,7 @@ public class StatusLogger {
         TEST_START_ORDER.add(TestUtils.getTestCaseName(method));
     }
 
-    public static synchronized void incrementFinishedTestCount(Method method) {
+    public static synchronized void incrementFinishedTestCount(Method method, long duration) {
         String methodIdentifier = TestUtils.getMethodIdentifier(method);
         FINISHED_TESTS.add(methodIdentifier);
 
@@ -54,6 +54,6 @@ public class StatusLogger {
             }
         }
 
-        log.info("{} {}% {}/{} - {}", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, TestUtils.getTestCaseName(method));
+        log.info("{} {}% {}/{} - {} Duration: {}ms", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, TestUtils.getTestCaseName(method), duration);
     }
 }

@@ -55,7 +55,6 @@ public class TerraformationServiceTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 436;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
-    private static final int PARALLEL_WORKERS = 254;
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -208,10 +207,9 @@ public class TerraformationServiceTest {
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, PARALLEL_WORKERS, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
+        given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(constructionRequirements.getParallelWorkers()).willReturn(PARALLEL_WORKERS);
         given(terraformationProcessFactory.create(gameData, PLANET_ID, terraformation)).willReturn(terraformationProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(game.getEventLoop()).willReturn(eventLoop);

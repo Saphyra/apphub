@@ -117,7 +117,6 @@
                                 .filter((itemId) => {return buildingData.gives[itemId].placed.indexOf(surfaceType) > -1})
                                 .forEach((itemId) => {
                                     const productionData = buildingData.gives[itemId];
-                                    titleBuilder.appendLine((building.level * productionData.constructionRequirements.parallelWorkers) + " x " + productionData.amount + " " + dataCaches.itemDataNames.get(itemId));
                                     new MapStream(productionData.constructionRequirements.requiredResources)
                                         .toListStream((itemId, amount) => {return amount + " x " + dataCaches.itemDataNames.get(itemId)})
                                         .sorted((a, b) => {return a.localeCompare(b)})

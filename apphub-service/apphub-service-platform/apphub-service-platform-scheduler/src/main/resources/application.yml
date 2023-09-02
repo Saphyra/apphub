@@ -16,8 +16,8 @@ interval:
     lobby:
       lobbyCleanup: 300000
     game:
-      gameCleanup: 300000
-      deletion: 60000
+      gameCleanup: 300000 #5 minutes
+      deletion: 60000 #1 minute
   platform:
     memoryStatusUpdateTrigger: 1000
     messageSender:

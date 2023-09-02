@@ -24,7 +24,6 @@ class StorageSettingConverter extends ConverterBase<StorageSettingEntity, Storag
         model.setDataId(entity.getDataId());
         model.setTargetAmount(entity.getTargetAmount());
         model.setPriority(entity.getPriority());
-        model.setBatchSize(entity.getBatchSize());
         return model;
     }
 
@@ -37,7 +36,6 @@ class StorageSettingConverter extends ConverterBase<StorageSettingEntity, Storag
             .dataId(domain.getDataId())
             .targetAmount(domain.getTargetAmount())
             .priority(domain.getPriority())
-            .batchSize(domain.getBatchSize())
             .build();
     }
 }

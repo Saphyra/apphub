@@ -44,7 +44,6 @@
     function resetPanels(){
         const display = storageSettingsSyncEngine.size() > 0 ? "none" : "block";
             document.getElementById(ids.noStorageSettings).style.display = display;
-        setBachSize();
         setPriority();
         $(".create-storage-setting-input").prop("disabled", availableResourcesSyncEngine.size() == 0);
     }
@@ -79,18 +78,6 @@
                         amountInput.value = storageSetting.targetAmount;
                 amountLabel.appendChild(amountInput);
             inputContainer.appendChild(amountLabel);
-
-                const batchSizeLabel = document.createElement("LABEL");
-                    const batchSizeTitle = document.createElement("SPAN");
-                        batchSizeTitle.innerHTML = localization.getAdditionalContent("storage-setting-batch-size") + ": ";
-                batchSizeLabel.appendChild(batchSizeTitle);
-                    const batchSizeInput = document.createElement("INPUT");
-                        batchSizeInput.type = "number";
-                        batchSizeInput.min = 1;
-                        batchSizeInput.step = 1;
-                        batchSizeInput.value = storageSetting.batchSize;
-                batchSizeLabel.appendChild(batchSizeInput);
-            inputContainer.appendChild(batchSizeLabel);
 
                 const priorityLabel = document.createElement("LABEL");
                     const priorityTitle = document.createElement("SPAN");
@@ -130,13 +117,13 @@
             priorityValue.innerHTML = priorityInput.value;
         }
 
-        saveButton.onclick = function(){updateStorageSetting(dataId, storageSetting.storageSettingId, amountInput.value, batchSizeInput.value, priorityInput.value)};
+        saveButton.onclick = function(){updateStorageSetting(dataId, storageSetting.storageSettingId, amountInput.value, priorityInput.value)};
         deleteButton.onclick = function(){deleteStorageSetting(storageSetting.storageSettingId, storageSetting.dataId)};
 
         return node;
     }
 
-    function updateStorageSetting(dataId, storageSettingId, targetAmount, batchSize, priority){
+    function updateStorageSetting(dataId, storageSettingId, targetAmount, priority){
         if(targetAmount < 1){
             notificationService.showError(localization.getAdditionalContent("storage-setting-amount-too-low"));
             return;
@@ -146,7 +133,6 @@
             dataId: dataId,
             storageSettingId: storageSettingId,
             targetAmount: targetAmount,
-            batchSize: batchSize,
             priority: priority
         }
 
@@ -186,13 +172,11 @@
     function createStorageSettings(){
         const dataId = document.getElementById(ids.storageSettingsResourceInput).value;
         const amount = document.getElementById(ids.storageSettingsAmountInput).value;
-        const batchSize = document.getElementById(ids.storageSettingsBatchSizeInput).value;
         const priority = document.getElementById(ids.storageSettingsPriorityInput).value;
 
         const payload = {
             dataId: dataId,
             targetAmount: amount,
-            batchSize: batchSize,
             priority: priority
         }
 
@@ -210,10 +194,6 @@
                 resetPanels();
             }
         dao.sendRequestAsync(request);
-    }
-
-    function setBachSize(){
-        document.getElementById(ids.storageSettingsBatchSizeInput).value = 10;
     }
 
     function setPriority(){

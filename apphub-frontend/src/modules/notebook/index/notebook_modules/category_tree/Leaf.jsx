@@ -79,13 +79,13 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
             onDragOver={handleOnDragOver}
             onDrop={handleOnDrop}
         >
-            <div className={"notebook-tree-leaf button" + (category.archived ? " archived" : "")}>
+            <div
+                className={"notebook-tree-leaf button" + (category.archived ? " archived" : "")}
+                onClick={() => setOpenedListItem({ id: category.categoryId, type: ListItemType.CATEGORY })}
+            >
                 {hasLeaves && (isOpened ? closeButton() : expandButton())}
 
-                <div
-                    className="notebook-tree-leaf-title"
-                    onClick={() => setOpenedListItem({ id: category.categoryId, type: ListItemType.CATEGORY })}
-                >
+                <div className="notebook-tree-leaf-title">
                     {category.title}
                 </div>
             </div>

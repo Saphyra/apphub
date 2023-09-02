@@ -1,0 +1,73 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-test_case" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="test_case"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="test_case">
+            <column name="id" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text"/>
+            <column name="first_run" type="timestamp"/>
+            <column name="last_run" type="timestamp"/>
+            <column name="groups" type="text"/>
+        </createTable>
+
+        <addPrimaryKey tableName="test_case" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-table-test_run" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="test_run"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="test_run">
+            <column name="id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="timestamp"/>
+            <column name="end_time" type="timestamp"/>
+            <column name="status" type="text"/>
+        </createTable>
+
+        <addPrimaryKey tableName="test_run" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-table-test_case_run" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="test_case_run"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="test_case_run">
+            <column name="id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_run_id" type="uuid"/>
+            <column name="test_case_id" type="text"/>
+            <column name="duration" type="number"/>
+            <column name="status" type="text"/>
+        </createTable>
+
+        <addPrimaryKey tableName="test_case_run" columnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-column-created_at-to-test_case_run" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="test_case_run" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="test_case_run">
+            <column name="created_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

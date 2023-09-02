@@ -88,10 +88,6 @@ class GamePage {
         return driver.findElement(By.id("storage-settings-amount-input"));
     }
 
-    public static WebElement createStorageSettingBatchSizeInput(WebDriver driver) {
-        return driver.findElement(By.id("storage-settings-batch-size-input"));
-    }
-
     public static WebElement createStorageSettingPriorityInput(WebDriver driver) {
         return driver.findElement(By.id("storage-settings-priority-input"));
     }

@@ -36,7 +36,6 @@ public class AllianceService implements GameItemService {
             .map(gameItem -> (AllianceModel) gameItem)
             .collect(Collectors.toList());
 
-
         dao.saveAll(models);
     }
 

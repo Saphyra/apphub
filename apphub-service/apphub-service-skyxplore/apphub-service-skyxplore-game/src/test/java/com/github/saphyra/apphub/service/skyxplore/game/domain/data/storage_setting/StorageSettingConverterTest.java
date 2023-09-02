@@ -21,7 +21,6 @@ public class StorageSettingConverterTest {
     private static final String DATA_ID = "data-id";
     private static final int TARGET_AMOUNT = 254;
     private static final int PRIORITY = 4527;
-    private static final int BATCH_SIZE = 132;
 
     @InjectMocks
     private StorageSettingConverter underTest;
@@ -34,7 +33,6 @@ public class StorageSettingConverterTest {
             .dataId(DATA_ID)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
-            .batchSize(BATCH_SIZE)
             .build();
 
         List<StorageSettingModel> result = underTest.toModel(GAME_ID, Arrays.asList(storageSetting));
@@ -46,6 +44,5 @@ public class StorageSettingConverterTest {
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.get(0).getPriority()).isEqualTo(PRIORITY);
-        assertThat(result.get(0).getBatchSize()).isEqualTo(BATCH_SIZE);
     }
 }

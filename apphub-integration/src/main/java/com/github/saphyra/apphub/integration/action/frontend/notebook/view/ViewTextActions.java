@@ -23,7 +23,7 @@ public class ViewTextActions {
     }
 
     private static WebElement getTitleInput(WebDriver driver) {
-        return driver.findElement(By.cssSelector(".notebook-list-item-title > input"));
+        return driver.findElement(By.id("notebook-content-list-item-title-input"));
     }
 
     public static void enableEditing(WebDriver driver) {
@@ -55,7 +55,7 @@ public class ViewTextActions {
     }
 
     public static void close(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-text-close-button"))
+        driver.findElement(By.id("notebook-content-list-item-close-button"))
             .click();
 
         AwaitilityWrapper.createDefault()

@@ -1,2 +1,8 @@
 server:
   port: 8082
+
+interval:
+  skyxplore:
+    game:
+      gameCleanup: 30000 #30 sec
+      deletion: 10000 #10 sec

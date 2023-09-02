@@ -17,12 +17,11 @@ public class SkyXplorePlanetStorageSettingActions {
         return GamePage.storageSettingsWindow(driver).isDisplayed();
     }
 
-    public static void create(WebDriver driver, String resourceId, int amount, int batchSize, int priority) {
+    public static void create(WebDriver driver, String resourceId, int amount, int priority) {
         createStorageSettingResourceSelectMenu(driver)
             .selectOptionByValue(resourceId);
 
         clearAndFill(GamePage.createStorageSettingResourceAmountInput(driver), String.valueOf(amount));
-        clearAndFill(GamePage.createStorageSettingBatchSizeInput(driver), String.valueOf(batchSize));
 
         new RangeInput(GamePage.createStorageSettingPriorityInput(driver))
             .setValue(priority);

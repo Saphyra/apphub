@@ -1,0 +1,21 @@
+===FEATURES===
+Platform
+    Integration Server for integration test measurements
+
+===BUGFIXES===
+Notebook
+    Clicking on the border of a ListItem did not open it
+    Increase font size in text
+SkyXplore
+    Update LobbyMembers in Lobby page when the invitor is left lobby
+
+===PLATFORM CHANGES===
+Feature switch for parallel unit test execution
+ToastMessageUtil accepts enum based localization
+
+===TECHNICAL DEBTS===
+SkyXplore
+    Get rid of locationType and batchSize
+    Get rid of parallelWorkers
+Notebook
+    Extract opened list item header to reduce code duplication

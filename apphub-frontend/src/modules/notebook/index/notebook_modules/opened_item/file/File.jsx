@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Endpoints from "../../../../../../common/js/dao/dao";
-import ListItemTitle from "../../../../common/list_item_title/ListItemTitle";
 import Button from "../../../../../../common/component/input/Button";
 import ListItemType from "../../../../common/ListItemType";
 import "./file.css";
 import Utils from "../../../../../../common/js/Utils";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
+import OpenedListItemHeader from "../OpenedListItemHeader";
 
 const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
@@ -47,20 +47,12 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
     return (
         <div id="notebook-content-file" className="notebook-content notebook-content-view">
-            <ListItemTitle
-                id="notebook-content-file-title"
-                placeholder={localizationHandler.get("list-item-title")}
-                value={title}
-                setListItemTitle={setTitle}
-                disabled={true}
-                closeButton={
-                    <Button
-                        id="notebook-content-file-close-button"
-                        className="notebook-close-button"
-                        label="X"
-                        onclick={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
-                    />
-                }
+            <OpenedListItemHeader
+                localizationHandler={localizationHandler}
+                title={title}
+                setTitle={setTitle}
+                editingEnabled={false}
+                close={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
             />
 
             <div id="notebook-content-file-content" className="notebook-content-view-main">

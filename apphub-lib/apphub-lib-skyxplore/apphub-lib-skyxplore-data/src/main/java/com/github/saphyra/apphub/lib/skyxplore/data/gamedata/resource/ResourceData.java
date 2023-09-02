@@ -11,7 +11,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ResourceData extends GameDataItem {
     private StorageType storageType;
-    @Deprecated
-    private Integer mass;
     private Integer maxProductionBatchSize;
 }

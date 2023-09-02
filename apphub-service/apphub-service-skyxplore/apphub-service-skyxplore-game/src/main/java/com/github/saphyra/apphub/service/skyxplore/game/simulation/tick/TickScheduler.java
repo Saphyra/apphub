@@ -70,6 +70,7 @@ class TickScheduler implements Runnable {
                 .getOrThrow();
 
             sleepTime = Math.max(0, context.getGameProperties().getTickTimeMillis() - (processingTime));
+            log.info("Next tick for game {} is {}", game.getGameId(), sleepTime);
         }
 
         log.info("TickScheduler finished for game {}", game.getGameId());
