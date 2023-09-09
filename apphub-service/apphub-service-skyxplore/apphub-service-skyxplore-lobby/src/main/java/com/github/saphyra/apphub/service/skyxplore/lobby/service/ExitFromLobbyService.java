@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,19 +19,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO split
+//TODO unit test
 public class ExitFromLobbyService {
     private final CharacterProxy characterProxy;
     private final LobbyDao lobbyDao;
-    private final MessageSenderProxy messageSenderProxy;
     private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
     private final DateTimeUtil dateTimeUtil;
+    private final SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     public void exit(UUID userId) {
         lobbyDao.findByUserId(userId)
@@ -66,12 +66,7 @@ public class ExitFromLobbyService {
     }
 
     private void rejectInvitation(Invitation invitation, Lobby lobby) {
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(
-            WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION,
-            Arrays.asList(invitation.getCharacterId()),
-            invitation.getInvitorId()
-        );
-        messageSenderProxy.sendToMainMenu(message);
+        invitationWebSocketHandler.sendEvent(invitation.getCharacterId(), WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION, invitation.getInvitorId());
         sendExitMessage(invitation.getCharacterId(), lobby, true);
     }
 
@@ -84,15 +79,7 @@ public class ExitFromLobbyService {
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .onlyInvited(onlyInvited)
             .build();
-        WebSocketEvent event = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_EXIT)
-            .payload(payload)
-            .build();
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(new ArrayList<>(lobby.getMembers().keySet()))
-            .event(event)
-            .build();
-        messageSenderProxy.sendToLobby(message);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_EXIT, payload);
     }
 
     public void userDisconnected(UUID userId) {
@@ -103,8 +90,8 @@ public class ExitFromLobbyService {
         lobbyMember.setStatus(LobbyMemberStatus.DISCONNECTED);
 
         LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
-        messageSenderProxy.lobbyMemberModified(response, lobby.getMembers().keySet());
-        messageSenderProxy.lobbyMemberDisconnected(response, lobby.getMembers().keySet());
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, response);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_DISCONNECTED, response);
     }
 
     @Data

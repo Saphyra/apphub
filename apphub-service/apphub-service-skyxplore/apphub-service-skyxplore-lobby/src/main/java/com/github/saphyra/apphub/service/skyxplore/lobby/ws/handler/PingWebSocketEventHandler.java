@@ -1,9 +1,10 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
+package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ class PingWebSocketEventHandler implements WebSocketEventHandler {
     }
 
     @Override
-    public void handle(UUID from, WebSocketEvent event) {
+    public void handle(UUID from, WebSocketEvent event, SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler) {
         log.info("Handling ping from {}", from);
         lobbyDao.findByUserId(from).ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentDateTime()));
     }

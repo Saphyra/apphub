@@ -1,17 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class LobbyDao {
     private final Map<UUID, Lobby> repository = new ConcurrentHashMap<>();
 
-    private final MessageSenderProxy messageSenderProxy;
+    private final ApplicationContextProxy applicationContextProxy;
 
     public void save(Lobby lobby) {
         repository.put(lobby.getLobbyId(), lobby);
@@ -69,8 +68,8 @@ public class LobbyDao {
     }
 
     private void cancelInvitation(Invitation invitation) {
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION, Arrays.asList(invitation.getCharacterId()), invitation.getInvitorId());
-        messageSenderProxy.sendToMainMenu(message);
+        applicationContextProxy.getBean(SkyXploreLobbyInvitationWebSocketHandler.class)
+            .sendEvent(invitation.getCharacterId(), WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION, invitation.getInvitorId());
     }
 
     public Collection<Lobby> getAll() {

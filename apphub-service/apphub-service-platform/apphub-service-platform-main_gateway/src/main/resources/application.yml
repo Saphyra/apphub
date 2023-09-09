@@ -104,6 +104,10 @@ spring:
         uri: ws://admin-panel:8080
         predicates:
         - Path=/api/ws/admin-panel/**
+      - id: web-socket-skyxplore-lobby
+        uri: ws://skyxplore-lobby:8080
+        predicates:
+        - Path=/api/ws/skyxplore-lobby/**
       - id: ws
         uri: ws://message-sender:8080
         predicates:

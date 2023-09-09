@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.GameSettingsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ import static java.util.Objects.isNull;
 class AiService {
     private final IdGenerator idGenerator;
     private final LobbyDao lobbyDao;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final GameSettingsProperties gameSettingsProperties;
 
     void removeAi(UUID userId, UUID aiUserId) {
@@ -35,13 +34,7 @@ class AiService {
         lobby.getAis()
             .removeIf(aiPlayer -> aiPlayer.getUserId().equals(aiUserId));
 
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(
-            WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED,
-            lobby.getMembers().keySet(),
-            aiUserId
-        );
-
-        messageSenderProxy.sendToLobby(message);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED, aiUserId);
     }
 
     public void createOrModifyAi(UUID userId, AiPlayer aiPlayer) {
@@ -76,12 +69,6 @@ class AiService {
         lobby.getAis()
             .add(aiPlayer);
 
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(
-            WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED,
-            lobby.getMembers().keySet(),
-            aiPlayer
-        );
-
-        messageSenderProxy.sendToLobby(message);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 }

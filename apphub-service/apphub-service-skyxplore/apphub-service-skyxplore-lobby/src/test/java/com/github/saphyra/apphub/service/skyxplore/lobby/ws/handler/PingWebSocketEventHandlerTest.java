@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
+package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -50,7 +50,7 @@ public class PingWebSocketEventHandlerTest {
         given(lobbyDao.findByUserId(FROM)).willReturn(Optional.of(lobby));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
-        underTest.handle(FROM, null);
+        underTest.handle(FROM, null, null);
 
         verify(lobby).setLastAccess(CURRENT_DATE);
     }

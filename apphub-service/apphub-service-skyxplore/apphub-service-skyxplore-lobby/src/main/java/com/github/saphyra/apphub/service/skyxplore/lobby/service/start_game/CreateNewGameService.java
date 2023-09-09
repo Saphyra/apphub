@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class CreateNewGameService {
     private final LobbyDao lobbyDao;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyWebSocketHandler skyXploreLobbyWebSocketHandler;
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
     private final AllianceSetupValidator allianceSetupValidator;
@@ -57,11 +56,7 @@ class CreateNewGameService {
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .build();
 
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(lobby.getMembers().keySet())
-            .event(event)
-            .build();
-        messageSenderProxy.sendToLobby(message);
+        skyXploreLobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
 
         lobbyDao.delete(lobby);
     }

@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreGameProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 @Slf4j
 class LoadGameService {
     private final LobbyDao lobbyDao;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final SkyXploreGameProxy gameProxy;
 
     void loadGame(Lobby lobby) {
@@ -36,11 +35,7 @@ class LoadGameService {
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .build();
 
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(lobby.getMembers().keySet())
-            .event(event)
-            .build();
-        messageSenderProxy.sendToLobby(message);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
 
         lobbyDao.delete(lobby);
     }

@@ -12,6 +12,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,10 +37,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             .lastUpdate(context.getDateTimeUtil().getCurrentDateTime())
             .build();
         sessions.put(session.getId(), sessionWrapper);
-        afterConnection(session);
+        afterConnection(getUserId(session.getPrincipal()));
     }
 
-    protected void afterConnection(WebSocketSession session) {
+    protected void afterConnection(UUID userId) {
 
     }
 
@@ -47,10 +48,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
         log.info("User {} disconnected from {}", session.getPrincipal().getName(), getEndpoint());
         sessions.remove(session.getId());
-        afterDisconnection(session);
+        afterDisconnection(getUserId(session.getPrincipal()));
     }
 
-    protected void afterDisconnection(WebSocketSession session) {
+    protected void afterDisconnection(UUID userId) {
 
     }
 
@@ -112,11 +113,19 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             .isBefore(expiration);
     }
 
+    public void sendEvent(UUID recipient, WebSocketEventName eventName, Object payload) {
+        sendEvent(List.of(recipient), WebSocketEvent.builder().eventName(eventName).payload(payload).build());
+    }
+
+    public void sendEvent(Collection<UUID> recipients, WebSocketEventName eventName, Object payload) {
+        sendEvent(recipients, WebSocketEvent.builder().eventName(eventName).payload(payload).build());
+    }
+
     public void sendEvent(UUID recipient, WebSocketEvent event) {
         sendEvent(List.of(recipient), event);
     }
 
-    public void sendEvent(List<UUID> recipients, WebSocketEvent event) {
+    public void sendEvent(Collection<UUID> recipients, WebSocketEvent event) {
         log.info("Sending {} event in {} to {} number of recipients", event.getEventName(), getEndpoint(), recipients.size());
         log.debug("Recipients: {}", recipients);
         recipients.forEach(userId -> sendEventToUser(userId, event));
@@ -129,7 +138,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             .forEach(webSocketSessionWrapper -> sendEventToSession(webSocketSessionWrapper, event));
     }
 
-    private List<WebSocketSessionWrapper> getSessionsByUserId(UUID userId) {
+    protected List<WebSocketSessionWrapper> getSessionsByUserId(UUID userId) {
         String userIdString = context.getUuidConverter().convertDomain(userId);
 
         return sessions.values()

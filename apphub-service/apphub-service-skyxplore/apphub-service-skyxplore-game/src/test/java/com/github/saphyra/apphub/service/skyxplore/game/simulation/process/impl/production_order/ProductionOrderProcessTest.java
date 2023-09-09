@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;

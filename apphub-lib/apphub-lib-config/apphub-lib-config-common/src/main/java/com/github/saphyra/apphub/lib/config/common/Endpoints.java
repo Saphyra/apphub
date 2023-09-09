@@ -59,7 +59,8 @@ public class Endpoints {
     public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/ws/admin-panel/monitoring";
     public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/ws/admin-panel/error-report";
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
-    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore/lobby";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore/lobby/invitation";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
     public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
 

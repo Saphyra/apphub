@@ -1,15 +1,15 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
+package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,7 +23,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class ChatSendMessageWebSocketEventHandlerTest {
@@ -40,7 +40,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     private CharacterProxy characterProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -80,10 +80,10 @@ public class ChatSendMessageWebSocketEventHandlerTest {
         given(receivedEvent.getPayload()).willReturn(EVENT_PAYLOAD);
         given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CREATED_AT);
 
-        underTest.handle(FROM, receivedEvent);
+        underTest.handle(FROM, receivedEvent, lobbyWebSocketHandler);
 
         ArgumentCaptor<ChatSendMessageWebSocketEventHandler.Message> argumentCaptor = ArgumentCaptor.forClass(ChatSendMessageWebSocketEventHandler.Message.class);
-        verify(messageSenderProxy).sendLobbyChatMessage(argumentCaptor.capture(), eq(lobbyMembers.keySet()));
+        then(lobbyWebSocketHandler).should().sendEvent(eq(lobbyMembers.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE), argumentCaptor.capture());
 
         ChatSendMessageWebSocketEventHandler.Message payload = argumentCaptor.getValue();
         assertThat(payload.getSenderId()).isEqualTo(FROM);

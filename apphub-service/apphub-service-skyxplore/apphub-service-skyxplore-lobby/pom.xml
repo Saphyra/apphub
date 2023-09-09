@@ -18,6 +18,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-web_socket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>

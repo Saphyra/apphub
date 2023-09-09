@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.service.skyxplore.game.common.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;

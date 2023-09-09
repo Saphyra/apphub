@@ -1,12 +1,12 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.event.handler;
+package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +22,6 @@ import java.util.UUID;
 public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
     private final CharacterProxy characterProxy;
-    private final MessageSenderProxy messageSenderProxy;
     private final DateTimeUtil dateTimeUtil;
 
     @Override
@@ -31,7 +30,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
     }
 
     @Override
-    public void handle(UUID from, WebSocketEvent event) {
+    public void handle(UUID from, WebSocketEvent event, SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler) {
         log.info("Sending message from {}", from);
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
@@ -45,7 +44,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .build();
 
-        messageSenderProxy.sendLobbyChatMessage(message, lobby.getMembers().keySet());
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE, message);
     }
 
     @Data

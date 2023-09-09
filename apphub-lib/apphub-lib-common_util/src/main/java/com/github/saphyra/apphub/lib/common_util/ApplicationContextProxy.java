@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.common;
+package com.github.saphyra.apphub.lib.common_util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;

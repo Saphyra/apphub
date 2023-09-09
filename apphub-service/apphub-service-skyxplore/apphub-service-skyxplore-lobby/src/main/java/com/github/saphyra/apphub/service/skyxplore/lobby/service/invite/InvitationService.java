@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
@@ -12,9 +10,10 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +33,8 @@ public class InvitationService {
     private final InvitationFactory invitationFactory;
     private final DateTimeUtil dateTimeUtil;
     private final CharacterProxy characterProxy;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final SkyXploreDataProxy dataProxy;
     private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
     private final int floodingLimitSeconds;
@@ -45,15 +44,18 @@ public class InvitationService {
         InvitationFactory invitationFactory,
         DateTimeUtil dateTimeUtil,
         CharacterProxy characterProxy,
-        MessageSenderProxy messageSenderProxy,
+        SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler,
+        SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler,
         SkyXploreDataProxy dataProxy,
-        LobbyMemberToResponseConverter lobbyMemberToResponseConverter, @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
+        LobbyMemberToResponseConverter lobbyMemberToResponseConverter,
+        @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
     ) {
         this.lobbyDao = lobbyDao;
         this.invitationFactory = invitationFactory;
         this.dateTimeUtil = dateTimeUtil;
         this.characterProxy = characterProxy;
-        this.messageSenderProxy = messageSenderProxy;
+        this.invitationWebSocketHandler = invitationWebSocketHandler;
+        this.lobbyWebSocketHandler = lobbyWebSocketHandler;
         this.dataProxy = dataProxy;
         this.lobbyMemberToResponseConverter = lobbyMemberToResponseConverter;
         this.floodingLimitSeconds = floodingLimitSeconds;
@@ -104,20 +106,12 @@ public class InvitationService {
                 return i;
             });
 
-        messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertInvitation(invitation), lobby.getMembers().keySet());
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberToResponseConverter.convertInvitation(invitation));
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
             .senderId(senderId)
             .senderName(characterProxy.getCharacter().getName())
             .build();
-        WebSocketEvent event = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
-            .payload(invitationMessage)
-            .build();
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(Arrays.asList(characterId))
-            .event(event)
-            .build();
-        messageSenderProxy.sendToMainMenu(message);
+        invitationWebSocketHandler.sendEvent(characterId, WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION, invitationMessage);
     }
 }
