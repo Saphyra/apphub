@@ -1,13 +1,16 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
-import com.github.saphyra.apphub.api.platform.message_sender.client.MessageSenderApiClient;
-import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
+import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
@@ -15,12 +18,12 @@ import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.ErrorResponseValidator;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.web_socket.ApphubWsClient;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,17 +33,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.test.common.TestConstants.DEFAULT_LOCALE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -58,6 +60,8 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
     private static final String EXCEPTION_TYPE = "exception-type";
     private static final String EXCEPTION_THREAD = "exception-thread";
     private static final String SERVICE = "service";
+    private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @LocalServerPort
     private int serverPort;
@@ -66,10 +70,16 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
     private LocalizationClient localizationClient;
 
     @MockBean
-    private MessageSenderApiClient messageSenderClient;
+    private UserAuthenticationClient userAuthenticationClient;
 
     @Autowired
     private ErrorReportDao errorReportDao;
+
+    @Autowired
+    private CommonConfigProperties commonConfigProperties;
+
+    @Autowired
+    private ObjectMapperWrapper objectMapperWrapper;
 
     @BeforeEach
     public void setUp() {
@@ -109,7 +119,7 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
     }
 
     @Test
-    public void saveReport() {
+    public void saveReport() throws URISyntaxException {
         StackTraceModel stackTraceModel = StackTraceModel.builder()
             .fileName(FILE_NAME)
             .className(CLASS_NAME)
@@ -131,6 +141,9 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
             .service(SERVICE)
             .build();
 
+        given(userAuthenticationClient.getAccessTokenById(ACCESS_TOKEN_ID, commonConfigProperties.getDefaultLocale())).willReturn(InternalAccessTokenResponse.builder().userId(USER_ID).build());
+        ApphubWsClient apphubWsClient = new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT, ACCESS_TOKEN_ID, commonConfigProperties.getDefaultLocale());
+
         Response response = RequestFactory.createRequest()
             .body(model)
             .put(UrlFactory.create(serverPort, Endpoints.ADMIN_PANEL_INTERNAL_REPORT_ERROR));
@@ -148,10 +161,17 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
         assertThat(report.getService()).isEqualTo(SERVICE);
         assertThat(report.getException()).isEqualTo(exceptionModel);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderClient).sendMessage(eq(MessageGroup.ADMIN_PANEL_ERROR_REPORT), argumentCaptor.capture(), any());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT);
-        assertThat(message.getRecipients()).isNull();
+        WebSocketEvent event = apphubWsClient.awaitForEvent(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT)
+            .orElseThrow(() -> new RuntimeException("WebSocket event not arrived."));
+
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT);
+        ErrorReportOverview errorReportOverview = objectMapperWrapper.convertValue(event.getPayload(), ErrorReportOverview.class);
+
+        assertThat(errorReportOverview.getId()).isEqualTo(report.getId());
+        assertThat(errorReportOverview.getCreatedAt()).isNotNull();
+        assertThat(errorReportOverview.getResponseStatus()).isEqualTo(report.getResponseStatus());
+        assertThat(errorReportOverview.getMessage()).isEqualTo(report.getMessage());
+        assertThat(errorReportOverview.getStatus()).isEqualTo(report.getStatus().name());
+        assertThat(errorReportOverview.getService()).isEqualTo(report.getService());
     }
 }

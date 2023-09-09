@@ -2,25 +2,26 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.repor
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
-import com.github.saphyra.apphub.service.admin_panel.proxy.MessageSenderProxy;
-import com.github.saphyra.apphub.service.admin_panel.ws.WebSocketMessageFactory;
+import com.github.saphyra.apphub.service.admin_panel.ws.ErrorReportWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,10 +36,7 @@ public class ReportErrorServiceTest {
     private ErrorReportDao errorReportDao;
 
     @Mock
-    private WebSocketMessageFactory webSocketMessageFactory;
-
-    @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private ErrorReportWebSocketHandler errorReportWebSocketHandler;
 
     @Mock
     private ErrorReportToOverviewConverter converter;
@@ -48,9 +46,6 @@ public class ReportErrorServiceTest {
 
     @Mock
     private ErrorReport errorReport;
-
-    @Mock
-    private WebSocketMessage webSocketMessage;
 
     @Mock
     private ErrorReportOverview errorReportOverview;
@@ -99,7 +94,6 @@ public class ReportErrorServiceTest {
             .service(SERVICE)
             .build();
 
-        given(webSocketMessageFactory.create((List<UUID>) null, WebSocketEventName.ADMIN_PANEL_ERROR_REPORT, errorReportOverview)).willReturn(webSocketMessage);
         given(converter.convert(errorReport)).willReturn(errorReportOverview);
 
         given(errorReportFactory.create(model)).willReturn(errorReport);
@@ -107,6 +101,10 @@ public class ReportErrorServiceTest {
         underTest.saveReport(model);
 
         verify(errorReportDao).save(errorReport);
-        verify(messageSenderProxy).sendToErrorReport(webSocketMessage);
+        ArgumentCaptor<WebSocketEvent> argumentCaptor = ArgumentCaptor.forClass(WebSocketEvent.class);
+        then(errorReportWebSocketHandler).should().sendToAllConnectedClient(argumentCaptor.capture());
+        WebSocketEvent event = argumentCaptor.getValue();
+        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT);
+        assertThat(event.getPayload()).isEqualTo(errorReportOverview);
     }
 }

@@ -1,20 +1,16 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
-import com.github.saphyra.apphub.service.admin_panel.proxy.MessageSenderProxy;
-import com.github.saphyra.apphub.service.admin_panel.ws.WebSocketMessageFactory;
+import com.github.saphyra.apphub.service.admin_panel.ws.ErrorReportWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -25,9 +21,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class ReportErrorService {
     private final ErrorReportFactory errorReportFactory;
     private final ErrorReportDao errorReportDao;
-    private final WebSocketMessageFactory webSocketMessageFactory;
+    private final ErrorReportWebSocketHandler errorReportWebSocketHandler;
     private final ErrorReportToOverviewConverter converter;
-    private final MessageSenderProxy messageSenderProxy;
 
     public void saveReport(ErrorReportModel model) {
         if (!isNull(model.getId())) {
@@ -47,11 +42,11 @@ public class ReportErrorService {
         errorReportDao.save(errorReport);
         log.info("ErrorReport created with id {} for message {}", errorReport.getId(), errorReport.getMessage());
 
-        WebSocketMessage message = webSocketMessageFactory.create(
-            (List<UUID>) null,
-            WebSocketEventName.ADMIN_PANEL_ERROR_REPORT,
-            converter.convert(errorReport)
-        );
-        messageSenderProxy.sendToErrorReport(message);
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT)
+            .payload(converter.convert(errorReport))
+            .build();
+
+        errorReportWebSocketHandler.sendToAllConnectedClient(event);
     }
 }

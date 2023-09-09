@@ -15,14 +15,12 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @Builder
 public class LoadGameWebSocketHandler extends TextWebSocketHandler {
-    private final WebSocketSessionCache sessionCache;
     private final IdGenerator idGenerator;
     private final ObjectMapperWrapper objectMapperWrapper;
     private final List<SkyXploreWsEventHandler> eventHandlers;
@@ -30,8 +28,6 @@ public class LoadGameWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         log.info("Connection established.");
-        UUID sessionId = idGenerator.randomUuid();
-        sessionCache.put(sessionId, session);
     }
 
     public void sendEvent(WebSocketSession session, SkyXploreWsEvent event) {

@@ -25,13 +25,13 @@ public class MessageSenderEventProcessorRegistry implements EventProcessorRegist
         return Arrays.asList(
             RegisterProcessorRequest.builder()
                 .host(host)
-                .eventName(EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME)
-                .url(Endpoints.EVENT_MESSAGE_SENDER_PING_REQUEST)
+                .eventName(EmptyEvent.WEB_SOCKET_SEND_PING_EVENT)
+                .url(Endpoints.EVENT_WEB_SOCKET_SEND_PING_EVENT)
                 .build(),
             RegisterProcessorRequest.builder()
                 .host(host)
-                .eventName(EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT)
-                .url(Endpoints.EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP)
+                .eventName(EmptyEvent.WEB_SOCKET_CONNECTION_CLEANUP_EVENT)
+                .url(Endpoints.EVENT_WEB_SOCKET_CONNECTION_CLEANUP)
                 .build()
         );
     }

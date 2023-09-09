@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class EventGatewayProxy {
     private final EventGatewayApiClient eventGatewayApiClient;
     private final LocaleProvider localeProvider;

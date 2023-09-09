@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.platform.message_sender.controller;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.lib.web_socket.core.domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.service.platform.message_sender.connection.WebSocketHandler;

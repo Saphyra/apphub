@@ -69,6 +69,8 @@ supportedLocales:
 defaultLocale: en
 fileUpload:
   maxFileSize: 2147483648 #2 GB
+webSocketSession:
+  expirationSeconds: 30
 
 endpoint:
   whitelisting:

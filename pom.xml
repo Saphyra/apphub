@@ -53,6 +53,8 @@
         <versions.jakartaValidationApi>3.0.2</versions.jakartaValidationApi>
         <versions.jakartaServletApi>6.0.0</versions.jakartaServletApi>
         <versions.jaxbApi>2.4.0-b180830.0359</versions.jaxbApi>
+        <versions.awaitility>4.2.0</versions.awaitility>
+        <versions.java-websocket>1.5.3</versions.java-websocket>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.10.1</versions.maven-compiler-plugin>

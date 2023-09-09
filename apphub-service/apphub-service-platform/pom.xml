@@ -27,7 +27,6 @@
         <module>apphub-service-platform-event_gateway</module>
         <module>apphub-service-platform-scheduler</module>
         <module>apphub-service-platform-web_content</module>
-        <module>apphub-service-platform-message_sender</module>
         <module>apphub-service-platform-encryption</module>
         <module>apphub-service-platform-storage</module>
     </modules>

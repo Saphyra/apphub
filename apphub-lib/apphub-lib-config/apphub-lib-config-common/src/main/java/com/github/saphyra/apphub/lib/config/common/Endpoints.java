@@ -44,8 +44,8 @@ public class Endpoints {
     public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
     public static final String EVENT_SKYXPLORE_LOBBY_CLEANUP = "/event/skyxplore/lobby/cleanup";
     public static final String EVENT_SKYXPLORE_GAME_CLEANUP = "/event/skyxplore/game/cleanup";
-    public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
-    public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
+    public static final String EVENT_WEB_SOCKET_SEND_PING_EVENT = "/event/web-socket/send-ping";
+    public static final String EVENT_WEB_SOCKET_CONNECTION_CLEANUP = "/event/web-socket/connection-cleanup";
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
     public static final String EVENT_SKYXPLORE_DELETE_GAMES = "/event/skyxplore/data/game/delete";
@@ -56,8 +56,8 @@ public class Endpoints {
     public static final String WEB_SOCKET_BULK_SEND_MESSAGE = "/internal/message/{group}/bulk";
 
     //CONNECTION SUBSCRIPTIONS
-    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
-    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/message-sender/admin-panel/error-report";
+    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/ws/admin-panel/monitoring";
+    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/ws/admin-panel/error-report";
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";

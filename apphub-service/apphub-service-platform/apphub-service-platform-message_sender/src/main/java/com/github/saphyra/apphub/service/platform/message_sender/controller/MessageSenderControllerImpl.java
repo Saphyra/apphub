@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.platform.message_sender.controller;
 
 import com.github.saphyra.apphub.api.platform.message_sender.model.MessageGroup;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.platform.message_sender.server.MessageSenderController;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;

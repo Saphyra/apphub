@@ -100,6 +100,10 @@ spring:
         - Path=/api/storage/**
 
       #WS
+      - id: web-socket-admin-panel
+        uri: ws://admin-panel:8080
+        predicates:
+        - Path=/api/ws/admin-panel/**
       - id: ws
         uri: ws://message-sender:8080
         predicates:

@@ -18,7 +18,7 @@ class MessageSenderPingRequestScheduler {
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.messageSender.pingRequest}")
     void pingRequest() {
-        String eventName = EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME;
+        String eventName = EmptyEvent.WEB_SOCKET_SEND_PING_EVENT;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
