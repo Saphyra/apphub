@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.ws.handler;
+package com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.handler;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.LoadGameItemService;
-import com.github.saphyra.apphub.service.skyxplore.data.ws.LoadGameWebSocketHandler;
-import com.github.saphyra.apphub.service.skyxplore.data.ws.SkyXploreWsEventHandler;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.LoadGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.SkyXploreLoadGameWsEventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LoadPageForGameHandler implements SkyXploreWsEventHandler {
+public class LoadPageForGameHandler implements SkyXploreLoadGameWsEventHandler {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final LoadGameItemService loadGameItemService;
 

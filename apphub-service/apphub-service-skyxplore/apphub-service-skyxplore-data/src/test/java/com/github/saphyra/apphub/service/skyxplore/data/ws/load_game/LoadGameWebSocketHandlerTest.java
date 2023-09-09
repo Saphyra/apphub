@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.ws;
+package com.github.saphyra.apphub.service.skyxplore.data.ws.load_game;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -32,16 +32,13 @@ public class LoadGameWebSocketHandlerTest {
     private static final String PAYLOAD = "payload";
 
     @Mock
-    private WebSocketSessionCache sessionCache;
-
-    @Mock
     private IdGenerator idGenerator;
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
     @Mock
-    private SkyXploreWsEventHandler eventHandler;
+    private SkyXploreLoadGameWsEventHandler eventHandler;
 
     private LoadGameWebSocketHandler underTest;
 
@@ -58,19 +55,9 @@ public class LoadGameWebSocketHandlerTest {
     public void setUp() {
         underTest = LoadGameWebSocketHandler.builder()
             .idGenerator(idGenerator)
-            .sessionCache(sessionCache)
             .objectMapperWrapper(objectMapperWrapper)
             .eventHandlers(List.of(eventHandler))
             .build();
-    }
-
-    @Test
-    public void afterConnectionEstablished() {
-        given(idGenerator.randomUuid()).willReturn(SESSION_ID);
-
-        underTest.afterConnectionEstablished(webSocketSession);
-
-        verify(sessionCache).put(SESSION_ID, webSocketSession);
     }
 
     @Test

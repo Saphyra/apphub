@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.data.ws;
+package com.github.saphyra.apphub.service.skyxplore.data.ws.load_game;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -23,7 +23,7 @@ import java.util.List;
 public class LoadGameWebSocketHandler extends TextWebSocketHandler {
     private final IdGenerator idGenerator;
     private final ObjectMapperWrapper objectMapperWrapper;
-    private final List<SkyXploreWsEventHandler> eventHandlers;
+    private final List<SkyXploreLoadGameWsEventHandler> eventHandlers;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {

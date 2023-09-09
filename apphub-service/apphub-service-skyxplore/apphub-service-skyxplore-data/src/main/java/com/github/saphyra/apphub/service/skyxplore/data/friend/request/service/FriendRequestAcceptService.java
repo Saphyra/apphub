@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.converter.FriendshipToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service.FriendshipFactory;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.SkyXploreFriendshipWebSocketHandler;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import jakarta.transaction.Transactional;
-
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -32,7 +29,7 @@ public class FriendRequestAcceptService {
     private final FriendRequestDao friendRequestDao;
     private final FriendshipFactory friendshipFactory;
     private final FriendshipDao friendshipDao;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreFriendshipWebSocketHandler friendshipWebSocketHandler;
     private final FriendshipToResponseConverter friendshipToResponseConverter;
 
     @Transactional
@@ -55,8 +52,7 @@ public class FriendRequestAcceptService {
             .friendship(friendshipToResponseConverter.convert(friendship, friendRequest.getSenderId()))
             .build();
 
-        WebSocketMessage message = WebSocketMessage.forEventAndRecipients(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED, List.of(friendRequest.getSenderId()), payload);
-        messageSenderProxy.sendToMainMenu(message);
+        friendshipWebSocketHandler.sendEvent(friendRequest.getSenderId(), WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED, payload);
 
         return response;
     }

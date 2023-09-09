@@ -108,6 +108,10 @@ spring:
         uri: ws://skyxplore-lobby:8080
         predicates:
         - Path=/api/ws/skyxplore-lobby/**
+      - id: web-socket-skyxplore-data
+        uri: ws://skyxplore-data:8080
+        predicates:
+        - Path=/api/ws/skyxplore-data/**
       - id: ws
         uri: ws://message-sender:8080
         predicates:
