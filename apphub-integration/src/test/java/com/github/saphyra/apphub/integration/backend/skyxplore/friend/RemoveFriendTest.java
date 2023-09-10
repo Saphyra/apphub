@@ -77,7 +77,7 @@ public class RemoveFriendTest extends BackEndTest {
     }
 
     private static void remove(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID friendshipId) {
-        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2, accessTokenId2);
 
         SkyXploreFriendActions.removeFriend(language, accessTokenId1, friendshipId);
 

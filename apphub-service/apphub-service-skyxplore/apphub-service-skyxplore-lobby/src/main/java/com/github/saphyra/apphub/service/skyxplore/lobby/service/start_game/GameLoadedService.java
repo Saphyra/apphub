@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
@@ -23,9 +24,9 @@ public class GameLoadedService {
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     public void gameLoaded(UUID gameId) {
-        List<UUID> recipients = lobbyDao.findByGameId(gameId)
-            .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND, "Lobby not found for gameId " + gameId))
-            .getMembers()
+        Lobby lobby = lobbyDao.findByGameId(gameId)
+            .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND, "Lobby not found for gameId " + gameId));
+        List<UUID> recipients = lobby.getMembers()
             .values()
             .stream()
             .filter(LobbyMember::isConnected)
@@ -33,5 +34,7 @@ public class GameLoadedService {
             .toList();
 
         lobbyWebSocketHandler.sendEvent(recipients, WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+
+        lobbyDao.delete(lobby);
     }
 }

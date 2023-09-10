@@ -69,6 +69,6 @@ public class SetReadinessWebSocketEventHandlerTest {
         underTest.handle(FROM, WebSocketEvent.builder().payload(String.valueOf(true)).build(), lobbyWebSocketHandler);
 
         verify(lobbyMember).setStatus(LobbyMemberStatus.READY);
-        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, lobbyMemberResponse);
+        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
     }
 }

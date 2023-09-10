@@ -67,7 +67,7 @@ public class InviteToLobbyTest extends BackEndTest {
 
     private static ApphubWsClient invitationArrived(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, UUID userId2) {
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId2, accessTokenId2);
 
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         WebSocketEvent event = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)

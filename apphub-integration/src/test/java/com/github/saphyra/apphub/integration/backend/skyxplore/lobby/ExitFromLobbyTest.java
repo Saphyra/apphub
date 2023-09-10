@@ -66,15 +66,15 @@ public class ExitFromLobbyTest extends BackEndTest {
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId3, userId1);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2, accessTokenId2);
 
-        ApphubWsClient mainMenuClient = memberLeft(language, characterModel3, accessTokenId3, userId3, accessTokenId4, userId4, wsClient);
-        hostLeft(language, characterModel1, accessTokenId1, userId1, accessTokenId2, userId2, userId4, wsClient, mainMenuClient);
+        ApphubWsClient invitationClient = memberLeft(language, characterModel3, accessTokenId3, userId3, accessTokenId4, userId4, wsClient);
+        hostLeft(language, characterModel1, accessTokenId1, userId1, accessTokenId2, userId2, userId4, wsClient, invitationClient);
     }
 
     private static ApphubWsClient memberLeft(Language language, SkyXploreCharacterModel characterModel3, UUID accessTokenId3, UUID userId3, UUID accessTokenId4, UUID userId4, ApphubWsClient wsClient) {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId3, userId4);
-        ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId4);
+        ApphubWsClient invitationClient = ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId4, accessTokenId4);
 
         SkyXploreLobbyActions.exitFromLobby(language, accessTokenId3);
         WebSocketEvent memberLeftEvent = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_EXIT, webSocketEvent -> webSocketEvent.getPayloadAs(ExitFromLobbyWsMessage.class).getUserId().equals(userId3))
@@ -84,13 +84,13 @@ public class ExitFromLobbyTest extends BackEndTest {
         assertThat(memberLeftMessage.getUserId()).isEqualTo(userId3);
         assertThat(memberLeftMessage.isHost()).isFalse();
 
-        WebSocketEvent rejectInvitationEvent = mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION)
+        WebSocketEvent rejectInvitationEvent = invitationClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION)
             .orElseThrow(() -> new RuntimeException("RejectInvitation event did not arrive."));
         assertThat(rejectInvitationEvent.getPayload()).isEqualTo(userId3.toString());
 
         wsClient.clearMessages();
-        mainMenuClient.clearMessages();
-        return mainMenuClient;
+        invitationClient.clearMessages();
+        return invitationClient;
     }
 
     private static void hostLeft(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, UUID userId2, UUID userId4, ApphubWsClient wsClient, ApphubWsClient mainMenuClient) {

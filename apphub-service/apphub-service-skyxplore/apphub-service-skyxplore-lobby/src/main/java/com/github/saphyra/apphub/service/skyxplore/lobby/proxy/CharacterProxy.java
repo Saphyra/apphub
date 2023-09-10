@@ -25,7 +25,7 @@ public class CharacterProxy {
     public SkyXploreCharacterModel getCharacter(UUID userId) {
         return characterClient.internalGetCharacterByUserId(
             userId,
-            localeProvider.getLocaleValidated()
+            localeProvider.getOrDefault()
         );
     }
 }

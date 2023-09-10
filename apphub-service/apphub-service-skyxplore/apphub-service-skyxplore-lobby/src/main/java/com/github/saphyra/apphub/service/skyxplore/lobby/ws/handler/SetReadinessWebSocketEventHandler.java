@@ -39,6 +39,6 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
 
         LobbyMemberResponse lobbyMemberResponse = lobbyMemberToResponseConverter.convertMember(lobbyMember);
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS, lobbyMemberResponse);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
     }
 }

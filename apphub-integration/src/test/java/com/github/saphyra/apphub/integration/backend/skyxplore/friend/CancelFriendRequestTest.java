@@ -69,7 +69,7 @@ public class CancelFriendRequestTest extends BackEndTest {
     }
 
     private static void cancel(Language language, UUID accessTokenId1, UUID accessTokenId2, UUID friendRequestId) {
-        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2, accessTokenId2);
 
         SkyXploreFriendActions.cancelFriendRequest(language, accessTokenId1, friendRequestId);
 

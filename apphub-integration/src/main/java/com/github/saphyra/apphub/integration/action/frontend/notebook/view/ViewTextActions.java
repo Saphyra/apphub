@@ -64,6 +64,6 @@ public class ViewTextActions {
     }
 
     public static void fillTitle(WebDriver driver, String title) {
-        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-text-title")), title);
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-list-item-title-input")), title);
     }
 }

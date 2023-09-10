@@ -50,7 +50,7 @@ public class AllianceSettingsTest extends BackEndTest {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
 
         setAllianceOfPlayer_notHost(language, userId1, accessTokenId2);
         UUID allianceId1 = setAllianceOfPlayer_newAlliance(language, accessTokenId1, userId1, wsClient);
@@ -169,7 +169,7 @@ public class AllianceSettingsTest extends BackEndTest {
 
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
 
         SkyXploreLobbyActions.createOrModifyAi(language, accessTokenId1, AiPlayer.builder().name(AI_NAME).build());
 

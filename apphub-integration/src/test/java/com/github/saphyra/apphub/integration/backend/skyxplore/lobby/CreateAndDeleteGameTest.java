@@ -77,8 +77,8 @@ public class CreateAndDeleteGameTest extends BackEndTest {
     }
 
     private static void createGame(Language language, UUID accessTokenId1, UUID accessTokenId2) {
-        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-        ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, "host");
+        ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2, "member");
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
