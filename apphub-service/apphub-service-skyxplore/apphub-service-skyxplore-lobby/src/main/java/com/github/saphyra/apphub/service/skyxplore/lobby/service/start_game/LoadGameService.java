@@ -3,10 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreGameProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @Slf4j
 class LoadGameService {
-    private final LobbyDao lobbyDao;
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final SkyXploreGameProxy gameProxy;
 
@@ -36,7 +34,5 @@ class LoadGameService {
             .build();
 
         lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
-
-        lobbyDao.delete(lobby);
     }
 }

@@ -128,20 +128,6 @@ public class SkyXploreLobbyControllerImplTest {
     }
 
     @Test
-    public void userJoinedToLobby() {
-        underTest.userJoinedToLobby(USER_ID);
-
-        verify(joinToLobbyService).userJoinedToLobby(USER_ID);
-    }
-
-    @Test
-    public void userLeftLobby() {
-        underTest.userLeftLobby(USER_ID);
-
-        verify(exitFromLobbyService).userDisconnected(USER_ID);
-    }
-
-    @Test
     public void getMembersOfLobby() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(List.of(lobbyMemberResponse));

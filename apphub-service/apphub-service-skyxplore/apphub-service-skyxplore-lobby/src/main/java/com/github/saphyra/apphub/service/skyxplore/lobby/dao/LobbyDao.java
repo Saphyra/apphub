@@ -75,4 +75,12 @@ public class LobbyDao {
     public Collection<Lobby> getAll() {
         return repository.values();
     }
+
+    //TODO unit test
+    public Optional<Lobby> findByGameId(UUID gameId) {
+        return repository.values()
+            .stream()
+            .filter(lobby -> gameId.equals(lobby.getGameId()))
+            .findFirst();
+    }
 }

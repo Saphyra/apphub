@@ -1,16 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.handler.SkyXploreGameWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,7 @@ import java.util.UUID;
 class LeaveChatRoomService {
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreGameWebSocketHandler webSocketHandler;
 
     void leave(UUID userId, String roomId) {
         if (GameConstants.CHAT_ROOM_ALLIANCE.equals(roomId) || GameConstants.CHAT_ROOM_GENERAL.equals(roomId)) {
@@ -54,14 +52,14 @@ class LeaveChatRoomService {
             return;
         }
 
-        WebSocketEvent webSocketEvent = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)
-            .payload(new SystemMessage(roomId, characterProxy.getCharacterByUserId(userId).getName(), userId))
-            .build();
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(chatRoom.getMembers())
-            .event(webSocketEvent)
-            .build();
-        messageSenderProxy.sendToGame(message);
+        webSocketHandler.sendEvent(
+            chatRoom.getMembers(),
+            WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
+            new SystemMessage(
+                roomId,
+                characterProxy.getCharacterByUserId(userId).getName(),
+                userId
+            )
+        );
     }
 }

@@ -27,8 +27,6 @@ spring:
               uri: http://localization:8080
             main-gateway[0]:
               uri: http://main-gateway:8080
-            message-sender[0]:
-              uri: http://message-sender:8080
             scheduler[0]:
               uri: http://scheduler:8080
             storage[0]:

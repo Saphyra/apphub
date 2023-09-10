@@ -113,6 +113,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             .isBefore(expiration);
     }
 
+    public void sendEvent(List<UUID> recipients, WebSocketEventName eventName) {
+        sendEvent(recipients, eventName, null);
+    }
+
     public void sendEvent(UUID recipient, WebSocketEventName eventName, Object payload) {
         sendEvent(List.of(recipient), WebSocketEvent.builder().eventName(eventName).payload(payload).build());
     }

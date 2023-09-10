@@ -101,7 +101,7 @@ spring:
         uri: ws://localhost:8091
         predicates:
         - Path=/api/ws/skyxplore-data/**
-      - id: ws
-        uri: ws://localhost:8094
+      - id: web-socket-skyxplore-game
+        uri: ws://localhost:8095
         predicates:
-        - Path=/api/message-sender/**
+        - Path=/api/ws/skyxplore-game/**

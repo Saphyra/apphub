@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -32,6 +32,9 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
+    @Mock
+    private SkyXploreGameWebSocketHandler webSocketHandler;
+
     @InjectMocks
     private SkyXploreGamePageOpenedWebSocketHandler underTest;
 
@@ -49,7 +52,7 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
         given(objectMapperWrapper.convertValue(PAYLOAD, OpenedPage.class)).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(null);
 
-        Throwable ex = catchThrowable(() -> underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build()));
+        Throwable ex = catchThrowable(() -> underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build(), webSocketHandler));
 
         ExceptionValidator.validateInvalidParam(ex, "pageType", "must not be null");
     }
@@ -61,7 +64,7 @@ public class SkyXploreGamePageOpenedWebSocketHandlerTest {
         given(objectMapperWrapper.convertValue(PAYLOAD, OpenedPage.class)).willReturn(openedPage);
         given(openedPage.getPageType()).willReturn(OpenedPageType.PLANET);
 
-        underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build());
+        underTest.handle(USER_ID, WebSocketEvent.builder().payload(PAYLOAD).build(), webSocketHandler);
 
         verify(player).setOpenedPage(openedPage);
     }

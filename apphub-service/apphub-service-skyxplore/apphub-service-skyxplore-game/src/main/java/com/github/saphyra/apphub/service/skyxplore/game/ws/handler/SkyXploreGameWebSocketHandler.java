@@ -1,45 +1,55 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameWebSocketEventController;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
+import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.CommonSkyXploreConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-@RestController
-@RequiredArgsConstructor
+@Component
 @Slf4j
-@Builder
-public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameWebSocketEventController {
+//TODO unit test
+//TODO split
+public class SkyXploreGameWebSocketHandler extends AbstractWebSocketHandler {
+    private final List<WebSocketEventHandler> handlers;
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
-    private final List<WebSocketEventHandler> handlers;
-    private final MessageSenderProxy messageSenderProxy;
     private final DateTimeUtil dateTimeUtil;
     private final CommonSkyXploreConfiguration configuration;
-    private final WebSocketMessageFactory webSocketMessageFactory;
+
+    public SkyXploreGameWebSocketHandler(WebSocketHandlerContext context, List<WebSocketEventHandler> handlers, GameDao gameDao, CharacterProxy characterProxy, DateTimeUtil dateTimeUtil, CommonSkyXploreConfiguration configuration) {
+        super(context);
+        this.handlers = handlers;
+        this.gameDao = gameDao;
+        this.characterProxy = characterProxy;
+        this.dateTimeUtil = dateTimeUtil;
+        this.configuration = configuration;
+    }
 
     @Override
-    public void processWebSocketEvent(UUID from, WebSocketEvent event) {
-        log.info("Processing WebSocketEvent {} from {}", event.getEventName(), from);
+    public String getEndpoint() {
+        return Endpoints.WS_CONNECTION_SKYXPLORE_GAME;
+    }
+
+    @Override
+    protected void handleMessage(UUID userId, WebSocketEvent event) {
+        log.info("Processing WebSocketEvent {} from {}", event.getEventName(), userId);
         List<WebSocketEventHandler> eventHandlers = handlers.stream()
             .filter(webSocketEventHandler -> webSocketEventHandler.canHandle(event.getEventName()))
-            .collect(Collectors.toList());
+            .toList();
 
-        eventHandlers.forEach(webSocketEventHandler -> webSocketEventHandler.handle(from, event));
+        eventHandlers.forEach(webSocketEventHandler -> webSocketEventHandler.handle(userId, event, this));
 
         if (eventHandlers.isEmpty()) {
             log.warn("No {} found for event {}", WebSocketEventHandler.class.getSimpleName(), event.getEventName());
@@ -47,14 +57,15 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
     }
 
     @Override
-    public void userJoinedToGame(UUID userId) {
+    protected void afterConnection(UUID userId) {
         log.info("{} joined to the game.", userId);
         Game game = gameDao.findByUserIdValidated(userId);
 
         game.getPlayers()
             .get(userId)
             .setConnected(true);
-        messageSenderProxy.sendToGame(webSocketMessageFactory.create(userId, WebSocketEventName.SKYXPLORE_GAME_PAUSED, game.isGamePaused()));
+
+        sendEvent(userId, WebSocketEventName.SKYXPLORE_GAME_PAUSED, game.isGamePaused());
 
         String userName = characterProxy.getCharacterByUserId(userId).getName();
 
@@ -62,17 +73,17 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             .getRooms()
             .stream()
             .filter(chatRoom -> chatRoom.getMembers().contains(userId))
-            .forEach(chatRoom -> messageSenderProxy.sendToGame(webSocketMessageFactory.create(
+            .forEach(chatRoom -> sendEvent(
                 game.filterConnectedPlayersFrom(chatRoom.getMembers()),
                 WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
-                new SystemMessage(chatRoom.getId(), userName, userId)))
+                new SystemMessage(chatRoom.getId(), userName, userId))
             );
 
         game.setExpiresAt(null);
     }
 
     @Override
-    public void userLeftGame(UUID userId) {
+    public void afterDisconnection(UUID userId) {
         log.info("{} left the game.", userId);
         gameDao.findByUserId(userId).ifPresent(game -> {
             game.getPlayers().get(userId).setConnected(false);
@@ -85,16 +96,16 @@ public class SkyXploreGameWebSocketEventControllerImpl implements SkyXploreGameW
             }
 
             game.setGamePaused(true);
-            messageSenderProxy.sendToGame(webSocketMessageFactory.create(game.filterConnectedPlayersFrom(game.getPlayers().keySet()), WebSocketEventName.SKYXPLORE_GAME_PAUSED, game.isGamePaused()));
+            sendEvent(game.filterConnectedPlayersFrom(game.getPlayers().keySet()), WebSocketEventName.SKYXPLORE_GAME_PAUSED, game.isGamePaused());
 
             game.getChat()
                 .getRooms()
                 .stream()
                 .filter(chatRoom -> chatRoom.getMembers().contains(userId))
-                .forEach(chatRoom -> messageSenderProxy.sendToGame(webSocketMessageFactory.create(
+                .forEach(chatRoom -> sendEvent(
                     game.filterConnectedPlayersFrom(chatRoom.getMembers()),
                     WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
-                    new SystemMessage(chatRoom.getId(), userName, userId)))
+                    new SystemMessage(chatRoom.getId(), userName, userId))
                 );
         });
     }

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerCon
 import org.springframework.stereotype.Component;
 
 @Component
+//TODO unit test
 public class ErrorReportWebSocketHandler extends AbstractWebSocketHandler {
     public ErrorReportWebSocketHandler(WebSocketHandlerContext context) {
         super(context);

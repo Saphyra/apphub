@@ -52,6 +52,4 @@ public class LobbyCreationService {
             .filter(playerModel -> !playerModel.getUserId().equals(userId))
             .forEach(playerModel -> invitationService.inviteDirectly(userId, playerModel.getUserId(), lobby));
     }
-
-
 }

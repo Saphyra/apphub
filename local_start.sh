@@ -25,7 +25,6 @@ waitStartup 8081
 ./infra/deployment/script/local_start_app.sh 8083 "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8099 "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8082 "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar" &
-./infra/deployment/script/local_start_app.sh 8094 "./apphub-service/apphub-service-platform/apphub-service-platform-message_sender/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8098 "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar" &
 
 ./infra/deployment/script/local_start_app.sh 8091 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar" &

@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.GameLoadedService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
@@ -35,6 +36,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final LobbyMemberQueryService lobbyMemberQueryService;
     private final LobbyDao lobbyDao;
     private final StartGameService startGameService;
+    private final GameLoadedService gameLoadedService;
 
     @Override
     public OneParamResponse<Boolean> isUserInLobby(AccessTokenHeader accessTokenHeader) {
@@ -84,18 +86,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    public void userJoinedToLobby(UUID userId) {
-        log.info("User {} is joined to lobby.", userId);
-        joinToLobbyService.userJoinedToLobby(userId);
-    }
-
-    @Override
-    public void userLeftLobby(UUID userId) {
-        log.info("User {} is left the lobby", userId);
-        exitFromLobbyService.userDisconnected(userId);
-    }
-
-    @Override
     public List<LobbyMemberResponse> getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the members of his lobby.", accessTokenHeader.getUserId());
         return lobbyMemberQueryService.getMembers(accessTokenHeader.getUserId());
@@ -117,5 +107,12 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     public void loadGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to load game {}", accessTokenHeader.getUserId(), gameId);
         lobbyCreationService.createForExistingGame(accessTokenHeader.getUserId(), gameId);
+    }
+
+    @Override
+    //TODO unit test
+    public void gameLoaded(UUID gameId) {
+        log.info("Game with id {} is loaded.", gameId);
+        gameLoadedService.gameLoaded(gameId);
     }
 }

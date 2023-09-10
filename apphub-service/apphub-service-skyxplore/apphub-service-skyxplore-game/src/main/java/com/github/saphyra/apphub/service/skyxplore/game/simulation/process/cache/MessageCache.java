@@ -1,13 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.handler.SkyXploreGameWebSocketHandler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -15,19 +13,13 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 class MessageCache extends ConcurrentHashMap<WsMessageKey, Supplier<WebSocketMessage>> {
     @NonNull
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreGameWebSocketHandler webSocketHandler;
 
     void process(Game game) {
-        List<WebSocketMessage> messages = entrySet()
+        entrySet()
             .stream()
             .filter(entry -> entry.getKey().shouldBeSent(game))
             .map(entry -> entry.getValue().get())
-            .toList();
-
-        if (messages.isEmpty()) {
-            return;
-        }
-
-        messageSenderProxy.bulkSendToGame(messages);
+            .forEach(webSocketMessage -> webSocketHandler.sendEvent(webSocketMessage.getRecipients(), webSocketMessage.getEvent()));
     }
 }

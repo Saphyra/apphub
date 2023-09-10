@@ -5,10 +5,9 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class CreateNewGameService {
-    private final LobbyDao lobbyDao;
     private final SkyXploreLobbyWebSocketHandler skyXploreLobbyWebSocketHandler;
     private final SkyXploreGameCreationApiClient gameCreationClient;
     private final LocaleProvider localeProvider;
@@ -49,15 +47,14 @@ class CreateNewGameService {
 
         allianceSetupValidator.check(request);
 
-        gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
+        UUID gameId = gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
         lobby.setGameCreationStarted(true);
+        lobby.setGameId(gameId);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .build();
 
         skyXploreLobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
-
-        lobbyDao.delete(lobby);
     }
 }

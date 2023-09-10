@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -36,9 +36,7 @@ public class CreateNewGameServiceTest {
     private static final String ALLIANCE_NAME = "alliance-name";
     private static final String LOCALE = "locale";
     private static final String GAME_NAME = "game-name";
-
-    @Mock
-    private LobbyDao lobbyDao;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
@@ -80,6 +78,7 @@ public class CreateNewGameServiceTest {
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
         given(lobbyMember.getUserId()).willReturn(USER_ID);
+        given(gameCreationClient.createGame(any(SkyXploreGameCreationRequest.class), eq(LOCALE))).willReturn(GAME_ID);
 
         underTest.createNewGame(lobby);
 
@@ -95,9 +94,8 @@ public class CreateNewGameServiceTest {
         verify(allianceSetupValidator).check(gameCreationRequest);
 
         verify(lobby).setGameCreationStarted(true);
+        then(lobby).should().setGameId(GAME_ID);
 
         then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
-
-        verify(lobbyDao).delete(lobby);
     }
 }

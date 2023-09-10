@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

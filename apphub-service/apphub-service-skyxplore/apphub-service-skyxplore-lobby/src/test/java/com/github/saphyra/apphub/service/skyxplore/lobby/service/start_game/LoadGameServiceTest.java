@@ -30,9 +30,6 @@ public class LoadGameServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private LobbyDao lobbyDao;
-
-    @Mock
     private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
@@ -61,8 +58,6 @@ public class LoadGameServiceTest {
         assertThat(loadGameRequest.getMembers()).containsExactly(HOST);
 
         verify(lobby).setGameCreationStarted(true);
-
-        verify(lobbyDao).delete(lobby);
 
         then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
     }

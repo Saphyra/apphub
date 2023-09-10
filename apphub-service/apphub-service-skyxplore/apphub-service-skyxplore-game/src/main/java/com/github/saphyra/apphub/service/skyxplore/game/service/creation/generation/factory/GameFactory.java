@@ -2,14 +2,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.PlayerFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ import java.util.UUID;
 @Slf4j
 public class GameFactory {
     private final AllianceFactory allianceFactory;
-    private final IdGenerator idGenerator;
     private final GameDataFactory gameDataFactory;
     private final ChatFactory chatFactory;
     private final DateTimeUtil dateTimeUtil;
@@ -30,9 +28,7 @@ public class GameFactory {
     private final AiFactory aiFactory;
     private final EventLoopFactory eventLoopFactory;
 
-    public Game create(SkyXploreGameCreationRequest request) {
-        UUID gameId = idGenerator.randomUuid();
-
+    public Game create(SkyXploreGameCreationRequest request, UUID gameId) {
         Map<UUID, Player> players = playerFactory.create(request.getMembers());
         aiFactory.generateAis(request)
             .forEach(player -> players.put(player.getUserId(), player));

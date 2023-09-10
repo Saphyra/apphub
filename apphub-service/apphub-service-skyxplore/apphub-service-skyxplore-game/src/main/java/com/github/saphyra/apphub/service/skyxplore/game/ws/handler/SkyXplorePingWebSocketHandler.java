@@ -1,7 +1,7 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class SkyXplorePingWebSocketHandler implements WebSocketEventHandler {
     }
 
     @Override
-    public void handle(UUID from, WebSocketEvent event) {
+    public void handle(UUID from, WebSocketEvent event, SkyXploreGameWebSocketHandler webSocketHandler) {
         log.debug("Ping arrived from {}", from);
     }
 }

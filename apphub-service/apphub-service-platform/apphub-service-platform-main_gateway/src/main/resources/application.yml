@@ -112,10 +112,10 @@ spring:
         uri: ws://skyxplore-data:8080
         predicates:
         - Path=/api/ws/skyxplore-data/**
-      - id: ws
-        uri: ws://message-sender:8080
+      - id: web-socket-skyxplore-game
+        uri: ws://skyxplore-game:8080
         predicates:
-        - Path=/api/message-sender/**
+        - Path=/api/ws/skyxplore-game/**
 
 nonSessionExtendingUris:
 - pattern: /api/user/authentication/session
