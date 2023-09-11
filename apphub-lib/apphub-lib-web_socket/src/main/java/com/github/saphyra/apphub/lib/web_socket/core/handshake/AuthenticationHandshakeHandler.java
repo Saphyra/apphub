@@ -10,6 +10,7 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.security.Principal;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class AuthenticationHandshakeHandler extends DefaultHandshakeHandler {
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         log.info("Connecting to {} / {}", request.getRemoteAddress(), request.getLocalAddress());
         log.debug("Attributes: {}", attributes);
-        UUID userId = userIdProvider.findUserId(request);
+        Optional<UUID> userId = userIdProvider.findUserId(request);
         log.info("{} is connected.", userId);
-        return () -> uuidConverter.convertDomain(userId);
+        return () -> uuidConverter.convertDomain(userId).orElse(null);
     }
 }

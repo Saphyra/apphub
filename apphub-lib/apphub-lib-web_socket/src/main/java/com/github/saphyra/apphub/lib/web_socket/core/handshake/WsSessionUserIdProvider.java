@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.lib.web_socket.core.handshake;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
-import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -16,17 +16,14 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 class WsSessionUserIdProvider {
-    private final UserAuthenticationClient userAuthenticationApi;
-    private final WsSessionAccessTokenProvider accessTokenProvider;
-    private final WsSessionCookieParser cookieParser;
-    private final CommonConfigProperties commonConfigProperties;
+    private final AccessTokenHeaderConverter accessTokenHeaderConverter;
 
-    UUID findUserId(ServerHttpRequest request) {
-        Map<String, String> cookies = cookieParser.getCookies(request);
-
-        UUID accessTokenId = accessTokenProvider.getAccessTokenId(cookies);
-
-        InternalAccessTokenResponse accessTokenResponse = userAuthenticationApi.getAccessTokenById(accessTokenId, commonConfigProperties.getDefaultLocale());
-        return accessTokenResponse.getUserId();
+    Optional<UUID> findUserId(ServerHttpRequest request) {
+        return request.getHeaders()
+            .getOrEmpty(Constants.ACCESS_TOKEN_HEADER)
+            .stream()
+            .findFirst()
+            .map(accessTokenHeaderConverter::convertEntity)
+            .map(AccessTokenHeader::getUserId);
     }
 }
