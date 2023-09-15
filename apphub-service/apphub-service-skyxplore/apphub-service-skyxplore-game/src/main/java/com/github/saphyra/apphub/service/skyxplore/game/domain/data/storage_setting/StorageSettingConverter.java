@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_set
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StorageSettingConverter {
+public class StorageSettingConverter implements GameDataToModelConverter {
     public List<StorageSettingModel> toModel(UUID gameId, Collection<StorageSetting> storageSettings) {
         return storageSettings.stream()
             .map(storageSetting -> toModel(gameId, storageSetting))
@@ -31,5 +33,10 @@ public class StorageSettingConverter {
         model.setTargetAmount(storageSetting.getTargetAmount());
         model.setPriority(storageSetting.getPriority());
         return model;
+    }
+
+    @Override
+    public List<StorageSettingModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getStorageSettings());
     }
 }

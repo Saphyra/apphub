@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
+//TODO unit test
 public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     protected final Map<String, WebSocketSessionWrapper> sessions = new ConcurrentHashMap<>();
 

@@ -110,7 +110,6 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    //TODO unit test
     public void gameLoaded(UUID gameId) {
         log.info("Game with id {} is loaded.", gameId);
         gameLoadedService.gameLoaded(gameId);

@@ -16,7 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class AuthenticationHandshakeHandler extends DefaultHandshakeHandler {
     private final WsSessionUserIdProvider userIdProvider;
     private final UuidConverter uuidConverter;

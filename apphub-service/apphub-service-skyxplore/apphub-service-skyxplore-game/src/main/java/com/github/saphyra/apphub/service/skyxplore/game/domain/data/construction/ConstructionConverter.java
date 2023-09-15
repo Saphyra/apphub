@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ConstructionConverter {
+public class ConstructionConverter implements GameDataToModelConverter {
     public List<ConstructionModel> toModel(UUID gameId, Collection<Construction> constructions) {
         return constructions.stream()
             .map(construction -> toModel(gameId, construction))
@@ -45,5 +47,10 @@ public class ConstructionConverter {
             .currentWorkPoints(construction.getCurrentWorkPoints())
             .data(construction.getData())
             .build();
+    }
+
+    @Override
+    public List<ConstructionModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getConstructions());
     }
 }

@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class WsSessionUserIdProvider {
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
 

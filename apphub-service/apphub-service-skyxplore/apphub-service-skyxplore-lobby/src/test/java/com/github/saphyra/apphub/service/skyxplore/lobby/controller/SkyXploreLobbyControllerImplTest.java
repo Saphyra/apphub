@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.A
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.GameLoadedService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,6 +62,9 @@ public class SkyXploreLobbyControllerImplTest {
     @Mock
     private LobbyDao lobbyDao;
 
+    @Mock
+    private GameLoadedService gameLoadedService;
+
     @InjectMocks
     private SkyXploreLobbyControllerImpl underTest;
 
@@ -76,7 +81,7 @@ public class SkyXploreLobbyControllerImplTest {
     private Lobby lobby;
 
     @Test
-    void lobbyForPage(){
+    void lobbyForPage() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
@@ -163,5 +168,12 @@ public class SkyXploreLobbyControllerImplTest {
         underTest.loadGame(GAME_ID, accessTokenHeader);
 
         verify(lobbyCreationService).createForExistingGame(USER_ID, GAME_ID);
+    }
+
+    @Test
+    void gameLoaded() {
+        underTest.gameLoaded(GAME_ID);
+
+        then(gameLoadedService).should().gameLoaded(GAME_ID);
     }
 }

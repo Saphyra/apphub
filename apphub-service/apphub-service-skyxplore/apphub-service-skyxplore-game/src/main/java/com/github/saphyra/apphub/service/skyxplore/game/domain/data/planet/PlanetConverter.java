@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class PlanetConverter {
+public class PlanetConverter implements GameDataToModelConverter {
     public List<PlanetModel> toModel(UUID gameId, Collection<Planet> planets) {
         return planets.stream()
             .map(planet -> toModel(gameId, planet))
@@ -35,5 +37,10 @@ public class PlanetConverter {
         model.setOwner(planet.getOwner());
 
         return model;
+    }
+
+    @Override
+    public List<PlanetModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getPlanets().values());
     }
 }

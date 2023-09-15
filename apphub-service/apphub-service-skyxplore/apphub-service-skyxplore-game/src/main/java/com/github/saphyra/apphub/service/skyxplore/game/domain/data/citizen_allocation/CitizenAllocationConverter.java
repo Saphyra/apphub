@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_all
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CitizenAllocationConverter {
+public class CitizenAllocationConverter implements GameDataToModelConverter {
     public List<CitizenAllocationModel> toModel(UUID gameId, Collection<CitizenAllocation> citizenAllocations) {
         return citizenAllocations.stream()
             .map(citizenAllocation -> toModel(gameId, citizenAllocation))
@@ -31,5 +33,10 @@ public class CitizenAllocationConverter {
         model.setProcessId(citizenAllocation.getProcessId());
 
         return model;
+    }
+
+    @Override
+    public List<CitizenAllocationModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getCitizenAllocations());
     }
 }

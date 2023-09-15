@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
