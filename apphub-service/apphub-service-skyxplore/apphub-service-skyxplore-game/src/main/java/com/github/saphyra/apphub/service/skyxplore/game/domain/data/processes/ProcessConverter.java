@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProcessConverter implements GameDataToModelConverter {
     @Override
     public List<ProcessModel> convert(UUID gameId, GameData gameData) {

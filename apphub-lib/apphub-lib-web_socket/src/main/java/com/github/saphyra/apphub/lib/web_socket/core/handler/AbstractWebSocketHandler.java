@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     protected final Map<String, WebSocketSessionWrapper> sessions = new ConcurrentHashMap<>();
 
@@ -64,7 +63,8 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             userId = getUserId(session.getPrincipal());
             String payload = message.getPayload();
             event = context.getObjectMapperWrapper().readValue(payload, WebSocketEvent.class);
-            Optional.ofNullable(sessions.get(session.getId())).ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime()));
+            Optional.ofNullable(sessions.get(session.getId()))
+                .ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime()));
             handleMessage(userId, event);
         } catch (Exception e) {
             log.error("Failed processing event {} from {} in {}", event.getEventName(), userId, getEndpoint(), e);

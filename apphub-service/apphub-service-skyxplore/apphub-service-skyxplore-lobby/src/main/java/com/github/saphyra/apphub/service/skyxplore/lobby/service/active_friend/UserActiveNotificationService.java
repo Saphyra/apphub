@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class UserActiveNotificationService {
     private final SkyXploreDataProxy skyXploreDataProxy;
     private final ApplicationContextProxy applicationContextProxy;
@@ -30,11 +29,13 @@ public class UserActiveNotificationService {
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     public void userOnline(UUID userId) {
-        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE, userId));;
+        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE, userId));
+        ;
     }
 
     public void userOffline(UUID userId) {
-        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE, userId));;
+        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE, userId));
+        ;
     }
 
     private List<UUID> getRecipients(UUID userId) {
@@ -55,7 +56,7 @@ public class UserActiveNotificationService {
             .isPresent();
     }
 
-    private WebSocketEvent createEvent(WebSocketEventName eventName, UUID friendId){
+    private WebSocketEvent createEvent(WebSocketEventName eventName, UUID friendId) {
         return WebSocketEvent.builder()
             .eventName(eventName)
             .payload(ActiveFriendResponse.builder()

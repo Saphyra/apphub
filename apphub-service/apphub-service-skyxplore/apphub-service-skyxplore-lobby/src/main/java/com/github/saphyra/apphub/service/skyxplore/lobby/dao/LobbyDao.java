@@ -76,7 +76,6 @@ public class LobbyDao {
         return repository.values();
     }
 
-    //TODO unit test
     public Optional<Lobby> findByGameId(UUID gameId) {
         return repository.values()
             .stream()

@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlayerConnectedService {
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
@@ -29,7 +28,7 @@ public class PlayerConnectedService {
 
         webSocketHandler.sendEvent(userId, WebSocketEventName.SKYXPLORE_GAME_PAUSED, game.isGamePaused());
 
-        String userName = characterProxy.getCharacterByUserId(userId).getName();
+        String characterName = characterProxy.getCharacterName(userId);
 
         game.getChat()
             .getRooms()
@@ -38,7 +37,7 @@ public class PlayerConnectedService {
             .forEach(chatRoom -> webSocketHandler.sendEvent(
                 game.filterConnectedPlayersFrom(chatRoom.getMembers()),
                 WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
-                new SystemMessage(chatRoom.getId(), userName, userId))
+                new SystemMessage(chatRoom.getId(), characterName, userId))
             );
 
         game.setExpiresAt(null);

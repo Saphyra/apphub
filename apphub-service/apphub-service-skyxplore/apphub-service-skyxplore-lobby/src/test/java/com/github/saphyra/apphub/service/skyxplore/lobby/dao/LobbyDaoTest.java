@@ -30,6 +30,7 @@ public class LobbyDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final UUID CHARACTER_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
@@ -105,5 +106,12 @@ public class LobbyDaoTest {
         underTest.delete(lobby1);
 
         then(invitationWebSocketHandler).should().sendEvent(CHARACTER_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION, USER_ID);
+    }
+
+    @Test
+    void findByGameId() {
+        given(lobby1.getGameId()).willReturn(GAME_ID);
+
+        assertThat(underTest.findByGameId(GAME_ID)).contains(lobby1);
     }
 }

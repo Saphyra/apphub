@@ -5,9 +5,10 @@ import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.disconnect.PlayerDisconnectedService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler.WebSocketEventHandler;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,11 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class SkyXploreLobbyWebSocketHandler extends AbstractWebSocketHandler {
     private final List<WebSocketEventHandler> eventHandlers;
     private final ApplicationContextProxy applicationContextProxy;
 
+    @Builder
     public SkyXploreLobbyWebSocketHandler(
         WebSocketHandlerContext context,
         List<WebSocketEventHandler> eventHandlers,
@@ -46,8 +47,8 @@ public class SkyXploreLobbyWebSocketHandler extends AbstractWebSocketHandler {
     @Override
     protected void afterDisconnection(UUID userId) {
         log.info("{} is disconnected from lobby", userId);
-        applicationContextProxy.getBean(ExitFromLobbyService.class)
-            .userDisconnected(userId);
+        applicationContextProxy.getBean(PlayerDisconnectedService.class)
+            .playerDisconnected(userId);
     }
 
     @Override
