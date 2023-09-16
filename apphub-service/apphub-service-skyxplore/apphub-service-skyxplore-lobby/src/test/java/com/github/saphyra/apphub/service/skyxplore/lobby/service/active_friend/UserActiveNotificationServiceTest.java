@@ -111,6 +111,7 @@ class UserActiveNotificationServiceTest {
                 WebSocketEvent.builder()
                     .eventName(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE)
                     .payload(ActiveFriendResponse.builder()
+                        .friendId(USER_ID)
                         .friendName(CHARACTER_NAME)
                         .build()
                     )
