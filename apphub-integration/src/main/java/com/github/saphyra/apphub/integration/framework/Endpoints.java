@@ -28,10 +28,11 @@ public class Endpoints {
     public static final String TRAINING_JAVASCRIPT_PAGE = "/web/training/javascript/001_introduction";
 
     //CONNECTION SUBSCRIPTIONS
-    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
-    public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
-    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
-    public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
+    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/ws/admin-panel/monitoring";
+    public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/ws/skyxplore-data/main-menu";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore-lobby/lobby";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";

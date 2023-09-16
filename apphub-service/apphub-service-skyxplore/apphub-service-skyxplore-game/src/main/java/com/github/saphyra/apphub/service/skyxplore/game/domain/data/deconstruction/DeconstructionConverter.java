@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DeconstructionConverter {
+public class DeconstructionConverter implements GameDataToModelConverter {
     private final GameProperties gameProperties;
 
     public List<DeconstructionModel> toModel(UUID gameId, Collection<Deconstruction> deconstructions) {
@@ -43,5 +45,10 @@ public class DeconstructionConverter {
             .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
             .currentWorkPoints(deconstruction.getCurrentWorkPoints())
             .build();
+    }
+
+    @Override
+    public List<DeconstructionModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getDeconstructions());
     }
 }

@@ -3,5 +3,6 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+Get rid of message-sender
 
 ===TECHNICAL DEBTS===

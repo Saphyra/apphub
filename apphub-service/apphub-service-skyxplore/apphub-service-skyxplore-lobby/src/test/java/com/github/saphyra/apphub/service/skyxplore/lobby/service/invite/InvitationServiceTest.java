@@ -1,13 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
@@ -15,26 +13,29 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class InvitationServiceTest {
@@ -57,7 +58,10 @@ public class InvitationServiceTest {
     private CharacterProxy characterProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
+
+    @Mock
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
     private SkyXploreDataProxy dataProxy;
@@ -92,7 +96,8 @@ public class InvitationServiceTest {
             .invitationFactory(invitationFactory)
             .dateTimeUtil(dateTimeUtil)
             .characterProxy(characterProxy)
-            .messageSenderProxy(messageSenderProxy)
+            .invitationWebSocketHandler(invitationWebSocketHandler)
+            .lobbyWebSocketHandler(lobbyWebSocketHandler)
             .dataProxy(dataProxy)
             .floodingLimitSeconds(FLOODING_LIMIT_SECONDS)
             .lobbyMemberToResponseConverter(lobbyMemberToResponseConverter)
@@ -139,22 +144,14 @@ public class InvitationServiceTest {
         given(invitation.getInvitorId()).willReturn(UUID.randomUUID());
         given(invitationFactory.create(USER_ID, FRIEND_ID)).willReturn(newInvitation);
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(lobbyMemberToResponseConverter.convertInvitation(newInvitation)).willReturn(lobbyMemberResponse);
 
         underTest.invite(accessTokenHeader, FRIEND_ID);
 
         assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation, newInvitation);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(FRIEND_ID);
-
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION);
-
-        InvitationMessage payload = (InvitationMessage) event.getPayload();
-        assertThat(payload.getSenderId()).isEqualTo(USER_ID);
-        assertThat(payload.getSenderName()).isEqualTo(PLAYER_NAME);
+        then(lobbyWebSocketHandler).should().sendEvent(any(Collection.class), eq(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED), eq(lobbyMemberResponse));
+        then(invitationWebSocketHandler).should().sendEvent(FRIEND_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION, InvitationMessage.builder().senderName(PLAYER_NAME).senderId(USER_ID).build());
     }
 
     @Test
@@ -169,22 +166,14 @@ public class InvitationServiceTest {
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE.minusSeconds(FLOODING_LIMIT_SECONDS));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
+        given(lobbyMemberToResponseConverter.convertInvitation(invitation)).willReturn(lobbyMemberResponse);
 
         underTest.invite(accessTokenHeader, FRIEND_ID);
 
         assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(FRIEND_ID);
-
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION);
-
-        InvitationMessage payload = (InvitationMessage) event.getPayload();
-        assertThat(payload.getSenderId()).isEqualTo(USER_ID);
-        assertThat(payload.getSenderName()).isEqualTo(PLAYER_NAME);
+        then(lobbyWebSocketHandler).should().sendEvent(any(Collection.class), eq(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED), eq(lobbyMemberResponse));
+        then(invitationWebSocketHandler).should().sendEvent(FRIEND_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION, InvitationMessage.builder().senderName(PLAYER_NAME).senderId(USER_ID).build());
     }
 
     @Test

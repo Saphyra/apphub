@@ -4,13 +4,14 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class AllianceService {
 
     private final LobbyDao lobbyDao;
     private final UuidConverter uuidConverter;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
     private final AllianceToResponseConverter allianceToResponseConverter;
     private final AllianceFactory allianceFactory;
@@ -59,25 +60,24 @@ public class AllianceService {
         switch (allianceValue) {
             case NO_ALLIANCE -> {
                 aiPlayer.setAllianceId(null);
-                messageSenderProxy.aiModified(aiPlayer, lobby.getMembers().keySet());
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
             }
             case NEW_ALLIANCE -> {
                 Alliance alliance = allianceFactory.create(lobby.getAlliances().size());
                 lobby.getAlliances()
                     .add(alliance);
                 aiPlayer.setAllianceId(alliance.getAllianceId());
-                messageSenderProxy.allianceCreated(
-                    AllianceCreatedResponse.builder()
-                        .alliance(allianceToResponseConverter.convertToResponse(alliance))
-                        .ai(aiPlayer)
-                        .build(),
-                    lobby.getMembers().keySet()
-                );
+                AllianceCreatedResponse allianceCreatedResponse = AllianceCreatedResponse.builder()
+                    .alliance(allianceToResponseConverter.convertToResponse(alliance))
+                    .ai(aiPlayer)
+                    .build();
+
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED, allianceCreatedResponse);
             }
             default -> {
                 UUID allianceId = uuidConverter.convertEntity(allianceValue);
                 aiPlayer.setAllianceId(allianceId);
-                messageSenderProxy.aiModified(aiPlayer, lobby.getMembers().keySet());
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
             }
         }
     }
@@ -95,24 +95,22 @@ public class AllianceService {
         switch (allianceValue) {
             case NO_ALLIANCE -> {
                 lobbyMember.setAllianceId(null);
-                messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(lobbyMember), lobby.getMembers().keySet());
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberToResponseConverter.convertMember(lobbyMember));
             }
             case NEW_ALLIANCE -> {
                 Alliance alliance = allianceFactory.create(lobby.getAlliances().size());
                 lobby.getAlliances().add(alliance);
                 lobbyMember.setAllianceId(alliance.getAllianceId());
-                messageSenderProxy.allianceCreated(
-                    AllianceCreatedResponse.builder()
-                        .alliance(allianceToResponseConverter.convertToResponse(alliance))
-                        .member(lobbyMemberToResponseConverter.convertMember(lobbyMember))
-                        .build(),
-                    lobby.getMembers().keySet()
-                );
+                AllianceCreatedResponse allianceCreatedResponse = AllianceCreatedResponse.builder()
+                    .alliance(allianceToResponseConverter.convertToResponse(alliance))
+                    .member(lobbyMemberToResponseConverter.convertMember(lobbyMember))
+                    .build();
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED, allianceCreatedResponse);
             }
             default -> {
                 UUID allianceId = uuidConverter.convertEntity(allianceValue);
                 lobbyMember.setAllianceId(allianceId);
-                messageSenderProxy.lobbyMemberModified(lobbyMemberToResponseConverter.convertMember(lobbyMember), lobby.getMembers().keySet());
+                lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberToResponseConverter.convertMember(lobbyMember));
             }
         }
     }

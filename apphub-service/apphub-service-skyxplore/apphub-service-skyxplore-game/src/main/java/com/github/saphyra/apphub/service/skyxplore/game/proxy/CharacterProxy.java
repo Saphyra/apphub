@@ -23,4 +23,9 @@ public class CharacterProxy {
         log.debug("Character found: {}", skyXploreCharacterModel);
         return skyXploreCharacterModel;
     }
+
+    public String getCharacterName(UUID userId){
+        return getCharacterByUserId(userId)
+            .getName();
+    }
 }

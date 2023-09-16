@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service;
 
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketEventControllerImpl;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.service.PlayerDisconnectedService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,10 @@ public class ExitFromGameServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private SkyXploreGameWebSocketEventControllerImpl wsEventController;
+    private SkyXploreGameWebSocketHandler webSocketHandler;
+
+    @Mock
+    private PlayerDisconnectedService playerDisconnectedService;
 
     @Mock
     private GameDao gameDao;
@@ -37,7 +41,7 @@ public class ExitFromGameServiceTest {
 
         underTest.exitFromGame(USER_ID);
 
-        verify(wsEventController).userLeftGame(USER_ID);
+        verify(playerDisconnectedService).playerDisconnected(USER_ID, webSocketHandler);
         verify(gameDao).delete(game);
     }
 }

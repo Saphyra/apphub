@@ -1,19 +1,18 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.GameSettingsProperties;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class AiServiceTest {
@@ -44,7 +44,7 @@ class AiServiceTest {
     private LobbyDao lobbyDao;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
     private GameSettingsProperties gameSettingsProperties;
@@ -64,22 +64,18 @@ class AiServiceTest {
         List<AiPlayer> ais = CollectionUtils.toList(aiPlayer);
         given(lobby.getAis()).willReturn(ais);
         given(aiPlayer.getUserId()).willReturn(AI_USER_ID);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));
+        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(USER_ID, null);
+        given(lobby.getMembers()).willReturn(lobbyMembers);
 
         underTest.removeAi(USER_ID, AI_USER_ID);
 
         assertThat(ais).isEmpty();
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED);
-        assertThat(message.getEvent().getPayload()).isEqualTo(AI_USER_ID);
+        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED, AI_USER_ID);
     }
 
     @Test
-    void aiNameNull(){
+    void aiNameNull() {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(null)
             .build();
@@ -90,7 +86,7 @@ class AiServiceTest {
     }
 
     @Test
-    void aiNameTooShort(){
+    void aiNameTooShort() {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name("aa")
             .build();
@@ -101,7 +97,7 @@ class AiServiceTest {
     }
 
     @Test
-    void aiNameTooLong(){
+    void aiNameTooLong() {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
@@ -112,7 +108,7 @@ class AiServiceTest {
     }
 
     @Test
-    void allianceDoesNotExist(){
+    void allianceDoesNotExist() {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(AI_NAME)
             .allianceId(UUID.randomUUID())
@@ -121,7 +117,7 @@ class AiServiceTest {
         given(lobbyDao.findByHostValidated(USER_ID)).willReturn(lobby);
         given(lobby.getAlliances()).willReturn(Collections.emptyList());
 
-        Throwable ex = catchThrowable(()->underTest.createOrModifyAi(USER_ID, aiPlayer));
+        Throwable ex = catchThrowable(() -> underTest.createOrModifyAi(USER_ID, aiPlayer));
 
         ExceptionValidator.validateInvalidParam(ex, "allianceId", "does not exist");
     }
@@ -133,7 +129,8 @@ class AiServiceTest {
         given(lobby.getAis()).willReturn(aiPlayers);
         given(idGenerator.randomUuid()).willReturn(AI_USER_ID);
         given(gameSettingsProperties.getMaxAiCount()).willReturn(1);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));
+        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(USER_ID, null);
+        given(lobby.getMembers()).willReturn(lobbyMembers);
 
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(AI_NAME)
@@ -144,12 +141,7 @@ class AiServiceTest {
         assertThat(aiPlayer.getUserId()).isEqualTo(AI_USER_ID);
         assertThat(aiPlayers).containsExactly(aiPlayer);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED);
-        assertThat(message.getEvent().getPayload()).isEqualTo(aiPlayer);
+        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test
@@ -165,19 +157,15 @@ class AiServiceTest {
         given(this.aiPlayer.getUserId()).willReturn(AI_USER_ID);
         given(lobby.getAis()).willReturn(aiPlayers);
         given(gameSettingsProperties.getMaxAiCount()).willReturn(1);
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, null));
+        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(USER_ID, null);
+        given(lobby.getMembers()).willReturn(lobbyMembers);
 
         underTest.createOrModifyAi(USER_ID, aiPlayer);
 
         assertThat(aiPlayer.getUserId()).isEqualTo(AI_USER_ID);
         assertThat(aiPlayers).containsExactly(aiPlayer);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED);
-        assertThat(message.getEvent().getPayload()).isEqualTo(aiPlayer);
+        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test

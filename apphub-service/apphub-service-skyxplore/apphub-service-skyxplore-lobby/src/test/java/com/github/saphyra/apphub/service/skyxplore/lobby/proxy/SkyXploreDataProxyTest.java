@@ -57,7 +57,7 @@ public class SkyXploreDataProxyTest {
     @Test
     public void getFriends() {
         given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(dataFriendClient.getFriends(ACCESS_TOKEN_HEADER, LOCALE)).willReturn(Arrays.asList(friendshipResponse));
 
         List<FriendshipResponse> result = underTest.getFriends(accessTokenHeader);
@@ -68,7 +68,7 @@ public class SkyXploreDataProxyTest {
     @Test
     public void getGameForLobbyCreation() {
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN_HEADER);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(savedGameClient.getGameForLobbyCreation(GAME_ID, ACCESS_TOKEN_HEADER, LOCALE)).willReturn(gameViewForLobbyCreation);
 
         GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID);

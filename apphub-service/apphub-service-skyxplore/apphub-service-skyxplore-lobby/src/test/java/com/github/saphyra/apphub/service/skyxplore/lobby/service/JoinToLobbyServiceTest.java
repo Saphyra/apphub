@@ -3,13 +3,14 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +39,7 @@ class JoinToLobbyServiceTest {
     private LobbyDao lobbyDao;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
     private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
@@ -95,7 +97,8 @@ class JoinToLobbyServiceTest {
 
         verify(lobbyMember).setConnected(true);
         verify(lobbyMember).setStatus(LobbyMemberStatus.NOT_READY);
-        verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, members.keySet());
-        verify(messageSenderProxy).lobbyMemberConnected(lobbyMemberResponse, members.keySet());
+
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, lobbyMemberResponse);
     }
 }

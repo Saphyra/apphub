@@ -32,6 +32,6 @@ public class MessageSenderPingRequestSchedulerTest {
 
         underTest.pingRequest();
 
-        verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.MESSAGE_SENDER_PING_REQUEST_EVENT_NAME).build(), LOCALE);
+        verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.WEB_SOCKET_SEND_PING_EVENT).build(), LOCALE);
     }
 }

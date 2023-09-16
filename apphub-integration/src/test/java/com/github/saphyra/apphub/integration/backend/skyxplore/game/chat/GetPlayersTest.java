@@ -52,8 +52,8 @@ public class GetPlayersTest extends BackEndTest {
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId2, userId2);
         SkyXploreFriendActions.setUpFriendship(language, accessTokenId1, accessTokenId3, userId3);
 
-        ApphubWsClient mainMenuWsClient2 = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
-        ApphubWsClient mainMenuWsClient3 = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId3);
+        ApphubWsClient invitationWsClient2 = ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId2, accessTokenId2);
+        ApphubWsClient invitationWsClient3 = ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId3, accessTokenId3);
 
         SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
 
@@ -63,12 +63,12 @@ public class GetPlayersTest extends BackEndTest {
             .map(FriendshipResponse::getFriendId)
             .forEach(friendId -> SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, friendId));
 
-        acceptInvitation(language, accessTokenId2, mainMenuWsClient2);
-        acceptInvitation(language, accessTokenId3, mainMenuWsClient3);
+        acceptInvitation(language, accessTokenId2, invitationWsClient2);
+        acceptInvitation(language, accessTokenId3, invitationWsClient3);
 
-        ApphubWsClient lobbyWsClient1 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-        ApphubWsClient lobbyWsClient2 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
-        ApphubWsClient lobbyWsClient3 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId3);
+        ApphubWsClient lobbyWsClient1 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
+        ApphubWsClient lobbyWsClient2 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2, accessTokenId2);
+        ApphubWsClient lobbyWsClient3 = ApphubWsClient.createSkyXploreLobby(language, accessTokenId3, accessTokenId3);
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
@@ -87,7 +87,7 @@ public class GetPlayersTest extends BackEndTest {
 
         lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
 
-        ApphubWsClient.createSkyXploreGame(language, accessTokenId2);
+        ApphubWsClient.createSkyXploreGame(language, accessTokenId2, accessTokenId2);
 
         List<SkyXploreCharacterModel> characters = SkyXploreGameChatActions.getPlayers(language, accessTokenId1);
 

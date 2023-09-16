@@ -23,7 +23,7 @@ public class Lobby {
 
     @NonNull
     private final LobbyType type;
-    private final UUID gameId;
+    private UUID gameId;
 
     @Builder.Default
     private final List<UUID> expectedPlayers = Collections.emptyList();

@@ -56,10 +56,10 @@ public class LoadGameTest extends BackEndTest {
 
         createLobby_gameNotFound(language, accessTokenId1);
         UUID gameId = createLobby_notHost(language, accessTokenId1, accessTokenId2);
-        ApphubWsClient mainMenuClient = createLobby(language, characterModel1, accessTokenId1, userId1, accessTokenId2, gameId);
+        ApphubWsClient invitationClient = createLobby(language, characterModel1, accessTokenId1, userId1, accessTokenId2, gameId);
         startGane_notAllReady(language, accessTokenId1);
         ApphubWsClient hostLobbyClient = startGame_notHost(language, accessTokenId1, accessTokenId2);
-        inviteAgainMember(language, accessTokenId1, accessTokenId2, userId2, mainMenuClient);
+        inviteAgainMember(language, accessTokenId1, accessTokenId2, userId2, invitationClient);
         inviteNotMember(language, accessTokenId1, accessTokenId3, userId3);
         loadGame(language, accessTokenId1, hostLobbyClient);
         checkGameLoadingProcess(hostLobbyClient);
@@ -82,16 +82,16 @@ public class LoadGameTest extends BackEndTest {
     }
 
     private static ApphubWsClient createLobby(Language language, SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, UUID gameId) {
-        ApphubWsClient mainMenuClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient invitationClient = ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId2, accessTokenId2);
         SkyXploreLobbyActions.loadGame(language, accessTokenId1, gameId);
 
-        InvitationMessage invitationMessage = mainMenuClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
+        InvitationMessage invitationMessage = invitationClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION)
             .orElseThrow(() -> new RuntimeException("Invitation not arrived"))
             .getPayloadAs(InvitationMessage.class);
         assertThat(invitationMessage.getSenderId()).isEqualTo(userId1);
         assertThat(invitationMessage.getSenderName()).isEqualTo(characterModel1.getName());
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
-        return mainMenuClient;
+        return invitationClient;
     }
 
     private static void startGane_notAllReady(Language language, UUID accessTokenId1) {
@@ -100,8 +100,8 @@ public class LoadGameTest extends BackEndTest {
     }
 
     private static ApphubWsClient startGame_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2) {
-        ApphubWsClient hostLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-        ApphubWsClient memberLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient hostLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
+        ApphubWsClient memberLobbyClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2, accessTokenId2);
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
             .payload(true)

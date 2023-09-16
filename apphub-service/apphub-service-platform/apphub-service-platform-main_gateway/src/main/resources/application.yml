@@ -100,10 +100,22 @@ spring:
         - Path=/api/storage/**
 
       #WS
-      - id: ws
-        uri: ws://message-sender:8080
+      - id: web-socket-admin-panel
+        uri: ws://admin-panel:8080
         predicates:
-        - Path=/api/message-sender/**
+        - Path=/api/ws/admin-panel/**
+      - id: web-socket-skyxplore-lobby
+        uri: ws://skyxplore-lobby:8080
+        predicates:
+        - Path=/api/ws/skyxplore-lobby/**
+      - id: web-socket-skyxplore-data
+        uri: ws://skyxplore-data:8080
+        predicates:
+        - Path=/api/ws/skyxplore-data/**
+      - id: web-socket-skyxplore-game
+        uri: ws://skyxplore-game:8080
+        predicates:
+        - Path=/api/ws/skyxplore-game/**
 
 nonSessionExtendingUris:
 - pattern: /api/user/authentication/session

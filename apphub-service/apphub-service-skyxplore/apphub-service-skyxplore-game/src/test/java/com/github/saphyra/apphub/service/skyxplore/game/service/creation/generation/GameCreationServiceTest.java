@@ -1,20 +1,18 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,17 +21,18 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class GameCreationServiceTest {
-    private static final UUID PLAYER_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
+    private static final String LOCALE = "locale";
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyApiClient lobbyClient;
 
     @Mock
     private GameFactory gameFactory;
@@ -47,10 +46,13 @@ public class GameCreationServiceTest {
     @Mock
     private TickSchedulerLauncher tickSchedulerLauncher;
 
-    private final BlockingQueue<SkyXploreGameCreationRequest> requests = new ArrayBlockingQueue<>(1);
+    private final BlockingQueue<BiWrapper<SkyXploreGameCreationRequest, UUID>> requests = new ArrayBlockingQueue<>(1);
 
     @Mock
     private ErrorReporterService errorReporterService;
+
+    @Mock
+    private CommonConfigProperties commonConfigProperties;
 
     private GameCreationService underTest;
 
@@ -63,7 +65,7 @@ public class GameCreationServiceTest {
     @BeforeEach
     public void setUp() {
         underTest = GameCreationService.builder()
-            .messageSenderProxy(messageSenderProxy)
+            .lobbyClient(lobbyClient)
             .gameFactory(gameFactory)
             .gameDao(gameDao)
             .requests(requests)
@@ -71,24 +73,22 @@ public class GameCreationServiceTest {
             .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
             .errorReporterService(errorReporterService)
             .tickSchedulerLauncher(tickSchedulerLauncher)
+            .commonConfigProperties(commonConfigProperties)
             .build();
     }
 
     @Test
     public void create() throws InterruptedException {
-        given(gameFactory.create(request)).willReturn(game);
-        given(request.getMembers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, null));
+        given(gameFactory.create(request, GAME_ID)).willReturn(game);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.createGames();
 
-        requests.put(request);
+        requests.put(new BiWrapper<>(request, GAME_ID));
 
         verify(gameDao, timeout(1000)).save(game);
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(PLAYER_ID);
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+
+        then(lobbyClient).should().gameLoaded(GAME_ID, LOCALE);
         verify(gameSaverService).save(game);
         verify(tickSchedulerLauncher).launch(game);
     }

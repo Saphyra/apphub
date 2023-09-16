@@ -28,7 +28,7 @@ public class SkyXploreDataProxy {
     public List<FriendshipResponse> getFriends(AccessTokenHeader accessTokenHeader) {
         return dataFriendClient.getFriends(
             accessTokenHeaderConverter.convertDomain(accessTokenHeader),
-            localeProvider.getLocaleValidated()
+            localeProvider.getOrDefault()
         );
     }
 
@@ -36,7 +36,7 @@ public class SkyXploreDataProxy {
         return savedGameClient.getGameForLobbyCreation(
             gameId,
             accessTokenProvider.getAsString(),
-            localeProvider.getLocaleValidated()
+            localeProvider.getOrDefault()
         );
     }
 }

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import com.github.saphyra.apphub.service.skyxplore.data.ws.LoadGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.LoadGameWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

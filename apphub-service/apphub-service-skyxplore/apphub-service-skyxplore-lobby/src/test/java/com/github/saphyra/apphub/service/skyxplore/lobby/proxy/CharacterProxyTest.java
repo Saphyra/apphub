@@ -43,7 +43,7 @@ public class CharacterProxyTest {
     public void getCharacter() {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(model);
 
         SkyXploreCharacterModel result = underTest.getCharacter();

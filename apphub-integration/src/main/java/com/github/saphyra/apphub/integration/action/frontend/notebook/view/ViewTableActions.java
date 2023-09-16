@@ -98,6 +98,6 @@ public class ViewTableActions {
     }
 
     public static void fillTitle(WebDriver driver, String title) {
-        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-table-title")), title);
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-list-item-title-input")), title);
     }
 }

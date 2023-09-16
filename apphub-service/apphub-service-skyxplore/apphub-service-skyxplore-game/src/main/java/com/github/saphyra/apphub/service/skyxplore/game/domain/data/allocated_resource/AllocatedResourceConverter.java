@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_r
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AllocatedResourceConverter {
+public class AllocatedResourceConverter implements GameDataToModelConverter {
     public List<AllocatedResourceModel> toModel(UUID gameId, Collection<AllocatedResource> allocatedResources) {
         return allocatedResources.stream()
             .map(allocatedResource -> toModel(gameId, allocatedResource))
@@ -31,5 +33,10 @@ public class AllocatedResourceConverter {
         model.setDataId(allocatedResource.getDataId());
         model.setAmount(allocatedResource.getAmount());
         return model;
+    }
+
+    @Override
+    public List<AllocatedResourceModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getAllocatedResources());
     }
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +13,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class WsMessageKeyFactory {
-    WsMessageKey create(UUID recipient, WebSocketEventName eventName,  UUID objectId, OpenedPageType pageType, UUID pageId) {
+    WsMessageKey create(UUID recipient, WebSocketEventName eventName, UUID objectId, OpenedPageType pageType, UUID pageId) {
         return create(recipient, eventName, objectId, List.of(pageType), pageId);
     }
 
-    WsMessageKey create(UUID recipient, WebSocketEventName eventName,  UUID objectId, List<OpenedPageType> pages, UUID pageId) {
+    WsMessageKey create(UUID recipient, WebSocketEventName eventName, UUID objectId, List<OpenedPageType> pages, UUID pageId) {
         return WsMessageKey.builder()
             .recipient(recipient)
             .eventName(eventName)

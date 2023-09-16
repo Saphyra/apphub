@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCre
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.disconnect.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +52,4 @@ public class LobbyCreationService {
             .filter(playerModel -> !playerModel.getUserId().equals(userId))
             .forEach(playerModel -> invitationService.inviteDirectly(userId, playerModel.getUserId(), lobby));
     }
-
-
 }

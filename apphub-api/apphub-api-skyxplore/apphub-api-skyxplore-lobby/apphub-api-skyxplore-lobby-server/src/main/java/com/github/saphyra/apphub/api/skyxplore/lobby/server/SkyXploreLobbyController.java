@@ -38,7 +38,6 @@ public interface SkyXploreLobbyController {
 
     /**
      * Removing the user from the lobby. Also deleting the lobby if the host left.
-     * Called by message-sender when the user's webSocket connection is timed out or by the WebUi directly
      */
     @DeleteMapping(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY)
     void exitFromLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
@@ -52,19 +51,6 @@ public interface SkyXploreLobbyController {
 
     @PostMapping(Endpoints.SKYXPLORE_LOBBY_ACCEPT_INVITATION)
     void acceptInvitation(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
-
-    /**
-     * Called by message-sender when a user connected to the lobby webSocket
-     */
-    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY)
-    void userJoinedToLobby(@PathVariable("userId") UUID userId);
-
-    /**
-     * Called by message-sender when a user disconnected from the lobby webSocket
-     */
-    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_USER_LEFT_LOBBY)
-    void userLeftLobby(@PathVariable("userId") UUID userId);
-
 
     @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)
     List<LobbyMemberResponse> getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
@@ -84,4 +70,10 @@ public interface SkyXploreLobbyController {
      */
     @PostMapping(Endpoints.SKYXPLORE_LOBBY_LOAD_GAME)
     void loadGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    /**
+     * Callback for game service to notify the lobby members about the game is loaded.
+     */
+    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_GAME_LOADED)
+    void gameLoaded(@PathVariable("gameId") UUID gameId);
 }

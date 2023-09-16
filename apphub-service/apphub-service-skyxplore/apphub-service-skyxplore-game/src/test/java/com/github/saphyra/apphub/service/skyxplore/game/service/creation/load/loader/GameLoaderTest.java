@@ -1,20 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
+import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +29,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +41,7 @@ class GameLoaderTest {
     private static final UUID HOST = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final Integer UNIVERSE_SIZE = 324;
+    private static final String LOCALE = "locale";
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -61,7 +62,7 @@ class GameLoaderTest {
     private GameDataProxy gameDataProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyApiClient lobbyClient;
 
     @Mock
     private EventLoopFactory eventLoopFactory;
@@ -74,6 +75,9 @@ class GameLoaderTest {
 
     @Mock
     private TickSchedulerLauncher tickSchedulerLauncher;
+
+    @Mock
+    private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
     private GameLoader underTest;
@@ -112,6 +116,7 @@ class GameLoaderTest {
         given(gameModel.getMarkedForDeletion()).willReturn(false);
         given(gameModel.getMarkedForDeletionAt()).willReturn(null);
         given(gameModel.getLastPlayed()).willReturn(CURRENT_TIME);
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.loadGame(gameModel, List.of(USER_ID));
 
@@ -136,10 +141,6 @@ class GameLoaderTest {
         verify(gameDataProxy).saveItem(gameModel);
         verify(tickSchedulerLauncher).launch(game);
 
-        ArgumentCaptor<WebSocketMessage> messageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(messageArgumentCaptor.capture());
-        WebSocketMessage message = messageArgumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(USER_ID);
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
+        then(lobbyClient).should().gameLoaded(GAME_ID, LOCALE);
     }
 }

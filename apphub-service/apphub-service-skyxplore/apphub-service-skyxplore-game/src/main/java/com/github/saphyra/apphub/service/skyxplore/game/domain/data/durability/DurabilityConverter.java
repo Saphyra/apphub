@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DurabilityModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DurabilityConverter {
+public class DurabilityConverter implements GameDataToModelConverter {
     public List<DurabilityModel> convert(UUID gameId, Collection<Durability> durabilities) {
         return durabilities.stream()
             .map(durability -> convert(gameId, durability))
@@ -33,5 +35,10 @@ public class DurabilityConverter {
         model.setCurrentHitPoints(durability.getCurrentHitPoints());
 
         return model;
+    }
+
+    @Override
+    public List<DurabilityModel> convert(UUID gameId, GameData gameData) {
+        return convert(gameId, gameData.getDurabilities());
     }
 }

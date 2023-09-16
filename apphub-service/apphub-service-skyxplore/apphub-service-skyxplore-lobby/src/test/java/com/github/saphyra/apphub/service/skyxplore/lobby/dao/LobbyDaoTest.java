@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,7 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class LobbyDaoTest {
@@ -31,9 +30,13 @@ public class LobbyDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final UUID CHARACTER_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private ApplicationContextProxy applicationContextProxy;
+
+    @Mock
+    private SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
 
     @InjectMocks
     private LobbyDao underTest;
@@ -98,13 +101,17 @@ public class LobbyDaoTest {
         given(lobby1.getInvitations())
             .willReturn(CollectionUtils.toList(Invitation.builder().invitorId(USER_ID).characterId(CHARACTER_ID).build()));
 
+        given(applicationContextProxy.getBean(SkyXploreLobbyInvitationWebSocketHandler.class)).willReturn(invitationWebSocketHandler);
+
         underTest.delete(lobby1);
 
-        assertThat(underTest.getAll()).containsExactly(lobby2);
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue().getRecipients()).containsExactly(CHARACTER_ID);
-        assertThat(argumentCaptor.getValue().getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION);
-        assertThat(argumentCaptor.getValue().getEvent().getPayload()).isEqualTo(USER_ID);
+        then(invitationWebSocketHandler).should().sendEvent(CHARACTER_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION, USER_ID);
+    }
+
+    @Test
+    void findByGameId() {
+        given(lobby1.getGameId()).willReturn(GAME_ID);
+
+        assertThat(underTest.findByGameId(GAME_ID)).contains(lobby1);
     }
 }

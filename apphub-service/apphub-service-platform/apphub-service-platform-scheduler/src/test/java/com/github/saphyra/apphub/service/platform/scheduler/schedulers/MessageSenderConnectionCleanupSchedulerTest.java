@@ -32,6 +32,6 @@ public class MessageSenderConnectionCleanupSchedulerTest {
 
         underTest.pingRequest();
 
-        verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.MESSAGE_SENDER_CONNECTION_CLEANUP_EVENT).build(), LOCALE);
+        verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.WEB_SOCKET_CONNECTION_CLEANUP_EVENT).build(), LOCALE);
     }
 }

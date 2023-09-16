@@ -89,7 +89,19 @@ spring:
         - Path=/api/storage/**
 
       #WS
-      - id: ws
-        uri: ws://localhost:8094
+      - id: web-socket-admin-panel
+        uri: ws://localhost:8089
         predicates:
-        - Path=/api/message-sender/**
+        - Path=/api/ws/admin-panel/**
+      - id: web-socket-skyxplore-lobby
+        uri: ws://localhost:8093
+        predicates:
+        - Path=/api/ws/skyxplore-lobby/**
+      - id: web-socket-skyxplore-data
+        uri: ws://localhost:8091
+        predicates:
+        - Path=/api/ws/skyxplore-data/**
+      - id: web-socket-skyxplore-game
+        uri: ws://localhost:8095
+        predicates:
+        - Path=/api/ws/skyxplore-game/**

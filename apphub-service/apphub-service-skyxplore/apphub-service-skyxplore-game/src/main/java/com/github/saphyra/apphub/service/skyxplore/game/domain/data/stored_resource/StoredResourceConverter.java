@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_reso
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StoredResourceConverter {
+public class StoredResourceConverter implements GameDataToModelConverter {
     public List<StoredResourceModel> toModel(UUID gameId, Collection<StoredResource> storedResources) {
         return storedResources.stream()
             .map(storedResource -> toModel(gameId, storedResource))
@@ -30,5 +32,10 @@ public class StoredResourceConverter {
         model.setDataId(storedResource.getDataId());
         model.setAmount(storedResource.getAmount());
         return model;
+    }
+
+    @Override
+    public List<StoredResourceModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getStoredResources());
     }
 }

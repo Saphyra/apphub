@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPageType;

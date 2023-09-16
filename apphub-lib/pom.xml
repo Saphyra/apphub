@@ -72,6 +72,6 @@
         <module>apphub-lib-error_report</module>
         <module>apphub-lib-concurrency</module>
         <module>apphub-lib-monitoring</module>
+        <module>apphub-lib-web_socket</module>
     </modules>
-
 </project>

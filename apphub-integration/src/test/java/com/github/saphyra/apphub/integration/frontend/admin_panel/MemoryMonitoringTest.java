@@ -25,7 +25,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
         "event-gateway",
         "admin-panel",
         "main-gateway",
-        "message-sender",
         "modules",
         "notebook",
         "scheduler",
