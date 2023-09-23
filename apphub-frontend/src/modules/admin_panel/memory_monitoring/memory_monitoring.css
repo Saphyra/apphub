@@ -1,0 +1,68 @@
+#memory-monitoring main {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+#duration-choices {
+    text-align: center;
+    border-bottom: 2px ridge white;
+}
+
+.duration-choice.active {
+    border-color: lime;
+}
+
+#memory-monitoring-diagrams {
+    text-align: center;
+}
+
+.memory-monitoring-diagram {
+    display: inline-block;
+    margin: 10px;
+    border: 3px ridge white;
+}
+
+.memory-monitoring-diagram-title{
+    font-size: 20px;
+    border-bottom: 3px ridge white;
+    padding: 2px;
+}
+
+.memory-monitoring-diagram-content{
+    display: flex;
+    flex-direction: row;
+}
+
+.memory-monitoring-diagram-details{
+    display: grid;
+    grid-template-rows: auto auto auto;
+    padding: 5px;
+}
+
+.memory-monitoring-diagram-details > div{
+    vertical-align: middle;
+}
+
+.memory-monitoring-svg-diagram{
+    border-left: 3px ridge white;
+    padding: 20px;
+}
+
+.memory-monitoring-svg-container{
+    height: 210px;
+    border: 3px inset white;
+}
+
+.memory-monitoring-svg-diagram-item{
+    fill: none;
+    stroke-width: 1px;;
+}
+
+.memory-monitoring-svg-diagram-item.allocated{
+    stroke: orange;
+}
+
+.memory-monitoring-svg-diagram-item.used{
+    stroke: lime;
+}

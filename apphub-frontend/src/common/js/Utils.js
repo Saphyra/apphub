@@ -48,33 +48,37 @@ const generateRandomId = () => {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
-const hasValue = (value) =>{
+const hasValue = (value) => {
     return value !== null && value !== undefined;
 }
 
-const formatFileSize =(bytes) =>{
-    if(bytes > Constants.GIGABYTES){
+const formatFileSize = (bytes) => {
+    if (bytes > Constants.GIGABYTES) {
         return limitDecimals(bytes / Constants.GIGABYTES, 1) + " GB";
     }
 
-    if(bytes > Constants.MEGABYTES){
+    if (bytes > Constants.MEGABYTES) {
         return limitDecimals(bytes / Constants.MEGABYTES, 1) + " MB";
     }
 
-    if(bytes > Constants.KILOBYTES){
+    if (bytes > Constants.KILOBYTES) {
         return limitDecimals(bytes / Constants.KILOBYTES, 1) + " KB";
     }
 
     return bytes + " B";
 
-    function limitDecimals(value, limit){
-        if(value % 1 == 0){
+    function limitDecimals(value, limit) {
+        if (value % 1 == 0) {
             return value;
         }
 
         return parseFloat(value)
             .toFixed(limit);
     }
+}
+
+const bytesToMegabytes = (bytes) => {
+    return Math.round(bytes / 1024 / 1024);
 }
 
 const Utils = {
@@ -87,6 +91,7 @@ const Utils = {
     generateRandomId: generateRandomId,
     hasValue: hasValue,
     formatFileSize: formatFileSize,
+    bytesToMegabytes: bytesToMegabytes,
 }
 
 export default Utils;

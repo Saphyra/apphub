@@ -9,7 +9,7 @@ spring:
       - id: frontend
         uri: http://localhost:3000
         predicates:
-        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby, /web/notebook, /web/notebook/**
+        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby, /web/notebook, /web/notebook/**, /web/admin-panel/memory-monitoring
       - id: frontend-resources
         uri: http://localhost:3000
         predicates:

@@ -4,5 +4,8 @@
 
 ===PLATFORM CHANGES===
 Get rid of message-sender
+Admin Panel
+    Memory Monitoring
+        Migrated to react
 
 ===TECHNICAL DEBTS===

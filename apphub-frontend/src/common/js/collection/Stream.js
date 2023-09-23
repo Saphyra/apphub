@@ -58,6 +58,26 @@ const Stream = class {
         this.items.forEach(consumer);
     }
 
+    groupBy(idSupplier) {
+        const result = {};
+
+        this.forEach((item) => {
+            const id = idSupplier(item);
+            if (!result[id]) {
+                result[id] = [];
+            }
+
+            result[id].push(item);
+        });
+
+        return new MapStream(result);
+    }
+
+    join(delimiter = "") {
+        return this.toList()
+            .join(delimiter);
+    }
+
     map(mapper) {
         return new Stream(this.items.map(mapper));
     }

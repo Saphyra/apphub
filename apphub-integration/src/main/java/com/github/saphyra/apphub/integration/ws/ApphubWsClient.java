@@ -59,7 +59,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createAdminPanelMonitoring(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING, accessTokenId, name);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

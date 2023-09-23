@@ -1,0 +1,26 @@
+{
+    "10-seconds": {
+        "en": "10 seconds",
+        "hu": "10 másodperc"
+    },
+    "30-seconds": {
+        "en": "30 seconds",
+        "hu": "30 másodperc"
+    },
+    "1-minute": {
+        "en": "1 minute",
+        "hu": "1 perc"
+    },
+    "5-minutes": {
+        "en": "5 minutes",
+        "hu": "5 perc"
+    },
+    "15-minutes": {
+        "en": "15 minutes",
+        "hu": "15 perc"
+    },
+    "30-minutes": {
+        "en": "30 minutes",
+        "hu": "30 perc"
+    }
+}

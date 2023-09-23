@@ -1,0 +1,22 @@
+{
+    "title": {
+        "en": "Memory monitoring - Admin panel - Apphub",
+        "hu": "Memória felhasználás - Kezelőfelület - Apphub"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "available": {
+        "en": "Available",
+        "hu": "Elérhető"
+    },
+    "allocated": {
+        "en": "Allocated",
+        "hu": "Lefoglalt"
+    },
+    "used": {
+        "en": "Used",
+        "hu": "Felhasznált"
+    }
+}

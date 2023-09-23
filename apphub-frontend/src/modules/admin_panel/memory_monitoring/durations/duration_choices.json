@@ -1,0 +1,26 @@
+[
+    {
+        "duration": 10,
+        "localizationKey": "10-seconds"
+    },
+    {
+        "duration": 30,
+        "localizationKey": "30-seconds"
+    },
+    {
+        "duration": 60,
+        "localizationKey": "1-minute"
+    },
+    {
+        "duration": 300,
+        "localizationKey": "5-minutes"
+    },
+    {
+        "duration": 900,
+        "localizationKey": "15-minutes"
+    },
+    {
+        "duration": 1800,
+        "localizationKey": "30-minutes"
+    }
+]

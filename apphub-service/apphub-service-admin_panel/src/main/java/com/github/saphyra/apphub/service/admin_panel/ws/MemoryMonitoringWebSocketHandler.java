@@ -14,7 +14,7 @@ public class MemoryMonitoringWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING;
+        return Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING;
     }
 
     public boolean hasConnectedClient() {
