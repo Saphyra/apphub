@@ -29,6 +29,12 @@
     padding: 2px;
 }
 
+.memory-monitoring-not-connected{
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+}
+
 .memory-monitoring-diagram-content{
     display: flex;
     flex-direction: row;

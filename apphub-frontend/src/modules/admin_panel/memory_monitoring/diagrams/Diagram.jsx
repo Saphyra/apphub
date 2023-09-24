@@ -2,6 +2,8 @@ import React from "react";
 import Stream from "../../../../common/js/collection/Stream";
 import Utils from "../../../../common/js/Utils";
 import SvgDiagram from "./SvgDiagram";
+import NotConnected from "./NotConnected";
+import LocalDateTime from "../../../../common/js/date/LocalDateTime";
 
 const Diagram = ({ service, reports, duration, localizationHandler }) => {
     const lastReport = new Stream(reports)
@@ -10,7 +12,7 @@ const Diagram = ({ service, reports, duration, localizationHandler }) => {
         .orElse(null);
 
     if (lastReport == null) {
-        return;
+
     }
 
     const availableBytes = new Stream(reports)
@@ -18,13 +20,14 @@ const Diagram = ({ service, reports, duration, localizationHandler }) => {
         .max()
         .orElse(0);
 
-    return (
-        <div
-            id={"memory-monitoring-diagram-" + service}
-            className="memory-monitoring-diagram"
-        >
-            <div className="memory-monitoring-diagram-title">{service}</div>
+    const getContent = () => {
+        if (lastReport == null || lastReport.epochSeconds < LocalDateTime.now().getEpoch() / 1000 - 5) {
+            return (
+                <NotConnected localizationHandler={localizationHandler} />
+            );
+        }
 
+        return (
             <div className="memory-monitoring-diagram-content">
                 <div className="memory-monitoring-diagram-details">
                     <div className="memory-monitoring-available-memory">
@@ -50,6 +53,17 @@ const Diagram = ({ service, reports, duration, localizationHandler }) => {
                     reports={reports}
                 />
             </div>
+        );
+    }
+
+    return (
+        <div
+            id={"memory-monitoring-diagram-" + service}
+            className="memory-monitoring-diagram"
+        >
+            <div className="memory-monitoring-diagram-title">{service}</div>
+
+            {getContent()}
         </div>
     );
 }

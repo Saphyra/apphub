@@ -18,5 +18,9 @@
     "used": {
         "en": "Used",
         "hu": "Felhasznált"
+    },
+    "not-connected": {
+        "en": "Not connected",
+        "hu": "Nem csatlakozott"
     }
 }
