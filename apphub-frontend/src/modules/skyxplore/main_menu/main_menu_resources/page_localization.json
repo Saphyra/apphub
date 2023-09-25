@@ -110,5 +110,9 @@
     "invited-you":{
         "en": "invited you to a game",
         "hu": "meghívott egy játékba"
+    },
+    "searching": {
+        "en": "Searching...",
+        "hu": "Keresés..."
     }
 }

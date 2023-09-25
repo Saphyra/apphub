@@ -17,7 +17,7 @@
     width: 90%;
 }
 
-#skyxplore-character-not-found {
+#skyxplore-character-not-found, #skyxplore-character-searching {
     font-size: 24px;
     margin: 5px;
 }

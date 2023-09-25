@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+SkyXplore
+    Scheduled API calls for friend candidate query
 
 ===PLATFORM CHANGES===
 Get rid of message-sender
