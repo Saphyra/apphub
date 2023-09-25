@@ -62,7 +62,7 @@ const NewCategoryPage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-category-back-button"

@@ -1,9 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
-SkyXplore
-    Scheduled API calls for friend candidate query
-    Remove mass from resources
+Notebook
+    Move the home / next buttons to the right
 
 ===PLATFORM CHANGES===
 Get rid of message-sender
@@ -13,3 +12,6 @@ Admin Panel
         Display message when reports not available
 
 ===TECHNICAL DEBTS===
+SkyXplore
+    Scheduled API calls for friend candidate query
+    Remove mass from resources

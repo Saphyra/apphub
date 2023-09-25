@@ -76,7 +76,7 @@ const NewTextPage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-text-back-button"

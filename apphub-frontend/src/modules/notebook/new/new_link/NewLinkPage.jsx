@@ -83,7 +83,7 @@ const NewLinkPage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-link-back-button"

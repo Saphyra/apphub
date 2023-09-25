@@ -53,7 +53,7 @@ const NotebookNewPage = () => {
             </main>
 
             <Footer
-                leftButtons={
+                rightButtons={
                     <Button
                         id="notebook-new-back-button"
                         onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}

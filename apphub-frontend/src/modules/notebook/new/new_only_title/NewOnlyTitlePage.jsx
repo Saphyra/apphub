@@ -62,7 +62,7 @@ const NewOnlyTitlePage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-only-title-back-button"
