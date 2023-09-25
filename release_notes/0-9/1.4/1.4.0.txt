@@ -3,6 +3,7 @@
 ===BUGFIXES===
 SkyXplore
     Scheduled API calls for friend candidate query
+    Remove mass from resources
 
 ===PLATFORM CHANGES===
 Get rid of message-sender

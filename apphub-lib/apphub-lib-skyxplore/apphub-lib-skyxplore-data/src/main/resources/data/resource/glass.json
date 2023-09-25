@@ -1,6 +1,5 @@
 {
   "id": "glass",
   "storageType": "bulk",
-  "mass": 1,
   "maxProductionBatchSize": 10
 }

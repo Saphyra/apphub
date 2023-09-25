@@ -1,6 +1,5 @@
 {
   "id": "wood",
   "storageType": "bulk",
-  "mass": 1,
   "maxProductionBatchSize": 50
 }

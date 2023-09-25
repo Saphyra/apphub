@@ -1,6 +1,5 @@
 {
   "id": "energy",
   "storageType": "energy",
-  "mass": 1,
   "maxProductionBatchSize": 1000
 }

@@ -1,6 +1,5 @@
 {
   "id": "oil",
   "storageType": "liquid",
-  "mass": 1,
   "maxProductionBatchSize": 50
 }

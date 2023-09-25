@@ -1,6 +1,5 @@
 {
   "id": "sand",
   "storageType": "bulk",
-  "mass": 1,
   "maxProductionBatchSize": 50
 }
