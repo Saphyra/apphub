@@ -10,6 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
+@Deprecated
 public class ChecklistItem {
     @NonNull
     private final UUID checklistItemId;

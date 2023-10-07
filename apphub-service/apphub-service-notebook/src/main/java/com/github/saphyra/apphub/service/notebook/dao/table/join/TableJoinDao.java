@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@Deprecated
 public class TableJoinDao extends AbstractDao<TableJoinEntity, TableJoin, String, TableJoinRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

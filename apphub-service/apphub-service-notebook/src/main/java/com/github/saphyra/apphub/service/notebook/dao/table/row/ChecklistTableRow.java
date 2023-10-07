@@ -7,6 +7,7 @@ import java.util.UUID;
 
 @Data
 @Builder(toBuilder = true)
+@Deprecated
 public class ChecklistTableRow {
     private final UUID rowId;
     private final UUID userId;

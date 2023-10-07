@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
+@Deprecated
 public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, ChecklistItem, String, ChecklistItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

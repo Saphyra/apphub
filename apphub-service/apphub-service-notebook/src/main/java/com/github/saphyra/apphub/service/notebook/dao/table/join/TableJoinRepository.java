@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+@Deprecated
 interface TableJoinRepository extends CrudRepository<TableJoinEntity, String> {
     void deleteByUserId(String userId);
 

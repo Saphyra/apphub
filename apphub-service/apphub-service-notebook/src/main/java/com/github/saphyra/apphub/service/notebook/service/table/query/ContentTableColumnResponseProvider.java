@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.query;
 
 import com.github.saphyra.apphub.api.notebook.model.response.TableColumnResponse;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
+import com.github.saphyra.apphub.api.notebook.model.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

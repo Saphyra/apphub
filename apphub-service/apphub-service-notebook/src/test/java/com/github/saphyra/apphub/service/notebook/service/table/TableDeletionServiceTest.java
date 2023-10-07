@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import org.junit.jupiter.api.Test;

@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.edition.table_h
 
 import com.github.saphyra.apphub.api.notebook.model.request.EditTableHeadRequest;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 class ChecklistTableRowConverter extends ConverterBase<ChecklistTableRowEntity, ChecklistTableRow> {
     private final UuidConverter uuidConverter;
     private final BooleanEncryptor booleanEncryptor;

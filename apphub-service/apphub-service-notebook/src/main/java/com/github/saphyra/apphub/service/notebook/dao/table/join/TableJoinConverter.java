@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
+import com.github.saphyra.apphub.api.notebook.model.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class TableJoinConverter extends ConverterBase<TableJoinEntity, TableJoin> {
     private final UuidConverter uuidConverter;
 

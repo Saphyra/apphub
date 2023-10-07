@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import lombok.RequiredArgsConstructor;

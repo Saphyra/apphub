@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.custom_table;
 
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
+import com.github.saphyra.apphub.api.notebook.model.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;

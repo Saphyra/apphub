@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Deprecated
 class ChecklistItemEntity {
     @Id
     private String checklistItemId;

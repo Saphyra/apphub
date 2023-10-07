@@ -27,7 +27,7 @@ public class ListItemRequestValidator {
 
         if (!isNull(parent)) {
             Optional<ListItem> listItem = listItemDao.findById(parent);
-            if (!listItem.isPresent()) {
+            if (listItem.isEmpty()) {
                 throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.CATEGORY_NOT_FOUND, "Category not found with id " + parent);
             }
 

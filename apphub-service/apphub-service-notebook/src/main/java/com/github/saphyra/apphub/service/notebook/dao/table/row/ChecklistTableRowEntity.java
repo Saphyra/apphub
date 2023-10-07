@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Deprecated
 public class ChecklistTableRowEntity {
     @Id
     private String rowId;

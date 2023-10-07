@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.ColumnType;
+import com.github.saphyra.apphub.api.notebook.model.ColumnType;
 import com.github.saphyra.apphub.service.notebook.service.custom_table.data_type.Number;
 import com.github.saphyra.apphub.service.notebook.service.custom_table.data_type.Range;
 import com.github.saphyra.apphub.service.notebook.service.table.ColumnNameValidator;

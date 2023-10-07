@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
