@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
-import com.github.saphyra.apphub.api.notebook.model.ColumnType;
+import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;

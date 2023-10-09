@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.create;
 import com.github.saphyra.apphub.api.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

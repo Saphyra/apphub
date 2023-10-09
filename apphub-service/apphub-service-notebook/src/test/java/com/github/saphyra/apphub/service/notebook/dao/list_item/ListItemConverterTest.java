@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;

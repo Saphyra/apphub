@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableRowFactory;
+import com.github.saphyra.apphub.service.notebook.service.checklist_table_deprecated.ChecklistTableRowFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

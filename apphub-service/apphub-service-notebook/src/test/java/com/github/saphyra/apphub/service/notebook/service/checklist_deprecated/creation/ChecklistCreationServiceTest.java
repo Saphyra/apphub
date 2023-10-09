@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.checklist_deprecated.ChecklistItemFactory;
 import org.junit.jupiter.api.Test;

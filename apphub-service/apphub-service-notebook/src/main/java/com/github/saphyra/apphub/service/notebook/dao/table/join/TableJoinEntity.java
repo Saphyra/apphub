@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
-import com.github.saphyra.apphub.api.notebook.model.ColumnType;
+import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;

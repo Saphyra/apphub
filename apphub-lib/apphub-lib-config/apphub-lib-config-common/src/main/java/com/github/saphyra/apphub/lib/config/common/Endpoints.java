@@ -161,6 +161,8 @@ public class Endpoints {
     public static final String NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS = "/api/notebook/custom-table/{rowId}";
     public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}/checked";
     public static final String NOTEBOOK_GET_LIST_ITEM = "/api/notebook/list-item/{listItemId}";
+    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/{rowId}/status";
+    public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

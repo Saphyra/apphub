@@ -24,7 +24,13 @@ public class ChecklistItemDeletionService {
     public void deleteChecklistItem(UUID checklistItemId) {
         Dimension dimension = dimensionDao.findByIdValidated(checklistItemId);
 
+        deleteChecklistItem(dimension);
+    }
+
+    @Transactional
+    public void deleteChecklistItem(Dimension dimension) {
         checkedItemDao.deleteById(dimension.getDimensionId());
         contentDao.deleteByParent(dimension.getDimensionId());
+        dimensionDao.delete(dimension);
     }
 }

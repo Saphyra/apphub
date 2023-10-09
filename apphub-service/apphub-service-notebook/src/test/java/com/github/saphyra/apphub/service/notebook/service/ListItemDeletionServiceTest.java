@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistIt
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.custom_table.CustomTableDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.checklist_table_deprecated.ChecklistTableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.custom_table_deprecated.CustomTableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.table_deprecated.TableDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
