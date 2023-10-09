@@ -9,4 +9,7 @@ interface ChecklistItemRepository extends CrudRepository<ChecklistItemEntity, St
     void deleteByUserId(String userId);
 
     List<ChecklistItemEntity> getByParent(String parent);
+
+    //TODO unit test
+    List<ChecklistItemEntity> getByUserId(String userId);
 }
