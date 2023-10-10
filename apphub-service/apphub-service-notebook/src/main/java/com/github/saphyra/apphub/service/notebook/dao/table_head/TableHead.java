@@ -10,7 +10,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Deprecated
 public class TableHead {
     @NonNull
     private final UUID tableHeadId;

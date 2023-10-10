@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,12 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 class TableControllerImpl implements TableController {
+    private final TableCreationService tableCreationService;
+
     @Override
     public List<TableFileUploadResponse> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a {}", accessTokenHeader.getUserId(), request.getListItemType());
-        return null;
+        return tableCreationService.create(accessTokenHeader.getUserId(), request);
     }
 
     @Override
