@@ -1,22 +1,26 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
+import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.file.File;
+import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
-import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
@@ -59,24 +63,32 @@ public class NotebookEventControllerImplItTest {
     private ContentDao contentDao;
 
     @Autowired
-    private ChecklistItemDao checklistItemDao;
-
-    @Autowired
     private TableHeadDao tableHeadDao;
 
     @Autowired
-    private TableJoinDao tableJoinDao;
+    private AccessTokenProvider accessTokenProvider;
 
     @Autowired
-    private AccessTokenProvider accessTokenProvider;
+    private CheckedItemDao checkedItemDao;
+
+    @Autowired
+    private ColumnTypeDao columnTypeDao;
+
+    @Autowired
+    private DimensionDao dimensionDao;
+
+    @Autowired
+    private FileDao fileDao;
 
     @AfterEach
     public void clear() {
         listItemDao.deleteAll();
         contentDao.deleteAll();
-        checklistItemDao.deleteAll();
         tableHeadDao.deleteAll();
-        tableJoinDao.deleteAll();
+        checkedItemDao.deleteAll();
+        columnTypeDao.deleteAll();
+        dimensionDao.deleteAll();
+        fileDao.deleteAll();
     }
 
     @Test
@@ -97,15 +109,6 @@ public class NotebookEventControllerImplItTest {
             .build();
         save(() -> contentDao.save(content));
 
-        ChecklistItem checklistItem = ChecklistItem.builder()
-            .checklistItemId(UUID.randomUUID())
-            .parent(UUID.randomUUID())
-            .userId(USER_ID)
-            .order(1)
-            .checked(true)
-            .build();
-        save(() -> checklistItemDao.save(checklistItem));
-
         TableHead tableHead = TableHead.builder()
             .tableHeadId(UUID.randomUUID())
             .parent(UUID.randomUUID())
@@ -114,15 +117,33 @@ public class NotebookEventControllerImplItTest {
             .build();
         save(() -> tableHeadDao.save(tableHead));
 
-        TableJoin tableJoin = TableJoin.builder()
-            .tableJoinId(UUID.randomUUID())
-            .parent(UUID.randomUUID())
+        CheckedItem checkedItem = CheckedItem.builder()
+            .checkedItemId(UUID.randomUUID())
             .userId(USER_ID)
-            .columnIndex(234)
-            .rowIndex(345)
-            .columnType(ColumnType.EMPTY)
+            .checked(true)
             .build();
-        save(() -> tableJoinDao.save(tableJoin));
+        save(() -> checkedItemDao.save(checkedItem));
+
+        ColumnTypeDto columnType = ColumnTypeDto.builder()
+            .columnId(UUID.randomUUID())
+            .userId(USER_ID)
+            .type(ColumnType.LINK)
+            .build();
+        save(() -> columnTypeDao.save(columnType));
+
+        Dimension dimension = Dimension.builder()
+            .dimensionId(UUID.randomUUID())
+            .userId(USER_ID)
+            .externalReference(UUID.randomUUID())
+            .index(32)
+            .build();
+        save(() -> dimensionDao.save(dimension));
+
+        File file = File.builder()
+            .fileId(UUID.randomUUID())
+            .userId(USER_ID)
+            .build();
+        save(() -> fileDao.save(file));
 
         SendEventRequest<DeleteAccountEvent> eventRequest = SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build();
         Response response = RequestFactory.createRequest()
@@ -133,9 +154,11 @@ public class NotebookEventControllerImplItTest {
 
         assertThat(query(() -> listItemDao.findAll())).isEmpty();
         assertThat(query(() -> contentDao.findAll())).isEmpty();
-        assertThat(query(() -> checklistItemDao.findAll())).isEmpty();
         assertThat(query(() -> tableHeadDao.findAll())).isEmpty();
-        assertThat(query(() -> tableJoinDao.findAll())).isEmpty();
+        assertThat(query(() -> checkedItemDao.findAll())).isEmpty();
+        assertThat(query(() -> columnTypeDao.findAll())).isEmpty();
+        assertThat(query(() -> dimensionDao.findAll())).isEmpty();
+        assertThat(query(() -> fileDao.findAll())).isEmpty();
     }
 
     private void save(Runnable runnable) {

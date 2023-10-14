@@ -1,13 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.table_deprecated.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.ColumnNameValidator;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.RowValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 class TableCreationRequestValidator {
     private final ColumnNameValidator columnNameValidator;

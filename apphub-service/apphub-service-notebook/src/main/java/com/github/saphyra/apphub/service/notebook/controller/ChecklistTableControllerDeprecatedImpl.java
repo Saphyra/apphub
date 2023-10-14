@@ -14,11 +14,9 @@ import com.github.saphyra.apphub.service.notebook.service.checklist_table_deprec
 import com.github.saphyra.apphub.service.notebook.service.checklist_table_deprecated.edition.ChecklistTableEditionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-@RestController
 @Slf4j
 @RequiredArgsConstructor
 public class ChecklistTableControllerDeprecatedImpl implements ChecklistTableControllerDeprecated {

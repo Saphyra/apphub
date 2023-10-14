@@ -11,12 +11,10 @@ import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-@Component
 @RequiredArgsConstructor
 //TODO unit test
 class EditTableRequestValidator {

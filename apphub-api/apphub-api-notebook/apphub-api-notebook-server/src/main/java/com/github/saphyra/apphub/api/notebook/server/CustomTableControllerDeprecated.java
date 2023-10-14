@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 //TODO API test
+@Deprecated
 public interface CustomTableControllerDeprecated {
     @PutMapping(Endpoints.NOTEBOOK_CREATE_CUSTOM_TABLE)
     List<CustomTableCreatedResponse> createCustomTable(@RequestBody CustomTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

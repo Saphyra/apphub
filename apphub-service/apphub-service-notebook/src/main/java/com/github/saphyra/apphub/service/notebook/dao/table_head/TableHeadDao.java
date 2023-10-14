@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.dao.table_head;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -39,5 +42,10 @@ public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String
 
     public Optional<TableHead> findById(UUID tableHeadId) {
         return findById(uuidConverter.convertDomain(tableHeadId));
+    }
+
+    public TableHead findByIdValidated(UUID tableHeadId) {
+        return findById(tableHeadId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "TableHead not found with id " + tableHeadId));
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.UUID;
 
+@Deprecated
 public interface ChecklistTableControllerDeprecated {
     @RequestMapping(method = RequestMethod.PUT, path = Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE)
     OneParamResponse<UUID> createChecklistTable(@RequestBody CreateChecklistTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

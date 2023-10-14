@@ -13,12 +13,10 @@ import com.github.saphyra.apphub.service.notebook.service.custom_table_deprecate
 import com.github.saphyra.apphub.service.notebook.service.custom_table_deprecated.query.CustomTableQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
-@RestController
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test

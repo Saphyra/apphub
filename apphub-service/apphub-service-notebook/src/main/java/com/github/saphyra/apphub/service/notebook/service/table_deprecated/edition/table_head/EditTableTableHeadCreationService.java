@@ -10,13 +10,11 @@ import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.TableHeadFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO remove

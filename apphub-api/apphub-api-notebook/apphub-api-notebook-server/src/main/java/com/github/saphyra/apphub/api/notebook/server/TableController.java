@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.api.notebook.server;
 
 import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.table.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -24,7 +25,7 @@ public interface TableController {
     List<TableFileUploadResponse> createTable(@RequestBody CreateTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_EDIT_TABLE)
-    List<TableFileUploadResponse> editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    EditTableResponse editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_TABLE)
     TableResponse getTable(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

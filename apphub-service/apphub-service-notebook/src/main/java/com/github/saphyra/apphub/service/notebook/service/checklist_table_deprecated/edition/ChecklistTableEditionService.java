@@ -6,12 +6,10 @@ import com.github.saphyra.apphub.service.notebook.service.table_deprecated.editi
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
 public class ChecklistTableEditionService {
     private final TableEditionService tableEditionService;

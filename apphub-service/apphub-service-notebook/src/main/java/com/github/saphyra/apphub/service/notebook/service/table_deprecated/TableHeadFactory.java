@@ -6,13 +6,11 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component
 @RequiredArgsConstructor
 public class TableHeadFactory {
     private final ContentFactory contentFactory;

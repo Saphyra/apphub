@@ -5,16 +5,13 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.edition.table_head.EditTableTableHeadService;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.edition.table_join.EditTableTableJoinService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
 
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;

@@ -1,21 +1,18 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist_table_deprecated.creation;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRow;
 import com.github.saphyra.apphub.service.notebook.dao.table.row.ChecklistTableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist_table_deprecated.ChecklistTableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.creation.TableCreationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
 
 import java.util.UUID;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ChecklistTableCreationService {

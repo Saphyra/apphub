@@ -17,8 +17,7 @@
     <include file="database/change_sets/table_join.xml"/>
     <include file="database/change_sets/checklist_table_row.xml"/>
     <include file="database/change_sets/file.xml"/>
-
-    <changeSet id="migrate-checklist" author="saphyra">
-        <customChange class="com.github.saphyra.apphub.service.notebook.migration.checklist.ChecklistMigrationService" />
-    </changeSet>
+    <include file="database/change_sets/checked_item.xml"/>
+    <include file="database/change_sets/column_type.xml"/>
+    <include file="database/change_sets/dimension.xml"/>
 </databaseChangeLog>

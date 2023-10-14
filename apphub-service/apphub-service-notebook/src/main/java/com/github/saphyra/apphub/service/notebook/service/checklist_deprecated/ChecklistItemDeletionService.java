@@ -3,15 +3,12 @@ package com.github.saphyra.apphub.service.notebook.service.checklist_deprecated;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
 
 import java.util.UUID;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ChecklistItemDeletionService {

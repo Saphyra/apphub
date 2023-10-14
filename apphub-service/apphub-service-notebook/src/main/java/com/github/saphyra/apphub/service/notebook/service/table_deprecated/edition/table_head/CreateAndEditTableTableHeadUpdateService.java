@@ -10,11 +10,9 @@ import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.TableHeadFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 //TODO unit test

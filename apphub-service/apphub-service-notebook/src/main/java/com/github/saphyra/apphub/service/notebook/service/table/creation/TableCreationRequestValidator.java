@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 import com.github.saphyra.apphub.api.notebook.model.table.*;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.service.table.validator.TableColumnDataValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.function.Function;
 //TODO unit test
 class TableCreationRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
+    private final TableColumnDataValidator tableColumnDataValidator;
 
     void validate(CreateTableRequest request) {
         listItemRequestValidator.validate(request.getTitle(), request.getParent());
@@ -64,6 +66,8 @@ class TableCreationRequestValidator {
     private void validateColumn(TableColumnModel tableColumnModel) {
         ValidationUtil.notNull(tableColumnModel.getColumnIndex(), "row.column.columnIndex");
         ValidationUtil.notNull(tableColumnModel.getColumnType(), "row.column.columnType");
+
+        tableColumnDataValidator.validate(tableColumnModel.getColumnType(), tableColumnModel.getData());
     }
 
     private void validateTableHeads(List<TableHeadModel> tableHeads) {

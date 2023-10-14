@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.service.custom_table_deprecated.creation;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableColumnRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.CustomTableRowRequest;
 import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.response.CustomTableCreatedResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -15,12 +17,10 @@ import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoin;
 import com.github.saphyra.apphub.service.notebook.dao.table.join.TableJoinDao;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
@@ -32,7 +32,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,7 +40,6 @@ import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO split

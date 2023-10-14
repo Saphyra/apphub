@@ -6,4 +6,3 @@ TODO Check Endpoints for unused URLs
 TODO update RELEASE notes
 TODO update clone service for checklist
 TODO update clone service for table
-TODO update delete service for table

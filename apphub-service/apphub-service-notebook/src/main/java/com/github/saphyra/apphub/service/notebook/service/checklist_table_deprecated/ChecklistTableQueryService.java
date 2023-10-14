@@ -9,13 +9,11 @@ import com.github.saphyra.apphub.service.notebook.service.table_deprecated.query
 import com.github.saphyra.apphub.service.notebook.service.table_deprecated.query.TableQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ChecklistTableQueryService {

@@ -17,7 +17,7 @@ import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.column_saver.ColumnSaver;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class TableCreationService {
     private final TableHeadDao tableHeadDao;
     private final ContentFactory contentFactory;
     private final ContentDao contentDao;
-    private final List<ColumnSaver> columnSavers;
+    private final List<ColumnDataService> columnDataServices;
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
     private final CheckedItemFactory checkedItemFactory;
@@ -94,10 +94,10 @@ public class TableCreationService {
     }
 
     private Optional<TableFileUploadResponse> saveColumn(UUID userId, UUID listItemId, Dimension row, TableColumnModel tableColumnModel) {
-        return columnSavers.stream()
-                .filter(columnSaver -> columnSaver.canProcess(tableColumnModel.getColumnType()))
+        return columnDataServices.stream()
+                .filter(columnDataService -> columnDataService.canProcess(tableColumnModel.getColumnType()))
                 .findAny()
                 .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled columnType: " + tableColumnModel.getColumnType()))
-                .save(userId, listItemId, row, tableColumnModel);
+                .save(userId, listItemId, row.getDimensionId(), tableColumnModel);
     }
 }

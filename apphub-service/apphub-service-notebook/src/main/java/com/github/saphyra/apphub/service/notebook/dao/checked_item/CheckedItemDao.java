@@ -33,7 +33,7 @@ public class CheckedItemDao extends AbstractDao<CheckedItemEntity, CheckedItem, 
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "CheckedItem not found with id " + checkedItemId));
     }
 
-    private Optional<CheckedItem> findById(UUID checkedItemId) {
+    public Optional<CheckedItem> findById(UUID checkedItemId) {
         return findById(uuidConverter.convertDomain(checkedItemId));
     }
 

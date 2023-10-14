@@ -4,11 +4,9 @@ import com.github.saphyra.apphub.api.notebook.model.request.EditTableHeadRequest
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class EditTableTableHeadService {
