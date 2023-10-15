@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 class ChecklistTableCloneService {
     private final TableCloneService tableCloneService;
     private final ChecklistTableRowDao checklistTableRowDao;

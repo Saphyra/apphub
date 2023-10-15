@@ -3,6 +3,4 @@ TODO add @ForRemoval("notebook-redesign") to classes
 TODO Check api-model for unused classes
 TODO Check Endpoints for unused URLs
 TODO update RELEASE notes
-TODO update clone service for checklist
-TODO update clone service for table
-TODO Trigger migrations
+TODO extract columnDataServices.findForColumnType to a dedicated class

@@ -14,6 +14,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 class CloneUtil {
     private final IdGenerator idGenerator;
 

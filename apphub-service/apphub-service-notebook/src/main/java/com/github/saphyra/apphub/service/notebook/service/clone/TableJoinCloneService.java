@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 class TableJoinCloneService {
     private final CloneUtil cloneUtil;
     private final ContentDao contentDao;

@@ -76,4 +76,17 @@ class TextColumnDataService implements ColumnDataService {
 
         return Optional.empty();
     }
+
+    @Override
+    public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
+        Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
+        dimensionDao.save(clonedColumn);
+
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.TEXT);
+        columnTypeDao.save(columnTypeDto);
+
+        Content originalContent = contentDao.findByParentValidated(originalColumn.getDimensionId());
+        Content clonedContent = contentFactory.create(clone.getListItemId(), clonedColumn.getDimensionId(), clone.getUserId(), originalContent.getContent());
+        contentDao.save(clonedContent);
+    }
 }

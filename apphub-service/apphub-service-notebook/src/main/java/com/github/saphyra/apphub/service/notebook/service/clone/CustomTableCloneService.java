@@ -17,6 +17,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 //TODO unit test
 class CustomTableCloneService {
     private final ChecklistTableCloneService checklistTableCloneService;
