@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.lib.config.common;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
+
 public class Endpoints {
     //PAGES
     public static final String INDEX_PAGE = "/web";
@@ -121,6 +123,11 @@ public class Endpoints {
     public static final String MODULES_SET_FAVORITE = "/api/modules/{module}/favorite";
 
     //NOTEBOOK
+    @ForRemoval("notebook-redesign")
+    public static final String NOTEBOOK_EVENT_MIGRATION_CHECKLIST = "/event/notebook/migration/checklist";
+    @ForRemoval("notebook-redesign")
+    public static final String NOTEBOOK_EVENT_MIGRATION_TABLE = "/event/notebook/migration/table";
+
     public static final String NOTEBOOK_GET_CATEGORY_TREE = "/api/notebook/category/tree";
     public static final String NOTEBOOK_CREATE_CATEGORY = "/api/notebook/category";
     public static final String NOTEBOOK_CREATE_TEXT = "/api/notebook/text";
