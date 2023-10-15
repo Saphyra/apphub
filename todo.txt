@@ -1,8 +1,9 @@
-TODO Convert Tables to the new structure
-TODO Convert ChecklistTables to the new structure
 TODO Remove deprecated files
+TODO add @ForRemoval("notebook-redesign") to classes
 TODO Check api-model for unused classes
 TODO Check Endpoints for unused URLs
 TODO update RELEASE notes
 TODO update clone service for checklist
 TODO update clone service for table
+TODO Migration service in admin-panel
+TODO Trigger migrations

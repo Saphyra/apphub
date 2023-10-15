@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.migration.checklist;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@ForRemoval("notebook-redesign")
 //TODO unit test
 public class ChecklistMigrationService {
     private final ChecklistItemDao checklistItemDao;

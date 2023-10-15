@@ -18,6 +18,8 @@ public class ChecklistItemModelValidator {
     private final DimensionDao dimensionDao;
 
     public void validateNew(List<ChecklistItemModel> items) {
+        ValidationUtil.notNull(items, "items");
+
         items.forEach(this::validateContent);
     }
 
