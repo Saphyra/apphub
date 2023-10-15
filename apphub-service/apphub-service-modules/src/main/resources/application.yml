@@ -37,6 +37,10 @@ modules:
         url: /web/admin-panel/memory-monitoring
         roles:
           - ADMIN
+      - name: migration-tasks
+        url: /web/admin-panel/migration-tasks
+        roles:
+        - ADMIN
     accounts:
       - name: account
         url: /web/user/account

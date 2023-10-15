@@ -16,7 +16,7 @@ spring:
       - id: frontend
         uri: http://frontend:3000
         predicates:
-        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby, /web/notebook, /web/notebook/**, /web/admin-panel/memory-monitoring
+        - Path=/web, /web/modules, /web/skyxplore, /web/skyxplore/character, /web/skyxplore/lobby, /web/notebook, /web/notebook/**, /web/admin-panel/memory-monitoring, /web/admin-panel/migration-tasks
         filters:
         - StripPrefix=10
       - id: frontend-resources

@@ -267,6 +267,12 @@ const Endpoints = {
     //User Settings
     GET_USER_SETTINGS: new Endpoint(RequestMethod.GET, "/api/user/settings/{category}"),
     SET_USER_SETTINGS: new Endpoint(RequestMethod.POST, "/api/user/settings"),
+
+    //Admin Panel
+    //Migration Tasks
+    ADMIN_PANEL_MIGRATION_GET_TASKS: new Endpoint(RequestMethod.GET, "/api/admin-panel/migration"),
+    ADMIN_PANEL_MIGRATION_DELETE_TASK: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/migration/{event}"),
+    ADMIN_PANEL_MIGRATION_TRIGGER_TASK: new Endpoint(RequestMethod.POST, "/api/admin-panel/migration/{event}"),
 }
 
 export default Endpoints;

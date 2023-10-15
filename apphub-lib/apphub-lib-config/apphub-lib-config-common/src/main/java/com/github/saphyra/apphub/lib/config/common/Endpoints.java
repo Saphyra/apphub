@@ -74,6 +74,11 @@ public class Endpoints {
     //MONITORING
     public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
 
+    //MIGRATION
+    public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
+    public static final String ADMIN_PANEL_MIGRATION_TRIGGER_TASK = "/api/admin-panel/migration/{event}";
+    public static final String ADMIN_PANEL_MIGRATION_DELETE_TASK = "/api/admin-panel/migration/{event}";
+
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
     public static final String LOGOUT = "/api/user/authentication/logout";
