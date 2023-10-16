@@ -56,8 +56,9 @@ class TableControllerImpl implements TableController {
     }
 
     @Override
-    public void deleteCheckedRows(UUID listItemId, AccessTokenHeader accessTokenHeader) {
+    public TableResponse deleteCheckedRows(UUID listItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete checked rows of table {}", accessTokenHeader.getUserId(), listItemId);
         checkedTableRowDeletionService.deleteCheckedRows(listItemId);
+        return getTable(listItemId, accessTokenHeader);
     }
 }

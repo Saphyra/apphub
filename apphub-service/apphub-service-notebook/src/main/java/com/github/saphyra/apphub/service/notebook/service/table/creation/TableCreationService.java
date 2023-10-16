@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
@@ -37,6 +38,7 @@ import java.util.stream.Stream;
 public class TableCreationService {
     private final TableCreationRequestValidator tableCreationRequestValidator;
     private final ListItemFactory listItemFactory;
+    private final ListItemDao listItemDao;
     private final TableHeadFactory tableHeadFactory;
     private final TableHeadDao tableHeadDao;
     private final ContentFactory contentFactory;
@@ -52,6 +54,7 @@ public class TableCreationService {
         tableCreationRequestValidator.validate(request);
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), request.getListItemType());
+        listItemDao.save(listItem);
 
         request.getTableHeads()
                 .forEach(tableHeadModel -> saveTableHead(userId, listItem.getListItemId(), tableHeadModel));

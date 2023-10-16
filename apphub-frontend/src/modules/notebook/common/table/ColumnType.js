@@ -1,4 +1,4 @@
-const CustomTableColumnType = {
+const ColumnType = {
     EMPTY: "EMPTY",
     TEXT: "TEXT",
     NUMBER: "NUMBER",
@@ -14,4 +14,4 @@ const CustomTableColumnType = {
     LINK: "LINK",
 }
 
-export default CustomTableColumnType;
+export default ColumnType;

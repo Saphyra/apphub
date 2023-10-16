@@ -27,15 +27,14 @@ const NewChecklistPage = () => {
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
     const [listItemTitle, setListItemTitle] = useState("");
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState([new ChecklistItemData(0)]);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useEffect(() => addItem(), []);
 
     const addItem = () => {
         const maxOrder = new Stream(items)
-            .map(item => item.order)
+            .map(item => item.index)
             .max()
             .orElse(0);
 
@@ -62,7 +61,7 @@ const NewChecklistPage = () => {
 
     const moveItem = (item, moveDirection) => {
         const orderedItems = new Stream(items)
-            .sorted((a, b) => a.order - b.order)
+            .sorted((a, b) => a.index - b.index)
             .toList();
 
         const itemIndex = orderedItems.indexOf(item);
@@ -86,11 +85,11 @@ const NewChecklistPage = () => {
             return;
         }
 
-        const originalOrder = item.order;
-        const newOrder = otherItem.order;
+        const originalOrder = item.index;
+        const newOrder = otherItem.index;
 
-        item.order = newOrder;
-        otherItem.order = originalOrder;
+        item.index = newOrder;
+        otherItem.index = originalOrder;
 
         updateItem();
     }
@@ -105,15 +104,7 @@ const NewChecklistPage = () => {
         const payload = {
             parent: parentId,
             title: listItemTitle,
-            nodes: new Stream(items)
-                .map(item => {
-                    return {
-                        order: item.order,
-                        checked: item.checked,
-                        content: item.content
-                    }
-                })
-                .toList()
+            items: items
         }
 
         await Endpoints.NOTEBOOK_CREATE_CHECKLIST.createRequest(payload)
@@ -130,10 +121,10 @@ const NewChecklistPage = () => {
         }
 
         return new Stream(items)
-            .sorted((a, b) => a.order - b.order)
+            .sorted((a, b) => a.index - b.index)
             .map(item =>
                 <ChecklistItem
-                    key={item.order}
+                    key={item.index}
                     localizationHandler={localizationHandler}
                     item={item}
                     updateItem={updateItem}

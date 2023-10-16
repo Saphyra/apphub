@@ -125,7 +125,7 @@ public class CustomTableCreationService {
                 fileDao.save(file);
             }
             case EMPTY -> log.debug("No content required");
-            default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
         }
     }
 }

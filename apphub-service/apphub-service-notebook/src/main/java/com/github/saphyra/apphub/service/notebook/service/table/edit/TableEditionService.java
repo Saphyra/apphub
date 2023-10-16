@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadRespons
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ public class TableEditionService {
     private final EditTableHeadService editTableHeadService;
     private final EditTableRowService editTableRowService;
 
+    @Transactional
     public EditTableResponse editTable(UUID listItemId, EditTableRequest request) {
         editTableRequestValidator.validate(listItemId, request);
 
@@ -33,7 +35,6 @@ public class TableEditionService {
 
         editTableHeadService.editTableHeads(listItem, request.getTableHeads());
         List<TableFileUploadResponse> fileUploads = editTableRowService.editTableRows(listItem, request.getRows());
-
 
         return EditTableResponse.builder()
             .tableResponse(tableQueryService.getTable(listItemId))

@@ -1,5 +1,5 @@
 import React from "react";
-import CustomTableColumnType from "../CustomTableColumnType";
+import ColumnType from "../../table/ColumnType";
 import Utils from "../../../../../common/js/Utils";
 import "./custom_table_column.css";
 import localizationData from "./custom_table_column_localization.json";
@@ -36,14 +36,14 @@ const CustomTableColumn = ({
 
     const getColumnContent = () => {
         switch (columnData.type) {
-            case CustomTableColumnType.EMPTY:
+            case ColumnType.EMPTY:
                 return <Empty
                     editingEnabled={editingEnabled}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.TEXT:
-            case CustomTableColumnType.LINK:
+            case ColumnType.TEXT:
+            case ColumnType.LINK:
                 return <Text
                     content={columnData.data}
                     updateContent={updateData}
@@ -51,69 +51,69 @@ const CustomTableColumn = ({
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.CHECKBOX:
+            case ColumnType.CHECKBOX:
                 return <Checkbox
                     checked={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.NUMBER:
+            case ColumnType.NUMBER:
                 return <Number
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.RANGE:
+            case ColumnType.RANGE:
                 return <Range
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.COLOR:
+            case ColumnType.COLOR:
                 return <Color
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.DATE:
+            case ColumnType.DATE:
                 return <Date
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.TIME:
+            case ColumnType.TIME:
                 return <Time
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.DATE_TIME:
+            case ColumnType.DATE_TIME:
                 return <DateTime
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.MONTH:
+            case ColumnType.MONTH:
                 return <Month
                     data={columnData.data}
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.FILE:
+            case ColumnType.FILE:
                 return <File
                     updateData={updateData}
                     selectType={selectType}
                     localizationHandler={localizationHandler}
                 />
-            case CustomTableColumnType.IMAGE:
+            case ColumnType.IMAGE:
                 return <Image
                     data={columnData.data}
                     updateData={updateData}

@@ -84,6 +84,7 @@ public class TableQueryService {
                     .columnIndex(column.getIndex())
                     .columnType(columnType)
                     .data(getDataForColumnType(column.getDimensionId(), columnType))
+                    .itemType(ItemType.EXISTING)
                     .build();
             })
             .collect(Collectors.toList());

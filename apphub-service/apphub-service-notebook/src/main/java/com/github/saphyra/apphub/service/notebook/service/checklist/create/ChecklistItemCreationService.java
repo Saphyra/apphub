@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.create;
 
-import com.github.saphyra.apphub.api.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
@@ -37,7 +36,7 @@ public class ChecklistItemCreationService {
     }
 
     public void create(UUID userId, UUID listItemId, ChecklistItemModel item) {
-        Dimension dimension = getDimension(userId, listItemId, item);
+        Dimension dimension = dimensionFactory.create(userId, listItemId, item.getIndex(), item.getChecklistItemId());
         dimensionDao.save(dimension);
 
         CheckedItem checkedItem = checkedItemFactory.create(userId, dimension.getDimensionId(), item.getChecked());
@@ -45,13 +44,5 @@ public class ChecklistItemCreationService {
 
         Content content = contentFactory.create(listItemId, dimension.getDimensionId(), userId, item.getContent());
         contentDao.save(content);
-    }
-
-    private Dimension getDimension(UUID userId, UUID listItemId, ChecklistItemModel item) {
-        if (item.getType() == ItemType.EXISTING) {
-            return dimensionFactory.create(userId, listItemId, item.getIndex(), item.getChecklistItemId());
-        }
-
-        return dimensionFactory.create(userId, listItemId, item.getIndex());
     }
 }

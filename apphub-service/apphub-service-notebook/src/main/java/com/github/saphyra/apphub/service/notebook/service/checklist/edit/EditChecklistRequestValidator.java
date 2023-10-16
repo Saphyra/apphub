@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
 import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemModelValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,9 @@ class EditChecklistRequestValidator {
 
     void validate(EditChecklistRequest request) {
         titleValidator.validate(request.getTitle());
+
+        ValidationUtil.notNull(request.getItems(), "items");
+
         request.getItems()
             .forEach(checklistItemModelValidator::validate);
     }

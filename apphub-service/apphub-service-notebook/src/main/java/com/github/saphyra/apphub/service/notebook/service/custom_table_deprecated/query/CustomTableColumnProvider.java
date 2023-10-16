@@ -55,7 +55,7 @@ class CustomTableColumnProvider implements TableColumnResponseProvider<Object> {
                 log.debug("No validation required");
                 return null;
             }
-            default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + tableJoin.getColumnType());
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + tableJoin.getColumnType());
         }
     }
 }

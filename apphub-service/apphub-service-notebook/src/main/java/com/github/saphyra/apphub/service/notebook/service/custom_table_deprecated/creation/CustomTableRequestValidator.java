@@ -74,7 +74,7 @@ class CustomTableRequestValidator {
             case RANGE -> validateRange(column.getValue());
             case LINK -> ValidationUtil.notBlank(column.getValue().toString(), "linkValue");
             case EMPTY -> log.debug("No validation required");
-            default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
         }
     }
 

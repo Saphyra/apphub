@@ -36,11 +36,18 @@ class EditTableHeadService {
             .filter(tableHeadModel -> tableHeadModel.getType() == ItemType.EXISTING)
             .map(TableHeadModel::getTableHeadId)
             .toList();
+        log.debug("TableHeads to keep: {}", toKeep);
 
         tableHeadDao.getByParent(listItemId)
             .stream()
             .filter(tableHead -> !toKeep.contains(tableHead.getTableHeadId()))
-            .forEach(tableHeadDao::delete);
+            .forEach(this::deleteTableHead);
+    }
+
+    private void deleteTableHead(TableHead tableHead) {
+        log.info("Deleting TableHead with id {}", tableHead.getTableHeadId());
+        contentDao.deleteByParent(tableHead.getTableHeadId());
+        tableHeadDao.delete(tableHead);
     }
 
     private void saveTableHeads(ListItem listItem, List<TableHeadModel> tableHeads) {
@@ -49,9 +56,11 @@ class EditTableHeadService {
 
     private void saveTableHead(ListItem listItem, TableHeadModel tableHeadModel) {
         TableHead tableHead = getTableHead(listItem, tableHeadModel);
+        log.debug("TableHead to save: {}", tableHead);
         tableHeadDao.save(tableHead);
 
-        Content content = getContent(listItem, tableHeadModel);
+        Content content = getContent(listItem, tableHeadModel.getType(), tableHead.getTableHeadId(), tableHeadModel.getContent());
+        log.debug("Content to save: {}", content);
         contentDao.save(content);
     }
 
@@ -65,13 +74,13 @@ class EditTableHeadService {
         }
     }
 
-    private Content getContent(ListItem listItem, TableHeadModel tableHeadModel) {
-        if (tableHeadModel.getType() == ItemType.EXISTING) {
-            Content content = contentDao.findByParentValidated(tableHeadModel.getTableHeadId());
-            content.setContent(tableHeadModel.getContent());
+    private Content getContent(ListItem listItem, ItemType itemType, UUID parent, String contentValue) {
+        if (itemType == ItemType.EXISTING) {
+            Content content = contentDao.findByParentValidated(parent);
+            content.setContent(contentValue);
             return content;
         } else {
-            return contentFactory.create(listItem.getListItemId(), tableHeadModel.getTableHeadId(), listItem.getUserId(), tableHeadModel.getContent());
+            return contentFactory.create(listItem.getListItemId(), parent, listItem.getUserId(), contentValue);
         }
     }
 }

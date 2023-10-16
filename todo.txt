@@ -4,3 +4,5 @@ TODO Check api-model for unused classes
 TODO Check Endpoints for unused URLs
 TODO update RELEASE notes
 TODO extract columnDataServices.findForColumnType to a dedicated class
+TODO BE test for migration tasks
+TODO FE test for migration tasks

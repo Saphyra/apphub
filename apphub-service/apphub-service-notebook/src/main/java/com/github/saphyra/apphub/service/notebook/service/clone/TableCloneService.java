@@ -68,6 +68,7 @@ class TableCloneService {
 
     private void cloneRow(ListItem clone, Dimension originalRow) {
         Dimension clonedRow = dimensionFactory.create(clone.getUserId(), clone.getListItemId(), originalRow.getIndex());
+        dimensionDao.save(clonedRow);
 
         if (clone.getType() == ListItemType.CHECKLIST_TABLE) {
             CheckedItem originalCheckedItem = checkedItemDao.findByIdValidated(originalRow.getDimensionId());

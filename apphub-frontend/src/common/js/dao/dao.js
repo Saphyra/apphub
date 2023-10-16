@@ -247,7 +247,7 @@ const Endpoints = {
     NOTEBOOK_EDIT_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/table/{listItemId}"),
     NOTEBOOK_CREATE_CHECKLIST_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/checklist-table"),
     NOTEBOOK_GET_CHECKLIST_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/checklist-table/{listItemId}"),
-    NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{rowId}/status"),
+    NOTEBOOK_TABLE_SET_ROW_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/table/{rowId}/status"),
     NOTEBOOK_EDIT_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/checklist-table/{listItemId}"),
     NBOTEBOOK_CREATE_IMAGE: new Endpoint(RequestMethod.PUT, "/api/notebook/image"),
     NOTEBOOK_GET_LIST_ITEM: new Endpoint(RequestMethod.GET, "/api/notebook/list-item/{listItemId}"),
@@ -256,8 +256,7 @@ const Endpoints = {
     NOTEBOOK_MOVE_LIST_ITEM: new Endpoint(RequestMethod.POST, "/api/notebook/{listItemId}/move"),
     NOTEBOOK_CREATE_CUSTOM_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/custom-table"),
     NOTEBOOK_GET_CUSTOM_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/custom-table/{listItemId}"),
-    NOTEBOOK_CHECKLIST_TABLE_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist-table/{listItemId}/checked"),
-    NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/table/{listItemId}/convert-to-checklist-table"),
+    NOTEBOOK_TABLE_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/table/{listItemId}/checked"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),

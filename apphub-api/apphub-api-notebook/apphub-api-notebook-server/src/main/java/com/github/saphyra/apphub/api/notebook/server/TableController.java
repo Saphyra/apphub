@@ -34,5 +34,5 @@ public interface TableController {
     void setRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED)
-    void deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    TableResponse deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

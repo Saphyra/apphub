@@ -23,6 +23,7 @@ import TableRow from "../../common/table/row/TableRow";
 import Endpoints from "../../../../common/js/dao/dao";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../common/validator/TableHeadNameValidator";
+import ListItemType from "../../common/ListItemType";
 
 const NewTablePage = ({ checklist }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -44,57 +45,22 @@ const NewTablePage = ({ checklist }) => {
             return;
         }
 
-        const columnNames = new Stream(tableHeads)
-            .sorted((a, b) => a.columnIndex - b.columnIndex)
-            .map(tableHead => tableHead.content)
-            .toList();
-
-        const tableHeadNameValidationResult = validateTableHeadNames(columnNames);
+        const tableHeadNameValidationResult = validateTableHeadNames(tableHeads);
         if (!tableHeadNameValidationResult.valid) {
             NotificationService.showError(tableHeadNameValidationResult.message);
             return;
         }
 
-        if (checklist) {
-            const payload = {
-                title: listItemTitle,
-                parent: parentId,
-                columnNames: columnNames,
-                rows: new Stream(rows)
-                    .sorted((a, b) => a.rowIndex - b.rowIndex)
-                    .map(row => {
-                        return {
-                            checked: row.checked,
-                            columns: new Stream(row.columns)
-                                .sorted((a, b) => a.columnIndex - b.columnIndex)
-                                .map(column => column.content)
-                                .toList()
-                        }
-                    })
-                    .toList()
-            }
-
-            await Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE.createRequest(payload)
-                .send();
-        } else {
-            const payload = {
-                title: listItemTitle,
-                parent: parentId,
-                columnNames: columnNames,
-                columns: new Stream(rows)
-                    .sorted((a, b) => a.rowIndex - b.rowIndex)
-                    .map(row =>
-                        new Stream(row.columns)
-                            .sorted((a, b) => a.columnIndex - b.columnIndex)
-                            .map(column => column.content)
-                            .toList()
-                    )
-                    .toList()
-            }
-
-            await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
-                .send();
+        const payload = {
+            title: listItemTitle,
+            parent: parentId,
+            listItemType: checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE,
+            tableHeads: tableHeads,
+            rows: rows
         }
+
+        await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
+            .send();
 
         window.location.href = Constants.NOTEBOOK_PAGE;
     }
