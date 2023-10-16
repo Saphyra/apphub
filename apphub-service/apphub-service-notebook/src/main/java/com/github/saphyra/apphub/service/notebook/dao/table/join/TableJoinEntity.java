@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.join;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import jakarta.persistence.Table;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Deprecated
+@ForRemoval("notebook-redesign")
 class TableJoinEntity {
     @Id
     private String tableJoinId;

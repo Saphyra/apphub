@@ -9,14 +9,14 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTree
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableColumnModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableHeadModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableResponse;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableRowModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableColumnModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableHeadModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableRowModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -534,5 +534,10 @@ public class TableCrudTest extends BackEndTest {
 
         List<CategoryTreeView> categoryTreeViews = NotebookActions.getCategoryTree(accessTokenId);
         assertThat(categoryTreeViews).isEmpty();
+    }
+
+    @Test(groups = {"be", "notebook"})
+    public void checklistTableTest() {
+        //TODO
     }
 }

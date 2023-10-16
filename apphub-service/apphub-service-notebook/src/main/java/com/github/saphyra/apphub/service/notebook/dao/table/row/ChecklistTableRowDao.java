@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-@Deprecated
+@ForRemoval("notebook-redesign")
 public class ChecklistTableRowDao extends AbstractDao<ChecklistTableRowEntity, ChecklistTableRow, String, ChecklistTableRowRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

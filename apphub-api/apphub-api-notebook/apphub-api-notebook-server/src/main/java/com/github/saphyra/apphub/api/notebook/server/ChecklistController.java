@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-//TODO API test a
+//TODO API test
 public interface ChecklistController {
     @PutMapping(Endpoints.NOTEBOOK_CREATE_CHECKLIST)
     OneParamResponse<UUID> createChecklist(@RequestBody CreateChecklistRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

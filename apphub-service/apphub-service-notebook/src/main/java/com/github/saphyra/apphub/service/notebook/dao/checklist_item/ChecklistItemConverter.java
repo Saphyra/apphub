@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
@@ -15,7 +16,7 @@ import java.util.stream.StreamSupport;
 
 @Component
 @RequiredArgsConstructor
-@Deprecated
+@ForRemoval("notebook-redesign")
 class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, ChecklistItem> {
     private final UuidConverter uuidConverter;
     private final AccessTokenProvider accessTokenProvider;

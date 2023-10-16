@@ -1,29 +1,25 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
-import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditListItemRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.TextResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.EditChecklistRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
 import io.restassured.response.Response;
 
 import java.util.Arrays;
@@ -242,52 +238,6 @@ public class NotebookActions {
             .post(UrlFactory.create(Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    @Deprecated
-    @ForRemoval("notebook-redesign")
-    public static UUID createChecklistTable(UUID accessTokenId, CreateChecklistTableRequest request) {
-        Response response = getCreateChecklistTableResponse(accessTokenId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody()
-            .jsonPath()
-            .getUUID("value");
-    }
-
-    public static Response getCreateChecklistTableResponse(UUID accessTokenId, CreateChecklistTableRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CHECKLIST_TABLE));
-    }
-
-    public static ChecklistTableResponse getChecklistTable(UUID accessTokenId, UUID listItemId) {
-        Response response = getChecklistTableResponse(accessTokenId, listItemId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody()
-            .as(ChecklistTableResponse.class);
-    }
-
-    public static Response getChecklistTableResponse(UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE, "listItemId", listItemId));
-    }
-
-    public static ChecklistTableResponse editChecklistTable(UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
-        Response response = getEditChecklistTableResponse(accessTokenId, listItemId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody().as(ChecklistTableResponse.class);
-    }
-
-    public static Response getEditChecklistTableResponse(UUID accessTokenId, UUID listItemId, EditChecklistTableRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(request)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE, "listItemId", listItemId));
-    }
-
     public static void updateChecklistTableRowStatus(UUID accessTokenId, UUID rowId, boolean status) {
         Response response = getUpdateChecklistTableRowStatusResponse(accessTokenId, rowId, status);
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -299,11 +249,6 @@ public class NotebookActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS, pathVariables));
-    }
-
-    public static Response getConvertTableToChecklistTableResponse(UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE, "listItemId", listItemId));
     }
 
     public static Response getDeleteCheckedChecklistItemsResponse(UUID accessTokenId, UUID listItemId) {

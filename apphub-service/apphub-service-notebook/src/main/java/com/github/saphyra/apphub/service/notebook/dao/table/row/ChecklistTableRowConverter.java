@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Deprecated
+@ForRemoval("notebook-redesign")
 class ChecklistTableRowConverter extends ConverterBase<ChecklistTableRowEntity, ChecklistTableRow> {
     private final UuidConverter uuidConverter;
     private final BooleanEncryptor booleanEncryptor;

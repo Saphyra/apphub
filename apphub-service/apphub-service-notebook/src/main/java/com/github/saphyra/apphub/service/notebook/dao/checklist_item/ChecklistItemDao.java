@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@Deprecated
+@ForRemoval("notebook-redesign")
 public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, ChecklistItem, String, ChecklistItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
     private final ChecklistItemConverter converter;

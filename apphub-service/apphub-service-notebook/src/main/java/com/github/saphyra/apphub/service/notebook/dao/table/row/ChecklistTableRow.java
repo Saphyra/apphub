@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Builder(toBuilder = true)
-@Deprecated
+@ForRemoval("notebook-redesign")
 public class ChecklistTableRow {
     private final UUID rowId;
     private final UUID userId;

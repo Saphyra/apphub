@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.table.row;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Deprecated
+@ForRemoval("notebook-redesign")
 public class ChecklistTableRowEntity {
     @Id
     private String rowId;
