@@ -15,7 +15,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO uni test
+//TODO unit test
 public class ChecklistCreationService {
     private final CreateChecklistRequestValidator createChecklistRequestValidator;
     private final ListItemFactory listItemFactory;
@@ -23,12 +23,14 @@ public class ChecklistCreationService {
     private final ChecklistItemCreationService checklistItemCreationService;
 
     @Transactional
-    public void create(UUID userId, CreateChecklistRequest request) {
+    public UUID create(UUID userId, CreateChecklistRequest request) {
         createChecklistRequestValidator.validate(request);
 
         ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.CHECKLIST);
         listItemDao.save(listItem);
 
         checklistItemCreationService.create(userId, listItem.getListItemId(), request.getItems());
+
+        return listItem.getListItemId();
     }
 }

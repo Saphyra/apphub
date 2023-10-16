@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistReque
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import java.util.UUID;
 //TODO API test a
 public interface ChecklistController {
     @PutMapping(Endpoints.NOTEBOOK_CREATE_CHECKLIST)
-    void createChecklist(@RequestBody CreateChecklistRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createChecklist(@RequestBody CreateChecklistRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.NOTEBOOK_EDIT_CHECKLIST)
     ChecklistResponse editChecklist(@RequestBody EditChecklistRequest request, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

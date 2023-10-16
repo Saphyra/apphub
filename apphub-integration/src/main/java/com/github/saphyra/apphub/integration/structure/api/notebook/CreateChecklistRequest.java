@@ -8,13 +8,12 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TableResponse {
-    private String title;
+@Data
+@Builder
+public class CreateChecklistRequest {
     private UUID parent;
-    private List<TableHeadModel> tableHeads;
-    private List<TableRowModel> rows;
+    private String title;
+    private List<ChecklistItemModel> items;
 }

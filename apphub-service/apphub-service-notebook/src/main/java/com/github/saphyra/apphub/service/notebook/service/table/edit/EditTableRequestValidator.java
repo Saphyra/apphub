@@ -39,6 +39,7 @@ public class EditTableRequestValidator {
         titleValidator.validate(request.getTitle());
 
         validateTableHeads(listItemId, request.getTableHeads());
+        validateColumnNumbersMatches(request.getTableHeads(), request.getRows());
         validateTableRows(listItemId, request.getRows());
     }
 
@@ -50,7 +51,7 @@ public class EditTableRequestValidator {
 
     private void validateTableHead(UUID listItemId, TableHeadModel model) {
         ValidationUtil.notNull(model.getColumnIndex(), "tableHead.columnIndex");
-        ValidationUtil.notNull(model.getContent(), "tableHead.content");
+        ValidationUtil.notBlank(model.getContent(), "tableHead.content");
         ValidationUtil.notNull(model.getType(), "tableHead.type");
 
         if (model.getType() == ItemType.EXISTING) {
@@ -72,7 +73,7 @@ public class EditTableRequestValidator {
     private void validateRow(UUID listItemId, TableRowModel model) {
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
 
-        ValidationUtil.notNull(model.getRowId(), "row.rowIndex");
+        ValidationUtil.notNull(model.getRowIndex(), "row.rowIndex");
         if (listItem.getType() == ListItemType.CHECKLIST_TABLE) {
             ValidationUtil.notNull(model.getChecked(), "row.checked");
         }
@@ -112,6 +113,14 @@ public class EditTableRequestValidator {
         if (model.getItemType() == ItemType.EXISTING && !allowedColumns.contains(model.getColumnId())) {
             dimensionDao.findByIdValidated(model.getColumnId()); //To check existence
             throw ExceptionFactory.invalidParam("row.column.columnId", "points to different table");
+        }
+    }
+
+    private void validateColumnNumbersMatches(List<TableHeadModel> tableHeads, List<TableRowModel> rows) {
+        boolean hasMismatch = rows.stream()
+            .anyMatch(tableRowModel -> tableRowModel.getColumns().size() != tableHeads.size());
+        if (hasMismatch) {
+            throw ExceptionFactory.invalidParam("row.columns", "item count mismatch");
         }
     }
 }

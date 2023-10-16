@@ -88,7 +88,7 @@ class TableCreationRequestValidator {
         boolean hasMismatch = rows.stream()
             .anyMatch(tableRowModel -> tableRowModel.getColumns().size() != tableHeads.size());
         if (hasMismatch) {
-            throw ExceptionFactory.invalidParam("rows.columns", "item count mismatch");
+            throw ExceptionFactory.invalidParam("row.columns", "item count mismatch");
         }
     }
 }

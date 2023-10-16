@@ -36,7 +36,7 @@ public class ChecklistItemCreationService {
     }
 
     public void create(UUID userId, UUID listItemId, ChecklistItemModel item) {
-        Dimension dimension = dimensionFactory.create(userId, listItemId, item.getIndex(), item.getChecklistItemId());
+        Dimension dimension = dimensionFactory.create(userId, listItemId, item.getIndex());
         dimensionDao.save(dimension);
 
         CheckedItem checkedItem = checkedItemFactory.create(userId, dimension.getDimensionId(), item.getChecked());

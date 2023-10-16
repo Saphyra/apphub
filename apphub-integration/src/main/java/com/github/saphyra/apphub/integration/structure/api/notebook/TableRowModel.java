@@ -6,12 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
-public class EditChecklistItemRequest {
-    private String title;
-    private List<ChecklistItemNodeRequest> nodes;
+@Builder(toBuilder = true)
+public class TableRowModel {
+    private UUID rowId;
+    private Integer rowIndex;
+    private Boolean checked;
+    private ItemType itemType;
+    private List<TableColumnModel> columns;
 }

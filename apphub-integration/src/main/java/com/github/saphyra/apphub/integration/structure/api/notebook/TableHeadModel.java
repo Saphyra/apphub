@@ -10,10 +10,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
-public class ChecklistItemNodeRequest {
-    private UUID checklistItemId;
-    private Integer order;
-    private Boolean checked;
+@Builder(toBuilder = true)
+public class TableHeadModel {
+    private UUID tableHeadId;
+    private Integer columnIndex;
     private String content;
+    private ItemType type;
 }

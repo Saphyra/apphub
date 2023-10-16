@@ -5,12 +5,13 @@ import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemResponse;
+import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -49,7 +50,7 @@ public class ChecklistCrudTest extends BackEndTest {
         UUID checklistItemId = creationResult.getEntity1();
         UUID listItemId = creationResult.getEntity2();
         listItemNotFound(accessTokenId);
-        ChecklistItemNodeRequest edit_validNodeRequest = edit_blankTitle(accessTokenId, listItemId, checklistItemId);
+        ChecklistItemModel edit_validNodeRequest = edit_blankTitle(accessTokenId, listItemId, checklistItemId);
         edit_nullContent(accessTokenId, listItemId, checklistItemId);
         edit_nullChecked(accessTokenId, listItemId, checklistItemId);
         edit_nullOrder(accessTokenId, listItemId, checklistItemId);
@@ -63,16 +64,16 @@ public class ChecklistCrudTest extends BackEndTest {
         edit_checklistItemModified(accessTokenId, listItemId, checklistItemAddedResponse);
         delete_deleteChecked(accessTokenId, listItemId);
         deleteChecklist(accessTokenId, notCategoryParentId, listItemId);
-        CreateChecklistItemRequest request = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest request = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(
-                ChecklistItemNodeRequest.builder()
-                    .order(1)
+            .items(Arrays.asList(
+                ChecklistItemModel.builder()
+                    .index(1)
                     .checked(true)
                     .content("A")
                     .build(),
-                ChecklistItemNodeRequest.builder()
-                    .order(0)
+                ChecklistItemModel.builder()
+                    .index(0)
                     .checked(true)
                     .content("B")
                     .build()
@@ -84,10 +85,10 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private static void create_blankTitle(UUID accessTokenId) {
-        CreateChecklistItemRequest create_blankTitleRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_blankTitleRequest = CreateChecklistRequest.builder()
             .title(" ")
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(true)
                 .content(CONTENT)
                 .build()))
@@ -97,11 +98,11 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private static void create_parentNotFound(UUID accessTokenId) {
-        CreateChecklistItemRequest create_parentNotFoundRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_parentNotFoundRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(UUID.randomUUID())
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(true)
                 .content(CONTENT)
                 .build()))
@@ -112,11 +113,11 @@ public class ChecklistCrudTest extends BackEndTest {
 
     private static UUID create_parentNotCategory(UUID accessTokenId) {
         UUID notCategoryParentId = NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title("a").content("").build());
-        CreateChecklistItemRequest create_parentNotCategoryRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_parentNotCategoryRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(notCategoryParentId)
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(true)
                 .content(CONTENT)
                 .build()))
@@ -127,73 +128,73 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private static void create_nullNodes(UUID accessTokenId) {
-        CreateChecklistItemRequest create_nullNodesRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_nullNodesRequest = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(null)
+            .items(null)
             .build();
         Response create_nullNodesResponse = NotebookActions.getCreateChecklistItemResponse(accessTokenId, create_nullNodesRequest);
-        verifyInvalidParam(create_nullNodesResponse, "nodes", "must not be null");
+        verifyInvalidParam(create_nullNodesResponse, "items", "must not be null");
     }
 
     private static void create_nullContent(UUID accessTokenId) {
-        CreateChecklistItemRequest create_nullContentRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_nullContentRequest = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(true)
                 .content(null)
                 .build()))
             .build();
         Response create_nullContentResponse = NotebookActions.getCreateChecklistItemResponse(accessTokenId, create_nullContentRequest);
-        verifyInvalidParam(create_nullContentResponse, "node.content", "must not be null");
+        verifyInvalidParam(create_nullContentResponse, "item.content", "must not be null");
     }
 
     private static void create_nullChecked(UUID accessTokenId) {
-        CreateChecklistItemRequest create_nullCheckedRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_nullCheckedRequest = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(null)
                 .content(CONTENT)
                 .build()))
             .build();
         Response create_nullCheckedResponse = NotebookActions.getCreateChecklistItemResponse(accessTokenId, create_nullCheckedRequest);
-        verifyInvalidParam(create_nullCheckedResponse, "node.checked", "must not be null");
+        verifyInvalidParam(create_nullCheckedResponse, "item.checked", "must not be null");
     }
 
     private static void create_nullOrder(UUID accessTokenId) {
-        CreateChecklistItemRequest create_nullOrderRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest create_nullOrderRequest = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(null)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(null)
                 .checked(true)
                 .content(CONTENT)
                 .build()))
             .build();
         Response create_nullOrderResponse = NotebookActions.getCreateChecklistItemResponse(accessTokenId, create_nullOrderRequest);
-        verifyInvalidParam(create_nullOrderResponse, "node.order", "must not be null");
+        verifyInvalidParam(create_nullOrderResponse, "item.index", "must not be null");
     }
 
     private BiWrapper<UUID, UUID> create(UUID accessTokenId) {
-        CreateChecklistItemRequest createRequest = CreateChecklistItemRequest.builder()
+        CreateChecklistRequest createRequest = CreateChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                .order(ORDER)
+            .items(Arrays.asList(ChecklistItemModel.builder()
+                .index(ORDER)
                 .checked(true)
                 .content(CONTENT)
                 .build()))
             .build();
         UUID listItemId = NotebookActions.createChecklist(accessTokenId, createRequest);
         ChecklistResponse createdChecklistItemResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
-        UUID checklistItemId = createdChecklistItemResponse.getNodes()
+        UUID checklistItemId = createdChecklistItemResponse.getItems()
             .get(0)
             .getChecklistItemId();
         assertThat(createdChecklistItemResponse.getTitle()).isEqualTo(TITLE);
-        assertThat(createdChecklistItemResponse.getNodes()).hasSize(1);
-        assertThat(createdChecklistItemResponse.getNodes().get(0).getChecklistItemId()).isNotNull();
-        assertThat(createdChecklistItemResponse.getNodes().get(0).getContent()).isEqualTo(CONTENT);
-        assertThat(createdChecklistItemResponse.getNodes().get(0).getChecked()).isTrue();
-        assertThat(createdChecklistItemResponse.getNodes().get(0).getOrder()).isEqualTo(ORDER);
+        assertThat(createdChecklistItemResponse.getItems()).hasSize(1);
+        assertThat(createdChecklistItemResponse.getItems().get(0).getChecklistItemId()).isNotNull();
+        assertThat(createdChecklistItemResponse.getItems().get(0).getContent()).isEqualTo(CONTENT);
+        assertThat(createdChecklistItemResponse.getItems().get(0).getChecked()).isTrue();
+        assertThat(createdChecklistItemResponse.getItems().get(0).getIndex()).isEqualTo(ORDER);
 
         return new BiWrapper<>(checklistItemId, listItemId);
     }
@@ -203,16 +204,17 @@ public class ChecklistCrudTest extends BackEndTest {
         verifyListItemNotFound(get_listItemNotFoundResponse);
     }
 
-    private static ChecklistItemNodeRequest edit_blankTitle(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
-        ChecklistItemNodeRequest edit_validNodeRequest = ChecklistItemNodeRequest.builder()
+    private static ChecklistItemModel edit_blankTitle(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
+        ChecklistItemModel edit_validNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
-            .order(NEW_ORDER)
+            .index(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
+            .type(ItemType.EXISTING)
             .build();
-        EditChecklistItemRequest edit_blankTitleRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_blankTitleRequest = EditChecklistRequest.builder()
             .title(" ")
-            .nodes(Arrays.asList(edit_validNodeRequest))
+            .items(Arrays.asList(edit_validNodeRequest))
             .build();
         Response edit_blankTitleResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_blankTitleRequest, listItemId);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
@@ -220,152 +222,155 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private static void edit_nullContent(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
-        ChecklistItemNodeRequest edit_nullContentNodeRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemModel edit_nullContentNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
-            .order(NEW_ORDER)
+            .index(NEW_ORDER)
             .checked(true)
             .content(null)
             .build();
-        EditChecklistItemRequest edit_nullContentRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_nullContentRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_nullContentNodeRequest))
+            .items(Arrays.asList(edit_nullContentNodeRequest))
             .build();
         Response edit_nullContentResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_nullContentRequest, listItemId);
-        verifyInvalidParam(edit_nullContentResponse, "node.content", "must not be null");
+        verifyInvalidParam(edit_nullContentResponse, "item.content", "must not be null");
     }
 
     private static void edit_nullChecked(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
-        ChecklistItemNodeRequest edit_nullCheckedNodeRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemModel edit_nullCheckedNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
-            .order(NEW_ORDER)
+            .index(NEW_ORDER)
             .checked(null)
             .content(NEW_CONTENT)
             .build();
-        EditChecklistItemRequest edit_nullCheckedRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_nullCheckedRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_nullCheckedNodeRequest))
+            .items(Arrays.asList(edit_nullCheckedNodeRequest))
             .build();
         Response edit_nullCheckedResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_nullCheckedRequest, listItemId);
-        verifyInvalidParam(edit_nullCheckedResponse, "node.checked", "must not be null");
+        verifyInvalidParam(edit_nullCheckedResponse, "item.checked", "must not be null");
     }
 
     private static void edit_nullOrder(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
-        ChecklistItemNodeRequest edit_nullOrderNodeRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemModel edit_nullOrderNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
-            .order(null)
+            .index(null)
             .checked(true)
             .content(NEW_CONTENT)
             .build();
-        EditChecklistItemRequest edit_nullOrderRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_nullOrderRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_nullOrderNodeRequest))
+            .items(Arrays.asList(edit_nullOrderNodeRequest))
             .build();
         Response edit_nullOrderResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_nullOrderRequest, listItemId);
-        verifyInvalidParam(edit_nullOrderResponse, "node.order", "must not be null");
+        verifyInvalidParam(edit_nullOrderResponse, "item.index", "must not be null");
     }
 
-    private static void edit_listItemNotFound(UUID accessTokenId, ChecklistItemNodeRequest edit_validNodeRequest) {
-        EditChecklistItemRequest edit_listItemNotFoundRequest = EditChecklistItemRequest.builder()
+    private static void edit_listItemNotFound(UUID accessTokenId, ChecklistItemModel edit_validNodeRequest) {
+        EditChecklistRequest edit_listItemNotFoundRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_validNodeRequest))
+            .items(Arrays.asList(edit_validNodeRequest))
             .build();
         Response edit_listItemNotFoundResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(edit_listItemNotFoundResponse);
     }
 
     private static void edit_checklistItemNotFound(UUID accessTokenId, UUID listItemId) {
-        ChecklistItemNodeRequest edit_checklistItemNotFoundNodeRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemModel edit_checklistItemNotFoundNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(UUID.randomUUID())
-            .order(NEW_ORDER)
+            .index(NEW_ORDER)
             .checked(true)
             .content(NEW_CONTENT)
+            .type(ItemType.EXISTING)
             .build();
 
-        EditChecklistItemRequest edit_checklistItemNotFoundRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_checklistItemNotFoundRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_checklistItemNotFoundNodeRequest))
+            .items(Arrays.asList(edit_checklistItemNotFoundNodeRequest))
             .build();
 
         Response edit_checklistItemNotFoundResponse = NotebookActions.getEditChecklistResponse(accessTokenId, edit_checklistItemNotFoundRequest, listItemId);
-        verifyListItemNotFound(edit_checklistItemNotFoundResponse);
+        ResponseValidator.verifyErrorResponse(edit_checklistItemNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void edit_checklistItemDeleted(UUID accessTokenId, UUID listItemId) {
-        EditChecklistItemRequest edit_checklistItemDeletedRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_checklistItemDeletedRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Collections.emptyList())
+            .items(Collections.emptyList())
             .build();
         NotebookActions.editChecklist(accessTokenId, edit_checklistItemDeletedRequest, listItemId);
         ChecklistResponse deletedChecklistItemResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
-        assertThat(deletedChecklistItemResponse.getNodes()).isEmpty();
+        assertThat(deletedChecklistItemResponse.getItems()).isEmpty();
         assertThat(deletedChecklistItemResponse.getTitle()).isEqualTo(NEW_TITLE);
     }
 
     private static ChecklistResponse edit_checklistItemAdded(UUID accessTokenId, UUID listItemId) {
-        ChecklistItemNodeRequest edit_checklistItemAddedNodeRequest = ChecklistItemNodeRequest.builder()
-            .order(NEW_ORDER)
+        ChecklistItemModel edit_checklistItemAddedNodeRequest = ChecklistItemModel.builder()
+            .index(NEW_ORDER)
             .checked(false)
             .content(NEW_CONTENT)
+            .type(ItemType.NEW)
             .build();
-        EditChecklistItemRequest edit_checklistItemAddedRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_checklistItemAddedRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
-            .nodes(Arrays.asList(edit_checklistItemAddedNodeRequest))
+            .items(Arrays.asList(edit_checklistItemAddedNodeRequest))
             .build();
         NotebookActions.editChecklist(accessTokenId, edit_checklistItemAddedRequest, listItemId);
         ChecklistResponse checklistItemAddedResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
         assertThat(checklistItemAddedResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(checklistItemAddedResponse.getNodes()).hasSize(1);
-        assertThat(checklistItemAddedResponse.getNodes().get(0).getOrder()).isEqualTo(NEW_ORDER);
-        assertThat(checklistItemAddedResponse.getNodes().get(0).getContent()).isEqualTo(NEW_CONTENT);
-        assertThat(checklistItemAddedResponse.getNodes().get(0).getChecked()).isFalse();
+        assertThat(checklistItemAddedResponse.getItems()).hasSize(1);
+        assertThat(checklistItemAddedResponse.getItems().get(0).getIndex()).isEqualTo(NEW_ORDER);
+        assertThat(checklistItemAddedResponse.getItems().get(0).getContent()).isEqualTo(NEW_CONTENT);
+        assertThat(checklistItemAddedResponse.getItems().get(0).getChecked()).isFalse();
         return checklistItemAddedResponse;
     }
 
     private static void check_listItemNotFound(UUID accessTokenId) {
         Response check_listItemNotFoundResponse = NotebookActions.getUpdateChecklistItemStatusResponse(accessTokenId, UUID.randomUUID(), true);
-        verifyListItemNotFound(check_listItemNotFoundResponse);
+        ResponseValidator.verifyErrorResponse(check_listItemNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void check(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
-        NotebookActions.updateChecklistItemStatus(accessTokenId, checklistItemAddedResponse.getNodes().get(0).getChecklistItemId(), true);
-        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getNodes().get(0).getChecked()).isTrue();
+        NotebookActions.updateChecklistItemStatus(accessTokenId, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), true);
+        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getItems().get(0).getChecked()).isTrue();
     }
 
     private static void uncheck(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
-        NotebookActions.updateChecklistItemStatus(accessTokenId, checklistItemAddedResponse.getNodes().get(0).getChecklistItemId(), false);
-        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getNodes().get(0).getChecked()).isFalse();
+        NotebookActions.updateChecklistItemStatus(accessTokenId, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), false);
+        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getItems().get(0).getChecked()).isFalse();
     }
 
     private static void edit_checklistItemModified(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
         UUID checklistItemId;
-        checklistItemId = checklistItemAddedResponse.getNodes()
+        checklistItemId = checklistItemAddedResponse.getItems()
             .get(0)
             .getChecklistItemId();
 
-        ChecklistItemNodeRequest edit_checklistItemModifiedNodeRequest = ChecklistItemNodeRequest.builder()
+        ChecklistItemModel edit_checklistItemModifiedNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
-            .order(ORDER)
+            .index(ORDER)
             .checked(true)
             .content(CONTENT)
+            .type(ItemType.EXISTING)
             .build();
-        EditChecklistItemRequest edit_checklistItemModifiedRequest = EditChecklistItemRequest.builder()
+        EditChecklistRequest edit_checklistItemModifiedRequest = EditChecklistRequest.builder()
             .title(TITLE)
-            .nodes(Arrays.asList(edit_checklistItemModifiedNodeRequest))
+            .items(Arrays.asList(edit_checklistItemModifiedNodeRequest))
             .build();
         NotebookActions.editChecklist(accessTokenId, edit_checklistItemModifiedRequest, listItemId);
         ChecklistResponse modifiedChecklistItemResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
         assertThat(modifiedChecklistItemResponse.getTitle()).isEqualTo(TITLE);
-        assertThat(modifiedChecklistItemResponse.getNodes()).hasSize(1);
-        assertThat(modifiedChecklistItemResponse.getNodes().get(0).getOrder()).isEqualTo(ORDER);
-        assertThat(modifiedChecklistItemResponse.getNodes().get(0).getContent()).isEqualTo(CONTENT);
-        assertThat(modifiedChecklistItemResponse.getNodes().get(0).getChecked()).isTrue();
+        assertThat(modifiedChecklistItemResponse.getItems()).hasSize(1);
+        assertThat(modifiedChecklistItemResponse.getItems().get(0).getIndex()).isEqualTo(ORDER);
+        assertThat(modifiedChecklistItemResponse.getItems().get(0).getContent()).isEqualTo(CONTENT);
+        assertThat(modifiedChecklistItemResponse.getItems().get(0).getChecked()).isTrue();
     }
 
     private static void delete_deleteChecked(UUID accessTokenId, UUID listItemId) {
         Response response = NotebookActions.getDeleteCheckedChecklistItemsResponse(accessTokenId, listItemId);
         assertThat(response.getStatusCode()).isEqualTo(200);
         ChecklistResponse deleteCheckedChecklistItemResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
-        assertThat(deleteCheckedChecklistItemResponse.getNodes()).isEmpty();
+        assertThat(deleteCheckedChecklistItemResponse.getItems()).isEmpty();
     }
 
     private static void deleteChecklist(UUID accessTokenId, UUID notCategoryParentId, UUID listItemId) {
@@ -377,25 +382,25 @@ public class ChecklistCrudTest extends BackEndTest {
         Response orderResponse = NotebookActions.orderChecklistItems(accessTokenId, listItemId);
         assertThat(orderResponse.getStatusCode()).isEqualTo(200);
         ChecklistResponse checklistResponse = NotebookActions.getChecklist(accessTokenId, listItemId);
-        assertThat(checklistResponse.getNodes()).hasSize(2);
-        assertThat(findByOrder(checklistResponse.getNodes(), 0).getContent()).isEqualTo("A");
-        assertThat(findByOrder(checklistResponse.getNodes(), 1).getContent()).isEqualTo("B");
+        assertThat(checklistResponse.getItems()).hasSize(2);
+        assertThat(findByOrder(checklistResponse.getItems(), 0).getContent()).isEqualTo("A");
+        assertThat(findByOrder(checklistResponse.getItems(), 1).getContent()).isEqualTo("B");
         return checklistResponse;
     }
 
     private static void deleteRow(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistResponse) {
         Response response;
-        response = NotebookActions.getDeleteChecklistItemResponse(accessTokenId, checklistResponse.getNodes().get(0).getChecklistItemId());
+        response = NotebookActions.getDeleteChecklistItemResponse(accessTokenId, checklistResponse.getItems().get(0).getChecklistItemId());
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getNodes())
-            .extracting(ChecklistItemResponse::getChecklistItemId)
-            .containsExactly(checklistResponse.getNodes().get(1).getChecklistItemId());
+        assertThat(NotebookActions.getChecklist(accessTokenId, listItemId).getItems())
+            .extracting(ChecklistItemModel::getChecklistItemId)
+            .containsExactly(checklistResponse.getItems().get(1).getChecklistItemId());
     }
 
-    private ChecklistItemResponse findByOrder(List<ChecklistItemResponse> nodes, int order) {
-        return nodes.stream()
-            .filter(checklistItemResponse -> checklistItemResponse.getOrder().equals(order))
+    private ChecklistItemModel findByOrder(List<ChecklistItemModel> items, int order) {
+        return items.stream()
+            .filter(checklistItemResponse -> checklistItemResponse.getIndex().equals(order))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No checklistItem found with order " + 2));
     }

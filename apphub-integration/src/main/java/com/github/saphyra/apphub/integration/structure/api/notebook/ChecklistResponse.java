@@ -16,5 +16,5 @@ import java.util.UUID;
 public class ChecklistResponse {
     private String title;
     private UUID parent;
-    private List<ChecklistItemResponse> nodes;
+    private List<ChecklistItemModel> items;
 }

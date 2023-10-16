@@ -13,6 +13,6 @@ import java.util.List;
 @Data
 public class EditTableRequest {
     private String title;
-    private List<EditTableHeadRequest> tableHeads;
-    private List<EditTableJoinRequest> columns;
+    private List<TableHeadModel> tableHeads;
+    private List<TableRowModel> rows;
 }

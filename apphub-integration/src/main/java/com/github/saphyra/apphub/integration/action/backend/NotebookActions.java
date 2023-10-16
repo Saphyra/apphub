@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -9,13 +10,13 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistRes
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditChecklistTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditListItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditTableRequest;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO split
 public class NotebookActions {
     public static UUID createCategory(UUID accessTokenId, CreateCategoryRequest request) {
         Response response = getCreateCategoryResponse(accessTokenId, request);
@@ -139,14 +141,14 @@ public class NotebookActions {
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_LINK));
     }
 
-    public static UUID createChecklist(UUID accessTokenId, CreateChecklistItemRequest request) {
+    public static UUID createChecklist(UUID accessTokenId, CreateChecklistRequest request) {
         Response response = getCreateChecklistItemResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateChecklistItemResponse(UUID accessTokenId, CreateChecklistItemRequest request) {
+    public static Response getCreateChecklistItemResponse(UUID accessTokenId, CreateChecklistRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
@@ -175,13 +177,13 @@ public class NotebookActions {
             .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", listItemId));
     }
 
-    public static void editChecklist(UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
+    public static void editChecklist(UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
         Response response = getEditChecklistResponse(accessTokenId, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditChecklistResponse(UUID accessTokenId, EditChecklistItemRequest editRequest, UUID listItemId) {
+    public static Response getEditChecklistResponse(UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editRequest)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
@@ -199,12 +201,10 @@ public class NotebookActions {
             .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
     }
 
-    public static UUID createTable(UUID accessTokenId, CreateTableRequest request) {
+    public static void createTable(UUID accessTokenId, CreateTableRequest request) {
         Response response = getCreateTableResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody().jsonPath().getUUID("value");
     }
 
     public static Response getCreateTableResponse(UUID accessTokenId, CreateTableRequest request) {
@@ -242,6 +242,8 @@ public class NotebookActions {
             .post(UrlFactory.create(Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
     }
 
+    @Deprecated
+    @ForRemoval("notebook-redesign")
     public static UUID createChecklistTable(UUID accessTokenId, CreateChecklistTableRequest request) {
         Response response = getCreateChecklistTableResponse(accessTokenId, request);
 

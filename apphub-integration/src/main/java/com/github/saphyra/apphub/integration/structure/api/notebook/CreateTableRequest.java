@@ -15,6 +15,7 @@ import java.util.UUID;
 public class CreateTableRequest {
     private String title;
     private UUID parent;
-    private List<String> columnNames;
-    private List<List<String>> columns;
+    private ListItemType listItemType;
+    private List<TableHeadModel> tableHeads;
+    private List<TableRowModel> rows;
 }

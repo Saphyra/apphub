@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistReque
 import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.DeleteCheckedItemsOfChecklistService;
@@ -33,9 +34,10 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final EditChecklistService editChecklistService;
 
     @Override
-    public void createChecklist(CreateChecklistRequest request, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createChecklist(CreateChecklistRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new checklist.", accessTokenHeader.getUserId());
-        checklistCreationService.create(accessTokenHeader.getUserId(), request);
+        UUID listItemId = checklistCreationService.create(accessTokenHeader.getUserId(), request);
+        return new OneParamResponse<>(listItemId);
     }
 
     @Override

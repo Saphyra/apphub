@@ -4,16 +4,18 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.structure.api.notebook.TableColumnModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.TableHeadModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.TableRowModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -50,10 +52,10 @@ public class SearchListItemTest extends BackEndTest {
         NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
         NotebookActions.createChecklist(
             accessTokenId,
-            CreateChecklistItemRequest.builder()
+            CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
-                .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                    .order(0)
+                .items(Arrays.asList(ChecklistItemModel.builder()
+                    .index(0)
                     .checked(true)
                     .content(CHECKLIST_ITEM_CONTENT)
                     .build()))
@@ -63,19 +65,39 @@ public class SearchListItemTest extends BackEndTest {
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
-                .columnNames(Arrays.asList(TABLE_COLUMN_NAME))
-                .columns(Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)))
+                .listItemType(ListItemType.TABLE)
+                .tableHeads(List.of(TableHeadModel.builder()
+                    .columnIndex(0)
+                    .content(TABLE_COLUMN_NAME)
+                    .build()))
+                .rows(List.of(TableRowModel.builder()
+                    .rowIndex(0)
+                    .columns(List.of(TableColumnModel.builder()
+                        .columnIndex(0)
+                        .columnType(ColumnType.TEXT)
+                        .data(TABLE_COLUMN_VALUE)
+                        .build()))
+                    .build()))
                 .build()
         );
 
-        NotebookActions.createChecklistTable(
+        NotebookActions.createTable(
             accessTokenId,
-            CreateChecklistTableRequest.builder()
+            CreateTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
-                .columnNames(Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME))
-                .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder()
+                .listItemType(ListItemType.CHECKLIST_TABLE)
+                .tableHeads(List.of(TableHeadModel.builder()
+                    .columnIndex(0)
+                    .content(CHECKLIST_TABLE_COLUMN_NAME)
+                    .build()))
+                .rows(List.of(TableRowModel.builder()
+                    .rowIndex(0)
                     .checked(true)
-                    .columns(Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))
+                    .columns(List.of(TableColumnModel.builder()
+                        .columnIndex(0)
+                        .columnType(ColumnType.TEXT)
+                        .data(CHECKLIST_TABLE_COLUMN_VALUE)
+                        .build()))
                     .build()))
                 .build()
         );

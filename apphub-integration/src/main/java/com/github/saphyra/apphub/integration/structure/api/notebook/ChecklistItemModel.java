@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TableResponse {
-    private String title;
-    private UUID parent;
-    private List<TableHeadModel> tableHeads;
-    private List<TableRowModel> rows;
+@Data
+@Builder
+public class ChecklistItemModel {
+    private UUID checklistItemId;
+    private Integer index;
+    private Boolean checked;
+    private String content;
+    private ItemType type;
 }
