@@ -33,11 +33,12 @@ public class ChecklistMigrationService {
 
     @Transactional
     public void migrate() {
+        log.info("Migrating Checklists...");
         checklistItemDao.getAllUnencrypted()
             .stream()
             .map(UnencryptedChecklistItem::getUserId)
             .forEach(this::migrate);
-
+        log.info("Checklists successfully migrated.");
     }
 
     private void migrate(UUID userId) {

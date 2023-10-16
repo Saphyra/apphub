@@ -15,6 +15,8 @@ import ConfirmationDialog from "../../../common/component/confirmation_dialog/Co
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
+    document.title = localizationHandler.get("title");
+
     const [migrationTasks, setMigrationTasks] = useState([]);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
@@ -110,7 +112,7 @@ const MigrationTasksPage = () => {
 
     return (
         <div id="mmigration-tasks" className="main-page">
-            <Header label={localizationHandler.get("title")} />
+            <Header label={localizationHandler.get("page-title")} />
 
             <main>
                 <table id="migration-tasks-table" className="formatted-table">

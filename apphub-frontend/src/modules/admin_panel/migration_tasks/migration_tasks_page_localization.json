@@ -3,6 +3,10 @@
         "en": "Migration Tasks - Admin Panel - Apphub",
         "hu": "Migrációs feladatok - Kezelőfelület - Apphub"
     },
+    "page-title": {
+        "en": "Migration Tasks",
+        "hu": "Migrációs feladatok"
+    },
     "home": {
         "en": "Home",
         "hu": "Kezdőlap"
