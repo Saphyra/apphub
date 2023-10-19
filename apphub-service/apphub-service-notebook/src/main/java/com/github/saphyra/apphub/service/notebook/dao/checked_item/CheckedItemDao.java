@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class CheckedItemDao extends AbstractDao<CheckedItemEntity, CheckedItem, String, CheckedItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -37,7 +36,7 @@ public class CheckedItemDao extends AbstractDao<CheckedItemEntity, CheckedItem, 
         return findById(uuidConverter.convertDomain(checkedItemId));
     }
 
-    public void deleteById(UUID dimensionId) {
-        deleteById(uuidConverter.convertDomain(dimensionId));
+    public void deleteById(UUID checkedItemId) {
+        deleteById(uuidConverter.convertDomain(checkedItemId));
     }
 }

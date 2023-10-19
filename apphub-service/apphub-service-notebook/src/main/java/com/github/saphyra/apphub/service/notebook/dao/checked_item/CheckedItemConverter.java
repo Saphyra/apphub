@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CheckedItemConverter extends ConverterBase<CheckedItemEntity, CheckedItem> {
     private final BooleanEncryptor booleanEncryptor;
     private final UuidConverter uuidConverter;

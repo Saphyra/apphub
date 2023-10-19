@@ -89,4 +89,15 @@ public class ChecklistItemDaoTest {
 
         assertThat(result).isEqualTo(domain);
     }
+
+    @Test
+    void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        List<ChecklistItem> result = underTest.getByUserId(USER_ID);
+
+        assertThat(result).containsExactly(domain);
+    }
 }

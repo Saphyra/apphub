@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MigrationTaskConverter extends ConverterBase<MigrationTaskEntity, MigrationTask> {
     @Override
     protected MigrationTaskEntity processDomainConversion(MigrationTask domain) {

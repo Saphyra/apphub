@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit testa
 public class DimensionFactory {
     private final IdGenerator idGenerator;
 

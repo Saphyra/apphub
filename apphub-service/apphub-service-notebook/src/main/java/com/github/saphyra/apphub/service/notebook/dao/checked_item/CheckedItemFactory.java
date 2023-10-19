@@ -9,7 +9,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CheckedItemFactory {
     public CheckedItem create(UUID userId, UUID checkedItemId, Boolean checked) {
         return CheckedItem.builder()

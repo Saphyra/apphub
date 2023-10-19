@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DimensionConverter extends ConverterBase<DimensionEntity, Dimension> {
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;

@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @ForRemoval("notebook-redesign")
-//TODO unit test
 public class TableMigrationService {
     private final ListItemDao listItemDao;
     private final AccessTokenProvider accessTokenProvider;

@@ -6,13 +6,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.notebook.migration.checklist.UnencryptedChecklistItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Component
 @RequiredArgsConstructor
@@ -44,23 +39,6 @@ class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, Checklis
             .parent(uuidConverter.convertDomain(domain.getParent()))
             .order(integerEncryptor.encryptEntity(domain.getOrder(), userId))
             .checked(booleanEncryptor.encryptEntity(domain.getChecked(), userId))
-            .build();
-    }
-
-    //TODO unit test
-    public List<UnencryptedChecklistItem> convertEntityUnencrypted(Iterable<ChecklistItemEntity> entities) {
-        return StreamSupport.stream(entities.spliterator(), false)
-            .map(this::convertUnencrypted)
-            .collect(Collectors.toList());
-    }
-
-    private UnencryptedChecklistItem convertUnencrypted(ChecklistItemEntity entity) {
-        return UnencryptedChecklistItem.builder()
-            .checklistItemId(uuidConverter.convertEntity(entity.getChecklistItemId()))
-            .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .parent(uuidConverter.convertEntity(entity.getParent()))
-            .order(entity.getOrder())
-            .checked(entity.getChecked())
             .build();
     }
 }

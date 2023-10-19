@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-//TODO unit test
 public class MigrationTaskControllerImpl implements MigrationTaskController {
     private final MigrationTaskDao migrationTaskDao;
     private final EventGatewayProxy eventGatewayProxy;

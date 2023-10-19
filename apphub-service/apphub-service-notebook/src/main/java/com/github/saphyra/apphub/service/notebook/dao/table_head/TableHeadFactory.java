@@ -10,15 +10,14 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableHeadFactory {
     private final IdGenerator idGenerator;
 
-    public TableHead create(UUID userId, UUID listItemId, Integer columnIndex) {
+    public TableHead create(UUID userId, UUID parent, Integer columnIndex) {
         return TableHead.builder()
                 .tableHeadId(idGenerator.randomUuid())
                 .userId(userId)
-                .parent(listItemId)
+                .parent(parent)
                 .columnIndex(columnIndex)
                 .build();
     }

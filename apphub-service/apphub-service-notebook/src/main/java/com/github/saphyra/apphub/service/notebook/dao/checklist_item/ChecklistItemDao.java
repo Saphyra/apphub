@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.migration.checklist.UnencryptedChecklistItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -39,13 +38,6 @@ public class ChecklistItemDao extends AbstractDao<ChecklistItemEntity, Checklist
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ChecklistItem not found with id " + checklistItemId));
     }
 
-    //TODO unit test
-    @ForRemoval("notebook-redesign")
-    public List<UnencryptedChecklistItem> getAllUnencrypted() {
-        return this.converter.convertEntityUnencrypted(repository.findAll());
-    }
-
-    //TODO unit test
     @ForRemoval("notebook-redesign")
     public List<ChecklistItem> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));

@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class DimensionDao extends AbstractDao<DimensionEntity, Dimension, String, DimensionRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

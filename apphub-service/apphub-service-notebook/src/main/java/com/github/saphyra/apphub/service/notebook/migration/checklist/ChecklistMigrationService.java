@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.migration.checklist;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
@@ -11,6 +12,8 @@ import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistIt
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.migration.table.UnencryptedListItem;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +25,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @ForRemoval("notebook-redesign")
-//TODO unit test
 public class ChecklistMigrationService {
     private final ChecklistItemDao checklistItemDao;
     private final AccessTokenProvider accessTokenProvider;
@@ -30,13 +32,16 @@ public class ChecklistMigrationService {
     private final DimensionDao dimensionDao;
     private final CheckedItemFactory checkedItemFactory;
     private final CheckedItemDao checkedItemDao;
+    private final ListItemDao listItemDao;
 
     @Transactional
     public void migrate() {
         log.info("Migrating Checklists...");
-        checklistItemDao.getAllUnencrypted()
+        listItemDao.getAllUnencrypted()
             .stream()
-            .map(UnencryptedChecklistItem::getUserId)
+            .filter(listItem -> listItem.getType() == ListItemType.CHECKLIST)
+            .map(UnencryptedListItem::getUserId)
+            .distinct()
             .forEach(this::migrate);
         log.info("Checklists successfully migrated.");
     }

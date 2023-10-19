@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ColumnTypeDao extends AbstractDao<ColumnTypeEntity, ColumnTypeDto, String, ColumnTypeRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
