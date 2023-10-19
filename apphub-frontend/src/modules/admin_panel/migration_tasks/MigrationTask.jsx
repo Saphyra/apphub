@@ -5,16 +5,17 @@ import Button from "../../../common/component/input/Button";
 const MigrationTask = ({ localizationHandler, data, deleteCallback, triggerCallback }) => {
     return (
         <tr className="migration-task">
-            <td>{data.event}</td>
-            <td>{data.name}</td>
+            <td className="migration-task-event">{data.event}</td>
+            <td className="migration-task-name">{data.name}</td>
             <td className="migration-task-checkbox-cell">
                 <InputField
                     type="checkbox"
+                    className={"migration-task-completed"}
                     checked={data.completed}
                     disabled={true}
                 />
             </td>
-            <td>
+            <td className="migration-task-commands">
                 <Button
                     className="migration-task-delete-button"
                     label={localizationHandler.get("delete")}
@@ -23,7 +24,7 @@ const MigrationTask = ({ localizationHandler, data, deleteCallback, triggerCallb
 
                 {
                     !data.completed &&
-                    
+
                     <Button
                         className="migration-task-trigger-button"
                         label={localizationHandler.get("trigger")}

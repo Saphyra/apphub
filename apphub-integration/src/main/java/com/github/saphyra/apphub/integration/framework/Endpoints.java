@@ -9,6 +9,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_MEMORY_MONITORING_PAGE = "/web/admin-panel/memory-monitoring";
+    public static final String ADMIN_PANEL_MIGRATION_TASKS_PAGE = "/web/admin-panel/migration-tasks";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
@@ -64,6 +65,11 @@ public class Endpoints {
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+
+    //MIGRATION
+    public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
+    public static final String ADMIN_PANEL_MIGRATION_TRIGGER_TASK = "/api/admin-panel/migration/{event}";
+    public static final String ADMIN_PANEL_MIGRATION_DELETE_TASK = "/api/admin-panel/migration/{event}";
 
     //MODULES
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";

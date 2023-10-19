@@ -30,6 +30,8 @@ public class DatabaseUtil {
     private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
     private static final String GET_CALENDAR_OCCURRENCES_BY_USER_ID = "SELECT * FROM calendar.occurrence WHERE user_id='%s'";
     private static final String UNLOCK_USER_BY_EMAIL = "UPDATE apphub_user.apphub_user SET locked_until = null WHERE email='%s'";
+    private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed) VALUES ('%s', '%s', '%s');";
+    private static final String DELETE_MIGRATION_TASK_BY_EVENT = "DELETE FROM admin_panel.migration_task WHERE event='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
@@ -70,6 +72,24 @@ public class DatabaseUtil {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void insertMigrationTask(String event, String name, boolean completed) {
+        try {
+            String sql = INSERT_MIGRATION_TASK.formatted(event, name, completed);
+            execute(sql);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed inserting new Migration Task", e);
+        }
+    }
+
+    public static void deleteMigrationTaskByEvent(String event) {
+        try{
+            String sql = DELETE_MIGRATION_TASK_BY_EVENT.formatted(event);
+            execute(sql);
+        }catch (Exception e){
+            throw new RuntimeException("Failed deleting MigrationTask by event " + event, e);
         }
     }
 
