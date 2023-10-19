@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.service.notebook.service.table.deletion;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,7 +18,7 @@ import java.util.UUID;
 //TODO unit test
 public class TableColumnDeletionService {
     private final ColumnTypeDao columnTypeDao;
-    private final List<ColumnDataService> columnDataServices;
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
     private final DimensionDao dimensionDao;
 
     public void deleteColumnsOfRow(UUID rowId) {
@@ -36,13 +35,6 @@ public class TableColumnDeletionService {
         ColumnType columnType = columnTypeDao.findByIdValidated(columnId)
             .getType();
 
-        return findColumnDataService(columnType);
-    }
-
-    private ColumnDataService findColumnDataService(ColumnType columnType) {
-        return columnDataServices.stream()
-            .filter(columnDataService -> columnDataService.canProcess(columnType))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.reportedException("No ColumnDataService found for columnType " + columnType));
+        return columnDataServiceFetcher.findColumnDataService(columnType);
     }
 }

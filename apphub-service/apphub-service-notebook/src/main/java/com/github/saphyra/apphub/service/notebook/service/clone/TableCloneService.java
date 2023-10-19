@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;
@@ -17,12 +16,11 @@ import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -37,7 +35,7 @@ class TableCloneService {
     private final DimensionFactory dimensionFactory;
     private final CheckedItemDao checkedItemDao;
     private final CheckedItemFactory checkedItemFactory;
-    private final List<ColumnDataService> columnDataServices;
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
     private final ContentDao contentDao;
     private final ContentFactory contentFactory;
     private final ColumnTypeDao columnTypeDao;
@@ -88,10 +86,7 @@ class TableCloneService {
         ColumnType columnType = columnTypeDao.findByIdValidated(column.getDimensionId())
                 .getType();
 
-        columnDataServices.stream()
-            .filter(columnDataService -> columnDataService.canProcess(columnType))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.reportedException("ColumnDataService not found for columnType " + columnType))
+        columnDataServiceFetcher.findColumnDataService(columnType)
             .clone(clone, rowId, column);
     }
 }

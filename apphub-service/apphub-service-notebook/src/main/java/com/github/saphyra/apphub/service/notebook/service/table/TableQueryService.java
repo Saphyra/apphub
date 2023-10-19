@@ -2,11 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.api.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.api.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.api.notebook.model.table.*;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
@@ -17,7 +13,7 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,7 +37,7 @@ public class TableQueryService {
     private final DimensionDao dimensionDao;
     private final CheckedItemDao checkedItemDao;
     private final ColumnTypeDao columnTypeDao;
-    private final List<ColumnDataService> columnDataServices;
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
 
     public TableResponse getTable(UUID listItemId) {
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
@@ -100,10 +96,7 @@ public class TableQueryService {
     }
 
     private Object getDataForColumnType(UUID columnId, ColumnType columnType) {
-        return columnDataServices.stream()
-            .filter(columnDataService -> columnDataService.canProcess(columnType))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.reportedException("ColumnDataService not found for columnType " + columnType))
+        return columnDataServiceFetcher.findColumnDataService(columnType)
             .getData(columnId);
     }
 }

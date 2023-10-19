@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.table.*;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;
@@ -18,11 +17,10 @@ import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,7 +41,7 @@ public class TableCreationService {
     private final TableHeadDao tableHeadDao;
     private final ContentFactory contentFactory;
     private final ContentDao contentDao;
-    private final List<ColumnDataService> columnDataServices;
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
     private final CheckedItemFactory checkedItemFactory;
@@ -97,10 +95,7 @@ public class TableCreationService {
     }
 
     private Optional<TableFileUploadResponse> saveColumn(UUID userId, UUID listItemId, Dimension row, TableColumnModel tableColumnModel) {
-        return columnDataServices.stream()
-                .filter(columnDataService -> columnDataService.canProcess(tableColumnModel.getColumnType()))
-                .findAny()
-                .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled columnType: " + tableColumnModel.getColumnType()))
+        return columnDataServiceFetcher.findColumnDataService(tableColumnModel.getColumnType())
                 .save(userId, listItemId, row.getDimensionId(), tableColumnModel);
     }
 }
