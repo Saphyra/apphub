@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.clone.table.TableCloneService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -158,7 +159,7 @@ public class ListItemCloneServiceTest {
         verify(listItemDao).save(checklistListItemClone);
         verify(checklistCloneService).clone(checklistListItem, checklistListItemClone);
         verify(listItemDao).save(tableListItemClone);
-        verify(tableCloneService).clone(tableListItem, tableListItemClone);
+        verify(tableCloneService).cloneTable(tableListItem, tableListItemClone);
         verify(listItemDao).save(checklistTableListItemClone);
         verify(listItemDao).save(onlyTitleListItemClone);
         verify(cloneFileService).cloneFile(imageListItem, imageListItemClone);

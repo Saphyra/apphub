@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistDeletionService {
     private final DimensionDao dimensionDao;
     private final ChecklistItemDeletionService checklistItemDeletionService;

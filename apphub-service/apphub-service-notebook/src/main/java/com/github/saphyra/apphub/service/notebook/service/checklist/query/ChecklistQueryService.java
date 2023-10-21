@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistQueryService {
     private final ListItemDao listItemDao;
     private final ChecklistResponseFactory checklistResponseFactory;
@@ -24,7 +23,7 @@ public class ChecklistQueryService {
         ListItem listItem = listItemDao.findByIdValidated(listItemId);
 
         if (listItem.getType() != ListItemType.CHECKLIST) {
-            throw ExceptionFactory.reportedException(HttpStatus.BAD_REQUEST, listItemId + " is not a " + ListItemType.CHECKLIST + ", it is a " + listItem.getType());
+            throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, listItemId + " is not a " + ListItemType.CHECKLIST + ", it is a " + listItem.getType());
         }
         return checklistResponseFactory.create(listItem);
     }
