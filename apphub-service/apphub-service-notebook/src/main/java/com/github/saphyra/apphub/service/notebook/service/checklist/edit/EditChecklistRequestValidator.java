@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EditChecklistRequestValidator {
     private final TitleValidator titleValidator;
     private final ChecklistItemModelValidator checklistItemModelValidator;
