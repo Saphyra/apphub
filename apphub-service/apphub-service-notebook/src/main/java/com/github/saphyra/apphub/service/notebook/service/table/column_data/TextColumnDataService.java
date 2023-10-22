@@ -23,7 +23,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TextColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;

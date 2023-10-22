@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TableColumnCloneService {
     private final DimensionDao dimensionDao;
     private final ColumnDataServiceFetcher columnDataServiceFetcher;

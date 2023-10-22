@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableRowDeletionService {
     private final DimensionDao dimensionDao;
     private final TableColumnDeletionService tableColumnDeletionService;
@@ -19,8 +18,7 @@ public class TableRowDeletionService {
     public void deleteRow(Dimension row) {
         tableColumnDeletionService.deleteColumnsOfRow(row.getDimensionId());
 
-        checkedItemDao.findById(row.getDimensionId())
-            .ifPresent(checkedItemDao::delete);
+        checkedItemDao.deleteById(row.getDimensionId());
 
         dimensionDao.delete(row);
     }

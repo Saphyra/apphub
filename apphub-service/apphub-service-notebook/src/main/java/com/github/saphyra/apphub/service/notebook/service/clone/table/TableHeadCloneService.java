@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TableHeadCloneService {
     private final ContentDao contentDao;
     private final ContentFactory contentFactory;

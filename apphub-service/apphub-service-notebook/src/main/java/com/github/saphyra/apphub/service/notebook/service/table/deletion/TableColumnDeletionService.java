@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableColumnDeletionService {
     private final ColumnTypeDao columnTypeDao;
     private final ColumnDataServiceFetcher columnDataServiceFetcher;
@@ -23,7 +22,7 @@ public class TableColumnDeletionService {
 
     public void deleteColumnsOfRow(UUID rowId) {
         dimensionDao.getByExternalReference(rowId)
-            .forEach(column -> findColumnDataService(column.getDimensionId()).delete(column));
+            .forEach(this::deleteColumn);
     }
 
     public void deleteColumn(Dimension column) {
