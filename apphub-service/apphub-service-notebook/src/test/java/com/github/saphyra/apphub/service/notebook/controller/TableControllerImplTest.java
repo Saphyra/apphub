@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;

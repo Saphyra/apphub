@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -154,5 +156,17 @@ class TextColumnDataServiceTest {
         then(dimensionDao).should().save(clonedColumn);
         then(columnTypeDao).should().save(clonedColumnType);
         then(contentDao).should().save(clonedContent);
+    }
+
+    @Test
+    void validateData_null() {
+        Throwable ex = catchThrowable(() -> underTest.validateData(null));
+
+        ExceptionValidator.validateInvalidParam(ex, "textValue", "must not be null");
+    }
+
+    @Test
+    void validateData_valid() {
+        underTest.validateData("");
     }
 }

@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -21,4 +21,6 @@ public interface ColumnDataService {
     Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel column);
 
     void clone(ListItem clone, UUID rowId, Dimension originalColumn);
+
+    void validateData(Object data);
 }

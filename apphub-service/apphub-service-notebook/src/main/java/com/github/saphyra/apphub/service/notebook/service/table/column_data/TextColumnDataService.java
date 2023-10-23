@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeFactory;
@@ -87,5 +88,10 @@ class TextColumnDataService implements ColumnDataService {
         Content originalContent = contentDao.findByParentValidated(originalColumn.getDimensionId());
         Content clonedContent = contentFactory.create(clone.getListItemId(), clonedColumn.getDimensionId(), clone.getUserId(), originalContent.getContent());
         contentDao.save(clonedContent);
+    }
+
+    @Override
+    public void validateData(Object data) {
+        ValidationUtil.notNull(data, "textValue");
     }
 }

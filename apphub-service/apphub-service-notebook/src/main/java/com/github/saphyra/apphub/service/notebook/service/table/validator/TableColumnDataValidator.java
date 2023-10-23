@@ -2,34 +2,33 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Number;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Range;
 import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableColumnDataValidator {
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
     private final ObjectMapperWrapper objectMapperWrapper;
     private final FileMetadataValidator fileRequestValidator;
 
     public void validate(ColumnType columnType, Object data) {
-        switch (columnType) {
+        columnDataServiceFetcher.findColumnDataService(columnType)
+            .validateData(data);
+
+        /*switch (columnType) {
             case NUMBER -> validateNumber(data);
             case TEXT -> ValidationUtil.notNull(data, "textValue");
             case IMAGE, FILE -> validateFile(data);
@@ -43,10 +42,10 @@ public class TableColumnDataValidator {
             case LINK -> ValidationUtil.notBlank(data.toString(), "linkValue");
             case EMPTY -> log.debug("No validation required");
             default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Unhandled columnType " + columnType);
-        }
+        }*/
     }
 
-    //TODO extract
+    @ForRemoval("custom-table")
     private void validateRange(Object value) {
         Range range = objectMapperWrapper.convertValue(value, Range.class);
 
@@ -56,7 +55,7 @@ public class TableColumnDataValidator {
         ValidationUtil.notNull(range.getValue(), "rangeValue");
     }
 
-    //TODO extract
+    @ForRemoval("custom-table")
     private static void validateColor(Object data) {
         String hexString = data.toString();
         ValidationUtil.length(hexString, 7, "colorValue");
@@ -67,7 +66,7 @@ public class TableColumnDataValidator {
         ValidationUtil.parse(hexString, v -> Integer.parseInt(v.toString().substring(1), 16), "colorValue");
     }
 
-    //TODO extract
+    @ForRemoval("custom-table")
     private void validateFile(Object value) {
         if (isNull(value)) {
             return;
@@ -77,7 +76,7 @@ public class TableColumnDataValidator {
         fileRequestValidator.validate(request);
     }
 
-    //TODO extract
+    @ForRemoval("custom-table")
     private void validateNumber(Object value) {
         Number number = objectMapperWrapper.convertValue(value, Number.class);
 
