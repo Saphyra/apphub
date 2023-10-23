@@ -1,7 +1,12 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
@@ -46,11 +51,11 @@ public class SearchListItemTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        UUID categoryId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
+        UUID categoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
 
-        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
-        NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
-        NotebookActions.createChecklist(
+        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
+        TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
+        ChecklistActions.createChecklist(
             accessTokenId,
             CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
@@ -61,7 +66,7 @@ public class SearchListItemTest extends BackEndTest {
                     .build()))
                 .build()
         );
-        NotebookActions.createTable(
+        TableActions.createTable(
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
@@ -81,7 +86,7 @@ public class SearchListItemTest extends BackEndTest {
                 .build()
         );
 
-        NotebookActions.createTable(
+        TableActions.createTable(
             accessTokenId,
             CreateTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
@@ -120,7 +125,7 @@ public class SearchListItemTest extends BackEndTest {
     }
 
     private static void searchTextTooShort(UUID accessTokenId) {
-        Response response = NotebookActions.getSearchResponse(accessTokenId, "as");
+        Response response = ListItemActions.getSearchResponse(accessTokenId, "as");
         ResponseValidator.verifyInvalidParam(response, "search", "too short");
     }
 
@@ -129,15 +134,15 @@ public class SearchListItemTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
+        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
 
-        List<NotebookView> searchResult = NotebookActions.search(accessTokenId, LINK_TITLE);
+        List<NotebookView> searchResult = ListItemActions.search(accessTokenId, LINK_TITLE);
 
         assertThat(searchResult).hasSize(1);
     }
 
     private void search(UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
-        List<NotebookView> searchResult = NotebookActions.search(accessTokenId, search);
+        List<NotebookView> searchResult = ListItemActions.search(accessTokenId, search);
 
         NotebookView expected = searchResult.stream()
             .filter(notebookView -> notebookView.getTitle().equals(listItemTitle))

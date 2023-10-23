@@ -11,6 +11,5 @@ interface ChecklistItemRepository extends CrudRepository<ChecklistItemEntity, St
 
     List<ChecklistItemEntity> getByParent(String parent);
 
-    //TODO unit test
     List<ChecklistItemEntity> getByUserId(String userId);
 }

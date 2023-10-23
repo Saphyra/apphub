@@ -68,4 +68,19 @@ public class ChecklistItemRepositoryTest {
 
         assertThat(result).containsExactly(entity1);
     }
+
+    @Test
+    void getByUserId() {
+        ChecklistItemEntity entity1 = ChecklistItemEntity.builder()
+            .checklistItemId(CHECKLIST_ITEM_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        ChecklistItemEntity entity2 = ChecklistItemEntity.builder()
+            .checklistItemId(CHECKLIST_ITEM_ID_2)
+            .userId(USER_ID_2)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        assertThat(underTest.getByUserId(USER_ID_1)).containsExactly(entity1);
+    }
 }

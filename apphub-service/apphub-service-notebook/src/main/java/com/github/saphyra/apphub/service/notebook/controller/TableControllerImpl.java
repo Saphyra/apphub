@@ -23,7 +23,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TableControllerImpl implements TableController {
     private final TableCreationService tableCreationService;
     private final TableQueryService tableQueryService;

@@ -132,13 +132,9 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void equals(Object value, Object expected, String field) {
-        if (value != expected) {
-            notNull(value, field);
-            if (!value.equals(expected)) {
-                throw ExceptionFactory.invalidParam(field, "must be " + expected);
-            }
+        if (!Objects.equals(value, expected)) {
+            throw ExceptionFactory.invalidParam(field, "must be " + expected);
         }
     }
 }

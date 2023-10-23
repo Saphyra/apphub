@@ -1,7 +1,13 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
@@ -59,20 +65,19 @@ public class CloneListItemTest extends BackEndTest {
     }
 
     private static void listItemNotFound(UUID accessTokenId) {
-        Response response = NotebookActions.getCloneListItemResponse(accessTokenId, UUID.randomUUID());
+        Response response = ListItemActions.getCloneListItemResponse(accessTokenId, UUID.randomUUID());
         ResponseValidator.verifyErrorResponse(response, 404, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     private void clone(UUID accessTokenId) {
-        UUID rootId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
-        UUID parentId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
-        UUID childCategoryId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());
+        UUID rootId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
+        UUID parentId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
+        UUID childCategoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());
 
-        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
-        NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
-        NotebookActions.createOnlyTitle(accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
-        NotebookActions.createChecklist(
-
+        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
+        TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
+        OnlyTitleActions.createOnlyTitle(accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
+        ChecklistActions.createChecklist(
             accessTokenId,
             CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
@@ -84,7 +89,7 @@ public class CloneListItemTest extends BackEndTest {
                     .build()))
                 .build()
         );
-        NotebookActions.createTable(
+        TableActions.createTable(
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
@@ -105,7 +110,7 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
-        NotebookActions.createTable(
+        TableActions.createTable(
             accessTokenId,
             CreateTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
@@ -127,14 +132,14 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
-        NotebookActions.archive(accessTokenId, parentId, true);
-        NotebookActions.pin(accessTokenId, parentId, true);
+        ListItemActions.archive(accessTokenId, parentId, true);
+        ListItemActions.pin(accessTokenId, parentId, true);
 
-        Response cloneResponse = NotebookActions.getCloneListItemResponse(accessTokenId, parentId);
+        Response cloneResponse = ListItemActions.getCloneListItemResponse(accessTokenId, parentId);
 
         assertThat(cloneResponse.getStatusCode()).isEqualTo(200);
 
-        ChildrenOfCategoryResponse rootItems = NotebookActions.getChildrenOfCategory(accessTokenId, rootId);
+        ChildrenOfCategoryResponse rootItems = CategoryActions.getChildrenOfCategory(accessTokenId, rootId);
         assertThat(rootItems.getChildren()).hasSize(2);
         assertThat(rootItems.getChildren().stream().allMatch(notebookView -> notebookView.getTitle().equals(PARENT_TITLE))).isTrue();
 
@@ -149,11 +154,11 @@ public class CloneListItemTest extends BackEndTest {
 
         UUID clonedParentId = clonedItem.getId();
 
-        ChildrenOfCategoryResponse clonedParentItems = NotebookActions.getChildrenOfCategory(accessTokenId, clonedParentId);
+        ChildrenOfCategoryResponse clonedParentItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedParentId);
         assertThat(clonedParentItems.getChildren()).hasSize(6);
 
         UUID clonedChildCategoryId = findByTitle(CHILD_CATEGORY_TITLE, clonedParentItems.getChildren()).getId();
-        ChildrenOfCategoryResponse clonedChildCategoryItems = NotebookActions.getChildrenOfCategory(accessTokenId, clonedChildCategoryId);
+        ChildrenOfCategoryResponse clonedChildCategoryItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedChildCategoryId);
         assertThat(clonedChildCategoryItems.getChildren()).hasSize(1);
 
         NotebookView linkItem = findByTitle(LINK_TITLE, clonedChildCategoryItems.getChildren());
@@ -162,7 +167,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView textItem = findByTitle(TEXT_TITLE, clonedParentItems.getChildren());
         assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT.name());
-        String textContent = NotebookActions.getText(accessTokenId, textItem.getId())
+        String textContent = TextActions.getText(accessTokenId, textItem.getId())
             .getContent();
         assertThat(textContent).isEqualTo(TEXT_CONTENT);
 
@@ -171,7 +176,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView checklistItem = findByTitle(CHECKLIST_TITLE, clonedParentItems.getChildren());
         assertThat(checklistItem.getType()).isEqualTo(ListItemType.CHECKLIST.name());
-        ChecklistResponse checklistData = NotebookActions.getChecklist(accessTokenId, checklistItem.getId());
+        ChecklistResponse checklistData = ChecklistActions.getChecklist(accessTokenId, checklistItem.getId());
         assertThat(checklistData.getItems()).hasSize(1);
         assertThat(checklistData.getItems().get(0).getIndex()).isEqualTo(0);
         assertThat(checklistData.getItems().get(0).getContent()).isEqualTo(CHECKLIST_ITEM_CONTENT);
@@ -179,7 +184,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView tableItem = findByTitle(TABLE_TITLE, clonedParentItems.getChildren());
         assertThat(tableItem.getType()).isEqualTo(ListItemType.TABLE.name());
-        TableResponse tableData = NotebookActions.getTable(accessTokenId, tableItem.getId());
+        TableResponse tableData = TableActions.getTable(accessTokenId, tableItem.getId());
         assertThat(tableData.getTableHeads()).hasSize(1);
         assertThat(tableData.getTableHeads().get(0).getContent()).isEqualTo(TABLE_COLUMN_NAME);
         assertThat(tableData.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -191,7 +196,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView checklistTableItem = findByTitle(CHECKLIST_TABLE_TITLE, clonedParentItems.getChildren());
         assertThat(checklistTableItem.getType()).isEqualTo(ListItemType.CHECKLIST_TABLE.name());
-        TableResponse checklistTableData = NotebookActions.getTable(accessTokenId, checklistTableItem.getId());
+        TableResponse checklistTableData = TableActions.getTable(accessTokenId, checklistTableItem.getId());
         assertThat(checklistTableData.getTableHeads()).hasSize(1);
         assertThat(checklistTableData.getTableHeads().get(0).getContent()).isEqualTo(CHECKLIST_TABLE_COLUMN_NAME);
         assertThat(checklistTableData.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);

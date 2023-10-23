@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item;
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.notebook.migration.table.UnencryptedListItem;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,8 @@ public class ListItemDaoTest {
     @Mock
     private ListItemEntity entity;
 
+    @Mock
+    private UnencryptedListItem unencryptedListItem;
 
     @Test
     public void getByUserIdAndType() {
@@ -113,5 +116,13 @@ public class ListItemDaoTest {
         List<ListItem> result = underTest.getByUserId(USER_ID);
 
         assertThat(result).containsExactly(domain);
+    }
+
+    @Test
+    void getAllUnencrypted(){
+        given(repository.findAll()).willReturn(List.of(entity));
+        given(converter.convertUnencrypted(List.of(entity))).willReturn(List.of(unencryptedListItem));
+
+        assertThat(underTest.getAllUnencrypted()).containsExactly(unencryptedListItem);
     }
 }

@@ -57,7 +57,6 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
     }
 
     @ForRemoval("notebook-redesign")
-    //TODO unit test
     public List<UnencryptedListItem> getAllUnencrypted() {
         return this.converter.convertUnencrypted(repository.findAll());
     }

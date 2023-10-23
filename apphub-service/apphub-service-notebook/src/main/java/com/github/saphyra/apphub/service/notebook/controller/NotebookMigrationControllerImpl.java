@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @ForRemoval("notebook-redesign")
-//TODO unit test
 public class NotebookMigrationControllerImpl implements NotebookMigrationController {
     private final ChecklistMigrationService checklistMigrationService;
     private final TableMigrationService tableMigrationService;

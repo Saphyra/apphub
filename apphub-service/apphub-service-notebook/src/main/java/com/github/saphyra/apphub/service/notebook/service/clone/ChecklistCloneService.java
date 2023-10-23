@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChecklistCloneService {
     private final DimensionDao dimensionDao;
     private final DimensionFactory dimensionFactory;

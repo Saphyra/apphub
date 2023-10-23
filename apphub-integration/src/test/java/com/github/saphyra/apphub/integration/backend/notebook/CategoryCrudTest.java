@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
@@ -45,7 +47,7 @@ public class CategoryCrudTest extends BackEndTest {
         CreateCategoryRequest create_emptyTitleRequest = CreateCategoryRequest.builder()
             .title(" ")
             .build();
-        Response create_emptyTitleResponse = NotebookActions.getCreateCategoryResponse(accessTokenId, create_emptyTitleRequest);
+        Response create_emptyTitleResponse = CategoryActions.getCreateCategoryResponse(accessTokenId, create_emptyTitleRequest);
         verifyInvalidParam(create_emptyTitleResponse, "title", "must not be null or blank");
     }
 
@@ -53,9 +55,9 @@ public class CategoryCrudTest extends BackEndTest {
         CreateCategoryRequest create_addToRootRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();
-        UUID parentCategoryId = NotebookActions.createCategory(accessTokenId, create_addToRootRequest);
+        UUID parentCategoryId = CategoryActions.createCategory(accessTokenId, create_addToRootRequest);
 
-        List<CategoryTreeView> categories = NotebookActions.getCategoryTree(accessTokenId);
+        List<CategoryTreeView> categories = CategoryActions.getCategoryTree(accessTokenId);
         assertThat(categories).hasSize(1);
         assertThat(categories.get(0).getCategoryId()).isEqualTo(parentCategoryId);
         assertThat(categories.get(0).getTitle()).isEqualTo(TITLE_1);
@@ -68,17 +70,17 @@ public class CategoryCrudTest extends BackEndTest {
             .title(TITLE_1)
             .parent(UUID.randomUUID())
             .build();
-        Response create_parentNotFoundResponse = NotebookActions.getCreateCategoryResponse(accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = CategoryActions.getCreateCategoryResponse(accessTokenId, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
     private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID noCategoryParentId = NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE_1).content("").build());
+        UUID noCategoryParentId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE_1).content("").build());
         CreateCategoryRequest create_parentNotCategoryRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .parent(noCategoryParentId)
             .build();
-        Response create_parentNotCategoryResponse = NotebookActions.getCreateCategoryResponse(accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = CategoryActions.getCreateCategoryResponse(accessTokenId, create_parentNotCategoryRequest);
 
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
@@ -88,9 +90,9 @@ public class CategoryCrudTest extends BackEndTest {
             .title(TITLE_2)
             .parent(parentCategoryId)
             .build();
-        UUID childCategoryId = NotebookActions.createCategory(accessTokenId, createRequest);
+        UUID childCategoryId = CategoryActions.createCategory(accessTokenId, createRequest);
 
-        List<CategoryTreeView> categoryTree = NotebookActions.getCategoryTree(accessTokenId);
+        List<CategoryTreeView> categoryTree = CategoryActions.getCategoryTree(accessTokenId);
         assertThat(categoryTree).hasSize(1);
         assertThat(categoryTree.get(0).getChildren()).hasSize(1);
         assertThat(categoryTree.get(0).getChildren().get(0).getCategoryId()).isEqualTo(childCategoryId);
@@ -103,12 +105,12 @@ public class CategoryCrudTest extends BackEndTest {
             .title("asd")
             .parent(parentCategoryId)
             .build();
-        UUID childId = NotebookActions.createCategory(accessTokenId, createChildRequest);
+        UUID childId = CategoryActions.createCategory(accessTokenId, createChildRequest);
         EditListItemRequest ownChildRequest = EditListItemRequest.builder()
             .parent(childId)
             .title(NEW_TITLE)
             .build();
-        Response ownChildResponse = NotebookActions.getEditListItemResponse(accessTokenId, ownChildRequest, parentCategoryId);
+        Response ownChildResponse = ListItemActions.getEditListItemResponse(accessTokenId, ownChildRequest, parentCategoryId);
         verifyErrorResponse(ownChildResponse, 400, ErrorCode.INVALID_PARAM, "parent", "must not be own child");
         return childId;
     }
@@ -118,21 +120,21 @@ public class CategoryCrudTest extends BackEndTest {
             .title("asd")
             .parent(parentCategoryId)
             .build();
-        UUID modifiedCategoryId = NotebookActions.createCategory(accessTokenId, createModifiedCategoryRequest);
+        UUID modifiedCategoryId = CategoryActions.createCategory(accessTokenId, createModifiedCategoryRequest);
         EditListItemRequest editListItemRequest = EditListItemRequest.builder()
             .parent(childId)
             .title(NEW_TITLE)
             .build();
-        NotebookActions.editListItem(accessTokenId, editListItemRequest, modifiedCategoryId);
+        ListItemActions.editListItem(accessTokenId, editListItemRequest, modifiedCategoryId);
 
-        ChildrenOfCategoryResponse childrenOfCategoryResponse = NotebookActions.getChildrenOfCategory(accessTokenId, childId);
+        ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(accessTokenId, childId);
         assertThat(childrenOfCategoryResponse.getChildren()).hasSize(1);
         NotebookView categoryView = childrenOfCategoryResponse.getChildren().get(0);
         assertThat(categoryView.getTitle()).isEqualTo(NEW_TITLE);
     }
 
     private static void delete(UUID accessTokenId, UUID parentCategoryId) {
-        NotebookActions.deleteListItem(accessTokenId, parentCategoryId);
-        assertThat(NotebookActions.getCategoryTree(accessTokenId)).isEmpty();
+        ListItemActions.deleteListItem(accessTokenId, parentCategoryId);
+        assertThat(CategoryActions.getCategoryTree(accessTokenId)).isEmpty();
     }
 }

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadRespons
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;
     private final ListItemDao listItemDao;

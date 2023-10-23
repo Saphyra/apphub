@@ -23,7 +23,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistCreationService checklistCreationService;
     private final ChecklistQueryService checklistQueryService;

@@ -25,6 +25,10 @@ public class TableColumnDeletionService {
             .forEach(this::deleteColumn);
     }
 
+    public void deleteColumn(UUID columnId) {
+        deleteColumn(dimensionDao.findByIdValidated(columnId));
+    }
+
     public void deleteColumn(Dimension column) {
         findColumnDataService(column.getDimensionId())
             .delete(column);
