@@ -1,7 +1,8 @@
 import Utils from "../../../../../common/js/Utils"
+import ItemType from "../../ItemType";
 
 const TableHeadData = class {
-    constructor(columnIndex, content = "", tableHeadId = Utils.generateRandomId()) {
+    constructor(columnIndex, content = "", tableHeadId = Utils.generateRandomId(), type = ItemType.NEW) {
         if (columnIndex === null || columnIndex === undefined) {
             Utils.throwException("IllegalArgument", "columnIndex must not be " + columnIndex);
         }
@@ -13,6 +14,7 @@ const TableHeadData = class {
         this.columnIndex = columnIndex;
         this.content = content;
         this.tableHeadId = tableHeadId;
+        this.type = type
     }
 }
 

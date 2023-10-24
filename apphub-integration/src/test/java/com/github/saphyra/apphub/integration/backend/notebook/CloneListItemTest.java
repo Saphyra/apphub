@@ -1,25 +1,32 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistItemNodeRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistResponse;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableResponse;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ChecklistTableRowRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistItemRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateChecklistTableRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
-import com.github.saphyra.apphub.integration.structure.api.notebook.TableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableColumnModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableHeadModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableRowModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -58,64 +65,81 @@ public class CloneListItemTest extends BackEndTest {
     }
 
     private static void listItemNotFound(UUID accessTokenId) {
-        Response response = NotebookActions.getCloneListItemResponse(accessTokenId, UUID.randomUUID());
+        Response response = ListItemActions.getCloneListItemResponse(accessTokenId, UUID.randomUUID());
         ResponseValidator.verifyErrorResponse(response, 404, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     private void clone(UUID accessTokenId) {
-        UUID rootId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
-        UUID parentId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
-        UUID childCategoryId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());
+        UUID rootId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ROOT_TITLE).build());
+        UUID parentId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).parent(rootId).build());
+        UUID childCategoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CHILD_CATEGORY_TITLE).parent(parentId).build());
 
-        NotebookActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
-        NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
-        NotebookActions.createOnlyTitle(accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
-        NotebookActions.createChecklist(
-
+        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
+        TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
+        OnlyTitleActions.createOnlyTitle(accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
+        ChecklistActions.createChecklist(
             accessTokenId,
-            CreateChecklistItemRequest.builder()
+            CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
                 .parent(parentId)
-                .nodes(Arrays.asList(ChecklistItemNodeRequest.builder()
-                    .order(0)
+                .items(Arrays.asList(ChecklistItemModel.builder()
+                    .index(0)
                     .checked(true)
                     .content(CHECKLIST_ITEM_CONTENT)
                     .build()))
                 .build()
         );
-        NotebookActions.createTable(
-
+        TableActions.createTable(
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
+                .listItemType(ListItemType.TABLE)
                 .parent(parentId)
-                .columnNames(Arrays.asList(TABLE_COLUMN_NAME))
-                .columns(Arrays.asList(Arrays.asList(TABLE_COLUMN_VALUE)))
-                .build()
-        );
-
-        NotebookActions.createChecklistTable(
-
-            accessTokenId,
-            CreateChecklistTableRequest.builder()
-                .title(CHECKLIST_TABLE_TITLE)
-                .parent(parentId)
-                .columnNames(Arrays.asList(CHECKLIST_TABLE_COLUMN_NAME))
-                .rows(Arrays.asList(ChecklistTableRowRequest.<String>builder()
-                    .checked(true)
-                    .columns(Arrays.asList(CHECKLIST_TABLE_COLUMN_VALUE))
+                .tableHeads(List.of(TableHeadModel.builder()
+                    .columnIndex(0)
+                    .content(TABLE_COLUMN_NAME)
+                    .build()))
+                .rows(List.of(TableRowModel.builder()
+                    .rowIndex(0)
+                    .columns(List.of(TableColumnModel.builder()
+                        .columnType(ColumnType.TEXT)
+                        .columnIndex(0)
+                        .data(TABLE_COLUMN_VALUE)
+                        .build()))
                     .build()))
                 .build()
         );
 
-        NotebookActions.archive(accessTokenId, parentId, true);
-        NotebookActions.pin(accessTokenId, parentId, true);
+        TableActions.createTable(
+            accessTokenId,
+            CreateTableRequest.builder()
+                .title(CHECKLIST_TABLE_TITLE)
+                .listItemType(ListItemType.CHECKLIST_TABLE)
+                .parent(parentId)
+                .tableHeads(List.of(TableHeadModel.builder()
+                    .columnIndex(0)
+                    .content(CHECKLIST_TABLE_COLUMN_NAME)
+                    .build()))
+                .rows(List.of(TableRowModel.builder()
+                    .rowIndex(0)
+                        .checked(true)
+                    .columns(List.of(TableColumnModel.builder()
+                        .columnType(ColumnType.TEXT)
+                        .columnIndex(0)
+                        .data(CHECKLIST_TABLE_COLUMN_VALUE)
+                        .build()))
+                    .build()))
+                .build()
+        );
 
-        Response cloneResponse = NotebookActions.getCloneListItemResponse(accessTokenId, parentId);
+        ListItemActions.archive(accessTokenId, parentId, true);
+        ListItemActions.pin(accessTokenId, parentId, true);
+
+        Response cloneResponse = ListItemActions.getCloneListItemResponse(accessTokenId, parentId);
 
         assertThat(cloneResponse.getStatusCode()).isEqualTo(200);
 
-        ChildrenOfCategoryResponse rootItems = NotebookActions.getChildrenOfCategory(accessTokenId, rootId);
+        ChildrenOfCategoryResponse rootItems = CategoryActions.getChildrenOfCategory(accessTokenId, rootId);
         assertThat(rootItems.getChildren()).hasSize(2);
         assertThat(rootItems.getChildren().stream().allMatch(notebookView -> notebookView.getTitle().equals(PARENT_TITLE))).isTrue();
 
@@ -130,11 +154,11 @@ public class CloneListItemTest extends BackEndTest {
 
         UUID clonedParentId = clonedItem.getId();
 
-        ChildrenOfCategoryResponse clonedParentItems = NotebookActions.getChildrenOfCategory(accessTokenId, clonedParentId);
+        ChildrenOfCategoryResponse clonedParentItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedParentId);
         assertThat(clonedParentItems.getChildren()).hasSize(6);
 
         UUID clonedChildCategoryId = findByTitle(CHILD_CATEGORY_TITLE, clonedParentItems.getChildren()).getId();
-        ChildrenOfCategoryResponse clonedChildCategoryItems = NotebookActions.getChildrenOfCategory(accessTokenId, clonedChildCategoryId);
+        ChildrenOfCategoryResponse clonedChildCategoryItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedChildCategoryId);
         assertThat(clonedChildCategoryItems.getChildren()).hasSize(1);
 
         NotebookView linkItem = findByTitle(LINK_TITLE, clonedChildCategoryItems.getChildren());
@@ -143,7 +167,7 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView textItem = findByTitle(TEXT_TITLE, clonedParentItems.getChildren());
         assertThat(textItem.getType()).isEqualTo(ListItemType.TEXT.name());
-        String textContent = NotebookActions.getText(accessTokenId, textItem.getId())
+        String textContent = TextActions.getText(accessTokenId, textItem.getId())
             .getContent();
         assertThat(textContent).isEqualTo(TEXT_CONTENT);
 
@@ -152,34 +176,36 @@ public class CloneListItemTest extends BackEndTest {
 
         NotebookView checklistItem = findByTitle(CHECKLIST_TITLE, clonedParentItems.getChildren());
         assertThat(checklistItem.getType()).isEqualTo(ListItemType.CHECKLIST.name());
-        ChecklistResponse checklistData = NotebookActions.getChecklist(accessTokenId, checklistItem.getId());
-        assertThat(checklistData.getNodes()).hasSize(1);
-        assertThat(checklistData.getNodes().get(0).getOrder()).isEqualTo(0);
-        assertThat(checklistData.getNodes().get(0).getContent()).isEqualTo(CHECKLIST_ITEM_CONTENT);
-        assertThat(checklistData.getNodes().get(0).getChecked()).isTrue();
+        ChecklistResponse checklistData = ChecklistActions.getChecklist(accessTokenId, checklistItem.getId());
+        assertThat(checklistData.getItems()).hasSize(1);
+        assertThat(checklistData.getItems().get(0).getIndex()).isEqualTo(0);
+        assertThat(checklistData.getItems().get(0).getContent()).isEqualTo(CHECKLIST_ITEM_CONTENT);
+        assertThat(checklistData.getItems().get(0).getChecked()).isTrue();
 
         NotebookView tableItem = findByTitle(TABLE_TITLE, clonedParentItems.getChildren());
         assertThat(tableItem.getType()).isEqualTo(ListItemType.TABLE.name());
-        TableResponse tableData = NotebookActions.getTable(accessTokenId, tableItem.getId());
+        TableResponse tableData = TableActions.getTable(accessTokenId, tableItem.getId());
         assertThat(tableData.getTableHeads()).hasSize(1);
         assertThat(tableData.getTableHeads().get(0).getContent()).isEqualTo(TABLE_COLUMN_NAME);
         assertThat(tableData.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableData.getTableColumns()).hasSize(1);
-        assertThat(tableData.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableData.getTableColumns().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableData.getTableColumns().get(0).getContent()).isEqualTo(TABLE_COLUMN_VALUE);
+        assertThat(tableData.getRows()).hasSize(1);
+        assertThat(tableData.getRows().get(0).getRowIndex()).isEqualTo(0);
+        assertThat(tableData.getRows().get(0).getColumns()).hasSize(1);
+        assertThat(tableData.getRows().get(0).getColumns().get(0).getData()).isEqualTo(TABLE_COLUMN_VALUE);
+        assertThat(tableData.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
 
         NotebookView checklistTableItem = findByTitle(CHECKLIST_TABLE_TITLE, clonedParentItems.getChildren());
         assertThat(checklistTableItem.getType()).isEqualTo(ListItemType.CHECKLIST_TABLE.name());
-        ChecklistTableResponse checklistTableData = NotebookActions.getChecklistTable(accessTokenId, checklistTableItem.getId());
+        TableResponse checklistTableData = TableActions.getTable(accessTokenId, checklistTableItem.getId());
         assertThat(checklistTableData.getTableHeads()).hasSize(1);
         assertThat(checklistTableData.getTableHeads().get(0).getContent()).isEqualTo(CHECKLIST_TABLE_COLUMN_NAME);
         assertThat(checklistTableData.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(checklistTableData.getTableColumns()).hasSize(1);
-        assertThat(checklistTableData.getTableColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(checklistTableData.getTableColumns().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(checklistTableData.getTableColumns().get(0).getContent()).isEqualTo(CHECKLIST_TABLE_COLUMN_VALUE);
-        assertThat(checklistTableData.getRowStatus().get(0).getChecked()).isTrue();
+        assertThat(checklistTableData.getRows()).hasSize(1);
+        assertThat(checklistTableData.getRows().get(0).getRowIndex()).isEqualTo(0);
+        assertThat(checklistTableData.getRows().get(0).getChecked()).isTrue();
+        assertThat(checklistTableData.getRows().get(0).getColumns()).hasSize(1);
+        assertThat(checklistTableData.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
+        assertThat(checklistTableData.getRows().get(0).getColumns().get(0).getData()).isEqualTo(CHECKLIST_TABLE_COLUMN_VALUE);
     }
 
     private NotebookView findByTitle(String title, List<NotebookView> views) {

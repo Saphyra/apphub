@@ -1,0 +1,42 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-migration_task" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="admin_panel" tableName="migration_task"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="admin_panel" tableName="migration_task">
+            <column name="event" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text"/>
+            <column name="completed" type="boolean" defaultValueBoolean="false"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="admin_panel" tableName="migration_task" columnNames="event" constraintName="migration_task-pk"/>
+    </changeSet>
+
+    <changeSet id="add-migration-task-migrate-notebook-checklists" author="sahyra">
+        <comment>@ForRemoval("notebook-redesign")</comment>
+
+        <insert schemaName="admin_panel" tableName="migration_task">
+            <column name="event" value="notebook-migrate-checklists"/>
+            <column name="name" value="Migrate Notebook Checklists to the new structure"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add-migration-task-migrate-notebook-tables" author="sahyra">
+        <comment>@ForRemoval("notebook-redesign")</comment>
+
+        <insert schemaName="admin_panel" tableName="migration_task">
+            <column name="event" value="notebook-migrate-tables"/>
+            <column name="name" value="Migrate Notebook Tables and Checklist Tables to the new structure"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

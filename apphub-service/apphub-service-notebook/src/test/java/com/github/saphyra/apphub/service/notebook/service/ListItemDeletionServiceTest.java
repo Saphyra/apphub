@@ -1,14 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
+import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist_table.ChecklistTableDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.custom_table.CustomTableDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,19 +32,13 @@ public class ListItemDeletionServiceTest {
     private ContentDao contentDao;
 
     @Mock
-    private ChecklistItemDao checklistItemDao;
+    private ChecklistDeletionService checklistDeletionService;
 
     @Mock
     private TableDeletionService tableDeletionService;
 
     @Mock
-    private ChecklistTableDeletionService checklistTableDeletionService;
-
-    @Mock
     private FileDeletionService fileDeletionService;
-
-    @Mock
-    private CustomTableDeletionService customTableDeletionService;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -57,9 +48,6 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private ListItem child;
-
-    @Mock
-    private ChecklistItem checklistItem;
 
     @Test
     public void deleteCategory() {
@@ -118,38 +106,33 @@ public class ListItemDeletionServiceTest {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.CHECKLIST);
-        given(checklistItemDao.getByParent(LIST_ITEM_ID_1)).willReturn(Arrays.asList(checklistItem));
-        given(checklistItem.getChecklistItemId()).willReturn(CHECKLIST_ITEM_ID);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(contentDao).deleteByParent(CHECKLIST_ITEM_ID);
-        verify(checklistItemDao).delete(checklistItem);
+        verify(checklistDeletionService).delete(LIST_ITEM_ID_1);
     }
 
     @Test
     public void deleteTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
-        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.TABLE);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(tableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
+        verify(tableDeletionService).delete(deleted);
     }
 
     @Test
     public void deleteChecklistTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
-        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.CHECKLIST_TABLE);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(checklistTableDeletionService).deleteByListItemId(LIST_ITEM_ID_1);
+        verify(tableDeletionService).delete(deleted);
     }
 
     @Test
@@ -184,6 +167,6 @@ public class ListItemDeletionServiceTest {
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
         verify(listItemDao).delete(deleted);
-        verify(customTableDeletionService).delete(deleted);
+        verify(tableDeletionService).delete(deleted);
     }
 }

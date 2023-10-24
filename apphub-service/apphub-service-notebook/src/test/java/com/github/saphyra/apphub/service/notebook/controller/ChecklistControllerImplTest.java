@@ -1,17 +1,18 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateChecklistRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditChecklistItemRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.ChecklistResponse;
+import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistResponse;
+import com.github.saphyra.apphub.api.notebook.model.checklist.CreateChecklistRequest;
+import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemQueryService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemsOrderService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.creation.ChecklistCreationService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.edition.EditChecklistItemService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistStatusUpdateService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.DeleteCheckedItemsOfChecklistService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.OrderChecklistItemsService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.create.ChecklistCreationService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.edit.EditChecklistService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.query.ChecklistQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,110 +23,100 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class ChecklistControllerImplTest {
-    private static final UUID USER_ID = UUID.randomUUID();
+class ChecklistControllerImplTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
     private ChecklistCreationService checklistCreationService;
 
     @Mock
-    private EditChecklistItemService editChecklistItemService;
+    private ChecklistQueryService checklistQueryService;
 
     @Mock
-    private ChecklistItemQueryService checklistItemQueryService;
-
-    @Mock
-    private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
+    private ChecklistStatusUpdateService checklistStatusUpdateService;
 
     @Mock
     private ChecklistItemDeletionService checklistItemDeletionService;
 
     @Mock
-    private ChecklistItemsOrderService checklistItemsOrderService;
+    private DeleteCheckedItemsOfChecklistService deleteCheckedItemsOfChecklistService;
+
+    @Mock
+    private OrderChecklistItemsService orderChecklistItemsService;
+
+    @Mock
+    private EditChecklistService editChecklistService;
 
     @InjectMocks
     private ChecklistControllerImpl underTest;
 
     @Mock
+    private CreateChecklistRequest createChecklistRequest;
+
+    @Mock
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private CreateChecklistRequest createChecklistRequest;
+    private EditChecklistRequest editChecklistRequest;
 
     @Mock
     private ChecklistResponse checklistResponse;
 
-    @Mock
-    private EditChecklistItemRequest editChecklistItemRequest;
-
     @Test
-    public void createChecklistItem() {
-        given(checklistCreationService.create(createChecklistRequest, USER_ID)).willReturn(LIST_ITEM_ID);
+    void createChecklist() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(checklistCreationService.create(USER_ID, createChecklistRequest)).willReturn(LIST_ITEM_ID);
 
-        OneParamResponse<UUID> result = underTest.createChecklist(createChecklistRequest, accessTokenHeader);
-
-        assertThat(result.getValue()).isEqualTo(LIST_ITEM_ID);
+        assertThat(underTest.createChecklist(createChecklistRequest, accessTokenHeader))
+            .extracting(OneParamResponse::getValue)
+            .isEqualTo(LIST_ITEM_ID);
     }
 
     @Test
-    public void editChecklistItem() {
-        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
+    void editChecklist() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(editChecklistService.edit(USER_ID, LIST_ITEM_ID, editChecklistRequest)).willReturn(checklistResponse);
 
-        ChecklistResponse result = underTest.editChecklist(editChecklistItemRequest, LIST_ITEM_ID);
-
-        verify(editChecklistItemService).edit(editChecklistItemRequest, LIST_ITEM_ID);
-
-        assertThat(result).isEqualTo(checklistResponse);
+        assertThat(underTest.editChecklist(editChecklistRequest, LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
     }
 
     @Test
-    public void getChecklistItem() {
-        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
+    void getChecklist() {
+        given(checklistQueryService.getChecklistResponse(LIST_ITEM_ID)).willReturn(checklistResponse);
 
-        ChecklistResponse result = underTest.getChecklist(LIST_ITEM_ID);
-
-        assertThat(result).isEqualTo(checklistResponse);
+        assertThat(underTest.getChecklist(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
     }
 
     @Test
-    public void updateStatus() {
-        underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID);
+    void updateStatus() {
+        underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID, accessTokenHeader);
 
-        verify(checklistItemStatusUpdateService).update(CHECKLIST_ITEM_ID, true);
+        then(checklistStatusUpdateService).should().updateStatus(CHECKLIST_ITEM_ID, true);
     }
 
     @Test
-    public void deleteCheckedItems() {
-        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
-
-        ChecklistResponse result = underTest.deleteCheckedItems(LIST_ITEM_ID);
-
-        verify(checklistItemDeletionService).deleteCheckedItems(LIST_ITEM_ID);
-
-        assertThat(result).isEqualTo(checklistResponse);
-    }
-
-    @Test
-    public void orderItems() {
-        given(checklistItemQueryService.query(LIST_ITEM_ID)).willReturn(checklistResponse);
-
-        ChecklistResponse result = underTest.orderItems(LIST_ITEM_ID);
-
-        verify(checklistItemsOrderService).orderChecklistItems(LIST_ITEM_ID);
-
-        assertThat(result).isEqualTo(checklistResponse);
-    }
-
-    @Test
-    void deleteChecklistItem() {
+    void deleteCheckedItem() {
         underTest.deleteChecklistItem(CHECKLIST_ITEM_ID, accessTokenHeader);
 
-        verify(checklistItemDeletionService).delete(CHECKLIST_ITEM_ID);
+        then(checklistItemDeletionService).should().deleteChecklistItem(CHECKLIST_ITEM_ID);
+    }
+
+    @Test
+    void deleteCheckedItems() {
+        given(deleteCheckedItemsOfChecklistService.deleteCheckedItems(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        assertThat(underTest.deleteCheckedItems(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
+    }
+
+    @Test
+    void orderItems() {
+        given(orderChecklistItemsService.orderItems(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        assertThat(underTest.orderItems(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
     }
 }

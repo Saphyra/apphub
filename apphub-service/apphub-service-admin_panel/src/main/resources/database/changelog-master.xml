@@ -4,4 +4,5 @@
     </changeSet>
 
     <include file="database/change_sets/error_report.xml"/>
+    <include file="database/change_sets/migration_task.xml"/>
 </databaseChangeLog>

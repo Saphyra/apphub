@@ -27,7 +27,7 @@ public class ContentDao extends AbstractDao<ContentEntity, Content, String, Cont
 
     public Content findByParentValidated(UUID parent) {
         return findByParent(parent)
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "Content not found by parent."));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Content not found by parent " + parent));
     }
 
     public Optional<Content> findByParent(UUID parent) {

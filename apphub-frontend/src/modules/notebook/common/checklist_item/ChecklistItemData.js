@@ -1,16 +1,17 @@
 import Utils from "../../../../common/js/Utils";
+import ItemType from "../ItemType";
 
 const ChecklistItemData = class {
-    constructor(order, content = "", checked = false, checklistItemId = null) {
-        if (order === null || order === undefined) {
-            Utils.throwException("IllegalArgument", "order must be set. Currently it is " + order);
+    constructor(index, content = "", checked = false, checklistItemId = Utils.generateRandomId(), type = ItemType.NEW) {
+        if (index === null || index === undefined) {
+            Utils.throwException("IllegalArgument", "index must be set. Currently it is " + index);
         }
 
         this.checklistItemId = checklistItemId || Utils.generateRandomId();
-        this.order = order;
+        this.index = index;
         this.content = content;
         this.checked = checked;
-        this.new = checklistItemId == null;
+        this.type = type;
     }
 }
 

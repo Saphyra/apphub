@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
@@ -23,7 +25,7 @@ public class ArchiveTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        UUID listItemId = NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID listItemId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
 
         archive_nullArchived(accessTokenId, listItemId);
         archive(accessTokenId, listItemId);
@@ -31,14 +33,14 @@ public class ArchiveTest extends BackEndTest {
     }
 
     private static void archive_nullArchived(UUID accessTokenId, UUID listItemId) {
-        Response pin_nullPinnedResponse = NotebookActions.getArchiveResponse(accessTokenId, listItemId, null);
+        Response pin_nullPinnedResponse = ListItemActions.getArchiveResponse(accessTokenId, listItemId, null);
         ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "archived", "must not be null");
     }
 
     private static void archive(UUID accessTokenId, UUID listItemId) {
-        NotebookActions.archive(accessTokenId, listItemId, true);
+        ListItemActions.archive(accessTokenId, listItemId, true);
 
-        List<NotebookView> pinnedItems = NotebookActions.getChildrenOfCategory(accessTokenId, null)
+        List<NotebookView> pinnedItems = CategoryActions.getChildrenOfCategory(accessTokenId, null)
             .getChildren();
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
@@ -47,9 +49,9 @@ public class ArchiveTest extends BackEndTest {
 
     private static void unarchive(UUID accessTokenId, UUID listItemId) {
         List<NotebookView> pinnedItems;
-        NotebookActions.archive(accessTokenId, listItemId, false);
+        ListItemActions.archive(accessTokenId, listItemId, false);
 
-        pinnedItems = NotebookActions.getChildrenOfCategory(accessTokenId, null)
+        pinnedItems = CategoryActions.getChildrenOfCategory(accessTokenId, null)
             .getChildren();
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);

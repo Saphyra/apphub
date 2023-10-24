@@ -131,4 +131,10 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(field, "failed to parse", e);
         }
     }
+
+    public static void equals(Object value, Object expected, String field) {
+        if (!Objects.equals(value, expected)) {
+            throw ExceptionFactory.invalidParam(field, "must be " + expected);
+        }
+    }
 }

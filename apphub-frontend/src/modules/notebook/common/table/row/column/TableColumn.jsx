@@ -3,7 +3,7 @@ import InputField from "../../../../../../common/component/input/InputField";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
     const updateContent = (newValue) => {
-        columnData.content = newValue;
+        columnData.data = newValue;
         updateColumn();
     }
     if (editingEnabled) {
@@ -13,14 +13,14 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true }) => {
                     className="notebook-table-column-input"
                     type="text"
                     onchangeCallback={updateContent}
-                    value={columnData.content}
+                    value={columnData.data}
                 />
             </td>
         )
     } else {
         return (
             <td className="table-column">
-                {columnData.content}
+                {columnData.data}
             </td>
         );
     }

@@ -61,7 +61,7 @@ public class ContentDaoTest {
 
         Throwable ex = catchThrowable(() -> underTest.findByParentValidated(PARENT));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test

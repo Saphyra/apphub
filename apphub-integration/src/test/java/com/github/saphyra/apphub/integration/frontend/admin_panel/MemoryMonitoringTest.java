@@ -48,7 +48,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.MEMORY_MONITORING);

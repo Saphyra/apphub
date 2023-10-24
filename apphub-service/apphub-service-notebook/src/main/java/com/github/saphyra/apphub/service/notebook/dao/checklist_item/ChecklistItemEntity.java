@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@ForRemoval("notebook-redesign")
 class ChecklistItemEntity {
     @Id
     private String checklistItemId;

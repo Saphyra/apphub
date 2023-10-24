@@ -23,6 +23,15 @@ public class ExceptionValidator {
         validateRestException((RestException) ex, status, errorCode);
     }
 
+    public static void validateReportedException(Throwable ex, HttpStatus status) {
+        validateReportedException(ex, status, ErrorCode.GENERAL_ERROR);
+    }
+
+    public static void validateReportedException(Throwable ex, HttpStatus status, ErrorCode errorCode, String field, String value) {
+        assertThat(ex).isInstanceOf(ReportedException.class);
+        validateRestException((RestException) ex, status, errorCode, field, value);
+    }
+
     public static void validateNotLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex).isInstanceOf(NotLoggedException.class);
         validateRestException((RestException) ex, status, errorCode);

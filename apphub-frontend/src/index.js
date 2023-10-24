@@ -25,6 +25,7 @@ import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
 import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
 import NewCustomTable from './modules/notebook/new/new_custom_table/NewCustomTable';
 import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMonitoring';
+import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
 
 const router = createBrowserRouter([
   {
@@ -162,6 +163,10 @@ const router = createBrowserRouter([
   {
     path: "/web/admin-panel/memory-monitoring",
     element: <MemoryMonitoring />
+  },
+  {
+    path: "/web/admin-panel/migration-tasks",
+    element: <MigrationTasksPage />
   }
 ]);
 

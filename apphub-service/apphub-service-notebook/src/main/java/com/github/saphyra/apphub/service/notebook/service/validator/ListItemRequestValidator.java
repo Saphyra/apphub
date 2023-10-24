@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class ListItemRequestValidator {
 
         if (!isNull(parent)) {
             Optional<ListItem> listItem = listItemDao.findById(parent);
-            if (!listItem.isPresent()) {
+            if (listItem.isEmpty()) {
                 throw ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.CATEGORY_NOT_FOUND, "Category not found with id " + parent);
             }
 

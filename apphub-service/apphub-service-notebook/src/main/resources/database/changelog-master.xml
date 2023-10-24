@@ -17,4 +17,7 @@
     <include file="database/change_sets/table_join.xml"/>
     <include file="database/change_sets/checklist_table_row.xml"/>
     <include file="database/change_sets/file.xml"/>
+    <include file="database/change_sets/checked_item.xml"/>
+    <include file="database/change_sets/column_type.xml"/>
+    <include file="database/change_sets/dimension.xml"/>
 </databaseChangeLog>

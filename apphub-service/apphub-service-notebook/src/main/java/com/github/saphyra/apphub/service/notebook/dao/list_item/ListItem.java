@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

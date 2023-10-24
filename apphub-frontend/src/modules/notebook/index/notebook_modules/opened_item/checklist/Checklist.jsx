@@ -45,7 +45,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
     const setDataFromResponse = (response) => {
         setTitle(response.title);
-        setItems(response.nodes);
+        setItems(response.items);
         setParent(response.parent);
     }
 
@@ -59,7 +59,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         }
 
         return new Stream(items)
-            .sorted((a, b) => a.order - b.order)
+            .sorted((a, b) => a.index - b.index)
             .map(item =>
                 <ChecklistItem
                     key={item.checklistItemId}
@@ -75,13 +75,13 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     }
 
     const addItem = () => {
-        const order = new Stream(items)
-            .map(item => item.order)
+        const index = new Stream(items)
+            .map(item => item.index)
             .max()
             .orElse(0)
             + 1
 
-        const newRow = new ChecklistItemData(order);
+        const newRow = new ChecklistItemData(index);
         const copy = new Stream(items)
             .add(newRow)
             .toList();
@@ -145,7 +145,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
     const moveItem = (item, moveDirection) => {
         const orderedItems = new Stream(items)
-            .sorted((a, b) => a.order - b.order)
+            .sorted((a, b) => a.index - b.index)
             .toList();
 
         const itemIndex = orderedItems.indexOf(item);
@@ -169,11 +169,11 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             return;
         }
 
-        const originalOrder = item.order;
-        const newOrder = otherItem.order;
+        const originalOrder = item.index;
+        const newOrder = otherItem.index;
 
-        item.order = newOrder;
-        otherItem.order = originalOrder;
+        item.index = newOrder;
+        otherItem.index = originalOrder;
 
         updateItem();
     }
@@ -214,13 +214,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
 
         const payload = {
             title: title,
-            nodes: new Stream(items)
-                .peek(item => {
-                    if (item.new) {
-                        item.checklistItemId = null;
-                    }
-                })
-                .toList()
+            items: items
         }
 
         const response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST.createRequest(payload, { listItemId: openedListItem.id })
@@ -300,7 +294,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     }
 
     return (
-        <div id="notebook-content-checklist" className="notebook-content notebook-content-view">
+        <div id="notebook-content-checklist" className={"notebook-content notebook-content-view" + (editingEnabled ? " editable" : "")}>
             <OpenedListItemHeader
                 localizationHandler={localizationHandler}
                 title={title}

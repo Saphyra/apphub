@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
@@ -23,7 +24,7 @@ public class PinTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        UUID listItemId = NotebookActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID listItemId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
 
         pin_nullPinned(accessTokenId, listItemId);
         pin(accessTokenId, listItemId);
@@ -31,23 +32,23 @@ public class PinTest extends BackEndTest {
     }
 
     private static void pin_nullPinned(UUID accessTokenId, UUID listItemId) {
-        Response pin_nullPinnedResponse = NotebookActions.getPinResponse(accessTokenId, listItemId, null);
+        Response pin_nullPinnedResponse = ListItemActions.getPinResponse(accessTokenId, listItemId, null);
         ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "pinned", "must not be null");
     }
 
     private static void pin(UUID accessTokenId, UUID listItemId) {
-        NotebookActions.pin(accessTokenId, listItemId, true);
+        ListItemActions.pin(accessTokenId, listItemId, true);
 
-        List<NotebookView> pinnedItems = NotebookActions.getPinnedItems(accessTokenId);
+        List<NotebookView> pinnedItems = ListItemActions.getPinnedItems(accessTokenId);
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
     }
 
     private static void unpin(UUID accessTokenId, UUID listItemId) {
         List<NotebookView> pinnedItems;
-        NotebookActions.pin(accessTokenId, listItemId, false);
+        ListItemActions.pin(accessTokenId, listItemId, false);
 
-        pinnedItems = NotebookActions.getPinnedItems(accessTokenId);
+        pinnedItems = ListItemActions.getPinnedItems(accessTokenId);
         assertThat(pinnedItems).isEmpty();
     }
 }

@@ -51,7 +51,7 @@ const MemoryMonitoring = () => {
 
     return (
         <div id="memory-monitoring" className="main-page">
-            <Header label={localizationHandler.get("title")} />
+            <Header label={localizationHandler.get("page-title")} />
 
             <main>
                 <Durations

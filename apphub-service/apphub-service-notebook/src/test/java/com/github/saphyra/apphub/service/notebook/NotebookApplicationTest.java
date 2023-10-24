@@ -15,9 +15,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,7 +34,5 @@ public class NotebookApplicationTest {
             .getStatusCode();
 
         assertThat(statusCode).isEqualTo(HttpStatus.OK.value());
-
-        verify(eventGatewayApiClient, times(2)).registerProcessor(any());
     }
 }

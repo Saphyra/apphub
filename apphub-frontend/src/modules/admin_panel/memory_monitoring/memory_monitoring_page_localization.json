@@ -3,6 +3,10 @@
         "en": "Memory monitoring - Admin panel - Apphub",
         "hu": "Memória felhasználás - Kezelőfelület - Apphub"
     },
+    "page-title": {
+        "en": "Memory monitoring",
+        "hu": "Memória felhasználás"
+    },
     "home": {
         "en": "Home",
         "hu": "Kezdőlap"

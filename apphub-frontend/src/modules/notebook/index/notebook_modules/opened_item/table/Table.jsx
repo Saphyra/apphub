@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import TableHeadData from "../../../../common/table/table_head/TableHeadData";
-import MapStream from "../../../../../../common/js/collection/MapStream";
 import TableColumnData from "../../../../common/table/row/column/TableColumnData";
 import TableRowData from "../../../../common/table/row/TableRowData";
 import Button from "../../../../../../common/component/input/Button";
@@ -22,7 +21,14 @@ import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 
-const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, checklist, setConfirmationDialogData }) => {
+const Table = ({
+    localizationHandler,
+    openedListItem,
+    setOpenedListItem,
+    setLastEvent,
+    checklist,
+    setConfirmationDialogData
+}) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
@@ -41,9 +47,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     //System
     const loadTable = () => {
         const fetch = async () => {
-            const endpoint = checklist ? Endpoints.NOTEBOOK_GET_CHECKLIST_TABLE : Endpoints.NOTEBOOK_GET_TABLE;
-
-            const response = await endpoint.createRequest(null, { listItemId: openedListItem.id })
+            const response = await Endpoints.NOTEBOOK_GET_TABLE.createRequest(null, { listItemId: openedListItem.id })
                 .send();
 
             setDataFromResponse(response);
@@ -54,43 +58,8 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
     const setDataFromResponse = (response) => {
         setTitle(response.title);
         setParent(response.parent);
-        const theads = new Stream(response.tableHeads)
-            .map(data => new TableHeadData(
-                data.columnIndex,
-                data.content,
-                data.tableHeadId
-            ))
-            .toList();
-        setTableHeads(theads);
-
-        const tableColumnMapping = {};
-        new Stream(response.tableColumns)
-            .forEach(tableColumn => {
-                if (!tableColumnMapping[tableColumn.rowIndex]) {
-                    tableColumnMapping[tableColumn.rowIndex] = [];
-                }
-
-                tableColumnMapping[tableColumn.rowIndex].push(tableColumn);
-            });
-
-        const trows = new MapStream(tableColumnMapping)
-            .toList((rowIndex, columns) => {
-                const columnDataList = new Stream(columns)
-                    .map(column => new TableColumnData(
-                        column.columnIndex,
-                        column.content,
-                        column.tableJoinId
-                    ))
-                    .toList();
-
-                return new TableRowData(
-                    Number(rowIndex),
-                    columnDataList,
-                    checklist ? response.rowStatus[rowIndex].checked : false,
-                    checklist ? response.rowStatus[rowIndex].rowId : undefined
-                );
-            });
-        setRows(trows);
+        setTableHeads(response.tableHeads);
+        setRows(response.rows);
     }
 
     const updateTableHead = () => {
@@ -175,12 +144,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
             return;
         }
 
-        const columnNames = new Stream(tableHeads)
-            .map(tableHead => tableHead.content)
-            .peek(content => console.log(content))
-            .toList();
-
-        const tableHeadNameValidationResult = validateTableHeadNames(columnNames);
+        const tableHeadNameValidationResult = validateTableHeadNames(tableHeads);
         if (!tableHeadNameValidationResult.valid) {
             NotificationService.showError(tableHeadNameValidationResult.message);
             return;
@@ -188,57 +152,16 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
         const tablePayload = {
             title: title,
-            tableHeads: new Stream(tableHeads)
-                .sorted((a, b) => a.columnIndex - b.columnIndex)
-                .map(tableHead => {
-                    return {
-                        tableHeadId: tableHead.tableHeadId,
-                        columnIndex: tableHead.columnIndex,
-                        columnName: tableHead.content
-                    }
-                })
-                .toList(),
-            columns: new Stream(rows)
-                .flatMap(row =>
-                    new Stream(row.columns)
-                        .map(column => {
-                            return {
-                                tableJoinId: column.columnId,
-                                rowIndex: row.rowIndex,
-                                columnIndex: column.columnIndex,
-                                content: column.content
-                            }
-                        })
-                )
-                .toList()
+            tableHeads: tableHeads,
+            rows: rows
         }
 
-        let response;
-        if (checklist) {
-            const payload = {
-                table: tablePayload,
-                rows: new Stream(rows)
-                    .map(row => {
-                        return {
-                            rowId: row.rowId,
-                            rowIndex: row.rowIndex,
-                            checked: row.checked
-                        }
-                    })
-                    .toList()
-            };
-            response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST_TABLE.createRequest(payload, { listItemId: openedListItem.id })
-                .send();
-
-        } else {
-            response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: openedListItem.id })
-                .send();
-        }
-
+        const response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: openedListItem.id })
+            .send();
 
         setEditingEnabled(false);
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
-        setDataFromResponse(response);
+        setDataFromResponse(response.tableResponse);
     }
 
     const confirmDeleteChcecked = () => {
@@ -263,39 +186,8 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
         ));
     }
 
-    const convertToChecklistTableDialog = () => {
-        setConfirmationDialogData(new ConfirmationDialogData(
-            "notebook-content-table-conversion-confirmation",
-            localizationHandler.get("confirm-table-conversion-title"),
-            localizationHandler.get("confirm-table-conversion-content"),
-            [
-                <Button
-                    key="delete"
-                    id="notebook-content-table-conversion-confirm-button"
-                    label={localizationHandler.get("confirm-table-conversion")}
-                    onclick={convertToChecklistTable}
-                />,
-                <Button
-                    key="cancel"
-                    id="notebook-content-table-conversion-cancel-button"
-                    label={localizationHandler.get("cancel")}
-                    onclick={() => setConfirmationDialogData(null)}
-                />
-            ]
-        ));
-    }
-
-    const convertToChecklistTable = async () => {
-        await Endpoints.NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE.createRequest(null, { listItemId: openedListItem.id })
-            .send();
-
-        setConfirmationDialogData(null);
-        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
-        setOpenedListItem({ id: openedListItem.id, type: ListItemType.CHECKLIST_TABLE });
-    }
-
     const deleteChecked = async () => {
-        const response = await Endpoints.NOTEBOOK_CHECKLIST_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
+        const response = await Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
             .send();
 
         setDataFromResponse(response);
@@ -456,7 +348,7 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
 
     const updateChecked = (row) => {
         if (!editingEnabled) {
-            Endpoints.NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
+            Endpoints.NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
                 .send();
         }
 
@@ -526,14 +418,6 @@ const Table = ({ localizationHandler, openedListItem, setOpenedListItem, setLast
                         id="notebook-content-table-edit-button"
                         label={localizationHandler.get("edit")}
                         onclick={() => setEditingEnabled(true)}
-                    />
-                }
-
-                {!editingEnabled && !checklist &&
-                    <Button
-                        id="notebook-content-table-convert-button"
-                        label={localizationHandler.get("convert-to-checklist-table")}
-                        onclick={() => convertToChecklistTableDialog()}
                     />
                 }
 
