@@ -96,7 +96,6 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
         await Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest({ name: aiName })
             .send();
 
-
         setAiName("");
     }
 

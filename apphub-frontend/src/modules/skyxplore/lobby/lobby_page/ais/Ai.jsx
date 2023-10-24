@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../../../common/component/input/Button";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import Stream from "../../../../../common/js/collection/Stream";
 import Constants from "../../../../../common/js/Constants";
 import Endpoints from "../../../../../common/js/dao/dao";
 import "./ai/ai.css"
+import InputField from "../../../../../common/component/input/InputField";
 
 const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
+    const [editingEnabled, setEditingEnabled] = useState(false);
+    const [aiName, setAiName] = useState(ai.name);
+
+    useEffect(() => setAiName(ai.name), [ai.name]);
+
     const setAlliance = (event) => {
         const allianceValue = event.target.value;
 
@@ -17,6 +23,18 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
     const removeAi = () => {
         Endpoints.SKYXPLORE_LOBBY_REMOVE_AI.createRequest(null, { userId: ai.userId })
             .send();
+    }
+
+    const changeAiName = () => {
+        if (aiName.length >= 3) {
+            ai.name = aiName;
+            Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest(ai)
+                .send();
+        } else {
+            setAiName(ai.name);
+        }
+
+        setEditingEnabled(false);
     }
 
     const getAllianceSelectMenu = () => {
@@ -49,9 +67,35 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
         );
     }
 
+    const getAiName = () => {
+        if (editingEnabled) {
+            return (
+                <InputField
+                    className="skyxplore-lobby-member-name skyxplore-lobby-change-ai-name"
+                    type="text"
+                    placeholder={localizationHandler.get("ai-name")}
+                    value={aiName}
+                    onchangeCallback={setAiName}
+                    onfocusOutCallback={changeAiName}
+                    autoFocus={true}
+                />
+            )
+        } else {
+            return (
+                <h4
+                    className="skyxplore-lobby-member-name skyxplore-lobby-ai-name"
+                    onClick={() => isHost && setEditingEnabled(true)}
+                >
+                    {aiName}
+                </h4>
+            );
+        }
+    }
+
     return (
         <div className="skyxplore-lobby-ai">
-            <h4 className="skyxplore-lobby-member-name">{ai.name}</h4>
+            {getAiName()}
+
             <Button
                 className="skyxplore-lobby-remove-ai-button"
                 label="X"

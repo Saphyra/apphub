@@ -1,6 +1,9 @@
 ===FEATURES===
 Admin Panel
     Migration Tasks
+SkyXplore
+    Lobby
+        Rename AIs
 
 ===BUGFIXES===
 Notebook
