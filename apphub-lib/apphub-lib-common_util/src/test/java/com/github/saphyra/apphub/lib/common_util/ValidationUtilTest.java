@@ -283,6 +283,18 @@ public class ValidationUtilTest {
         assertThat(ValidationUtil.parse("asd", parser, FIELD)).isEqualTo(3);
     }
 
+    @Test
+    void equals(){
+        ValidationUtil.equals("a", "a", FIELD);
+    }
+
+    @Test
+    void equals_doesNotEqual(){
+        Throwable ex = catchThrowable(() -> ValidationUtil.equals("b", "a", FIELD));
+
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be a");
+    }
+
     enum TestEnum {
         ELEMENT
     }

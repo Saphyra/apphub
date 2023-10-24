@@ -10,25 +10,25 @@ import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
+import com.github.saphyra.apphub.lib.web_socket.WebSocketConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 @Configuration
 @EnableHealthCheck
 @Import({
     AccessTokenFilterConfiguration.class,
-    SkyXploreDataConfig.class
+    SkyXploreDataConfig.class,
+    WebSocketConfiguration.class
 })
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler
 @EnableLiquibase
 @EnableEventProcessor
 @EnableMemoryMonitoring
-@EnableWebSocket
 public class SkyXploreDataBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {

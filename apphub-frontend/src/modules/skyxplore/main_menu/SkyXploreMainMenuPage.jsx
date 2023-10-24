@@ -17,12 +17,20 @@ import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Invitations from "./main_menu_page/Invitations";
 
 const SkyXploreMainMenuPage = () => {
-    const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_MAIN_MENU;
+    const mainMenuWsUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_MAIN_MENU;
+    const invitationWsUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_INVITATION;
     const localizationHandler = new LocalizationHandler(localizationData);
     const [lastEvent, setLastEvent] = useState(null);
     const [displaynNewGameConfirmationDialog, setDisplaynNewGameConfirmationDialog] = useState(false);
-    const { sendMessage, lastMessage } = useWebSocket(
-        webSocketUrl,
+    const { sendMessage: sendMainMenuMessage, lastMessage: mainMenuLastMessage } = useWebSocket(
+        mainMenuWsUrl,
+        {
+            share: true,
+            shouldReconnect: () => false,
+        }
+    );
+    const { sendMessage: sendInvitationMessage, lastMessage: invitationLastMessage } = useWebSocket(
+        invitationWsUrl,
         {
             share: true,
             shouldReconnect: () => false,
@@ -31,7 +39,8 @@ const SkyXploreMainMenuPage = () => {
 
     useEffect(() => initPage(), []);
 
-    useEffect(() => handleMessage(), [lastMessage]);
+    useEffect(() => handleMessage(mainMenuLastMessage, sendMainMenuMessage), [mainMenuLastMessage]);
+    useEffect(() => handleMessage(invitationLastMessage, sendInvitationMessage), [invitationLastMessage]);
 
     const initPage = () => {
         Redirection.forMainMenu();
@@ -39,7 +48,7 @@ const SkyXploreMainMenuPage = () => {
         NotificationService.displayStoredMessages()
     }
 
-    const handleMessage = () => {
+    const handleMessage = (lastMessage, sendMessage) => {
         if (lastMessage === null) {
             return;
         }

@@ -116,7 +116,7 @@ const NewFilePage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-file-back-button"

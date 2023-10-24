@@ -3,12 +3,13 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class JoinToLobbyService {
     private final LobbyDao lobbyDao;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
 
     public void acceptInvitation(UUID userId, UUID invitorId) {
@@ -54,7 +55,7 @@ public class JoinToLobbyService {
         lobbyMember.setStatus(LobbyMemberStatus.NOT_READY);
 
         LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
-        messageSenderProxy.lobbyMemberModified(response, lobby.getMembers().keySet());
-        messageSenderProxy.lobbyMemberConnected(response, lobby.getMembers().keySet());
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, response);
+        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, response);
     }
 }

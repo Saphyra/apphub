@@ -1,55 +1,63 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.table.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.table.EditTableResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ConvertTableToChecklistTableService;
-import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
-import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
+import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
-public class TableControllerImpl implements TableController {
+@Slf4j
+class TableControllerImpl implements TableController {
     private final TableCreationService tableCreationService;
-    private final TableEditionService tableEditionService;
     private final TableQueryService tableQueryService;
-    private final ConvertTableToChecklistTableService convertTableToChecklistTableService;
-    private final ContentTableColumnResponseProvider tableColumnResponseProvider;
+    private final TableRowStatusUpdateService tableRowStatusUpdateService;
+    private final CheckedTableRowDeletionService checkedTableRowDeletionService;
+    private final TableEditionService tableEditionService;
 
     @Override
-    public OneParamResponse<UUID> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a table.", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(tableCreationService.create(request, accessTokenHeader.getUserId(), ListItemType.TABLE));
+    public List<TableFileUploadResponse> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to create a {}", accessTokenHeader.getUserId(), request.getListItemType());
+        return tableCreationService.create(accessTokenHeader.getUserId(), request);
     }
 
     @Override
-    public TableResponse<String> editTable(EditTableRequest request, UUID listItemId) {
-        log.info("Editing table {}", listItemId);
-        tableEditionService.edit(listItemId, request);
-        return getTable(listItemId);
+    public EditTableResponse editTable(EditTableRequest request, UUID listItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit table {}", accessTokenHeader.getUserId(), listItemId);
+        return tableEditionService.editTable(listItemId, request);
     }
 
     @Override
-    public TableResponse<String> getTable(UUID listItemId) {
-        log.info("Querying table with listItemId {}", listItemId);
-        return tableQueryService.getTable(listItemId, tableColumnResponseProvider);
+    public TableResponse getTable(UUID listItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to query table {}", accessTokenHeader.getUserId(), listItemId);
+        return tableQueryService.getTable(listItemId);
     }
 
     @Override
-    public void convertToChecklistTable(UUID listItemId) {
-        log.info("Converting table {} to checklistTable", listItemId);
-        convertTableToChecklistTableService.convert(listItemId);
+    public void setRowStatus(UUID rowId, OneParamRequest<Boolean> status, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to modify status of table row {}", accessTokenHeader.getUserId(), rowId);
+        tableRowStatusUpdateService.setRowStatus(rowId, status.getValue());
+    }
+
+    @Override
+    public TableResponse deleteCheckedRows(UUID listItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete checked rows of table {}", accessTokenHeader.getUserId(), listItemId);
+        checkedTableRowDeletionService.deleteCheckedRows(listItemId);
+        return getTable(listItemId, accessTokenHeader);
     }
 }

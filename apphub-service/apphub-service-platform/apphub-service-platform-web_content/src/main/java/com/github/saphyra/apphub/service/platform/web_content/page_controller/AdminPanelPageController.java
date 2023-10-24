@@ -41,7 +41,6 @@ public class AdminPanelPageController {
         return "admin_panel/roles_for_all";
     }
 
-    @GetMapping(Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE)
     public String memoryMonitoringPage() {
         log.info("RolesForAll page called.");
         return "admin_panel/memory_monitoring";

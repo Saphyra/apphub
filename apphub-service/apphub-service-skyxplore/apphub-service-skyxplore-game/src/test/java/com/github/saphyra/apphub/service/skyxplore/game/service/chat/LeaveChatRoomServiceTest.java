@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -13,23 +11,23 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +44,7 @@ public class LeaveChatRoomServiceTest {
     private CharacterProxy characterProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreGameWebSocketHandler webSocketHandler;
 
     @InjectMocks
     private LeaveChatRoomService underTest;
@@ -98,7 +96,7 @@ public class LeaveChatRoomServiceTest {
         underTest.leave(USER_ID, ROOM_ID);
 
         assertThat(chat.getRooms()).containsExactly(chatRoom);
-        verifyNoInteractions(messageSenderProxy);
+        verifyNoInteractions(webSocketHandler);
     }
 
     @Test
@@ -112,7 +110,7 @@ public class LeaveChatRoomServiceTest {
         underTest.leave(USER_ID, ROOM_ID);
 
         assertThat(chat.getRooms()).isEmpty();
-        verifyNoInteractions(messageSenderProxy);
+        verifyNoInteractions(webSocketHandler);
     }
 
     @Test
@@ -128,18 +126,6 @@ public class LeaveChatRoomServiceTest {
 
         assertThat(chatRoom.getMembers()).containsExactly(ANOTHER_MEMBER);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
-
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(ANOTHER_MEMBER);
-
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT);
-
-        SystemMessage payload = (SystemMessage) event.getPayload();
-        assertThat(payload.getRoom()).isEqualTo(ROOM_ID);
-        assertThat(payload.getCharacterName()).isEqualTo(CHARACTER_NAME);
-        assertThat(payload.getUserId()).isEqualTo(USER_ID);
+        then(webSocketHandler).should().sendEvent(List.of(ANOTHER_MEMBER), WebSocketEventName.SKYXPLORE_GAME_USER_LEFT, new SystemMessage(ROOM_ID, CHARACTER_NAME, USER_ID));
     }
 }

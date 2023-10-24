@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
@@ -9,8 +10,10 @@ import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
+import com.github.saphyra.apphub.lib.web_socket.WebSocketConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter.LobbyLastAccessInterceptorFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,7 +21,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableHealthCheck
 @Import({
-    AccessTokenFilterConfiguration.class
+    AccessTokenFilterConfiguration.class,
+    WebSocketConfiguration.class
 })
 @EnableLocaleMandatoryRequestValidation
 @EnableErrorHandler
@@ -42,5 +46,10 @@ public class SkyXploreLobbyBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    ApplicationContextProxy applicationContextProxy(ApplicationContext applicationContext) {
+        return new ApplicationContextProxy(applicationContext);
     }
 }

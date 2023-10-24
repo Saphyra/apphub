@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCre
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.ExitFromLobbyService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.disconnect.ExitFromLobbyService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

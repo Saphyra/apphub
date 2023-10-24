@@ -1,8 +1,8 @@
 import Utils from "../../../../../common/js/Utils";
-import CustomTableColumnType from "../CustomTableColumnType";
+import ColumnType from "../../table/ColumnType";
 
 const CustomTableColumnData = class {
-    constructor(columnIndex, type = CustomTableColumnType.EMPTY, data = "", columnId = Utils.generateRandomId()) {
+    constructor(columnIndex, type = ColumnType.EMPTY, data = "", columnId = Utils.generateRandomId()) {
         if (columnIndex === null || columnIndex === undefined) {
             Utils.throwException("IllegalArgument", "columnIndex must not be " + columnIndex);
         }

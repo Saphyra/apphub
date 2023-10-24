@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CitizenConverter {
+public class CitizenConverter implements GameDataToModelConverter {
     private final SkillConverter skillConverter;
 
     public List<CitizenModel> toModel(UUID gameId, Collection<Citizen> citizens) {
@@ -52,5 +53,10 @@ public class CitizenConverter {
             .satiety(citizen.getSatiety())
             .skills(skillConverter.toResponse(gameData, citizen.getCitizenId()))
             .build();
+    }
+
+    @Override
+    public List<CitizenModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getCitizens());
     }
 }

@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.lib.config.common;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
+
 public class Endpoints {
     //PAGES
     public static final String INDEX_PAGE = "/web";
@@ -7,7 +9,6 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
     public static final String ADMIN_PANEL_ERROR_REPORT_PAGE = "/web/admin-panel/error-report";
-    public static final String ADMIN_PANEL_MEMORY_MONITORING_PAGE = "/web/admin-panel/memory-monitoring";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
     public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE = "/web/admin-panel/roles-for-all";
     public static final String ERROR_PAGE = "/web/error";
@@ -44,29 +45,21 @@ public class Endpoints {
     public static final String EVENT_DELETE_ACCOUNT = "/event/delete-account";
     public static final String EVENT_SKYXPLORE_LOBBY_CLEANUP = "/event/skyxplore/lobby/cleanup";
     public static final String EVENT_SKYXPLORE_GAME_CLEANUP = "/event/skyxplore/game/cleanup";
-    public static final String EVENT_MESSAGE_SENDER_PING_REQUEST = "/event/message-sender/ping-request";
-    public static final String EVENT_MESSAGE_SENDER_CONNECTION_CLEANUP = "/event/message-sender/connection-cleanup";
+    public static final String EVENT_WEB_SOCKET_SEND_PING_EVENT = "/event/web-socket/send-ping";
+    public static final String EVENT_WEB_SOCKET_CONNECTION_CLEANUP = "/event/web-socket/connection-cleanup";
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
     public static final String EVENT_SKYXPLORE_DELETE_GAMES = "/event/skyxplore/data/game/delete";
     public static final String EVENT_CLEAN_UP_STORED_FILES = "/event/storage/cleanup";
 
-    //WEB-SOCKET-MESSAGING
-    public static final String WEB_SOCKET_SEND_MESSAGE = "/internal/message/{group}";
-    public static final String WEB_SOCKET_BULK_SEND_MESSAGE = "/internal/message/{group}/bulk";
-
     //CONNECTION SUBSCRIPTIONS
-    public static final String WS_CONNECTION_ADMIN_PANEL_MONITORING = "/api/message-sender/admin-panel/monitoring";
-    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/message-sender/admin-panel/error-report";
-    public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/message-sender/skyxplore/main-menu";
-    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/message-sender/skyxplore/lobby";
-    public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/message-sender/skyxplore/game";
+    public static final String WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING = "/api/ws/admin-panel/monitoring/memory";
+    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/ws/admin-panel/error-report";
+    public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/ws/skyxplore-data/main-menu";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore-lobby/lobby";
+    public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
     public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
-
-    //ADMIN-PANEL WEB-SOCKET MESSAGING
-    public static final String ADMIN_PANEL_WEB_SOCKET_USER_CONNECTED = "/internal/api/admin-panel/ws/{userId}";
-    public static final String ADMIN_PANEL_WEB_SOCKET_USER_DISCONNECTED = "/internal/api/admin-panel/ws/{userId}";
-    public static final String ADMIN_PANEL_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/admin-panel/{userId}";
 
     //ERROR REPORTING
     public static final String ADMIN_PANEL_INTERNAL_REPORT_ERROR = "/internal/admin-panel/report-error";
@@ -80,6 +73,11 @@ public class Endpoints {
 
     //MONITORING
     public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
+
+    //MIGRATION
+    public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
+    public static final String ADMIN_PANEL_MIGRATION_TRIGGER_TASK = "/api/admin-panel/migration/{event}";
+    public static final String ADMIN_PANEL_MIGRATION_DELETE_TASK = "/api/admin-panel/migration/{event}";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";
@@ -130,6 +128,11 @@ public class Endpoints {
     public static final String MODULES_SET_FAVORITE = "/api/modules/{module}/favorite";
 
     //NOTEBOOK
+    @ForRemoval("notebook-redesign")
+    public static final String NOTEBOOK_EVENT_MIGRATION_CHECKLIST = "/event/notebook/migration/checklist";
+    @ForRemoval("notebook-redesign")
+    public static final String NOTEBOOK_EVENT_MIGRATION_TABLE = "/event/notebook/migration/table";
+
     public static final String NOTEBOOK_GET_CATEGORY_TREE = "/api/notebook/category/tree";
     public static final String NOTEBOOK_CREATE_CATEGORY = "/api/notebook/category";
     public static final String NOTEBOOK_CREATE_TEXT = "/api/notebook/text";
@@ -150,13 +153,7 @@ public class Endpoints {
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_GET_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_CLONE_LIST_ITEM = "/api/notebook/{listItemId}/clone";
-    public static final String NOTEBOOK_CREATE_CHECKLIST_TABLE = "/api/notebook/checklist-table";
-    public static final String NOTEBOOK_EDIT_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
-    public static final String NOTEBOOK_GET_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}";
-    public static final String NOTEBOOK_UPDATE_CHECKLIST_TABLE_ROW_STATUS = "/api/notebook/checklist-table/{rowId}/status";
-    public static final String NOTEBOOK_CONVERT_TABLE_TO_CHECKLIST_TABLE = "/api/notebook/table/{listItemId}/convert-to-checklist-table";
     public static final String NOTEBOOK_CHECKLIST_DELETE_CHECKED = "/api/notebook/checklist/{listItemId}/checked";
-    public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST_TABLE = "/api/notebook/checklist-table/{listItemId}/checked";
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
     public static final String NOTEBOOK_ARCHIVE_ITEM = "/api/notebook/item/{listItemId}/archive";
@@ -164,12 +161,9 @@ public class Endpoints {
     public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
     public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
     public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
-    public static final String NOTEBOOK_CREATE_CUSTOM_TABLE = "/api/notebook/custom-table";
-    public static final String NOTEBOOK_EDIT_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
-    public static final String NOTEBOOK_GET_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}";
-    public static final String NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS = "/api/notebook/custom-table/{rowId}";
-    public static final String NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE = "/api/notebook/custom-table/{listItemId}/checked";
     public static final String NOTEBOOK_GET_LIST_ITEM = "/api/notebook/list-item/{listItemId}";
+    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/{rowId}/status";
+    public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
@@ -200,11 +194,7 @@ public class Endpoints {
     public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
 
     //SKYXPLORE-LOBBY
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_ONLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-    public static final String SKYXPLORE_INTERNAL_LOBBY_PLAYER_OFFLINE = "/web-socket-event/skyxplore/lobby/online/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_LEFT_LOBBY = "/allowed-internal/skyxplore/lobby/{userId}";
+    public static final String SKYXPLORE_INTERNAL_GAME_LOADED = "/allowed-internal/skyxplore/lobby/{gameId}/loaded";
 
     public static final String SKYXPLORE_LOBBY_VIEW_FOR_PAGE = "/api/skyxplore/lobby/page";
     public static final String SKYXPLORE_LOBBY_IS_IN_LOBBY = "/api/skyxplore/lobby";
@@ -226,12 +216,8 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI = "/api/skyxplore/lobby/alliance/ai/{userId}";
 
     //SKYXPLORE-GAME
-    public static final String SKYXPLORE_INTERNAL_GAME_PROCESS_WEB_SOCKET_EVENTS = "/web-socket-event/skyxplore/game/{userId}";
-
     public static final String SKYXPLORE_INTERNAL_CREATE_GAME = "/internal/skyxplore/game";
     public static final String SKYXPLORE_INTERNAL_LOAD_GAME = "/internal/skyxplore/game";
-    public static final String SKYXPLORE_INTERNAL_USER_JOINED_TO_GAME = "/internal/skyxplore/game/user/{userId}";
-    public static final String SKYXPLORE_INTERNAL_USER_LEFT_GAME = "/internal/skyxplore/game/user/{userId}";
     public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
     public static final String SKYXPLORE_INTERNAL_DELETE_GAME = "/internal/skyxplore/game/{gameId}";
 

@@ -18,6 +18,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-skyxplore-lobby-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-web_socket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${versions.guava}</version>
@@ -38,12 +50,6 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-skyxplore-game-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-platform-message_sender-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

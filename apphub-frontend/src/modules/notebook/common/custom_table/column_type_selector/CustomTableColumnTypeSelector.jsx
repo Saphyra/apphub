@@ -5,14 +5,14 @@ import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Footer from "../../../../../common/component/Footer";
 import Button from "../../../../../common/component/input/Button";
 import Stream from "../../../../../common/js/collection/Stream";
-import CustomTableColumnType from "../CustomTableColumnType";
+import ColumnType from "../../table/ColumnType";
 import "./custom_table_column_type_selector.css";
 
 const CustomTableColumnTypeSelector = ({ columnTypeSelectorData, setColumnTypeSelectorData, setColumnType }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getColumnTypes = () => {
-        return new Stream(Object.keys(CustomTableColumnType))
+        return new Stream(Object.keys(ColumnType))
             .toMapStream(columnType => columnType, columnType => localizationHandler.get("column-type-" + columnType.toLowerCase()))
             .sorted((a, b) => a.value.localeCompare(b.value))
             .map((columnType, label) =>

@@ -36,14 +36,9 @@ public class StartGameService {
         }
 
         switch (lobby.getType()) {
-            case NEW_GAME:
-                createNewGameService.createNewGame(lobby);
-                break;
-            case LOAD_GAME:
-                loadGameService.loadGame(lobby);
-                break;
-            default:
-                throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled lobbyType: " + lobby.getType());
+            case NEW_GAME -> createNewGameService.createNewGame(lobby);
+            case LOAD_GAME -> loadGameService.loadGame(lobby);
+            default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled lobbyType: " + lobby.getType());
         }
     }
 }

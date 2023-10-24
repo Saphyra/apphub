@@ -45,8 +45,8 @@ public class ChatTest extends BackEndTest {
         SkyXploreLobbyActions.inviteToLobby(language, accessTokenId1, userId2);
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
 
-        ApphubWsClient hostClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
-        ApphubWsClient memberClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2);
+        ApphubWsClient hostClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
+        ApphubWsClient memberClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId2, accessTokenId2);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)

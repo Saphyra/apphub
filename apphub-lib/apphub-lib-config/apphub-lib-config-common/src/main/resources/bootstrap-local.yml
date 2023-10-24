@@ -36,8 +36,6 @@ spring:
               uri: http://event-gateway:8081
             main-gateway[0]:
               uri: http://main-gateway:8080
-            message-sender[0]:
-              uri: http://message-sender:8094
             scheduler[0]:
               uri: http://scheduler:8082
             storage[0]:

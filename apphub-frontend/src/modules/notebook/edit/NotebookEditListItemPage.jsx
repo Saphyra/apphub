@@ -104,7 +104,7 @@ const NotebookEditListItemPage = () => {
                 </main>
 
                 <Footer
-                    leftButtons={
+                    rightButtons={
                         <Button
                             id="notebook-edit-back-button"
                             onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}

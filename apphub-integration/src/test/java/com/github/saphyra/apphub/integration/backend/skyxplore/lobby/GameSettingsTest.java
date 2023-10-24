@@ -64,7 +64,7 @@ public class GameSettingsTest extends BackEndTest {
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 21)), accessTokenId1, "planetSize.max", "too high");
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 12)), accessTokenId1, "planetSize.max", "too low");
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
         Response response = SkyXploreLobbyActions.getEditSettingsResponse(language, accessTokenId1, VALID_SETTINGS);
 
         assertThat(response.getStatusCode()).isEqualTo(200);

@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "Memory monitoring - Admin panel - Apphub",
+        "hu": "Memória felhasználás - Kezelőfelület - Apphub"
+    },
+    "page-title": {
+        "en": "Memory monitoring",
+        "hu": "Memória felhasználás"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "available": {
+        "en": "Available",
+        "hu": "Elérhető"
+    },
+    "allocated": {
+        "en": "Allocated",
+        "hu": "Lefoglalt"
+    },
+    "used": {
+        "en": "Used",
+        "hu": "Felhasznált"
+    },
+    "not-connected": {
+        "en": "Not connected",
+        "hu": "Nem csatlakozott"
+    }
+}

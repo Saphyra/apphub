@@ -25,7 +25,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
         "event-gateway",
         "admin-panel",
         "main-gateway",
-        "message-sender",
         "modules",
         "notebook",
         "scheduler",
@@ -49,7 +48,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
         ModulesPageActions.openModule(driver, ModuleLocation.MEMORY_MONITORING);
@@ -57,7 +55,7 @@ public class MemoryMonitoringTest extends SeleniumTest {
 
         List<String> services = AwaitilityWrapper.getListWithWait(() -> MemoryMonitoringActions.getReportContainers(driver), webElements -> webElements.size() == SERVICES.size())
             .stream()
-            .map(webElement -> webElement.getAttribute("id").split("report-container-")[1])
+            .map(webElement -> webElement.getAttribute("id").split("memory-monitoring-svg-diagram-")[1])
             .collect(Collectors.toList());
 
         assertThat(services).containsExactlyInAnyOrderElementsOf(SERVICES);

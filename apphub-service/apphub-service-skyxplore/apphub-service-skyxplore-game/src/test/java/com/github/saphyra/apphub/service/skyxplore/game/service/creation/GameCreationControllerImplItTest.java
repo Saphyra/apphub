@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
 import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
@@ -12,13 +13,11 @@ import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyXploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +29,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -63,7 +60,7 @@ public class GameCreationControllerImplItTest {
     private CharacterProxy characterProxy;
 
     @MockBean
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyApiClient lobbyApiClient;
 
     @MockBean
     private SkyXploreSavedGameClient skyXploreSavedGameClient;
@@ -76,56 +73,6 @@ public class GameCreationControllerImplItTest {
     @AfterEach
     public void clear() {
         gameDao.deleteAll();
-    }
-
-    @Test
-    @Disabled
-    public void loadTest() throws InterruptedException {
-        int gameCount = 50;
-        Stream.generate(() -> "")
-            .limit(gameCount)
-            .parallel()
-            .forEach(s -> {
-                final UUID hostId = UUID.randomUUID();
-                Map<UUID, UUID> members = CollectionUtils.singleValueMap(hostId, null);
-
-                SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-                    .host(hostId)
-                    .members(members)
-                    .alliances(new HashMap<>())
-                    .gameName(GAME_NAME)
-                    .settings(SkyXploreGameSettings.builder()
-                        .maxPlayersPerSolarSystem(5)
-                        .additionalSolarSystems(new Range<>(20, 30))
-                        .planetsPerSolarSystem(new Range<>(3, 5))
-                        .planetSize(new Range<>(10, 15))
-                        .build()
-                    )
-                    .ais(List.of(
-                        AiPlayer.builder()
-                            .userId(AI_USER_ID)
-                            .allianceId(null)
-                            .name(AI_NAME)
-                            .build()
-                    ))
-                    .build();
-
-                Response response = RequestFactory.createRequest()
-                    .body(request)
-                    .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
-
-                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
-            });
-
-        for (int i = 0; i < 200; i++) {
-            if (gameDao.size() == gameCount) {
-                return;
-            }
-
-            Thread.sleep(1000);
-        }
-
-        fail("Game is not created.");
     }
 
     @Test

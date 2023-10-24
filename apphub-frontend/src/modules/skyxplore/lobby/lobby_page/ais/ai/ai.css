@@ -1,27 +1,36 @@
-.skyxplore-lobby-ai, #skyxplore-lobby-create-ai {
+.skyxplore-lobby-ai,
+#skyxplore-lobby-create-ai {
     border: 2px ridge white;
     border-radius: 5px;
     position: relative;
 }
 
-#skyxplore-lobby-create-ai .skyxplore-lobby-ai-name{
+#skyxplore-lobby-create-ai .skyxplore-lobby-ai-name {
     margin: 5px;
 }
 
-.skyxplore-lobby-remove-ai-button{
+.skyxplore-lobby-ai-name{
+    cursor: pointer;
+}
+
+.skyxplore-lobby-change-ai-name{
+    margin-right: 24px;
+}
+
+.skyxplore-lobby-remove-ai-button {
     position: absolute;
     top: 0;
     right: 0;
     border-width: 1px;
 }
 
-#skyxplore-lobby-create-ai label{
+#skyxplore-lobby-create-ai label {
     display: block;
     margin: 5px;
     text-align: center;
 }
 
-#skyxplore-lobby-create-ai-button{
+#skyxplore-lobby-create-ai-button {
     display: block;
     margin: 5px auto;
 }

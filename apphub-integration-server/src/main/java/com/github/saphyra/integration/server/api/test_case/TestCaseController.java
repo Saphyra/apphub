@@ -24,7 +24,7 @@ public class TestCaseController {
 
     @PutMapping(Endpoints.REPORT_TEST_CASE)
     void reportTestCase(@PathVariable("testRunId") UUID testRunId, @RequestBody ReportTestCaseRequest request) {
-        log.info("Reporting TestCase for testRunId: {} - {}", testRunId, request);
+        log.info("{}", request);
         testCaseRunService.report(testRunId, request);
     }
 

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

@@ -1,17 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,42 +21,41 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class UserActiveNotificationServiceTest {
+class UserActiveNotificationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID FRIEND_ID_1 = UUID.randomUUID();
-    private static final UUID FRIEND_ID_2 = UUID.randomUUID();
-    private static final String PLAYER_NAME = "player-name";
+    private static final UUID FRIEND_ID = UUID.randomUUID();
+    private static final String CHARACTER_NAME = "character-name";
 
     @Mock
     private SkyXploreDataProxy skyXploreDataProxy;
 
     @Mock
-    private LobbyDao lobbyDao;
+    private ApplicationContextProxy applicationContextProxy;
 
     @Mock
     private CharacterProxy characterProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
+
+    @Mock
+    private LobbyDao lobbyDao;
 
     @InjectMocks
     private UserActiveNotificationService underTest;
 
     @Mock
-    private FriendshipResponse friendInLobby;
-
-    @Mock
-    private FriendshipResponse otherFriend;
+    private FriendshipResponse friendshipResponse;
 
     @Mock
     private Lobby lobby;
@@ -62,33 +63,59 @@ public class UserActiveNotificationServiceTest {
     @Mock
     private SkyXploreCharacterModel characterModel;
 
-    @Test
-    public void sendEvent() {
-        given(skyXploreDataProxy.getFriends(any(AccessTokenHeader.class))).willReturn(Arrays.asList(friendInLobby, otherFriend));
-        given(friendInLobby.getFriendId()).willReturn(FRIEND_ID_1);
-        given(otherFriend.getFriendId()).willReturn(FRIEND_ID_2);
-        given(lobbyDao.findByUserId(FRIEND_ID_1)).willReturn(Optional.of(lobby));
+    @BeforeEach
+    void setUpRecipients() {
+        given(skyXploreDataProxy.getFriends(any())).willReturn(List.of(friendshipResponse));
+        given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
+        given(applicationContextProxy.getBean(LobbyDao.class)).willReturn(lobbyDao);
+        given(lobbyDao.findByUserId(FRIEND_ID)).willReturn(Optional.of(lobby));
         given(characterProxy.getCharacter(USER_ID)).willReturn(characterModel);
-        given(characterModel.getName()).willReturn(PLAYER_NAME);
+        given(characterModel.getName()).willReturn(CHARACTER_NAME);
+    }
 
-        underTest.sendEvent(USER_ID, WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE);
+    @AfterEach
+    void verifyAccessToken() {
+        ArgumentCaptor<AccessTokenHeader> argumentCaptor = ArgumentCaptor.forClass(AccessTokenHeader.class);
+        then(skyXploreDataProxy).should().getFriends(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getUserId()).isEqualTo(USER_ID);
+        assertThat(argumentCaptor.getValue().getRoles()).containsExactly("SKYXPLORE", "ACCESS");
+    }
 
-        ArgumentCaptor<AccessTokenHeader> accessTokenHeaderArgumentCaptor = ArgumentCaptor.forClass(AccessTokenHeader.class);
-        verify(skyXploreDataProxy).getFriends(accessTokenHeaderArgumentCaptor.capture());
-        AccessTokenHeader accessTokenHeader = accessTokenHeaderArgumentCaptor.getValue();
-        assertThat(accessTokenHeader.getUserId()).isEqualTo(USER_ID);
-        assertThat(accessTokenHeader.getRoles()).containsExactlyInAnyOrder("SKYXPLORE", "ACCESS");
+    @Test
+    void userOnline() {
+        underTest.userOnline(USER_ID);
 
-        ArgumentCaptor<WebSocketMessage> webSocketMessageArgumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToLobby(webSocketMessageArgumentCaptor.capture());
-        WebSocketMessage message = webSocketMessageArgumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(FRIEND_ID_1);
+        then(lobbyWebSocketHandler)
+            .should()
+            .sendEvent(
+                List.of(FRIEND_ID),
+                WebSocketEvent.builder()
+                    .eventName(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE)
+                    .payload(ActiveFriendResponse.builder()
+                        .friendId(USER_ID)
+                        .friendName(CHARACTER_NAME)
+                        .build()
+                    )
+                    .build()
+            );
+    }
 
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE);
+    @Test
+    void userOffline() {
+        underTest.userOffline(USER_ID);
 
-        ActiveFriendResponse activeFriendResponse = (ActiveFriendResponse) event.getPayload();
-        assertThat(activeFriendResponse.getFriendId()).isEqualTo(USER_ID);
-        assertThat(activeFriendResponse.getFriendName()).isEqualTo(PLAYER_NAME);
+        then(lobbyWebSocketHandler)
+            .should()
+            .sendEvent(
+                List.of(FRIEND_ID),
+                WebSocketEvent.builder()
+                    .eventName(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE)
+                    .payload(ActiveFriendResponse.builder()
+                        .friendId(USER_ID)
+                        .friendName(CHARACTER_NAME)
+                        .build()
+                    )
+                    .build()
+            );
     }
 }

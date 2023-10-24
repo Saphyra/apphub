@@ -49,6 +49,11 @@ const Constants = {
 
     SKYXPLORE_LOBBY_TYPE_NEW: "NEW_GAME",
     SKYXPLORE_LOBBY_TYPE_LOAD: "LOAD_GAME",
+
+    //Memory monitoring
+    PIXEL_PER_REPORT: 3,
+    GRAPH_BORDER: 5,
+    GRAPH_HEIGHT: 200,
 }
 
 export default Constants;

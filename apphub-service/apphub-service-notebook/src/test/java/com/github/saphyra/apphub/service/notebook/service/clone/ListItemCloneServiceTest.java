@@ -2,8 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.clone.table.TableCloneService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,8 +45,6 @@ public class ListItemCloneServiceTest {
     private static final String FILE_TITLE = "file-title";
     private static final boolean PINNED = false;
     private static final boolean ARCHIVED = false;
-    private static final UUID CUSTOM_TABLE_LIST_ITEM_ID = UUID.randomUUID();
-    private static final String CUSTOM_TABLE_TITLE = "custom-table-title";
 
     @Mock
     private ListItemDao listItemDao;
@@ -63,13 +62,7 @@ public class ListItemCloneServiceTest {
     private ChecklistCloneService checklistCloneService;
 
     @Mock
-    private ChecklistTableCloneService checklistTableCloneService;
-
-    @Mock
     private FileCloneService cloneFileService;
-
-    @Mock
-    private CustomTableCloneService customTableCloneService;
 
     @InjectMocks
     private ListItemCloneService underTest;
@@ -124,11 +117,6 @@ public class ListItemCloneServiceTest {
     @Mock
     private ListItem fileListItemClone;
 
-    private final ListItem customTableListItem = createListItem(CUSTOM_TABLE_LIST_ITEM_ID, CUSTOM_TABLE_TITLE, ListItemType.CUSTOM_TABLE, PARENT_OF_PARENT);
-
-    @Mock
-    private ListItem customTableListItemClone;
-
     @Test
     public void cloneTest() {
         given(parentListItemClone.getListItemId()).willReturn(PARENT_LIST_ITEM_CLONE_ID);
@@ -145,8 +133,7 @@ public class ListItemCloneServiceTest {
             checklistTableListItem,
             onlyTitleListItem,
             imageListItem,
-            fileListItem,
-            customTableListItem
+            fileListItem
         ));
 
         given(listItemFactory.create(USER_ID, CATEGORY_LIST_ITEM_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CATEGORY, PINNED, ARCHIVED)).willReturn(categoryListItemClone);
@@ -160,7 +147,6 @@ public class ListItemCloneServiceTest {
         given(listItemFactory.create(USER_ID, ONLY_TITLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.ONLY_TITLE, PINNED, ARCHIVED)).willReturn(onlyTitleListItemClone);
         given(listItemFactory.create(USER_ID, IMAGE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.IMAGE, PINNED, ARCHIVED)).willReturn(imageListItemClone);
         given(listItemFactory.create(USER_ID, FILE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.FILE, PINNED, ARCHIVED)).willReturn(fileListItemClone);
-        given(listItemFactory.create(USER_ID, CUSTOM_TABLE_TITLE, PARENT_LIST_ITEM_CLONE_ID, ListItemType.CUSTOM_TABLE, PINNED, ARCHIVED)).willReturn(customTableListItemClone);
 
         underTest.clone(PARENT_LIST_ITEM_ID);
 
@@ -173,15 +159,13 @@ public class ListItemCloneServiceTest {
         verify(listItemDao).save(checklistListItemClone);
         verify(checklistCloneService).clone(checklistListItem, checklistListItemClone);
         verify(listItemDao).save(tableListItemClone);
-        verify(tableCloneService).clone(tableListItem, tableListItemClone);
+        verify(tableCloneService).cloneTable(tableListItem, tableListItemClone);
         verify(listItemDao).save(checklistTableListItemClone);
-        verify(checklistTableCloneService).clone(checklistTableListItem, checklistTableListItemClone);
         verify(listItemDao).save(onlyTitleListItemClone);
         verify(cloneFileService).cloneFile(imageListItem, imageListItemClone);
         verify(listItemDao).save(imageListItemClone);
         verify(cloneFileService).cloneFile(fileListItem, fileListItemClone);
         verify(listItemDao).save(fileListItemClone);
-        verify(checklistTableCloneService).clone(checklistTableListItem, checklistTableListItemClone);
         verify(listItemDao).save(checklistTableListItemClone);
     }
 

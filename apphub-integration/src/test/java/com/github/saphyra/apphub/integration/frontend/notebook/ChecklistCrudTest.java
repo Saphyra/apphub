@@ -156,6 +156,10 @@ public class ChecklistCrudTest extends SeleniumTest {
             .remove();
 
         ViewChecklistActions.saveChanges(driver);
+        AwaitilityWrapper.createDefault()
+            .until(() -> !ViewChecklistActions.isEditingEnabled(driver))
+            .assertTrue("Editing is still enabled.");
+
         ViewChecklistActions.close(driver);
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, NEW_CHECKLIST_TITLE), Optional::isPresent)

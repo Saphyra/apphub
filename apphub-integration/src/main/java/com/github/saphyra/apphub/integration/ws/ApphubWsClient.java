@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
@@ -33,8 +34,9 @@ public class ApphubWsClient extends WebSocketClient {
 
     private final String endpoint;
     private volatile boolean opened;
+    private final Object name;
 
-    private ApphubWsClient(Language language, String endpoint, UUID accessTokenId) throws URISyntaxException {
+    private ApphubWsClient(Language language, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
         super(
             new URI(String.format("ws://localhost:%s%s", TestConfiguration.SERVER_PORT, endpoint)),
             new Draft_6455(),
@@ -49,41 +51,47 @@ public class ApphubWsClient extends WebSocketClient {
         connect();
         AwaitilityWrapper.createDefault()
             .until(this::isOpen)
-            .assertTrue("Connection failed");
+            .assertTrue(name + " - Connection failed");
         WS_CONNECTIONS.get().add(this);
         opened = true;
+        this.name = name;
     }
 
-    public static ApphubWsClient createAdminPanelMonitoring(Language language, UUID accessTokenId) {
+    public static ApphubWsClient createAdminPanelMonitoring(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MONITORING, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId) {
+    public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreLobby(Language language, UUID accessTokenId) {
+    public static ApphubWsClient createSkyXploreLobby(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId) {
+    public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SneakyThrows
+    public static ApphubWsClient createSkyXploreLobbyInvitation(Language language, UUID accessTokenId, Object name) {
+        return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
     }
 
     public static List<WebSocketClient> getClients() {
@@ -93,14 +101,21 @@ public class ApphubWsClient extends WebSocketClient {
     public void send(WebSocketEvent event) {
         AwaitilityWrapper.createDefault()
             .until(this::isOpen)
-            .assertTrue("WebSocket is not connected. Failed sending event " + event.getPayload());
-        send(TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event));
+            .assertTrue(name + " - WebSocket is not connected. Failed sending event " + event.getPayload());
+
+        String payload = TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event);
+
+        if (TestConfiguration.REST_LOGGING_ENABLED) {
+            log.info("{} - WebSocketMessage sent to {}: {}", name, endpoint, event);
+        }
+
+        send(payload);
     }
 
     @Override
     public void onMessage(String message) {
         if (TestConfiguration.REST_LOGGING_ENABLED) {
-            log.info("WebSocketMessage arrived to {}: {}", endpoint, message);
+            log.info("{} - WebSocketMessage arrived to {}: {}", name, endpoint, message);
         }
         WebSocketEvent event = TestBase.OBJECT_MAPPER_WRAPPER.readValue(message, WebSocketEvent.class);
         messages.add(event);
@@ -112,21 +127,21 @@ public class ApphubWsClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        log.debug("WebSocket connection opened for endpoint {}", endpoint);
+        log.debug("{} - WebSocket connection opened for endpoint {}", name, endpoint);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
         opened = false;
-        log.debug("WebSocket connection closed for endpoint {} with code {}, reason {}, remote {}", endpoint, code, reason, remote);
+        log.debug("{} - WebSocket connection closed for endpoint {} with code {}, reason {}, remote {}", name, endpoint, code, reason, remote);
         if (code != 1000) {
-            throw new RuntimeException("WebSocket connection was closed with a code " + code + " and reason " + reason);
+            throw new RuntimeException(name + " - WebSocket connection was closed with a code " + code + " and reason " + reason);
         }
     }
 
     @Override
     public void onError(Exception e) {
-        throw new RuntimeException("WebSocket error on endpoint " + endpoint, e);
+        throw new RuntimeException(name + " - WebSocket error on endpoint " + endpoint, e);
     }
 
     public static void cleanUpConnections() {
@@ -155,7 +170,7 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public void clearMessages() {
-        log.debug("Clearing WebSocket messages for wsClient {}", endpoint);
+        log.debug("{} - Clearing WebSocket messages for wsClient {}", name, endpoint);
         messages.clear();
     }
 }

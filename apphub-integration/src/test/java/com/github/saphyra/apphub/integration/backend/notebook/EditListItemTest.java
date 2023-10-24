@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -28,7 +30,7 @@ public class EditListItemTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        UUID parentCategoryId = NotebookActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
+        UUID parentCategoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
 
         blankTitle(accessTokenId, parentCategoryId);
         newParentNotFound(accessTokenId, parentCategoryId);
@@ -40,7 +42,7 @@ public class EditListItemTest extends BackEndTest {
         EditListItemRequest blankTitleRequest = EditListItemRequest.builder()
             .title(" ")
             .build();
-        Response blankTitleResponse = NotebookActions.getEditListItemResponse(accessTokenId, blankTitleRequest, parentCategoryId);
+        Response blankTitleResponse = ListItemActions.getEditListItemResponse(accessTokenId, blankTitleRequest, parentCategoryId);
         verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
 
@@ -49,7 +51,7 @@ public class EditListItemTest extends BackEndTest {
             .title(NEW_TITLE)
             .parent(UUID.randomUUID())
             .build();
-        Response newParentNotFoundResponse = NotebookActions.getEditListItemResponse(accessTokenId, newParentNotFoundRequest, parentCategoryId);
+        Response newParentNotFoundResponse = ListItemActions.getEditListItemResponse(accessTokenId, newParentNotFoundRequest, parentCategoryId);
         verifyErrorResponse(newParentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
@@ -59,13 +61,13 @@ public class EditListItemTest extends BackEndTest {
             .title(ORIGINAL_TITLE)
             .url(ORIGINAL_URL)
             .build();
-        UUID linkId = NotebookActions.createLink(accessTokenId, createLinkRequest);
+        UUID linkId = LinkActions.createLink(accessTokenId, createLinkRequest);
 
         EditListItemRequest parentNotCategoryRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .parent(linkId)
             .build();
-        Response parentNotCategoryResponse = NotebookActions.getEditListItemResponse(accessTokenId, parentNotCategoryRequest, parentCategoryId);
+        Response parentNotCategoryResponse = ListItemActions.getEditListItemResponse(accessTokenId, parentNotCategoryRequest, parentCategoryId);
         verifyErrorResponse(parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
@@ -73,7 +75,7 @@ public class EditListItemTest extends BackEndTest {
         EditListItemRequest listItemNotFoundRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .build();
-        Response listItemNotFoundResponse = NotebookActions.getEditListItemResponse(accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
+        Response listItemNotFoundResponse = ListItemActions.getEditListItemResponse(accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(listItemNotFoundResponse);
     }
 }

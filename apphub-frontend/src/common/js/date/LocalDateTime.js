@@ -51,6 +51,10 @@ class LocalDateTimeObj {
         return String(this.date.getSeconds()).padStart(2, '0');
     }
 
+    getEpoch() {
+        return this.date.valueOf();
+    }
+
     format() {
         return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
     }

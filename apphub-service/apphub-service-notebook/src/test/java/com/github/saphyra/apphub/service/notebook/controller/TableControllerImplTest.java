@@ -1,47 +1,50 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.TableResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.table.EditTableRequest;
+import com.github.saphyra.apphub.api.notebook.model.table.EditTableResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ConvertTableToChecklistTableService;
-import com.github.saphyra.apphub.service.notebook.service.table.query.ContentTableColumnResponseProvider;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.edition.TableEditionService;
+import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class TableControllerImplTest {
+class TableControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID ROW_ID = UUID.randomUUID();
 
     @Mock
     private TableCreationService tableCreationService;
 
     @Mock
-    private TableEditionService tableEditionService;
-
-    @Mock
     private TableQueryService tableQueryService;
 
     @Mock
-    private ConvertTableToChecklistTableService convertTableToChecklistTableService;
+    private TableRowStatusUpdateService tableRowStatusUpdateService;
 
     @Mock
-    private ContentTableColumnResponseProvider contentTableColumnResponseProvider;
+    private CheckedTableRowDeletionService checkedTableRowDeletionService;
+
+    @Mock
+    private TableEditionService tableEditionService;
 
     @InjectMocks
     private TableControllerImpl underTest;
@@ -53,45 +56,52 @@ public class TableControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
+    private TableFileUploadResponse fileUploadResponse;
+
+    @Mock
+    private EditTableResponse editTableResponse;
+
+    @Mock
     private EditTableRequest editTableRequest;
 
     @Mock
-    private TableResponse<String> tableResponse;
+    private TableResponse tableResponse;
 
     @Test
-    public void createTable() {
+    void createTable() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(tableCreationService.create(createTableRequest, USER_ID, ListItemType.TABLE)).willReturn(LIST_ITEM_ID);
+        given(tableCreationService.create(USER_ID, createTableRequest)).willReturn(List.of(fileUploadResponse));
 
-        OneParamResponse<UUID> result = underTest.createTable(createTableRequest, accessTokenHeader);
-
-        assertThat(result.getValue()).isEqualTo(LIST_ITEM_ID);
+        assertThat(underTest.createTable(createTableRequest, accessTokenHeader)).containsExactly(fileUploadResponse);
     }
 
     @Test
-    public void editTable() {
-        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
+    void editTable() {
+        given(tableEditionService.editTable(LIST_ITEM_ID, editTableRequest)).willReturn(editTableResponse);
 
-        TableResponse<String> result = underTest.editTable(editTableRequest, LIST_ITEM_ID);
-
-        verify(tableEditionService).edit(LIST_ITEM_ID, editTableRequest);
-
-        assertThat(result).isEqualTo(tableResponse);
+        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessTokenHeader)).isEqualTo(editTableResponse);
     }
 
     @Test
-    public void getTable() {
-        given(tableQueryService.getTable(LIST_ITEM_ID, contentTableColumnResponseProvider)).willReturn(tableResponse);
+    void getTable() {
+        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
 
-        TableResponse<String> result = underTest.getTable(LIST_ITEM_ID);
-
-        assertThat(result).isEqualTo(tableResponse);
+        assertThat(underTest.getTable(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(tableResponse);
     }
 
     @Test
-    public void convertToChecklistTable() {
-        underTest.convertToChecklistTable(LIST_ITEM_ID);
+    void setRowStatus() {
+        underTest.setRowStatus(ROW_ID, new OneParamRequest<>(true), accessTokenHeader);
 
-        verify(convertTableToChecklistTableService).convert(LIST_ITEM_ID);
+        then(tableRowStatusUpdateService).should().setRowStatus(ROW_ID, true);
+    }
+
+    @Test
+    void deleteCheckedRows() {
+        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+
+        assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(tableResponse);
+
+        then(checkedTableRowDeletionService).should().deleteCheckedRows(LIST_ITEM_ID);
     }
 }

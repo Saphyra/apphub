@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SkillConverter {
+public class SkillConverter implements GameDataToModelConverter {
     public List<SkillModel> toModel(UUID gameId, Collection<Skill> skills) {
         return skills.stream()
             .map(skill -> toModel(gameId, skill))
@@ -50,5 +51,10 @@ public class SkillConverter {
             .level(skill.getLevel())
             .nextLevel(skill.getNextLevel())
             .build();
+    }
+
+    @Override
+    public List<SkillModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getSkills());
     }
 }

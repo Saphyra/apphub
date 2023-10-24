@@ -22,18 +22,6 @@
         <addPrimaryKey schemaName="skyxplore_game" tableName="construction" columnNames="construction_id" constraintName="construction_pk"/>
     </changeSet>
 
-    <changeSet id="add-column-parallel_workers-to-construction" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists schemaName="skyxplore_game" tableName="construction" columnName="parallel_workers"/>
-            </not>
-        </preConditions>
-
-        <addColumn schemaName="skyxplore_game" tableName="construction">
-            <column name="parallel_workers" type="integer"/>
-        </addColumn>
-    </changeSet>
-
     <changeSet id="remove-column-location_type-from-construction" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <columnExists schemaName="skyxplore_game" tableName="construction" columnName="location_type"/>
@@ -66,15 +54,5 @@
         <addColumn schemaName="skyxplore_game" tableName="construction">
             <column name="location" type="varchar(37)"/>
         </addColumn>
-    </changeSet>
-
-    <changeSet id="remove-column-parallel_workers-from-construction" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="parallel_workers"/>
-        </preConditions>
-
-        <dropColumn schemaName="skyxplore_game" tableName="construction">
-            <column name="parallel_workers"/>
-        </dropColumn>
     </changeSet>
 </databaseChangeLog>

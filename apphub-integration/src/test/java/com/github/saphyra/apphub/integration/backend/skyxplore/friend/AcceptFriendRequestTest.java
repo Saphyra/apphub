@@ -74,7 +74,7 @@ public class AcceptFriendRequestTest extends BackEndTest {
     }
 
     private static void accept(Language language, UUID accessTokenId1, UUID userId1, UUID accessTokenId2, SkyXploreCharacterModel model1, SkyXploreCharacterModel model2, UUID userId2, UUID friendRequestId) {
-        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId1);
+        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId1, accessTokenId1);
 
         FriendshipResponse acceptResponse = SkyXploreFriendActions.acceptFriendRequest(language, accessTokenId2, friendRequestId);
 

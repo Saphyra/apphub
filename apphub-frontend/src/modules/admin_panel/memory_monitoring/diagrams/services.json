@@ -1,0 +1,19 @@
+[
+    "event-gateway",
+    "admin-panel",
+    "main-gateway",
+    "modules",
+    "notebook",
+    "scheduler",
+    "skyxplore-data",
+    "skyxplore-game",
+    "skyxplore-lobby",
+    "training",
+    "user",
+    "utils",
+    "web-content",
+    "community",
+    "calendar",
+    "encryption",
+    "storage"
+]

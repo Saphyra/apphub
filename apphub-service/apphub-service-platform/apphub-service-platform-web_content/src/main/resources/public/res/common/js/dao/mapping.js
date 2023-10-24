@@ -7,11 +7,10 @@ window.Mapping = new function(){
 
     const endpoints = {
         //WS Connection Subscriptions
-        WS_CONNECTION_SKYXPLORE_MAIN_MENU: new Endpoint("/api/message-sender/skyxplore/main-menu", HttpMethod.GET),
-        WS_CONNECTION_SKYXPLORE_LOBBY: new Endpoint("/api/message-sender/skyxplore/lobby", HttpMethod.GET),
-        WS_CONNECTION_SKYXPLORE_GAME: new Endpoint("/api/message-sender/skyxplore/game", HttpMethod.GET),
-        WS_CONNECTION_ADMIN_PANEL_MONITORING: new Endpoint("/api/message-sender/admin-panel/monitoring", HttpMethod.GET),
-        WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT: new Endpoint("/api/message-sender/admin-panel/error-report", HttpMethod.GET),
+        WS_CONNECTION_SKYXPLORE_MAIN_MENU: new Endpoint("/api/ws/skyxplore-data/main-menu", HttpMethod.GET),
+        WS_CONNECTION_SKYXPLORE_GAME: new Endpoint("/api/ws/skyxplore-game/game", HttpMethod.GET),
+        WS_CONNECTION_ADMIN_PANEL_MONITORING: new Endpoint("/api/ws/admin-panel/monitoring", HttpMethod.GET),
+        WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT: new Endpoint("/api/ws/admin-panel/error-report", HttpMethod.GET),
 
         //Error reporting
         ADMIN_PANEL_GET_ERROR_REPORTS: new Endpoint("/api/admin-panel/error-report", HttpMethod.POST),

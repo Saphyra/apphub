@@ -112,7 +112,7 @@ public class AiSettingsTest extends BackEndTest {
 
         ResponseValidator.verifyForbiddenOperation(response);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
         return wsClient;
     }
 

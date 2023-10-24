@@ -36,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LobbySettingsTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-%s";
+    private static final String NEW_AI_NAME = "new-ai-name";
 
     @Test(groups = {"fe", "skyxplore"})
     public void allianceSettings() {
@@ -238,6 +239,7 @@ public class LobbySettingsTest extends SeleniumTest {
         aiValidation(driver1);
         createAndRemoveAi(driver1, driver2);
         setAlliance(driver1, driver2);
+        renameAi(driver1, driver2);
     }
 
     private static void aiValidation(WebDriver driver1) {
@@ -306,6 +308,15 @@ public class LobbySettingsTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyActions.findAiByName(playerDriver, aiName).isEmpty())
             .assertTrue("Ai with name " + aiName + " is still present.");
+    }
+
+    private void renameAi(WebDriver driver1, WebDriver driver2) {
+        SkyXploreLobbyActions.findAiByNameValidated(driver1, AI_NAME)
+            .rename(NEW_AI_NAME);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreLobbyActions.findAiByName(driver2, NEW_AI_NAME).isPresent())
+            .assertTrue("Ai is not renamed");
     }
 
     @Test(groups = {"fe", "skyxplore"})

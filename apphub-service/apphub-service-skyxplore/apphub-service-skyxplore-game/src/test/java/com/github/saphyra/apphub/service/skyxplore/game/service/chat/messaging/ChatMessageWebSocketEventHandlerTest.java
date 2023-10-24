@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat.messaging;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -12,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -21,11 +20,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class ChatMessageWebSocketEventHandlerTest {
@@ -45,7 +46,7 @@ public class ChatMessageWebSocketEventHandlerTest {
     private CharacterProxy characterProxy;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreGameWebSocketHandler webSocketHandler;
 
     @Mock
     private ChatRoomMemberFilter chatRoomMemberFilter;
@@ -88,14 +89,12 @@ public class ChatMessageWebSocketEventHandlerTest {
         given(characterProxy.getCharacterByUserId(SENDER)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(SENDER_NAME);
 
-        underTest.handle(SENDER, event);
+        underTest.handle(SENDER, event, webSocketHandler);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
+        ArgumentCaptor<WebSocketEvent> argumentCaptor = ArgumentCaptor.forClass(WebSocketEvent.class);
+        then(webSocketHandler).should().sendEvent(eq(List.of(PLAYER_ID)), argumentCaptor.capture());
 
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactly(PLAYER_ID);
-        WebSocketEvent event = message.getEvent();
+        WebSocketEvent event = argumentCaptor.getValue();
         assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE);
         assertThat(event.getPayload()).isInstanceOf(OutgoingChatMessage.class);
         OutgoingChatMessage outgoingChatMessage = (OutgoingChatMessage) event.getPayload();

@@ -26,7 +26,7 @@ public class MemoryMonitoringTest extends BackEndTest {
         UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        ApphubWsClient wsClient = ApphubWsClient.createAdminPanelMonitoring(language, accessTokenId);
+        ApphubWsClient wsClient = ApphubWsClient.createAdminPanelMonitoring(language, accessTokenId, accessTokenId);
 
         wsClient.awaitForEvent(WebSocketEventName.ADMIN_PANEL_MONITORING_MEMORY_STATUS);
 
@@ -42,7 +42,6 @@ public class MemoryMonitoringTest extends BackEndTest {
             "event-gateway",
             "admin-panel",
             "main-gateway",
-            "message-sender",
             "modules",
             "notebook",
             "scheduler",

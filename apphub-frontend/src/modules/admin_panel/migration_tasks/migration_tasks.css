@@ -1,0 +1,11 @@
+#migration-tasks-table {
+    margin: 24px auto;
+}
+
+.migration-task-checkbox-cell {
+    text-align: center;
+}
+
+.migration-task-checkbox-cell input{
+    transform: scale(1.5);
+}

@@ -1,0 +1,58 @@
+{
+    "title": {
+        "en": "Migration Tasks - Admin Panel - Apphub",
+        "hu": "Migrációs feladatok - Kezelőfelület - Apphub"
+    },
+    "page-title": {
+        "en": "Migration Tasks",
+        "hu": "Migrációs feladatok"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "migration-tasks": {
+        "en": "Migration Tasks",
+        "hu": "Migrációs feladatok"
+    },
+    "event": {
+        "en": "Event",
+        "hu": "Esemény"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Név"
+    },
+    "completed": {
+        "en": "Completed",
+        "hu": "Befejezve"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "trigger": {
+        "en": "Trigger",
+        "hu": "Elindít"
+    },
+    "confirm-deletion-title": {
+        "en": "Confirm Migration Task deletion",
+        "hu": "Migrációs feladat törlése?"
+    },
+    "confirm-deletion-detail": {
+        "en": "Are you sure you want to delete Migration Task \"{event}\"? It does \"{name}\".",
+        "hu": "Biztosan törölni szeretnéd a \"{event}\" Migrációs Feladatot? Ez a következőt csinálja: \"{name}\"."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "confirm-trigger-title": {
+        "en": "Trigger Migration Task?",
+        "hu": "Migrációs feladat indítása?"
+    },
+    "confirm-trigger-detail": {
+        "en": "Are you sure you want to trigger Migration Task \"{event}\"? It does \"{name}\".",
+        "hu": "Biztosan el szeretnéd indítani a \"{event}\" Migrációs Feladatot? Ez a következőt csinálja: \"{name}\"."
+    }
+}

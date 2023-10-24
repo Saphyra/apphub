@@ -28,6 +28,13 @@ public class WebElementUtils {
         webElement.sendKeys(text);
     }
 
+    public static void clearAndFillNotLooseFocus(WebElement webElement, String text, int oldTextLength) {
+        for(int i = 0; i < oldTextLength; i++){
+            webElement.sendKeys(Keys.BACK_SPACE);
+        }
+        webElement.sendKeys(text);
+    }
+
     public static void setNumberSlow(WebElement webElement, Integer value) {
         Integer currentValue = WebElementUtils.getValueOfInputAs(webElement, Integer::parseInt);
 

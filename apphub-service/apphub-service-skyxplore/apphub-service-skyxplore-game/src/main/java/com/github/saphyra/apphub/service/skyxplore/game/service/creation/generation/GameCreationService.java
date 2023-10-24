@@ -1,24 +1,23 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.GameFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
+import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -27,25 +26,28 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class GameCreationService {
     private final ExecutorServiceBean executorServiceBean;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyApiClient lobbyClient;
     private final GameFactory gameFactory;
     private final GameDao gameDao;
-    private final BlockingQueue<SkyXploreGameCreationRequest> requests;
+    private final BlockingQueue<BiWrapper<SkyXploreGameCreationRequest, UUID>> requests;
     private final GameSaverService gameSaverService;
     private final ErrorReporterService errorReporterService;
     private final TickSchedulerLauncher tickSchedulerLauncher;
+    private final CommonConfigProperties commonConfigProperties;
 
     @Builder
     public GameCreationService(
-        MessageSenderProxy messageSenderProxy,
+        SkyXploreLobbyApiClient lobbyClient,
         GameFactory gameFactory,
         GameDao gameDao,
-        BlockingQueue<SkyXploreGameCreationRequest> requests,
+        BlockingQueue<BiWrapper<SkyXploreGameCreationRequest, UUID>> requests,
         GameSaverService gameSaverService,
         ExecutorServiceBeanFactory executorServiceBeanFactory,
         ErrorReporterService errorReporterService,
-        TickSchedulerLauncher tickSchedulerLauncher) {
-        this.messageSenderProxy = messageSenderProxy;
+        TickSchedulerLauncher tickSchedulerLauncher,
+        CommonConfigProperties commonConfigProperties
+    ) {
+        this.lobbyClient = lobbyClient;
         this.gameFactory = gameFactory;
         this.gameDao = gameDao;
         this.requests = requests;
@@ -53,27 +55,19 @@ public class GameCreationService {
         executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
         this.errorReporterService = errorReporterService;
         this.tickSchedulerLauncher = tickSchedulerLauncher;
+        this.commonConfigProperties = commonConfigProperties;
     }
 
-    private void create(SkyXploreGameCreationRequest request) {
+    private void create(SkyXploreGameCreationRequest request, UUID gameId) {
         StopWatch stopWatch = StopWatch.createStarted();
-        Game game = gameFactory.create(request);
+        Game game = gameFactory.create(request, gameId);
         stopWatch.stop();
         log.info("Game {} created in {}ms for host {}", game.getGameId(), stopWatch.getTime(TimeUnit.MILLISECONDS), game.getHost());
         gameDao.save(game);
         gameSaverService.save(game);
         tickSchedulerLauncher.launch(game);
 
-        WebSocketEvent event = WebSocketEvent.builder()
-            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED)
-            .build();
-
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(request.getMembers().keySet())
-            .event(event)
-            .build();
-
-        messageSenderProxy.sendToLobby(message);
+        lobbyClient.gameLoaded(gameId, commonConfigProperties.getDefaultLocale());
     }
 
     @PostConstruct
@@ -82,8 +76,8 @@ public class GameCreationService {
             log.info("GameCreation Thread started.");
             while (true) {
                 try {
-                    SkyXploreGameCreationRequest request = requests.take();
-                    executorServiceBean.execute(() -> create(request));
+                    BiWrapper<SkyXploreGameCreationRequest, UUID> biWrapper = requests.take();
+                    executorServiceBean.execute(() -> create(biWrapper.getEntity1(), biWrapper.getEntity2()));
                 } catch (Exception e) {
                     log.error("Execution failed", e);
                     errorReporterService.report("GameCreation failed.", e);

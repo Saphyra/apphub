@@ -1,22 +1,20 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.service;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.response.friendship.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.friendship.SentFriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
-import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.converter.FriendRequestToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.SkyXploreFriendshipWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,6 +26,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +47,7 @@ public class FriendRequestCreationServiceTest {
     private FriendRequestFactory friendRequestFactory;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreFriendshipWebSocketHandler friendshipWebSocketHandler;
 
     @Mock
     private FriendRequestToResponseConverter friendRequestToResponseConverter;
@@ -113,12 +112,8 @@ public class FriendRequestCreationServiceTest {
         SentFriendRequestResponse result = underTest.createFriendRequest(SENDER_ID, FRIEND_ID);
 
         verify(friendRequestDao).save(friendRequest);
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT);
-        assertThat(message.getRecipients()).containsExactlyInAnyOrder(FRIEND_ID);
-        assertThat(message.getEvent().getPayload()).isEqualTo(incomingFriendRequestResponse);
+
+        then(friendshipWebSocketHandler).should().sendEvent(FRIEND_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT, incomingFriendRequestResponse);
 
         assertThat(result).isEqualTo(sentFriendRequestResponse);
     }

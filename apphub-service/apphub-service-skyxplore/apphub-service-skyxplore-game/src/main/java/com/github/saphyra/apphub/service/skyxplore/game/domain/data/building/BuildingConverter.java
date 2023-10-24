@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.planet.Construction
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuildingConverter {
+public class BuildingConverter implements GameDataToModelConverter {
     private final ConstructionConverter constructionConverter;
     private final DeconstructionConverter deconstructionConverter;
 
@@ -60,5 +61,10 @@ public class BuildingConverter {
             .construction(constructionResponse)
             .deconstruction(deconstructionResponse)
             .build();
+    }
+
+    @Override
+    public List<BuildingModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getBuildings());
     }
 }

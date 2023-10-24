@@ -1,17 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
+import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +31,12 @@ public class GameLoader {
     private final AllianceLoader allianceLoader;
     private final ChatFactory chatFactory;
     private final GameDataProxy gameDataProxy;
-    private final MessageSenderProxy messageSenderProxy;
+    private final SkyXploreLobbyApiClient lobbyClient;
     private final EventLoopFactory eventLoopFactory;
     private final GameDataLoader gameDataLoader;
     private final ProcessLoader processLoader;
     private final TickSchedulerLauncher tickSchedulerLauncher;
+    private final CommonConfigProperties commonConfigProperties;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -69,10 +68,6 @@ public class GameLoader {
         stopwatch.stop();
         log.info("Game loaded in {}s", stopwatch.elapsed(TimeUnit.SECONDS));
 
-        WebSocketMessage message = WebSocketMessage.builder()
-            .recipients(members)
-            .event(WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED).build())
-            .build();
-        messageSenderProxy.sendToLobby(message);
+        lobbyClient.gameLoaded(game.getGameId(), commonConfigProperties.getDefaultLocale());
     }
 }

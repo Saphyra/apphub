@@ -1,6 +1,5 @@
 {
   "id": "steel",
   "storageType": "bulk",
-  "mass": 1,
   "maxProductionBatchSize": 10
 }

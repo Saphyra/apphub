@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.checklist_item;
 
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
+@ForRemoval("notebook-redesign")
 public class ChecklistItem {
     @NonNull
     private final UUID checklistItemId;

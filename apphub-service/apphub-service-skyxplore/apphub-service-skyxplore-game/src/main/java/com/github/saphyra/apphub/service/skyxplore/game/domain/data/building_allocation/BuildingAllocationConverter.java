@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_al
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BuildingAllocationConverter {
+public class BuildingAllocationConverter implements GameDataToModelConverter {
     public List<BuildingAllocationModel> toModel(UUID gameId, Collection<BuildingAllocation> buildingAllocations) {
         return buildingAllocations.stream()
             .map(allocation -> toModel(gameId, allocation))
@@ -32,5 +34,10 @@ public class BuildingAllocationConverter {
         model.setProcessId(allocation.getProcessId());
 
         return model;
+    }
+
+    @Override
+    public List<BuildingAllocationModel> convert(UUID gameId, GameData gameData) {
+        return toModel(gameId, gameData.getBuildingAllocations());
     }
 }

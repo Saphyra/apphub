@@ -1,0 +1,25 @@
+===FEATURES===
+Admin Panel
+    Migration Tasks
+SkyXplore
+    Lobby
+        Rename AIs
+
+===BUGFIXES===
+Notebook
+    Move the home / next buttons to the right
+
+===PLATFORM CHANGES===
+Get rid of message-sender
+Admin Panel
+    Memory Monitoring
+        Migrated to react
+        Display message when reports not available
+Notebook
+    New database structure for tables, checklist tables, and checklists
+
+===TECHNICAL DEBTS===
+SkyXplore
+    Scheduled API calls for friend candidate query
+    Remove mass from resources
+    Delete redundant Liquibase changeSets

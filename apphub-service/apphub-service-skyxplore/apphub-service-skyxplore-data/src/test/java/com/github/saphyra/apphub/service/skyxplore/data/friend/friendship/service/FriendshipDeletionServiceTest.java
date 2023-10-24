@@ -1,16 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.service;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.skyxplore.data.common.MessageSenderProxy;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Friendship;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.FriendshipDeletionPlayerProcessor;
+import com.github.saphyra.apphub.service.skyxplore.data.ws.SkyXploreFriendshipWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,7 +32,7 @@ public class FriendshipDeletionServiceTest {
     private FriendshipDao friendshipDao;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreFriendshipWebSocketHandler friendshipWebSocketHandler;
 
     @Mock
     private FriendshipDeletionPlayerProcessor friendshipDeletionPlayerProcessor;
@@ -75,12 +73,8 @@ public class FriendshipDeletionServiceTest {
         underTest.removeFriendship(FRIENDSHIP_ID, USER_ID);
 
         verify(friendshipDao).delete(friendship);
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToMainMenu(argumentCaptor.capture());
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getEvent().getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED);
-        assertThat(message.getRecipients()).containsExactly(FRIEND_ID);
-        assertThat(message.getEvent().getPayload()).isEqualTo(FRIENDSHIP_ID);
+
+        then(friendshipWebSocketHandler).should().sendEvent(FRIEND_ID, WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED, FRIENDSHIP_ID);
 
         verify(friendshipDeletionPlayerProcessor).processDeletedFriendship(USER_ID, FRIEND_ID);
     }

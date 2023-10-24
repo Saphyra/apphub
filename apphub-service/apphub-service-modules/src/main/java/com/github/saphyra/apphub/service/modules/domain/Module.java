@@ -24,5 +24,6 @@ public class Module {
 
     private boolean mobileAllowed;
 
+    @Builder.Default
     private List<String> roles = new ArrayList<>();
 }

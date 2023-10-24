@@ -17,18 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-    </dependencies>
-
-    <build>
-
-    </build>
-
     <modules>
         <module>apphub-test-api</module>
         <module>apphub-test-config</module>
         <module>apphub-test-repository</module>
         <module>apphub-test-rest_assured</module>
         <module>apphub-test-common</module>
+        <module>apphub-test-web_socket</module>
     </modules>
 </project>

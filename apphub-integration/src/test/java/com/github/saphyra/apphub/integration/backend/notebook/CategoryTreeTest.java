@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.notebook;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.NotebookActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -25,15 +25,15 @@ public class CategoryTreeTest extends BackEndTest {
         CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();
-        UUID parentCategoryId = NotebookActions.createCategory(accessTokenId, parentRequest);
+        UUID parentCategoryId = CategoryActions.createCategory(accessTokenId, parentRequest);
 
         CreateCategoryRequest childRequest = CreateCategoryRequest.builder()
             .title(TITLE_2)
             .parent(parentCategoryId)
             .build();
-        UUID childCategoryId = NotebookActions.createCategory(accessTokenId, childRequest);
+        UUID childCategoryId = CategoryActions.createCategory(accessTokenId, childRequest);
 
-        List<CategoryTreeView> result = NotebookActions.getCategoryTree(accessTokenId);
+        List<CategoryTreeView> result = CategoryActions.getCategoryTree(accessTokenId);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTitle()).isEqualTo(TITLE_1);

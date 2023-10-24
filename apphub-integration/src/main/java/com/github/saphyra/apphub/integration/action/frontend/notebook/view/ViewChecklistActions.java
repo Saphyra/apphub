@@ -76,7 +76,12 @@ public class ViewChecklistActions {
     }
 
     public static String getTitle(WebDriver driver) {
-        return driver.findElement(By.id("notebook-content-checklist-title"))
+        return driver.findElement(By.id("notebook-content-list-item-title-input"))
             .getAttribute("value");
+    }
+
+    public static boolean isEditingEnabled(WebDriver driver) {
+        return WebElementUtils.getClasses(driver.findElement(By.id("notebook-content-checklist"))).contains("editable");
+
     }
 }

@@ -8,7 +8,6 @@ user apphub-service-user 02_service 8085
 utils apphub-service-utils 02_service 8100
 event-gateway apphub-service-platform-event_gateway 01_platform 8081
 main-gateway apphub-service-platform-main_gateway 02_service 8080
-message-sender apphub-service-platform-message_sender 02_service 8094
 scheduler apphub-service-platform-scheduler 02_service 8082
 web-content apphub-service-platform-web_content 02_service 8083
 skyxplore-data apphub-service-skyxplore-data 02_service 8091

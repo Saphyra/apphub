@@ -1,26 +1,24 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat.create;
 
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEvent;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketEventName;
-import com.github.saphyra.apphub.api.platform.message_sender.model.WebSocketMessage;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.MessageSenderProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +35,7 @@ public class CreateChatRoomServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreGameWebSocketHandler webSocketHandler;
 
     @Mock
     private CreateChatRoomRequestValidator createChatRoomRequestValidator;
@@ -72,17 +70,6 @@ public class CreateChatRoomServiceTest {
         verify(createChatRoomRequestValidator).validate(request, game);
         verify(chat).addRoom(chatRoom);
 
-        ArgumentCaptor<WebSocketMessage> argumentCaptor = ArgumentCaptor.forClass(WebSocketMessage.class);
-        verify(messageSenderProxy).sendToGame(argumentCaptor.capture());
-
-        WebSocketMessage message = argumentCaptor.getValue();
-        assertThat(message.getRecipients()).containsExactlyInAnyOrder(USER_ID, MEMBER);
-
-        WebSocketEvent event = message.getEvent();
-        assertThat(event.getEventName()).isEqualTo(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED);
-
-        ChatRoomCreatedMessage payload = (ChatRoomCreatedMessage) event.getPayload();
-        assertThat(payload.getId()).isEqualTo(CHAT_ROOM_ID);
-        assertThat(payload.getTitle()).isEqualTo(ROOM_TITLE);
+        then(webSocketHandler).should().sendEvent(List.of(USER_ID, MEMBER), WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED, new ChatRoomCreatedMessage(CHAT_ROOM_ID, ROOM_TITLE));
     }
 }

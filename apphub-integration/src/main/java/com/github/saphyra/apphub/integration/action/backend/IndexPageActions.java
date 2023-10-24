@@ -15,6 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexPageActions {
+    @Deprecated
     public static UUID registerAndLogin(Language locale, RegistrationParameters userData) {
         registerUser(locale, userData.toRegistrationRequest());
         return login(locale, userData.toLoginRequest());

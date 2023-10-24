@@ -11,7 +11,7 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 const Contacts = ({ localizationHandler, lastEvent }) => {
     const [friendQuery, setFriendQuery] = useState("");
     const [shouldDisplaySearchResult, setShouldDisplaySearchResult] = useState(false);
-    const [friendCandidates, setFriendCandidates] = useState([]);
+    const [friendCandidates, setFriendCandidates] = useState(null);
     const [incomingFriendRequests, setIncomingFriendRequests] = useState([]);
     const [sentFriendRequests, setSentFriendRequests] = useState([]);
     const [friendships, setFriendships] = useState([]);
@@ -52,14 +52,23 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     //Loaders
     const loadFriendCandidates = () => {
-        const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_SEARCH_FOR_FRIENDS.createRequest({ value: friendQuery })
-                .send();
+        const timeout = setTimeout(
+            () => {
+                const fetch = async () => {
+                    const result = await Endpoints.SKYXPLORE_SEARCH_FOR_FRIENDS.createRequest({ value: friendQuery })
+                        .send();
 
-            setFriendCandidates(result);
-        }
+                    setFriendCandidates(result);
+                }
 
-        shouldDisplaySearchResult && fetch();
+                shouldDisplaySearchResult && fetch();
+            },
+            1000
+        );
+
+        setFriendCandidates(null);
+
+        return () => clearTimeout(timeout);
     }
 
     const loadIncomingFriendRequests = () => {
@@ -150,6 +159,14 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     //Processing
     const getSearchResult = () => {
+        if(friendCandidates === null){
+            return (
+                <div id="skyxplore-character-searching">
+                    {localizationHandler.get("searching")}
+                </div>
+            );
+        }
+
         if (friendCandidates.length === 0) {
             return (
                 <div id="skyxplore-character-not-found">

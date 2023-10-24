@@ -141,7 +141,7 @@ const NewImagePage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="back-button"
                         id="notebook-new-image-back-button"

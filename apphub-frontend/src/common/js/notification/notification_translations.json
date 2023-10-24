@@ -74,5 +74,9 @@
     "CATEGORY_NOT_FOUND": {
         "en": "Category not found.",
         "hu": "Kategória nem található."
+    },
+    "DATA_NOT_FOUND": {
+        "en": "Data not found.",
+        "hu": "Az adat nem található."
     }
 }

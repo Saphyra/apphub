@@ -70,5 +70,9 @@
     "calendar": {
         "en": "Calendar",
         "hu": "Határidőnapló"
+    },
+    "migration-tasks": {
+        "en": "Migration Tasks",
+        "hu": "Migrációs feladatok"
     }
 }

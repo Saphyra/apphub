@@ -3,18 +3,17 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.GameDataFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.AiFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.player.PlayerFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,9 +41,6 @@ public class GameFactoryTest {
 
     @Mock
     private AllianceFactory allianceFactory;
-
-    @Mock
-    private IdGenerator idGenerator;
 
     @Mock
     private ChatFactory chatFactory;
@@ -99,7 +95,6 @@ public class GameFactoryTest {
             .gameName(GAME_NAME)
             .build();
 
-        given(idGenerator.randomUuid()).willReturn(GAME_ID);
         given(aiPlayer.getUserId()).willReturn(AI_PLAYER_ID);
 
         Map<UUID, Player> players = CollectionUtils.singleValueMap(USER_ID, player);
@@ -114,7 +109,7 @@ public class GameFactoryTest {
         given(chatFactory.create(members)).willReturn(chat);
         given(eventLoopFactory.create()).willReturn(eventLoop);
 
-        Game result = underTest.create(request);
+        Game result = underTest.create(request, GAME_ID);
 
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getHost()).isEqualTo(HOST);

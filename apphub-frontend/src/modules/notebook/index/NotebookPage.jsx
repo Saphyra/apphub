@@ -109,7 +109,7 @@ const NotebookPage = () => {
             </main>
 
             <Footer
-                leftButtons={
+                rightButtons={
                     <Button
                         id="notebook-home-button"
                         onclick={() => window.location.href = Constants.MODULES_PAGE}

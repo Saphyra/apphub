@@ -41,7 +41,7 @@ public class GetActiveFriendsTest extends BackEndTest {
 
         assertThat(SkyXploreFriendActions.getActiveFriends(language, accessTokenId1)).isEmpty();
 
-        ApphubWsClient.createSkyXploreMainMenu(language, accessTokenId2);
+        ApphubWsClient.createSkyXploreLobbyInvitation(language, accessTokenId2, accessTokenId2);
 
         List<ActiveFriendResponse> activeFriends = SkyXploreFriendActions.getActiveFriends(language, accessTokenId1);
         assertThat(activeFriends).hasSize(1);

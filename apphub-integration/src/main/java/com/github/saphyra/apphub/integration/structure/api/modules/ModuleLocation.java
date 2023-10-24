@@ -16,6 +16,7 @@ public enum ModuleLocation {
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
     ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
     MEMORY_MONITORING("admin-panel", "memory-monitoring", Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
+    MIGRATION_TASKS("admin-panel", "migration-tasks", Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),
     MANAGE_ACCOUNT("accounts", "account", Endpoints.ACCOUNT_PAGE, "Fiók kezelése"),
     NOTEBOOK("office", "notebook", Endpoints.NOTEBOOK_PAGE, "Jegyztefüzet"),
     SKYXPLORE(

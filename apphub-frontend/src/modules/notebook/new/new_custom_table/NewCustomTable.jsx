@@ -19,7 +19,7 @@ import Utils from "../../../../common/js/Utils";
 import CustomTableRow from "../../common/custom_table/CustomTableRow";
 import CustomTableColumnData from "../../common/custom_table/column/CustomTableColumnData";
 import CustomTableColumnTypeSelector from "../../common/custom_table/column_type_selector/CustomTableColumnTypeSelector";
-import CustomTableColumnType from "../../common/custom_table/CustomTableColumnType";
+import ColumnType from "../../common/table/ColumnType";
 import Endpoints from "../../../../common/js/dao/dao";
 import Spinner from "../../../../common/component/Spinner";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
@@ -94,7 +94,7 @@ const NewCustomTable = () => {
             .map(column => column.type)
             .orElseGet(() => {
                 console.log("Previous column not found with columnIndex " + columnIndex, previousRowColumns);
-                return CustomTableColumnType.EMPTY;
+                return ColumnType.EMPTY;
             });
     }
 
@@ -209,8 +209,8 @@ const NewCustomTable = () => {
 
     const mapValue = (column) => {
         switch (column.type) {
-            case CustomTableColumnType.IMAGE:
-            case CustomTableColumnType.FILE:
+            case ColumnType.IMAGE:
+            case ColumnType.FILE:
                 if (!Utils.hasValue(column.data)) {
                     return null;
                 }
@@ -352,28 +352,28 @@ const NewCustomTable = () => {
 
     const getDefaultDataForColumnType = (columnType) => {
         switch (columnType) {
-            case CustomTableColumnType.NUMBER:
+            case ColumnType.NUMBER:
                 return {
                     value: 0,
                     step: 1
                 }
-            case CustomTableColumnType.RANGE:
+            case ColumnType.RANGE:
                 return {
                     value: 0,
                     step: 1,
                     min: -10,
                     max: 10
                 }
-            case CustomTableColumnType.TEXT:
-            case CustomTableColumnType.LINK:
-            case CustomTableColumnType.DATE:
-            case CustomTableColumnType.TIME:
-            case CustomTableColumnType.DATE_TIME:
-            case CustomTableColumnType.MONTH:
+            case ColumnType.TEXT:
+            case ColumnType.LINK:
+            case ColumnType.DATE:
+            case ColumnType.TIME:
+            case ColumnType.DATE_TIME:
+            case ColumnType.MONTH:
                 return "";
-            case CustomTableColumnType.CHECKBOX:
+            case ColumnType.CHECKBOX:
                 return false;
-            case CustomTableColumnType.COLOR:
+            case ColumnType.COLOR:
                 return "#000000";
             default:
                 return null;

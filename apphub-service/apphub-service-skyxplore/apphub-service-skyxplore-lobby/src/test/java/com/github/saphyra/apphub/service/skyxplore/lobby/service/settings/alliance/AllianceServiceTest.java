@@ -5,13 +5,14 @@ import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedRes
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.MessageSenderProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +51,7 @@ class AllianceServiceTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private MessageSenderProxy messageSenderProxy;
+    private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
     private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
@@ -123,7 +125,7 @@ class AllianceServiceTest {
         underTest.setAllianceOfAi(USER_ID, PLAYER_ID, NO_ALLIANCE);
 
         verify(aiPlayer).setAllianceId(null);
-        verify(messageSenderProxy).aiModified(aiPlayer, members.keySet());
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test
@@ -146,7 +148,7 @@ class AllianceServiceTest {
         verify(aiPlayer).setAllianceId(ALLIANCE_ID);
 
         ArgumentCaptor<AllianceCreatedResponse> argumentCaptor = ArgumentCaptor.forClass(AllianceCreatedResponse.class);
-        verify(messageSenderProxy).allianceCreated(argumentCaptor.capture(), eq(members.keySet()));
+        verify(lobbyWebSocketHandler).sendEvent(eq(members.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getAlliance()).isEqualTo(allianceResponse);
         assertThat(argumentCaptor.getValue().getAi()).isEqualTo(aiPlayer);
         assertThat(argumentCaptor.getValue().getMember()).isNull();
@@ -165,7 +167,7 @@ class AllianceServiceTest {
         underTest.setAllianceOfAi(USER_ID, PLAYER_ID, ALLIANCE_ID_STRING);
 
         verify(aiPlayer).setAllianceId(ALLIANCE_ID);
-        verify(messageSenderProxy).aiModified(aiPlayer, members.keySet());
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test
@@ -189,7 +191,7 @@ class AllianceServiceTest {
         underTest.setAllianceOfPlayer(USER_ID, PLAYER_ID, NO_ALLIANCE);
 
         verify(lobbyMember).setAllianceId(null);
-        verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, members.keySet());
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
     }
 
     @Test
@@ -211,7 +213,7 @@ class AllianceServiceTest {
         verify(lobbyMember).setAllianceId(ALLIANCE_ID);
 
         ArgumentCaptor<AllianceCreatedResponse> argumentCaptor = ArgumentCaptor.forClass(AllianceCreatedResponse.class);
-        verify(messageSenderProxy).allianceCreated(argumentCaptor.capture(), eq(members.keySet()));
+        verify(lobbyWebSocketHandler).sendEvent(eq(members.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getAlliance()).isEqualTo(allianceResponse);
         assertThat(argumentCaptor.getValue().getAi()).isNull();
         assertThat(argumentCaptor.getValue().getMember()).isEqualTo(lobbyMemberResponse);
@@ -229,6 +231,6 @@ class AllianceServiceTest {
         underTest.setAllianceOfPlayer(USER_ID, PLAYER_ID, ALLIANCE_ID_STRING);
 
         verify(lobbyMember).setAllianceId(ALLIANCE_ID);
-        verify(messageSenderProxy).lobbyMemberModified(lobbyMemberResponse, members.keySet());
+        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
     }
 }

@@ -8,6 +8,6 @@ import java.util.List;
 
 class MemoryMonitoringPage {
     public static List<WebElement> reportContainers(WebDriver driver) {
-        return driver.findElements(By.className("report-container"));
+        return driver.findElements(By.className("memory-monitoring-svg-container"));
     }
 }
