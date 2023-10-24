@@ -19,7 +19,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EditTableRowValidator {
     private final ListItemDao listItemDao;
     private final DimensionDao dimensionDao;
@@ -41,17 +40,13 @@ class EditTableRowValidator {
 
         ValidationUtil.notNull(model.getItemType(), "row.itemType");
         if (model.getItemType() == ItemType.EXISTING) {
+            ValidationUtil.notNull(model.getRowId(), "row.rowId");
             Dimension row = dimensionDao.findByIdValidated(model.getRowId());
             if (!row.getExternalReference().equals(listItemId)) {
                 throw ExceptionFactory.invalidParam("row.rowId", "points to different table");
             }
         }
 
-        List<UUID> allowedColumns = dimensionDao.getByExternalReference(model.getRowId())
-            .stream()
-            .map(Dimension::getDimensionId)
-            .toList();
-
-        editTableColumnValidator.validateColumns(allowedColumns, model.getItemType(), model.getColumns());
+        editTableColumnValidator.validateColumns(model.getRowId(), model.getItemType(), model.getColumns());
     }
 }

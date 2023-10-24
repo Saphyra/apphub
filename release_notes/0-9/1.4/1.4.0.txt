@@ -1,4 +1,6 @@
 ===FEATURES===
+Admin Panel
+    Migration Tasks
 
 ===BUGFIXES===
 Notebook
@@ -10,6 +12,8 @@ Admin Panel
     Memory Monitoring
         Migrated to react
         Display message when reports not available
+Notebook
+    New database structure for tables, checklist tables, and checklists
 
 ===TECHNICAL DEBTS===
 SkyXplore
