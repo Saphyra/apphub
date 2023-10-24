@@ -30,26 +30,4 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
-
-    <changeSet id="add-column-location_type-to-reserved_storage" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists schemaName="skyxplore_game" tableName="reserved_storage" columnName="location_type"/>
-            </not>
-        </preConditions>
-
-        <addColumn schemaName="skyxplore_game" tableName="reserved_storage">
-            <column name="location_type" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="remove-location_type-from-reserved_storage" author="Saphyra">
-        <preConditions onFail="MARK_RAN">
-            <columnExists schemaName="skyxplore_game" tableName="reserved_storage" columnName="location_type"/>
-        </preConditions>
-
-        <dropColumn schemaName="skyxplore_game" tableName="reserved_storage">
-            <column name="location_type"/>
-        </dropColumn>
-    </changeSet>
 </databaseChangeLog>
