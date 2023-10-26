@@ -1,6 +1,9 @@
 ===FEATURES===
 
 ===BUGFIXES===
+Admin Panel
+    Memory Monitoring
+        Reconnect WebSocket
 
 ===PLATFORM CHANGES===
 

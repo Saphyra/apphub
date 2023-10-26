@@ -19,7 +19,7 @@ import LocalDateTime from "../../../common/js/date/LocalDateTime";
 const MemoryMonitoring = () => {
     const wsUrl = "ws://" + window.location.host + WebSocketEndpoint.ADMIN_PANEL_MEMORY_MONITORING;
     const localizationHandler = new LocalizationHandler(localizationData);
-    const { sendMessage, lastMessage } = useWebSocket(wsUrl, { share: true, shouldReconnect: () => false });
+    const { sendMessage, lastMessage } = useWebSocket(wsUrl, { share: true, shouldReconnect: () => true });
     const [reports, setReports] = useState([]);
     const [duration, setDuration] = useState(30);
 
