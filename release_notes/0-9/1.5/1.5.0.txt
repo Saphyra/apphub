@@ -1,4 +1,7 @@
 ===FEATURES===
+Admin Panel
+    Memory Monitoring
+        Hide / Show services
 
 ===BUGFIXES===
 Admin Panel

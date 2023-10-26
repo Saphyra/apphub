@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.google.common.collect.ImmutableList;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
 
 @UtilityClass
 public class Constants {
@@ -71,4 +74,25 @@ public class Constants {
     public final String USER_SETTING_CATEGORY_NOTEBOOK = "notebook";
 
     public final String USER_SETTING_KEY_SHOW_ARCHIVED = "show-archived";
+
+    public static final String SERVICE_NAME_USER = "user";
+    public static final List<String> SERVICES = ImmutableList.of(
+        "event-gateway",
+        "admin-panel",
+        "main-gateway",
+        "modules",
+        "notebook",
+        "scheduler",
+        "skyxplore-data",
+        "skyxplore-game",
+        "skyxplore-lobby",
+        "training",
+        SERVICE_NAME_USER,
+        "utils",
+        "web-content",
+        "community",
+        "calendar",
+        "encryption",
+        "storage"
+    );
 }

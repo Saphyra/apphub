@@ -15,6 +15,9 @@ import Durations from "./durations/Durations.jsx";
 import "./memory_monitoring.css";
 import Diagrams from "./diagrams/Diagrams";
 import LocalDateTime from "../../../common/js/date/LocalDateTime";
+import serviceList from  "./services.json";
+import Stream from "../../../common/js/collection/Stream";
+import Switches from "./switches/Switches";
 
 const MemoryMonitoring = () => {
     const wsUrl = "ws://" + window.location.host + WebSocketEndpoint.ADMIN_PANEL_MEMORY_MONITORING;
@@ -22,6 +25,7 @@ const MemoryMonitoring = () => {
     const { sendMessage, lastMessage } = useWebSocket(wsUrl, { share: true, shouldReconnect: () => true });
     const [reports, setReports] = useState([]);
     const [duration, setDuration] = useState(30);
+    const [switches, setSwitches] = useState(new Stream(serviceList).toMapStream(key => key, key => true).toObject());
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
@@ -59,7 +63,13 @@ const MemoryMonitoring = () => {
                     setDuration={setDuration}
                 />
 
+                <Switches
+                    services={switches}
+                    setServices={setSwitches}
+                />
+
                 <Diagrams
+                    services={switches}
                     reports={reports}
                     duration={duration}
                     localizationHandler={localizationHandler}
