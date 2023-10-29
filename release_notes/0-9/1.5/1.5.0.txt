@@ -11,3 +11,5 @@ Admin Panel
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+Notebook
+    Remove leftovers of Table / Checklist restructure

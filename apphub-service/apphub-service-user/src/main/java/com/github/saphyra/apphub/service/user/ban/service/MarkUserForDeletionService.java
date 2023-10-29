@@ -53,6 +53,11 @@ public class MarkUserForDeletionService {
             throw ExceptionFactory.invalidParam("time", "invalid value");
         }
 
-        return LocalDateTime.of(request.getDate(), time);
+        log.info("Incoming date: {}", request.getDate());
+        log.info("Incoming time: {}", request.getTime());
+        log.info("Parsed time: {}", time);
+        LocalDateTime result = LocalDateTime.of(request.getDate(), time);
+        log.info("Assembled date-time: {}", result);
+        return result;
     }
 }

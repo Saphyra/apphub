@@ -21,22 +21,4 @@
 
         <addPrimaryKey schemaName="admin_panel" tableName="migration_task" columnNames="event" constraintName="migration_task-pk"/>
     </changeSet>
-
-    <changeSet id="add-migration-task-migrate-notebook-checklists" author="sahyra">
-        <comment>@ForRemoval("notebook-redesign")</comment>
-
-        <insert schemaName="admin_panel" tableName="migration_task">
-            <column name="event" value="notebook-migrate-checklists"/>
-            <column name="name" value="Migrate Notebook Checklists to the new structure"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="add-migration-task-migrate-notebook-tables" author="sahyra">
-        <comment>@ForRemoval("notebook-redesign")</comment>
-
-        <insert schemaName="admin_panel" tableName="migration_task">
-            <column name="event" value="notebook-migrate-tables"/>
-            <column name="name" value="Migrate Notebook Tables and Checklist Tables to the new structure"/>
-        </insert>
-    </changeSet>
 </databaseChangeLog>

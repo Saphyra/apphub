@@ -56,7 +56,6 @@ public class MemoryMonitoringTest extends SeleniumTest {
 
     private void hideSpecific(WebDriver driver) {
         MemoryMonitoringActions.toggleService(driver, Constants.SERVICE_NAME_USER);
-        log.info("Toggled");
 
         AwaitilityWrapper.createDefault()
             .until(() -> !MemoryMonitoringActions.getDisplayedServices(driver).contains(Constants.SERVICE_NAME_USER))
