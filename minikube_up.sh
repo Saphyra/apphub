@@ -36,9 +36,7 @@ function scaleNamespace() {
 scaleNamespace "production" "production"
 ./pp.sh
 
-scaleNamespace "develop" "develop"
-
-if [[ "$NAMESPACE_NAME" != "develop" ]]; then
+if [[ "$NAMESPACE_NAME" != "master" ]]; then
   scaleNamespace "$NAMESPACE_NAME" "develop"
 fi
 

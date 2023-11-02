@@ -12,10 +12,15 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Locale handling (HU / EN)
 * Modules management (search and display available modules, mark them as favorite)
 * Admin features
-    * Ban users (permanent / for a specific time)
-    * Role management (Allow / block specific roles (features) for all / specific users)
+    * Ban/delete users
+      * Ban specific roles permanently, or for a specified time
+      * Schedule user deletion
+    * Role management
+      * Add / revoke specific roles to/from users
+      * Enable / disable roles for the whole platform
     * Error monitoring
     * Memory monitoring
+    * Manage migration tasks
 * Notebook
     * Store specific types of data grouped into categories.
     * Search
@@ -31,7 +36,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Log formatter
 * Games
     * SkyXplore (In progress, not enabled on production)
-* Community
+* Community (In progress, not enabled on production)
     * Chat
     * Event feed
     * Setting up groups
@@ -46,11 +51,63 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 
 * Build and Deployment scripts: Located in the root directory
 * apphub-api: Endpoint definitions of the external/internal communication
-* aphub-fronted: React based frontend
+* apphub-fronted: React based frontend
+* apphub-integration: BE and FE test framework for integration tests
+* apphub-integration-server: Statistic tool for measuring integration tests
 * apphub-lib: Libraries used by the services
 * apphub-proxy: Proxy application for exposing the application outside the host machine
 * apphub-service: Services of the application
 * infra: deployment scripts used by the deployment system, kubernetes definitions
+
+## Services
+
+* ### admin-panel
+  * Responsible for platform and user administration.
+    * error-reporting
+    * migration tasks
+    * memory monitoring
+* ### calendar
+  * Responsible for the Calendar feature
+* ### community
+  * Responsible for the platform's "social media"
+  * It's "Groups" feature will be the base of the future feature "Share with"
+  * In progress, disabled
+* ### modules
+  * Responsible for the landing page after registration/login.
+* ### notebook
+  * Responsible for the "Notebook" feature.
+* ### encryption
+  * Currently unused
+  * Will be responsible for storing encryption keys, and the access management for encrypted entities
+* ### event-gateway
+  * Broadcasts incoming events to the subscribers
+* ### main-gateway
+  * Roots the incoming requests to the corresponding service
+  * Authenticates the user
+  * Validates the requests semantically
+* ### scheduler
+  * Fires scheduled events
+* ### storage
+  * Responsible for file upload, storage, and download
+  * Acts as a proxy / adapter between the platform and an external FTP server
+* ### web-content
+  * Contains localization
+  * Servers frontend
+  * Deprecated, will be removed once all the features are migrated to React
+* ### skyxplore-data
+  * Responsible for user data storage, like games, friendships, and static game files
+* ### skyxplore-game
+  * Simulate games currently played
+* ### skyxplore-lobby
+  * Setting up new games
+* ### training
+  * Contains the data of the training books
+* ### user
+  * User session management
+  * User's basic data handling (email, password, etc)
+  * User role configuration
+* ### utils
+  * Small tools
 
 ## How to use
 
@@ -64,11 +121,108 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * npm installed
 * PostgreSQL installed and running
 
-The system is configured to work with AMD Ryzen R9 5900X and 64GB RAM. The configurations can be changed to work with less resources.
-
 ### Script usage
 
+### For local run
+
+How to start up:
+* Start postgres database
+  * Create database "apphub"
+  * If you plan run integration tests, create database "integration"
+* Start the WebUI
+  * Open terminal to apphub-frontend directory
+  * run command "npm install react-scripts"
+    * Need to do only during the first startup
+  * run command "npm start" from directory "apphub-frontend"
+  * Close the opened tab (or change the port to 8080)
+
+Be careful! Startup process eats the CPU until all the services are up.
+
+In local environment, React based pages reload automatically after a change is made.
+
+#### local_start.sh
+
+* Stops the existing services if any
+* Builds the application
+* Starts all the services on local machine
+* Waits until all the services are started up
+
+Usage: ./local_start.sh [skipTests | skipBuild]
+
+* skipBuild: skip the build process of the application, just restart the services
+* skipTests: skip the unit testing part of the build process
+
+#### local_stop.sh
+
+Stops the locally running services.
+
+Usage: ./local_stop.sh
+
+#### local_run_tests.sh
+
+Runs the integration tests against the local server.
+
+Usage: ./local_run_tests.sh [headless:true] [disabled groups:headed-only] [server port:8080] [database port:6432] [integration server port:8072]
+
+Parameters:
+
+* headless:
+  * true (default): Selenium tests run in the background
+  * false: Selenium tests open browser windows
+* disabled groups: Name of test groups should not run
+  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
+* server port: The port of the main gateway (8080)
+* database port: Port of the local postgres server (5432)
+* integration server port: integration server listens to this port. Default: 8072
+
+#### local_run_test_groups.sh
+
+Runs the integration tests against the local server with the specified groups only.
+
+Usage: ./local_run_test_groups.sh [enabled groups] [headless:true] [disabled groups:headed-only] [server port:8080] [database port:6432] [integration server port:8072]
+
+Parameters:
+
+* enabled groups: Name of the groups to run
+* headless:
+  * true (default): Selenium tests run in the background
+  * false: Selenium tests open browser windows
+* disabled groups: Name of test groups should not run
+  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
+* server port: The port of the main gateway (8080)
+* database port: Port of the local postgres server (5432)
+* integration server port: integration server listens to this port. Default: 8072
+
 ### For minikube deployments
+All minikube operations require administrator access.
+
+#### minikube_up.sh
+
+Used on "production machine"
+
+* Starts up minikube, and minikube dashboard
+* Creates if not present, and scales up namespaces
+  * production
+  * name of the current branch (if not develop or master)
+* Starts production proxy
+* Forwards the ports to the current namespace
+
+#### minikube_down.sh
+
+Use when you need to stop any minikube
+
+* Scales down namespaces
+  * production
+  * name of the current branch
+* Stops minikube
+
+#### local_minikube_up.sh
+
+Use when you don't need to scale up production namespace
+
+* Starts up minikube, and minikube dashboard
+* Creates if not present, and scales up namespace of the current branch
+* Forwards the ports to the current namespace
 
 #### build_and_deploy.sh
 
@@ -157,9 +311,9 @@ Parameters:
 
 #### run_tests.sh
 
-* Runs automated tests
+Runs automated tests
 
-Usage: ./run_tests.sh [namespace:current git branch] [headless] [disabled groups]
+Usage: ./run_tests.sh [namespace:current git branch] [headless] [disabled groups] [server port:8070] [database port:8071] [integration server port:8072]
 
 Parametes:
 
@@ -168,41 +322,17 @@ Parametes:
     * true (default): Selenium tests run in the background
     * false: Selenium tests open browser windows
 * disabled groups: Name of test groups should not run
+  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
+* server port: Script forwards the main gateway's port to this port. Default: 8070
+* database port: Script forwards the database's port to this port. Default: 8071
+* integration server port: integration server listens to this port. Default: 8072
 
-### For local run
+#### run_production_tests.sh
 
-#### local_start.sh
+Some features are not production-ready, and disabled on production.
+Runs a special set of integration test against production environment.
 
-* Stops the existing services if any
-* Builds the application
-* Starts all the services on local machine
-* Waits until all the services are started up
-
-Usage: ./local_start.sh [skipTests | skipBuild]
-
-* skipBuild: skip the build process of the application, just restart the services
-* skipTests: skip the unit testing part of the build process
-
-#### local_stop.sh
-
-Stops the locally running services.
-
-Usage: ./local_stop.sh
-
-#### local_run_tests.sh
-
-Runs the integration tests against the local server.
-
-Usage: ./local_run_tests.sh [headless] [disabled groups] [server port] [database port]
-
-Parameters:
-
-* headless:
-    * true (default): Selenium tests run in the background
-    * false: Selenium tests open browser windows
-* disabled groups: Name of test groups should not run
-* server port: The port of the main gateway (8080)
-* database port: Port of the local postgres server (5432)
+Usage: ./run_production_tests.sh
 
 ### Defaults:
 
@@ -212,6 +342,13 @@ Parameters:
 * 9001: Exposed endpoints with port_forward.sh
 * 9002: Exposed database with port_forward.sh
 * 8080: Port of the application run locally
+
+#### Default ports for local:
+
+* 3000: React app (WebUI) port
+* 8080: Main gateway (Entry point)
+* 8081-8100: Services
+* 5432: Postgres
 
 #### Parallelism:
 
