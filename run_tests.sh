@@ -2,11 +2,12 @@ NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
 DISABLED_GROUPS=${3:-headed-only}
 SERVER_PORT=${4:-8070}
-DATABASE_PORT=${4:-8071}
+DATABASE_PORT=${5:-8071}
+INTEGRATION_SERVER_PORT=${6:-8072}
 
 echo "Running Integration tests against namespace $NAMESPACE_NAME"
 
-./infra/deployment/script/start_integration_server.sh
+./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
 
 start ./port_forward.sh $NAMESPACE_NAME $SERVER_PORT $DATABASE_PORT
 

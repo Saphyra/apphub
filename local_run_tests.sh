@@ -2,8 +2,9 @@ HEADLESS=${1:-true}
 DISABLED_GROUPS=${2:-headed-only}
 SERVER_PORT=${3:-8080}
 DATABASE_PORT=${4:-5432}
+INTEGRATION_SERVER_PORT=${5:-8072}
 
-./infra/deployment/script/start_integration_server.sh
+./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
 
 function waitStartup(){
   echo "Pinging $1"
