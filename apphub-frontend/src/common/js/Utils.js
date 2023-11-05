@@ -1,4 +1,5 @@
 import Constants from "./Constants";
+import Stream from "./collection/Stream";
 
 const getCookie = (key) => {
     const cookies = document.cookie.split('; ');
@@ -77,6 +78,12 @@ const formatFileSize = (bytes) => {
     }
 }
 
+const copyAndSet = (items, set) => {
+    const copy = new Stream(items)
+        .toList();
+    set(copy);
+}
+
 const bytesToMegabytes = (bytes) => {
     return Math.round(bytes / 1024 / 1024);
 }
@@ -92,6 +99,7 @@ const Utils = {
     hasValue: hasValue,
     formatFileSize: formatFileSize,
     bytesToMegabytes: bytesToMegabytes,
+    copyAndSet: copyAndSet,
 }
 
 export default Utils;

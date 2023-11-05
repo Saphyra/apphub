@@ -13,12 +13,8 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import Spinner from "../../../../common/component/Spinner";
-import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import validateFile from "../../common/validator/FileValidator";
-import Endpoints from "../../../../common/js/dao/dao";
-import Utils from "../../../../common/js/Utils";
-import getDefaultErrorHandler from "../../../../common/js/dao/DefaultErrorHandler";
 import "./new_file.css";
+import create from "./NewFileSaver";
 
 const NewFilePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -32,63 +28,6 @@ const NewFilePage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
-    const create = async () => {
-        const listItemTitleValidationResult = validateListItemTitle(listItemTitle);
-        if (!listItemTitleValidationResult.valid) {
-            NotificationService.showError(listItemTitleValidationResult.message);
-            return;
-        }
-
-        const imageValidationResult = validateFile(file);
-        if (!imageValidationResult.valid) {
-            NotificationService.showError(imageValidationResult.message);
-            return;
-        }
-
-        setDisplaySpinner(true);
-
-        const payload = {
-            title: listItemTitle,
-            parent: parentId,
-            metadata: {
-                fileName: file.fileName,
-                size: file.size
-            }
-        }
-
-        const storedFileResponse = await Endpoints.NBOTEBOOK_CREATE_FILE.createRequest(payload)
-            .send();
-
-        const formData = new FormData();
-        formData.append("file", file.e.target.files[0]);
-
-        const options = {
-            method: "PUT",
-            body: formData,
-            headers: {
-                'Cache-Control': "no-cache",
-                "BrowserLanguage": Utils.getBrowserLanguage(),
-                "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
-            }
-        }
-
-        await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileResponse.value }), options)
-            .then(r => {
-                setDisplaySpinner(false);
-
-                if (!r.ok) {
-                    r.text()
-                        .then(body => {
-                            const response = new Response(r.status, body);
-                            getDefaultErrorHandler()
-                                .handle(response);
-                        });
-                } else {
-                    window.location.href = Constants.NOTEBOOK_PAGE;
-                }
-            });
-    }
 
     return (
         <div id="notebook-new-file" className="main-page">
@@ -136,7 +75,7 @@ const NewFilePage = () => {
                         key="create-button"
                         id="notebook-new-file-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create()}
+                        onclick={() => create(listItemTitle, file, parent, setDisplaySpinner)}
                     />
                 ]}
             />

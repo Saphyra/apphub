@@ -5,7 +5,7 @@ import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import "./parent_selector.css";
 import Button from "../../../../common/component/input/Button";
 import Stream from "../../../../common/js/collection/Stream";
-import Child from "./parent_selector/Child";
+import Child from "./Child";
 
 const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

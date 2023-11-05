@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import "./notebook_new.css";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import localizationData from "./notebook_new_page_localization.json";

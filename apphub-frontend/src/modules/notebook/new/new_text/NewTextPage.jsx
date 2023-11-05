@@ -15,6 +15,7 @@ import "./new_text.css";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import Endpoints from "../../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
+import create from "./NewTextSaver";
 
 const NewTextPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -29,24 +30,7 @@ const NewTextPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    const create = async () => {
-        const result = validateListItemTitle(listItemTitle);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
-            return;
-        }
 
-        const payload = {
-            parent: parentId,
-            title: listItemTitle,
-            content: content
-        }
-
-        await Endpoints.NOTEBOOK_CREATE_TEXT.createRequest(payload)
-            .send();
-
-        window.location.href = Constants.NOTEBOOK_PAGE;
-    }
 
     return (
         <div id="notebook-new-text" className="main-page">
@@ -96,7 +80,7 @@ const NewTextPage = () => {
                         key="create-button"
                         id="notebook-new-text-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create()}
+                        onclick={() => create(listItemTitle, parentId, content)}
                     />
                 ]}
             />

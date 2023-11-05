@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
-import ListItemType from "../../../../common/ListItemType";
-import Endpoints from "../../../../../../common/js/dao/dao";
-import Stream from "../../../../../../common/js/collection/Stream";
-import ChecklistItem from "../../../../common/checklist_item/ChecklistItem";
-import ChecklistItemData from "../../../../common/checklist_item/ChecklistItemData";
-import MoveDirection from "../../../../common/MoveDirection";
-import Utils from "../../../../../../common/js/Utils";
 import "./checklist.css";
-import UpdateType from "../../../../common/checklist_item/UpdateType";
-import validateListItemTitle from "../../../../common/validator/ListItemTitleValidator";
-import NotificationService from "../../../../../../common/js/notification/NotificationService";
-import EventName from "../../../../../../common/js/event/EventName";
-import Event from "../../../../../../common/js/event/Event";
-import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
+import { confirmDeleteChcecked, loadChecklist, orderItems, save } from "./service/ChecklistDao";
+import getItems from "./service/ChecklistAssembler";
+import { addItem } from "./service/ChecklistCrudService";
+import { close, discard } from "./service/ChecklistUtils";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -24,273 +15,20 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [title, setTitle] = useState("");
     const [items, setItems] = useState([]);
 
-    useEffect(() => loadChecklist(), [openedListItem]);
+    useEffect(() => loadChecklist(openedListItem.id, setDataFromResponse), [openedListItem]);
 
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
         if (isInFocus && !editingEnabled) {
-            loadChecklist();
+            loadChecklist(openedListItem.id, setDataFromResponse);
         }
     }, [isInFocus]);
 
-    const loadChecklist = () => {
-        const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_CHECKLIST.createRequest(null, { listItemId: openedListItem.id })
-                .send();
-
-            setDataFromResponse(response);
-        }
-        fetch();
-    }
 
     const setDataFromResponse = (response) => {
         setTitle(response.title);
         setItems(response.items);
         setParent(response.parent);
-    }
-
-    const getItems = () => {
-        if (items.length === 0) {
-            return (
-                <div id="notebook-view-checklist-empty">
-                    {localizationHandler.get("checklist-empty")}
-                </div>
-            );
-        }
-
-        return new Stream(items)
-            .sorted((a, b) => a.index - b.index)
-            .map(item =>
-                <ChecklistItem
-                    key={item.checklistItemId}
-                    localizationHandler={localizationHandler}
-                    item={item}
-                    updateItem={updateItem}
-                    removeItem={removeItem}
-                    moveItem={moveItem}
-                    editingEnabled={editingEnabled}
-                />
-            )
-            .toList();
-    }
-
-    const addItem = () => {
-        const index = new Stream(items)
-            .map(item => item.index)
-            .max()
-            .orElse(0)
-            + 1
-
-        const newRow = new ChecklistItemData(index);
-        const copy = new Stream(items)
-            .add(newRow)
-            .toList();
-
-        setItems(copy);
-    }
-
-    const updateItem = (item, updateType) => {
-        if (!editingEnabled) {
-            switch (updateType) {
-                case UpdateType.TOGGLE_CHECKED:
-                    Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
-                        .send();
-                    break;
-                default:
-                    Utils.throwException("IllegalArgument", "Unsupported updateType: " + updateType);
-            }
-        }
-        const copy = new Stream(items)
-            .toList();
-        setItems(copy);
-    }
-
-    const removeItem = async (item) => {
-        const doRemoveItem = (item) => {
-            const copy = new Stream(items)
-                .remove(i => i === item)
-                .toList();
-            setItems(copy);
-        }
-
-        if (!editingEnabled) {
-            setConfirmationDialogData(new ConfirmationDialogData(
-                "notebook-content-checklist-item-deletion-confirmation",
-                localizationHandler.get("confirm-checklist-item-deletion-title"),
-                localizationHandler.get("confirm-checklist-item-deletion-content"),
-                [
-                    <Button
-                        key="delete"
-                        id="notebook-content-checklist-item-deletion-confirm-button"
-                        label={localizationHandler.get("delete")}
-                        onclick={async () => {
-                            await Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
-                                .send();
-                            setConfirmationDialogData(null);
-                            doRemoveItem(item);
-                        }}
-                    />,
-                    <Button
-                        key="cancel"
-                        id="notebook-content-checklist-item-deletion-cancel-button"
-                        label={localizationHandler.get("cancel")}
-                        onclick={() => setConfirmationDialogData(null)}
-                    />
-                ]
-            ));
-        } else {
-            doRemoveItem(item);
-        }
-    }
-
-    const moveItem = (item, moveDirection) => {
-        const orderedItems = new Stream(items)
-            .sorted((a, b) => a.index - b.index)
-            .toList();
-
-        const itemIndex = orderedItems.indexOf(item);
-
-        let newIndex;
-        switch (moveDirection) {
-            case MoveDirection.UP:
-                newIndex = itemIndex - 1;
-                break;
-            case MoveDirection.DOWN:
-                newIndex = itemIndex + 1;
-                break;
-            default:
-                Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
-        }
-
-        const otherItem = orderedItems[newIndex];
-
-        if (!otherItem) {
-            //Item is at the top/bottom of the list and cannot be moved further.
-            return;
-        }
-
-        const originalOrder = item.index;
-        const newOrder = otherItem.index;
-
-        item.index = newOrder;
-        otherItem.index = originalOrder;
-
-        updateItem();
-    }
-
-
-    const discard = () => {
-        setConfirmationDialogData(new ConfirmationDialogData(
-            "notebook-content-checklist-discard-confirmation",
-            localizationHandler.get("confirm-discard-title"),
-            localizationHandler.get("confirm-discard-content"),
-            [
-                <Button
-                    key="discard"
-                    id="notebook-content-checklist-discard-confirm-button"
-                    label={localizationHandler.get("discard")}
-                    onclick={() => {
-                        setEditingEnabled(false);
-                        loadChecklist();
-                        setConfirmationDialogData(null);
-                    }}
-                />,
-                <Button
-                    key="cancel"
-                    id="notebook-content-checklist-discard-cancel-button"
-                    label={localizationHandler.get("cancel")}
-                    onclick={() => setConfirmationDialogData(null)}
-                />
-            ]
-        ));
-    }
-
-    const save = async () => {
-        const result = validateListItemTitle(title);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
-            return;
-        }
-
-        const payload = {
-            title: title,
-            items: items
-        }
-
-        const response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST.createRequest(payload, { listItemId: openedListItem.id })
-            .send();
-
-        setEditingEnabled(false);
-        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));
-        setDataFromResponse(response);
-    }
-
-    const confirmDeleteChcecked = () => {
-        setConfirmationDialogData(new ConfirmationDialogData(
-            "notebook-content-checklist-delete-checked-confirmation",
-            localizationHandler.get("confirm-delete-checked-title"),
-            localizationHandler.get("confirm-delete-checked-content"),
-            [
-                <Button
-                    key="delete"
-                    id="notebook-content-checklist-delete-checked-confirm-button"
-                    label={localizationHandler.get("delete-checked")}
-                    onclick={deleteChecked}
-                />,
-                <Button
-                    key="cancel"
-                    id="notebook-content-checklist-delete-checked-cancel-button"
-                    label={localizationHandler.get("cancel")}
-                    onclick={() => setConfirmationDialogData(null)}
-                />
-            ]
-        ));
-    }
-
-    const deleteChecked = async () => {
-        const response = await Endpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
-            .send();
-
-        setDataFromResponse(response);
-        setConfirmationDialogData(null);
-    }
-
-    const orderItems = async () => {
-        const response = await Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS.createRequest(null, { listItemId: openedListItem.id })
-            .send();
-
-        setDataFromResponse(response);
-    }
-
-    const close = () => {
-        if (editingEnabled) {
-            setConfirmationDialogData(new ConfirmationDialogData(
-                "notebook-content-checklist-close-confirmation",
-                localizationHandler.get("confirm-close-title"),
-                localizationHandler.get("confirm-close-content"),
-                [
-                    <Button
-                        key="close"
-                        id="notebook-content-checklist-close-confirm-button"
-                        label={localizationHandler.get("close")}
-                        onclick={doClose}
-                    />,
-                    <Button
-                        key="cancel"
-                        id="notebook-content-checklist-close-cancel-button"
-                        label={localizationHandler.get("cancel")}
-                        onclick={() => setConfirmationDialogData(null)}
-                    />
-                ]
-            ));
-        } else {
-            doClose();
-        }
-    }
-
-    const doClose = () => {
-        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
-        setConfirmationDialogData(null);
     }
 
     return (
@@ -300,11 +38,11 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 title={title}
                 setTitle={setTitle}
                 editingEnabled={editingEnabled}
-                close={close}
+                close={() => close(editingEnabled, setConfirmationDialogData, localizationHandler, setOpenedListItem, parent)}
             />
 
             <div id="notebook-content-checklist-content" className="notebook-content-view-main">
-                {getItems()}
+                {getItems(items, localizationHandler, editingEnabled, setItems, setConfirmationDialogData)}
             </div>
 
 
@@ -321,7 +59,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-delete-checked-button"
                         label={localizationHandler.get("delete-checked")}
-                        onclick={() => confirmDeleteChcecked()}
+                        onclick={() => confirmDeleteChcecked(setConfirmationDialogData, localizationHandler, openedListItem, setDataFromResponse)}
                     />
                 }
 
@@ -329,7 +67,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-order-items-button"
                         label={localizationHandler.get("order-items")}
-                        onclick={() => orderItems()}
+                        onclick={() => orderItems(openedListItem.id, setDataFromResponse)}
                     />
                 }
 
@@ -337,7 +75,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-discard-button"
                         label={localizationHandler.get("discard")}
-                        onclick={() => discard()}
+                        onclick={() => discard(setConfirmationDialogData, localizationHandler, setEditingEnabled, openedListItem.id, setDataFromResponse)}
                     />
                 }
 
@@ -345,7 +83,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-save-button"
                         label={localizationHandler.get("save")}
-                        onclick={() => save()}
+                        onclick={() => save(title, items, openedListItem, setEditingEnabled, setLastEvent, setDataFromResponse)}
                     />
                 }
 
@@ -353,7 +91,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-add-item-button"
                         label={localizationHandler.get("add-item")}
-                        onclick={() => addItem()}
+                        onclick={() => addItem(items, setItems)}
                     />
                 }
             </div>

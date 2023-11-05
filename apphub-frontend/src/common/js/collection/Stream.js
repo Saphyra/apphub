@@ -10,7 +10,7 @@ const Stream = class {
     add(item) {
         this.items.push(item);
 
-        return this;
+        return new Stream(this.items);
     }
 
     addAll(items) {

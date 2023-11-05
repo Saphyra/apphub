@@ -13,3 +13,4 @@ Admin Panel
 ===TECHNICAL DEBTS===
 Notebook
     Remove leftovers of Table / Checklist restructure
+    Extract service logic from large jsx files
