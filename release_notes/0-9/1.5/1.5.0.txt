@@ -9,6 +9,7 @@ Admin Panel
         Reconnect WebSocket
 
 ===PLATFORM CHANGES===
+Do not display error message when server is not available
 
 ===TECHNICAL DEBTS===
 Notebook

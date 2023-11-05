@@ -130,7 +130,7 @@ const Request = class {
             };
 
             xhr.onerror = () => {
-                this.handleError(new Response(xhr));
+                this.handleError(new Response(xhr.status, xhr.responseText));
                 reject();
             }
 
