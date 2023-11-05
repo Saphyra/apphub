@@ -85,6 +85,8 @@ public class ChecklistCrudTest extends BackEndTest {
         listItemId = ChecklistActions.createChecklist(accessTokenId, request);
         ChecklistResponse checklistResponse = order(accessTokenId, listItemId);
         deleteRow(accessTokenId, listItemId, checklistResponse);
+        editChecklistItem_nullContent(accessTokenId, checklistResponse.getItems().get(1).getChecklistItemId());
+        editChecklistItem(accessTokenId, checklistResponse.getItems().get(1).getChecklistItemId(), listItemId);
     }
 
     private static void create_blankTitle(UUID accessTokenId) {
@@ -392,13 +394,28 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private static void deleteRow(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistResponse) {
-        Response response;
-        response = ChecklistActions.getDeleteChecklistItemResponse(accessTokenId, checklistResponse.getItems().get(0).getChecklistItemId());
+        Response response = ChecklistActions.getDeleteChecklistItemResponse(accessTokenId, checklistResponse.getItems().get(0).getChecklistItemId());
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         assertThat(ChecklistActions.getChecklist(accessTokenId, listItemId).getItems())
             .extracting(ChecklistItemModel::getChecklistItemId)
             .containsExactly(checklistResponse.getItems().get(1).getChecklistItemId());
+    }
+
+    private void editChecklistItem_nullContent(UUID accessTokenId, UUID checklistItemId) {
+        Response response = ChecklistActions.getEditChecklistItemResponse(accessTokenId, checklistItemId, null);
+
+        ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
+    }
+
+    private void editChecklistItem(UUID accessTokenId, UUID checklistItemId, UUID listItemId) {
+        ChecklistActions.editChecklistItem(accessTokenId, checklistItemId, CONTENT);
+
+        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(accessTokenId, listItemId);
+
+        assertThat(checklistResponse.getItems())
+            .hasSize(1)
+            .extracting(ChecklistItemModel::getContent).containsExactly(CONTENT);
     }
 
     private ChecklistItemModel findByOrder(List<ChecklistItemModel> items, int order) {

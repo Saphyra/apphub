@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.lib.config.common;
 
-import com.github.saphyra.apphub.lib.common_util.ForRemoval;
-
 public class Endpoints {
     //PAGES
     public static final String INDEX_PAGE = "/web";
@@ -143,6 +141,7 @@ public class Endpoints {
     public static final String NOTEBOOK_EDIT_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_GET_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
+    public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}/content";
     public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";

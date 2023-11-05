@@ -2,6 +2,8 @@
 Admin Panel
     Memory Monitoring
         Hide / Show services
+Notebook
+    Edit single checklist item
 
 ===BUGFIXES===
 Admin Panel

@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.integration.structure.view.notebook;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 @RequiredArgsConstructor
@@ -85,5 +87,23 @@ public class ChecklistItem {
                 uncheck();
             }
         }
+    }
+
+    public void edit(WebDriver driver, String newContent) {
+        webElement.findElement(By.className("notebook-checklist-item-edit-button"))
+            .click();
+
+        WebElementUtils.clearAndFill(getEditContentInput(driver), newContent);
+
+        driver.findElement(By.id("notebook-checklist-item-content-edit-save-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.getIfPresent(() -> getEditContentInput(driver)).isEmpty())
+            .assertTrue("Edit checklist item content dialog did not disappear");
+    }
+
+    private static WebElement getEditContentInput(WebDriver driver) {
+        return driver.findElement(By.id("notebook-checklist-item-edit-input"));
     }
 }

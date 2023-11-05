@@ -77,4 +77,16 @@ public class ChecklistActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
+
+    public static void editChecklistItem(UUID accessTokenId, UUID checklistItemId, String content) {
+        Response response = getEditChecklistItemResponse(accessTokenId, checklistItemId, content);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditChecklistItemResponse(UUID accessTokenId, UUID checklistItemId, String content) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(content))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, "checklistItemId", checklistItemId));
+    }
 }

@@ -14,11 +14,16 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
                 Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
                     .send();
                 break;
+            case UpdateType.CONTENT_MODIFIED:
+                Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
+                    .send();
+                break;
             default:
                 Utils.throwException("IllegalArgument", "Unsupported updateType: " + updateType);
         }
     }
 
+    console.log("update");
     Utils.copyAndSet(items, setItems);
 }
 

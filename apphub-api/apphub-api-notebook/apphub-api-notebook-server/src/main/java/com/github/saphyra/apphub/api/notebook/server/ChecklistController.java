@@ -39,4 +39,8 @@ public interface ChecklistController {
 
     @PostMapping(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS)
     ChecklistResponse orderItems(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM)
+    //TODO API test
+    void editChecklistItem(@RequestBody OneParamRequest<String> content, @PathVariable("checklistItemId") UUID checklistItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

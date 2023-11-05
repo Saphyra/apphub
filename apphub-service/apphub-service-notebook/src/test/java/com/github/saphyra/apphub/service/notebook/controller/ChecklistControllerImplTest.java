@@ -6,8 +6,9 @@ import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistReque
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemContentUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistStatusUpdateService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.DeleteCheckedItemsOfChecklistService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.OrderChecklistItemsService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.create.ChecklistCreationService;
@@ -30,6 +31,7 @@ class ChecklistControllerImplTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
+    private static final String CONTENT = "content";
 
     @Mock
     private ChecklistCreationService checklistCreationService;
@@ -38,7 +40,7 @@ class ChecklistControllerImplTest {
     private ChecklistQueryService checklistQueryService;
 
     @Mock
-    private ChecklistStatusUpdateService checklistStatusUpdateService;
+    private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
 
     @Mock
     private ChecklistItemDeletionService checklistItemDeletionService;
@@ -66,6 +68,9 @@ class ChecklistControllerImplTest {
 
     @Mock
     private ChecklistResponse checklistResponse;
+
+    @Mock
+    private ChecklistItemContentUpdateService checklistItemContentUpdateService;
 
     @Test
     void createChecklist() {
@@ -96,7 +101,7 @@ class ChecklistControllerImplTest {
     void updateStatus() {
         underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID, accessTokenHeader);
 
-        then(checklistStatusUpdateService).should().updateStatus(CHECKLIST_ITEM_ID, true);
+        then(checklistItemStatusUpdateService).should().updateStatus(CHECKLIST_ITEM_ID, true);
     }
 
     @Test
@@ -118,5 +123,12 @@ class ChecklistControllerImplTest {
         given(orderChecklistItemsService.orderItems(LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.orderItems(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
+    }
+
+    @Test
+    void editChecklistItem() {
+        underTest.editChecklistItem(new OneParamRequest<>(CONTENT), CHECKLIST_ITEM_ID, accessTokenHeader);
+
+        then(checklistItemContentUpdateService).should().updateContent(CHECKLIST_ITEM_ID, CONTENT);
     }
 }

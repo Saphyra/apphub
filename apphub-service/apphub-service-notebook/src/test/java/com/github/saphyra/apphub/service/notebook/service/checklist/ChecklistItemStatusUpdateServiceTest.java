@@ -14,14 +14,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class ChecklistStatusUpdateServiceTest {
+class ChecklistItemStatusUpdateServiceTest {
     private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
     private CheckedItemDao checkedItemDao;
 
     @InjectMocks
-    private ChecklistStatusUpdateService underTest;
+    private ChecklistItemStatusUpdateService underTest;
 
     @Mock
     private CheckedItem checkedItem;

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ChecklistStatusUpdateService {
+public class ChecklistItemStatusUpdateService {
     private final CheckedItemDao checkedItemDao;
 
     public void updateStatus(UUID checklistItemId, Boolean value) {

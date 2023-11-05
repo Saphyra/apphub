@@ -202,5 +202,9 @@
     "close": {
         "en": "Close",
         "hu": "Bezárás"
+    },
+    "edit-checklist-item-title": {
+        "en": "Edit checklist item content",
+        "hu": "Lista elem szerkesztése"
     }
 }
