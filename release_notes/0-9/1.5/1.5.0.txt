@@ -4,6 +4,8 @@ Admin Panel
         Hide / Show services
 Notebook
     Edit single checklist item
+    Add item to checklist without editing
+    Add item to the start of a checklist
 
 ===BUGFIXES===
 Admin Panel

@@ -71,3 +71,15 @@ export const orderItems = async (listItemId, setDataFromResponse) => {
 
     setDataFromResponse(response);
 }
+
+export const addItemToTheEdge = async (listItemId, index, content, setDataFromResponse) => {
+    const body = {
+        index: index,
+        content: content
+    }
+
+    const response = await Endpoints.NOTEBOOK_ADD_CHECKLIST_ITEM.createRequest(body, { listItemId: listItemId })
+        .send();
+
+    setDataFromResponse(response);
+}

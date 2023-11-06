@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.notebook.model.checklist.AddChecklistItemRequest;
 import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.api.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemAdditionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemContentUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
@@ -54,6 +56,9 @@ class ChecklistControllerImplTest {
     @Mock
     private EditChecklistService editChecklistService;
 
+    @Mock
+    private ChecklistItemAdditionService checklistItemAdditionService;
+
     @InjectMocks
     private ChecklistControllerImpl underTest;
 
@@ -71,6 +76,9 @@ class ChecklistControllerImplTest {
 
     @Mock
     private ChecklistItemContentUpdateService checklistItemContentUpdateService;
+
+    @Mock
+    private AddChecklistItemRequest addChecklistItemRequest;
 
     @Test
     void createChecklist() {
@@ -130,5 +138,15 @@ class ChecklistControllerImplTest {
         underTest.editChecklistItem(new OneParamRequest<>(CONTENT), CHECKLIST_ITEM_ID, accessTokenHeader);
 
         then(checklistItemContentUpdateService).should().updateContent(CHECKLIST_ITEM_ID, CONTENT);
+    }
+
+    @Test
+    void addChecklistItem() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(checklistQueryService.getChecklistResponse(LIST_ITEM_ID)).willReturn(checklistResponse);
+
+        assertThat(underTest.addChecklistItem(addChecklistItemRequest, LIST_ITEM_ID, accessTokenHeader)).isEqualTo(checklistResponse);
+
+        then(checklistItemAdditionService).should().addChecklistItem(USER_ID, LIST_ITEM_ID, addChecklistItemRequest);
     }
 }

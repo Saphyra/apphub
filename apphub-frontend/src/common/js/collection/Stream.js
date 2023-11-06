@@ -102,6 +102,26 @@ const Stream = class {
         return new Optional(currentMax);
     }
 
+    min() {
+        if (this.items.length === 0) {
+            return new Optional(null);
+        }
+
+        let currentMin = Number.MAX_SAFE_INTEGER;
+
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            }
+
+            if (item < currentMin) {
+                currentMin = item;
+            }
+        });
+
+        return new Optional(currentMin);
+    }
+
     peek(consumer) {
         this.forEach(consumer);
 

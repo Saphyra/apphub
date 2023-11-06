@@ -35,13 +35,17 @@ public class ChecklistItemCreationService {
     }
 
     public void create(UUID userId, UUID listItemId, ChecklistItemModel item) {
-        Dimension dimension = dimensionFactory.create(userId, listItemId, item.getIndex());
+        create(userId, listItemId, item.getIndex(), item.getContent(), item.getChecked());
+    }
+
+    public void create(UUID userId, UUID listItemId, Integer index, String contentValue, Boolean checked) {
+        Dimension dimension = dimensionFactory.create(userId, listItemId, index);
         dimensionDao.save(dimension);
 
-        CheckedItem checkedItem = checkedItemFactory.create(userId, dimension.getDimensionId(), item.getChecked());
+        CheckedItem checkedItem = checkedItemFactory.create(userId, dimension.getDimensionId(), checked);
         checkedItemDao.save(checkedItem);
 
-        Content content = contentFactory.create(listItemId, dimension.getDimensionId(), userId, item.getContent());
+        Content content = contentFactory.create(listItemId, dimension.getDimensionId(), userId, contentValue);
         contentDao.save(content);
     }
 }

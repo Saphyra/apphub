@@ -99,18 +99,3 @@ export const moveItem = (item, moveDirection, items, setItems) => {
 
     Utils.copyAndSet(items, setItems);
 }
-
-export const addItem = (items, setItems) => {
-    const index = new Stream(items)
-        .map(item => item.index)
-        .max()
-        .orElse(0)
-        + 1
-
-    const newRow = new ChecklistItemData(index);
-    const copy = new Stream(items)
-        .add(newRow)
-        .toList();
-
-    setItems(copy);
-}

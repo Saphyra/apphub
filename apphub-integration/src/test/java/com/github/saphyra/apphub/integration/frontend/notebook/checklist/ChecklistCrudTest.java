@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.notebook;
+package com.github.saphyra.apphub.integration.frontend.notebook.checklist;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;

@@ -4,18 +4,24 @@ import "./checklist.css";
 import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
-import { confirmDeleteChcecked, loadChecklist, orderItems, save } from "./service/ChecklistDao";
+import { addItemToTheEdge, confirmDeleteChcecked, loadChecklist, orderItems, save } from "./service/ChecklistDao";
 import getItems from "./service/ChecklistAssembler";
-import { addItem } from "./service/ChecklistCrudService";
 import { close, discard } from "./service/ChecklistUtils";
+import IndexRange from "./IndexRange";
+import addItemToEdge from "./service/ChecklistAddItemToEdgeService";
+import InputField from "../../../../../../common/component/input/InputField";
+import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [items, setItems] = useState([]);
+    const [newItemIndex, setNewItemIndex] = useState(null);
+    const [newItemContent, setNewItemContent] = useState("");
 
     useEffect(() => loadChecklist(openedListItem.id, setDataFromResponse), [openedListItem]);
+    useEffect(() => setNewItemContent(""), [newItemIndex]);
 
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
@@ -31,6 +37,50 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
         setParent(response.parent);
     }
 
+    const addButton = (indexRange, id) => {
+        return (
+            <Button
+                id={id}
+                className="notebook-content-checklist-add-button"
+                label="+"
+                onclick={() => addItemToEdge(indexRange, items, editingEnabled, setItems, setNewItemIndex)}
+            />
+        );
+    }
+
+    const getNewItemConfirmationDialog = () => {
+        return (
+            <ConfirmationDialog
+                id="notebook-add-checklist-item-to-the-edge-dialog"
+                title={localizationHandler.get("add-checklist-item-title")}
+                content={<InputField
+                    id="notebook-add-checklist-item-to-the-edge-input"
+                    type="text"
+                    placeholder={localizationHandler.get("content")}
+                    value={newItemContent}
+                    onchangeCallback={setNewItemContent}
+                />}
+                choices={[
+                    <Button
+                        key="save"
+                        id="notebook-add-checklist-item-to-the-edge-save-button"
+                        label={localizationHandler.get("save")}
+                        onclick={() => {
+                            addItemToTheEdge(openedListItem.id, newItemIndex, newItemContent, setDataFromResponse);
+                            setNewItemIndex(null);
+                        }}
+                    />,
+                    <Button
+                        key="cancel"
+                        id="notebook-add-checklist-item-to-the-edge-cancel-button"
+                        label={localizationHandler.get("cancel")}
+                        onclick={() => setNewItemIndex(null)}
+                    />
+                ]}
+            />
+        )
+    }
+
     return (
         <div id="notebook-content-checklist" className={"notebook-content notebook-content-view" + (editingEnabled ? " editable" : "")}>
             <OpenedListItemHeader
@@ -42,7 +92,13 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             />
 
             <div id="notebook-content-checklist-content" className="notebook-content-view-main">
-                {getItems(items, localizationHandler, editingEnabled, setItems, setConfirmationDialogData)}
+                {addButton(IndexRange.MIN, "notebook-content-checklist-add-item-to-start")}
+
+                <div>
+                    {getItems(items, localizationHandler, editingEnabled, setItems, setConfirmationDialogData)}
+                </div>
+
+                {addButton(IndexRange.MAX, "notebook-content-checklist-add-item-to-end")}
             </div>
 
 
@@ -86,15 +142,9 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                         onclick={() => save(title, items, openedListItem, setEditingEnabled, setLastEvent, setDataFromResponse)}
                     />
                 }
-
-                {editingEnabled &&
-                    <Button
-                        id="notebook-content-checklist-add-item-button"
-                        label={localizationHandler.get("add-item")}
-                        onclick={() => addItem(items, setItems)}
-                    />
-                }
             </div>
+
+            {newItemIndex && getNewItemConfirmationDialog()}
         </div>
     );
 }

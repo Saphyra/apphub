@@ -89,6 +89,7 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_LINK = "/api/notebook/link";
     public static final String NOTEBOOK_CREATE_CHECKLIST_ITEM = "/api/notebook/checklist";
     public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
+    public static final String NOTEBOOK_ADD_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item";
     public static final String NOTEBOOK_GET_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT = "/api/notebook/checklist/item/{checklistItemId}/content";
