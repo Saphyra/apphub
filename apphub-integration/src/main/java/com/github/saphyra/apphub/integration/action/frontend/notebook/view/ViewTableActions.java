@@ -55,8 +55,13 @@ public class ViewTableActions {
             .getAttribute("value");
     }
 
-    public static void newRow(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-table-new-row-button"))
+    public static void addRowToStart(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-row-to-start"))
+            .click();
+    }
+
+    public static void addRowToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-row-to-end"))
             .click();
     }
 

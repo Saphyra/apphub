@@ -9,6 +9,8 @@ import { getTableHeads, getTableRows } from "./service/TableAssembler";
 import { close, discard } from "./service/TableUtils";
 import { newRow } from "./service/TableRowCrudService";
 import { newColumn } from "./service/TableColumnCrudService";
+import IndexRange from "./IndexRange";
+import AddRowButton from "./component/AddRowButton";
 
 const Table = ({
     localizationHandler,
@@ -61,7 +63,29 @@ const Table = ({
                     </thead>
 
                     <tbody>
+                        {editingEnabled &&
+                            <AddRowButton
+                                indexRange={IndexRange.MIN}
+                                id="notebook-content-table-add-row-to-start"
+                                rows={rows}
+                                tableHeads={tableHeads}
+                                setRows={setRows}
+                                checklist={checklist}
+                            />
+                        }
+
                         {getTableRows(rows, checklist, editingEnabled, setRows)}
+
+                        {editingEnabled &&
+                            <AddRowButton
+                                indexRange={IndexRange.MAX}
+                                id="notebook-content-table-add-row-to-end"
+                                rows={rows}
+                                tableHeads={tableHeads}
+                                setRows={setRows}
+                                checklist={checklist}
+                            />
+                        }
                     </tbody>
                 </table>
             </div>
@@ -96,14 +120,6 @@ const Table = ({
                         id="notebook-content-table-save-button"
                         label={localizationHandler.get("save")}
                         onclick={() => save(title, tableHeads, rows, openedListItem.id, setEditingEnabled, setLastEvent, setDataFromResponse)}
-                    />
-                }
-
-                {editingEnabled &&
-                    <Button
-                        id="notebook-content-table-new-row-button"
-                        label={localizationHandler.get("new-row")}
-                        onclick={() => newRow(rows, tableHeads, setRows)}
                     />
                 }
 

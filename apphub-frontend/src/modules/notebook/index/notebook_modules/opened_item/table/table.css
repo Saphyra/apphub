@@ -6,3 +6,9 @@
     text-decoration: line-through;
     opacity: 0.5;
 }
+
+.notebook-content-table-add-row-button{
+    display: block;
+    margin: auto;
+    width: 75%;
+}

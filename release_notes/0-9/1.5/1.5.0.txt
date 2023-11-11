@@ -6,6 +6,7 @@ Notebook
     Edit single checklist item
     Add item to checklist without editing
     Add item to the start of a checklist
+    Add item to the start of tables
 
 ===BUGFIXES===
 Admin Panel

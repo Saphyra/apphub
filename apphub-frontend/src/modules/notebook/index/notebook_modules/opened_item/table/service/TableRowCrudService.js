@@ -4,18 +4,17 @@ import MoveDirection from "../../../../../common/MoveDirection";
 import TableRowData from "../../../../../common/table/row/TableRowData";
 import TableColumnData from "../../../../../common/table/row/column/TableColumnData";
 
-export const newRow = (rows, tableHeads, setRows) => {
-    const rowIndex = new Stream(rows)
-        .map(row => row.rowIndex)
-        .max()
-        .orElse(0);
+export const newRow = (rows, tableHeads, setRows, indexRange) => {
+    console.log(rows);
+    const rowIndex = indexRange(rows);
+    console.log(rowIndex);
 
     const columns = new Stream(tableHeads)
         .map(tableHead => tableHead.columnIndex)
         .map(columnIndex => new TableColumnData(columnIndex))
         .toList();
 
-    const newRow = new TableRowData(rowIndex + 1, columns);
+    const newRow = new TableRowData(rowIndex, columns);
 
     const copy = new Stream(rows)
         .add(newRow)

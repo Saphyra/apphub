@@ -234,7 +234,7 @@ public class TableCrudTest extends SeleniumTest {
     private static void edit_addRow(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
 
-        ViewTableActions.newRow(driver);
+        ViewTableActions.addRowToEnd(driver);
 
         assertThat(ViewTableActions.getRows(driver)).hasSize(3);
     }
