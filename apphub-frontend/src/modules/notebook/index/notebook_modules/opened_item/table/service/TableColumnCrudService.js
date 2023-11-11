@@ -4,13 +4,10 @@ import MoveDirection from "../../../../../common/MoveDirection";
 import TableColumnData from "../../../../../common/table/row/column/TableColumnData";
 import TableHeadData from "../../../../../common/table/table_head/TableHeadData";
 
-export const newColumn = (tableHeads, setTableHeads, rows, setRows) => {
-    const columnIndex = new Stream(tableHeads)
-        .map(tableHead => tableHead.columnIndex)
-        .max()
-        .orElse(0);
+export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange) => {
+    const columnIndex = indexRange(tableHeads);
 
-    const newTableHead = new TableHeadData(columnIndex + 1, "", Utils.generateRandomId());
+    const newTableHead = new TableHeadData(columnIndex, "", Utils.generateRandomId());
     const copy = new Stream(tableHeads)
         .add(newTableHead)
         .toList();

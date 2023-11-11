@@ -12,8 +12,7 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableColumn;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -22,14 +21,14 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AddTableRowTest extends SeleniumTest {
+public class AddTableColumnTest extends SeleniumTest {
     private static final String TITLE = "title";
     private static final String COLUMN_NAME = "column-name";
     private static final String COLUMN_VALUE = "column-value";
-    private static final String FIRST_COLUMN = "first-column";
+    private static final String NEW_COLUMN_NAME = "new-column-name";
 
     @Test(groups = {"fe", "notebook"})
-    public void addRowsToTable() {
+    public void addColumnsToTable() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -57,32 +56,29 @@ public class AddTableRowTest extends SeleniumTest {
 
         ViewTableActions.enableEditing(driver);
 
-        addRowToStart(driver);
-        addRowToEnd(driver);
+        addColumnToStart(driver);
+        addColumnToEnd(driver);
     }
 
-    private static void addRowToStart(WebDriver driver) {
-        ViewTableActions.addRowToStart(driver);
+    private static void addColumnToStart(WebDriver driver) {
+        ViewTableActions.addColumnToStart(driver);
 
-        List<TableRow> rows = ViewTableActions.getRows(driver);
-        assertThat(rows).hasSize(2);
-        TableRow row = rows.get(0);
-        assertThat(row.isChecked()).isFalse();
-        TableColumn column = row.getColumns()
-            .get(0);
-        assertThat(column.getValue()).isEmpty();
-        column.setValue(FIRST_COLUMN);
+        List<TableHead> tableHeads = ViewTableActions.getTableHeads(driver);
+        assertThat(tableHeads).hasSize(2);
+
+        TableHead tableHead = tableHeads.get(0);
+        assertThat(tableHead.getValue()).isEmpty();
+
+        tableHead.setValue(NEW_COLUMN_NAME);
     }
 
-    private void addRowToEnd(WebDriver driver) {
-        ViewTableActions.addRowToEnd(driver);
+    private void addColumnToEnd(WebDriver driver) {
+        ViewTableActions.addColumnToEnd(driver);
 
-        List<TableRow> rows = ViewTableActions.getRows(driver);
-        assertThat(rows).hasSize(3);
-        TableRow row = rows.get(2);
-        assertThat(row.isChecked()).isFalse();
-        TableColumn column = row.getColumns()
-            .get(0);
-        assertThat(column.getValue()).isEmpty();
+        List<TableHead> tableHeads = ViewTableActions.getTableHeads(driver);
+        assertThat(tableHeads).hasSize(3);
+
+        TableHead tableHead = tableHeads.get(2);
+        assertThat(tableHead.getValue()).isEmpty();
     }
 }

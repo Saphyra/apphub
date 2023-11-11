@@ -7,10 +7,11 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import { confirmDeleteChcecked, loadTable, save } from "./service/TableDao";
 import { getTableHeads, getTableRows } from "./service/TableAssembler";
 import { close, discard } from "./service/TableUtils";
-import { newRow } from "./service/TableRowCrudService";
 import { newColumn } from "./service/TableColumnCrudService";
-import IndexRange from "./IndexRange";
+import RowIndexRange from "./RowIndexRange";
 import AddRowButton from "./component/AddRowButton";
+import AddColumnButton from "./component/AddColumnButton";
+import TableHeadIndexRange from "./TableHeadIndexRange";
 
 const Table = ({
     localizationHandler,
@@ -56,7 +57,29 @@ const Table = ({
                 <table id="notebook-content-table-content-table" className="formatted-table content-selectable">
                     <thead>
                         <tr>
-                            {editingEnabled && <th></th>}
+                            {editingEnabled &&
+                                <th>
+                                    <AddColumnButton
+                                        tableHeads={tableHeads}
+                                        setTableHeads={setTableHeads}
+                                        rows={rows}
+                                        setRows={setRows}
+                                        id="notebook-content-table-add-column-to-start"
+                                        label="|<+"
+                                        indexRange={TableHeadIndexRange.MIN}
+                                    />
+
+                                    <AddColumnButton
+                                        tableHeads={tableHeads}
+                                        setTableHeads={setTableHeads}
+                                        rows={rows}
+                                        setRows={setRows}
+                                        id="notebook-content-table-add-column-to-end"
+                                        label="+>|"
+                                        indexRange={TableHeadIndexRange.MAX}
+                                    />
+                                </th>
+                            }
                             {checklist && <th>{localizationHandler.get("checked")}</th>}
                             {getTableHeads(tableHeads, localizationHandler, editingEnabled, setTableHeads, rows, setRows)}
                         </tr>
@@ -65,7 +88,7 @@ const Table = ({
                     <tbody>
                         {editingEnabled &&
                             <AddRowButton
-                                indexRange={IndexRange.MIN}
+                                indexRange={RowIndexRange.MIN}
                                 id="notebook-content-table-add-row-to-start"
                                 rows={rows}
                                 tableHeads={tableHeads}
@@ -78,7 +101,7 @@ const Table = ({
 
                         {editingEnabled &&
                             <AddRowButton
-                                indexRange={IndexRange.MAX}
+                                indexRange={RowIndexRange.MAX}
                                 id="notebook-content-table-add-row-to-end"
                                 rows={rows}
                                 tableHeads={tableHeads}
@@ -120,14 +143,6 @@ const Table = ({
                         id="notebook-content-table-save-button"
                         label={localizationHandler.get("save")}
                         onclick={() => save(title, tableHeads, rows, openedListItem.id, setEditingEnabled, setLastEvent, setDataFromResponse)}
-                    />
-                }
-
-                {editingEnabled &&
-                    <Button
-                        id="notebook-content-table-new-column-button"
-                        label={localizationHandler.get("new-column")}
-                        onclick={() => newColumn(tableHeads, setTableHeads, rows, setRows)}
                     />
                 }
             </div>

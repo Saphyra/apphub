@@ -263,7 +263,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
     }
 
     private static void edit_addColumn(WebDriver driver) {
-        ViewTableActions.newColumn(driver);
+        ViewTableActions.addColumnToEnd(driver);
 
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(2);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);

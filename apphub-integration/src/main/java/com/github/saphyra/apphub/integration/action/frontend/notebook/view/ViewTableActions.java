@@ -72,8 +72,13 @@ public class ViewTableActions {
             .collect(Collectors.toList());
     }
 
-    public static void newColumn(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-table-new-column-button"))
+    public static void addColumnToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-column-to-end"))
+            .click();
+    }
+
+    public static void addColumnToStart(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-column-to-start"))
             .click();
     }
 

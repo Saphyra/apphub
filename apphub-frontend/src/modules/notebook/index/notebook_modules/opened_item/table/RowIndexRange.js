@@ -1,6 +1,6 @@
 import Stream from "../../../../../../common/js/collection/Stream";
 
-const IndexRange = {
+const RowIndexRange = {
     MIN: (rows) => new Stream(rows)
         .map(row => row.rowIndex)
         .min()
@@ -12,4 +12,4 @@ const IndexRange = {
         .orElse(0) + 1
 }
 
-export default IndexRange;
+export default RowIndexRange;
