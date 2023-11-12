@@ -3,17 +3,24 @@ package com.github.saphyra.apphub.lib.encryption.impl;
 import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
-public class IntegerEncryptor extends AbstractEncryptor<Integer> {
+public class IntegerEncryptor implements AbstractEncryptor<Integer> {
     private final StringEncryptor stringEncryptor;
 
     @Override
-    protected String encrypt(Integer entity, String key) {
-        return stringEncryptor.encryptEntity(entity.toString(), key);
+    public String encrypt(Integer entity, String key, String entityId, String column) {
+        String stringified = Optional.ofNullable(entity)
+            .map(Object::toString)
+            .orElse(null);
+        return stringEncryptor.encrypt(stringified, key, entityId, column);
     }
 
     @Override
-    protected Integer decrypt(String entity, String key) {
-        return Integer.valueOf(stringEncryptor.decryptEntity(entity, key));
+    public Integer decrypt(String entity, String key, String entityId, String column) {
+        return Optional.ofNullable(stringEncryptor.decrypt(entity, key, entityId, column))
+            .map(Integer::parseInt)
+            .orElse(null);
     }
 }

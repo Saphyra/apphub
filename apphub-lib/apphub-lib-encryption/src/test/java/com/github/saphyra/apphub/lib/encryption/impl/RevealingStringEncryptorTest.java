@@ -23,6 +23,8 @@ class RevealingStringEncryptorTest {
     private static final String KEY = "key";
     private static final String ENCRYPTED_ENTITY = "encrypted-entity";
     private static final String SERIALIZED = "serialized";
+    private static final String ENTITY_ID = "entity-id";
+    private static final String COLUMN = "column";
 
     @Mock
     private DefaultStringEncryptor defaultStringEncryptor;
@@ -35,10 +37,10 @@ class RevealingStringEncryptorTest {
 
     @Test
     void encrypt() {
-        given(defaultStringEncryptor.encryptEntity(ENTITY, KEY)).willReturn(ENCRYPTED_ENTITY);
+        given(defaultStringEncryptor.encrypt(ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(ENCRYPTED_ENTITY);
         given(objectMapperWrapper.writeValueAsString(any(StringStringMap.class))).willReturn(SERIALIZED);
 
-        assertThat(underTest.encrypt(ENTITY, KEY)).isEqualTo(SERIALIZED);
+        assertThat(underTest.encrypt(ENTITY, KEY, ENTITY_ID, COLUMN)).isEqualTo(SERIALIZED);
 
         ArgumentCaptor<StringStringMap> argumentCaptor = ArgumentCaptor.forClass(StringStringMap.class);
         then(objectMapperWrapper).should().writeValueAsString(argumentCaptor.capture());
@@ -52,8 +54,8 @@ class RevealingStringEncryptorTest {
     @Test
     void decrypt() {
         given(objectMapperWrapper.readValue(SERIALIZED, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(ENCRYPTED, ENCRYPTED_ENTITY, new StringStringMap()));
-        given(defaultStringEncryptor.decryptEntity(ENCRYPTED_ENTITY, KEY)).willReturn(ENTITY);
+        given(defaultStringEncryptor.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(ENTITY);
 
-        assertThat(underTest.decrypt(SERIALIZED, KEY)).isEqualTo(ENTITY);
+        assertThat(underTest.decrypt(SERIALIZED, KEY, ENTITY_ID, COLUMN)).isEqualTo(ENTITY);
     }
 }

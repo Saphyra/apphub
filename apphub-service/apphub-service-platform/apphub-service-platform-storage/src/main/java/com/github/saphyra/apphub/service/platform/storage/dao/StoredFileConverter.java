@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
+    static final String COLUMN_FILE_NAME = "file-name";
+    static final String COLUMN_SIZE = "size";
+
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
     private final AccessTokenProvider accessTokenProvider;
@@ -21,13 +24,14 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
     @Override
     protected StoredFileEntity processDomainConversion(StoredFile domain) {
         String userId = accessTokenProvider.getUserIdAsString();
+        String storedFileId = uuidConverter.convertDomain(domain.getStoredFileId());
         return StoredFileEntity.builder()
-            .storedFileId(uuidConverter.convertDomain(domain.getStoredFileId()))
+            .storedFileId(storedFileId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .createdAt(domain.getCreatedAt())
             .fileUploaded(domain.isFileUploaded())
-            .fileName(stringEncryptor.encryptEntity(domain.getFileName(), userId))
-            .size(longEncryptor.encryptEntity(domain.getSize(), userId))
+            .fileName(stringEncryptor.encrypt(domain.getFileName(), userId, storedFileId, COLUMN_FILE_NAME))
+            .size(longEncryptor.encrypt(domain.getSize(), userId, storedFileId, COLUMN_SIZE))
             .build();
     }
 
@@ -39,8 +43,8 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .createdAt(entity.getCreatedAt())
             .fileUploaded(entity.isFileUploaded())
-            .fileName(stringEncryptor.decryptEntity(entity.getFileName(), userId))
-            .size(longEncryptor.decryptEntity(entity.getSize(), userId))
+            .fileName(stringEncryptor.decrypt(entity.getFileName(), userId, entity.getStoredFileId(), COLUMN_FILE_NAME))
+            .size(longEncryptor.decrypt(entity.getSize(), userId, entity.getStoredFileId(), COLUMN_SIZE))
             .build();
     }
 }

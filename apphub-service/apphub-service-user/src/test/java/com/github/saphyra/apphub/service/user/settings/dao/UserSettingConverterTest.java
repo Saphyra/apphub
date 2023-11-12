@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.user.settings.dao.UserSettingConverter.COLUMN_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -52,7 +53,7 @@ public class UserSettingConverterTest {
             .build();
 
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(VALUE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_VALUE);
+        given(stringEncryptor.encrypt(VALUE, ACCESS_TOKEN_USER_ID, KEY, COLUMN_VALUE)).willReturn(ENCRYPTED_VALUE);
 
         UserSettingEntity result = underTest.convertDomain(domain);
 
@@ -76,7 +77,7 @@ public class UserSettingConverterTest {
             .build();
 
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_VALUE, ACCESS_TOKEN_USER_ID)).willReturn(VALUE);
+        given(stringEncryptor.decrypt(ENCRYPTED_VALUE, ACCESS_TOKEN_USER_ID, KEY, COLUMN_VALUE)).willReturn(VALUE);
 
         UserSetting result = underTest.convertEntity(entity);
 

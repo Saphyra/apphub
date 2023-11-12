@@ -13,16 +13,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class ColumnTypeConverter extends ConverterBase<ColumnTypeEntity, ColumnTypeDto> {
+    static final String COLUMN_TYPE = "type";
+
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
 
     @Override
     protected ColumnTypeEntity processDomainConversion(ColumnTypeDto domain) {
+        String columnId = uuidConverter.convertDomain(domain.getColumnId());
         return ColumnTypeEntity.builder()
-            .columnId(uuidConverter.convertDomain(domain.getColumnId()))
+            .columnId(columnId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
-            .type(stringEncryptor.encryptEntity(domain.getType().name(), accessTokenProvider.getUserIdAsString()))
+            .type(stringEncryptor.encrypt(domain.getType().name(), accessTokenProvider.getUserIdAsString(), columnId, COLUMN_TYPE))
             .build();
     }
 
@@ -31,7 +34,7 @@ class ColumnTypeConverter extends ConverterBase<ColumnTypeEntity, ColumnTypeDto>
         return ColumnTypeDto.builder()
             .columnId(uuidConverter.convertEntity(entity.getColumnId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .type(ColumnType.valueOf(stringEncryptor.decryptEntity(entity.getType(), accessTokenProvider.getUserIdAsString())))
+            .type(ColumnType.valueOf(stringEncryptor.decrypt(entity.getType(), accessTokenProvider.getUserIdAsString(), entity.getColumnId(), COLUMN_TYPE)))
             .build();
     }
 }

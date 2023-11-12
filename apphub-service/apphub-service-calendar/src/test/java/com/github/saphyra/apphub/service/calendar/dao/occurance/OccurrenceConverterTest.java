@@ -14,6 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.calendar.dao.occurance.OccurrenceConverter.COLUMN_DATE;
+import static com.github.saphyra.apphub.service.calendar.dao.occurance.OccurrenceConverter.COLUMN_NOTE;
+import static com.github.saphyra.apphub.service.calendar.dao.occurance.OccurrenceConverter.COLUMN_TIME;
+import static com.github.saphyra.apphub.service.calendar.dao.occurance.OccurrenceConverter.COLUMN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -67,10 +71,10 @@ public class OccurrenceConverterTest {
         given(uuidConverter.convertDomain(OCCURRENCE_ID)).willReturn(OCCURRENCE_ID_STRING);
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(DATE.toString(), ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_DATE);
-        given(stringEncryptor.encryptEntity(TIME.toString(), ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_TIME);
-        given(stringEncryptor.encryptEntity(NOTE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_NOTE);
-        given(stringEncryptor.encryptEntity(OccurrenceType.FOLLOW_UP.name(), ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_TYPE);
+        given(stringEncryptor.encrypt(DATE.toString(), ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_DATE)).willReturn(ENCRYPTED_DATE);
+        given(stringEncryptor.encrypt(TIME.toString(), ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_TIME)).willReturn(ENCRYPTED_TIME);
+        given(stringEncryptor.encrypt(NOTE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_NOTE)).willReturn(ENCRYPTED_NOTE);
+        given(stringEncryptor.encrypt(OccurrenceType.FOLLOW_UP.name(), ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_TYPE)).willReturn(ENCRYPTED_TYPE);
 
         OccurrenceEntity result = underTest.convertDomain(occurrence);
 
@@ -100,12 +104,12 @@ public class OccurrenceConverterTest {
         given(uuidConverter.convertEntity(OCCURRENCE_ID_STRING)).willReturn(OCCURRENCE_ID);
         given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_DATE, ACCESS_TOKEN_USER_ID)).willReturn(DATE.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID)).willReturn(TIME.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_NOTE, ACCESS_TOKEN_USER_ID)).willReturn(NOTE);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TYPE, ACCESS_TOKEN_USER_ID)).willReturn(OccurrenceType.FOLLOW_UP.name());
+        given(stringEncryptor.decrypt(ENCRYPTED_DATE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_DATE)).willReturn(DATE.toString());
+        given(stringEncryptor.decrypt(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_TIME)).willReturn(TIME.toString());
+        given(stringEncryptor.decrypt(ENCRYPTED_NOTE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_NOTE)).willReturn(NOTE);
+        given(stringEncryptor.decrypt(ENCRYPTED_TYPE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_TYPE)).willReturn(OccurrenceType.FOLLOW_UP.name());
 
-        Occurrence result = underTest.convertEntity(occurrence);
+        Occurrence result = underTest.processEntityConversion(occurrence);
 
         assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
         assertThat(result.getEventId()).isEqualTo(EVENT_ID);
@@ -133,9 +137,9 @@ public class OccurrenceConverterTest {
         given(uuidConverter.convertEntity(OCCURRENCE_ID_STRING)).willReturn(OCCURRENCE_ID);
         given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_DATE, ACCESS_TOKEN_USER_ID)).willReturn(DATE.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID)).willReturn(TIME.toString());
-        given(stringEncryptor.decryptEntity(ENCRYPTED_NOTE, ACCESS_TOKEN_USER_ID)).willReturn(NOTE);
+        given(stringEncryptor.decrypt(ENCRYPTED_DATE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_DATE)).willReturn(DATE.toString());
+        given(stringEncryptor.decrypt(ENCRYPTED_TIME, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_TIME)).willReturn(TIME.toString());
+        given(stringEncryptor.decrypt(ENCRYPTED_NOTE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_NOTE)).willReturn(NOTE);
 
         Occurrence result = underTest.convertEntity(occurrence);
 

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting> {
+    static final String COLUMN_VALUE = "value";
+
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
     private final AccessTokenProvider accessTokenProvider;
@@ -27,7 +29,7 @@ class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting>
                     .key(domain.getKey())
                     .build()
             )
-            .value(stringEncryptor.encryptEntity(domain.getValue(), userId))
+            .value(stringEncryptor.encrypt(domain.getValue(), userId, domain.getKey(), COLUMN_VALUE))
             .build();
     }
 
@@ -38,7 +40,7 @@ class UserSettingConverter extends ConverterBase<UserSettingEntity, UserSetting>
             .userId(uuidConverter.convertEntity(entity.getId().getUserId()))
             .category(entity.getId().getCategory())
             .key(entity.getId().getKey())
-            .value(stringEncryptor.decryptEntity(entity.getValue(), userId))
+            .value(stringEncryptor.decrypt(entity.getValue(), userId, entity.getId().getKey(), COLUMN_VALUE))
             .build();
     }
 }

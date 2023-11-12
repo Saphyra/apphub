@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-public class RevealingStringEncryptor extends StringEncryptor {
+public class RevealingStringEncryptor implements StringEncryptor {
     static final String ENCRYPTED = "encrypted";
     static final String RAW = "raw";
     static final String KEY = "key";
@@ -16,8 +16,8 @@ public class RevealingStringEncryptor extends StringEncryptor {
     private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
-    protected String encrypt(String entity, String key) {
-        String encrypted = defaultStringEncryptor.encryptEntity(entity, key);
+    public String encrypt(String entity, String key, String entityId, String column) {
+        String encrypted = defaultStringEncryptor.encrypt(entity, key, entityId, column);
         StringStringMap map = new StringStringMap();
         map.put(ENCRYPTED, encrypted);
         map.put(RAW, entity);
@@ -26,8 +26,8 @@ public class RevealingStringEncryptor extends StringEncryptor {
     }
 
     @Override
-    protected String decrypt(String entity, String key) {
+    public String decrypt(String entity, String key, String entityId, String column) {
         StringStringMap map = objectMapperWrapper.readValue(entity, StringStringMap.class);
-        return defaultStringEncryptor.decryptEntity(map.get(ENCRYPTED), key);
+        return defaultStringEncryptor.decrypt(map.get(ENCRYPTED), key, entityId, column);
     }
 }

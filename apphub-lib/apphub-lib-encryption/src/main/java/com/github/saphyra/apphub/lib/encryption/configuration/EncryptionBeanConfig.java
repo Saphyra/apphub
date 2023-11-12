@@ -22,8 +22,8 @@ public class EncryptionBeanConfig {
     }
 
     @Bean
-    public DefaultStringEncryptor stringEncryptor(Base64Encoder encoder) {
-        return new DefaultStringEncryptor(encoder);
+    public DefaultStringEncryptor stringEncryptor(Base64Encoder encoder, ObjectMapperWrapper objectMapperWrapper) {
+        return new DefaultStringEncryptor(encoder, objectMapperWrapper);
     }
 
     @Bean

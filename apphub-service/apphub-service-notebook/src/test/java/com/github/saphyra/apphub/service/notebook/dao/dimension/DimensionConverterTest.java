@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionConverter.COLUMN_INDEX;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -50,7 +51,7 @@ class DimensionConverterTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(integerEncryptor.encryptEntity(INDEX, USER_ID_FROM_ACCESS_TOKEN)).willReturn(ENCRYPTED_INDEX);
+        given(integerEncryptor.encrypt(INDEX, USER_ID_FROM_ACCESS_TOKEN, DIMENSION_ID_STRING, COLUMN_INDEX)).willReturn(ENCRYPTED_INDEX);
 
         DimensionEntity result = underTest.convertDomain(domain);
 
@@ -72,7 +73,7 @@ class DimensionConverterTest {
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(integerEncryptor.decryptEntity(ENCRYPTED_INDEX, USER_ID_FROM_ACCESS_TOKEN)).willReturn(INDEX);
+        given(integerEncryptor.decrypt(ENCRYPTED_INDEX, USER_ID_FROM_ACCESS_TOKEN, DIMENSION_ID_STRING, COLUMN_INDEX)).willReturn(INDEX);
 
         Dimension result = underTest.convertEntity(entity);
 

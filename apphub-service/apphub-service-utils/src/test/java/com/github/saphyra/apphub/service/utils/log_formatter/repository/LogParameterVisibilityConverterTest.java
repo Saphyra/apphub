@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.utils.log_formatter.repository.LogParameterVisibilityConverter.COLUMN_PARAMETER;
+import static com.github.saphyra.apphub.service.utils.log_formatter.repository.LogParameterVisibilityConverter.COLUMN_VISIBLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -58,8 +60,8 @@ public class LogParameterVisibilityConverterTest {
 
         given(uuidConverter.convertEntity(ID_STRING)).willReturn(ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID)).willReturn(DECRYPTED_PARAMETER);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_VISIBLE, ACCESS_TOKEN_USER_ID)).willReturn(true);
+        given(stringEncryptor.decrypt(ENCRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID, ID_STRING, COLUMN_PARAMETER)).willReturn(DECRYPTED_PARAMETER);
+        given(booleanEncryptor.decrypt(ENCRYPTED_VISIBLE, ACCESS_TOKEN_USER_ID, ID_STRING, COLUMN_VISIBLE)).willReturn(true);
 
         LogParameterVisibility result = underTest.convertEntity(entity);
 
@@ -80,8 +82,8 @@ public class LogParameterVisibilityConverterTest {
 
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(DECRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_PARAMETER);
-        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_VISIBLE);
+        given(stringEncryptor.encrypt(DECRYPTED_PARAMETER, ACCESS_TOKEN_USER_ID, ID_STRING, COLUMN_PARAMETER)).willReturn(ENCRYPTED_PARAMETER);
+        given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID, ID_STRING, COLUMN_VISIBLE)).willReturn(ENCRYPTED_VISIBLE);
 
         LogParameterVisibilityEntity result = underTest.convertDomain(domain);
 

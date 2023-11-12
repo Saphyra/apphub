@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ContentConverter extends ConverterBase<ContentEntity, Content> {
+    static final String COLUMN_CONTENT = "content";
+
     private final AccessTokenProvider accessTokenProvider;
     private final StringEncryptor stringEncryptor;
     private final UuidConverter uuidConverter;
@@ -21,18 +23,19 @@ public class ContentConverter extends ConverterBase<ContentEntity, Content> {
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
             .listItemId(uuidConverter.convertEntity(entity.getListItemId()))
-            .content(stringEncryptor.decryptEntity(entity.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
+            .content(stringEncryptor.decrypt(entity.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId()), entity.getContentId(), COLUMN_CONTENT))
             .build();
     }
 
     @Override
     protected ContentEntity processDomainConversion(Content content) {
+        String contentId = uuidConverter.convertDomain(content.getContentId());
         return ContentEntity.builder()
-            .contentId(uuidConverter.convertDomain(content.getContentId()))
+            .contentId(contentId)
             .userId(uuidConverter.convertDomain(content.getUserId()))
             .parent(uuidConverter.convertDomain(content.getParent()))
             .listItemId(uuidConverter.convertDomain(content.getListItemId()))
-            .content(stringEncryptor.encryptEntity(content.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
+            .content(stringEncryptor.encrypt(content.getContent(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId()), contentId, COLUMN_CONTENT))
             .build();
     }
 }

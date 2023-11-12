@@ -18,6 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 class EventConverter extends ConverterBase<EventEntity, Event> {
+    static final String COLUMN_START_DATE = "start-date";
+    static final String COLUMN_TIME = "time";
+    static final String COLUMN_REPETITION_DATA = "repetition-data";
+    static final String COLUMN_TITLE = "title";
+    static final String COLUMN_CONTENT = "content";
+    static final String COLUMN_REPEAT = "repeat";
+
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
     private final IntegerEncryptor integerEncryptor;
@@ -26,16 +33,17 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
     @Override
     protected EventEntity processDomainConversion(Event domain) {
         String userId = accessTokenProvider.getUserIdAsString();
+        String eventId = uuidConverter.convertDomain(domain.getEventId());
         return EventEntity.builder()
-            .eventId(uuidConverter.convertDomain(domain.getEventId()))
+            .eventId(eventId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
-            .startDate(stringEncryptor.encryptEntity(domain.getStartDate().toString(), userId))
-            .time(stringEncryptor.encryptEntity(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId))
+            .startDate(stringEncryptor.encrypt(domain.getStartDate().toString(), userId, eventId, COLUMN_START_DATE))
+            .time(stringEncryptor.encrypt(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId, eventId, COLUMN_TIME))
             .repetitionType(domain.getRepetitionType())
-            .repetitionData(stringEncryptor.encryptEntity(domain.getRepetitionData(), userId))
-            .title(stringEncryptor.encryptEntity(domain.getTitle(), userId))
-            .content(stringEncryptor.encryptEntity(domain.getContent(), userId))
-            .repeat(integerEncryptor.encryptEntity(domain.getRepeat(), userId))
+            .repetitionData(stringEncryptor.encrypt(domain.getRepetitionData(), userId, eventId, COLUMN_REPETITION_DATA))
+            .title(stringEncryptor.encrypt(domain.getTitle(), userId, eventId, COLUMN_TITLE))
+            .content(stringEncryptor.encrypt(domain.getContent(), userId, eventId, COLUMN_CONTENT))
+            .repeat(integerEncryptor.encrypt(domain.getRepeat(), userId, eventId, COLUMN_REPEAT))
             .build();
     }
 
@@ -45,13 +53,16 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
         return Event.builder()
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .startDate(LocalDate.parse(stringEncryptor.decryptEntity(entity.getStartDate(), userId)))
-            .time(Optional.ofNullable(stringEncryptor.decryptEntity(entity.getTime(), userId)).map(LocalTime::parse).orElse(null))
+            .startDate(LocalDate.parse(stringEncryptor.decrypt(entity.getStartDate(), userId, entity.getEventId(), COLUMN_START_DATE)))
+            .time(Optional.ofNullable(stringEncryptor.decrypt(entity.getTime(), userId, entity.getEventId(), COLUMN_TIME)).map(LocalTime::parse).orElse(null))
             .repetitionType(entity.getRepetitionType())
-            .repetitionData(stringEncryptor.decryptEntity(entity.getRepetitionData(), userId))
-            .title(stringEncryptor.decryptEntity(entity.getTitle(), userId))
-            .content(stringEncryptor.decryptEntity(entity.getContent(), userId))
-            .repeat(Optional.ofNullable(entity.getRepeat()).map(repeat -> integerEncryptor.decryptEntity(repeat, userId)).orElse(1))
+            .repetitionData(stringEncryptor.decrypt(entity.getRepetitionData(), userId, entity.getEventId(), COLUMN_REPETITION_DATA))
+            .title(stringEncryptor.decrypt(entity.getTitle(), userId, entity.getEventId(), COLUMN_TITLE))
+            .content(stringEncryptor.decrypt(entity.getContent(), userId, entity.getEventId(), COLUMN_CONTENT))
+            .repeat(Optional.ofNullable(integerEncryptor.decrypt(entity.getRepeat(), userId, entity.getEventId(), COLUMN_REPEAT)).orElseGet(() -> {
+                log.info("OrElse");
+                return 1;
+            }))
             .build();
     }
 }

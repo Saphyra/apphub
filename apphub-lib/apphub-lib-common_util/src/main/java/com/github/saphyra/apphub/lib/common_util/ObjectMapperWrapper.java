@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.common_util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ObjectMapperWrapper {
+    @Getter
     private final ObjectMapper objectMapper;
 
     public <T> T readValue(InputStream in, TypeReference<T> type) {

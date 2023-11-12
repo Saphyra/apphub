@@ -19,6 +19,7 @@ SkyXplore
 ===PLATFORM CHANGES===
 Do not display error message when server is not available
 Store the encrypted data readable on local env
+Store the entityId and column to encrypted text
 
 ===TECHNICAL DEBTS===
 Notebook

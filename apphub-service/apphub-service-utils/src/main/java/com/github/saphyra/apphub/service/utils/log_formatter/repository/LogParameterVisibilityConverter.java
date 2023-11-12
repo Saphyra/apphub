@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 class LogParameterVisibilityConverter extends ConverterBase<LogParameterVisibilityEntity, LogParameterVisibility> {
+    static final String COLUMN_PARAMETER = "parameter";
+    static final String COLUMN_VISIBLE = "visible";
+
     private final StringEncryptor stringEncryptor;
     private final BooleanEncryptor booleanEncryptor;
     private final UuidConverter uuidConverter;
@@ -23,19 +26,20 @@ class LogParameterVisibilityConverter extends ConverterBase<LogParameterVisibili
         return LogParameterVisibility.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .parameter(stringEncryptor.decryptEntity(entity.getParameter(), userId))
-            .visible(booleanEncryptor.decryptEntity(entity.getVisible(), userId))
+            .parameter(stringEncryptor.decrypt(entity.getParameter(), userId, entity.getId(), COLUMN_PARAMETER))
+            .visible(booleanEncryptor.decrypt(entity.getVisible(), userId, entity.getId(), COLUMN_VISIBLE))
             .build();
     }
 
     @Override
     protected LogParameterVisibilityEntity processDomainConversion(LogParameterVisibility domain) {
         String userId = accessTokenProvider.getUserIdAsString();
+        String id = uuidConverter.convertDomain(domain.getId());
         return LogParameterVisibilityEntity.builder()
-            .id(uuidConverter.convertDomain(domain.getId()))
+            .id(id)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
-            .parameter(stringEncryptor.encryptEntity(domain.getParameter(), userId))
-            .visible(booleanEncryptor.encryptEntity(domain.isVisible(), userId))
+            .parameter(stringEncryptor.encrypt(domain.getParameter(), userId, id, COLUMN_PARAMETER))
+            .visible(booleanEncryptor.encrypt(domain.isVisible(), userId, id, COLUMN_VISIBLE))
             .build();
     }
 }

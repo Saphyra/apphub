@@ -7,32 +7,38 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Component
 class FavoriteConverter extends ConverterBase<FavoriteEntity, Favorite> {
+    static final String COLUMN_FAVORITE = "favorite";
+
     private final AccessTokenProvider accessTokenProvider;
     private final BooleanEncryptor booleanEncryptor;
     private final UuidConverter uuidConverter;
 
     @Override
-    protected Favorite processEntityConversion(FavoriteEntity favoriteEntity) {
+    protected Favorite processEntityConversion(FavoriteEntity entity) {
+        UUID userId = uuidConverter.convertEntity(entity.getKey().getUserId());
         return Favorite.builder()
-            .userId(uuidConverter.convertEntity(favoriteEntity.getKey().getUserId()))
-            .module(favoriteEntity.getKey().getModule())
-            .favorite(booleanEncryptor.decryptEntity(favoriteEntity.getFavorite(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
+            .userId(userId)
+            .module(entity.getKey().getModule())
+            .favorite(booleanEncryptor.decrypt(entity.getFavorite(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId()), entity.getKey().getModule(), COLUMN_FAVORITE))
             .build();
     }
 
     @Override
     protected FavoriteEntity processDomainConversion(Favorite favorite) {
+        String userId = uuidConverter.convertDomain(favorite.getUserId());
         return FavoriteEntity.builder()
             .key(
                 FavoriteEntityKey.builder()
-                    .userId(uuidConverter.convertDomain(favorite.getUserId()))
+                    .userId(userId)
                     .module(favorite.getModule())
                     .build()
             )
-            .favorite(booleanEncryptor.encryptEntity(favorite.isFavorite(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId())))
+            .favorite(booleanEncryptor.encrypt(favorite.isFavorite(), uuidConverter.convertDomain(accessTokenProvider.get().getUserId()), favorite.getModule(), COLUMN_FAVORITE))
             .build();
     }
 }

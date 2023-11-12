@@ -12,16 +12,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class CheckedItemConverter extends ConverterBase<CheckedItemEntity, CheckedItem> {
+    static final String COLUMN_CHECKED = "checked";
+
     private final BooleanEncryptor booleanEncryptor;
     private final UuidConverter uuidConverter;
     private final AccessTokenProvider accessTokenProvider;
 
     @Override
     protected CheckedItemEntity processDomainConversion(CheckedItem domain) {
+        String checkedItemId = uuidConverter.convertDomain(domain.getCheckedItemId());
         return CheckedItemEntity.builder()
-            .checkedItemId(uuidConverter.convertDomain(domain.getCheckedItemId()))
+            .checkedItemId(checkedItemId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
-            .checked(booleanEncryptor.encryptEntity(domain.getChecked(), accessTokenProvider.getUserIdAsString()))
+            .checked(booleanEncryptor.encrypt(domain.getChecked(), accessTokenProvider.getUserIdAsString(), checkedItemId, COLUMN_CHECKED))
             .build();
     }
 
@@ -30,7 +33,7 @@ class CheckedItemConverter extends ConverterBase<CheckedItemEntity, CheckedItem>
         return CheckedItem.builder()
             .checkedItemId(uuidConverter.convertEntity(entity.getCheckedItemId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .checked(booleanEncryptor.decryptEntity(entity.getChecked(), accessTokenProvider.getUserIdAsString()))
+            .checked(booleanEncryptor.decrypt(entity.getChecked(), accessTokenProvider.getUserIdAsString(), entity.getCheckedItemId(), COLUMN_CHECKED))
             .build();
     }
 }

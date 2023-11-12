@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemConverter.COLUMN_CHECKED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -24,19 +25,19 @@ class CheckedItemConverterTest {
     private static final String ENCRYPTED_CHECKED = "encrypted-checked";
 
     @Mock
-    private  BooleanEncryptor booleanEncryptor;
+    private BooleanEncryptor booleanEncryptor;
 
     @Mock
-    private  UuidConverter uuidConverter;
+    private UuidConverter uuidConverter;
 
     @Mock
-    private  AccessTokenProvider accessTokenProvider;
+    private AccessTokenProvider accessTokenProvider;
 
     @InjectMocks
     private CheckedItemConverter underTest;
 
     @Test
-    void convertDomain(){
+    void convertDomain() {
         CheckedItem domain = CheckedItem.builder()
             .checkedItemId(CHECKED_ITEM_ID)
             .userId(USER_ID)
@@ -45,7 +46,7 @@ class CheckedItemConverterTest {
         given(uuidConverter.convertDomain(CHECKED_ITEM_ID)).willReturn(CHECKED_ITEM_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(booleanEncryptor.encryptEntity(true, USER_ID_FROM_ACCESS_TOKEN)).willReturn(ENCRYPTED_CHECKED);
+        given(booleanEncryptor.encrypt(true, USER_ID_FROM_ACCESS_TOKEN, CHECKED_ITEM_ID_STRING, COLUMN_CHECKED)).willReturn(ENCRYPTED_CHECKED);
 
         CheckedItemEntity result = underTest.convertDomain(domain);
 
@@ -55,7 +56,7 @@ class CheckedItemConverterTest {
     }
 
     @Test
-    void convertEntity(){
+    void convertEntity() {
         CheckedItemEntity domain = CheckedItemEntity.builder()
             .checkedItemId(CHECKED_ITEM_ID_STRING)
             .userId(USER_ID_STRING)
@@ -64,7 +65,7 @@ class CheckedItemConverterTest {
         given(uuidConverter.convertEntity(CHECKED_ITEM_ID_STRING)).willReturn(CHECKED_ITEM_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_CHECKED, USER_ID_FROM_ACCESS_TOKEN)).willReturn(true);
+        given(booleanEncryptor.decrypt(ENCRYPTED_CHECKED, USER_ID_FROM_ACCESS_TOKEN, CHECKED_ITEM_ID_STRING, COLUMN_CHECKED)).willReturn(true);
 
         CheckedItem result = underTest.convertEntity(domain);
 
