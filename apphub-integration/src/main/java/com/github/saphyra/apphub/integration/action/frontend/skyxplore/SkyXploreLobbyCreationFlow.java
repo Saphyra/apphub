@@ -15,20 +15,20 @@ import java.util.stream.Stream;
 @Slf4j
 public class SkyXploreLobbyCreationFlow {
     @SafeVarargs
-    public static void setUpLobbyWithMembers(String gameName, WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... members) {
+    public static void setUpLobbyWithPlayers(String gameName, WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... players) {
         log.debug("Setting up lobby...");
 
-        Stream<WebDriver> players = Stream.concat(Stream.of(hostDriver), Arrays.stream(members).map(BiWrapper::getEntity1));
+        Stream<WebDriver> playersStream = Stream.concat(Stream.of(hostDriver), Arrays.stream(players).map(BiWrapper::getEntity1));
         AwaitilityWrapper.createDefault()
-            .until(() -> players.allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)))
+            .until(() -> playersStream.allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)))
             .assertTrue("Not all players loaded the MainMenu page.");
 
-        Arrays.stream(members)
+        Arrays.stream(players)
             .forEach(biWrapper -> SkyXploreFriendshipActions.setUpFriendship(hostDriver, biWrapper.getEntity1(), hostName, biWrapper.getEntity2()));
 
         SkyXploreMainMenuActions.createLobby(hostDriver, gameName);
 
-        Arrays.stream(members)
+        Arrays.stream(players)
             .peek(biWrapper -> SkyXploreLobbyActions.inviteFriend(hostDriver, biWrapper.getEntity2()))
             .parallel()
             .peek(biWrapper -> SkyXploreMainMenuActions.acceptInvitation(biWrapper.getEntity1(), hostName))

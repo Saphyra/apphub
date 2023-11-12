@@ -1,10 +1,10 @@
-package com.github.saphyra.apphub.service.skyxplore.lobby.service.member;
+package com.github.saphyra.apphub.service.skyxplore.lobby.service.player;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,43 +19,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class LobbyMemberQueryServiceTest {
+class LobbyPlayerQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private LobbyDao lobbyDao;
 
     @Mock
-    private LobbyMemberToResponseConverter converter;
+    private LobbyPlayerToResponseConverter converter;
 
     @InjectMocks
-    private LobbyMemberQueryService underTest;
+    private LobbyPlayerQueryService underTest;
 
     @Mock
     private Lobby lobby;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @Mock
     private Invitation invitation;
 
     @Mock
-    private LobbyMemberResponse memberResponse;
+    private LobbyPlayerResponse playerResponse;
 
     @Mock
-    private LobbyMemberResponse invitationResponse;
+    private LobbyPlayerResponse invitationResponse;
 
     @Test
-    void getMembers() {
+    void getPlayers() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        given(lobby.getMembers()).willReturn(Map.of(UUID.randomUUID(), lobbyMember));
-        given(converter.convertMember(lobbyMember)).willReturn(memberResponse);
+        given(lobby.getPlayers()).willReturn(Map.of(UUID.randomUUID(), lobbyPlayer));
+        given(converter.convertPlayer(lobbyPlayer)).willReturn(playerResponse);
         given(lobby.getInvitations()).willReturn(List.of(invitation));
         given(converter.convertInvitation(invitation)).willReturn(invitationResponse);
 
-        List<LobbyMemberResponse> result = underTest.getMembers(USER_ID);
+        List<LobbyPlayerResponse> result = underTest.getPlayers(USER_ID);
 
-        assertThat(result).containsExactlyInAnyOrder(memberResponse, invitationResponse);
+        assertThat(result).containsExactlyInAnyOrder(playerResponse, invitationResponse);
     }
 }

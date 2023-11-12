@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,15 +37,15 @@ class GameLoadedServiceTest {
     private Lobby lobby;
 
     @Mock
-    private LobbyMember connectedPlayer;
+    private LobbyPlayer connectedPlayer;
 
     @Mock
-    private LobbyMember disconnectedPlayer;
+    private LobbyPlayer disconnectedPlayer;
 
     @Test
     void gameLoaded() {
         given(lobbyDao.findByGameId(GAME_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getMembers()).willReturn(Map.of(
+        given(lobby.getPlayers()).willReturn(Map.of(
             UUID.randomUUID(), connectedPlayer,
             UUID.randomUUID(), disconnectedPlayer
         ));

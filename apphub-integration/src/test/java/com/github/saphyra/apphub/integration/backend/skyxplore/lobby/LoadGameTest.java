@@ -96,7 +96,7 @@ public class LoadGameTest extends BackEndTest {
 
     private static void startGane_notAllReady(Language language, UUID accessTokenId1) {
         Response startGame_notAllReadyResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId1);
-        ResponseValidator.verifyErrorResponse(language, startGame_notAllReadyResponse, 412, ErrorCode.LOBBY_MEMBER_NOT_READY);
+        ResponseValidator.verifyErrorResponse(language, startGame_notAllReadyResponse, 412, ErrorCode.LOBBY_PLAYER_NOT_READY);
     }
 
     private static ApphubWsClient startGame_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2) {

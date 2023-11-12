@@ -21,3 +21,5 @@ Do not display error message when server is not available
 Notebook
     Remove leftovers of Table / Checklist restructure
     Extract service logic from large jsx files
+SkyXplore
+    Rename LobbyMember to LobbyPlayer

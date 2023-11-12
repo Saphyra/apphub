@@ -26,6 +26,6 @@ class EditSettingsService {
 
         lobby.setSettings(settings);
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED, settings);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED, settings);
     }
 }

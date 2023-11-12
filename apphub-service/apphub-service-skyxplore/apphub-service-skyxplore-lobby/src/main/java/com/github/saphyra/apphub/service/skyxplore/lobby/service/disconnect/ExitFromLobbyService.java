@@ -22,7 +22,7 @@ public class ExitFromLobbyService {
     }
 
     public void exit(UUID userId, Lobby lobby) {
-        lobby.getMembers()
+        lobby.getPlayers()
             .remove(userId);
 
         invitationRejectionService.rejectInvitations(userId, lobby);

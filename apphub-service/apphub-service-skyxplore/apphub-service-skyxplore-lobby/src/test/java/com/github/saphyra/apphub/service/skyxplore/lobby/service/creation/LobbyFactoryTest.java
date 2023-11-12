@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +75,7 @@ public class LobbyFactoryTest {
         assertThat(result.getType()).isEqualTo(LobbyType.NEW_GAME);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.getHost()).isEqualTo(USER_ID);
-        assertThat(result.getMembers()).containsEntry(USER_ID, LobbyMember.builder().userId(USER_ID).status(LobbyMemberStatus.NOT_READY).build());
+        assertThat(result.getPlayers()).containsEntry(USER_ID, LobbyPlayer.builder().userId(USER_ID).status(LobbyPlayerStatus.NOT_READY).build());
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);
         assertThat(result.getSettings()).isEqualTo(settings);
     }
@@ -100,7 +100,7 @@ public class LobbyFactoryTest {
         assertThat(result.getType()).isEqualTo(LobbyType.LOAD_GAME);
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.getHost()).isEqualTo(USER_ID);
-        assertThat(result.getMembers()).containsEntry(USER_ID, LobbyMember.builder().userId(USER_ID).allianceId(ALLIANCE_ID).status(LobbyMemberStatus.NOT_READY).build());
+        assertThat(result.getPlayers()).containsEntry(USER_ID, LobbyPlayer.builder().userId(USER_ID).allianceId(ALLIANCE_ID).status(LobbyPlayerStatus.NOT_READY).build());
         assertThat(result.getLastAccess()).isEqualTo(CURRENT_DATE);
         assertThat(result.getAlliances()).hasSize(1);
         assertThat(result.getAlliances().get(0).getAllianceId()).isEqualTo(ALLIANCE_ID);

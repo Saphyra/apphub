@@ -12,8 +12,8 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberStatus;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayer;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -52,10 +52,10 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         onlineFriend.invite();
 
-        LobbyMember invitedMember = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findMember(driver1, userData2.getUsername()), Optional::isPresent)
+        LobbyPlayer invitedMember = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findPlayer(driver1, userData2.getUsername()), Optional::isPresent)
             .orElseThrow()
             .orElseThrow();
-        assertThat(invitedMember.getStatus()).isEqualTo(LobbyMemberStatus.INVITED);
+        assertThat(invitedMember.getStatus()).isEqualTo(LobbyPlayerStatus.INVITED);
 
         onlineFriend.invite();
         ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_LOBBY_INVITATION_SENT_RECENTLY);
@@ -67,7 +67,7 @@ public class LobbyInvitationTest extends SeleniumTest {
             .assertTrue("Invited member was not redirected to lobby.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData2.getUsername()).getStatus() == LobbyMemberStatus.NOT_READY)
+            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver1, userData2.getUsername()).getStatus() == LobbyPlayerStatus.NOT_READY)
             .assertTrue("Lobby member status is not 'NOT_READY'");
     }
 
@@ -102,13 +102,13 @@ public class LobbyInvitationTest extends SeleniumTest {
             .assertTrue("Invitation not arrived");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getMember(driver1, userData3.getUsername()).getStatus() == LobbyMemberStatus.INVITED)
+            .until(() -> SkyXploreLobbyActions.getPlayer(driver1, userData3.getUsername()).getStatus() == LobbyPlayerStatus.INVITED)
             .assertTrue("Invitation did not appear for host");
 
         SkyXploreLobbyActions.exitLobby(driver2);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMember(driver1, userData3.getUsername()).isEmpty())
+            .until(() -> SkyXploreLobbyActions.findPlayer(driver1, userData3.getUsername()).isEmpty())
             .assertTrue("Invitation did not disappear for host");
 
         AwaitilityWrapper.createDefault()

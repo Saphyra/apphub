@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyType;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.Builder;
@@ -36,7 +36,7 @@ public class InvitationService {
     private final SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
     private final SkyXploreDataProxy dataProxy;
-    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private final LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter;
     private final int floodingLimitSeconds;
 
     public InvitationService(
@@ -47,7 +47,7 @@ public class InvitationService {
         SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler,
         SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler,
         SkyXploreDataProxy dataProxy,
-        LobbyMemberToResponseConverter lobbyMemberToResponseConverter,
+        LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter,
         @Value("${lobby.invitation.floodingLimitSeconds}") int floodingLimitSeconds
     ) {
         this.lobbyDao = lobbyDao;
@@ -57,7 +57,7 @@ public class InvitationService {
         this.invitationWebSocketHandler = invitationWebSocketHandler;
         this.lobbyWebSocketHandler = lobbyWebSocketHandler;
         this.dataProxy = dataProxy;
-        this.lobbyMemberToResponseConverter = lobbyMemberToResponseConverter;
+        this.lobbyPlayerToResponseConverter = lobbyPlayerToResponseConverter;
         this.floodingLimitSeconds = floodingLimitSeconds;
     }
 
@@ -91,7 +91,7 @@ public class InvitationService {
 
     public void inviteDirectly(UUID senderId, UUID characterId, Lobby lobby) {
         if (LobbyType.LOAD_GAME == lobby.getType() && !lobby.getExpectedPlayers().contains(characterId)) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, characterId + " is not an expected member of LOAD_GAME lobby " + lobby.getLobbyId());
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, characterId + " is not an expected player of LOAD_GAME lobby " + lobby.getLobbyId());
         }
 
         Invitation invitation = lobby.getInvitations()
@@ -106,7 +106,7 @@ public class InvitationService {
                 return i;
             });
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberToResponseConverter.convertInvitation(invitation));
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyPlayerToResponseConverter.convertInvitation(invitation));
 
         InvitationMessage invitationMessage = InvitationMessage.builder()
             .senderId(senderId)

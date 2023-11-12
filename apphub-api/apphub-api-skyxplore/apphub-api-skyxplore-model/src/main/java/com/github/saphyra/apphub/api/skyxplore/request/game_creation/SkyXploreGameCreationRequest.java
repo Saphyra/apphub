@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 public class SkyXploreGameCreationRequest {
     private UUID host;
-    private Map<UUID, UUID> members; //<UserId, AllianceId>
+    private Map<UUID, UUID> players; //<UserId, AllianceId>
     private List<AiPlayer> ais;
     private Map<UUID, String> alliances; //<AllianceId, AllianceName>
     private SkyXploreGameSettings settings;

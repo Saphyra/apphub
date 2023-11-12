@@ -71,7 +71,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
         if (editingEnabled) {
             return (
                 <InputField
-                    className="skyxplore-lobby-member-name skyxplore-lobby-change-ai-name"
+                    className="skyxplore-lobby-player-name skyxplore-lobby-change-ai-name"
                     type="text"
                     placeholder={localizationHandler.get("ai-name")}
                     value={aiName}
@@ -83,7 +83,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
         } else {
             return (
                 <h4
-                    className="skyxplore-lobby-member-name skyxplore-lobby-ai-name"
+                    className="skyxplore-lobby-player-name skyxplore-lobby-ai-name"
                     onClick={() => isHost && setEditingEnabled(true)}
                 >
                     {aiName}
@@ -104,7 +104,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
             />
 
             <PreLabeledInputField
-                className="skyxplore-lobby-member-alliance"
+                className="skyxplore-lobby-player-alliance"
                 label={localizationHandler.get("alliance") + ":"}
                 input={getAllianceSelectMenu()}
             />

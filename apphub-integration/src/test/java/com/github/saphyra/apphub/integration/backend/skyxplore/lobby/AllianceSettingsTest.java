@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayer;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AllianceCreatedResponse;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
@@ -76,8 +76,8 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(AllianceCreatedResponse.class);
         assertThat(allianceCreatedResponse.getAlliance().getAllianceName()).isEqualTo("1");
         UUID allianceId1 = allianceCreatedResponse.getAlliance().getAllianceId();
-        assertThat(allianceCreatedResponse.getMember().getAllianceId()).isEqualTo(allianceId1);
-        assertThat(allianceCreatedResponse.getMember().getUserId()).isEqualTo(userId1);
+        assertThat(allianceCreatedResponse.getPlayer().getAllianceId()).isEqualTo(allianceId1);
+        assertThat(allianceCreatedResponse.getPlayer().getUserId()).isEqualTo(userId1);
         assertThat(allianceCreatedResponse.getAi()).isNull();
         return allianceId1;
     }
@@ -85,24 +85,24 @@ public class AllianceSettingsTest extends BackEndTest {
     private static void setAllianceOfPlayer_noAlliance(Language language, UUID accessTokenId1, UUID userId1, ApphubWsClient wsClient) {
         SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId1, Constants.NO_ALLIANCE_VALUE);
 
-        LobbyMemberResponse lobbyMemberResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
+        LobbyPlayerResponse lobbyPlayerResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
             .orElseThrow()
-            .getPayloadAs(LobbyMemberResponse.class);
-        assertThat(lobbyMemberResponse.getUserId()).isEqualTo(userId1);
-        assertThat(lobbyMemberResponse.getAllianceId()).isNull();
+            .getPayloadAs(LobbyPlayerResponse.class);
+        assertThat(lobbyPlayerResponse.getUserId()).isEqualTo(userId1);
+        assertThat(lobbyPlayerResponse.getAllianceId()).isNull();
     }
 
     private static void setAllianceOfPlayer_existingAlliance(Language language, UUID accessTokenId1, UUID userId2, ApphubWsClient wsClient, UUID allianceId1) {
-        LobbyMemberResponse lobbyMemberResponse;
+        LobbyPlayerResponse lobbyPlayerResponse;
         wsClient.clearMessages();
 
         SkyXploreLobbyActions.changeAllianceOfPlayer(language, accessTokenId1, userId2, allianceId1);
 
-        lobbyMemberResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
+        lobbyPlayerResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
             .orElseThrow()
-            .getPayloadAs(LobbyMemberResponse.class);
-        assertThat(lobbyMemberResponse.getUserId()).isEqualTo(userId2);
-        assertThat(lobbyMemberResponse.getAllianceId()).isEqualTo(allianceId1);
+            .getPayloadAs(LobbyPlayerResponse.class);
+        assertThat(lobbyPlayerResponse.getUserId()).isEqualTo(userId2);
+        assertThat(lobbyPlayerResponse.getAllianceId()).isEqualTo(allianceId1);
     }
 
     private static UUID setAllianceOfAi_notHost(Language language, UUID accessTokenId1, UUID accessTokenId2, ApphubWsClient wsClient) {
@@ -128,7 +128,7 @@ public class AllianceSettingsTest extends BackEndTest {
             .getPayloadAs(AllianceCreatedResponse.class);
         assertThat(allianceCreatedResponse.getAlliance().getAllianceName()).isEqualTo("2");
         UUID allianceId2 = allianceCreatedResponse.getAlliance().getAllianceId();
-        assertThat(allianceCreatedResponse.getMember()).isNull();
+        assertThat(allianceCreatedResponse.getPlayer()).isNull();
         assertThat(allianceCreatedResponse.getAi().getUserId()).isEqualTo(aiId);
         assertThat(allianceCreatedResponse.getAi().getAllianceId()).isEqualTo(allianceId2);
     }

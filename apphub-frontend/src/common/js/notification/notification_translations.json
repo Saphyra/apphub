@@ -43,8 +43,8 @@
         "en": "You have invited this player recently. Please wait a few seconds before trying again.",
         "hu": "Ezt a játékost nem rég hívtad meg. Várj pár másodpercet, mielőtt újra próbálkozhatsz!"
     },
-    "LOBBY_MEMBER_NOT_READY": {
-        "en": "Not all the members are ready.",
+    "LOBBY_PLAYER_NOT_READY": {
+        "en": "Not all the players are ready.",
         "hu": "Még nincs kész mindenki."
     },
     "SKYXPLORE_CHARACTER_SAVED": {

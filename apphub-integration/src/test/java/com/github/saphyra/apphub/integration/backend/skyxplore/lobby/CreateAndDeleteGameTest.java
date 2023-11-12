@@ -72,8 +72,8 @@ public class CreateAndDeleteGameTest extends BackEndTest {
         Response notReadyResponse = SkyXploreLobbyActions.getStartGameResponse(language, accessTokenId1);
         assertThat(notReadyResponse.getStatusCode()).isEqualTo(412);
         ErrorResponse notReadyErrorResponse = notReadyResponse.getBody().as(ErrorResponse.class);
-        assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_MEMBER_NOT_READY.name());
-        assertThat(notReadyErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_MEMBER_NOT_READY));
+        assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_PLAYER_NOT_READY.name());
+        assertThat(notReadyErrorResponse.getLocalizedMessage()).isEqualTo(LocalizationProperties.getProperty(language, LocalizationKey.LOBBY_PLAYER_NOT_READY));
     }
 
     private static void createGame(Language language, UUID accessTokenId1, UUID accessTokenId2) {

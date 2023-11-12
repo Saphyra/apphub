@@ -22,7 +22,7 @@ public enum LocalizedText {
     //SKYXPLORE
     SKYXPLORE_CHARACTER_SAVED("Character saved."),
     SKYXPLORE_CHARACTER_NAME_ALREADY_EXISTS("Character name already exists."),
-    SKYXPLORE_LOBBY_MEMBERS_NOT_READY("Not all the members are ready."),
+    SKYXPLORE_LOBBY_PLAYERS_NOT_READY("Not all the players are ready."),
     SKYXPLORE_LOBBY_INVITATION_SENT_RECENTLY("You have invited this player recently. Please wait a few seconds before trying again."),
     SKYXPLORE_LOBBY_ONLY_ONE_ALLIANCE("Every player is in the same alliance. Game is boring with no one to conquer."),
     ;

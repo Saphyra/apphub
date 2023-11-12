@@ -19,11 +19,11 @@ class GameCreationRequestValidator {
             throw ExceptionFactory.invalidParam("host", "must not be null");
         }
 
-        if (isNull(request.getMembers())) {
+        if (isNull(request.getPlayers())) {
             throw ExceptionFactory.invalidParam("members", "must not be null");
         }
 
-        if (!request.getMembers().containsKey(request.getHost())) {
+        if (!request.getPlayers().containsKey(request.getHost())) {
             throw ExceptionFactory.invalidParam("host", "unknown id");
         }
 
@@ -44,7 +44,7 @@ class GameCreationRequestValidator {
             throw ExceptionFactory.invalidParam("allianceName", "not unique");
         }
 
-        boolean allianceIdsAreKnown = request.getMembers()
+        boolean allianceIdsAreKnown = request.getPlayers()
             .values()
             .stream()
             .filter(uuid -> !isNull(uuid))

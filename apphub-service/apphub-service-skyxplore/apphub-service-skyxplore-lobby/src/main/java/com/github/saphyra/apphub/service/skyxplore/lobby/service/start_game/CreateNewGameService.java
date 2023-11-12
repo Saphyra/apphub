@@ -27,10 +27,10 @@ class CreateNewGameService {
     private final AllianceSetupValidator allianceSetupValidator;
 
     void createNewGame(Lobby lobby) {
-        Map<UUID, UUID> members = new HashMap<>();
-        lobby.getMembers()
+        Map<UUID, UUID> players = new HashMap<>();
+        lobby.getPlayers()
             .values()
-            .forEach(member -> members.put(member.getUserId(), member.getAllianceId()));
+            .forEach(player -> players.put(player.getUserId(), player.getAllianceId()));
 
         Map<UUID, String> alliances = lobby.getAlliances()
             .stream()
@@ -38,7 +38,7 @@ class CreateNewGameService {
 
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(lobby.getHost())
-            .members(members)
+            .players(players)
             .alliances(alliances)
             .settings(lobby.getSettings())
             .gameName(lobby.getLobbyName())
@@ -55,6 +55,6 @@ class CreateNewGameService {
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .build();
 
-        skyXploreLobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
+        skyXploreLobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), event);
     }
 }

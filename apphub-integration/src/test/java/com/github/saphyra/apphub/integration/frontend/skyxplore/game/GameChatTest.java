@@ -18,7 +18,7 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatRoom;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -67,27 +67,27 @@ public class GameChatTest extends SeleniumTest {
             .map(FutureWrapper::get)
             .forEach(ExecutionResult::getOrThrow);
 
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()), new BiWrapper<>(driver3, userData3.getUsername()));
 
-        LobbyMember host = SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername());
+        LobbyPlayer host = SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername());
         host.changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
             .assertTrue("Alliance of host did not change.");
 
-        SkyXploreLobbyActions.getMember(driver1, userData2.getUsername())
+        SkyXploreLobbyActions.getPlayer(driver1, userData2.getUsername())
             .changeAllianceTo("1");
 
         Stream.of(driver1, driver2, driver3)
             .forEach(SkyXploreLobbyActions::setReady);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getMembers(driver1).stream().allMatch(LobbyMember::isReady))
+            .until(() -> SkyXploreLobbyActions.getPlayers(driver1).stream().allMatch(LobbyPlayer::isReady))
             .assertTrue("Lobby members are not ready.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername()).isReady())
+            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername()).isReady())
             .assertTrue("Host is not ready.");
 
         SkyXploreLobbyActions.startGameCreation(driver1);

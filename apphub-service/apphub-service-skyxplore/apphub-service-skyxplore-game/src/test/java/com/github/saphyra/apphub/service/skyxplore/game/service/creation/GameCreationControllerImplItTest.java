@@ -91,7 +91,7 @@ public class GameCreationControllerImplItTest {
 
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(host)
-            .members(members)
+            .players(members)
             .alliances(CollectionUtils.singleValueMap(ALLIANCE_ID, ALLIANCE_NAME))
             .settings(SkyXploreGameSettings.builder()
                 .maxPlayersPerSolarSystem(5)
@@ -141,7 +141,7 @@ public class GameCreationControllerImplItTest {
         );
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
             .host(playerId)
-            .members(members)
+            .players(members)
             .alliances(CollectionUtils.singleValueMap(allianceId, ALLIANCE_NAME))
             .settings(SkyXploreGameSettings.builder()
                 .maxPlayersPerSolarSystem(1)

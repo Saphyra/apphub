@@ -23,7 +23,7 @@ class LoadGameService {
         SkyXploreLoadGameRequest request = SkyXploreLoadGameRequest.builder()
             .host(lobby.getHost())
             .gameId(lobby.getGameId())
-            .members(new ArrayList<>(lobby.getMembers().keySet()))
+            .players(new ArrayList<>(lobby.getPlayers().keySet()))
             .build();
 
         gameProxy.loadGame(request);
@@ -33,6 +33,6 @@ class LoadGameService {
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .build();
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), event);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), event);
     }
 }

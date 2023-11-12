@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
@@ -50,8 +50,8 @@ class ExitMessageSenderTest {
         given(characterProxy.getCharacter(USER_ID)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(CHARACTER_NAME);
         given(dateTimeUtil.getCurrentTimeEpochMillis()).willReturn(CURRENT_TIME_EPOCH);
-        Map<UUID, LobbyMember> players = CollectionUtils.singleValueMap(USER_ID, null);
-        given(lobby.getMembers()).willReturn(players);
+        Map<UUID, LobbyPlayer> players = CollectionUtils.singleValueMap(USER_ID, null);
+        given(lobby.getPlayers()).willReturn(players);
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getExpectedPlayers()).willReturn(List.of(USER_ID));
 

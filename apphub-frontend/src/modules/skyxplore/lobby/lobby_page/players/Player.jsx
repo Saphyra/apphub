@@ -1,25 +1,25 @@
 import React from "react";
-import "./member/member.css"
+import "./player/player.css"
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField"
 import Stream from "../../../../../common/js/collection/Stream";
 import Endpoints from "../../../../../common/js/dao/dao";
 import Constants from "../../../../../common/js/Constants";
 
-const Member = ({ member, localizationHandler, alliances, isHost, lobbyType }) => {
-    const statusClass = "skyxplore-lobby-member-status-" + member.status.toLowerCase();
+const Player = ({ player, localizationHandler, alliances, isHost, lobbyType }) => {
+    const statusClass = "skyxplore-lobby-player-status-" + player.status.toLowerCase();
 
     const setAlliance = (event) => {
         const allianceValue = event.target.value;
 
-        Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER.createRequest({ value: allianceValue }, { userId: member.userId })
+        Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER.createRequest({ value: allianceValue }, { userId: player.userId })
             .send();
     }
 
     const getAllianceSelectMenu = () => {
         return (
             <select
-                disabled={!isHost || member.status === "INVITED" || lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_LOAD}
-                value={member.allianceId || ""}
+                disabled={!isHost || player.status === "INVITED" || lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_LOAD}
+                value={player.allianceId || ""}
                 onChange={setAlliance}
             >
                 <option value="no-alliance" >
@@ -46,10 +46,10 @@ const Member = ({ member, localizationHandler, alliances, isHost, lobbyType }) =
     }
 
     return (
-        <div className={"skyxplore-lobby-member " + statusClass}>
-            <h4 className="skyxplore-lobby-member-name">{member.characterName}</h4>
+        <div className={"skyxplore-lobby-player " + statusClass}>
+            <h4 className="skyxplore-lobby-player-name">{player.characterName}</h4>
             <PreLabeledInputField
-                className="skyxplore-lobby-member-alliance"
+                className="skyxplore-lobby-player-alliance"
                 label={localizationHandler.get("alliance") + ":"}
                 input={getAllianceSelectMenu()}
             />
@@ -57,4 +57,4 @@ const Member = ({ member, localizationHandler, alliances, isHost, lobbyType }) =
     );
 }
 
-export default Member;
+export default Player;

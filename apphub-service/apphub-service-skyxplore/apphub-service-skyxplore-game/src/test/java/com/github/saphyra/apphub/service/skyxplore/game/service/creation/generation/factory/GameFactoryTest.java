@@ -88,7 +88,7 @@ public class GameFactoryTest {
         Map<UUID, UUID> members = Map.of(USER_ID, ALLIANCE_ID);
         Map<UUID, String> alliances = Map.of(ALLIANCE_ID, ALLIANCE_NAME);
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(members)
+            .players(members)
             .alliances(alliances)
             .settings(settings)
             .host(HOST)

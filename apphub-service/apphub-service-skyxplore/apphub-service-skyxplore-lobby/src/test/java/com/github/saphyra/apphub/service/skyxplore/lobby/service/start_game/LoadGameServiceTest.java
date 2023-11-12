@@ -5,8 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreGameProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
@@ -45,8 +44,8 @@ public class LoadGameServiceTest {
     public void loadGame() {
         given(lobby.getHost()).willReturn(HOST);
         given(lobby.getGameId()).willReturn(GAME_ID);
-        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(HOST, null);
-        given(lobby.getMembers()).willReturn(lobbyMembers);
+        Map<UUID, LobbyPlayer> players = CollectionUtils.singleValueMap(HOST, null);
+        given(lobby.getPlayers()).willReturn(players);
 
         underTest.loadGame(lobby);
 
@@ -55,10 +54,10 @@ public class LoadGameServiceTest {
         SkyXploreLoadGameRequest loadGameRequest = gameCreationArgumentCaptor.getValue();
         assertThat(loadGameRequest.getHost()).isEqualTo(HOST);
         assertThat(loadGameRequest.getGameId()).isEqualTo(GAME_ID);
-        assertThat(loadGameRequest.getMembers()).containsExactly(HOST);
+        assertThat(loadGameRequest.getPlayers()).containsExactly(HOST);
 
         verify(lobby).setGameCreationStarted(true);
 
-        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
     }
 }

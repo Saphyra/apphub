@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -13,7 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyServ
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.ActiveFriendsService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerQueryService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.GameLoadedService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class SkyXploreLobbyControllerImplTest {
     private JoinToLobbyService joinToLobbyService;
 
     @Mock
-    private LobbyMemberQueryService lobbyMemberQueryService;
+    private LobbyPlayerQueryService lobbyPlayerQueryService;
 
     @Mock
     private StartGameService startGameService;
@@ -75,7 +75,7 @@ public class SkyXploreLobbyControllerImplTest {
     private ActiveFriendResponse activeFriendResponse;
 
     @Mock
-    private LobbyMemberResponse lobbyMemberResponse;
+    private LobbyPlayerResponse lobbyPlayerResponse;
 
     @Mock
     private Lobby lobby;
@@ -133,13 +133,13 @@ public class SkyXploreLobbyControllerImplTest {
     }
 
     @Test
-    public void getMembersOfLobby() {
+    public void getPlayersOfLobby() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(lobbyMemberQueryService.getMembers(USER_ID)).willReturn(List.of(lobbyMemberResponse));
+        given(lobbyPlayerQueryService.getPlayers(USER_ID)).willReturn(List.of(lobbyPlayerResponse));
 
-        List<LobbyMemberResponse> result = underTest.getMembersOfLobby(accessTokenHeader);
+        List<LobbyPlayerResponse> result = underTest.getPlayersOfLobby(accessTokenHeader);
 
-        assertThat(result).containsExactly(lobbyMemberResponse);
+        assertThat(result).containsExactly(lobbyPlayerResponse);
     }
 
     @Test

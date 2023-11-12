@@ -21,7 +21,7 @@
   "INVALID_TYPE": "Érvénytelen típus.",
   "ITEM_NOT_VISIBLE": "Te nem látod ezt az objektumot.",
   "LIST_ITEM_NOT_FOUND": "Elem nem található.",
-  "LOBBY_MEMBER_NOT_READY": "Várd meg, amíg mindenki kész van!",
+  "LOBBY_PLAYER_NOT_READY": "Várd meg, amíg mindenki kész van!",
   "LOBBY_NOT_FOUND": "Szoba nem található",
   "LOCALE_NOT_FOUND": "A locale nem található.",
   "MISSING_ROLE": "Ehhez a művelethez nincs jogosultságod.",

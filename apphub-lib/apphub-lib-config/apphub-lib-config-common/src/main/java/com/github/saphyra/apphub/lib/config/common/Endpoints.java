@@ -196,7 +196,7 @@ public class Endpoints {
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
-    public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
+    public static final String SKYXPLORE_LOBBY_GET_PLAYERS = "/api/skyxplore/lobby/players";
     public static final String SKYXPLORE_LOBBY_GET_ALLIANCES = "/api/skyxplore/lobby/alliances";
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_START_GAME = "/api/skyxplore/lobby/start";

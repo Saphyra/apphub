@@ -35,7 +35,7 @@ public class TerraformationTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -88,7 +88,7 @@ public class TerraformationTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 

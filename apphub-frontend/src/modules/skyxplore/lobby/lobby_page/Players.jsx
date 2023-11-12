@@ -3,13 +3,13 @@ import MapStream from "../../../../common/js/collection/MapStream";
 import Stream from "../../../../common/js/collection/Stream";
 import Endpoints from "../../../../common/js/dao/dao";
 import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
-import Member from "./members/Member";
+import Player from "./players/Player";
 import PanelTitle from "./PanelTitle";
 
-const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
-    const [members, setMembers] = useState({});
+const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
+    const [players, setPlayers] = useState({});
 
-    useEffect(() => loadMembers(), []);
+    useEffect(() => loadPlayers(), []);
     useEffect(() => handleEvent(), [lastEvent]);
 
 
@@ -19,56 +19,56 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
         }
 
         if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED) {
-            console.log("Lobby Member modified", lastEvent.payload);
-            const newMember = lastEvent.payload;
+            console.log("Lobby Player modified", lastEvent.payload);
+            const newPlayer = lastEvent.payload;
 
-            const copy = new MapStream(members)
+            const copy = new MapStream(players)
                 .clone()
-                .add(newMember.userId, newMember)
+                .add(newPlayer.userId, newPlayer)
                 .toObject();
 
-            setMembers(copy);
+            setPlayers(copy);
         } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
-            const copy = new MapStream(members)
+            const copy = new MapStream(players)
                 .filter(userId => userId !== lastEvent.payload.userId)
                 .toObject();
 
-            setMembers(copy);
+            setPlayers(copy);
         } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
-            const newMember = lastEvent.payload.member;
+            const newPlayer = lastEvent.payload.player;
 
-            if (newMember === null) {
+            if (newPlayer === null) {
                 return;
             }
 
-            const copy = new MapStream(members)
+            const copy = new MapStream(players)
                 .clone()
-                .add(newMember.userId, newMember)
+                .add(newPlayer.userId, newPlayer)
                 .toObject();
 
-            setMembers(copy);
+            setPlayers(copy);
         }
     }
 
     //Load
-    const loadMembers = () => {
+    const loadPlayers = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS.createRequest()
+            const result = await Endpoints.SKYXPLORE_LOBBY_GET_PLAYERS.createRequest()
                 .send();
-            const memberMap = new Stream(result)
-                .toMap((member) => member.userId);
+            const playerMap = new Stream(result)
+                .toMap((player) => player.userId);
 
-            setMembers(memberMap);
+            setPlayers(playerMap);
         }
         fetch();
     }
 
-    const getMembers = () => {
-        return new MapStream(members)
-            .map((userId, member) =>
-                <Member
-                    key={member.userId}
-                    member={member}
+    const getPlayers = () => {
+        return new MapStream(players)
+            .map((userId, player) =>
+                <Player
+                    key={player.userId}
+                    player={player}
                     localizationHandler={localizationHandler}
                     alliances={alliances}
                     isHost={isHost}
@@ -79,14 +79,14 @@ const Members = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
     }
 
     return (
-        <div id="skyxplore-lobby-members" className="skyxplore-lobby-panel">
-            <PanelTitle label={localizationHandler.get("members")} />
+        <div id="skyxplore-lobby-players" className="skyxplore-lobby-panel">
+            <PanelTitle label={localizationHandler.get("players")} />
 
             <div className="skyxplore-lobby-panel-content">
-                {getMembers()}
+                {getPlayers()}
             </div>
         </div>
     );
 }
 
-export default Members;
+export default Players;

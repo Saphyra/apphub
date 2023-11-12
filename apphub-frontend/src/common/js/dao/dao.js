@@ -203,7 +203,7 @@ const Endpoints = {
     SKYXPLORE_LOBBY_IS_IN_LOBBY: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby"),
     SKYXPLORE_LOBBY_VIEW_FOR_PAGE: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/page"),
     SKYXPLORE_LOBBY_GET_ALLIANCES: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/alliances"),
-    SKYXPLORE_LOBBY_GET_MEMBERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/members"),
+    SKYXPLORE_LOBBY_GET_PLAYERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/players"),
     SKYXPLORE_LOBBY_EXIT: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/player/{userId}"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/ai/{userId}"),

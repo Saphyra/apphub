@@ -21,7 +21,7 @@
   "INVALID_TYPE": "Invalid type.",
   "ITEM_NOT_VISIBLE": "You don't see this object.",
   "LIST_ITEM_NOT_FOUND": "Item not found.",
-  "LOBBY_MEMBER_NOT_READY": "Please wait until everyone is ready.",
+  "LOBBY_PLAYER_NOT_READY": "Please wait until everyone is ready.",
   "LOBBY_NOT_FOUND": "Lobby not found.",
   "LOCALE_NOT_FOUND": "Locale not found.",
   "MISSING_ROLE": "You are not allowed to perform this operation.",

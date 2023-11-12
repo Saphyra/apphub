@@ -10,16 +10,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class LobbyMember {
+public class LobbyPlayer {
     private final WebElement webElement;
 
     public boolean isReady() {
         return Arrays.asList(webElement.getAttribute("class").split(" "))
-            .contains("skyxplore-lobby-member-status-ready");
+            .contains("skyxplore-lobby-player-status-ready");
     }
 
     public String getName() {
-        return webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-member-name")).getText();
+        return webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-player-name")).getText();
     }
 
     public void changeAllianceTo(String allianceName) {
@@ -28,11 +28,11 @@ public class LobbyMember {
     }
 
     private SelectMenu getAllianceSelectionInput() {
-        return new SelectMenu(webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-member-alliance select")));
+        return new SelectMenu(webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-player-alliance select")));
     }
 
     public String getAlliance() {
-        return webElement.findElements(By.cssSelector(":scope .skyxplore-lobby-member-alliance select option"))
+        return webElement.findElements(By.cssSelector(":scope .skyxplore-lobby-player-alliance select option"))
             .stream()
             .filter(WebElement::isSelected)
             .map(WebElement::getText)
@@ -44,12 +44,12 @@ public class LobbyMember {
         return getAllianceSelectionInput().isEnabled();
     }
 
-    public LobbyMemberStatus getStatus() {
+    public LobbyPlayerStatus getStatus() {
         List<String> classes = WebElementUtils.getClasses(webElement);
 
-        return Arrays.stream(LobbyMemberStatus.values())
-            .filter(lobbyMemberStatus -> classes.contains(lobbyMemberStatus.getClassName()))
+        return Arrays.stream(LobbyPlayerStatus.values())
+            .filter(lobbyPlayerStatus -> classes.contains(lobbyPlayerStatus.getClassName()))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException("LobbyMember has no recognized status"));
+            .orElseThrow(() -> new RuntimeException("LobbyPlayer has no recognized status"));
     }
 }

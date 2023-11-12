@@ -33,7 +33,7 @@ class AllianceSetupValidatorTest {
     @Test
     void onlyOnePlayer() {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(CollectionUtils.singleValueMap(USER_ID_1, null))
+            .players(CollectionUtils.singleValueMap(USER_ID_1, null))
             .ais(Collections.emptyList())
             .build();
 
@@ -43,7 +43,7 @@ class AllianceSetupValidatorTest {
     @Test
     void noAlliances() {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(CollectionUtils.singleValueMap(USER_ID_1, null))
+            .players(CollectionUtils.singleValueMap(USER_ID_1, null))
             .ais(List.of(aiPlayer))
             .build();
 
@@ -55,7 +55,7 @@ class AllianceSetupValidatorTest {
     @Test
     void aiAndPlayerInTheSameAlliance() {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(CollectionUtils.singleValueMap(USER_ID_1, ALLIANCE_ID))
+            .players(CollectionUtils.singleValueMap(USER_ID_1, ALLIANCE_ID))
             .ais(List.of(aiPlayer))
             .build();
 
@@ -69,7 +69,7 @@ class AllianceSetupValidatorTest {
     @Test
     void twoPlayersVsOneAi() {
         SkyXploreGameCreationRequest request = SkyXploreGameCreationRequest.builder()
-            .members(Map.of(
+            .players(Map.of(
                 USER_ID_1, ALLIANCE_ID,
                 USER_ID_2, ALLIANCE_ID
             ))

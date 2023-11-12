@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.response.lobby;
+package com.github.saphyra.apphub.integration.structure.api.skyxplore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class LobbyMemberResponse {
+public class LobbyPlayerResponse {
     private UUID userId;
     private String characterName;
-    private LobbyMemberStatus status;
+    private LobbyPlayerStatus status;
     private UUID allianceId;
     private Long createdAt;
 }

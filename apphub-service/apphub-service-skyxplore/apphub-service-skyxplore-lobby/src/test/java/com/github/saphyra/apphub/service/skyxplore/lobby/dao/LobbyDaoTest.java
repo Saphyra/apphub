@@ -48,7 +48,7 @@ public class LobbyDaoTest {
     private Lobby lobby2;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @BeforeEach
     public void setUp() {
@@ -68,7 +68,7 @@ public class LobbyDaoTest {
 
     @Test
     void findByHostValidated_notHost() {
-        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, lobbyMember));
+        given(lobby1.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, lobbyPlayer));
         given(lobby1.getHost()).willReturn(UUID.randomUUID());
 
         Throwable ex = catchThrowable(() -> underTest.findByHostValidated(USER_ID));
@@ -78,7 +78,7 @@ public class LobbyDaoTest {
 
     @Test
     public void findByHostValidated() {
-        given(lobby1.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, lobbyMember));
+        given(lobby1.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, lobbyPlayer));
         given(lobby1.getHost()).willReturn(USER_ID);
 
         Lobby result = underTest.findByHostValidated(USER_ID);
