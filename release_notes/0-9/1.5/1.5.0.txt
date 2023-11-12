@@ -18,6 +18,7 @@ SkyXplore
 
 ===PLATFORM CHANGES===
 Do not display error message when server is not available
+Store the encrypted data readable on local env
 
 ===TECHNICAL DEBTS===
 Notebook

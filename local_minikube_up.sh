@@ -19,7 +19,7 @@ function scaleUpByDirectory() {
     kubectl -n "$NAMESPACE" scale deployments --replicas=1 "$SERVICE_NAME"
   done
 
-  ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE" "$MAX_WAIT_TIME" 2 5
+  ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE" 60 2 5
 }
 
 function scaleNamespace() {
@@ -27,6 +27,9 @@ function scaleNamespace() {
     SCRIPT_DIR_NAME=$2
 
   kubectl apply -n "$NAMESPACE" -f infra/deployment/deploy-postgres.yaml
+
+  ./infra/deployment/script/wait_for_pods_ready.sh "$NAMESPACE" "$MAX_WAIT_TIME" 2 5
+
   scaleUpByDirectory $NAMESPACE "./infra/deployment/service/$SCRIPT_DIR_NAME/01_platform/*" 60
   scaleUpByDirectory $NAMESPACE "./infra/deployment/service/$SCRIPT_DIR_NAME/02_service/*" 180
 }

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.encryption.base;
 
-public abstract class AbstractEncryptor<T> implements Encryptor<T> {
-    @Override
+public abstract class AbstractEncryptor<T> {
     public String encryptEntity(T entity, String key) {
         validateKey(key);
         if (entity == null) {
@@ -10,7 +9,6 @@ public abstract class AbstractEncryptor<T> implements Encryptor<T> {
         return encrypt(entity, key);
     }
 
-    @Override
     public T decryptEntity(String entity, String key) {
         validateKey(key);
         if (entity == null) {
@@ -19,7 +17,7 @@ public abstract class AbstractEncryptor<T> implements Encryptor<T> {
         return decrypt(entity, key);
     }
 
-    private void validateKey(String key) {
+    private static void validateKey(String key) {
         if (key == null) {
             throw new IllegalArgumentException("Key must not be null.");
         }

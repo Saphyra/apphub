@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StringEncryptorTest {
+public class DefaultStringEncryptorTest {
     private static final String TEST_ENTITY = "test_entity";
     private static final String KEY = "key";
 
-    private StringEncryptor underTest;
+    private DefaultStringEncryptor underTest;
 
     @BeforeEach
     public void setUp() {
-        underTest = new StringEncryptor(new Base64Encoder());
+        underTest = new DefaultStringEncryptor(new Base64Encoder());
     }
 
     @Test

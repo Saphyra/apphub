@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BooleanEncryptorTest {
     private BooleanEncryptor underTest;
 
-    private final StringEncryptor stringEncryptor = new StringEncryptor(new Base64Encoder());
+    private final StringEncryptor stringEncryptor = new DefaultStringEncryptor(new Base64Encoder());
 
     @BeforeEach
     public void setUp() {
