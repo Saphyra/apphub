@@ -13,6 +13,8 @@ Notebook
 Admin Panel
     Memory Monitoring
         Reconnect WebSocket
+SkyXplore
+    Display "No active friends" message when no friend can be invited
 
 ===PLATFORM CHANGES===
 Do not display error message when server is not available

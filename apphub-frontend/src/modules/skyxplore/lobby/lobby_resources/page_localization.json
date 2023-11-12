@@ -130,5 +130,9 @@
     "cancel": {
         "en": "Cancel",
         "hu": "Mégse"
+    },
+    "no-active-friend": {
+        "en": "No active friend.",
+        "hu": "Nincs elérhető barát."
     }
 }

@@ -44,6 +44,14 @@ const Friends = ({ localizationHandler, lastEvent }) => {
     }
 
     const getFriends = () => {
+        if (friends.length == 0) {
+            return (
+                <h4 id="skyxplore-lobby-no-active-friend">
+                    {localizationHandler.get("no-active-friend")}
+                </h4>
+            );
+        }
+
         return new Stream(friends)
             .sorted((a, b) => a.friendName.localeCompare(b.friendName))
             .map(friend =>
@@ -64,7 +72,10 @@ const Friends = ({ localizationHandler, lastEvent }) => {
     return (
         <div id="skyxplore-lobby-friends" className="skyxplore-lobby-panel">
             <PanelTitle label={localizationHandler.get("friends")} />
-            <div className="skyxplore-lobby-panel-content">
+            <div
+                id="skyxplore-lobby-friends-list"
+                className="skyxplore-lobby-panel-content"
+            >
                 {getFriends()}
             </div>
         </div>
