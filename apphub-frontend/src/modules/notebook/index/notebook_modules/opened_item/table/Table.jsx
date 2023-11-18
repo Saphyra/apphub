@@ -19,7 +19,8 @@ const Table = ({
     setOpenedListItem,
     setLastEvent,
     checklist,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    custom = false
 }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);

@@ -1,0 +1,4 @@
+TODO update release notes
+TODO edit custom table - new row - Infer type from previous row
+TODO edit custom table - new column - Default type is empty
+TODO Delete old CustomTable frontend

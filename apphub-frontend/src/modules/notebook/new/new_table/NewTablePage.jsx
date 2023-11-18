@@ -21,7 +21,7 @@ import { newColumn } from "./service/NewTableColumnCrudService";
 import { newRow } from "./service/NewTableRowCrudService";
 import getTable from "./service/NewTableAssembler";
 
-const NewTablePage = ({ checklist }) => {
+const NewTablePage = ({ checklist, custom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
@@ -56,7 +56,7 @@ const NewTablePage = ({ checklist }) => {
                 />
 
                 <div id="notebook-new-table-content-wrapper">
-                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows)}
+                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom)}
                 </div>
             </main>
 
@@ -66,7 +66,7 @@ const NewTablePage = ({ checklist }) => {
                         key="new-column"
                         id="notebook-new-table-new-column-button"
                         label={localizationHandler.get("new-column")}
-                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows)}
+                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows, custom)}
                     />,
                     <Button
                         key="new-row"
@@ -75,7 +75,8 @@ const NewTablePage = ({ checklist }) => {
                         onclick={() => newRow(
                             rows,
                             tableHeads,
-                            setRows
+                            setRows,
+                            custom
                         )}
                     />
                 ]}
@@ -84,7 +85,7 @@ const NewTablePage = ({ checklist }) => {
                     <Button
                         id="notebook-new-table-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, tableHeads, parentId, checklist, rows)}
+                        onclick={() => create(listItemTitle, tableHeads, parentId, checklist, rows, custom)}
                     />
                 }
 

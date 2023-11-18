@@ -5,7 +5,7 @@ import TableHead from "../../../common/table/table_head/TableHead"
 import { moveColumn, removeColumn } from "./NewTableColumnCrudService"
 import { moveRow, removeRow } from "./NewTableRowCrudService"
 
-const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows) => {
+const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom) => {
     return (
         <table id="notebook-new-table-content" className="formatted-table">
             <thead>
@@ -13,7 +13,7 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
             </thead>
 
             <tbody>
-                {getTableRows(rows, setRows, checklist)}
+                {getTableRows(rows, setRows, checklist, custom)}
             </tbody>
         </table>
     )
@@ -65,7 +65,7 @@ const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads
     )
 }
 
-const getTableRows = (rows, setRows, checklist) => {
+const getTableRows = (rows, setRows, checklist, custom) => {
     const updateRows = () => {
         Utils.copyAndSet(rows, setRows);
     }
@@ -90,6 +90,7 @@ const getTableRows = (rows, setRows, checklist) => {
                     setRows
                 )}
                 checklist={checklist}
+                custom={custom}
             />
         )
         .toList();

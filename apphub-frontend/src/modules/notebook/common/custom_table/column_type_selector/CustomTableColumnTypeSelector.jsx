@@ -5,8 +5,8 @@ import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Footer from "../../../../../common/component/Footer";
 import Button from "../../../../../common/component/input/Button";
 import Stream from "../../../../../common/js/collection/Stream";
-import ColumnType from "../../table/ColumnType";
 import "./custom_table_column_type_selector.css";
+import ColumnType from "../../table/row/column/type/ColumnType";
 
 const CustomTableColumnTypeSelector = ({ columnTypeSelectorData, setColumnTypeSelectorData, setColumnType }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

@@ -5,7 +5,7 @@ import ListItemType from "../../../common/ListItemType";
 import validateListItemTitle from "../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../common/validator/TableHeadNameValidator";
 
-const create = async (listItemTitle, tableHeads, parent, checklist, rows) => {
+const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom) => {
     const titleValidationResult = validateListItemTitle(listItemTitle);
     if (!titleValidationResult.valid) {
         NotificationService.showError(titleValidationResult.message);
@@ -21,7 +21,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows) => {
     const payload = {
         title: listItemTitle,
         parent: parent,
-        listItemType: checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE,
+        listItemType: getListItemType(checklist, custom),
         tableHeads: tableHeads,
         rows: rows
     }
@@ -30,6 +30,14 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows) => {
         .send();
 
     window.location.href = Constants.NOTEBOOK_PAGE;
+}
+
+const getListItemType = (checklist, custom) => {
+    if (custom) {
+        return ListItemType.CUSTOM_TABLE;
+    }
+
+    return checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE
 }
 
 export default create;

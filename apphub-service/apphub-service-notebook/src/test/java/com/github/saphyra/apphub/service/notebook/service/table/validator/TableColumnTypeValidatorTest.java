@@ -5,14 +5,12 @@ import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.service.table.validator.TableAndChecklistTableColumnTypeValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -20,9 +18,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class TableAndChecklistTableColumnTypeValidatorTest {
+class TableColumnTypeValidatorTest {
     @InjectMocks
-    private TableAndChecklistTableColumnTypeValidator underTest;
+    private TableColumnTypeValidator underTest;
 
     @Mock
     private CreateTableRequest createTableRequest;
@@ -101,14 +99,5 @@ class TableAndChecklistTableColumnTypeValidatorTest {
         given(columnModel.getData()).willReturn("asd");
 
         underTest.validateColumnType(createTableRequest);
-    }
-
-    @Test
-    void handleCustomTable() {
-        given(createTableRequest.getListItemType()).willReturn(ListItemType.CUSTOM_TABLE);
-
-        Throwable ex = catchThrowable(() -> underTest.validateColumnType(createTableRequest));
-
-        ExceptionValidator.validateReportedException(ex, HttpStatus.NOT_IMPLEMENTED);
     }
 }

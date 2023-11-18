@@ -18,7 +18,7 @@ public interface ColumnDataService {
 
     void delete(Dimension column);
 
-    Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel column);
+    Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel columnModel);
 
     void clone(ListItem clone, UUID rowId, Dimension originalColumn);
 

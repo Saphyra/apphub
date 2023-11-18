@@ -1,0 +1,62 @@
+{
+    "title": {
+        "en": "Column type selector",
+        "hu": "Cella típus kiválasztó"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "column-type-empty": {
+        "en": "Empty",
+        "hu": "Üres"
+    },
+    "column-type-text": {
+        "en": "Text",
+        "hu": "Szöveg"
+    },
+    "column-type-number": {
+        "en": "Number",
+        "hu": "Szám"
+    },
+    "column-type-image": {
+        "en": "Image",
+        "hu": "Kép"
+    },
+    "column-type-file": {
+        "en": "File",
+        "hu": "Fájl"
+    },
+    "column-type-checkbox": {
+        "en": "Checkbox",
+        "hu": "Jelölőnégyzet"
+    },
+    "column-type-color": {
+        "en": "Color",
+        "hu": "Szín"
+    },
+    "column-type-date": {
+        "en": "Date",
+        "hu": "Dátum"
+    },
+    "column-type-time": {
+        "en": "Time",
+        "hu": "Idő"
+    },
+    "column-type-date_time": {
+        "en": "Date-time",
+        "hu": "Dátum és idő"
+    },
+    "column-type-month": {
+        "en": "Month",
+        "hu": "Hónap"
+    },
+    "column-type-range": {
+        "en": "Range",
+        "hu": "Intervallum"
+    },
+    "column-type-link": {
+        "en": "Link",
+        "hu": "Hivatkozás"
+    }
+}

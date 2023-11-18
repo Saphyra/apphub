@@ -16,7 +16,7 @@ import java.util.List;
 public class TableCreationRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final TableCreationRowValidator tableCreationRowValidator;
-    private final TableAndChecklistTableColumnTypeValidator tableAndChecklistTableColumnTypeValidator;
+    private final TableColumnTypeValidator tableColumnTypeValidator;
     private final CreateTableHeadValidator createTableHeadValidator;
     private final ColumnNumberAmountValidator columnNumberAmountValidator;
 
@@ -31,6 +31,6 @@ public class TableCreationRequestValidator {
 
         tableCreationRowValidator.validateRows(listItemType, request.getRows());
         columnNumberAmountValidator.validateColumnNumbersMatches(request.getTableHeads(), request.getRows());
-        tableAndChecklistTableColumnTypeValidator.validateColumnType(request);
+        tableColumnTypeValidator.validateColumnType(request);
     }
 }

@@ -108,7 +108,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/notebook/new/table/:parent",
-    element: <NewTablePage checklist={false} />,
+    element: <NewTablePage checklist={false} custom={false} />,
     loader: ({ params }) => {
       return {
         parent: params.parent
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/notebook/new/custom-table/:parent",
-    element: <NewCustomTable />,
+    element: <NewTablePage checklist={false} custom={true} />,
     loader: ({ params }) => {
       return {
         parent: params.parent
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/notebook/new/checklist-table/:parent",
-    element: <NewTablePage checklist={true} />,
+    element: <NewTablePage checklist={true} custom={false}/>,
     loader: ({ params }) => {
       return {
         parent: params.parent

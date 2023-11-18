@@ -3,16 +3,21 @@ import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import TableRowData from "../../../common/table/row/TableRowData";
 import TableColumnData from "../../../common/table/row/column/TableColumnData";
+import ColumnType from "../../../common/table/row/column/type/ColumnType";
 
-export const newRow = (rows, tableHeads, setRows) => {
+export const newRow = (rows, tableHeads, setRows, custom) => {
     const rowIndex = new Stream(rows)
         .map(row => row.rowIndex)
         .max()
         .orElse(0);
 
+    const maybeFirstRow = new Stream(rows)
+        .filter(row => row.rowIndex === rowIndex)
+        .findFirst();
+
     const columns = new Stream(tableHeads)
         .map(tableHead => tableHead.columnIndex)
-        .map(columnIndex => new TableColumnData(columnIndex))
+        .map(columnIndex => new TableColumnData(columnIndex, getColumnType(maybeFirstRow, columnIndex, custom)))
         .toList();
 
     const newRow = new TableRowData(rowIndex + 1, columns);
@@ -22,6 +27,21 @@ export const newRow = (rows, tableHeads, setRows) => {
         .toList();
 
     setRows(copy);
+}
+
+const getColumnType = (maybeFirstRow, columnIndex, custom) => {
+    if (!custom) {
+        return ColumnType.TEXT;
+    }
+
+    return maybeFirstRow.map(
+        row => new Stream(row.columns)
+            .filter(column => column.columnIndex === columnIndex)
+            .findFirst()
+            .orElseThrow("IllegalState", "Column not found by columnIndex " + columnIndex)
+    )
+        .map(column => column.columnType)
+        .orElse(ColumnType.EMPTY);
 }
 
 export const moveRow = (row, moveDirection, rows, updateRows) => {

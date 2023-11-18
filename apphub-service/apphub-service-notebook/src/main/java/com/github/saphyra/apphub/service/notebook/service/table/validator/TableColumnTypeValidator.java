@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,11 +15,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class TableAndChecklistTableColumnTypeValidator {
+class TableColumnTypeValidator {
      void validateColumnType(CreateTableRequest request) {
         switch (request.getListItemType()) {
             case TABLE, CHECKLIST_TABLE -> validateColumnsForTable(request.getRows());
-            case CUSTOM_TABLE -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + request.getListItemType());
+            case CUSTOM_TABLE -> validateForCustomTable(request.getRows()); //TODO unit test
             default -> throw ExceptionFactory.invalidParam("listItemType", "not supported");
         }
     }
@@ -29,6 +28,21 @@ class TableAndChecklistTableColumnTypeValidator {
         rows.stream()
             .flatMap(tableRowModel -> tableRowModel.getColumns().stream())
             .forEach(this::validateTextColumnType);
+    }
+
+    //TODO extract
+    private void validateForCustomTable(List<TableRowModel> rows) {
+        rows.stream()
+            .flatMap(tableRowModel -> tableRowModel.getColumns().stream())
+            .forEach(this::validateColumnType);
+    }
+
+    private void validateColumnType(TableColumnModel columnModel) {
+        switch (columnModel.getColumnType()){
+            case TEXT -> validateTextColumnType(columnModel);
+            case EMPTY -> {}
+            default -> throw ExceptionFactory.reportedException("Unhandled columnType " + columnModel.getColumnType());
+        }
     }
 
     private void validateTextColumnType(TableColumnModel tableColumnModel) {

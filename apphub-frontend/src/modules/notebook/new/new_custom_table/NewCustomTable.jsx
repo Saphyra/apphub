@@ -19,13 +19,13 @@ import Utils from "../../../../common/js/Utils";
 import CustomTableRow from "../../common/custom_table/CustomTableRow";
 import CustomTableColumnData from "../../common/custom_table/column/CustomTableColumnData";
 import CustomTableColumnTypeSelector from "../../common/custom_table/column_type_selector/CustomTableColumnTypeSelector";
-import ColumnType from "../../common/table/ColumnType";
 import Endpoints from "../../../../common/js/dao/dao";
 import Spinner from "../../../../common/component/Spinner";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import validateTableHeadNames from "../../common/validator/TableHeadNameValidator";
 import getDefaultErrorHandler from "../../../../common/js/dao/DefaultErrorHandler";
+import ColumnType from "../../common/table/row/column/type/ColumnType";
 
 const NewCustomTable = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

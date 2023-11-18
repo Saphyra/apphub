@@ -94,12 +94,14 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                 />
             case ListItemType.CUSTOM_TABLE:
-                return <CustomTable
+                return <Table
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
+                    checklist={false}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    custom={true}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);

@@ -1,5 +1,4 @@
 import React from "react";
-import ColumnType from "../../table/ColumnType";
 import Utils from "../../../../../common/js/Utils";
 import "./custom_table_column.css";
 import localizationData from "./custom_table_column_localization.json";
@@ -16,6 +15,7 @@ import DateTime from "./type/DateTime";
 import Month from "./type/Month";
 import File from "./type/File";
 import Image from "./type/Image";
+import ColumnType from "../../table/row/column/type/ColumnType";
 
 const CustomTableColumn = ({
     columnData,
