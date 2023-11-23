@@ -36,6 +36,14 @@ const Optional = class {
 
         return this.value;
     }
+
+    peek(consumer) {
+        if (this.value) {
+            consumer(this.value);
+        }
+
+        return this;
+    }
 }
 
 export default Optional;

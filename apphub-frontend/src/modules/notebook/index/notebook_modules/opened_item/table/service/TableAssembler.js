@@ -23,7 +23,7 @@ export const getTableHeads = (tableHeads, localizationHandler, editingEnabled, s
         .toList();
 }
 
-export const getTableRows = (rows, checklist, editingEnabled, setRows) => {
+export const getTableRows = (rows, checklist, editingEnabled, setRows, custom) => {
     return new Stream(rows)
         .sorted((a, b) => a.rowIndex - b.rowIndex)
         .map(row =>
@@ -36,6 +36,7 @@ export const getTableRows = (rows, checklist, editingEnabled, setRows) => {
                 moveRow={(row, moveDirection) => moveRow(row, moveDirection, rows, setRows)}
                 editingEnabled={editingEnabled}
                 checklist={checklist}
+                custom={custom}
             />
         )
         .toList();

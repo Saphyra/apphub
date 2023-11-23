@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../../../../../../../common/component/input/Button";
 import { newRow } from "../service/TableRowCrudService";
 
-const AddRowButton = ({ indexRange, id, rows, tableHeads, setRows, checklist }) => {
+const AddRowButton = ({ indexRange, id, rows, tableHeads, setRows, checklist, custom = false }) => {
     return (
         <tr>
             {checklist ? <td colSpan={2}></td> : <td></td>}
@@ -11,7 +11,7 @@ const AddRowButton = ({ indexRange, id, rows, tableHeads, setRows, checklist }) 
                     id={id}
                     className={"notebook-content-table-add-row-button"}
                     label="+"
-                    onclick={() => newRow(rows, tableHeads, setRows, indexRange)}
+                    onclick={() => newRow(rows, tableHeads, setRows, indexRange, custom)}
                 />
             </td>
         </tr>

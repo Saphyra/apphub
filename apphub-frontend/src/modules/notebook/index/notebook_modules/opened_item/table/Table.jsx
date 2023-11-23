@@ -7,7 +7,6 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import { confirmDeleteChcecked, loadTable, save } from "./service/TableDao";
 import { getTableHeads, getTableRows } from "./service/TableAssembler";
 import { close, discard } from "./service/TableUtils";
-import { newColumn } from "./service/TableColumnCrudService";
 import RowIndexRange from "./RowIndexRange";
 import AddRowButton from "./component/AddRowButton";
 import AddColumnButton from "./component/AddColumnButton";
@@ -95,10 +94,11 @@ const Table = ({
                                 tableHeads={tableHeads}
                                 setRows={setRows}
                                 checklist={checklist}
+                                custom={custom}
                             />
                         }
 
-                        {getTableRows(rows, checklist, editingEnabled, setRows)}
+                        {getTableRows(rows, checklist, editingEnabled, setRows, custom)}
 
                         {editingEnabled &&
                             <AddRowButton
@@ -108,6 +108,7 @@ const Table = ({
                                 tableHeads={tableHeads}
                                 setRows={setRows}
                                 checklist={checklist}
+                                custom={custom}
                             />
                         }
                     </tbody>
