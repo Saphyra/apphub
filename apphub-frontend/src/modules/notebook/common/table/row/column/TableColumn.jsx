@@ -8,6 +8,7 @@ import "./table_column.css";
 import ColumnTypeSelector from "./column_type_selector/ColumnTypeSelector";
 import getDefaultDataForColumnType from "./DefaultColumnValueProvider";
 import EmptyColumn from "./type/EmptyColumn";
+import NumberColumn from "./type/NumberColumn";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -38,6 +39,15 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
             />
         case ColumnType.TEXT:
             return <TextColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                custom={custom}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.NUMBER:
+            return <NumberColumn
                 columnData={columnData}
                 updateColumn={updateColumn}
                 editingEnabled={editingEnabled}

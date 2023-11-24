@@ -20,6 +20,7 @@ import create from "./service/NewTableSaver";
 import { newColumn } from "./service/NewTableColumnCrudService";
 import { newRow } from "./service/NewTableRowCrudService";
 import getTable from "./service/NewTableAssembler";
+import ColumnType from "../../common/table/row/column/type/ColumnType";
 
 const NewTablePage = ({ checklist, custom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -29,7 +30,7 @@ const NewTablePage = ({ checklist, custom }) => {
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
     const [listItemTitle, setListItemTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([new TableHeadData(0)]);
-    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0)])]);
+    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0, (custom ? ColumnType.EMPTY : ColumnType.TEXT))])]);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);

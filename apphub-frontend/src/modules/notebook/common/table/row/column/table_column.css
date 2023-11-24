@@ -19,9 +19,9 @@
     transform: scale(2);
 }
 
-.notebook-table-column-type-number,
-.notebook-table-column-type-image,
-.notebook-table-column-type-range {
+.editable.notebook-table-column-type-number,
+.editable.notebook-table-column-type-image,
+.editable.notebook-table-column-type-range {
     padding-right: 40px !important;
 }
 

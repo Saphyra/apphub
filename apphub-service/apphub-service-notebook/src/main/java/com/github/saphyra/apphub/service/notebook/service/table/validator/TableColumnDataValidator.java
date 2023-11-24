@@ -49,7 +49,7 @@ public class TableColumnDataValidator {
     private void validateRange(Object value) {
         Range range = objectMapperWrapper.convertValue(value, Range.class);
 
-        ValidationUtil.atLeastInclusive(range.getStep(), 0, "rangeStep");
+        ValidationUtil.atLeastExclusive(range.getStep(), 0, "rangeStep");
         ValidationUtil.notNull(range.getMin(), "rangeMin");
         ValidationUtil.atLeast(range.getMax(), range.getMin(), "rangeMax");
         ValidationUtil.notNull(range.getValue(), "rangeValue");
@@ -80,7 +80,7 @@ public class TableColumnDataValidator {
     private void validateNumber(Object value) {
         Number number = objectMapperWrapper.convertValue(value, Number.class);
 
-        ValidationUtil.atLeastInclusive(number.getStep(), 0, "numberStep");
+        ValidationUtil.atLeastExclusive(number.getStep(), 0, "numberStep");
         ValidationUtil.notNull(number.getValue(), "numberValue");
     }
 }

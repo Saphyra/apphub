@@ -1,2 +1,13 @@
 TODO update release notes
-TODO Delete old CustomTable frontendRRRRR
+TODO Delete old CustomTable frontend
+    NUMBER,
+    IMAGE,
+    FILE,
+    CHECKBOX,
+    COLOR,
+    DATE,
+    TIME,
+    DATE_TIME,
+    MONTH,
+    RANGE,
+    LINK,

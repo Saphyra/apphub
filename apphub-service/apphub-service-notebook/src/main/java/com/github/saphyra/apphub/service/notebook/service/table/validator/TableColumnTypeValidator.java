@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class TableColumnTypeValidator {
-     void validateColumnType(CreateTableRequest request) {
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
+
+    void validateColumnType(CreateTableRequest request) {
         switch (request.getListItemType()) {
             case TABLE, CHECKLIST_TABLE -> validateColumnsForTable(request.getRows());
             case CUSTOM_TABLE -> validateForCustomTable(request.getRows()); //TODO unit test
@@ -38,11 +41,8 @@ class TableColumnTypeValidator {
     }
 
     private void validateColumnType(TableColumnModel columnModel) {
-        switch (columnModel.getColumnType()){
-            case TEXT -> validateTextColumnType(columnModel);
-            case EMPTY -> {}
-            default -> throw ExceptionFactory.reportedException("Unhandled columnType " + columnModel.getColumnType());
-        }
+        columnDataServiceFetcher.findColumnDataService(columnModel.getColumnType())
+            .validateData(columnModel.getData());
     }
 
     private void validateTextColumnType(TableColumnModel tableColumnModel) {

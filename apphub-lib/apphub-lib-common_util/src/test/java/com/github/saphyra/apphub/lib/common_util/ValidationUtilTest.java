@@ -224,21 +224,21 @@ public class ValidationUtilTest {
 
     @Test
     void atLeastInclusive_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(null, 2d, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(null, 2d, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }
 
     @Test
     void atLeastInclusive_tooLow() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(2d, 2d, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(2d, 2d, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
     }
 
     @Test
     void atLeastInclusive() {
-        ValidationUtil.atLeastInclusive(3d, 2d, FIELD);
+        ValidationUtil.atLeastExclusive(3d, 2d, FIELD);
     }
 
     @Test
