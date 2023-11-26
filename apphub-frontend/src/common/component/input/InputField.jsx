@@ -14,7 +14,6 @@ const InputField = ({
     autoFocus = false,
     onfocusOutCallback = () => {}
 }) => {
-
     const onchange = (e) => {
         if (onchangeCallback) {
             switch (type.toLowerCase()) {

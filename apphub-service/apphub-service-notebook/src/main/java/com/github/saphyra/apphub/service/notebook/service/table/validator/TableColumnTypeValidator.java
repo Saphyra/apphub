@@ -33,7 +33,6 @@ class TableColumnTypeValidator {
             .forEach(this::validateTextColumnType);
     }
 
-    //TODO extract
     private void validateForCustomTable(List<TableRowModel> rows) {
         rows.stream()
             .flatMap(tableRowModel -> tableRowModel.getColumns().stream())

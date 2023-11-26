@@ -9,6 +9,7 @@ import ColumnTypeSelector from "./column_type_selector/ColumnTypeSelector";
 import getDefaultDataForColumnType from "./DefaultColumnValueProvider";
 import EmptyColumn from "./type/EmptyColumn";
 import NumberColumn from "./type/NumberColumn";
+import CheckboxColumn from "./type/CheckboxColumn";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -51,7 +52,14 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
                 columnData={columnData}
                 updateColumn={updateColumn}
                 editingEnabled={editingEnabled}
-                custom={custom}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.CHECKBOX:
+            return <CheckboxColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
             />

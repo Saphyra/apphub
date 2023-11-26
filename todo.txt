@@ -1,6 +1,5 @@
 TODO update release notes
 TODO Delete old CustomTable frontend
-    NUMBER,
     IMAGE,
     FILE,
     CHECKBOX,

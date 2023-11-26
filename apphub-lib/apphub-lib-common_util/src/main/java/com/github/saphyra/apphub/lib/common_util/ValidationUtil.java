@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -136,15 +135,6 @@ public class ValidationUtil {
     public static void equals(Object value, Object expected, String field) {
         if (!Objects.equals(value, expected)) {
             throw ExceptionFactory.invalidParam(field, "must be " + expected);
-        }
-    }
-
-    //TODO unit test
-    public static <T> T convertChecked(Supplier<T> supplier, String label) {
-        try {
-            return supplier.get();
-        } catch (Exception e) {
-            throw ExceptionFactory.invalidParam(label, "invalid format", e);
         }
     }
 }

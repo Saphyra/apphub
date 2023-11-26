@@ -4,7 +4,7 @@ import Button from "../../../../../../../common/component/input/Button";
 const EmptyColumn = ({ editingEnabled, selectType, localizationHandler }) => {
     if (editingEnabled) {
         return (
-            <td className={"table-column editable notebook-table-column-type-empty"}>
+            <td className={"editable notebook-table-column-type-empty"}>
                 <div>
                     <Button
                         className="notebook-table-change-column-type-button"
@@ -16,7 +16,7 @@ const EmptyColumn = ({ editingEnabled, selectType, localizationHandler }) => {
         )
     } else {
         return (
-            <td className="table-column"></td>
+            <td ></td>
         );
     }
 }

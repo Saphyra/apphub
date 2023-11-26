@@ -1,9 +1,21 @@
+.table-column {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.table-column-content {
+    flex-grow: 2;
+}
+
 .notebook-table-change-column-type-button {
-    width: 22px;
-    height: 23px;
+    width: 26px;
+    height: 26px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    background-origin: content-box;
+    padding: 2px;
     background-image: url("../../../../../../common/style/img/edit.png");
 }
 
@@ -11,36 +23,13 @@
     text-align: center;
 }
 
-.notebook-custom-table-column-input {
-    width: calc(100% - 36px) !important;
-}
-
 .notebook-table-column-type-checkbox input {
+    margin: 6px;
     transform: scale(2);
 }
 
-.editable.notebook-table-column-type-number,
-.editable.notebook-table-column-type-image,
-.editable.notebook-table-column-type-range {
-    padding-right: 40px !important;
-}
-
-.notebook-table-column-type-checkbox,
-.notebook-table-column-type-range,
-.notebook-table-column-type-image,
-.notebook-table-column-type-number {
-    position: relative;
-}
-
-.notebook-table-column-type-checkbox .notebook-table-change-column-type-button,
-.notebook-table-column-type-range .notebook-table-change-column-type-button,
-.notebook-table-column-type-image .notebook-table-change-column-type-button,
-.notebook-table-column-type-number .notebook-table-change-column-type-button {
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    top: 4px;
-    right: 4px;
+.editable.notebook-table-column-type-checkbox input {
+    margin-top: 9px;
 }
 
 .notebook-table-column-type-color,
