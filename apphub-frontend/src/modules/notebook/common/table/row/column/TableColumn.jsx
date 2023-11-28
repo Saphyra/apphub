@@ -17,6 +17,7 @@ import DateTimeColumn from "./type/DateTimeColumn";
 import MonthColumn from "./type/MonthColumn";
 import LinkColumn from "./type/LinkColumn";
 import RangeColumn from "./type/RangeColumn";
+import FileColumn from "./type/FileColumn";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -126,6 +127,14 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
             />
+            case ColumnType.FILE:
+                return <FileColumn
+                    columnData={columnData}
+                    updateColumn={updateColumn}
+                    editingEnabled={editingEnabled}
+                    localizationHandler={localizationHandler}
+                    selectType={() => setDisplayColumnTypeSelector(true)}
+                />
         default:
             Utils.throwException("IllegalArgument", "Undhandled columnType " + columnData.columnType);
     }
