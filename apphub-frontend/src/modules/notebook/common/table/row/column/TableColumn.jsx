@@ -11,6 +11,12 @@ import EmptyColumn from "./type/EmptyColumn";
 import NumberColumn from "./type/NumberColumn";
 import CheckboxColumn from "./type/CheckboxColumn";
 import ColorColumn from "./type/ColorColumn";
+import DateColumn from "./type/DateColumn";
+import TimeColumn from "./type/TimeColumn";
+import DateTimeColumn from "./type/DateTimeColumn";
+import MonthColumn from "./type/MonthColumn";
+import LinkColumn from "./type/LinkColumn";
+import RangeColumn from "./type/RangeColumn";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -66,6 +72,54 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
             />
         case ColumnType.COLOR:
             return <ColorColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.DATE:
+            return <DateColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.TIME:
+            return <TimeColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.DATE_TIME:
+            return <DateTimeColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.MONTH:
+            return <MonthColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.LINK:
+            return <LinkColumn
+                columnData={columnData}
+                updateColumn={updateColumn}
+                editingEnabled={editingEnabled}
+                localizationHandler={localizationHandler}
+                selectType={() => setDisplayColumnTypeSelector(true)}
+            />
+        case ColumnType.RANGE:
+            return <RangeColumn
                 columnData={columnData}
                 updateColumn={updateColumn}
                 editingEnabled={editingEnabled}

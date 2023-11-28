@@ -2,9 +2,5 @@ TODO update release notes
 TODO Delete old CustomTable frontend
     IMAGE,
     FILE,
-    DATE,
-    TIME,
-    DATE_TIME,
-    MONTH,
-    RANGE,
-    LINK,
+
+TODO extract duplicated code to service from ColumnDataServices

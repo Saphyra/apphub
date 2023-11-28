@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.dto.Number;
+import com.github.saphyra.apphub.service.notebook.service.table.dto.Range;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class NumberColumnDataService implements ColumnDataService {
+class RangeColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final ContentFactory contentFactory;
     private final ColumnTypeFactory columnTypeFactory;
@@ -38,7 +38,7 @@ class NumberColumnDataService implements ColumnDataService {
 
     @Override
     public boolean canProcess(ColumnType columnType) {
-        return columnType == ColumnType.NUMBER;
+        return columnType == ColumnType.RANGE;
     }
 
     @Override
@@ -49,7 +49,7 @@ class NumberColumnDataService implements ColumnDataService {
         Content content = contentFactory.create(listItemId, column.getDimensionId(), userId, objectMapperWrapper.writeValueAsString(model.getData()));
         contentDao.save(content);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.NUMBER);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.RANGE);
         columnTypeDao.save(columnTypeDto);
 
         return Optional.empty();
@@ -87,7 +87,7 @@ class NumberColumnDataService implements ColumnDataService {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
         dimensionDao.save(clonedColumn);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.NUMBER);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.RANGE);
         columnTypeDao.save(columnTypeDto);
 
         Content originalContent = contentDao.findByParentValidated(originalColumn.getDimensionId());
@@ -97,8 +97,10 @@ class NumberColumnDataService implements ColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        Number number = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Number.class), "numberData");
-        ValidationUtil.notNull(number.getValue(), "number.value");
-        ValidationUtil.atLeastExclusive(number.getStep(), 0d, "number.step");
+        Range range = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Range.class), "rangeData");
+        ValidationUtil.atLeastExclusive(range.getStep(), 0, "range.step");
+        ValidationUtil.notNull(range.getMin(), "range.min");
+        ValidationUtil.atLeast(range.getMax(), range.getMin(), "range.max");
+        ValidationUtil.betweenInclusive(range.getValue(), range.getMin(), range.getMax(), "range.value");
     }
 }

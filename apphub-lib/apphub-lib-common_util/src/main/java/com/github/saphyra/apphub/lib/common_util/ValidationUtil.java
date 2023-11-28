@@ -89,6 +89,13 @@ public class ValidationUtil {
         }
     }
 
+    public static void maximum(Double value, double max, String field) {
+        notNull(value, field);
+        if (value > max) {
+            throw ExceptionFactory.invalidParam(field, "too high");
+        }
+    }
+
     public static void maximum(Long value, Long max, String field) {
         notNull(value, field);
         if (value > max) {
@@ -97,6 +104,12 @@ public class ValidationUtil {
     }
 
     public static void betweenInclusive(Integer value, int min, int max, String field) {
+        notNull(value, field);
+        atLeast(value, min, field);
+        maximum(value, max, field);
+    }
+
+    public static void betweenInclusive(Double value, double min, double max, String field) {
         notNull(value, field);
         atLeast(value, min, field);
         maximum(value, max, field);

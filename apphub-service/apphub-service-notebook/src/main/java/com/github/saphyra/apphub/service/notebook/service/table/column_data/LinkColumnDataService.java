@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
@@ -15,7 +14,6 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.dto.Number;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,19 +24,17 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class NumberColumnDataService implements ColumnDataService {
+class LinkColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
-    private final ContentFactory contentFactory;
-    private final ColumnTypeFactory columnTypeFactory;
     private final DimensionDao dimensionDao;
+    private final ContentFactory contentFactory;
     private final ContentDao contentDao;
+    private final ColumnTypeFactory columnTypeFactory;
     private final ColumnTypeDao columnTypeDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
     public boolean canProcess(ColumnType columnType) {
-        return columnType == ColumnType.NUMBER;
+        return columnType == ColumnType.LINK;
     }
 
     @Override
@@ -46,10 +42,10 @@ class NumberColumnDataService implements ColumnDataService {
         Dimension column = dimensionFactory.create(userId, rowId, model.getColumnIndex());
         dimensionDao.save(column);
 
-        Content content = contentFactory.create(listItemId, column.getDimensionId(), userId, objectMapperWrapper.writeValueAsString(model.getData()));
+        Content content = contentFactory.create(listItemId, column.getDimensionId(), userId, model.getData().toString());
         contentDao.save(content);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.NUMBER);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.LINK);
         columnTypeDao.save(columnTypeDto);
 
         return Optional.empty();
@@ -57,9 +53,8 @@ class NumberColumnDataService implements ColumnDataService {
 
     @Override
     public Object getData(UUID columnId) {
-        String rawContent = contentDao.findByParentValidated(columnId)
+        return contentDao.findByParentValidated(columnId)
             .getContent();
-        return objectMapperWrapper.readValue(rawContent, Object.class);
     }
 
     @Override
@@ -70,13 +65,13 @@ class NumberColumnDataService implements ColumnDataService {
     }
 
     @Override
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel columnModel) {
-        Dimension column = dimensionDao.findByIdValidated(columnModel.getColumnId());
-        column.setIndex(columnModel.getColumnIndex());
+    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
+        Dimension column = dimensionDao.findByIdValidated(model.getColumnId());
+        column.setIndex(model.getColumnIndex());
         dimensionDao.save(column);
 
         Content content = contentDao.findByParentValidated(column.getDimensionId());
-        content.setContent(objectMapperWrapper.writeValueAsString(columnModel.getData()));
+        content.setContent(model.getData().toString());
         contentDao.save(content);
 
         return Optional.empty();
@@ -87,7 +82,7 @@ class NumberColumnDataService implements ColumnDataService {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
         dimensionDao.save(clonedColumn);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.NUMBER);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.LINK);
         columnTypeDao.save(columnTypeDto);
 
         Content originalContent = contentDao.findByParentValidated(originalColumn.getDimensionId());
@@ -97,8 +92,6 @@ class NumberColumnDataService implements ColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        Number number = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Number.class), "numberData");
-        ValidationUtil.notNull(number.getValue(), "number.value");
-        ValidationUtil.atLeastExclusive(number.getStep(), 0d, "number.step");
+        ValidationUtil.notNull(data, "textValue");
     }
 }
