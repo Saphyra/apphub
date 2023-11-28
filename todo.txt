@@ -1,6 +1,4 @@
 TODO update release notes
 TODO Delete old CustomTable frontend
-    IMAGE,
-    FILE,
-
+TODO Download images and files
 TODO extract duplicated code to service from ColumnDataServices

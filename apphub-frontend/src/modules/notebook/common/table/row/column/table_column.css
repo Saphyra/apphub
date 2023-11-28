@@ -56,9 +56,10 @@
     width: 350px;
 }
 
-.notebook-new-table-image-preview {
+.notebook-table-image-preview {
     max-width: 400px;
     max-height: 300px;
     margin: 5px;
     border: 2px ridge white;
+    display: block;
 }

@@ -26,7 +26,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
         rows: rows
     }
 
-    await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
+    const fileUploadResponse = await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
         .send();
 
     window.location.href = Constants.NOTEBOOK_PAGE;
