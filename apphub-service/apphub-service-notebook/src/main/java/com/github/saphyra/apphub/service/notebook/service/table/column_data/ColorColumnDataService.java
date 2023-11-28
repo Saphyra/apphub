@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeFactory;
@@ -24,7 +25,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class TextColumnDataService implements ColumnDataService {
+//TODO unit test
+class ColorColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
     private final ContentFactory contentFactory;
@@ -34,7 +36,7 @@ class TextColumnDataService implements ColumnDataService {
 
     @Override
     public boolean canProcess(ColumnType columnType) {
-        return columnType == ColumnType.TEXT;
+        return columnType == ColumnType.COLOR;
     }
 
     @Override
@@ -45,7 +47,7 @@ class TextColumnDataService implements ColumnDataService {
         Content content = contentFactory.create(listItemId, column.getDimensionId(), userId, model.getData().toString());
         contentDao.save(content);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.TEXT);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.COLOR);
         columnTypeDao.save(columnTypeDto);
 
         return Optional.empty();
@@ -82,7 +84,7 @@ class TextColumnDataService implements ColumnDataService {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
         dimensionDao.save(clonedColumn);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.TEXT);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.COLOR);
         columnTypeDao.save(columnTypeDto);
 
         Content originalContent = contentDao.findByParentValidated(originalColumn.getDimensionId());
@@ -92,6 +94,12 @@ class TextColumnDataService implements ColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        ValidationUtil.notNull(data, "textValue");
+        String hexString = data.toString();
+        ValidationUtil.length(hexString, 7, "colorValue");
+        if (hexString.charAt(0) != '#') {
+            throw ExceptionFactory.invalidParam("colorValue", "first character is not #");
+        }
+
+        ValidationUtil.parse(hexString, v -> Integer.parseInt(v.toString().substring(1), 16), "colorValue");
     }
 }

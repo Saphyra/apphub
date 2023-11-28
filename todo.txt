@@ -2,8 +2,6 @@ TODO update release notes
 TODO Delete old CustomTable frontend
     IMAGE,
     FILE,
-    CHECKBOX,
-    COLOR,
     DATE,
     TIME,
     DATE_TIME,

@@ -22,8 +22,8 @@ const NumberColumn = ({
 
     if (editingEnabled) {
         return (
-            <td className={"editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column">
+            <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
+                <div className="table-column-wrapper">
                     <div className="table-column-content">
                         <PreLabeledInputField
                             label={localizationHandler.get("value")}
@@ -62,8 +62,8 @@ const NumberColumn = ({
         )
     } else {
         return (
-            <td className={"notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column">
+            <td className={"table-column notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
+                <div className="table-column-wrapper">
                     {columnData.data.value}
                 </div>
             </td>

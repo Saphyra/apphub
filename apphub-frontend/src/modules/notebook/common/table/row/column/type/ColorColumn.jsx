@@ -1,29 +1,34 @@
 import React from "react";
+import PreLabeledInputField from "../../../../../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
 
-const CheckboxColumn = ({
+const ColorColumn = ({
     columnData,
     updateColumn,
     editingEnabled = true,
     selectType,
     localizationHandler
 }) => {
-    const updateData = (checked) => {
-        columnData.data = checked;
+    const updateContent = (newValue) => {
+        columnData.data = newValue;
         updateColumn();
     }
 
     return (
-        <td className={"table-column notebook-table-column-type-" + columnData.columnType.toLowerCase() + (editingEnabled ? " editable" : "")}>
+        <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
             <div className="table-column-wrapper">
                 <div className="table-column-content">
-                    <InputField
-                        type="checkbox"
-                        onchangeCallback={updateData}
-                        checked={Utils.isTrue(columnData.data)}
-                        disabled={!editingEnabled}
+                    <PreLabeledInputField
+                        label={columnData.data}
+                        input={
+                            <InputField
+                                type="color"
+                                onchangeCallback={updateContent}
+                                value={columnData.data}
+                                disabled={!editingEnabled}
+                            />
+                        }
                     />
                 </div>
 
@@ -35,8 +40,8 @@ const CheckboxColumn = ({
                     />
                 }
             </div>
-        </td >
+        </td>
     )
 }
 
-export default CheckboxColumn;
+export default ColorColumn;

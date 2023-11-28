@@ -16,15 +16,15 @@ const TextColumn = ({
     }
     if (editingEnabled) {
         return (
-            <td className={"editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column">
+            <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
+                <div className="table-column-wrapper">
                     <div className="table-column-content">
-                    <InputField
-                        className={"notebook-table-column-input" + (custom ? " notebook-table-column-input" : "")}
-                        type="text"
-                        onchangeCallback={updateContent}
-                        value={columnData.data}
-                    />
+                        <InputField
+                            className={"notebook-table-column-input" + (custom ? " notebook-table-column-input" : "")}
+                            type="text"
+                            onchangeCallback={updateContent}
+                            value={columnData.data}
+                        />
                     </div>
 
                     {custom &&
@@ -39,8 +39,8 @@ const TextColumn = ({
         )
     } else {
         return (
-            <td>
-                <div className="table-column">
+            <td className="table-column">
+                <div className="table-column-wrapper">
                     {columnData.data}
                 </div>
             </td >
