@@ -9,7 +9,8 @@ const ImageColumn = ({
     updateColumn,
     editingEnabled = true,
     selectType,
-    localizationHandler
+    localizationHandler,
+    addFileToColum
 }) => {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -49,6 +50,8 @@ const ImageColumn = ({
         if (file == null) {
             columnData.data = null;
         } else {
+            addFileToColum(columnData.columnIndex, file);
+
             columnData.data = {
                 fileName: file.fileName,
                 size: file.size

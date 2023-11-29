@@ -11,6 +11,7 @@ import RowIndexRange from "./RowIndexRange";
 import AddRowButton from "./component/AddRowButton";
 import AddColumnButton from "./component/AddColumnButton";
 import TableHeadIndexRange from "./TableHeadIndexRange";
+import Stream from "../../../../../../common/js/collection/Stream";
 
 const Table = ({
     localizationHandler,
@@ -19,13 +20,15 @@ const Table = ({
     setLastEvent,
     checklist,
     setConfirmationDialogData,
-    custom = false
+    custom = false,
+    setDisplaySpinner
 }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([]);
     const [rows, setRows] = useState([]);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => loadTable(openedListItem.id, setDataFromResponse), [openedListItem]);
 
@@ -41,6 +44,19 @@ const Table = ({
         setParent(response.parent);
         setTableHeads(response.tableHeads);
         setRows(response.rows);
+    }
+
+    const addFile = (rowIndex, columnIndex, file) => {
+        const clone = new Stream(files)
+            .remove(file => file.rowIndex == rowIndex && file.columnIndex == columnIndex)
+            .add({
+                rowIndex: rowIndex,
+                columnIndex: columnIndex,
+                file: file
+            })
+            .toList();
+
+        setFiles(clone);
     }
 
     return (
@@ -98,7 +114,7 @@ const Table = ({
                             />
                         }
 
-                        {getTableRows(rows, checklist, editingEnabled, setRows, custom)}
+                        {getTableRows(rows, checklist, editingEnabled, setRows, custom, addFile)}
 
                         {editingEnabled &&
                             <AddRowButton
@@ -144,7 +160,7 @@ const Table = ({
                     <Button
                         id="notebook-content-table-save-button"
                         label={localizationHandler.get("save")}
-                        onclick={() => save(title, tableHeads, rows, openedListItem.id, setEditingEnabled, setLastEvent, setDataFromResponse)}
+                        onclick={() => save(title, tableHeads, rows, openedListItem.id, setEditingEnabled, setLastEvent, setDataFromResponse, files, setDisplaySpinner)}
                     />
                 }
             </div>

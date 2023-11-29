@@ -9,7 +9,6 @@ import Table from "./opened_item/table/Table";
 import Image from "./opened_item/image/Image";
 import File from "./opened_item/file/File";
 import Search from "./opened_item/category/Search";
-import CustomTable from "./opened_item/custom_table/CustomTable";
 
 const OpenedListItem = ({
     localizationHandler,
@@ -19,7 +18,8 @@ const OpenedListItem = ({
     setLastEvent,
     userSettings,
     changeUserSettings,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    setDisplaySpinner
 }) => {
     console.log("Opened ListItem", openedListItem);
 
@@ -102,6 +102,7 @@ const OpenedListItem = ({
                     checklist={false}
                     setConfirmationDialogData={setConfirmationDialogData}
                     custom={true}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);

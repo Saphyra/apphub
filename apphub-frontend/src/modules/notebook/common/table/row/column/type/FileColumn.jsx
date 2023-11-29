@@ -9,7 +9,8 @@ const FileColumn = ({
     updateColumn,
     editingEnabled = true,
     selectType,
-    localizationHandler
+    localizationHandler,
+    addFileToColum
 }) => {
     const [file, setFile] = useState(null);
     const [fileMetadata, setFileMetadata] = useState(null);
@@ -47,6 +48,8 @@ const FileColumn = ({
         if (file == null) {
             columnData.data = null;
         } else {
+            addFileToColum(columnData.columnIndex, file);
+
             columnData.data = {
                 fileName: file.fileName,
                 size: file.size

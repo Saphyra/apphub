@@ -20,7 +20,7 @@ import RangeColumn from "./type/RangeColumn";
 import FileColumn from "./type/FileColumn";
 import ImageColumn from "./type/ImageColumn";
 
-const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false }) => {
+const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [displayColumnTypeSelector, setDisplayColumnTypeSelector] = useState(false);
@@ -135,6 +135,7 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
                 editingEnabled={editingEnabled}
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
+                addFileToColum={addFileToColum}
             />
         case ColumnType.IMAGE:
             return <ImageColumn
@@ -143,6 +144,7 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
                 editingEnabled={editingEnabled}
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
+                addFileToColum={addFileToColum}
             />
         default:
             Utils.throwException("IllegalArgument", "Undhandled columnType " + columnData.columnType);

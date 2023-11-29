@@ -148,7 +148,7 @@ public class ValidationUtilTest {
 
     @Test
     public void between_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(null, 5, 10, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(null, 5d, 10, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }

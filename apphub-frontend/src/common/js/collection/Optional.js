@@ -5,8 +5,18 @@ const Optional = class {
         this.value = value;
     }
 
+    ifPresent(consumer) {
+        if (this.isPresent()) {
+            consumer(this.value);
+        }
+    }
+
+    isPresent() {
+        return Utils.hasValue(this.value);
+    }
+
     map(mapper) {
-        if (!Utils.hasValue(this.value)) {
+        if (!this.isPresent()) {
             return this;
         }
 
@@ -14,7 +24,7 @@ const Optional = class {
     }
 
     orElse(another) {
-        if (!Utils.hasValue(this.value)) {
+        if (!this.isPresent()) {
             return another;
         }
 
@@ -22,7 +32,7 @@ const Optional = class {
     }
 
     orElseGet(supplier) {
-        if (!Utils.hasValue(this.value)) {
+        if (!this.isPresent()) {
             return supplier();
         }
 
@@ -30,7 +40,7 @@ const Optional = class {
     }
 
     orElseThrow(exceptionType, exceptionMessage) {
-        if (!Utils.hasValue(this.value)) {
+        if (!this.isPresent()) {
             Utils.throwException(exceptionType, exceptionMessage);
         }
 
