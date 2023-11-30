@@ -34,10 +34,14 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
     }
 
     if (displayColumnTypeSelector) {
-        return <ColumnTypeSelector
-            setColumnType={setColumnType}
-            setDisplayColumnTypeSelector={setDisplayColumnTypeSelector}
-        />
+        return (
+            <td>
+                <ColumnTypeSelector
+                    setColumnType={setColumnType}
+                    setDisplayColumnTypeSelector={setDisplayColumnTypeSelector}
+                />
+            </td>
+        )
     }
 
     switch (columnData.columnType) {
