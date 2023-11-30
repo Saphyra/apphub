@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class EmptyColumnDataService implements ColumnDataService{
+class EmptyColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
     private final ColumnTypeFactory columnTypeFactory;

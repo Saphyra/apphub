@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.column_data;
+package com.github.saphyra.apphub.service.notebook.service.table.column_data.base;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;

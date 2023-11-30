@@ -214,7 +214,7 @@ public class ValidationUtilTest {
     void exactLengthTest_differentLength() {
         Throwable ex = catchThrowable(() -> ValidationUtil.length("d", 3, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 long");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 character(s) long");
     }
 
     @Test

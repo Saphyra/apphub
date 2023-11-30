@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.column_data;
+package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadRespons
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.util.ContentBasedColumnTypeProxy;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,11 +15,10 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public abstract class ContentBasedColumnDataService implements ColumnDataService {
     protected final ColumnType columnType;
     protected final ContentDao contentDao;
-    private final ContentBasedColumnTypeProxy proxy;
+    private final ContentBasedColumnProxy proxy;
 
     @Override
     public boolean canProcess(ColumnType columnType) {
@@ -57,6 +56,6 @@ public abstract class ContentBasedColumnDataService implements ColumnDataService
 
     @Override
     public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
-        proxy.clone(clone.getUserId(), clone.getListItemId(), rowId, originalColumn.getDimensionId(), originalColumn.getIndex(), ColumnType.TIME);
+        proxy.clone(clone.getUserId(), clone.getListItemId(), rowId, originalColumn.getDimensionId(), originalColumn.getIndex(), columnType);
     }
 }

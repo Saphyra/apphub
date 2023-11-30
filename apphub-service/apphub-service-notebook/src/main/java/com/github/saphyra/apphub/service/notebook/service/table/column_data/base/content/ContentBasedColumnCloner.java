@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.column_data.util;
+package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
@@ -19,8 +19,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class ContentBasedColumnTypeSaver {
+class ContentBasedColumnCloner {
     private final DimensionFactory dimensionFactory;
     private final ContentFactory contentFactory;
     private final ColumnTypeFactory columnTypeFactory;
@@ -28,14 +27,15 @@ class ContentBasedColumnTypeSaver {
     private final ContentDao contentDao;
     private final ColumnTypeDao columnTypeDao;
 
-    void save(UUID userId, UUID listItemId, UUID rowId, Integer columnIndex, String contentValue, ColumnType columnType) {
-        Dimension column = dimensionFactory.create(userId, rowId, columnIndex);
-        dimensionDao.save(column);
+    void clone(UUID userId, UUID clonedListItemId, UUID rowId, UUID originalColumnId, Integer columnIndex, ColumnType columnType) {
+        Dimension clonedColumn = dimensionFactory.create(userId, rowId, columnIndex);
+        dimensionDao.save(clonedColumn);
 
-        Content content = contentFactory.create(listItemId, column.getDimensionId(), userId, contentValue);
-        contentDao.save(content);
-
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, columnType);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), userId, columnType);
         columnTypeDao.save(columnTypeDto);
+
+        Content originalContent = contentDao.findByParentValidated(originalColumnId);
+        Content clonedContent = contentFactory.create(clonedListItemId, clonedColumn.getDimensionId(), userId, originalContent.getContent());
+        contentDao.save(clonedContent);
     }
 }

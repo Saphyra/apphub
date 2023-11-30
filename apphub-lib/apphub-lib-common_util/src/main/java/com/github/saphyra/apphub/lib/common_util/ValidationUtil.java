@@ -36,7 +36,7 @@ public class ValidationUtil {
     public static void length(String value, int length, String field) {
         notNull(value, field);
         if (value.length() != length) {
-            throw ExceptionFactory.invalidParam(field, "must be " + length + " long");
+            throw ExceptionFactory.invalidParam(field, "must be " + length + " character(s) long");
         }
     }
 
