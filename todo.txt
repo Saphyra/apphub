@@ -1,4 +1,3 @@
 TODO update release notes
 TODO Download images and files
-TODO extract duplicated code to service from ColumnDataServices
 TODO integration tests
