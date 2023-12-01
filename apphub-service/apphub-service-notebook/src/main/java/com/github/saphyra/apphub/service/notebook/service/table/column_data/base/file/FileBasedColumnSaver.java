@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FileBasedColumnSaver {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
@@ -30,11 +29,11 @@ class FileBasedColumnSaver {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final FileSaver fileSaver;
 
-    public Optional<TableFileUploadResponse> save(UUID userId, UUID rowId, TableColumnModel model) {
+    public Optional<TableFileUploadResponse> save(UUID userId, UUID rowId, TableColumnModel model, ColumnType columnType) {
         Dimension column = dimensionFactory.create(userId, rowId, model.getColumnIndex());
         dimensionDao.save(column);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, ColumnType.IMAGE);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(column.getDimensionId(), userId, columnType);
         columnTypeDao.save(columnTypeDto);
 
         FileMetadata fileMetadata = objectMapperWrapper.convertValue(model.getData(), FileMetadata.class);

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.file;
 
+import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
@@ -14,15 +15,14 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FileBasedColumnProxy {
     private final FileBasedColumnSaver fileBasedColumnSaver;
     private final FileBasedColumnDeleter fileBasedColumnDeleter;
     private final FileBasedColumnEditer fileBasedColumnEditer;
     private final FileBasedColumnCloner fileBasedColumnCloner;
 
-    Optional<TableFileUploadResponse> save(UUID userId, UUID rowId, TableColumnModel model) {
-        return fileBasedColumnSaver.save(userId, rowId, model);
+    Optional<TableFileUploadResponse> save(UUID userId, UUID rowId, TableColumnModel model, ColumnType columnType) {
+        return fileBasedColumnSaver.save(userId, rowId, model, columnType);
     }
 
     public void delete(Dimension column) {
@@ -33,7 +33,7 @@ public class FileBasedColumnProxy {
         return fileBasedColumnEditer.edit(listItem, rowId, model);
     }
 
-    public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
-        fileBasedColumnCloner.clone(clone, rowId, originalColumn);
+    public void clone(ListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {
+        fileBasedColumnCloner.clone(clone, rowId, originalColumn, columnType);
     }
 }

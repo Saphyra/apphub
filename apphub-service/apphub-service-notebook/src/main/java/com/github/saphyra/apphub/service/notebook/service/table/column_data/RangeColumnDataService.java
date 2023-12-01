@@ -14,11 +14,10 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 class RangeColumnDataService extends ContentBasedColumnDataService {
     private final ObjectMapperWrapper objectMapperWrapper;
 
-    public RangeColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapperWrapper objectMapperWrapper) {
+    RangeColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapperWrapper objectMapperWrapper) {
         super(ColumnType.RANGE, contentDao, proxy);
         this.objectMapperWrapper = objectMapperWrapper;
     }
@@ -37,7 +36,7 @@ class RangeColumnDataService extends ContentBasedColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        Range range = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Range.class), "rangeData");
+        Range range = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Range.class), "range");
         ValidationUtil.atLeastExclusive(range.getStep(), 0, "range.step");
         ValidationUtil.notNull(range.getMin(), "range.min");
         ValidationUtil.atLeast(range.getMax(), range.getMin(), "range.max");

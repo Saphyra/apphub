@@ -13,7 +13,6 @@ import java.time.LocalTime;
 
 @Component
 @Slf4j
-//TODO unit test
 class TimeColumnDataService extends ContentBasedColumnDataService {
     TimeColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy) {
         super(ColumnType.TIME, contentDao, proxy);
@@ -24,6 +23,6 @@ class TimeColumnDataService extends ContentBasedColumnDataService {
         if (Constants.EMPTY_STRING.equals(data)) {
             return;
         }
-        ValidationUtil.parse(data, o -> LocalTime.parse(o.toString()), "timeValue");
+        ValidationUtil.parse(data, o -> LocalTime.parse(o.toString()), "time");
     }
 }

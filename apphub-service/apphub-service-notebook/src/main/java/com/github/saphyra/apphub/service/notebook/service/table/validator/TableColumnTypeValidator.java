@@ -22,7 +22,7 @@ class TableColumnTypeValidator {
     void validateColumnType(CreateTableRequest request) {
         switch (request.getListItemType()) {
             case TABLE, CHECKLIST_TABLE -> validateColumnsForTable(request.getRows());
-            case CUSTOM_TABLE -> validateForCustomTable(request.getRows()); //TODO unit test
+            case CUSTOM_TABLE -> validateForCustomTable(request.getRows());
             default -> throw ExceptionFactory.invalidParam("listItemType", "not supported");
         }
     }

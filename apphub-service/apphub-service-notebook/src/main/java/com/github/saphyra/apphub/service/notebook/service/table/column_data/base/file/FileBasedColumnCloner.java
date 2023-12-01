@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FileBasedColumnCloner {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
@@ -29,11 +28,11 @@ class FileBasedColumnCloner {
     private final FileDao fileDao;
     private final FileCloneService fileCloneService;
 
-    void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
+    void clone(ListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
         dimensionDao.save(clonedColumn);
 
-        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), ColumnType.IMAGE);
+        ColumnTypeDto columnTypeDto = columnTypeFactory.create(clonedColumn.getDimensionId(), clone.getUserId(), columnType);
         columnTypeDao.save(columnTypeDto);
 
         File toClone = fileDao.findByParentValidated(originalColumn.getDimensionId());

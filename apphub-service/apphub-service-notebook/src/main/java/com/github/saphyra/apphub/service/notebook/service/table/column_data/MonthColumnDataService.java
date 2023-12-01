@@ -13,7 +13,6 @@ import java.time.LocalDate;
 
 @Component
 @Slf4j
-//TODO unit test
 class MonthColumnDataService extends ContentBasedColumnDataService {
     MonthColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy) {
         super(ColumnType.MONTH, contentDao, proxy);
@@ -24,6 +23,6 @@ class MonthColumnDataService extends ContentBasedColumnDataService {
         if (Constants.EMPTY_STRING.equals(data)) {
             return;
         }
-        ValidationUtil.parse(data, o -> LocalDate.parse(o.toString() + "-01"), "monthValue");
+        ValidationUtil.parse(data, o -> LocalDate.parse(o.toString() + "-01"), "month");
     }
 }

@@ -14,11 +14,10 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 class NumberColumnDataService extends ContentBasedColumnDataService {
     private final ObjectMapperWrapper objectMapperWrapper;
 
-    public NumberColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapperWrapper objectMapperWrapper) {
+    NumberColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapperWrapper objectMapperWrapper) {
         super(ColumnType.NUMBER, contentDao, proxy);
         this.objectMapperWrapper = objectMapperWrapper;
     }
@@ -37,7 +36,7 @@ class NumberColumnDataService extends ContentBasedColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        Number number = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Number.class), "numberData");
+        Number number = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, Number.class), "number");
         ValidationUtil.notNull(number.getValue(), "number.value");
         ValidationUtil.atLeastExclusive(number.getStep(), 0d, "number.step");
     }

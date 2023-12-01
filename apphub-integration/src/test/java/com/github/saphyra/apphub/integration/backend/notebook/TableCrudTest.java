@@ -286,7 +286,7 @@ public class TableCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(accessTokenId, create_nullColumnValueRequest);
-        verifyInvalidParam(create_nullColumnValueResponse, "textValue", "must not be null");
+        verifyInvalidParam(create_nullColumnValueResponse, "text", "must not be null");
     }
 
     private static void create_nullColumnType(UUID accessTokenId) {
@@ -496,7 +496,7 @@ public class TableCrudTest extends BackEndTest {
             ))
             .build();
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(accessTokenId, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(edit_nullColumnValueResponse, "textValue", "must not be null");
+        verifyInvalidParam(edit_nullColumnValueResponse, "text", "must not be null");
     }
 
     private static void edit_tableHeadNotFound(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {

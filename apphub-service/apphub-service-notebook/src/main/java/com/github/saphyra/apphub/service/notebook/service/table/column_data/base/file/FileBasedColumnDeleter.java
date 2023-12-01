@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FileBasedColumnDeleter {
     private final FileDeleter fileDeleter;
     private final DimensionDao dimensionDao;

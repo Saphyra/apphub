@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EmptyColumnDataService implements ColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;

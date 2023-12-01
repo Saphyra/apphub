@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-//TODO unit test
 class TextColumnDataService extends ContentBasedColumnDataService {
     public TextColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy) {
         super(ColumnType.TEXT, contentDao, proxy);
@@ -18,6 +17,6 @@ class TextColumnDataService extends ContentBasedColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        ValidationUtil.notNull(data, "textValue");
+        ValidationUtil.notNull(data, "text");
     }
 }

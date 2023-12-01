@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.service.table.column_data;
+package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content;
 
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
@@ -6,8 +6,6 @@ import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content.ContentBasedColumnDataService;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content.ContentBasedColumnTypeProxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ class ContentBasedColumnDataServiceTest {
     private ContentDao contentDao;
 
     @Mock
-    private ContentBasedColumnTypeProxy proxy;
+    private ContentBasedColumnProxy proxy;
 
     private ContentBasedColumnDataService underTest;
 
@@ -111,7 +109,7 @@ class ContentBasedColumnDataServiceTest {
 
     private static class ContentBasedColumnDataServiceImp extends ContentBasedColumnDataService {
 
-        private ContentBasedColumnDataServiceImp(ColumnType columnType, ContentDao contentDao, ContentBasedColumnTypeProxy proxy) {
+        private ContentBasedColumnDataServiceImp(ColumnType columnType, ContentDao contentDao, ContentBasedColumnProxy proxy) {
             super(columnType, contentDao, proxy);
         }
 
