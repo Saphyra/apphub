@@ -3,6 +3,7 @@ import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
 import Utils from "../../../../../../../common/js/Utils";
 import Endpoints from "../../../../../../../common/js/dao/dao";
+import downloadFile from "../../../../FileDownloader";
 
 const ImageColumn = ({
     columnData,
@@ -107,6 +108,12 @@ const ImageColumn = ({
                             <img
                                 className="notebook-table-image-preview"
                                 src={preview}
+                            />
+
+                            <Button
+                                className="notebook-table-download-file-button"
+                                onclick={() => downloadFile(columnData.data.storedFileId)}
+                                title={localizationHandler.get("overwrite-file")}
                             />
                         </div>
                     </div>

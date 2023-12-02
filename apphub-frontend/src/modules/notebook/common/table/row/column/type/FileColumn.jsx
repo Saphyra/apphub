@@ -3,6 +3,7 @@ import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
 import Utils from "../../../../../../../common/js/Utils";
 import Endpoints from "../../../../../../../common/js/dao/dao";
+import downloadFile from "../../../../FileDownloader";
 
 const FileColumn = ({
     columnData,
@@ -74,6 +75,8 @@ const FileColumn = ({
                             <FileMetadataTable
                                 fileMetadata={fileMetadata}
                                 localizationHandler={localizationHandler}
+                                editingEnabled={editingEnabled}
+                                storedFileId={columnData.data.storedFileId}
                             />
                         }
 
@@ -105,6 +108,8 @@ const FileColumn = ({
                             <FileMetadataTable
                                 fileMetadata={fileMetadata}
                                 localizationHandler={localizationHandler}
+                                editingEnabled={editingEnabled}
+                                storedFileId={columnData.data.storedFileId}
                             />
                         </div>
                     </div>
@@ -114,13 +119,22 @@ const FileColumn = ({
     }
 }
 
-const FileMetadataTable = ({ fileMetadata, localizationHandler }) => {
+const FileMetadataTable = ({ fileMetadata, localizationHandler, editingEnabled, storedFileId }) => {
     return (
         <table className="formatted-table content-selectable">
             <tbody>
                 <tr>
                     <td >{localizationHandler.get("file-name")}</td>
                     <td >{fileMetadata.fileName}</td>
+                    {!editingEnabled &&
+                        <td rowSpan={2}>
+                            <Button
+                                className="notebook-table-download-file-button"
+                                onclick={() => downloadFile(storedFileId)}
+                                title={localizationHandler.get("overwrite-file")}
+                            />
+                        </td>
+                    }
                 </tr>
                 <tr>
                     <td >{localizationHandler.get("file-size")}</td>

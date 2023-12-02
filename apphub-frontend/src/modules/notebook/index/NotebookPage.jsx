@@ -120,14 +120,11 @@ const NotebookPage = () => {
                     />
                 }
                 centerButtons={
-                    openedListItem.type === ListItemType.CATEGORY || openedListItem.type === ListItemType.SEARCH ?
-                        <Button
-                            id="notebook-new-button"
-                            onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
-                            label={localizationHandler.get("new")}
-                        />
-                        :
-                        []
+                    <Button
+                        id="notebook-new-button"
+                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
+                        label={localizationHandler.get("new")}
+                    />
                 }
             />
 

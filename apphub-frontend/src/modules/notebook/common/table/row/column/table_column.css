@@ -9,7 +9,8 @@
 }
 
 .notebook-table-change-column-type-button,
-.notebook-table-overwrite-file-button {
+.notebook-table-overwrite-file-button,
+.notebook-table-download-file-button {
     width: 26px;
     height: 26px;
     background-repeat: no-repeat;
@@ -25,6 +26,10 @@
 
 .notebook-table-overwrite-file-button {
     background-image: url("../../../../../../common/style/img/clone.png");
+}
+
+.notebook-table-download-file-button {
+    background-image: url("../../../../../../common/style/img/download.png");
 }
 
 .notebook-table-column-type-empty {
