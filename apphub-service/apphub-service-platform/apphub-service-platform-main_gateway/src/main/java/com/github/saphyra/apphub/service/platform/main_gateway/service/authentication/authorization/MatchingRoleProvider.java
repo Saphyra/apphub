@@ -30,7 +30,7 @@ class MatchingRoleProvider {
             .filter(roleSetting -> antPathMatcher.match(roleSetting.getPattern(), requestUri))
             .filter(roleSetting -> !isWhiteListed(roleSetting.getWhitelistedEndpoints(), requestMethod, requestUri))
             .collect(Collectors.toList());
-        log.info("Matching roles for {} - {}: {}", requestMethod, requestUri, matchingRoles);
+        log.debug("Matching roles for {} - {}: {}", requestMethod, requestUri, matchingRoles);
         return matchingRoles;
     }
 

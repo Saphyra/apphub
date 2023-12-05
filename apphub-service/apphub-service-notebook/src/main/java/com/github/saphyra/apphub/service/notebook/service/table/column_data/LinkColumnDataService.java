@@ -17,6 +17,6 @@ class LinkColumnDataService extends ContentBasedColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        ValidationUtil.notNull(data, "linkValue");
+        ValidationUtil.notNull(data, "link");
     }
 }

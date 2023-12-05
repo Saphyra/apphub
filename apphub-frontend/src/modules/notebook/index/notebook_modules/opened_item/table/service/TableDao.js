@@ -52,7 +52,9 @@ export const save = async (
     const response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: listItemId })
         .send();
 
-    uploadFiles(setDisplaySpinner, response.fileUpload, files);
+    if (response.fileUpload.length > 0) {
+        uploadFiles(setDisplaySpinner, response.fileUpload, files);
+    }
 
     setEditingEnabled(false);
     setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));

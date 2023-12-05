@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -47,7 +48,7 @@ class PlayerDisconnectedServiceTest {
 
     @Test
     void playerDisconnected() {
-        given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
+        given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
         Map<UUID, LobbyPlayer> players = Map.of(USER_ID, player);
         given(lobby.getPlayers()).willReturn(players);
         given(lobbyPlayerToResponseConverter.convertPlayer(player)).willReturn(lobbyPlayerResponse);

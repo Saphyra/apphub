@@ -132,6 +132,8 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
+        //TODO add custom table
+
         ListItemActions.archive(accessTokenId, parentId, true);
         ListItemActions.pin(accessTokenId, parentId, true);
 

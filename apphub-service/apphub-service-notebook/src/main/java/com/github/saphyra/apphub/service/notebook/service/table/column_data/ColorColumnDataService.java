@@ -19,11 +19,11 @@ class ColorColumnDataService extends ContentBasedColumnDataService {
 
     @Override
     public void validateData(Object data) {
-        ValidationUtil.notNull(data, "color");
-
         if(Constants.EMPTY_STRING.equals(data)){
             return;
         }
+
+        ValidationUtil.notNull(data, "color");
 
         String hexString = data.toString();
         ValidationUtil.length(hexString, 7, "color");
