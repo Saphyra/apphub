@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Map;
 
 public class NotebookNewListItemActions {
-    public static void selectListItem(WebDriver driver, ListItemType type) {
+    public static void selectListItemType(WebDriver driver, ListItemType type) {
         driver.findElement(By.id(String.format("notebook-new-%s", type.getSelector())))
             .click();
 

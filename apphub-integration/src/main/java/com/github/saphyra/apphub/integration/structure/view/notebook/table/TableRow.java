@@ -1,6 +1,7 @@
-package com.github.saphyra.apphub.integration.structure.view.notebook;
+package com.github.saphyra.apphub.integration.structure.view.notebook.table;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

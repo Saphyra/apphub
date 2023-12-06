@@ -34,8 +34,8 @@ public class TestCaseController {
     }
 
     private synchronized void logRequest(TestCaseRunRequest request) {
-        String displayedName = request.getTestCaseId()
-            .replace("com.github.saphyra.apphub.integration.", "");
+        String displayedName = parse(request.getTestCaseId());
+
         if (displayedName.length() > MAX_LENGTH) {
             MAX_LENGTH = displayedName.length();
         }
@@ -47,6 +47,23 @@ public class TestCaseController {
         displayedName += suffix;
 
         log.info("TestCase {} {} in {}ms", displayedName, request.getStatus(), request.getDuration());
+    }
+
+    private String parse(String testCaseId) {
+        String[] name = testCaseId.replace("com.github.saphyra.apphub.integration.", "")
+            .split("\\.");
+
+        String type;
+        switch (name[0]) {
+            case "frontend" -> type = "[FE]";
+            case "backend" -> type = "[BE]";
+            default -> {
+                log.error("TestCase is neither a BE or FE test. Value: {}", name[0]);
+                type = testCaseId;
+            }
+        }
+
+        return String.format("%s - %s:%s", type, name[name.length - 2], name[name.length - 1]);
     }
 
     @PostMapping(Endpoints.GET_AVERAGE_RUN_TIME)

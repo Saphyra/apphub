@@ -35,7 +35,7 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
 
     if (displayColumnTypeSelector) {
         return (
-            <td>
+            <td className="table-column">
                 <ColumnTypeSelector
                     setColumnType={setColumnType}
                     setDisplayColumnTypeSelector={setDisplayColumnTypeSelector}

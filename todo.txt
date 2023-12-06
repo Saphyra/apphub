@@ -1,2 +1,0 @@
-TODO update release notes
-TODO integration tests

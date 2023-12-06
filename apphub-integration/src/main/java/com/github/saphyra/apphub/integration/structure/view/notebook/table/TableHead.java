@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.view.notebook;
+package com.github.saphyra.apphub.integration.structure.view.notebook.table;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;

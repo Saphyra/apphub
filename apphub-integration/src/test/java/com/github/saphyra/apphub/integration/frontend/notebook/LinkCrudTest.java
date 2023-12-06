@@ -41,7 +41,7 @@ public class LinkCrudTest extends SeleniumTest {
         NotebookUtils.newCategory(driver, CATEGORY);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.LINK);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.LINK);
 
         create_blankTitle(driver);
         create_blankUrl(driver);
