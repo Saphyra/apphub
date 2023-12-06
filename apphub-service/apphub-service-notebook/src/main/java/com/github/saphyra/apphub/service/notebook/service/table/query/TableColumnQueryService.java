@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TableColumnQueryService {
     private final DimensionDao dimensionDao;
     private final ColumnTypeDao columnTypeDao;

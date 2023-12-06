@@ -17,7 +17,7 @@ import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Chat from "./lobby_page/Chat";
 import Settings from "./lobby_page/Settings";
 import Ais from "./lobby_page/Ais";
-import Members from "./lobby_page/Members";
+import Players from "./lobby_page/Players";
 import Friends from "./lobby_page/Friends";
 import Constants from "../../../common/js/Constants";
 import Spinner from "../../../common/component/Spinner";
@@ -226,7 +226,7 @@ const SkyXploreLobbyPage = () => {
                             lastEvent={lastEvent}
                         />
 
-                        <Members
+                        <Players
                             localizationHandler={localizationHandler}
                             alliances={alliances}
                             isHost={lobbyData.host}

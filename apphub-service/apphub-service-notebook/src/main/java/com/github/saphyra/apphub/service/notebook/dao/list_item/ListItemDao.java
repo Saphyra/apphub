@@ -4,10 +4,8 @@ import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.migration.table.UnencryptedListItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -54,10 +52,5 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
 
     public List<ListItem> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
-    }
-
-    @ForRemoval("notebook-redesign")
-    public List<UnencryptedListItem> getAllUnencrypted() {
-        return this.converter.convertUnencrypted(repository.findAll());
     }
 }

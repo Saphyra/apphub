@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TableHeadQueryService {
     private final TableHeadDao tableHeadDao;
     private final ContentDao contentDao;

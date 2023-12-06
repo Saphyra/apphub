@@ -11,21 +11,20 @@ import { ToastContainer } from "react-toastify";
 import Footer from "../../../../common/component/Footer";
 import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
-import Stream from "../../../../common/js/collection/Stream";
-import TableHead from "../../common/table/table_head/TableHead";
 import TableHeadData from "../../common/table/table_head/TableHeadData";
 import "./new_table.css";
-import MoveDirection from "../../common/MoveDirection";
 import Utils from "../../../../common/js/Utils";
 import TableColumnData from "../../common/table/row/column/TableColumnData";
 import TableRowData from "../../common/table/row/TableRowData";
-import TableRow from "../../common/table/row/TableRow";
-import Endpoints from "../../../../common/js/dao/dao";
-import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import validateTableHeadNames from "../../common/validator/TableHeadNameValidator";
-import ListItemType from "../../common/ListItemType";
+import create from "./service/NewTableSaver";
+import { newColumn } from "./service/NewTableColumnCrudService";
+import { newRow } from "./service/NewTableRowCrudService";
+import getTable from "./service/NewTableAssembler";
+import ColumnType from "../../common/table/row/column/type/ColumnType";
+import Spinner from "../../../../common/component/Spinner";
+import Stream from "../../../../common/js/collection/Stream";
 
-const NewTablePage = ({ checklist }) => {
+const NewTablePage = ({ checklist, custom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
@@ -33,258 +32,28 @@ const NewTablePage = ({ checklist }) => {
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
     const [listItemTitle, setListItemTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([new TableHeadData(0)]);
-    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0)])]);
+    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0, (custom ? ColumnType.EMPTY : ColumnType.TEXT))])]);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [files, setFiles] = useState([]);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    const create = async () => {
-        const titleValidationResult = validateListItemTitle(listItemTitle);
-        if (!titleValidationResult.valid) {
-            NotificationService.showError(titleValidationResult.message);
-            return;
-        }
-
-        const tableHeadNameValidationResult = validateTableHeadNames(tableHeads);
-        if (!tableHeadNameValidationResult.valid) {
-            NotificationService.showError(tableHeadNameValidationResult.message);
-            return;
-        }
-
-        const payload = {
-            title: listItemTitle,
-            parent: parentId,
-            listItemType: checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE,
-            tableHeads: tableHeads,
-            rows: rows
-        }
-
-        await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
-            .send();
-
-        window.location.href = Constants.NOTEBOOK_PAGE;
+    const updateRows = () => {
+        Utils.copyAndSet(rows, setRows);
     }
 
-    const newColumn = () => {
-        const columnIndex = new Stream(tableHeads)
-            .map(tableHead => tableHead.columnIndex)
-            .max()
-            .orElse(0);
-
-        const newTableHead = new TableHeadData(columnIndex + 1, "", Utils.generateRandomId());
-        const copy = new Stream(tableHeads)
-            .add(newTableHead)
-            .toList();
-        setTableHeads(copy);
-
-        new Stream(rows)
-            .forEach(row => {
-                const newColumn = new TableColumnData(newTableHead.columnIndex);
-                row.columns.push(newColumn);
-            });
-
-        updateRow();
-    }
-
-    const newRow = () => {
-        const rowIndex = new Stream(rows)
-            .map(row => row.rowIndex)
-            .max()
-            .orElse(0);
-
-        const columns = new Stream(tableHeads)
-            .map(tableHead => tableHead.columnIndex)
-            .map(columnIndex => new TableColumnData(columnIndex))
+    const addFile = (rowIndex, columnIndex, file) => {
+        const clone = new Stream(files)
+            .remove(file => file.rowIndex == rowIndex && file.columnIndex == columnIndex)
+            .add({
+                rowIndex: rowIndex,
+                columnIndex: columnIndex,
+                file: file
+            })
             .toList();
 
-        const newRow = new TableRowData(rowIndex + 1, columns);
-
-        const copy = new Stream(rows)
-            .add(newRow)
-            .toList();
-
-        setRows(copy);
-    }
-
-    const moveColumn = (tableHead, moveDirection) => {
-        const orderedItems = new Stream(tableHeads)
-            .sorted((a, b) => a.columnIndex - b.columnIndex)
-            .toList();
-
-        const tableHeadIndex = orderedItems.indexOf(tableHead);
-
-        let otherTableHeadIndex;
-        switch (moveDirection) {
-            case MoveDirection.LEFT:
-                otherTableHeadIndex = tableHeadIndex - 1;
-                break;
-            case MoveDirection.RIGHT:
-                otherTableHeadIndex = tableHeadIndex + 1;
-                break;
-            default:
-                Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
-        }
-
-        const otherTableHead = orderedItems[otherTableHeadIndex];
-
-        if (!otherTableHead) {
-            //Item is at the most left/right of the list and cannot be moved further.
-            return;
-        }
-
-        const originalColumnIndex = tableHead.columnIndex;
-        const newColumnIndex = otherTableHead.columnIndex;
-
-        tableHead.columnIndex = newColumnIndex;
-        otherTableHead.columnIndex = originalColumnIndex;
-
-        updateTableHead();
-
-        new Stream(rows)
-            .forEach(row => {
-                const originalColumn = new Stream(row.columns)
-                    .filter(column => column.columnIndex === originalColumnIndex)
-                    .findFirst()
-                    .orElseThrow("IllegalState", "Column not found with columnIndex " + originalColumnIndex);
-
-                const otherColumn = new Stream(row.columns)
-                    .filter(column => column.columnIndex === newColumnIndex)
-                    .findFirst()
-                    .orElseThrow("IllegalState", "Column not found with columnIndex " + newColumnIndex);
-
-                originalColumn.columnIndex = newColumnIndex;
-                otherColumn.columnIndex = originalColumnIndex;
-            });
-        updateRow();
-    }
-
-    const moveRow = (row, moveDirection) => {
-        const orderedItems = new Stream(rows)
-            .sorted((a, b) => a.rowIndex - b.rowIndex)
-            .toList();
-
-        const rowPosition = orderedItems.indexOf(row);
-
-        let otherRowPosition;
-        switch (moveDirection) {
-            case MoveDirection.UP:
-                otherRowPosition = rowPosition - 1;
-                break;
-            case MoveDirection.DOWN:
-                otherRowPosition = rowPosition + 1;
-                break;
-            default:
-                Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
-        }
-
-        const otherRow = orderedItems[otherRowPosition];
-
-        if (!otherRow) {
-            //Item is at the top/bottom of the list and cannot be moved further.
-            return;
-        }
-
-        const originalRowIndex = row.rowIndex;
-        const newRowIndex = otherRow.rowIndex;
-
-        row.rowIndex = newRowIndex;
-        otherRow.rowIndex = originalRowIndex;
-
-        updateRow();
-    }
-
-    const removeRow = (row) => {
-        const copy = new Stream(rows)
-            .remove(r => r === row)
-            .toList();
-        setRows(copy);
-    }
-
-    const removeColumn = (tableHead) => {
-        const copy = new Stream(tableHeads)
-            .remove(i => i === tableHead)
-            .toList();
-        setTableHeads(copy);
-
-        new Stream(rows)
-            .forEach(row => {
-                const columns = new Stream(row.columns)
-                    .remove(column => column.columnIndex === tableHead.columnIndex)
-                    .toList();
-                row.columns = columns;
-            });
-
-        updateRow();
-    }
-
-    const updateTableHead = () => {
-        const copy = new Stream(tableHeads)
-            .toList();
-        setTableHeads(copy);
-    }
-
-    const updateRow = () => {
-        const copy = new Stream(rows)
-            .toList();
-
-        setRows(copy);
-    }
-
-    //Content assembly
-    const getTable = () => {
-        return (
-            <table id="notebook-new-table-content" className="formatted-table">
-                <thead>
-                    {getTableHeads()}
-                </thead>
-
-                <tbody>
-                    {getTableRows()}
-                </tbody>
-            </table>
-        )
-    }
-
-    const getTableHeads = () => {
-        return (
-            <tr>
-                <th></th>
-                {checklist && <th>{localizationHandler.get("checked")}</th>}
-
-                {
-                    new Stream(tableHeads)
-                        .sorted((a, b) => a.columnIndex - b.columnIndex)
-                        .map(tableHeadData =>
-                            <TableHead
-                                key={tableHeadData.tableHeadId}
-                                localizationHandler={localizationHandler}
-                                tableHeadData={tableHeadData}
-                                updateTableHead={updateTableHead}
-                                moveColumn={moveColumn}
-                                removeColumn={removeColumn}
-                            />
-                        )
-                        .toList()
-                }
-            </tr>
-        )
-    }
-
-    const getTableRows = () => {
-        return new Stream(rows)
-            .sorted((a, b) => a.rowIndex - b.rowIndex)
-            .map(row =>
-                <TableRow
-                    key={row.rowId}
-                    rowData={row}
-                    updateRow={updateRow}
-                    updateChecked={updateRow}
-                    moveRow={moveRow}
-                    removeRow={removeRow}
-                    checklist={checklist}
-                />
-            )
-            .toList();
+        setFiles(clone);
     }
 
     return (
@@ -305,7 +74,7 @@ const NewTablePage = ({ checklist }) => {
                 />
 
                 <div id="notebook-new-table-content-wrapper">
-                    {getTable()}
+                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile)}
                 </div>
             </main>
 
@@ -315,13 +84,18 @@ const NewTablePage = ({ checklist }) => {
                         key="new-column"
                         id="notebook-new-table-new-column-button"
                         label={localizationHandler.get("new-column")}
-                        onclick={newColumn}
+                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows, custom)}
                     />,
                     <Button
                         key="new-row"
                         id="notebook-new-table-new-row-button"
                         label={localizationHandler.get("new-row")}
-                        onclick={newRow}
+                        onclick={() => newRow(
+                            rows,
+                            tableHeads,
+                            setRows,
+                            custom
+                        )}
                     />
                 ]}
 
@@ -329,7 +103,7 @@ const NewTablePage = ({ checklist }) => {
                     <Button
                         id="notebook-new-table-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create()}
+                        onclick={() => create(listItemTitle, tableHeads, parentId, checklist, rows, custom, setDisplaySpinner, files)}
                     />
                 }
 
@@ -348,6 +122,8 @@ const NewTablePage = ({ checklist }) => {
                     />
                 ]}
             />
+
+            {displaySpinner && <Spinner />}
 
             <ToastContainer />
         </div>

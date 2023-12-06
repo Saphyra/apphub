@@ -18,8 +18,8 @@ import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableColumn;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -47,7 +47,7 @@ public class TableCrudTest extends SeleniumTest {
         NotebookUtils.newCategory(driver, CATEGORY_TITLE);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.TABLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TABLE);
 
         create_blankTitle(driver);
         create_hasBlankColumnName(driver);
@@ -234,7 +234,7 @@ public class TableCrudTest extends SeleniumTest {
     private static void edit_addRow(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
 
-        ViewTableActions.newRow(driver);
+        ViewTableActions.addRowToEnd(driver);
 
         assertThat(ViewTableActions.getRows(driver)).hasSize(3);
     }
@@ -248,7 +248,7 @@ public class TableCrudTest extends SeleniumTest {
     }
 
     private static void edit_addColumn(WebDriver driver) {
-        ViewTableActions.newColumn(driver);
+        ViewTableActions.addColumnToEnd(driver);
 
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(2);
         assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);

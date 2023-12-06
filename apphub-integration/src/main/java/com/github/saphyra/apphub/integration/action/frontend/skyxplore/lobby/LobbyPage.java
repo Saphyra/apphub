@@ -24,8 +24,8 @@ class LobbyPage {
         return driver.findElements(By.cssSelector("#skyxplore-lobby-friends .skyxplore-lobby-active-friend"));
     }
 
-    static List<WebElement> lobbyMembers(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#skyxplore-lobby-members .skyxplore-lobby-member"));
+    static List<WebElement> lobbyPlayers(WebDriver driver) {
+        return driver.findElements(By.cssSelector("#skyxplore-lobby-players .skyxplore-lobby-player"));
     }
 
     static WebElement chatInput(WebDriver driver) {

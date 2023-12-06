@@ -3,7 +3,12 @@ import Stream from "./Stream";
 
 const MapStream = class {
     constructor(items) {
-        this.items = items;
+        const clone = {};
+        for (const key in items) {
+            clone[key] = items[key];
+        }
+
+        this.items = clone;
     }
 
     add(key, value) {
@@ -36,7 +41,7 @@ const MapStream = class {
         const keys = Object.keys(this.items);
 
         if (keys.length === 0) {
-            return new Optional();
+            return new Optional(null);
         }
 
         return new Optional(this.items[keys[0]]);
@@ -56,7 +61,7 @@ const MapStream = class {
         return new MapStream(result);
     }
 
-    peek(consumer){
+    peek(consumer) {
         this.forEach(consumer);
 
         return this;
@@ -68,7 +73,7 @@ const MapStream = class {
             .toMapStream(item => item.key, item => item.value);
     }
 
-    toListStream(mapper){
+    toListStream(mapper) {
         return new Stream(this.toList(mapper));
     }
 

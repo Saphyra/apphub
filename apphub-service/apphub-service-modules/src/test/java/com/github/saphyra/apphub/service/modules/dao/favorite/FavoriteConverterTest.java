@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.modules.dao.favorite.FavoriteConverter.COLUMN_FAVORITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -45,7 +46,7 @@ public class FavoriteConverterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_FAVORITE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
+        given(booleanEncryptor.decrypt(ENCRYPTED_FAVORITE, ACCESS_TOKEN_USER_ID_STRING, MODULE, COLUMN_FAVORITE)).willReturn(true);
 
         FavoriteEntity favorite = FavoriteEntity.builder()
             .key(
@@ -70,7 +71,7 @@ public class FavoriteConverterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
-        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_FAVORITE);
+        given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID_STRING, MODULE, COLUMN_FAVORITE)).willReturn(ENCRYPTED_FAVORITE);
 
         Favorite favorite = Favorite.builder()
             .userId(USER_ID)

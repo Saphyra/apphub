@@ -3,17 +3,24 @@ package com.github.saphyra.apphub.lib.encryption.impl;
 import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
-public class LongEncryptor extends AbstractEncryptor<Long> {
+public class LongEncryptor implements AbstractEncryptor<Long> {
     private final StringEncryptor stringEncryptor;
 
     @Override
-    protected String encrypt(Long entity, String key) {
-        return stringEncryptor.encryptEntity(entity.toString(), key);
+    public String encrypt(Long entity, String key, String entityId, String column) {
+        String stringified = Optional.ofNullable(entity)
+            .map(Object::toString)
+            .orElse(null);
+        return stringEncryptor.encrypt(stringified, key, entityId, column);
     }
 
     @Override
-    protected Long decrypt(String entity, String key) {
-        return Long.valueOf(stringEncryptor.decryptEntity(entity, key));
+    public Long decrypt(String entity, String key, String entityId, String column) {
+        return Optional.ofNullable(stringEncryptor.decrypt(entity, key, entityId, column))
+            .map(Long::parseLong)
+            .orElse(null);
     }
 }

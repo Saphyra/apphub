@@ -10,7 +10,7 @@ const Stream = class {
     add(item) {
         this.items.push(item);
 
-        return this;
+        return new Stream(this.items);
     }
 
     addAll(items) {
@@ -82,7 +82,7 @@ const Stream = class {
         return new Stream(this.items.map(mapper));
     }
 
-    max() {
+    max(toIntFunction = (item) => item) {
         if (this.items.length === 0) {
             return new Optional(null);
         }
@@ -90,16 +90,38 @@ const Stream = class {
         let currentMax = Number.MIN_SAFE_INTEGER;
 
         this.forEach(item => {
-            if (typeof item !== "number") {
-                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            const itemNumber = toIntFunction(item);
+
+            if (typeof itemNumber !== "number") {
+                Utils.throwException("IllegalArgument", itemNumber + " is not a number. It is " + typeof itemNumber);
             }
 
-            if (item > currentMax) {
-                currentMax = item;
+            if (itemNumber > currentMax) {
+                currentMax = itemNumber;
             }
         });
 
         return new Optional(currentMax);
+    }
+
+    min() {
+        if (this.items.length === 0) {
+            return new Optional(null);
+        }
+
+        let currentMin = Number.MAX_SAFE_INTEGER;
+
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            }
+
+            if (item < currentMin) {
+                currentMin = item;
+            }
+        });
+
+        return new Optional(currentMin);
     }
 
     peek(consumer) {

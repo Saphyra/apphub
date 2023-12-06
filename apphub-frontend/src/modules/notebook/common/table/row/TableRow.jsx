@@ -6,7 +6,11 @@ import TableColumn from "./column/TableColumn";
 import "./table_row.css";
 import InputField from "../../../../../common/component/input/InputField";
 
-const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editingEnabled = true, checklist = false }) => {
+const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editingEnabled = true, checklist = false, custom = false, addFile }) => {
+    const addFileToColum = (columnIndex, file) => {
+        addFile(rowData.rowIndex, columnIndex, file);
+    }
+
     const getColumns = () => {
         return new Stream(rowData.columns)
             .sorted((a, b) => a.columnIndex - b.columnIndex)
@@ -16,6 +20,8 @@ const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editi
                     columnData={column}
                     updateColumn={updateRow}
                     editingEnabled={editingEnabled}
+                    custom={custom}
+                    addFileToColum={addFileToColum}
                 />
             )
             .toList();

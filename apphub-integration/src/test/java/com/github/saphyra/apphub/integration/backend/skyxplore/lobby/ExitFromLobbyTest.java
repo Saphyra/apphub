@@ -104,7 +104,7 @@ public class ExitFromLobbyTest extends BackEndTest {
         assertThat(hostLeftMessage.getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(hostLeftMessage.getUserId()).isEqualTo(userId1);
         assertThat(hostLeftMessage.isHost()).isTrue();
-        Response response = SkyXploreLobbyActions.getLobbyMembersResponse(language, accessTokenId2);
+        Response response = SkyXploreLobbyActions.getLobbyPlayersResponse(language, accessTokenId2);
         assertThat(response.getStatusCode()).isEqualTo(404);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_NOT_FOUND.name());

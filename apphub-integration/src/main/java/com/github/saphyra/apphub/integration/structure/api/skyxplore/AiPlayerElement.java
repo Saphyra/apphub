@@ -19,7 +19,7 @@ public class AiPlayerElement {
     }
 
     private WebElement aiNameField() {
-        return webElement.findElement(By.className("skyxplore-lobby-member-name"));
+        return webElement.findElement(By.className("skyxplore-lobby-player-name"));
     }
 
     public void remove() {
@@ -33,7 +33,7 @@ public class AiPlayerElement {
     }
 
     private WebElement getAllianceSelect() {
-        return webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-member-alliance select"));
+        return webElement.findElement(By.cssSelector(":scope .skyxplore-lobby-player-alliance select"));
     }
 
     public String getAlliance() {

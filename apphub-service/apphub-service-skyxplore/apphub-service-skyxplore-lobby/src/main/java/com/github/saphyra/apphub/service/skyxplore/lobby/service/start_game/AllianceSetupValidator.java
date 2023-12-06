@@ -22,7 +22,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 class AllianceSetupValidator {
     void check(SkyXploreGameCreationRequest request) {
-        if (request.getAis().isEmpty() && request.getMembers().size() == 1) {
+        if (request.getAis().isEmpty() && request.getPlayers().size() == 1) {
             log.info("There is only one player. AI will be generated automatically.");
             return;
         }
@@ -34,7 +34,7 @@ class AllianceSetupValidator {
             .map(AiPlayer::getAllianceId)
             .forEach(alliances::add);
 
-        alliances.addAll(request.getMembers().values());
+        alliances.addAll(request.getPlayers().values());
 
         Set<UUID> processed = new HashSet<>();
         for (UUID allianceId : alliances) {

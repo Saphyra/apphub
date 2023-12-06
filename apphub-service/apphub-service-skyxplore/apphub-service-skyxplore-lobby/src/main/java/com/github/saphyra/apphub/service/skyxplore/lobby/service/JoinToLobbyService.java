@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -9,8 +9,8 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSoc
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class JoinToLobbyService {
     private final LobbyDao lobbyDao;
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
-    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private final LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter;
 
     public void acceptInvitation(UUID userId, UUID invitorId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(invitorId);
@@ -39,23 +39,23 @@ public class JoinToLobbyService {
 
         invitations.remove(invitation);
 
-        LobbyMember lobbyMember = LobbyMember.builder()
+        LobbyPlayer lobbyPlayer = LobbyPlayer.builder()
             .userId(userId)
-            .status(LobbyMemberStatus.DISCONNECTED)
+            .status(LobbyPlayerStatus.DISCONNECTED)
             .build();
-        lobby.getMembers()
-            .put(userId, lobbyMember);
+        lobby.getPlayers()
+            .put(userId, lobbyPlayer);
     }
 
     public void userJoinedToLobby(UUID userId) {
         Lobby lobby = lobbyDao.findByUserIdValidated(userId);
-        LobbyMember lobbyMember = lobby.getMembers()
+        LobbyPlayer lobbyPlayer = lobby.getPlayers()
             .get(userId);
-        lobbyMember.setConnected(true);
-        lobbyMember.setStatus(LobbyMemberStatus.NOT_READY);
+        lobbyPlayer.setConnected(true);
+        lobbyPlayer.setStatus(LobbyPlayerStatus.NOT_READY);
 
-        LobbyMemberResponse response = lobbyMemberToResponseConverter.convertMember(lobbyMember);
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, response);
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, response);
+        LobbyPlayerResponse response = lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, response);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, response);
     }
 }

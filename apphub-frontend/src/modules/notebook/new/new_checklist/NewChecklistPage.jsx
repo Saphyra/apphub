@@ -12,13 +12,10 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import "./new_checklist.css";
-import Stream from "../../../../common/js/collection/Stream";
-import Utils from "../../../../common/js/Utils";
-import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Endpoints from "../../../../common/js/dao/dao";
-import ChecklistItem from "../../common/checklist_item/ChecklistItem";
 import ChecklistItemData from "../../common/checklist_item/ChecklistItemData";
-import MoveDirection from "../../common/MoveDirection";
+import { addItem } from "./service/NewChecklistItemOperations";
+import create from "./service/NewChecklistSaver";
+import getItems from "./service/NewChecklistItemAssembler";
 
 const NewChecklistPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -31,109 +28,6 @@ const NewChecklistPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
-    const addItem = () => {
-        const maxOrder = new Stream(items)
-            .map(item => item.index)
-            .max()
-            .orElse(0);
-
-        const newRow = new ChecklistItemData(maxOrder + 1);
-        const copy = new Stream(items)
-            .add(newRow)
-            .toList();
-
-        setItems(copy);
-    }
-
-    const updateItem = () => {
-        const copy = new Stream(items)
-            .toList();
-        setItems(copy);
-    }
-
-    const removeItem = (item) => {
-        const copy = new Stream(items)
-            .remove(i => i === item)
-            .toList();
-        setItems(copy);
-    }
-
-    const moveItem = (item, moveDirection) => {
-        const orderedItems = new Stream(items)
-            .sorted((a, b) => a.index - b.index)
-            .toList();
-
-        const itemIndex = orderedItems.indexOf(item);
-
-        let newIndex;
-        switch (moveDirection) {
-            case MoveDirection.UP:
-                newIndex = itemIndex - 1;
-                break;
-            case MoveDirection.DOWN:
-                newIndex = itemIndex + 1;
-                break;
-            default:
-                Utils.throwException("IllegalArgument", "Unhandled MoveDirection: " + moveDirection);
-        }
-
-        const otherItem = orderedItems[newIndex];
-
-        if (!otherItem) {
-            //Item is at the top/bottom of the list and cannot be moved further.
-            return;
-        }
-
-        const originalOrder = item.index;
-        const newOrder = otherItem.index;
-
-        item.index = newOrder;
-        otherItem.index = originalOrder;
-
-        updateItem();
-    }
-
-    const create = async () => {
-        const result = validateListItemTitle(listItemTitle);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
-            return;
-        }
-
-        const payload = {
-            parent: parentId,
-            title: listItemTitle,
-            items: items
-        }
-
-        await Endpoints.NOTEBOOK_CREATE_CHECKLIST.createRequest(payload)
-            .send();
-
-        window.location.href = Constants.NOTEBOOK_PAGE;
-    }
-
-    const getItems = () => {
-        if (items.length === 0) {
-            return (
-                <div id="notebook-new-checklist-no-items">{localizationHandler.get("no-items")}</div>
-            );
-        }
-
-        return new Stream(items)
-            .sorted((a, b) => a.index - b.index)
-            .map(item =>
-                <ChecklistItem
-                    key={item.index}
-                    localizationHandler={localizationHandler}
-                    item={item}
-                    updateItem={updateItem}
-                    removeItem={removeItem}
-                    moveItem={moveItem}
-                />
-            )
-            .toList();
-    }
 
     return (
         <div id="notebook-new-checklist" className="main-page">
@@ -153,7 +47,7 @@ const NewChecklistPage = () => {
                 />
 
                 <div id="notebook-new-checklist-content-wrapper">
-                    {getItems()}
+                    {getItems(items, localizationHandler, setItems)}
                 </div>
             </main>
 
@@ -162,7 +56,7 @@ const NewChecklistPage = () => {
                     <Button
                         id="notebook-new-checklist-new-item-button"
                         label={localizationHandler.get("new-item")}
-                        onclick={() => addItem()}
+                        onclick={() => addItem(items, setItems)}
                     />
                 }
 
@@ -170,7 +64,7 @@ const NewChecklistPage = () => {
                     <Button
                         id="notebook-new-checklist-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create()}
+                        onclick={() => create(listItemTitle, parentId, items)}
                     />
                 }
 

@@ -148,7 +148,7 @@ public class ValidationUtilTest {
 
     @Test
     public void between_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(null, 5, 10, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(null, 5d, 10, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }
@@ -214,7 +214,7 @@ public class ValidationUtilTest {
     void exactLengthTest_differentLength() {
         Throwable ex = catchThrowable(() -> ValidationUtil.length("d", 3, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 long");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 character(s) long");
     }
 
     @Test
@@ -224,21 +224,21 @@ public class ValidationUtilTest {
 
     @Test
     void atLeastInclusive_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(null, 2d, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(null, 2d, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }
 
     @Test
     void atLeastInclusive_tooLow() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastInclusive(2d, 2d, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(2d, 2d, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
     }
 
     @Test
     void atLeastInclusive() {
-        ValidationUtil.atLeastInclusive(3d, 2d, FIELD);
+        ValidationUtil.atLeastExclusive(3d, 2d, FIELD);
     }
 
     @Test

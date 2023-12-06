@@ -17,6 +17,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
+    static final String COLUMN_DATE = "date";
+    static final String COLUMN_TIME = "time";
+    static final String COLUMN_NOTE = "note";
+    static final String COLUMN_TYPE = "type";
+
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
     private final AccessTokenProvider accessTokenProvider;
@@ -24,15 +29,16 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     @Override
     protected OccurrenceEntity processDomainConversion(Occurrence domain) {
         String userId = accessTokenProvider.getUserIdAsString();
+        String occurrenceId = uuidConverter.convertDomain(domain.getOccurrenceId());
         return OccurrenceEntity.builder()
-            .occurrenceId(uuidConverter.convertDomain(domain.getOccurrenceId()))
+            .occurrenceId(occurrenceId)
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))
-            .date(stringEncryptor.encryptEntity(domain.getDate().toString(), userId))
-            .time(stringEncryptor.encryptEntity(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId))
+            .date(stringEncryptor.encrypt(domain.getDate().toString(), userId, occurrenceId, COLUMN_DATE))
+            .time(stringEncryptor.encrypt(Optional.ofNullable(domain.getTime()).map(Objects::toString).orElse(null), userId, occurrenceId, COLUMN_TIME))
             .status(domain.getStatus())
-            .note(stringEncryptor.encryptEntity(domain.getNote(), userId))
-            .type(stringEncryptor.encryptEntity(domain.getType().name(), userId))
+            .note(stringEncryptor.encrypt(domain.getNote(), userId, occurrenceId, COLUMN_NOTE))
+            .type(stringEncryptor.encrypt(domain.getType().name(), userId, occurrenceId, COLUMN_TYPE))
             .build();
     }
 
@@ -43,11 +49,11 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
-            .date(LocalDate.parse(stringEncryptor.decryptEntity(entity.getDate(), userId)))
-            .time(Optional.ofNullable(stringEncryptor.decryptEntity(entity.getTime(), userId)).map(LocalTime::parse).orElse(null))
+            .date(LocalDate.parse(stringEncryptor.decrypt(entity.getDate(), userId, entity.getOccurrenceId(), COLUMN_DATE)))
+            .time(Optional.ofNullable(stringEncryptor.decrypt(entity.getTime(), userId, entity.getOccurrenceId(), COLUMN_TIME)).map(LocalTime::parse).orElse(null))
             .status(entity.getStatus())
-            .note(stringEncryptor.decryptEntity(entity.getNote(), userId))
-            .type(Optional.ofNullable(entity.getType()).map(type -> stringEncryptor.decryptEntity(type, userId)).map(OccurrenceType::valueOf).orElse(OccurrenceType.DEFAULT))
+            .note(stringEncryptor.decrypt(entity.getNote(), userId, entity.getOccurrenceId(), COLUMN_NOTE))
+            .type(Optional.ofNullable(stringEncryptor.decrypt(entity.getType(), userId, entity.getOccurrenceId(), COLUMN_TYPE)).map(OccurrenceType::valueOf).orElse(OccurrenceType.DEFAULT))
             .build();
     }
 }

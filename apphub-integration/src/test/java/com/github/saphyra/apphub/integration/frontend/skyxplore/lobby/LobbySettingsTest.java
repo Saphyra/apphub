@@ -48,30 +48,30 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername())
+        SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver1, userData1.getUsername()).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername()).getAlliance().equals("1"))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findMemberValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
             .assertTrue();
 
-        assertThat(SkyXploreLobbyActions.findMemberValidated(driver2, userData1.getUsername()).allianceChangeEnabled()).isFalse();
+        assertThat(SkyXploreLobbyActions.findPlayerValidated(driver2, userData1.getUsername()).allianceChangeEnabled()).isFalse();
 
-        SkyXploreLobbyActions.getMember(driver1, userData2.getUsername())
+        SkyXploreLobbyActions.getPlayer(driver1, userData2.getUsername())
             .changeAllianceTo(Constants.NO_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getMember(driver1, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
+            .until(() -> SkyXploreLobbyActions.getPlayer(driver1, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getMember(driver2, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
+            .until(() -> SkyXploreLobbyActions.getPlayer(driver2, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
             .assertTrue();
     }
 
@@ -85,7 +85,7 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
         maxPlayersPerSolarSystemsSettings(driver1, driver2);
         additionalSolarSystemsSettings(driver1, driver2);
@@ -234,7 +234,7 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
         aiValidation(driver1);
         createAndRemoveAi(driver1, driver2);
@@ -337,7 +337,7 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyActions.createAi(driver, AI_NAME);
 
-        SkyXploreLobbyActions.findMemberValidated(driver, userData.getUsername())
+        SkyXploreLobbyActions.findPlayerValidated(driver, userData.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
         SkyXploreLobbyActions.findAiByName(driver, AI_NAME)

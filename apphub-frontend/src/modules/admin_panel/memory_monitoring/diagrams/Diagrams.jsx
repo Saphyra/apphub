@@ -1,15 +1,20 @@
 import React from "react";
-import services from "./services.json";
 import Stream from "../../../../common/js/collection/Stream";
 import Diagram from "./Diagram";
+import MapStream from "../../../../common/js/collection/MapStream";
+import Utils from "../../../../common/js/Utils";
 
-const Diagrams = ({ reports, duration, localizationHandler }) => {
+const Diagrams = ({ services, reports, duration, localizationHandler }) => {
     const getDiagrams = () => {
         const grouped = new Stream(reports)
             .groupBy((item) => item.service)
             .toObject();
 
-        return new Stream(services)
+        const c1 = new MapStream(services).toObject();
+
+        return new MapStream(services)
+            .filter((service, shouldDisplay) => shouldDisplay)
+            .toListStream((service, shouldDisplay) => service)
             .sorted((a, b) => a.localeCompare(b))
             .map(service =>
                 <Diagram
@@ -21,7 +26,6 @@ const Diagrams = ({ reports, duration, localizationHandler }) => {
                 />
             )
             .toList();
-
     }
 
     return (

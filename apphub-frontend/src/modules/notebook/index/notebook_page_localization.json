@@ -99,10 +99,6 @@
         "en": "Order items",
         "hu": "Sorba rendezés"
     },
-    "add-item": {
-        "en": "New item",
-        "hu": "Új elem"
-    },
     "table-head-title": {
         "en": "Name of the column",
         "hu": "Oszlop neve"
@@ -202,5 +198,13 @@
     "close": {
         "en": "Close",
         "hu": "Bezárás"
+    },
+    "edit-checklist-item-title": {
+        "en": "Edit checklist item content",
+        "hu": "Lista elem szerkesztése"
+    },
+    "add-checklist-item-title": {
+        "en": "Add checklist item",
+        "hu": "Új lista elem"
     }
 }

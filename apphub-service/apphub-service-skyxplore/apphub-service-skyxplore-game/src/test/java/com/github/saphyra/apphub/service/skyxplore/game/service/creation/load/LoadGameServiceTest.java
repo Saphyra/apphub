@@ -79,7 +79,7 @@ class LoadGameServiceTest {
         given(gameDataProxy.getGameModel(GAME_ID)).willReturn(gameModel);
         given(gameModel.getHost()).willReturn(HOST);
         given(request.getHost()).willReturn(HOST);
-        given(request.getMembers()).willReturn(List.of(MEMBER_ID));
+        given(request.getPlayers()).willReturn(List.of(MEMBER_ID));
 
         underTest.loadGame(request);
 

@@ -29,10 +29,10 @@ public class GameFactory {
     private final EventLoopFactory eventLoopFactory;
 
     public Game create(SkyXploreGameCreationRequest request, UUID gameId) {
-        Map<UUID, Player> players = playerFactory.create(request.getMembers());
+        Map<UUID, Player> players = playerFactory.create(request.getPlayers());
         aiFactory.generateAis(request)
             .forEach(player -> players.put(player.getUserId(), player));
-        Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getMembers(), players);
+        Map<UUID, Alliance> alliances = allianceFactory.create(request.getAlliances(), request.getPlayers(), players);
 
         Game result = Game.builder()
             .gameId(gameId)
@@ -40,7 +40,7 @@ public class GameFactory {
             .players(players)
             .alliances(alliances)
             .data(gameDataFactory.create(gameId, players.values(), request.getSettings()))
-            .chat(chatFactory.create(request.getMembers()))
+            .chat(chatFactory.create(request.getPlayers()))
             .gameName(request.getGameName())
             .lastPlayed(dateTimeUtil.getCurrentDateTime())
             .eventLoop(eventLoopFactory.create())

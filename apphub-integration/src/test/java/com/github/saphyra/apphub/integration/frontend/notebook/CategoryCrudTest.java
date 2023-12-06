@@ -41,7 +41,7 @@ public class CategoryCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CATEGORY);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CATEGORY);
 
         //Create - Blank title
         NewCategoryActions.fillTitle(driver, " ");

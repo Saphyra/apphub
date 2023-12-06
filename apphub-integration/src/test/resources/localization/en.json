@@ -19,7 +19,7 @@
   "INVALID_STATUS": "Invalid status.",
   "INVALID_TYPE": "Invalid type.",
   "LIST_ITEM_NOT_FOUND": "Item not found.",
-  "LOBBY_MEMBER_NOT_READY": "Please wait until everyone is ready.",
+  "LOBBY_PLAYER_NOT_READY": "Please wait until everyone is ready.",
   "LOBBY_NOT_FOUND": "Lobby not found.",
   "MISSING_ROLE": "You are not allowed to perform this operation.",
   "ROLE_ALREADY_EXISTS": "The user already has the selected role.",

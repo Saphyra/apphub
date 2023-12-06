@@ -34,7 +34,7 @@ class AiService {
         lobby.getAis()
             .removeIf(aiPlayer -> aiPlayer.getUserId().equals(aiUserId));
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED, aiUserId);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED, aiUserId);
     }
 
     public void createOrModifyAi(UUID userId, AiPlayer aiPlayer) {
@@ -69,6 +69,6 @@ class AiService {
         lobby.getAis()
             .add(aiPlayer);
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 }

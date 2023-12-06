@@ -1,0 +1,30 @@
+===FEATURES===
+Admin Panel
+    Memory Monitoring
+        Hide / Show services
+Notebook
+    Edit single checklist item
+    Add item to checklist without editing
+    Add item to the start of a checklist
+    Add item to the start of tables
+    Add column to the start of tables
+    Custom table
+
+===BUGFIXES===
+Admin Panel
+    Memory Monitoring
+        Reconnect WebSocket
+SkyXplore
+    Display "No active friends" message when no friend can be invited
+
+===PLATFORM CHANGES===
+Do not display error message when server is not available
+Store the encrypted data readable on local env
+Store the entityId and column to encrypted text
+
+===TECHNICAL DEBTS===
+Notebook
+    Remove leftovers of Table / Checklist restructure
+    Extract service logic from large jsx files
+SkyXplore
+    Rename LobbyMember to LobbyPlayer

@@ -3,18 +3,24 @@ package com.github.saphyra.apphub.lib.encryption.impl;
 import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
-public class BooleanEncryptor extends AbstractEncryptor<Boolean> {
+public class BooleanEncryptor implements AbstractEncryptor<Boolean> {
     private final StringEncryptor stringEncryptor;
 
-
     @Override
-    protected String encrypt(Boolean entity, String key) {
-        return stringEncryptor.encrypt(entity.toString(), key);
+    public String encrypt(Boolean entity, String key, String entityId, String column) {
+        String stringified = Optional.ofNullable(entity)
+            .map(Object::toString)
+            .orElse(null);
+        return stringEncryptor.encrypt(stringified, key, entityId, column);
     }
 
     @Override
-    protected Boolean decrypt(String entity, String key) {
-        return Boolean.parseBoolean(stringEncryptor.decrypt(entity, key));
+    public Boolean decrypt(String entity, String key, String entityId, String column) {
+        return Optional.ofNullable(stringEncryptor.decrypt(entity, key, entityId, column))
+            .map(Boolean::parseBoolean)
+            .orElse(null);
     }
 }

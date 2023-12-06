@@ -18,9 +18,9 @@ import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableColumn;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 

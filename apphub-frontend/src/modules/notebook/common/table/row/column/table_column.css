@@ -1,0 +1,70 @@
+.table-column-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.table-column-content {
+    flex-grow: 2;
+}
+
+.notebook-table-change-column-type-button,
+.notebook-table-overwrite-file-button,
+.notebook-table-download-file-button {
+    width: 26px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-origin: content-box;
+    padding: 2px;
+}
+
+.notebook-table-change-column-type-button {
+    background-image: url("../../../../../../common/style/img/edit.png");
+}
+
+.notebook-table-overwrite-file-button {
+    background-image: url("../../../../../../common/style/img/clone.png");
+}
+
+.notebook-table-download-file-button {
+    background-image: url("../../../../../../common/style/img/download.png");
+}
+
+.notebook-table-column-type-empty {
+    text-align: center;
+}
+
+.notebook-table-column-type-checkbox input {
+    margin: 6px;
+    transform: scale(2);
+}
+
+.editable.notebook-table-column-type-checkbox input {
+    margin-top: 9px;
+}
+
+.notebook-table-column-type-color,
+.notebook-table-column-type-checkbox,
+.notebook-table-column-type-date,
+.notebook-table-column-type-time,
+.notebook-table-column-type-date_time,
+.notebook-table-column-type-month,
+.notebook-table-column-type-image,
+.notebook-table-column-type-number,
+.notebook-table-column-type-range {
+    text-align: center;
+}
+
+.notebook-table-column-type-file input {
+    width: 350px;
+}
+
+.notebook-table-image-preview {
+    max-width: 400px;
+    max-height: 300px;
+    margin: 5px;
+    border: 2px ridge white;
+    display: block;
+}

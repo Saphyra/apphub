@@ -94,7 +94,7 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void openSavedGames(WebDriver driver) {
-        if (!WebElementUtils.getIfPresent(() -> MainMenuPage.savedGamesWrapper(driver)).isPresent()) {
+        if (WebElementUtils.getIfPresent(() -> MainMenuPage.savedGamesWrapper(driver)).isEmpty()) {
             MainMenuPage.loadGameButton(driver).click();
         }
     }

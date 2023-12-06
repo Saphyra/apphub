@@ -1,12 +1,16 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class NewTableActions {
@@ -41,5 +45,24 @@ public class NewTableActions {
             .stream()
             .map(TableHead::new)
             .collect(Collectors.toList());
+    }
+
+    public static void setColumnType(WebDriver driver, int rowIndex, int columnIndex, ColumnType columnType) {
+        Supplier<TableColumn> columnSupplier = () -> getRows(driver)
+            .get(rowIndex)
+            .getColumns()
+            .get(columnIndex);
+
+        columnSupplier.get()
+            .openColumnTypeSelector();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> columnSupplier.get().isColumnTypeSelectorOpened());
+
+        columnSupplier.get()
+            .setColumnType(columnType);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !columnSupplier.get().isColumnTypeSelectorOpened());
     }
 }

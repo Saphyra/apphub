@@ -10,12 +10,10 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
-import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Endpoints from "../../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import InputField from "../../../../common/component/input/InputField";
 import "./new_link.css";
-import validateUrl from "../../common/validator/UrlValidator";
+import create from "./NewLinkSaver";
 
 const NewLinkPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -29,30 +27,6 @@ const NewLinkPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
-    const create = async () => {
-        const listItemTitleResult = validateListItemTitle(listItemTitle);
-        if (!listItemTitleResult.valid) {
-            NotificationService.showError(listItemTitleResult.message);
-            return;
-        }
-
-        const urlResult = validateUrl(url);
-        if (!urlResult.valid) {
-            NotificationService.showError(urlResult.message);
-            return;
-        }
-
-        const payload = {
-            parent: parentId,
-            title: listItemTitle,
-            url: url
-        }
-        await Endpoints.NOTEBOOK_CREATE_LINK.createRequest(payload)
-            .send();
-
-        window.location.href = Constants.NOTEBOOK_PAGE;
-    }
 
     return (
         <div id="notebook-new-link" className="main-page">
@@ -103,7 +77,7 @@ const NewLinkPage = () => {
                         key="create-button"
                         id="notebook-new-link-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create()}
+                        onclick={() => create(listItemTitle, url, parentId)}
                     />
                 ]}
             />

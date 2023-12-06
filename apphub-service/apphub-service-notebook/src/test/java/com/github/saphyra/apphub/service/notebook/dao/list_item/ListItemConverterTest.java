@@ -14,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemConverter.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemConverter.COLUMN_PINNED;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemConverter.COLUMN_TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -66,7 +69,7 @@ public class ListItemConverterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(DECRYPTED_TITLE);
+        given(stringEncryptor.decrypt(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(DECRYPTED_TITLE);
 
         ListItem result = underTest.convertEntity(entity);
 
@@ -97,9 +100,9 @@ public class ListItemConverterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(DECRYPTED_TITLE);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_PINNED, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
-        given(booleanEncryptor.decryptEntity(ENCRYPTED_ARCHIVED, ACCESS_TOKEN_USER_ID_STRING)).willReturn(true);
+        given(stringEncryptor.decrypt(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(DECRYPTED_TITLE);
+        given(booleanEncryptor.decrypt(ENCRYPTED_PINNED, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_PINNED)).willReturn(true);
+        given(booleanEncryptor.decrypt(ENCRYPTED_ARCHIVED, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_ARCHIVED)).willReturn(true);
 
         ListItem result = underTest.convertEntity(entity);
 
@@ -130,9 +133,9 @@ public class ListItemConverterTest {
         given(accessTokenProvider.get()).willReturn(accessTokenHeader);
         given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(DECRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_TITLE);
-        given(booleanEncryptor.encryptEntity(true, ACCESS_TOKEN_USER_ID_STRING)).willReturn(ENCRYPTED_PINNED)
-            .willReturn(ENCRYPTED_ARCHIVED);
+        given(stringEncryptor.encrypt(DECRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(ENCRYPTED_TITLE);
+        given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_PINNED)).willReturn(ENCRYPTED_PINNED);
+        given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_ARCHIVED)).willReturn(ENCRYPTED_ARCHIVED);
 
         ListItemEntity result = underTest.convertDomain(domain);
 

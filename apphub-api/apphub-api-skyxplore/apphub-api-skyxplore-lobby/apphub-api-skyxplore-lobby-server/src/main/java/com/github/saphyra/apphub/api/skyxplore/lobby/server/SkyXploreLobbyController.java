@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.skyxplore.lobby.server;
 
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -52,8 +52,8 @@ public interface SkyXploreLobbyController {
     @PostMapping(Endpoints.SKYXPLORE_LOBBY_ACCEPT_INVITATION)
     void acceptInvitation(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS)
-    List<LobbyMemberResponse> getMembersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @GetMapping(Endpoints.SKYXPLORE_LOBBY_GET_PLAYERS)
+    List<LobbyPlayerResponse> getPlayersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Starting the game creation / loading depending on the lobby was created as brand-new, or from a saved game.

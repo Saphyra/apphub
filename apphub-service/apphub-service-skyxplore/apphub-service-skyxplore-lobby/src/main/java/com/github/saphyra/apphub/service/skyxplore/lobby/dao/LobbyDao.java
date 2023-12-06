@@ -44,7 +44,7 @@ public class LobbyDao {
     public Optional<Lobby> findByUserId(UUID userId) {
         return repository.values()
             .stream()
-            .filter(lobby -> lobby.getMembers().containsKey(userId))
+            .filter(lobby -> lobby.getPlayers().containsKey(userId))
             .findFirst();
     }
 

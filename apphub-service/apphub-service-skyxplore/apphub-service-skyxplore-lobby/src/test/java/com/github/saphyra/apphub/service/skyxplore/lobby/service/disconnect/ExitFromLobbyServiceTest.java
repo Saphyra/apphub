@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.disconnect;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,17 +39,17 @@ class ExitFromLobbyServiceTest {
     private Lobby lobby;
 
     @Mock
-    private LobbyMember player;
+    private LobbyPlayer player;
 
     @Test
     void exit_notHost() {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(lobby.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(lobby.getHost()).willReturn(UUID.randomUUID());
 
         underTest.exit(USER_ID);
 
-        assertThat(lobby.getMembers()).isEmpty();
+        assertThat(lobby.getPlayers()).isEmpty();
         then(invitationRejectionService).should().rejectInvitations(USER_ID, lobby);
         then(exitMessageSender).should().sendExitMessage(USER_ID, lobby, false);
         then(lobbyDao).should(times(0)).delete(any());
@@ -58,12 +58,12 @@ class ExitFromLobbyServiceTest {
     @Test
     void exit_host() {
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
-        given(lobby.getMembers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
+        given(lobby.getPlayers()).willReturn(CollectionUtils.singleValueMap(USER_ID, player));
         given(lobby.getHost()).willReturn(USER_ID);
 
         underTest.exit(USER_ID);
 
-        assertThat(lobby.getMembers()).isEmpty();
+        assertThat(lobby.getPlayers()).isEmpty();
         then(invitationRejectionService).should().rejectInvitations(USER_ID, lobby);
         then(exitMessageSender).should().sendExitMessage(USER_ID, lobby, false);
         then(lobbyDao).should().delete(lobby);

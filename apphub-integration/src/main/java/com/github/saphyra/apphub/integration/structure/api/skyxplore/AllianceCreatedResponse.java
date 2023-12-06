@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class AllianceCreatedResponse {
     private AllianceResponse alliance;
-    private LobbyMemberResponse member;
+    private LobbyPlayerResponse player;
     private AiPlayer ai;
 }

@@ -20,8 +20,11 @@ public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
         Map<String, Long> durations = new HashMap<>();
+        List<IMethodInstance> methodsToRun = methods.stream()
+            .filter(iMethodInstance -> isEnabled(iMethodInstance.getMethod()))
+            .toList();
         if (TestConfiguration.INTEGRATION_SERVER_ENABLED) {
-            durations = methods.stream()
+            durations = methodsToRun.stream()
                 .map(iMethodInstance -> iMethodInstance.getMethod().getConstructorOrMethod().getMethod())
                 .map(TestUtils::getMethodIdentifier)
                 .distinct()
@@ -31,8 +34,7 @@ public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
         Map<String, Long> d = durations;
         log.info("");
         log.info("Test case order:");
-        List<IMethodInstance> result = methods.stream()
-            .filter(iMethodInstance -> isEnabled(iMethodInstance.getMethod()))
+        List<IMethodInstance> result = methodsToRun.stream()
             .sorted((o1, o2) -> compare(o1, o2, d))
             .peek(iMethodInstance -> {
                 Method method = iMethodInstance.getMethod().getConstructorOrMethod().getMethod();

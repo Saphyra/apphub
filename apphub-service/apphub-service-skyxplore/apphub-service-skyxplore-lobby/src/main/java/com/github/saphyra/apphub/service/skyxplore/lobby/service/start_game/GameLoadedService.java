@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,11 @@ public class GameLoadedService {
     public void gameLoaded(UUID gameId) {
         Lobby lobby = lobbyDao.findByGameId(gameId)
             .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.NOT_FOUND, ErrorCode.LOBBY_NOT_FOUND, "Lobby not found for gameId " + gameId));
-        List<UUID> recipients = lobby.getMembers()
+        List<UUID> recipients = lobby.getPlayers()
             .values()
             .stream()
-            .filter(LobbyMember::isConnected)
-            .map(LobbyMember::getUserId)
+            .filter(LobbyPlayer::isConnected)
+            .map(LobbyPlayer::getUserId)
             .toList();
 
         lobbyWebSocketHandler.sendEvent(recipients, WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);

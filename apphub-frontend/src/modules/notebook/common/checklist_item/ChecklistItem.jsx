@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import InputField from "../../../../common/component/input/InputField";
 import Button from "../../../../common/component/input/Button";
 import "./checklist_item.css";
 import UpdateType from "./UpdateType";
 import MoveDirection from "../MoveDirection";
+import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
 const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true }) => {
+    const [contentEditingEnabled, setContentEditingEnabled] = useState(false);
+    const [modifiedContent, setModifiedContent] = useState(item.content);
+
     const toggleChecked = () => {
         if (window.getSelection().toString().length === 0) {
             item.checked = !item.checked;
@@ -68,19 +72,29 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
             </div>
 
             <div className="notebook-checklist-item-buttons">
-                <Button
-                    className={"notebook-checklist-item-move-up-button"}
-                    label="^"
-                    onclick={moveUp}
-                    disabled={!editingEnabled}
-                />
+                {editingEnabled &&
+                    <Button
+                        className={"notebook-checklist-item-move-up-button"}
+                        label="^"
+                        onclick={moveUp}
+                    />
+                }
 
-                <Button
-                    className={"notebook-checklist-item-move-down-button"}
-                    label="v"
-                    onclick={moveDown}
-                    disabled={!editingEnabled}
-                />
+                {editingEnabled &&
+                    <Button
+                        className={"notebook-checklist-item-move-down-button"}
+                        label="v"
+                        onclick={moveDown}
+                    />
+                }
+
+                {!editingEnabled &&
+
+                    <Button
+                        className="notebook-checklist-item-edit-button"
+                        onclick={() => setContentEditingEnabled(true)}
+                    />
+                }
 
                 <Button
                     className={"notebook-checklist-item-remove-button"}
@@ -88,6 +102,37 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
                     onclick={remove}
                 />
             </div>
+
+            {contentEditingEnabled &&
+                <ConfirmationDialog
+                    id="notebook-checklist-item-content-edit-dialog"
+                    title={localizationHandler.get("edit-checklist-item-title")}
+                    content={<InputField
+                        id="notebook-checklist-item-edit-input"
+                        type="text"
+                        placeholder={localizationHandler.get("content")}
+                        value={modifiedContent}
+                        onchangeCallback={setModifiedContent}
+                    />}
+                    choices={[
+                        <Button
+                            key="save"
+                            id="notebook-checklist-item-content-edit-save-button"
+                            label={localizationHandler.get("save")}
+                            onclick={() => {
+                                updateContent(modifiedContent);
+                                setContentEditingEnabled(false);
+                            }}
+                        />,
+                        <Button
+                            key="cancel"
+                            id="notebook-checklist-item-content-edit-cancel-button"
+                            label={localizationHandler.get("cancel")}
+                            onclick={() => setContentEditingEnabled(false)}
+                        />
+                    ]}
+                />
+            }
         </div>
     );
 }

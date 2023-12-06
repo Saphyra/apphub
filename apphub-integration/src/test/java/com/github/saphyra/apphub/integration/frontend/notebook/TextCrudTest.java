@@ -40,7 +40,7 @@ public class TextCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.TEXT);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TEXT);
 
         create_emptyTitle(driver);
         create(driver);

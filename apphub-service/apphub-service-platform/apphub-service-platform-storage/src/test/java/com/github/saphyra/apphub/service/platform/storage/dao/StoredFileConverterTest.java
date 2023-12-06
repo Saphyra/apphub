@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.platform.storage.dao.StoredFileConverter.COLUMN_FILE_NAME;
+import static com.github.saphyra.apphub.service.platform.storage.dao.StoredFileConverter.COLUMN_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -60,8 +62,8 @@ public class StoredFileConverterTest {
 
         given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(stringEncryptor.encryptEntity(FILE_NAME, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_FILE_NAME);
-        given(longEncryptor.encryptEntity(SIZE, ACCESS_TOKEN_USER_ID)).willReturn(ENCRYPTED_SIZE);
+        given(stringEncryptor.encrypt(FILE_NAME, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_FILE_NAME)).willReturn(ENCRYPTED_FILE_NAME);
+        given(longEncryptor.encrypt(SIZE, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_SIZE)).willReturn(ENCRYPTED_SIZE);
 
         StoredFileEntity result = underTest.convertDomain(storedFile);
 
@@ -88,8 +90,8 @@ public class StoredFileConverterTest {
 
         given(uuidConverter.convertEntity(STORED_FILE_ID_STRING)).willReturn(STORED_FILE_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_FILE_NAME, ACCESS_TOKEN_USER_ID)).willReturn(FILE_NAME);
-        given(longEncryptor.decryptEntity(ENCRYPTED_SIZE, ACCESS_TOKEN_USER_ID)).willReturn(SIZE);
+        given(stringEncryptor.decrypt(ENCRYPTED_FILE_NAME, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_FILE_NAME)).willReturn(FILE_NAME);
+        given(longEncryptor.decrypt(ENCRYPTED_SIZE, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_SIZE)).willReturn(SIZE);
 
         StoredFile result = underTest.convertEntity(storedFile);
 

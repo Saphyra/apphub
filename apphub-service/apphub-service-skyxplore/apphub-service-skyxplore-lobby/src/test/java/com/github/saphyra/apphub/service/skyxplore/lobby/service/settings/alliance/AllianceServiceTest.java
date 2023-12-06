@@ -3,15 +3,15 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings.allia
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class AllianceServiceTest {
     private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
-    private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter;
 
     @Mock
     private AllianceToResponseConverter allianceToResponseConverter;
@@ -78,10 +78,10 @@ class AllianceServiceTest {
     private AiPlayer aiPlayer;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @Mock
-    private LobbyMemberResponse lobbyMemberResponse;
+    private LobbyPlayerResponse lobbyPlayerResponse;
 
     @Test
     void getAlliances() {
@@ -119,13 +119,13 @@ class AllianceServiceTest {
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getAis()).willReturn(List.of(aiPlayer));
         given(aiPlayer.getUserId()).willReturn(PLAYER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
 
         underTest.setAllianceOfAi(USER_ID, PLAYER_ID, NO_ALLIANCE);
 
         verify(aiPlayer).setAllianceId(null);
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test
@@ -134,8 +134,8 @@ class AllianceServiceTest {
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getAis()).willReturn(List.of(aiPlayer));
         given(aiPlayer.getUserId()).willReturn(PLAYER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         List<Alliance> alliances = new ArrayList<>();
         given(lobby.getAlliances()).willReturn(alliances);
         given(allianceFactory.create(0)).willReturn(alliance);
@@ -148,10 +148,10 @@ class AllianceServiceTest {
         verify(aiPlayer).setAllianceId(ALLIANCE_ID);
 
         ArgumentCaptor<AllianceCreatedResponse> argumentCaptor = ArgumentCaptor.forClass(AllianceCreatedResponse.class);
-        verify(lobbyWebSocketHandler).sendEvent(eq(members.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
+        verify(lobbyWebSocketHandler).sendEvent(eq(players.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getAlliance()).isEqualTo(allianceResponse);
         assertThat(argumentCaptor.getValue().getAi()).isEqualTo(aiPlayer);
-        assertThat(argumentCaptor.getValue().getMember()).isNull();
+        assertThat(argumentCaptor.getValue().getPlayer()).isNull();
     }
 
     @Test
@@ -160,14 +160,14 @@ class AllianceServiceTest {
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getAis()).willReturn(List.of(aiPlayer));
         given(aiPlayer.getUserId()).willReturn(PLAYER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         given(uuidConverter.convertEntity(ALLIANCE_ID_STRING)).willReturn(ALLIANCE_ID);
 
         underTest.setAllianceOfAi(USER_ID, PLAYER_ID, ALLIANCE_ID_STRING);
 
         verify(aiPlayer).setAllianceId(ALLIANCE_ID);
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED, aiPlayer);
     }
 
     @Test
@@ -184,53 +184,53 @@ class AllianceServiceTest {
     void setAllianceOfPlayer_noAlliance() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getHost()).willReturn(USER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
-        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
+        given(lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer)).willReturn(lobbyPlayerResponse);
 
         underTest.setAllianceOfPlayer(USER_ID, PLAYER_ID, NO_ALLIANCE);
 
-        verify(lobbyMember).setAllianceId(null);
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
+        verify(lobbyPlayer).setAllianceId(null);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyPlayerResponse);
     }
 
     @Test
     void setAllianceOfPlayer_newAlliance() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getHost()).willReturn(USER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         List<Alliance> alliances = new ArrayList<>();
         given(lobby.getAlliances()).willReturn(alliances);
         given(allianceFactory.create(0)).willReturn(alliance);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(allianceToResponseConverter.convertToResponse(alliance)).willReturn(allianceResponse);
-        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+        given(lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer)).willReturn(lobbyPlayerResponse);
 
         underTest.setAllianceOfPlayer(USER_ID, PLAYER_ID, NEW_ALLIANCE);
 
         assertThat(alliances).containsExactly(alliance);
-        verify(lobbyMember).setAllianceId(ALLIANCE_ID);
+        verify(lobbyPlayer).setAllianceId(ALLIANCE_ID);
 
         ArgumentCaptor<AllianceCreatedResponse> argumentCaptor = ArgumentCaptor.forClass(AllianceCreatedResponse.class);
-        verify(lobbyWebSocketHandler).sendEvent(eq(members.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
+        verify(lobbyWebSocketHandler).sendEvent(eq(players.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getAlliance()).isEqualTo(allianceResponse);
         assertThat(argumentCaptor.getValue().getAi()).isNull();
-        assertThat(argumentCaptor.getValue().getMember()).isEqualTo(lobbyMemberResponse);
+        assertThat(argumentCaptor.getValue().getPlayer()).isEqualTo(lobbyPlayerResponse);
     }
 
     @Test
     void setAllianceOfPlayer_existingAlliance() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getHost()).willReturn(USER_ID);
-        Map<UUID, LobbyMember> members = Map.of(PLAYER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = Map.of(PLAYER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         given(uuidConverter.convertEntity(ALLIANCE_ID_STRING)).willReturn(ALLIANCE_ID);
-        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+        given(lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer)).willReturn(lobbyPlayerResponse);
 
         underTest.setAllianceOfPlayer(USER_ID, PLAYER_ID, ALLIANCE_ID_STRING);
 
-        verify(lobbyMember).setAllianceId(ALLIANCE_ID);
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
+        verify(lobbyPlayer).setAllianceId(ALLIANCE_ID);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyPlayerResponse);
     }
 }

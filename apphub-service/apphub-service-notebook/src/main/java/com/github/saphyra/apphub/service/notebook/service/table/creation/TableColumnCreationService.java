@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

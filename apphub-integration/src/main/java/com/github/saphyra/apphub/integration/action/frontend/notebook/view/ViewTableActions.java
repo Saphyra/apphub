@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.integration.action.frontend.notebook.view;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,8 +55,13 @@ public class ViewTableActions {
             .getAttribute("value");
     }
 
-    public static void newRow(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-table-new-row-button"))
+    public static void addRowToStart(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-row-to-start"))
+            .click();
+    }
+
+    public static void addRowToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-row-to-end"))
             .click();
     }
 
@@ -67,8 +72,13 @@ public class ViewTableActions {
             .collect(Collectors.toList());
     }
 
-    public static void newColumn(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-table-new-column-button"))
+    public static void addColumnToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-column-to-end"))
+            .click();
+    }
+
+    public static void addColumnToStart(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-table-add-column-to-start"))
             .click();
     }
 

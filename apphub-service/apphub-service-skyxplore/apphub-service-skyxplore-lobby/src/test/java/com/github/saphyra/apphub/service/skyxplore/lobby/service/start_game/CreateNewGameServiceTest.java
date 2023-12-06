@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +57,7 @@ public class CreateNewGameServiceTest {
     private Lobby lobby;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @Mock
     private Alliance alliance;
@@ -67,17 +67,17 @@ public class CreateNewGameServiceTest {
 
     @Test
     public void startGame() {
-        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(USER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(lobbyMembers);
+        Map<UUID, LobbyPlayer> players = CollectionUtils.singleValueMap(USER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         given(lobby.getHost()).willReturn(USER_ID);
-        given(lobbyMember.getAllianceId()).willReturn(ALLIANCE_ID);
+        given(lobbyPlayer.getAllianceId()).willReturn(ALLIANCE_ID);
         given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(lobby.getSettings()).willReturn(settings);
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
-        given(lobbyMember.getUserId()).willReturn(USER_ID);
+        given(lobbyPlayer.getUserId()).willReturn(USER_ID);
         given(gameCreationClient.createGame(any(SkyXploreGameCreationRequest.class), eq(LOCALE))).willReturn(GAME_ID);
 
         underTest.createNewGame(lobby);
@@ -86,7 +86,7 @@ public class CreateNewGameServiceTest {
         verify(gameCreationClient).createGame(gameCreationRequestArgumentCaptor.capture(), eq(LOCALE));
         SkyXploreGameCreationRequest gameCreationRequest = gameCreationRequestArgumentCaptor.getValue();
         assertThat(gameCreationRequest.getHost()).isEqualTo(USER_ID);
-        assertThat(gameCreationRequest.getMembers()).containsEntry(USER_ID, ALLIANCE_ID);
+        assertThat(gameCreationRequest.getPlayers()).containsEntry(USER_ID, ALLIANCE_ID);
         assertThat(gameCreationRequest.getAlliances()).containsEntry(ALLIANCE_ID, ALLIANCE_NAME);
         assertThat(gameCreationRequest.getGameName()).isEqualTo(GAME_NAME);
         assertThat(gameCreationRequest.getSettings()).isEqualTo(settings);
@@ -96,6 +96,6 @@ public class CreateNewGameServiceTest {
         verify(lobby).setGameCreationStarted(true);
         then(lobby).should().setGameId(GAME_ID);
 
-        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEvent.builder().eventName(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED).build());
     }
 }

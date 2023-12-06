@@ -35,7 +35,7 @@ public class DeconstructionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -94,7 +94,7 @@ public class DeconstructionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithMembers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 

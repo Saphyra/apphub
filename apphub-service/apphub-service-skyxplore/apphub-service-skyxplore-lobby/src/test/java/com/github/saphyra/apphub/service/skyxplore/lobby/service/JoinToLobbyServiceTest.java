@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerToResponseConverter;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class JoinToLobbyServiceTest {
     private SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Mock
-    private LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter;
 
     @InjectMocks
     private JoinToLobbyService underTest;
@@ -54,10 +54,10 @@ class JoinToLobbyServiceTest {
     private Invitation invitation;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @Mock
-    private LobbyMemberResponse lobbyMemberResponse;
+    private LobbyPlayerResponse lobbyPlayerResponse;
 
     @Test
     void acceptInvitation_notInvited() {
@@ -75,30 +75,30 @@ class JoinToLobbyServiceTest {
         given(lobbyDao.findByUserIdValidated(INVITOR_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(invitation));
         given(invitation.getCharacterId()).willReturn(USER_ID);
-        Map<UUID, LobbyMember> members = new HashMap<>();
-        given(lobby.getMembers()).willReturn(members);
+        Map<UUID, LobbyPlayer> players = new HashMap<>();
+        given(lobby.getPlayers()).willReturn(players);
 
         underTest.acceptInvitation(USER_ID, INVITOR_ID);
 
         assertThat(lobby.getInvitations()).isEmpty();
-        assertThat(members).hasSize(1);
-        assertThat(members.get(USER_ID).getUserId()).isEqualTo(USER_ID);
-        assertThat(members.get(USER_ID).getStatus()).isEqualTo(LobbyMemberStatus.DISCONNECTED);
+        assertThat(players).hasSize(1);
+        assertThat(players.get(USER_ID).getUserId()).isEqualTo(USER_ID);
+        assertThat(players.get(USER_ID).getStatus()).isEqualTo(LobbyPlayerStatus.DISCONNECTED);
     }
 
     @Test
     void userJoinedToLobby() {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
-        Map<UUID, LobbyMember> members = Map.of(USER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(members);
-        given(lobbyMemberToResponseConverter.convertMember(lobbyMember)).willReturn(lobbyMemberResponse);
+        Map<UUID, LobbyPlayer> players = Map.of(USER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
+        given(lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer)).willReturn(lobbyPlayerResponse);
 
         underTest.userJoinedToLobby(USER_ID);
 
-        verify(lobbyMember).setConnected(true);
-        verify(lobbyMember).setStatus(LobbyMemberStatus.NOT_READY);
+        verify(lobbyPlayer).setConnected(true);
+        verify(lobbyPlayer).setStatus(LobbyPlayerStatus.NOT_READY);
 
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
-        then(lobbyWebSocketHandler).should().sendEvent(members.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, lobbyMemberResponse);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyPlayerResponse);
+        then(lobbyWebSocketHandler).should().sendEvent(players.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED, lobbyPlayerResponse);
     }
 }

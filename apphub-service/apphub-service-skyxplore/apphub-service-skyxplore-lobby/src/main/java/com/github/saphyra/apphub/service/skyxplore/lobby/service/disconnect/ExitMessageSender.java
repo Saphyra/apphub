@@ -28,6 +28,6 @@ class ExitMessageSender {
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .onlyInvited(onlyInvited)
             .build();
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_EXIT, payload);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_EXIT, payload);
     }
 }

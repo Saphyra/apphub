@@ -15,5 +15,5 @@ import java.util.UUID;
 public class SkyXploreLoadGameRequest {
     private UUID host;
     private UUID gameId;
-    private List<UUID> members;
+    private List<UUID> players;
 }

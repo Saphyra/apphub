@@ -89,8 +89,10 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_LINK = "/api/notebook/link";
     public static final String NOTEBOOK_CREATE_CHECKLIST_ITEM = "/api/notebook/checklist";
     public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
+    public static final String NOTEBOOK_ADD_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item";
     public static final String NOTEBOOK_GET_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
+    public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT = "/api/notebook/checklist/item/{checklistItemId}/content";
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_GET_TABLE = "/api/notebook/table/{listItemId}";
@@ -127,7 +129,7 @@ public class Endpoints {
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
-    public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
+    public static final String SKYXPLORE_LOBBY_GET_PLAYERS = "/api/skyxplore/lobby/players";
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";

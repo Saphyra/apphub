@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     private Lobby lobby;
 
     @Mock
-    private LobbyMember lobbyMember;
+    private LobbyPlayer lobbyPlayer;
 
     @Mock
     private SkyXploreCharacterModel characterModel;
@@ -73,8 +73,8 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     @Test
     public void handle() {
         given(lobbyDao.findByUserIdValidated(FROM)).willReturn(lobby);
-        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(MEMBER_ID, lobbyMember);
-        given(lobby.getMembers()).willReturn(lobbyMembers);
+        Map<UUID, LobbyPlayer> players = CollectionUtils.singleValueMap(MEMBER_ID, lobbyPlayer);
+        given(lobby.getPlayers()).willReturn(players);
         given(characterProxy.getCharacter(FROM)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(PLAYER_NAME);
         given(receivedEvent.getPayload()).willReturn(EVENT_PAYLOAD);
@@ -83,7 +83,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
         underTest.handle(FROM, receivedEvent, lobbyWebSocketHandler);
 
         ArgumentCaptor<ChatSendMessageWebSocketEventHandler.Message> argumentCaptor = ArgumentCaptor.forClass(ChatSendMessageWebSocketEventHandler.Message.class);
-        then(lobbyWebSocketHandler).should().sendEvent(eq(lobbyMembers.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE), argumentCaptor.capture());
+        then(lobbyWebSocketHandler).should().sendEvent(eq(players.keySet()), eq(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE), argumentCaptor.capture());
 
         ChatSendMessageWebSocketEventHandler.Message payload = argumentCaptor.getValue();
         assertThat(payload.getSenderId()).isEqualTo(FROM);

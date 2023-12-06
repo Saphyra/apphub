@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreL
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
@@ -57,9 +57,9 @@ public class AcceptInvitationTest extends BackEndTest {
 
     private static void acceptInvitation(Language language, UUID userId1, UUID accessTokenId2, UUID userId2) {
         SkyXploreLobbyActions.acceptInvitation(language, accessTokenId2, userId1);
-        List<UUID> lobbyMembers = SkyXploreLobbyActions.getLobbyMembers(language, accessTokenId2)
+        List<UUID> lobbyMembers = SkyXploreLobbyActions.getLobbyPlayers(language, accessTokenId2)
             .stream()
-            .map(LobbyMemberResponse::getUserId)
+            .map(LobbyPlayerResponse::getUserId)
             .collect(Collectors.toList());
         assertThat(lobbyMembers).containsExactlyInAnyOrder(userId1, userId2);
     }

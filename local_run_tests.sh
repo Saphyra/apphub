@@ -4,8 +4,6 @@ SERVER_PORT=${3:-8080}
 DATABASE_PORT=${4:-5432}
 INTEGRATION_SERVER_PORT=${5:-8072}
 
-./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
-
 function waitStartup(){
   echo "Pinging $1"
   curl -s -o nul --head -X GET --silent --retry 20 --retry-connrefused --retry-delay 1 localhost:$1/platform/health
@@ -21,6 +19,8 @@ do
     waitStartup $TRIMMED
   fi
 done < ./infra/deployment/service/service_list
+
+./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
 
 cd apphub-integration || exit
 mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DdatabaseName=apphub -DintegrationServerEnabled=true" clean test

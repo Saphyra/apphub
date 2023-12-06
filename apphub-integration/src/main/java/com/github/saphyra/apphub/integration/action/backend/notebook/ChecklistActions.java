@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.AddChecklistItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.EditChecklistRequest;
@@ -76,5 +77,29 @@ public class ChecklistActions {
     public static Response getDeleteChecklistItemResponse(UUID accessTokenId, UUID checklistItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
+    }
+
+    public static void editChecklistItem(UUID accessTokenId, UUID checklistItemId, String content) {
+        Response response = getEditChecklistItemResponse(accessTokenId, checklistItemId, content);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditChecklistItemResponse(UUID accessTokenId, UUID checklistItemId, String content) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(content))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, "checklistItemId", checklistItemId));
+    }
+
+    public static void addChecklistItem(UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
+        Response response = getAddChecklistItemResponse(accessTokenId, listItemId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getAddChecklistItemResponse(UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(request)
+            .put(UrlFactory.create(Endpoints.NOTEBOOK_ADD_CHECKLIST_ITEM, "listItemId", listItemId));
     }
 }

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableColumnDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

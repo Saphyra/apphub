@@ -12,17 +12,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class DimensionConverter extends ConverterBase<DimensionEntity, Dimension> {
+    static final String COLUMN_INDEX = "index";
+
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;
 
     @Override
     protected DimensionEntity processDomainConversion(Dimension domain) {
+        String dimensionId = uuidConverter.convertDomain(domain.getDimensionId());
         return DimensionEntity.builder()
-            .dimensionId(uuidConverter.convertDomain(domain.getDimensionId()))
+            .dimensionId(dimensionId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-            .index(integerEncryptor.encryptEntity(domain.getIndex(), accessTokenProvider.getUserIdAsString()))
+            .index(integerEncryptor.encrypt(domain.getIndex(), accessTokenProvider.getUserIdAsString(), dimensionId, COLUMN_INDEX))
             .build();
     }
 
@@ -32,7 +35,7 @@ class DimensionConverter extends ConverterBase<DimensionEntity, Dimension> {
             .dimensionId(uuidConverter.convertEntity(entity.getDimensionId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .externalReference(uuidConverter.convertEntity(entity.getExternalReference()))
-            .index(integerEncryptor.decryptEntity(entity.getIndex(), accessTokenProvider.getUserIdAsString()))
+            .index(integerEncryptor.decrypt(entity.getIndex(), accessTokenProvider.getUserIdAsString(), entity.getDimensionId(), COLUMN_INDEX))
             .build();
     }
 }

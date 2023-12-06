@@ -32,7 +32,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.ONLY_TITLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.ONLY_TITLE);
 
         create_blankTitle(driver);
         create(driver);

@@ -20,6 +20,8 @@ const getDefaultErrorHandler = () => {
                         NotificationService.showErrorCode(errorResponse.errorCode, errorResponse.params);
                 }
 
+            } else if (response.status == 0) {
+                console.log("Connection failed");
             } else {
                 NotificationService.showError("Error response from BackEnd: " + response.toString());
             }

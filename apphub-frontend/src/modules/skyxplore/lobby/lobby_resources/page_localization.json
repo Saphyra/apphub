@@ -31,8 +31,8 @@
         "en": "Settings",
         "hu": "Beállítások"
     },
-    "members": {
-        "en": "Members",
+    "players": {
+        "en": "Players",
         "hu": "Játékosok"
     },
     "ais": {
@@ -130,5 +130,9 @@
     "cancel": {
         "en": "Cancel",
         "hu": "Mégse"
+    },
+    "no-active-friend": {
+        "en": "No active friend.",
+        "hu": "Nincs elérhető barát."
     }
 }

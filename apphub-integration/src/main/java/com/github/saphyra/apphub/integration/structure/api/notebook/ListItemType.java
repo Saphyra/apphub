@@ -11,6 +11,7 @@ public enum ListItemType {
     TEXT("text", "text"),
     CHECKLIST("checklist", "checklist"),
     CHECKLIST_TABLE("checklist-table", "checklist_table"),
+    CUSTOM_TABLE("custom-table", "custom_table"),
     LINK("link", "link"),
     ONLY_TITLE("only-title", "only_title");
 

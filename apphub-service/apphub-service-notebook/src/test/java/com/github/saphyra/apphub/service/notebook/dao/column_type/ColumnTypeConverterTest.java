@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeConverter.COLUMN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -47,7 +48,7 @@ class ColumnTypeConverterTest {
         given(uuidConverter.convertDomain(COLUMN_ID)).willReturn(COLUMN_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(stringEncryptor.encryptEntity(ColumnType.LINK.name(), USER_ID_FROM_ACCESS_TOKEN)).willReturn(ENCRYPTED_TYPE);
+        given(stringEncryptor.encrypt(ColumnType.LINK.name(), USER_ID_FROM_ACCESS_TOKEN, COLUMN_ID_STRING, COLUMN_TYPE)).willReturn(ENCRYPTED_TYPE);
 
         ColumnTypeEntity result = underTest.convertDomain(domain);
 
@@ -67,7 +68,7 @@ class ColumnTypeConverterTest {
         given(uuidConverter.convertEntity(COLUMN_ID_STRING)).willReturn(COLUMN_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
-        given(stringEncryptor.decryptEntity(ENCRYPTED_TYPE, USER_ID_FROM_ACCESS_TOKEN)).willReturn(ColumnType.LINK.name());
+        given(stringEncryptor.decrypt(ENCRYPTED_TYPE, USER_ID_FROM_ACCESS_TOKEN, COLUMN_ID_STRING, COLUMN_TYPE)).willReturn(ColumnType.LINK.name());
 
         ColumnTypeDto result = underTest.convertEntity(entity);
 

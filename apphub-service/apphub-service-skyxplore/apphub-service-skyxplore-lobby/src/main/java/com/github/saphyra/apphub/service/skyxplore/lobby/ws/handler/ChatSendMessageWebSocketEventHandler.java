@@ -44,7 +44,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .build();
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE, message);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE, message);
     }
 
     @Data

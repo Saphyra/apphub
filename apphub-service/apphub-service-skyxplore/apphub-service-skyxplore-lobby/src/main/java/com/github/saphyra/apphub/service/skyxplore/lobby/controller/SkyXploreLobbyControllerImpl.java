@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
 import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.A
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.GameLoadedService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.creation.LobbyCreationService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.invite.InvitationService;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberQueryService;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerQueryService;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game.StartGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final LobbyCreationService lobbyCreationService;
     private final InvitationService invitationService;
     private final JoinToLobbyService joinToLobbyService;
-    private final LobbyMemberQueryService lobbyMemberQueryService;
+    private final LobbyPlayerQueryService lobbyPlayerQueryService;
     private final LobbyDao lobbyDao;
     private final StartGameService startGameService;
     private final GameLoadedService gameLoadedService;
@@ -86,9 +86,9 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     }
 
     @Override
-    public List<LobbyMemberResponse> getMembersOfLobby(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the members of his lobby.", accessTokenHeader.getUserId());
-        return lobbyMemberQueryService.getMembers(accessTokenHeader.getUserId());
+    public List<LobbyPlayerResponse> getPlayersOfLobby(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know the players of his lobby.", accessTokenHeader.getUserId());
+        return lobbyPlayerQueryService.getPlayers(accessTokenHeader.getUserId());
     }
 
     @Override

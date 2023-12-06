@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,14 +45,14 @@ class EditSettingsServiceTest {
     @Test
     void editSettings() {
         given(lobbyDao.findByHostValidated(USER_ID)).willReturn(lobby);
-        Map<UUID, LobbyMember> lobbyMembers = CollectionUtils.singleValueMap(USER_ID, null);
-        given(lobby.getMembers()).willReturn(lobbyMembers);
+        Map<UUID, LobbyPlayer> lobbyPlayers = CollectionUtils.singleValueMap(USER_ID, null);
+        given(lobby.getPlayers()).willReturn(lobbyPlayers);
 
         underTest.editSettings(USER_ID, settings);
 
         verify(settingsValidator).validate(settings);
         verify(lobby).setSettings(settings);
 
-        then(lobbyWebSocketHandler).should().sendEvent(lobbyMembers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED, settings);
+        then(lobbyWebSocketHandler).should().sendEvent(lobbyPlayers.keySet(), WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED, settings);
     }
 }

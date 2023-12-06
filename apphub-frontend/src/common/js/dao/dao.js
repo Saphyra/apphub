@@ -130,7 +130,7 @@ const Request = class {
             };
 
             xhr.onerror = () => {
-                this.handleError(new Response(xhr));
+                this.handleError(new Response(xhr.status, xhr.responseText));
                 reject();
             }
 
@@ -203,7 +203,7 @@ const Endpoints = {
     SKYXPLORE_LOBBY_IS_IN_LOBBY: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby"),
     SKYXPLORE_LOBBY_VIEW_FOR_PAGE: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/page"),
     SKYXPLORE_LOBBY_GET_ALLIANCES: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/alliances"),
-    SKYXPLORE_LOBBY_GET_MEMBERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/members"),
+    SKYXPLORE_LOBBY_GET_PLAYERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/players"),
     SKYXPLORE_LOBBY_EXIT: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/player/{userId}"),
     SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/ai/{userId}"),
@@ -238,10 +238,12 @@ const Endpoints = {
     NOTEBOOK_CREATE_CHECKLIST: new Endpoint(RequestMethod.PUT, "/api/notebook/checklist"),
     NOTEBOOK_GET_CHECKLIST: new Endpoint(RequestMethod.GET, "/api/notebook/checklist/{listItemId}"),
     NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/item/{checklistItemId}/status"),
+    NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/item/{checklistItemId}/content"),
     NOTEBOOK_DELETE_CHECKLIST_ITEM: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist/item/{checklistItemId}"),
     NOTEBOOK_EDIT_CHECKLIST: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}"),
     NOTEBOOK_CHECKLIST_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/checklist/{listItemId}/checked"),
     NOTEBOOK_ORDER_CHECKLIST_ITEMS: new Endpoint(RequestMethod.POST, "/api/notebook/checklist/{listItemId}/order"),
+    NOTEBOOK_ADD_CHECKLIST_ITEM: new Endpoint(RequestMethod.PUT, "/api/notebook/checklist/{listItemId}/item"),
     NOTEBOOK_CREATE_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/table"),
     NOTEBOOK_GET_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/table/{listItemId}"),
     NOTEBOOK_EDIT_TABLE: new Endpoint(RequestMethod.POST, "/api/notebook/table/{listItemId}"),

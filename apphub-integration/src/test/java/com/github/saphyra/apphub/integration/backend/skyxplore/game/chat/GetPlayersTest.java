@@ -10,8 +10,8 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.InvitationMessage;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberStatus;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
@@ -98,9 +98,9 @@ public class GetPlayersTest extends BackEndTest {
     }
 
     private boolean isMemberReady(UUID userId, WebSocketEvent event) {
-        LobbyMemberResponse response = event.getPayloadAs(LobbyMemberResponse.class);
+        LobbyPlayerResponse response = event.getPayloadAs(LobbyPlayerResponse.class);
 
-        return response.getUserId().equals(userId) && response.getStatus() == LobbyMemberStatus.READY;
+        return response.getUserId().equals(userId) && response.getStatus() == LobbyPlayerStatus.READY;
     }
 
     private void acceptInvitation(Language language, UUID accessTokenId, ApphubWsClient wsClient) {

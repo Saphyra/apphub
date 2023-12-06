@@ -50,7 +50,7 @@ public class ViewChecklistActions {
     }
 
     public static void addItem(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-checklist-add-item-button"))
+        driver.findElement(By.id("notebook-content-checklist-add-item-to-end"))
             .click();
     }
 
@@ -83,5 +83,17 @@ public class ViewChecklistActions {
     public static boolean isEditingEnabled(WebDriver driver) {
         return WebElementUtils.getClasses(driver.findElement(By.id("notebook-content-checklist"))).contains("editable");
 
+    }
+
+    public static void setNewChecklistItemContent(WebDriver driver, String content) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-add-checklist-item-to-the-edge-input")), content);
+
+        driver.findElement(By.id("notebook-add-checklist-item-to-the-edge-save-button"))
+            .click();
+    }
+
+    public static void addItemToTheStart(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-checklist-add-item-to-start"))
+            .click();
     }
 }

@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.lib.config.common;
 
-import com.github.saphyra.apphub.lib.common_util.ForRemoval;
-
 public class Endpoints {
     //PAGES
     public static final String INDEX_PAGE = "/web";
@@ -128,11 +126,6 @@ public class Endpoints {
     public static final String MODULES_SET_FAVORITE = "/api/modules/{module}/favorite";
 
     //NOTEBOOK
-    @ForRemoval("notebook-redesign")
-    public static final String NOTEBOOK_EVENT_MIGRATION_CHECKLIST = "/event/notebook/migration/checklist";
-    @ForRemoval("notebook-redesign")
-    public static final String NOTEBOOK_EVENT_MIGRATION_TABLE = "/event/notebook/migration/table";
-
     public static final String NOTEBOOK_GET_CATEGORY_TREE = "/api/notebook/category/tree";
     public static final String NOTEBOOK_CREATE_CATEGORY = "/api/notebook/category";
     public static final String NOTEBOOK_CREATE_TEXT = "/api/notebook/text";
@@ -148,6 +141,8 @@ public class Endpoints {
     public static final String NOTEBOOK_EDIT_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_GET_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
+    public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}/content";
+    public static final String NOTEBOOK_ADD_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item";
     public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
@@ -201,7 +196,7 @@ public class Endpoints {
     public static final String SKYXPLORE_EXIT_FROM_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_INVITE_TO_LOBBY = "/api/skyxplore/lobby/invite/{friendId}";
     public static final String SKYXPLORE_LOBBY_ACCEPT_INVITATION = "/api/skyxplore/lobby/join/{invitorId}";
-    public static final String SKYXPLORE_LOBBY_GET_MEMBERS = "/api/skyxplore/lobby/members";
+    public static final String SKYXPLORE_LOBBY_GET_PLAYERS = "/api/skyxplore/lobby/players";
     public static final String SKYXPLORE_LOBBY_GET_ALLIANCES = "/api/skyxplore/lobby/alliances";
     public static final String SKYXPLORE_CREATE_LOBBY = "/api/skyxplore/lobby";
     public static final String SKYXPLORE_LOBBY_START_GAME = "/api/skyxplore/lobby/start";

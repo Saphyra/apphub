@@ -40,6 +40,6 @@ public class LoadGameService {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, request.getHost() + " must not load game " + request.getGameId());
         }
 
-        executorServiceBean.execute(() -> gameLoader.loadGame(game, request.getMembers()));
+        executorServiceBean.execute(() -> gameLoader.loadGame(game, request.getPlayers()));
     }
 }

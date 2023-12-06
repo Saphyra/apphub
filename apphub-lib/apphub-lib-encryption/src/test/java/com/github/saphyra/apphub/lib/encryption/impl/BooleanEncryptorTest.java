@@ -1,25 +1,51 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 public class BooleanEncryptorTest {
+    private static final String KEY = "key";
+    private static final String ENTITY_ID = "entity-id";
+    private static final String COLUMN = "column";
+    private static final String ENCRYPTED_ENTITY = "encrypted-entity";
+    @Mock
+    private StringEncryptor stringEncryptor;
+
+    @InjectMocks
     private BooleanEncryptor underTest;
 
-    private final StringEncryptor stringEncryptor = new StringEncryptor(new Base64Encoder());
+    @Test
+    void encrypt() {
+        given(stringEncryptor.encrypt(Boolean.TRUE.toString(), KEY, ENTITY_ID, COLUMN)).willReturn(ENCRYPTED_ENTITY);
 
-    @BeforeEach
-    public void setUp() {
-        underTest = new BooleanEncryptor(stringEncryptor);
+        assertThat(underTest.encrypt(true, KEY, ENTITY_ID, COLUMN)).isEqualTo(ENCRYPTED_ENTITY);
     }
 
     @Test
-    public void encryptDecrypt() {
-        String encrypted = underTest.encrypt(true, "key");
-        boolean decrypted = underTest.decrypt(encrypted, "key");
-        assertThat(decrypted).isTrue();
+    void encrypt_null() {
+        given(stringEncryptor.encrypt(null, KEY, ENTITY_ID, COLUMN)).willReturn(ENCRYPTED_ENTITY);
+
+        assertThat(underTest.encrypt(null, KEY, ENTITY_ID, COLUMN)).isEqualTo(ENCRYPTED_ENTITY);
+    }
+
+    @Test
+    void decrypt() {
+        given(stringEncryptor.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(Boolean.TRUE.toString());
+
+        assertThat(underTest.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).isTrue();
+    }
+
+    @Test
+    void decrypt_null() {
+        given(stringEncryptor.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(null);
+
+        assertThat(underTest.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).isNull();
     }
 }

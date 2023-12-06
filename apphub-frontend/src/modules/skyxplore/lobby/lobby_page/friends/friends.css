@@ -1,4 +1,8 @@
-.skyxplore-lobby-active-friend{
+#skyxplore-lobby-friends-list{
+    justify-content: center;
+}
+
+.skyxplore-lobby-active-friend {
     border: 2px ridge white;
     border-radius: 5px;
     padding: 5px;

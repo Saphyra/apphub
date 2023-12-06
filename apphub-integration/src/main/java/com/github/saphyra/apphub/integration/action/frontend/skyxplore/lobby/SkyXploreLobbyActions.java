@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayerElement;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyChatMessage;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMember;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import lombok.extern.slf4j.Slf4j;
@@ -48,22 +48,22 @@ public class SkyXploreLobbyActions {
             .collect(Collectors.toList());
     }
 
-    public static LobbyMember findMemberValidated(WebDriver driver, String name) {
-        return findMember(driver, name)
-            .orElseThrow(() -> new RuntimeException("LobbyMember not found with name " + name));
+    public static LobbyPlayer findPlayerValidated(WebDriver driver, String name) {
+        return findPlayer(driver, name)
+            .orElseThrow(() -> new RuntimeException("LobbyPlayer not found with name " + name));
     }
 
-    public static Optional<LobbyMember> findMember(WebDriver driver, String name) {
-        return getMembers(driver)
+    public static Optional<LobbyPlayer> findPlayer(WebDriver driver, String name) {
+        return getPlayers(driver)
             .stream()
-            .filter(lobbyMember -> lobbyMember.getName().equals(name))
+            .filter(lobbyPlayer -> lobbyPlayer.getName().equals(name))
             .findFirst();
     }
 
-    public static List<LobbyMember> getMembers(WebDriver driver) {
-        return AwaitilityWrapper.getListWithWait(() -> LobbyPage.lobbyMembers(driver), webElements -> !webElements.isEmpty())
+    public static List<LobbyPlayer> getPlayers(WebDriver driver) {
+        return AwaitilityWrapper.getListWithWait(() -> LobbyPage.lobbyPlayers(driver), webElements -> !webElements.isEmpty())
             .stream()
-            .map(LobbyMember::new)
+            .map(LobbyPlayer::new)
             .collect(Collectors.toList());
     }
 
@@ -99,9 +99,9 @@ public class SkyXploreLobbyActions {
         LobbyPage.exitButton(driver).click();
     }
 
-    public static LobbyMember getMember(WebDriver driver, String username) {
-        return findMember(driver, username)
-            .orElseThrow(() -> new RuntimeException("LobbyMember not found."));
+    public static LobbyPlayer getPlayer(WebDriver driver, String username) {
+        return findPlayer(driver, username)
+            .orElseThrow(() -> new RuntimeException("LobbyPlayer not found."));
     }
 
     public static void startGameWithMissingPlayers(WebDriver driver) {

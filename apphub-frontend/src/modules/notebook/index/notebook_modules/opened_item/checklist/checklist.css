@@ -7,3 +7,23 @@
 .notebook-checklist-item.editable .notebook-checklist-item-content:focus{
     font-size: 20px;
 }
+
+#notebook-content-checklist-content{
+    padding: 10px;
+}
+
+#notebook-content-checklist-content .notebook-checklist-item{
+    margin: 10px 0px;
+}
+
+.notebook-content-checklist-add-button{
+    display: block;
+    margin: auto;
+    width: 50%;
+}
+
+#notebook-add-checklist-item-to-the-edge-input{
+    display: block;
+    margin: auto;
+    width: 90%;
+}

@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyMemberStatus;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
-import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyMember;
-import com.github.saphyra.apphub.service.skyxplore.lobby.service.member.LobbyMemberToResponseConverter;
+import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
+import com.github.saphyra.apphub.service.skyxplore.lobby.service.player.LobbyPlayerToResponseConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
     private final LobbyDao lobbyDao;
-    private final LobbyMemberToResponseConverter lobbyMemberToResponseConverter;
+    private final LobbyPlayerToResponseConverter lobbyPlayerToResponseConverter;
 
     @Override
     public boolean canHandle(WebSocketEventName eventName) {
@@ -33,12 +33,12 @@ class SetReadinessWebSocketEventHandler implements WebSocketEventHandler {
         log.info("Setting {}'s readiness to {}", from, readiness);
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
-        LobbyMember lobbyMember = lobby.getMembers()
+        LobbyPlayer lobbyPlayer = lobby.getPlayers()
             .get(from);
-        lobbyMember.setStatus(readiness ? LobbyMemberStatus.READY : LobbyMemberStatus.NOT_READY);
+        lobbyPlayer.setStatus(readiness ? LobbyPlayerStatus.READY : LobbyPlayerStatus.NOT_READY);
 
-        LobbyMemberResponse lobbyMemberResponse = lobbyMemberToResponseConverter.convertMember(lobbyMember);
+        LobbyPlayerResponse lobbyPlayerResponse = lobbyPlayerToResponseConverter.convertPlayer(lobbyPlayer);
 
-        lobbyWebSocketHandler.sendEvent(lobby.getMembers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyMemberResponse);
+        lobbyWebSocketHandler.sendEvent(lobby.getPlayers().keySet(), WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED, lobbyPlayerResponse);
     }
 }

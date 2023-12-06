@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @UtilityClass
 public class ExceptionFactory {
@@ -60,7 +61,10 @@ public class ExceptionFactory {
     public RestException invalidParam(String field, String value, Exception cause) {
         Map<String, String> params = new HashMap<>();
         params.put(field, value);
-        return notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_PARAM, params, String.join(" ", field, value), cause);
+        String causeMessage = Optional.ofNullable(cause)
+            .map(Throwable::getMessage)
+            .orElse("");
+        return notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_PARAM, params, String.join(" ", field, value, causeMessage), cause);
     }
 
     public RestException invalidType(String message) {

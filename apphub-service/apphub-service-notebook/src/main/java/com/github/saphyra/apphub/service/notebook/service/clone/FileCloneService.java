@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class FileCloneService {
+public class FileCloneService {
     private final FileDao fileDao;
     private final StorageProxy storageProxy;
     private final FileFactory fileFactory;

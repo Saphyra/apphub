@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.OneParamResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayer;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyMemberResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
@@ -64,17 +64,17 @@ public class SkyXploreLobbyActions {
             .post(UrlFactory.create(Endpoints.SKYXPLORE_START_GAME));
     }
 
-    public static List<LobbyMemberResponse> getLobbyMembers(Language language, UUID accessTokenId) {
-        Response response = getLobbyMembersResponse(language, accessTokenId);
+    public static List<LobbyPlayerResponse> getLobbyPlayers(Language language, UUID accessTokenId) {
+        Response response = getLobbyPlayersResponse(language, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return Arrays.asList(response.getBody().as(LobbyMemberResponse[].class));
+        return Arrays.asList(response.getBody().as(LobbyPlayerResponse[].class));
     }
 
-    public static Response getLobbyMembersResponse(Language language, UUID accessTokenId) {
+    public static Response getLobbyPlayersResponse(Language language, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_MEMBERS));
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_PLAYERS));
     }
 
     public static void exitFromLobby(Language language, UUID accessTokenId) {

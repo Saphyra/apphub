@@ -53,7 +53,7 @@ public class GameCreationRequestValidatorTest {
     public void nullMembers() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(null)
+            .players(null)
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -65,7 +65,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownHost() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.singleValueMap(UUID.randomUUID(), null))
+            .players(CollectionUtils.singleValueMap(UUID.randomUUID(), null))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -106,7 +106,7 @@ public class GameCreationRequestValidatorTest {
     public void unknownAllianceId() {
         SkyXploreGameCreationRequest request = validRequest()
             .toBuilder()
-            .members(CollectionUtils.singleValueMap(HOST, UUID.randomUUID()))
+            .players(CollectionUtils.singleValueMap(HOST, UUID.randomUUID()))
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
@@ -147,7 +147,7 @@ public class GameCreationRequestValidatorTest {
     private SkyXploreGameCreationRequest validRequest() {
         return SkyXploreGameCreationRequest.builder()
             .host(HOST)
-            .members(
+            .players(
                 CollectionUtils.toMap(
                     new BiWrapper<>(HOST, null),
                     new BiWrapper<>(PLAYER_ID, ALLIANCE_ID)

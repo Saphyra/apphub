@@ -1,0 +1,32 @@
+.skyxplore-lobby-player {
+    border: 2px ridge white;
+    border-radius: 5px;
+}
+
+.skyxplore-lobby-player-name {
+    border-bottom: 2px ridge white;
+    text-align: center;
+    padding: 5px;
+}
+
+.skyxplore-lobby-player-alliance{
+    margin: 5px;
+    display: block;
+    text-align: center;
+}
+
+.skyxplore-lobby-player-status-not_ready{
+    border-color: red;
+}
+
+.skyxplore-lobby-player-status-ready{
+    border-color: green;
+}
+
+.skyxplore-lobby-player-status-invited{
+    border-color: cyan;
+}
+
+.skyxplore-lobby-player-status-disconnected{
+    border-color: black;
+}
