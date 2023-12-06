@@ -57,6 +57,10 @@ public class CustomTableNumberTest extends SeleniumTest {
 
         ViewTableActions.saveChanges(driver);
 
+        AwaitilityWrapper.createDefault()
+            .until(() -> !ViewTableActions.isEditingEnabled(driver))
+            .assertTrue("Editing is still enabled.");
+
         assertThat(getColumnAsNumber(ViewTableActions.getRows(driver)).getValue()).isEqualTo(String.valueOf(NEW_VALUE));
     }
 
