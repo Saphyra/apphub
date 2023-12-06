@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
 public class NotebookUtils {
     public static void newCategory(WebDriver driver, String title, String... parents) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CATEGORY);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CATEGORY);
 
         selectParent(driver, parents);
 
@@ -43,7 +43,7 @@ public class NotebookUtils {
 
     public static void newLink(WebDriver driver, String title, String url) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.LINK);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.LINK);
 
         NewLinkActions.fillTitle(driver, title);
         NewLinkActions.fillUrl(driver, url);
@@ -60,7 +60,7 @@ public class NotebookUtils {
 
     public static void newText(WebDriver driver, String title, String content, String... parents) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.TEXT);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TEXT);
 
         NewTextActions.fillTitle(driver, title);
         NewTextActions.fillContent(driver, content);
@@ -72,7 +72,7 @@ public class NotebookUtils {
 
     public static void newChecklist(WebDriver driver, String title, List<BiWrapper<String, Boolean>> items, String... parents) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST);
 
         NewChecklistActions.fillTitle(driver, title);
 
@@ -102,7 +102,7 @@ public class NotebookUtils {
 
     public static void newTable(WebDriver driver, String title, List<String> tableHeads, List<List<String>> columns) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.TABLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TABLE);
 
         NewTableActions.fillTitle(driver, title);
 
@@ -155,7 +155,7 @@ public class NotebookUtils {
 
     public static void newChecklistTable(WebDriver driver, String title, List<String> tableHeads, List<BiWrapper<Boolean, List<String>>> rows) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST_TABLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST_TABLE);
 
         NewTableActions.fillTitle(driver, title);
 
@@ -214,7 +214,7 @@ public class NotebookUtils {
 
     public static void newOnlyTitle(WebDriver driver, String title) {
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.ONLY_TITLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.ONLY_TITLE);
 
         NewOnlyTitleActions.fillTitle(driver, title);
         NewOnlyTitleActions.submit(driver);

@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.integration.action.frontend.notebook.view;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

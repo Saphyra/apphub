@@ -33,7 +33,9 @@ class TableControllerImpl implements TableController {
     @Override
     public List<TableFileUploadResponse> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a {}", accessTokenHeader.getUserId(), request.getListItemType());
-        return tableCreationService.create(accessTokenHeader.getUserId(), request);
+        List<TableFileUploadResponse> tableFileUploadResponses = tableCreationService.create(accessTokenHeader.getUserId(), request);
+        log.info("{}", tableFileUploadResponses);
+        return tableFileUploadResponses;
     }
 
     @Override

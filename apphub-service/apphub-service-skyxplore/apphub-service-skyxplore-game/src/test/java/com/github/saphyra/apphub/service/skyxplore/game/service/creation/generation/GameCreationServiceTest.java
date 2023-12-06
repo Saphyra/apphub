@@ -88,7 +88,7 @@ public class GameCreationServiceTest {
 
         verify(gameDao, timeout(1000)).save(game);
 
-        then(lobbyClient).should().gameLoaded(GAME_ID, LOCALE);
+        then(lobbyClient).should(timeout(1000)).gameLoaded(GAME_ID, LOCALE);
         verify(gameSaverService).save(game);
         verify(tickSchedulerLauncher).launch(game);
     }

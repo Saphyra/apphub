@@ -20,8 +20,11 @@ import create from "./service/NewTableSaver";
 import { newColumn } from "./service/NewTableColumnCrudService";
 import { newRow } from "./service/NewTableRowCrudService";
 import getTable from "./service/NewTableAssembler";
+import ColumnType from "../../common/table/row/column/type/ColumnType";
+import Spinner from "../../../../common/component/Spinner";
+import Stream from "../../../../common/js/collection/Stream";
 
-const NewTablePage = ({ checklist }) => {
+const NewTablePage = ({ checklist, custom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
@@ -29,13 +32,28 @@ const NewTablePage = ({ checklist }) => {
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
     const [listItemTitle, setListItemTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([new TableHeadData(0)]);
-    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0)])]);
+    const [rows, setRows] = useState([new TableRowData(0, [new TableColumnData(0, (custom ? ColumnType.EMPTY : ColumnType.TEXT))])]);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [files, setFiles] = useState([]);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const updateRows = () => {
         Utils.copyAndSet(rows, setRows);
+    }
+
+    const addFile = (rowIndex, columnIndex, file) => {
+        const clone = new Stream(files)
+            .remove(file => file.rowIndex == rowIndex && file.columnIndex == columnIndex)
+            .add({
+                rowIndex: rowIndex,
+                columnIndex: columnIndex,
+                file: file
+            })
+            .toList();
+
+        setFiles(clone);
     }
 
     return (
@@ -56,7 +74,7 @@ const NewTablePage = ({ checklist }) => {
                 />
 
                 <div id="notebook-new-table-content-wrapper">
-                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows)}
+                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile)}
                 </div>
             </main>
 
@@ -66,7 +84,7 @@ const NewTablePage = ({ checklist }) => {
                         key="new-column"
                         id="notebook-new-table-new-column-button"
                         label={localizationHandler.get("new-column")}
-                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows)}
+                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows, custom)}
                     />,
                     <Button
                         key="new-row"
@@ -75,7 +93,8 @@ const NewTablePage = ({ checklist }) => {
                         onclick={() => newRow(
                             rows,
                             tableHeads,
-                            setRows
+                            setRows,
+                            custom
                         )}
                     />
                 ]}
@@ -84,7 +103,7 @@ const NewTablePage = ({ checklist }) => {
                     <Button
                         id="notebook-new-table-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, tableHeads, parentId, checklist, rows)}
+                        onclick={() => create(listItemTitle, tableHeads, parentId, checklist, rows, custom, setDisplaySpinner, files)}
                     />
                 }
 
@@ -103,6 +122,8 @@ const NewTablePage = ({ checklist }) => {
                     />
                 ]}
             />
+
+            {displaySpinner && <Spinner />}
 
             <ToastContainer />
         </div>

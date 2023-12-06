@@ -8,6 +8,7 @@ Notebook
     Add item to the start of a checklist
     Add item to the start of tables
     Add column to the start of tables
+    Custom table
 
 ===BUGFIXES===
 Admin Panel

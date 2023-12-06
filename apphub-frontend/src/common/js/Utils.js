@@ -88,6 +88,18 @@ const bytesToMegabytes = (bytes) => {
     return Math.round(bytes / 1024 / 1024);
 }
 
+const isTrue = (b) => {
+    if (typeof b === "boolean") {
+        return b;
+    }
+
+    if (typeof b === "string") {
+        return b == "true";
+    }
+
+    return false;
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -100,6 +112,7 @@ const Utils = {
     formatFileSize: formatFileSize,
     bytesToMegabytes: bytesToMegabytes,
     copyAndSet: copyAndSet,
+    isTrue: isTrue,
 }
 
 export default Utils;

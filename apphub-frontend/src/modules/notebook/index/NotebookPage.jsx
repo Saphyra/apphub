@@ -16,6 +16,7 @@ import Utils from "../../../common/js/Utils";
 import UserSettings from "../common/UserSettings";
 import Endpoints from "../../../common/js/dao/dao";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
+import Spinner from "../../../common/component/Spinner";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -25,6 +26,7 @@ const NotebookPage = () => {
     const [lastEvent, setLastEvent] = useState(null);
     const [userSettings, setUserSettings] = useState({});
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const setOpenedListItem = (newListItem) => {
         if (!newListItem) {
@@ -105,6 +107,7 @@ const NotebookPage = () => {
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
@@ -117,14 +120,11 @@ const NotebookPage = () => {
                     />
                 }
                 centerButtons={
-                    openedListItem.type === ListItemType.CATEGORY || openedListItem.type === ListItemType.SEARCH ?
-                        <Button
-                            id="notebook-new-button"
-                            onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
-                            label={localizationHandler.get("new")}
-                        />
-                        :
-                        []
+                    <Button
+                        id="notebook-new-button"
+                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
+                        label={localizationHandler.get("new")}
+                    />
                 }
             />
 
@@ -136,6 +136,9 @@ const NotebookPage = () => {
                     choices={confirmationDialogData.choices}
                 />
             }
+
+            {displaySpinner && <Spinner />}
+
             <ToastContainer />
         </div>
     );

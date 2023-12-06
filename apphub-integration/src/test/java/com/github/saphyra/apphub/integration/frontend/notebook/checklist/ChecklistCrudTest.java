@@ -47,7 +47,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         NotebookUtils.newCategory(driver, CATEGORY_TITLE);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST);
 
         create_emptyTitle(driver);
         NewChecklistActions.fillTitle(driver, CHECKLIST_TITLE);

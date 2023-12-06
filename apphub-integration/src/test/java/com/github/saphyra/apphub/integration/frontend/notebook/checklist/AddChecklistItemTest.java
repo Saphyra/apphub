@@ -37,7 +37,7 @@ public class AddChecklistItemTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST);
         NewChecklistActions.fillTitle(driver, TITLE);
         NewChecklistActions.getItems(driver)
             .get(0)

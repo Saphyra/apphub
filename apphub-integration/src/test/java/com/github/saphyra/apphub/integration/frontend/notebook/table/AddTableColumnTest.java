@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.notebook.TableHead;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -37,7 +37,7 @@ public class AddTableColumnTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
 
         NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItem(driver, ListItemType.CHECKLIST_TABLE);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST_TABLE);
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
             .get(0)

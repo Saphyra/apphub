@@ -34,7 +34,7 @@ class TableCreationRequestValidatorTest {
     private TableCreationRowValidator tableCreationRowValidator;
 
     @Mock
-    private TableAndChecklistTableColumnTypeValidator tableAndChecklistTableColumnTypeValidator;
+    private TableColumnTypeValidator tableColumnTypeValidator;
 
     @Mock
     private CreateTableHeadValidator createTableHeadValidator;
@@ -104,7 +104,7 @@ class TableCreationRequestValidatorTest {
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
         then(tableCreationRowValidator).should().validateRows(ListItemType.TABLE, List.of(rowModel));
         then(columnNumberAmountValidator).should().validateColumnNumbersMatches(List.of(tableHeadModel), List.of(rowModel));
-        then(tableAndChecklistTableColumnTypeValidator).should().validateColumnType(request);
+        then(tableColumnTypeValidator).should().validateColumnType(request);
     }
 
     private static Stream<Arguments> nonTableListItems() {

@@ -41,7 +41,7 @@ const MapStream = class {
         const keys = Object.keys(this.items);
 
         if (keys.length === 0) {
-            return new Optional();
+            return new Optional(null);
         }
 
         return new Optional(this.items[keys[0]]);

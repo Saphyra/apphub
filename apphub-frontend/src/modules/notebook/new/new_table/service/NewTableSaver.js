@@ -1,11 +1,15 @@
 import Constants from "../../../../../common/js/Constants";
+import Utils from "../../../../../common/js/Utils";
+import MapStream from "../../../../../common/js/collection/MapStream";
+import Stream from "../../../../../common/js/collection/Stream";
+import getDefaultErrorHandler from "../../../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import ListItemType from "../../../common/ListItemType";
 import validateListItemTitle from "../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../common/validator/TableHeadNameValidator";
 
-const create = async (listItemTitle, tableHeads, parent, checklist, rows) => {
+const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom, setDisplaySpinner, files) => {
     const titleValidationResult = validateListItemTitle(listItemTitle);
     if (!titleValidationResult.valid) {
         NotificationService.showError(titleValidationResult.message);
@@ -21,15 +25,71 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows) => {
     const payload = {
         title: listItemTitle,
         parent: parent,
-        listItemType: checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE,
+        listItemType: getListItemType(checklist, custom),
         tableHeads: tableHeads,
         rows: rows
     }
 
-    await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
+    const fileUploadResponse = await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
         .send();
 
+    if (fileUploadResponse.length > 0) {
+        uploadFiles(setDisplaySpinner, fileUploadResponse, files);
+    }
+
     window.location.href = Constants.NOTEBOOK_PAGE;
+}
+
+const uploadFiles = async (setDisplaySpinner, fileUploadResponse, files) => {
+    setDisplaySpinner(true);
+
+    new Stream(fileUploadResponse)
+        .forEach(fileUpload => uploadFile(fileUpload, files, setDisplaySpinner));
+}
+
+const uploadFile = async (fileUpload, files, setDisplaySpinner) => {
+    new Stream(files)
+        .filter(file => file.rowIndex == fileUpload.rowIndex && file.columnIndex == fileUpload.columnIndex)
+        .map(file => file.file)
+        .findFirst()
+        .ifPresent((file) => doUpload(fileUpload, file, setDisplaySpinner));
+}
+
+const doUpload = async (fileUpload, file, setDisplaySpinner) => {
+    const formData = new FormData();
+    console.log(file);
+    formData.append("file", file.e.target.files[0]);
+
+    const options = {
+        method: "PUT",
+        body: formData,
+        headers: {
+            'Cache-Control': "no-cache",
+            "BrowserLanguage": Utils.getBrowserLanguage(),
+            "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
+        }
+    }
+
+    await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: fileUpload.storedFileId }), options)
+        .then(r => {
+            if (!r.ok) {
+                setDisplaySpinner(false);
+                r.text()
+                    .then(body => {
+                        const response = new Response(r.status, body);
+                        getDefaultErrorHandler()
+                            .handle(response);
+                    });
+            }
+        });
+}
+
+const getListItemType = (checklist, custom) => {
+    if (custom) {
+        return ListItemType.CUSTOM_TABLE;
+    }
+
+    return checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE
 }
 
 export default create;
