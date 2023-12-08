@@ -1,4 +1,6 @@
 ===FEATURES===
+Notebook
+    Custom Table checkbox cell - Toggle without editing mode
 
 ===BUGFIXES===
 Notebook

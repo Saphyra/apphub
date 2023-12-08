@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//todo add custom table
 public class CloneListItemTest extends SeleniumTest {
     private static final String ROOT_TITLE = "root-category";
     private static final String CATEGORY_TITLE = "category-title";

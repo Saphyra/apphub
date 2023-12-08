@@ -35,4 +35,7 @@ public interface TableController {
 
     @DeleteMapping(Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED)
     TableResponse deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS)
+    void setCheckboxColumnStatus(@PathVariable("columnId") UUID columnId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

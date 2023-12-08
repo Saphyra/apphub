@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadRespons
 import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
@@ -30,6 +31,7 @@ class TableControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID ROW_ID = UUID.randomUUID();
+    private static final UUID COLUMN_ID = UUID.randomUUID();
 
     @Mock
     private TableCreationService tableCreationService;
@@ -45,6 +47,9 @@ class TableControllerImplTest {
 
     @Mock
     private TableEditionService tableEditionService;
+
+    @Mock
+    private CheckboxColumnStatusUpdateService checkboxColumnStatusUpdateService;
 
     @InjectMocks
     private TableControllerImpl underTest;
@@ -103,5 +108,12 @@ class TableControllerImplTest {
         assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(tableResponse);
 
         then(checkedTableRowDeletionService).should().deleteCheckedRows(LIST_ITEM_ID);
+    }
+
+    @Test
+    void setCheckboxColumnStatus(){
+        underTest.setCheckboxColumnStatus(COLUMN_ID, new OneParamRequest<>(true), accessTokenHeader);
+
+        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(COLUMN_ID, true);
     }
 }

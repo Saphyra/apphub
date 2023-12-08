@@ -18,6 +18,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${versions.awaitility}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-exception</artifactId>
             <version>${project.version}</version>
@@ -28,12 +34,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${versions.assertj-core}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>${versions.awaitility}</version>
         </dependency>
     </dependencies>
 

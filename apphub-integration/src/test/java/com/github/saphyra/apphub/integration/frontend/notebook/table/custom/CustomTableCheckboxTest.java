@@ -38,18 +38,30 @@ public class CustomTableCheckboxTest extends SeleniumTest {
 
         createCustomTableWithCheckedCell(driver);
         openTable(driver);
+        toggleStatus(driver);
         editColumn(driver);
+    }
+
+    private void toggleStatus(WebDriver driver) {
+        getColumnAsChecked(ViewTableActions.getRows(driver))
+            .setChecked(false);
+
+        ViewTableActions.close(driver);
+        NotebookActions.findListItemByTitleValidated(driver, TITLE)
+            .open();
+
+        assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isFalse();
     }
 
     private static void editColumn(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
         getColumnAsChecked(ViewTableActions.getRows(driver))
-            .setChecked(false);
-        assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isFalse();
+            .setChecked(true);
+        assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isTrue();
 
         ViewTableActions.saveChanges(driver);
 
-        assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isFalse();
+        assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isTrue();
     }
 
     private static void openTable(WebDriver driver) {
