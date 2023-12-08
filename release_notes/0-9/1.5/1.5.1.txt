@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+Notebook
+    Add margin to the bottom of "Checklist is empty" text
 
 ===PLATFORM CHANGES===
 
