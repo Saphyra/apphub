@@ -5,6 +5,8 @@ Notebook
 ===BUGFIXES===
 Notebook
     Add margin to the bottom of "Checklist is empty" text
+    Add checklist item without editing
+        Works every time
 
 ===PLATFORM CHANGES===
 
