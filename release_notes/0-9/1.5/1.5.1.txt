@@ -11,3 +11,5 @@ Notebook
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+Notebook
+    Missing tests for custom table cloning

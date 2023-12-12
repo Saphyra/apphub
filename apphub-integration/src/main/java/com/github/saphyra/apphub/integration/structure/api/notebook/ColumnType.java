@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.api.notebook;
 
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.CheckedTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.LinkTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public enum ColumnType {
     DATE_TIME("date_time", null),
     MONTH("month", null),
     RANGE("range", null),
-    LINK("link", Function.identity()),
+    LINK("link", tableColumn -> new LinkTableColumn(tableColumn.getWebElement())),
     EMPTY("empty", null);
 
     private static final String COLUMN_TYPE_SELECTOR_MASK = "notebook-table-column-type-selector-column-type-%s";
