@@ -8,6 +8,8 @@ Notebook
     Add checklist item without editing
         Works every time
     Use proper parent when adding new list item from not-category list item view
+Memory monitoring
+    Vertically aligned labels
 
 ===PLATFORM CHANGES===
 
