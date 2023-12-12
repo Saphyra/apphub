@@ -20,4 +20,9 @@ public class ParentSelectorActions {
         driver.findElement(By.className("notebook-parent-selector-up-button"))
             .click();
     }
+
+    public static String getParent(WebDriver driver) {
+        return driver.findElement(By.id("notebook-parent-selector-selected-parent-title"))
+            .getText();
+    }
 }
