@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
@@ -29,6 +30,7 @@ class TableControllerImpl implements TableController {
     private final TableRowStatusUpdateService tableRowStatusUpdateService;
     private final CheckedTableRowDeletionService checkedTableRowDeletionService;
     private final TableEditionService tableEditionService;
+    private final CheckboxColumnStatusUpdateService checkboxColumnStatusUpdateService;
 
     @Override
     public List<TableFileUploadResponse> createTable(CreateTableRequest request, AccessTokenHeader accessTokenHeader) {
@@ -61,5 +63,11 @@ class TableControllerImpl implements TableController {
         log.info("{} wants to delete checked rows of table {}", accessTokenHeader.getUserId(), listItemId);
         checkedTableRowDeletionService.deleteCheckedRows(listItemId);
         return getTable(listItemId, accessTokenHeader);
+    }
+
+    @Override
+    public void setCheckboxColumnStatus(UUID columnId, OneParamRequest<Boolean> status, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to change the status of checked column {}", accessTokenHeader.getUserId(), columnId);
+        checkboxColumnStatusUpdateService.updateColumnStatus(columnId, status.getValue());
     }
 }

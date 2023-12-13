@@ -15,18 +15,22 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
-import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.CheckedTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.LinkTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +51,22 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String ONLY_TITLE_TITLE = "only-title-title";
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
+    private static final String CUSTOM_TABLE_TITLE = "custom-table-title";
+    private static final String CUSTOM_TABLE_COLUMN_NAME = "custom-table-column-name";
+    private static final String CUSTOM_TABLE_LINK = Endpoints.ACCOUNT_PAGE;
+    private static final Double CUSTOM_TABLE_NUMBER_VALUE = 4d;
+    private static final Double CUSTOM_TABLE_NUMBER_STEP = 2d;
+    private static final String CUSTOM_TABLE_TEXT = "custom-table-text";
+    private static final List<String> LIST_ITEMS = List.of(
+        CHILD_CATEGORY_TITLE,
+        LINK_TITLE,
+        TEXT_TITLE,
+        CHECKLIST_TITLE,
+        TABLE_TITLE,
+        CHECKLIST_TABLE_TITLE,
+        ONLY_TITLE_TITLE,
+        CUSTOM_TABLE_TITLE
+    );
 
     @Test(groups = {"fe", "notebook"}, priority = Integer.MIN_VALUE)
     public void cloneListItem() {
@@ -71,36 +91,22 @@ public class CloneListItemTest extends SeleniumTest {
         NotebookUtils.newTable(driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
         NotebookUtils.newChecklistTable(driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(true, List.of(CHECKLIST_TABLE_CONTENT))));
         NotebookUtils.newOnlyTitle(driver, ONLY_TITLE_TITLE);
+        NotebookUtils.newCustomTable(
+            driver,
+            CUSTOM_TABLE_TITLE,
+            List.of(CUSTOM_TABLE_COLUMN_NAME),
+            List.of(
+                List.of(new BiWrapper<>(ColumnType.CHECKBOX, true)),
+                List.of(new BiWrapper<>(ColumnType.LINK, CUSTOM_TABLE_LINK)),
+                List.of(new BiWrapper<>(ColumnType.NUMBER, new Number(CUSTOM_TABLE_NUMBER_STEP, CUSTOM_TABLE_NUMBER_VALUE))),
+                List.of(new BiWrapper<>(ColumnType.TEXT, CUSTOM_TABLE_TEXT))
+            )
+        );
 
-        NotebookActions.findListItemByTitleValidated(driver, CHILD_CATEGORY_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TABLE_TITLE)
-            .archive(driver);
-        NotebookActions.findListItemByTitleValidated(driver, ONLY_TITLE_TITLE)
-            .archive(driver);
-
-        NotebookActions.findListItemByTitleValidated(driver, CHILD_CATEGORY_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TABLE_TITLE)
-            .pin(driver);
-        NotebookActions.findListItemByTitleValidated(driver, ONLY_TITLE_TITLE)
-            .pin(driver);
+        LIST_ITEMS.forEach(listItemTitle -> {
+            NotebookActions.findListItemByTitleValidated(driver, listItemTitle).pin(driver);
+            NotebookActions.findListItemByTitleValidated(driver, listItemTitle).archive(driver);
+        });
 
         NotebookActions.up(driver);
 
@@ -129,19 +135,7 @@ public class CloneListItemTest extends SeleniumTest {
 
         verifyContent(driver);
 
-        verifyPinnedItems(driver);
-    }
-
-    private void verifyPinnedItems(WebDriver driver) {
-        Stream.of(
-            CHILD_CATEGORY_TITLE,
-            LINK_TITLE,
-            TEXT_TITLE,
-            CHECKLIST_TITLE,
-            TABLE_TITLE,
-            CHECKLIST_TABLE_TITLE,
-            ONLY_TITLE_TITLE
-        ).forEach(listItemTitle -> assertThat(NotebookActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
+        LIST_ITEMS.forEach(listItemTitle -> assertThat(NotebookActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
     }
 
     private void verifyContent(WebDriver driver) {
@@ -152,16 +146,46 @@ public class CloneListItemTest extends SeleniumTest {
         verifyTable(driver);
         verifyChecklistTable(driver);
         verifyOnlyTitle(driver);
+        verifyCustomTable(driver);
 
-        Stream.of(
-            CHILD_CATEGORY_TITLE,
-            LINK_TITLE,
-            TEXT_TITLE,
-            CHECKLIST_TITLE,
-            TABLE_TITLE,
-            CHECKLIST_TABLE_TITLE,
-            ONLY_TITLE_TITLE
-        ).forEach(listItemTitle -> assertThat(NotebookActions.findListItemByTitleValidated(driver, listItemTitle).isArchived()).isTrue());
+        LIST_ITEMS.forEach(listItemTitle -> assertThat(NotebookActions.findListItemByTitleValidated(driver, listItemTitle).isArchived()).isTrue());
+    }
+
+    private void verifyCustomTable(WebDriver driver) {
+        NotebookActions.findListItemByTitleValidated(driver, CUSTOM_TABLE_TITLE)
+            .open();
+
+        assertThat(ViewTableActions.getRows(driver)).hasSize(4);
+
+        CheckedTableColumn checkedColumn = ViewTableActions.getRows(driver)
+            .get(0)
+            .getColumns()
+            .get(0)
+            .as(ColumnType.CHECKBOX);
+        assertThat(checkedColumn.isChecked()).isTrue();
+
+        LinkTableColumn linkColumn = ViewTableActions.getRows(driver)
+            .get(1)
+            .getColumns()
+            .get(0)
+            .as(ColumnType.LINK);
+        linkColumn.open();
+
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        driver.close();
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+
+        NumberTableColumn numberColumn = ViewTableActions.getRows(driver)
+            .get(2)
+            .getColumns()
+            .get(0)
+            .as(ColumnType.NUMBER);
+        assertThat(numberColumn.getValue()).isEqualTo(String.valueOf(CUSTOM_TABLE_NUMBER_VALUE.intValue()));
+
+        assertThat(ViewTableActions.getRows(driver).get(3).getColumns().get(0).getValue()).isEqualTo(CUSTOM_TABLE_TEXT);
+
+        ViewTableActions.close(driver);
     }
 
     private void verifyOnlyTitle(WebDriver driver) {

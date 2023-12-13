@@ -56,7 +56,7 @@ public class CategoryChildrenQueryServiceTest {
         ListItem listItem = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
-            .type(ListItemType.CATEGORY)
+            .type(ListItemType.CHECKLIST)
             .title(TITLE_1)
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem));
@@ -66,6 +66,7 @@ public class CategoryChildrenQueryServiceTest {
 
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
+        assertThat(result.getListItemType()).isEqualTo(ListItemType.CATEGORY);
         assertThat(result.getChildren()).hasSize(1);
         assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }
@@ -92,6 +93,7 @@ public class CategoryChildrenQueryServiceTest {
         assertThat(result.getParent()).isNull();
         assertThat(result.getTitle()).isNull();
         assertThat(result.getChildren()).hasSize(1);
+        assertThat(result.getListItemType()).isEqualTo(ListItemType.CATEGORY);
         assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }
 
@@ -120,7 +122,7 @@ public class CategoryChildrenQueryServiceTest {
         ListItem parent = ListItem.builder()
             .listItemId(CATEGORY_ID)
             .userId(USER_ID)
-            .type(ListItemType.CATEGORY)
+            .type(ListItemType.CHECKLIST)
             .parent(PARENT)
             .title(TITLE_2)
             .build();
@@ -131,6 +133,7 @@ public class CategoryChildrenQueryServiceTest {
 
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTitle()).isEqualTo(TITLE_2);
+        assertThat(result.getListItemType()).isEqualTo(ListItemType.CHECKLIST);
         assertThat(result.getChildren()).hasSize(1);
         assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
     }

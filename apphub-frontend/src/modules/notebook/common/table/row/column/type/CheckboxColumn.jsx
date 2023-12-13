@@ -2,6 +2,7 @@ import React from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
 import Utils from "../../../../../../../common/js/Utils";
+import Endpoints from "../../../../../../../common/js/dao/dao";
 
 const CheckboxColumn = ({
     columnData,
@@ -11,6 +12,11 @@ const CheckboxColumn = ({
     localizationHandler
 }) => {
     const updateData = (checked) => {
+        if(!editingEnabled){
+            Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({value: checked}, {columnId: columnData.columnId})
+                .send();
+        }
+
         columnData.data = checked;
         updateColumn();
     }
@@ -23,7 +29,6 @@ const CheckboxColumn = ({
                         type="checkbox"
                         onchangeCallback={updateData}
                         checked={Utils.isTrue(columnData.data)}
-                        disabled={!editingEnabled}
                     />
                 </div>
 

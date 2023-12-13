@@ -40,7 +40,45 @@ public class CustomTableCheckboxTest extends BackEndTest {
 
         edit(accessTokenId, listItemId, tableResponse);
 
+        setStatus_nullStatus(accessTokenId, tableResponse);
+        setStatus(accessTokenId, listItemId, tableResponse);
+        setStatus_notCheckboxColumn(accessTokenId, listItemId, tableResponse);
+
         ListItemActions.deleteListItem(accessTokenId, listItemId);
+    }
+
+    private void setStatus_notCheckboxColumn(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+        UUID columnId = tableResponse.getRows().get(0).getColumns().get(0).getColumnId();
+        EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
+            NEW_TITLE,
+            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            NEW_COLUMN_TITLE,
+            tableResponse.getRows().get(0).getRowId(),
+            columnId,
+            ColumnType.EMPTY,
+            null
+        );
+
+        tableResponse = TableActions.editTable(accessTokenId, listItemId, editTableRequest)
+            .getTableResponse();
+
+        Response response = TableActions.getEditCheckboxStatusResponse(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+
+        ResponseValidator.verifyInvalidParam(response, "columnId", "not a " + ColumnType.CHECKBOX);
+    }
+
+    private void setStatus(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+        TableActions.editCheckboxStatus(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+
+        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+
+        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(String.valueOf(false));
+    }
+
+    private void setStatus_nullStatus(UUID accessTokenId, TableResponse tableResponse) {
+        Response response = TableActions.getEditCheckboxStatusResponse(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), null);
+
+        ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
     }
 
     private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {

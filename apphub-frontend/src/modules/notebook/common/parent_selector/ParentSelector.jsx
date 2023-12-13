@@ -30,6 +30,11 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
 
             const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
+
+            if (response.listItemType !== "CATEGORY") {
+                setParentId(response.parent);
+            }
+
             setCurrentCategoryData(response);
         }
         fetch();
@@ -60,7 +65,7 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
             <div className="notebook-parent-selector-selected-parent">
                 <span>{localizationHandler.get("selected-parent")}:</span>
                 <span> </span>
-                <span>{currentCategoryData.title === null ? localizationHandler.get("root") : currentCategoryData.title}</span>
+                <span id="notebook-parent-selector-selected-parent-title">{currentCategoryData.title === null ? localizationHandler.get("root") : currentCategoryData.title}</span>
             </div>
 
             <div className="notebook-parent-selector-up-button-wrapper">

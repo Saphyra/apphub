@@ -38,6 +38,7 @@ public class CategoryChildrenQueryService {
         return ChildrenOfCategoryResponse.builder()
             .parent(category.map(ListItem::getParent).orElse(null))
             .title(category.map(ListItem::getTitle).orElse(null))
+            .listItemType(category.map(ListItem::getType).orElse(ListItemType.CATEGORY))
             .children(children)
             .build();
     }

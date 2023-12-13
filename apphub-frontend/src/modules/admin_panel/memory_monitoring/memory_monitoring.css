@@ -59,6 +59,7 @@
     display: grid;
     grid-template-rows: auto auto auto;
     padding: 5px;
+    align-items: center;
 }
 
 .memory-monitoring-diagram-details>div {

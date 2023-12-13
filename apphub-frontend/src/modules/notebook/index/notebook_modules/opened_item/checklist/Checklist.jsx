@@ -11,6 +11,7 @@ import IndexRange from "./IndexRange";
 import addItemToEdge from "./service/ChecklistAddItemToEdgeService";
 import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
+import Utils from "../../../../../../common/js/Utils";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -144,7 +145,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 }
             </div>
 
-            {newItemIndex && getNewItemConfirmationDialog()}
+            {Utils.hasValue(newItemIndex) && getNewItemConfirmationDialog()}
         </div>
     );
 }
