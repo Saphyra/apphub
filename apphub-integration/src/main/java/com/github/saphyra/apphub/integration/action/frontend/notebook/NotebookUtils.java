@@ -9,13 +9,18 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.structure.Number;
+import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.CheckedTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
+import static com.github.saphyra.apphub.integration.core.TestBase.OBJECT_MAPPER_WRAPPER;
 import static java.util.Objects.isNull;
 
 public class NotebookUtils {
@@ -106,21 +111,7 @@ public class NotebookUtils {
 
         NewTableActions.fillTitle(driver, title);
 
-        if (tableHeads.isEmpty()) {
-            NewTableActions.getTableHeads(driver)
-                .get(0)
-                .remove();
-        } else {
-            NewTableActions.getTableHeads(driver)
-                .get(0)
-                .setValue(tableHeads.get(0));
-
-            for (int i = 1; i < tableHeads.size(); i++) {
-                NewTableActions.getTableHeads(driver)
-                    .get(i)
-                    .setValue(tableHeads.get(i));
-            }
-        }
+        setTableHeads(driver, tableHeads);
 
         if (columns.isEmpty()) {
             NewTableActions.getRows(driver)
@@ -159,21 +150,7 @@ public class NotebookUtils {
 
         NewTableActions.fillTitle(driver, title);
 
-        if (tableHeads.isEmpty()) {
-            NewTableActions.getTableHeads(driver)
-                .get(0)
-                .remove();
-        } else {
-            NewTableActions.getTableHeads(driver)
-                .get(0)
-                .setValue(tableHeads.get(0));
-
-            for (int i = 1; i < tableHeads.size(); i++) {
-                NewTableActions.getTableHeads(driver)
-                    .get(i)
-                    .setValue(tableHeads.get(i));
-            }
-        }
+        setTableHeads(driver, tableHeads);
 
         if (rows.isEmpty()) {
             NewTableActions.getRows(driver)
@@ -201,7 +178,7 @@ public class NotebookUtils {
             }
         }
 
-        for(int rowIndex = 0; rowIndex < rows.size(); rowIndex++){
+        for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
             NewTableActions.getRows(driver)
                 .get(rowIndex)
                 .setChecked(rows.get(rowIndex).getEntity1());
@@ -212,6 +189,24 @@ public class NotebookUtils {
         waitForNotebookPageOpened(driver);
     }
 
+    private static void setTableHeads(WebDriver driver, List<String> tableHeads) {
+        if (tableHeads.isEmpty()) {
+            NewTableActions.getTableHeads(driver)
+                .get(0)
+                .remove();
+        } else {
+            NewTableActions.getTableHeads(driver)
+                .get(0)
+                .setValue(tableHeads.get(0));
+
+            for (int i = 1; i < tableHeads.size(); i++) {
+                NewTableActions.getTableHeads(driver)
+                    .get(i)
+                    .setValue(tableHeads.get(i));
+            }
+        }
+    }
+
     public static void newOnlyTitle(WebDriver driver, String title) {
         NotebookActions.newListItem(driver);
         NotebookNewListItemActions.selectListItemType(driver, ListItemType.ONLY_TITLE);
@@ -220,5 +215,74 @@ public class NotebookUtils {
         NewOnlyTitleActions.submit(driver);
 
         waitForNotebookPageOpened(driver);
+    }
+
+    public static void newCustomTable(WebDriver driver, String title, List<String> tableHeads, List<List<BiWrapper<ColumnType, Object>>> rows) {
+        NotebookActions.newListItem(driver);
+        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CUSTOM_TABLE);
+
+        NewTableActions.fillTitle(driver, title);
+
+        NewTableActions.getRows(driver)
+            .get(0)
+            .remove();
+        NewTableActions.getTableHeads(driver)
+            .get(0)
+            .remove();
+
+        if (!rows.isEmpty()) {
+            for (int i = 0; i < rows.size(); i++) {
+                NewTableActions.newRow(driver);
+            }
+
+            for (int i = 0; i < rows.get(0).size(); i++) {
+                NewTableActions.newColumn(driver);
+            }
+        }
+
+        for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
+            for (int columnIndex = 0; columnIndex < rows.get(rowIndex).size(); columnIndex++) {
+                setColumn(driver, rowIndex, columnIndex, rows.get(rowIndex).get(columnIndex));
+            }
+        }
+
+        for (int columnIndex = 0; columnIndex < tableHeads.size(); columnIndex++) {
+            NewTableActions.getTableHeads(driver)
+                .get(columnIndex)
+                .setValue(tableHeads.get(columnIndex));
+        }
+
+        NewTableActions.submit(driver);
+        waitForNotebookPageOpened(driver);
+    }
+
+    private static void setColumn(WebDriver driver, int rowIndex, int columnIndex, BiWrapper<ColumnType, Object> column) {
+        NewTableActions.setColumnType(driver, rowIndex, columnIndex, column.getEntity1());
+
+        switch (column.getEntity1()) {
+            case LINK, TEXT -> NewTableActions.getRows(driver)
+                .get(rowIndex)
+                .getColumns()
+                .get(columnIndex)
+                .setValue(column.getEntity2().toString());
+            case NUMBER -> {
+                NumberTableColumn numberColumn = NewTableActions.getRows(driver)
+                    .get(rowIndex)
+                    .getColumns()
+                    .get(columnIndex)
+                    .as(ColumnType.NUMBER);
+                Number number = OBJECT_MAPPER_WRAPPER.convertValue(column.getEntity2(), Number.class);
+                numberColumn.setStep(number.getStep().intValue());
+                numberColumn.setValue(number.getValue().intValue());
+            }
+            case CHECKBOX -> {
+                CheckedTableColumn checkedColumn = NewTableActions.getRows(driver)
+                    .get(rowIndex)
+                    .getColumns()
+                    .get(columnIndex)
+                    .as(ColumnType.CHECKBOX);
+                checkedColumn.setChecked(Boolean.parseBoolean(column.getEntity2().toString()));
+            }
+        }
     }
 }

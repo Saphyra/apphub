@@ -157,8 +157,9 @@ public class Endpoints {
     public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
     public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
     public static final String NOTEBOOK_GET_LIST_ITEM = "/api/notebook/list-item/{listItemId}";
-    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/{rowId}/status";
+    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/row/{rowId}/status";
     public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
+    public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/column/{columnId}/status";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

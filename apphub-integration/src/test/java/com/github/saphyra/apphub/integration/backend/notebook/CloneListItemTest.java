@@ -11,6 +11,8 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.structure.Number;
+import com.github.saphyra.apphub.integration.structure.Range;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
@@ -31,9 +33,13 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,6 +60,21 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
     private static final String ONLY_TITLE_TITLE = "only-title-title";
+    private static final String CUSTOM_TABLE_TITLE = "custom-table-title";
+    private static final String CUSTOM_TABLE_COLUMN_NAME = "custom-table-column-name";
+    private static final String CUSTOM_TABLE_COLUMN_TEXT = "custom-table-column-value";
+    private static final Double CUSTOM_TABLE_NUMBER_STEP = 342d;
+    private static final Double CUSTOM_TABLE_NUMBER_VALUE = 65d;
+    private static final String CUSTOM_TABLE_COLOR_VALUE = "#112233";
+    private static final String CUSTOM_TABLE_COLUMN_DATE = LocalDate.now().toString();
+    private static final String CUSTOM_TABLE_COLUMN_TIME = LocalTime.now().toString();
+    private static final String CUSTOM_TABLE_COLUMN_DATE_TIME = LocalDateTime.now().toString();
+    private static final String CUSTOM_TABLE_COLUMN_MONTH = "2023-05";
+    private static final Double CUSTOM_TABLE_RANGE_MIN = 4d;
+    private static final Double CUSTOM_TABLE_RANGE_MAX = 6d;
+    private static final Double CUSTOM_TABLE_RANGE_STEP = 3d;
+    private static final Double CUSTOM_TABLE_RANGE_VALUE = 5d;
+    private static final String CUSTOM_TABLE_COLUMN_LINK = "custom-table-column-link";
 
     @Test(groups = {"be", "notebook"})
     public void cloneListItem() {
@@ -122,7 +143,7 @@ public class CloneListItemTest extends BackEndTest {
                     .build()))
                 .rows(List.of(TableRowModel.builder()
                     .rowIndex(0)
-                        .checked(true)
+                    .checked(true)
                     .columns(List.of(TableColumnModel.builder()
                         .columnType(ColumnType.TEXT)
                         .columnIndex(0)
@@ -132,7 +153,87 @@ public class CloneListItemTest extends BackEndTest {
                 .build()
         );
 
-        //TODO add custom table
+        TableActions.createTable(
+            accessTokenId,
+            CreateTableRequest.builder()
+                .title(CUSTOM_TABLE_TITLE)
+                .listItemType(ListItemType.CUSTOM_TABLE)
+                .parent(parentId)
+                .tableHeads(
+                    Stream.iterate(0, integer -> integer + 1)
+                        .limit(11)
+                        .map(columnIndex -> TableHeadModel.builder()
+                            .columnIndex(columnIndex)
+                            .content(CUSTOM_TABLE_COLUMN_NAME)
+                            .build())
+                        .toList()
+                )
+                .rows(List.of(TableRowModel.builder()
+                    .rowIndex(0)
+                    .columns(List.of(
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.TEXT)
+                            .columnIndex(0)
+                            .data(CUSTOM_TABLE_COLUMN_TEXT)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.NUMBER)
+                            .columnIndex(1)
+                            .data(new Number(CUSTOM_TABLE_NUMBER_STEP, CUSTOM_TABLE_NUMBER_VALUE))
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.CHECKBOX)
+                            .columnIndex(2)
+                            .data(true)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.COLOR)
+                            .columnIndex(3)
+                            .data(CUSTOM_TABLE_COLOR_VALUE)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.DATE)
+                            .columnIndex(4)
+                            .data(CUSTOM_TABLE_COLUMN_DATE)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.TIME)
+                            .columnIndex(5)
+                            .data(CUSTOM_TABLE_COLUMN_TIME)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.DATE_TIME)
+                            .columnIndex(6)
+                            .data(CUSTOM_TABLE_COLUMN_DATE_TIME)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.MONTH)
+                            .columnIndex(7)
+                            .data(CUSTOM_TABLE_COLUMN_MONTH)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.RANGE)
+                            .columnIndex(8)
+                            .data(new Range(
+                                CUSTOM_TABLE_RANGE_MIN,
+                                CUSTOM_TABLE_RANGE_MAX,
+                                CUSTOM_TABLE_RANGE_STEP,
+                                CUSTOM_TABLE_RANGE_VALUE
+                            ))
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.LINK)
+                            .columnIndex(9)
+                            .data(CUSTOM_TABLE_COLUMN_LINK)
+                            .build(),
+                        TableColumnModel.builder()
+                            .columnType(ColumnType.EMPTY)
+                            .columnIndex(10)
+                            .build()
+                    ))
+                    .build()))
+                .build()
+        );
 
         ListItemActions.archive(accessTokenId, parentId, true);
         ListItemActions.pin(accessTokenId, parentId, true);
@@ -157,7 +258,7 @@ public class CloneListItemTest extends BackEndTest {
         UUID clonedParentId = clonedItem.getId();
 
         ChildrenOfCategoryResponse clonedParentItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedParentId);
-        assertThat(clonedParentItems.getChildren()).hasSize(6);
+        assertThat(clonedParentItems.getChildren()).hasSize(7);
 
         UUID clonedChildCategoryId = findByTitle(CHILD_CATEGORY_TITLE, clonedParentItems.getChildren()).getId();
         ChildrenOfCategoryResponse clonedChildCategoryItems = CategoryActions.getChildrenOfCategory(accessTokenId, clonedChildCategoryId);
@@ -208,6 +309,46 @@ public class CloneListItemTest extends BackEndTest {
         assertThat(checklistTableData.getRows().get(0).getColumns()).hasSize(1);
         assertThat(checklistTableData.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
         assertThat(checklistTableData.getRows().get(0).getColumns().get(0).getData()).isEqualTo(CHECKLIST_TABLE_COLUMN_VALUE);
+
+        NotebookView customTableItem = findByTitle(CUSTOM_TABLE_TITLE, clonedParentItems.getChildren());
+        assertThat(customTableItem.getType()).isEqualTo(ListItemType.CUSTOM_TABLE.name());
+        TableResponse customTableData = TableActions.getTable(accessTokenId, customTableItem.getId());
+        assertThat(customTableData.getTableHeads()).hasSize(11);
+        assertThat(customTableData.getTableHeads().get(0).getContent()).isEqualTo(CUSTOM_TABLE_COLUMN_NAME);
+        assertThat(customTableData.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
+        assertThat(customTableData.getRows()).hasSize(1);
+        assertThat(customTableData.getRows().get(0).getRowIndex()).isEqualTo(0);
+        assertThat(customTableData.getRows()).hasSize(1);
+
+        verifyCustomTableColumn(customTableData, 0, ColumnType.TEXT, CUSTOM_TABLE_COLUMN_TEXT);
+        verifyCustomTableColumn(customTableData, 1, ColumnType.NUMBER, OBJECT_MAPPER_WRAPPER.convertValue(new Number(CUSTOM_TABLE_NUMBER_STEP, CUSTOM_TABLE_NUMBER_VALUE), Object.class));
+        verifyCustomTableColumn(customTableData, 2, ColumnType.CHECKBOX, String.valueOf(true));
+        verifyCustomTableColumn(customTableData, 3, ColumnType.COLOR, CUSTOM_TABLE_COLOR_VALUE);
+        verifyCustomTableColumn(customTableData, 4, ColumnType.DATE, CUSTOM_TABLE_COLUMN_DATE);
+        verifyCustomTableColumn(customTableData, 5, ColumnType.TIME, CUSTOM_TABLE_COLUMN_TIME);
+        verifyCustomTableColumn(customTableData, 6, ColumnType.DATE_TIME, CUSTOM_TABLE_COLUMN_DATE_TIME);
+        verifyCustomTableColumn(customTableData, 7, ColumnType.MONTH, CUSTOM_TABLE_COLUMN_MONTH);
+        verifyCustomTableColumn(
+            customTableData,
+            8,
+            ColumnType.RANGE,
+            OBJECT_MAPPER_WRAPPER.convertValue(
+                new Range(
+                    CUSTOM_TABLE_RANGE_MIN,
+                    CUSTOM_TABLE_RANGE_MAX,
+                    CUSTOM_TABLE_RANGE_STEP,
+                    CUSTOM_TABLE_RANGE_VALUE
+                ),
+                Object.class
+            )
+        );
+        verifyCustomTableColumn(customTableData, 9, ColumnType.LINK, CUSTOM_TABLE_COLUMN_LINK);
+        verifyCustomTableColumn(customTableData, 10, ColumnType.EMPTY, null);
+    }
+
+    private static void verifyCustomTableColumn(TableResponse customTableData, Integer columnIndex, ColumnType columnType, Object data) {
+        assertThat(customTableData.getRows().get(0).getColumns().get(columnIndex).getColumnType()).isEqualTo(columnType);
+        assertThat(customTableData.getRows().get(0).getColumns().get(columnIndex).getData()).isEqualTo(data);
     }
 
     private NotebookView findByTitle(String title, List<NotebookView> views) {

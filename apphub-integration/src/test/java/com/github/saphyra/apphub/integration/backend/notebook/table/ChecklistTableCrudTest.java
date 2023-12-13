@@ -78,7 +78,27 @@ public class ChecklistTableCrudTest extends BackEndTest {
         edit_listItemNotFound(accessTokenId, tableResponse);
         edit_columnDeleted(accessTokenId, listItemId);
         tableResponse = edit_columnAdded(accessTokenId, listItemId);
-        edit_columnModified(accessTokenId, listItemId, tableResponse);
+        tableResponse = edit_columnModified(accessTokenId, listItemId, tableResponse);
+
+        changeRowStatus_nullStatus(accessTokenId, tableResponse);
+        changeRowStatus(accessTokenId, listItemId, tableResponse);
+
+        delete(accessTokenId, listItemId);
+    }
+
+    private void changeRowStatus(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+        UUID rowId = tableResponse.getRows().get(0).getRowId();
+        TableActions.getUpdateChecklistTableRowStatusResponse(accessTokenId, rowId, false);
+
+        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+
+        assertThat(tableResponse.getRows().get(0).getChecked()).isFalse();
+    }
+
+    private void changeRowStatus_nullStatus(UUID accessTokenId, TableResponse tableResponse) {
+        Response response = TableActions.getUpdateChecklistTableRowStatusResponse(accessTokenId, tableResponse.getRows().get(0).getRowId(), null);
+
+        ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
     }
 
     private static void create_blankTitle(UUID accessTokenId) {
@@ -708,7 +728,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
         return tableResponse;
     }
 
-    private static void edit_columnModified(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static TableResponse edit_columnModified(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -734,12 +754,17 @@ public class ChecklistTableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        TableActions.editTable(accessTokenId, listItemId, editTableRequest);
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.editTable(accessTokenId, listItemId, editTableRequest)
+            .getTableResponse();
+        assertThat(tableResponse.getRows().get(0).getChecked()).isTrue();
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
         assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(NEW_COLUMN_VALUE);
 
+        return tableResponse;
+    }
+
+    private static void delete(UUID accessTokenId, UUID listItemId) {
         ListItemActions.deleteListItem(accessTokenId, listItemId);
 
         List<CategoryTreeView> categoryTreeViews = CategoryActions.getCategoryTree(accessTokenId);

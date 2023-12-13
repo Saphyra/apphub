@@ -15,5 +15,6 @@ import java.util.UUID;
 public class ChildrenOfCategoryResponse {
     private UUID parent;
     private String title;
+    private ListItemType listItemType;
     private List<NotebookView> children;
 }

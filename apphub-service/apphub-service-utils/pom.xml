@@ -33,12 +33,14 @@
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-test-repository</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-test-api</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

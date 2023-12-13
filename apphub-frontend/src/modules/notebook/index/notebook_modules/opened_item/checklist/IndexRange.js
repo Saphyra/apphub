@@ -4,12 +4,14 @@ const IndexRange = {
     MIN: (items) => new Stream(items)
         .map(item => item.index)
         .min()
-        .orElse(0) - 1,
+        .map(i => i - 1)
+        .orElse(0),
 
     MAX: (items) => new Stream(items)
         .map(item => item.index)
         .max()
-        .orElse(0) + 1
+        .map(i => i + 1)
+        .orElse(0)
 }
 
 export default IndexRange;
