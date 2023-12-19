@@ -6,4 +6,6 @@ import java.util.List;
 
 interface LogParameterVisibilityRepository extends CrudRepository<LogParameterVisibilityEntity, String> {
     List<LogParameterVisibilityEntity> getByUserId(String userId);
+
+    void deleteByUserId(String userId);
 }
