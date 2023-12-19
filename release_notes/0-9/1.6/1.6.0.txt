@@ -1,4 +1,6 @@
 ===FEATURES===
+    Integration tests
+        Save stack trace in case of test failure
 
 ===BUGFIXES===
 

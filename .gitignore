@@ -11,7 +11,7 @@ logs/**
 
 # testing
 **/coverage
-apphub-integration/screenshots/**
+apphub-integration/error_report/**
 
 # production
 **/build
