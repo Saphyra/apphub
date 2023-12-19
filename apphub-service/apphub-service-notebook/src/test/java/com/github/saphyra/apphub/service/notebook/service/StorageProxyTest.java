@@ -78,15 +78,6 @@ public class StorageProxyTest {
     }
 
     @Test
-    public void duplicateFile() {
-        given(storageClient.duplicateFile(STORED_FILE_ID, ACCESS_TOKEN, LOCALE)).willReturn(NEW_FILE_ID);
-
-        UUID result = underTest.duplicateFile(STORED_FILE_ID);
-
-        assertThat(result).isEqualTo(NEW_FILE_ID);
-    }
-
-    @Test
     public void getFileMetadata() {
         given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN, LOCALE)).willReturn(storedFileResponse);
 

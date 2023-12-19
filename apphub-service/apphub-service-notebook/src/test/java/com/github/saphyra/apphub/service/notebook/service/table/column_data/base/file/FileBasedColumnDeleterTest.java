@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +20,7 @@ class FileBasedColumnDeleterTest {
     private static final UUID COLUMN_ID = UUID.randomUUID();
 
     @Mock
-    private FileDeleter fileDeleter;
+    private FileDeletionService fileDeletionService;
 
     @Mock
     private DimensionDao dimensionDao;
@@ -39,7 +40,7 @@ class FileBasedColumnDeleterTest {
 
         underTest.delete(column);
 
-        then(fileDeleter).should().deleteFile(COLUMN_ID);
+        then(fileDeletionService).should().deleteFile(COLUMN_ID);
         then(columnTypeDao).should().deleteById(COLUMN_ID);
         then(dimensionDao).should().delete(column);
     }

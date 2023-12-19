@@ -24,6 +24,8 @@ public class FileDaoTest {
     private static final String PARENT_STRING = "parent";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
+    private static final String STORED_FILE_ID_STRING = "stored-file-id";
+    private static final UUID STORED_FILE_ID = UUID.randomUUID();
 
     @Mock
     private UuidConverter uuidConverter;
@@ -92,5 +94,13 @@ public class FileDaoTest {
         underTest.deleteByParent(PARENT);
 
         verify(repository).deleteByParent(PARENT_STRING);
+    }
+
+    @Test
+    void countByStoredFileId() {
+        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
+        given(repository.countByStoredFileId(STORED_FILE_ID_STRING)).willReturn(2);
+
+        assertThat(underTest.countByStoredFileId(STORED_FILE_ID)).isEqualTo(2);
     }
 }

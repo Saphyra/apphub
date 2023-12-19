@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ import static java.util.Objects.isNull;
 class FileBasedColumnEditer {
     private final DimensionDao dimensionDao;
     private final ObjectMapperWrapper objectMapperWrapper;
-    private final FileDeleter fileDeleter;
+    private final FileDeletionService fileDeletionService;
     private final FileSaver fileSaver;
 
     public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
@@ -32,7 +33,7 @@ class FileBasedColumnEditer {
 
         FileMetadata fileMetadata = objectMapperWrapper.convertValue(model.getData(), FileMetadata.class);
         if (isNull(fileMetadata.getStoredFileId())) {
-            fileDeleter.deleteFile(column.getDimensionId());
+            fileDeletionService.deleteFile(column.getDimensionId());
             return fileSaver.saveFile(listItem.getUserId(), rowId, model, column, fileMetadata);
         }
 

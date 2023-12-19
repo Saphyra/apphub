@@ -6,6 +6,7 @@
 
 .table-column-content {
     flex-grow: 2;
+    padding: 5px;
 }
 
 .notebook-table-change-column-type-button,
@@ -64,7 +65,7 @@
 .notebook-table-image-preview {
     max-width: 400px;
     max-height: 300px;
-    margin: 5px;
+    margin: auto;
     border: 2px ridge white;
     display: block;
 }

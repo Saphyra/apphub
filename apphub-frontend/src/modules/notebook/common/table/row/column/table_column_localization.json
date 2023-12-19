@@ -34,5 +34,9 @@
     "overwrite-file": {
         "en": "Overwrite file",
         "hu": "Fájl felülírása"
+    },
+    "download-file": {
+        "en": "Download file",
+        "hu": "Fájl letöltése"
     }
 }

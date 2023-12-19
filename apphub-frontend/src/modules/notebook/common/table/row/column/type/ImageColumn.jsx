@@ -113,7 +113,7 @@ const ImageColumn = ({
                             <Button
                                 className="notebook-table-download-file-button"
                                 onclick={() => downloadFile(columnData.data.storedFileId)}
-                                title={localizationHandler.get("overwrite-file")}
+                                title={localizationHandler.get("download-file")}
                             />
                         </div>
                     </div>

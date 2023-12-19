@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ class FileBasedColumnEditerTest {
     private ObjectMapperWrapper objectMapperWrapper;
 
     @Mock
-    private FileDeleter fileDeleter;
+    private FileDeletionService fileDeletionService;
 
     @Mock
     private FileSaver fileSaver;
@@ -67,7 +68,7 @@ class FileBasedColumnEditerTest {
         then(column).should().setIndex(COLUMN_INDEX);
         then(dimensionDao).should().save(column);
 
-        then(fileDeleter).shouldHaveNoInteractions();
+        then(fileDeletionService).shouldHaveNoInteractions();
         then(fileSaver).shouldHaveNoInteractions();
     }
 
@@ -87,7 +88,7 @@ class FileBasedColumnEditerTest {
         then(column).should().setIndex(COLUMN_INDEX);
         then(dimensionDao).should().save(column);
 
-        then(fileDeleter).should().deleteFile(COLUMN_ID);
+        then(fileDeletionService).should().deleteFile(COLUMN_ID);
         then(fileSaver).should().saveFile(USER_ID, ROW_ID, model, column, fileMetadata);
     }
 }

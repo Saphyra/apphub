@@ -19,8 +19,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class FileCloneServiceTest {
     private static final UUID ORIGINAL_PARENT = UUID.randomUUID();
-    private static final UUID ORIGINAL_FILE_ID = UUID.randomUUID();
-    private static final UUID CLONED_FILE_ID = UUID.randomUUID();
+    private static final UUID FILE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID NEW_PARENT = UUID.randomUUID();
 
@@ -55,11 +54,10 @@ public class FileCloneServiceTest {
 
         given(listItemClone.getListItemId()).willReturn(NEW_PARENT);
 
-        given(file.getStoredFileId()).willReturn(ORIGINAL_FILE_ID);
+        given(file.getStoredFileId()).willReturn(FILE_ID);
 
         given(fileDao.findByParentValidated(ORIGINAL_PARENT)).willReturn(file);
-        given(storageProxy.duplicateFile(ORIGINAL_FILE_ID)).willReturn(CLONED_FILE_ID);
-        given(fileFactory.create(USER_ID, NEW_PARENT, CLONED_FILE_ID)).willReturn(fileClone);
+        given(fileFactory.create(USER_ID, NEW_PARENT, FILE_ID)).willReturn(fileClone);
 
         underTest.cloneFile(toClone, listItemClone);
 

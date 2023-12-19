@@ -17,7 +17,10 @@ public class FileDeletionService {
 
     public void deleteFile(UUID parent) {
         File file = fileDao.findByParentValidated(parent);
-        storageProxy.deleteFile(file.getStoredFileId());
+        if (fileDao.countByStoredFileId(file.getStoredFileId()) < 2) {
+            storageProxy.deleteFile(file.getStoredFileId());
+        }
+
         fileDao.delete(file);
     }
 }

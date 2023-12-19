@@ -39,4 +39,8 @@ public class FileDao extends AbstractDao<FileEntity, File, String, FileRepositor
     public void deleteByParent(UUID parent) {
         repository.deleteByParent(uuidConverter.convertDomain(parent));
     }
+
+    public int countByStoredFileId(UUID storedFileId) {
+        return repository.countByStoredFileId(uuidConverter.convertDomain(storedFileId));
+    }
 }

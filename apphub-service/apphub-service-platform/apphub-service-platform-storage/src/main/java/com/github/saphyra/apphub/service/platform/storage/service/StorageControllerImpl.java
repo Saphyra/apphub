@@ -24,7 +24,6 @@ public class StorageControllerImpl implements StorageController {
     private final StoreFileService storeFileService;
     private final DownloadFileService downloadFileService;
     private final DeleteFileService deleteFileService;
-    private final DuplicateFileService duplicateFileService;
     private final StoredFileMetadataQueryService metadataQueryService;
 
     @Override
@@ -65,12 +64,6 @@ public class StorageControllerImpl implements StorageController {
             .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getStoredFile().getFileName()))
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .body(responseBody);
-    }
-
-    @Override
-    public UUID duplicateFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to duplicate file {}", accessTokenHeader.getUserId(), storedFileId);
-        return duplicateFileService.duplicateFile(accessTokenHeader.getUserId(), storedFileId);
     }
 
     @Override
