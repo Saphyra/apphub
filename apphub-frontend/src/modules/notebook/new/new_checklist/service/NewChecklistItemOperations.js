@@ -3,17 +3,14 @@ import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import ChecklistItemData from "../../../common/checklist_item/ChecklistItemData";
 
-export const addItem = (items, setItems) => {
-    const maxOrder = new Stream(items)
-        .map(item => item.index)
-        .max()
-        .orElse(0);
+export const addItemToEdge = (indexRange, items, setItems) => {
+    const index = indexRange(items);
 
-    const newRow = new ChecklistItemData(maxOrder + 1);
+    const newRow = new ChecklistItemData(index);
+
     const copy = new Stream(items)
         .add(newRow)
         .toList();
-
     setItems(copy);
 }
 

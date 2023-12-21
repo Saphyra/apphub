@@ -7,11 +7,13 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import { confirmDeleteChcecked, loadTable, save } from "./service/TableDao";
 import { getTableHeads, getTableRows } from "./service/TableAssembler";
 import { close, discard } from "./service/TableUtils";
-import RowIndexRange from "./RowIndexRange";
-import AddRowButton from "./component/AddRowButton";
-import AddColumnButton from "./component/AddColumnButton";
-import TableHeadIndexRange from "./TableHeadIndexRange";
+import RowIndexRange from "../../../../common/table/row/RowIndexRange";
+import AddRowButton from "../../../../common/table/row/AddRowButton";
+import AddColumnButton from "../../../../common/table/table_head/AddColumnButton";
+import TableHeadIndexRange from "../../../../common/table/table_head/TableHeadIndexRange";
 import Stream from "../../../../../../common/js/collection/Stream";
+import { newColumn } from "./service/TableColumnCrudService";
+import { newRow } from "./service/TableRowCrudService";
 
 const Table = ({
     localizationHandler,
@@ -76,23 +78,15 @@ const Table = ({
                             {editingEnabled &&
                                 <th>
                                     <AddColumnButton
-                                        tableHeads={tableHeads}
-                                        setTableHeads={setTableHeads}
-                                        rows={rows}
-                                        setRows={setRows}
                                         id="notebook-content-table-add-column-to-start"
                                         label="|<+"
-                                        indexRange={TableHeadIndexRange.MIN}
+                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN)}
                                     />
 
                                     <AddColumnButton
-                                        tableHeads={tableHeads}
-                                        setTableHeads={setTableHeads}
-                                        rows={rows}
-                                        setRows={setRows}
                                         id="notebook-content-table-add-column-to-end"
                                         label="+>|"
-                                        indexRange={TableHeadIndexRange.MAX}
+                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX)}
                                     />
                                 </th>
                             }
@@ -104,13 +98,11 @@ const Table = ({
                     <tbody>
                         {editingEnabled &&
                             <AddRowButton
-                                indexRange={RowIndexRange.MIN}
                                 id="notebook-content-table-add-row-to-start"
-                                rows={rows}
+                                className={"notebook-content-table-add-row-button"}
                                 tableHeads={tableHeads}
-                                setRows={setRows}
                                 checklist={checklist}
-                                custom={custom}
+                                callback={() => newRow(rows, tableHeads, setRows, RowIndexRange.MIN, custom)}
                             />
                         }
 
@@ -118,13 +110,11 @@ const Table = ({
 
                         {editingEnabled &&
                             <AddRowButton
-                                indexRange={RowIndexRange.MAX}
                                 id="notebook-content-table-add-row-to-end"
-                                rows={rows}
+                                className={"notebook-content-table-add-row-button"}
                                 tableHeads={tableHeads}
-                                setRows={setRows}
                                 checklist={checklist}
-                                custom={custom}
+                                callback={() => newRow(rows, tableHeads, setRows, RowIndexRange.MAX, custom)}
                             />
                         }
                     </tbody>

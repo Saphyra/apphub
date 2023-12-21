@@ -1,4 +1,4 @@
-import Stream from "../../../../../../common/js/collection/Stream";
+import Stream from "../../../../../common/js/collection/Stream";
 
 const TableHeadIndexRange = {
     MIN: (tableHeads) => new Stream(tableHeads)

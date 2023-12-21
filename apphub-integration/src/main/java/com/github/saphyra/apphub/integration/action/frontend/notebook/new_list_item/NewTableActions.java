@@ -23,8 +23,8 @@ public class NewTableActions {
             .click();
     }
 
-    public static void newRow(WebDriver driver) {
-        driver.findElement(By.id("notebook-new-table-new-row-button"))
+    public static void addRowToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-new-table-add-row-to-end"))
             .click();
     }
 
@@ -35,8 +35,8 @@ public class NewTableActions {
             .collect(Collectors.toList());
     }
 
-    public static void newColumn(WebDriver driver) {
-        driver.findElement(By.id("notebook-new-table-new-column-button"))
+    public static void addColumnToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-new-table-add-column-to-end"))
             .click();
     }
 

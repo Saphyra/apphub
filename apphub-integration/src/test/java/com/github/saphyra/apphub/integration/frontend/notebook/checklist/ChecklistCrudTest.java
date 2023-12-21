@@ -86,8 +86,8 @@ public class ChecklistCrudTest extends SeleniumTest {
     }
 
     private static void create_addItem(WebDriver driver) {
-        NewChecklistActions.addItem(driver);
-        NewChecklistActions.addItem(driver);
+        NewChecklistActions.addItemToEnd(driver);
+        NewChecklistActions.addItemToEnd(driver);
         assertThat(NewChecklistActions.getItems(driver)).hasSize(2);
     }
 

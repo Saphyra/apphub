@@ -1,4 +1,4 @@
-import Stream from "../../../../../../common/js/collection/Stream";
+import Stream from "../../../../../common/js/collection/Stream";
 
 const RowIndexRange = {
     MIN: (rows) => new Stream(rows)

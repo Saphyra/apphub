@@ -5,27 +5,19 @@ import TableRowData from "../../../common/table/row/TableRowData";
 import TableColumnData from "../../../common/table/row/column/TableColumnData";
 import ColumnType from "../../../common/table/row/column/type/ColumnType";
 
-export const newRow = (rows, tableHeads, setRows, custom) => {
-    const rowIndex = new Stream(rows)
-        .map(row => row.rowIndex)
-        .max()
-        .orElse(0);
-
-    const maybeFirstRow = new Stream(rows)
-        .filter(row => row.rowIndex === rowIndex)
-        .findFirst();
+export const newRow = (rows, tableHeads, setRows, indexRange, custom) => {
+    const rowIndex = indexRange(rows);
 
     const columns = new Stream(tableHeads)
         .map(tableHead => tableHead.columnIndex)
-        .map(columnIndex => new TableColumnData(columnIndex, getColumnType(maybeFirstRow, columnIndex, custom)))
+        .map(columnIndex => new TableColumnData(columnIndex, getColumnType(rows, indexRange, custom, columnIndex)))
         .toList();
 
-    const newRow = new TableRowData(rowIndex + 1, columns);
+    const newRow = new TableRowData(rowIndex, columns);
 
     const copy = new Stream(rows)
         .add(newRow)
         .toList();
-
     setRows(copy);
 }
 

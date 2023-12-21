@@ -127,7 +127,7 @@ public class NotebookUtils {
             }
 
             for (int rowIndex = 1; rowIndex < columns.size(); rowIndex++) {
-                NewTableActions.newRow(driver);
+                NewTableActions.addRowToEnd(driver);
 
                 List<TableColumn> tableColumns = NewTableActions.getRows(driver)
                     .get(rowIndex)
@@ -166,7 +166,7 @@ public class NotebookUtils {
             }
 
             for (int rowIndex = 1; rowIndex < rows.size(); rowIndex++) {
-                NewTableActions.newRow(driver);
+                NewTableActions.addRowToEnd(driver);
 
                 List<TableColumn> tableColumns = NewTableActions.getRows(driver)
                     .get(rowIndex)
@@ -232,11 +232,11 @@ public class NotebookUtils {
 
         if (!rows.isEmpty()) {
             for (int i = 0; i < rows.size(); i++) {
-                NewTableActions.newRow(driver);
+                NewTableActions.addRowToEnd(driver);
             }
 
             for (int i = 0; i < rows.get(0).size(); i++) {
-                NewTableActions.newColumn(driver);
+                NewTableActions.addColumnToEnd(driver);
             }
         }
 

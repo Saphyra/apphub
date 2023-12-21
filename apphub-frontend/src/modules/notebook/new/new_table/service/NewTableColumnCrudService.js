@@ -2,16 +2,12 @@ import Utils from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import TableColumnData from "../../../common/table/row/column/TableColumnData";
-import ColumnType from "../../../common/table/row/column/type/ColumnType";
 import TableHeadData from "../../../common/table/table_head/TableHeadData";
 
-export const newColumn = (tableHeads, setTableHeads, rows, updateRow, custom) => {
-    const columnIndex = new Stream(tableHeads)
-        .map(tableHead => tableHead.columnIndex)
-        .max()
-        .orElse(0);
+export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange) => {
+    const columnIndex = indexRange(tableHeads);
 
-    const newTableHead = new TableHeadData(columnIndex + 1, "", Utils.generateRandomId());
+    const newTableHead = new TableHeadData(columnIndex, "", Utils.generateRandomId());
     const copy = new Stream(tableHeads)
         .add(newTableHead)
         .toList();
@@ -19,11 +15,11 @@ export const newColumn = (tableHeads, setTableHeads, rows, updateRow, custom) =>
 
     new Stream(rows)
         .forEach(row => {
-            const newColumn = new TableColumnData(newTableHead.columnIndex, custom ? ColumnType.EMPTY : ColumnType.TEXT);
+            const newColumn = new TableColumnData(newTableHead.columnIndex);
             row.columns.push(newColumn);
         });
 
-    updateRow();
+    Utils.copyAndSet(rows, setRows);
 }
 
 export const moveColumn = (tableHead, moveDirection, tableHeads, updateTableHead, rows, updateRow) => {
