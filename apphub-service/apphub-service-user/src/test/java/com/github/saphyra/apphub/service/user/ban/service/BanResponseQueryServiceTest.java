@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,12 +33,17 @@ public class BanResponseQueryServiceTest {
     private static final String BANNED_BY_USER_EMAIL = "banned-by-user-email";
     private static final String BANNED_BY_USER_USERNAME = "banned-by-user-username";
     private static final LocalDateTime MARKED_FOR_DELETION_AT = EXPIRATION.plusDays(1);
+    private static final String FORMATTED_EXPIRATION = "formatted-expiration";
+    private static final String FORMATTED_MARKED_FOR_DELETION_AT = "formatted-marked-for-deletion-at";
 
     @Mock
     private BanDao banDao;
 
     @Mock
     private UserDao userDao;
+
+    @Mock
+    private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
     private BanResponseQueryService underTest;
@@ -69,6 +74,8 @@ public class BanResponseQueryServiceTest {
         given(bannedByUser.getUsername()).willReturn(BANNED_BY_USER_USERNAME);
         given(bannedUser.isMarkedForDeletion()).willReturn(true);
         given(bannedUser.getMarkedForDeletionAt()).willReturn(MARKED_FOR_DELETION_AT);
+        given(dateTimeUtil.format(EXPIRATION)).willReturn(FORMATTED_EXPIRATION);
+        given(dateTimeUtil.format(MARKED_FOR_DELETION_AT)).willReturn(FORMATTED_MARKED_FOR_DELETION_AT);
 
         BanResponse result = underTest.getBans(BANNED_USER_ID);
 
@@ -76,13 +83,13 @@ public class BanResponseQueryServiceTest {
         assertThat(result.getUsername()).isEqualTo(BANNED_USER_USERNAME);
         assertThat(result.getEmail()).isEqualTo(BANNED_USER_EMAIL);
         assertThat(result.getMarkedForDeletion()).isTrue();
-        assertThat(result.getMarkedForDeletionAt()).isEqualTo(MARKED_FOR_DELETION_AT.toEpochSecond(ZoneOffset.UTC));
+        assertThat(result.getMarkedForDeletionAt()).isEqualTo(FORMATTED_MARKED_FOR_DELETION_AT);
 
         assertThat(result.getBans()).hasSize(1);
         BanDetailsResponse response = result.getBans().get(0);
         assertThat(response.getId()).isEqualTo(BAN_ID);
         assertThat(response.getBannedRole()).isEqualTo(BANNED_ROLE);
-        assertThat(response.getExpiration()).isEqualTo(EXPIRATION.toEpochSecond(ZoneOffset.UTC));
+        assertThat(response.getExpiration()).isEqualTo(FORMATTED_EXPIRATION);
         assertThat(response.getPermanent()).isTrue();
         assertThat(response.getReason()).isEqualTo(REASON);
         assertThat(response.getBannedById()).isEqualTo(BANNED_BY_ID);
@@ -110,6 +117,7 @@ public class BanResponseQueryServiceTest {
         given(bannedByUser.getUsername()).willReturn(BANNED_BY_USER_USERNAME);
         given(bannedUser.isMarkedForDeletion()).willReturn(true);
         given(bannedUser.getMarkedForDeletionAt()).willReturn(null);
+        given(dateTimeUtil.format(EXPIRATION)).willReturn(FORMATTED_EXPIRATION);
 
         BanResponse result = underTest.getBans(BANNED_USER_ID);
 
@@ -123,7 +131,7 @@ public class BanResponseQueryServiceTest {
         BanDetailsResponse response = result.getBans().get(0);
         assertThat(response.getId()).isEqualTo(BAN_ID);
         assertThat(response.getBannedRole()).isEqualTo(BANNED_ROLE);
-        assertThat(response.getExpiration()).isEqualTo(EXPIRATION.toEpochSecond(ZoneOffset.UTC));
+        assertThat(response.getExpiration()).isEqualTo(FORMATTED_EXPIRATION);
         assertThat(response.getPermanent()).isTrue();
         assertThat(response.getReason()).isEqualTo(REASON);
         assertThat(response.getBannedById()).isEqualTo(BANNED_BY_ID);

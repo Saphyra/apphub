@@ -14,7 +14,7 @@ import java.util.UUID;
 public class BanDetailsResponse {
     private UUID id;
     private String bannedRole;
-    private Long expiration;
+    private String expiration;
     private Boolean permanent;
     private String reason;
     private UUID bannedById;

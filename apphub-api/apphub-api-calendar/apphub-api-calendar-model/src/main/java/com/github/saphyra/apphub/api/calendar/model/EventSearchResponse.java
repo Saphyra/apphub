@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +14,7 @@ import java.util.UUID;
 @Builder
 public class EventSearchResponse {
     private UUID eventId;
-    private LocalDateTime time;
+    private String time;
     private RepetitionType repetitionType;
     private String repetitionData;
     private String title;

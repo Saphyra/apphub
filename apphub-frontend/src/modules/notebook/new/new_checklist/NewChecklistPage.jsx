@@ -13,9 +13,10 @@ import Constants from "../../../../common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import "./new_checklist.css";
 import ChecklistItemData from "../../common/checklist_item/ChecklistItemData";
-import { addItem } from "./service/NewChecklistItemOperations";
+import { addItemToEdge } from "./service/NewChecklistItemOperations";
 import create from "./service/NewChecklistSaver";
 import getItems from "./service/NewChecklistItemAssembler";
+import IndexRange from "../../common/checklist_item/IndexRange";
 
 const NewChecklistPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,6 +29,17 @@ const NewChecklistPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    const addButton = (indexRange, id) => {
+        return (
+            <Button
+                id={id}
+                className="notebook-new-checklist-add-button"
+                label="+"
+                onclick={() => addItemToEdge(indexRange, items, setItems)}
+            />
+        );
+    }
 
     return (
         <div id="notebook-new-checklist" className="main-page">
@@ -47,19 +59,15 @@ const NewChecklistPage = () => {
                 />
 
                 <div id="notebook-new-checklist-content-wrapper">
+                    {addButton(IndexRange.MIN, "notebook-new-checklist-add-item-to-start")}
+
                     {getItems(items, localizationHandler, setItems)}
+
+                    {addButton(IndexRange.MAX, "notebook-new-checklist-add-item-to-end")}
                 </div>
             </main>
 
             <Footer
-                leftButtons={
-                    <Button
-                        id="notebook-new-checklist-new-item-button"
-                        label={localizationHandler.get("new-item")}
-                        onclick={() => addItem(items, setItems)}
-                    />
-                }
-
                 centerButtons={
                     <Button
                         id="notebook-new-checklist-create-button"

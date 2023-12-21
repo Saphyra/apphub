@@ -89,7 +89,7 @@ public class TableCrudTest extends SeleniumTest {
     }
 
     private static void create_addRow(WebDriver driver) {
-        NewTableActions.newRow(driver);
+        NewTableActions.addRowToEnd(driver);
 
         assertThat(NewTableActions.getRows(driver)).hasSize(2);
     }
@@ -103,7 +103,7 @@ public class TableCrudTest extends SeleniumTest {
     }
 
     private static void create_addColumn(WebDriver driver) {
-        NewTableActions.newColumn(driver);
+        NewTableActions.addColumnToEnd(driver);
 
         assertThat(NewTableActions.getTableHeads(driver)).hasSize(2);
         assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
@@ -119,7 +119,7 @@ public class TableCrudTest extends SeleniumTest {
     }
 
     private static void create_moveColumnRight(WebDriver driver) {
-        NewTableActions.newColumn(driver);
+        NewTableActions.addColumnToEnd(driver);
         NewTableActions.getTableHeads(driver)
             .get(0)
             .setValue(TABLE_HEAD_1);
@@ -159,7 +159,7 @@ public class TableCrudTest extends SeleniumTest {
             .get(1)
             .remove();
 
-        NewTableActions.newRow(driver);
+        NewTableActions.addRowToEnd(driver);
         NewTableActions.getRows(driver)
             .get(1)
             .getColumns()

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.overv
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +40,7 @@ public class ErrorReportOverviewQueryServiceTest {
     private ErrorReportOverviewQueryService underTest;
 
     @Mock
-    private ErrorReport errorReport;
+    private ErrorReportDto errorReport;
 
     @Mock
     private ErrorReportOverview errorReportOverview;

@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
@@ -10,7 +12,7 @@ import com.github.saphyra.apphub.service.admin_panel.error_report.service.detail
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.server.ErrorReporterController;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.report.ReportErrorService;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +32,10 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     private final ErrorReportDetailsQueryService errorReportDetailsQueryService;
     private final ErrorReportDao errorReportDao;
     private final MarkErrorReportService markErrorReportService;
+    private final DateTimeUtil dateTimeUtil;
 
     @Override
-    public void reportError(ErrorReportModel model) {
+    public void reportError(ErrorReport model) {
         log.info("Creating errorReport for message {}", model.getMessage());
         reportErrorService.saveReport(model);
     }
@@ -57,9 +60,19 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     }
 
     @Override
-    public ErrorReportModel getErrorReport(UUID id, AccessTokenHeader accessTokenHeader) {
+    public ErrorReportResponse getErrorReport(UUID id, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query errorReport {}", accessTokenHeader.getUserId(), id);
-        return errorReportDetailsQueryService.findById(id);
+        ErrorReport errorReport = errorReportDetailsQueryService.findById(id);
+        return ErrorReportResponse.builder()
+            .id(errorReport.getId())
+            .createdAt(dateTimeUtil.format(errorReport.getCreatedAt()))
+            .message(errorReport.getMessage())
+            .service(errorReport.getService())
+            .responseStatus(errorReport.getResponseStatus())
+            .responseBody(errorReport.getResponseBody())
+            .exception(errorReport.getException())
+            .status(errorReport.getStatus())
+            .build();
     }
 
     @Override

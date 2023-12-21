@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class ErrorReportModel {
+public class ErrorReport {
     private UUID id;
     private LocalDateTime createdAt;
     private String message;

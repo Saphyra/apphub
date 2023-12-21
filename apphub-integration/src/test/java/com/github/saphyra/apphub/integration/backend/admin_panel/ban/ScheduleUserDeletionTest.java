@@ -15,9 +15,6 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,7 +115,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         BanResponse markUserForDeletionResponse = BanActions.markUserForDeletion(language, accessTokenId, testUserId, markUserForDeletionRequest);
 
         assertThat(markUserForDeletionResponse.getMarkedForDeletion()).isTrue();
-        assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(LocalDateTime.of(DATE, LocalTime.of(HOURS, MINUTES, 0)).toEpochSecond(ZoneOffset.UTC));
+        assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(DATE + String.format(" %s:%s:00", HOURS, MINUTES));
     }
 
     private static void unmarkUserForDeletion(Language language, UUID accessTokenId, UUID testUserId) {

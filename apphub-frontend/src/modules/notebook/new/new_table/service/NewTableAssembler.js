@@ -2,8 +2,12 @@ import Utils from "../../../../../common/js/Utils"
 import Stream from "../../../../../common/js/collection/Stream"
 import TableRow from "../../../common/table/row/TableRow"
 import TableHead from "../../../common/table/table_head/TableHead"
-import { moveColumn, removeColumn } from "./NewTableColumnCrudService"
-import { moveRow, removeRow } from "./NewTableRowCrudService"
+import AddColumnButton from "../../../common/table/table_head/AddColumnButton"
+import { moveColumn, newColumn, removeColumn } from "./NewTableColumnCrudService"
+import { moveRow, newRow, removeRow } from "./NewTableRowCrudService"
+import TableHeadIndexRange from "../../../common/table/table_head/TableHeadIndexRange"
+import AddRowButton from "../../../common/table/row/AddRowButton"
+import RowIndexRange from "../../../common/table/row/RowIndexRange"
 
 const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile) => {
     return (
@@ -13,7 +17,23 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
             </thead>
 
             <tbody>
+                <AddRowButton
+                    id="notebook-new-table-add-row-to-start"
+                    className={"notebook-new-table-add-row-button"}
+                    tableHeads={tableHeads}
+                    checklist={checklist}
+                    callback={() => newRow(rows, tableHeads, setRows, RowIndexRange.MIN, custom)}
+                />
+
                 {getTableRows(rows, setRows, checklist, custom, addFile)}
+
+                <AddRowButton
+                    id="notebook-new-table-add-row-to-end"
+                    className={"notebook-new-table-add-row-button"}
+                    tableHeads={tableHeads}
+                    checklist={checklist}
+                    callback={() => newRow(rows, tableHeads, setRows, RowIndexRange.MAX, custom)}
+                />
             </tbody>
         </table>
     )
@@ -30,7 +50,19 @@ const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads
 
     return (
         <tr>
-            <th></th>
+            <th>
+                <AddColumnButton
+                    id="notebook-new-table-add-column-to-start"
+                    label="|<+"
+                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN)}
+                />
+
+                <AddColumnButton
+                    id="notebook-new-table-add-column-to-end"
+                    label="+>|"
+                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX)}
+                />
+            </th>
             {checklist && <th>{localizationHandler.get("checked")}</th>}
 
             {

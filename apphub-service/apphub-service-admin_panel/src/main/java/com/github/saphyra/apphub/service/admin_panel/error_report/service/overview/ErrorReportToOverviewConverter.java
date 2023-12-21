@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.overview;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class ErrorReportToOverviewConverter {
-    public ErrorReportOverview convert(ErrorReport errorReport) {
+    private final DateTimeUtil dateTimeUtil;
+
+    public ErrorReportOverview convert(ErrorReportDto errorReport) {
         return ErrorReportOverview.builder()
             .id(errorReport.getId())
-            .createdAt(errorReport.getCreatedAt().toString())
+            .createdAt(dateTimeUtil.format(errorReport.getCreatedAt()))
             .responseStatus(errorReport.getResponseStatus())
             .message(errorReport.getMessage())
             .status(errorReport.getStatus().name())

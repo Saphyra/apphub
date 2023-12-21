@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class LogParameterVisibilityDaoTest {
@@ -60,5 +61,14 @@ public class LogParameterVisibilityDaoTest {
         Optional<LogParameterVisibility> result = underTest.findById(ID);
 
         assertThat(result).contains(domain);
+    }
+
+    @Test
+    void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        then(repository).should().deleteByUserId(USER_ID_STRING);
     }
 }

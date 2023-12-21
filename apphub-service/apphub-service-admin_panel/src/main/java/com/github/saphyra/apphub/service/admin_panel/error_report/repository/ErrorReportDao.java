@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 
 @Component
 @Slf4j
-public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, String, ErrorReportRepository> {
+public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReportDto, String, ErrorReportRepository> {
     private final UuidConverter uuidConverter;
 
     public ErrorReportDao(ErrorReportConverter converter, ErrorReportRepository repository, UuidConverter uuidConverter) {
@@ -23,11 +23,11 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, 
         this.uuidConverter = uuidConverter;
     }
 
-    public List<ErrorReport> getOverview(Specification<ErrorReportEntity> spec, Pageable pageable) {
+    public List<ErrorReportDto> getOverview(Specification<ErrorReportEntity> spec, Pageable pageable) {
         return converter.convertEntity(repository.findAll(spec, pageable).toList());
     }
 
-    public Optional<ErrorReport> findById(UUID id) {
+    public Optional<ErrorReportDto> findById(UUID id) {
         return findById(uuidConverter.convertDomain(id));
     }
 
@@ -35,7 +35,7 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReport, 
         deleteById(uuidConverter.convertDomain(id));
     }
 
-    public List<ErrorReport> findAllById(List<UUID> ids) {
+    public List<ErrorReportDto> findAllById(List<UUID> ids) {
         return StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(ids)).spliterator(), false)
             .map(converter::convertEntity)
             .collect(Collectors.toList());

@@ -1,3 +1,9 @@
 #notebook-new-table-content{
     margin: auto;
 }
+
+.notebook-new-table-add-row-button{
+    display: block;
+    margin: auto;
+    width: 75%;
+}

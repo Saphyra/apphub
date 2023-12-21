@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
@@ -16,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +32,12 @@ import static org.mockito.Mockito.verify;
 public class ErrorReporterControllerImplTest {
     private static final UUID ID = UUID.randomUUID();
     private static final String STATUS = "status";
+    private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+    private static final String FORMATTED_CREATED_AT = "formatted-created-at";
+    private static final String MESSAGE = "message";
+    private static final String SERVICE = "service";
+    private static final Integer RESPONSE_STATUS = 23;
+    private static final String RESPONSE_BODY = "response-body";
 
     @Mock
     private ReportErrorService reportErrorService;
@@ -44,11 +54,14 @@ public class ErrorReporterControllerImplTest {
     @Mock
     private MarkErrorReportService markErrorReportService;
 
+    @Mock
+    private DateTimeUtil dateTimeUtil;
+
     @InjectMocks
     private ErrorReporterControllerImpl underTest;
 
     @Mock
-    private ErrorReportModel model;
+    private ErrorReport errorReport;
 
     @Mock
     private ErrorReportOverview errorReportOverview;
@@ -59,11 +72,14 @@ public class ErrorReporterControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
+    @Mock
+    private ExceptionModel exceptionModel;
+
     @Test
     public void reportError() {
-        underTest.reportError(model);
+        underTest.reportError(errorReport);
 
-        verify(reportErrorService).saveReport(model);
+        verify(reportErrorService).saveReport(errorReport);
     }
 
     @Test
@@ -77,11 +93,27 @@ public class ErrorReporterControllerImplTest {
 
     @Test
     public void getErrorReport() {
-        given(errorReportDetailsQueryService.findById(ID)).willReturn(model);
+        given(errorReportDetailsQueryService.findById(ID)).willReturn(errorReport);
+        given(errorReport.getId()).willReturn(ID);
+        given(errorReport.getCreatedAt()).willReturn(CREATED_AT);
+        given(dateTimeUtil.format(CREATED_AT)).willReturn(FORMATTED_CREATED_AT);
+        given(errorReport.getMessage()).willReturn(MESSAGE);
+        given(errorReport.getService()).willReturn(SERVICE);
+        given(errorReport.getResponseStatus()).willReturn(RESPONSE_STATUS);
+        given(errorReport.getResponseBody()).willReturn(RESPONSE_BODY);
+        given(errorReport.getException()).willReturn(exceptionModel);
+        given(errorReport.getStatus()).willReturn(STATUS);
 
-        ErrorReportModel result = underTest.getErrorReport(ID, accessTokenHeader);
+        ErrorReportResponse result = underTest.getErrorReport(ID, accessTokenHeader);
 
-        assertThat(result).isEqualTo(model);
+        assertThat(result.getId()).isEqualTo(ID);
+        assertThat(result.getCreatedAt()).isEqualTo(FORMATTED_CREATED_AT);
+        assertThat(result.getMessage()).isEqualTo(MESSAGE);
+        assertThat(result.getService()).isEqualTo(SERVICE);
+        assertThat(result.getResponseStatus()).isEqualTo(RESPONSE_STATUS);
+        assertThat(result.getResponseBody()).isEqualTo(RESPONSE_BODY);
+        assertThat(result.getException()).isEqualTo(exceptionModel);
+        assertThat(result.getStatus()).isEqualTo(STATUS);
     }
 
     @Test

@@ -7,7 +7,7 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import { addItemToTheEdge, confirmDeleteChcecked, loadChecklist, orderItems, save } from "./service/ChecklistDao";
 import getItems from "./service/ChecklistAssembler";
 import { close, discard } from "./service/ChecklistUtils";
-import IndexRange from "./IndexRange";
+import IndexRange from "../../../../common/checklist_item/IndexRange";
 import addItemToEdge from "./service/ChecklistAddItemToEdgeService";
 import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";

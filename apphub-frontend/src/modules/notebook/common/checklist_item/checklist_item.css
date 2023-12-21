@@ -42,6 +42,7 @@
 .notebook-checklist-item-buttons {
     border-left: 2px ridge white;
     padding: 0 5px;
+    white-space: nowrap;
 }
 
 .notebook-checklist-item-edit-button {

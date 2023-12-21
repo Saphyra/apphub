@@ -39,9 +39,6 @@ public class StorageControllerImplTest {
     private DeleteFileService deleteFileService;
 
     @Mock
-    private DuplicateFileService duplicateFileService;
-
-    @Mock
     private StoredFileMetadataQueryService metadataQueryService;
 
     @InjectMocks
@@ -97,15 +94,6 @@ public class StorageControllerImplTest {
     }
 
     @Test
-    public void duplicateFile() {
-        given(duplicateFileService.duplicateFile(USER_ID, STORED_FILE_ID)).willReturn(NEW_STORED_FILE_ID);
-
-        UUID result = underTest.duplicateFile(STORED_FILE_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(NEW_STORED_FILE_ID);
-    }
-
-    @Test
     public void getFileMetadata() {
         given(metadataQueryService.getMetadata(USER_ID, STORED_FILE_ID)).willReturn(storedFileResponse);
 
@@ -113,5 +101,4 @@ public class StorageControllerImplTest {
 
         assertThat(result).isEqualTo(storedFileResponse);
     }
-
 }

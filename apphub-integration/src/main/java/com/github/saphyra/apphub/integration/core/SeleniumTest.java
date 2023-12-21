@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,10 +28,6 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 public class SeleniumTest extends TestBase {
-
-
-    public static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
-
     private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)
@@ -58,7 +52,7 @@ public class SeleniumTest extends TestBase {
 
     @SneakyThrows
     private void reportFailure(WebDriverWrapper driver, String method, int driverIndex) {
-        String directory = "screenshots/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
+        String directory = getReportDirectory(method);
         takeScreenshot(driver, directory, driverIndex);
         saveLogs(driver, directory, driverIndex);
     }

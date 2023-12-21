@@ -12,13 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport> {
+class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReportDto> {
     private final UuidConverter uuidConverter;
     private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
-    protected ErrorReport processEntityConversion(ErrorReportEntity entity) {
-        return ErrorReport.builder()
+    protected ErrorReportDto processEntityConversion(ErrorReportEntity entity) {
+        return ErrorReportDto.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
             .createdAt(entity.getCreatedAt())
             .message(entity.getMessage())
@@ -31,7 +31,7 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReport>
     }
 
     @Override
-    protected ErrorReportEntity processDomainConversion(ErrorReport domain) {
+    protected ErrorReportEntity processDomainConversion(ErrorReportDto domain) {
         return ErrorReportEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
             .createdAt(domain.getCreatedAt())

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.details;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class ErrorReportToResponseConverter {
-    public ErrorReportModel convert(ErrorReport errorReport) {
-        return ErrorReportModel.builder()
+    public ErrorReport convert(ErrorReportDto errorReport) {
+        return ErrorReport.builder()
             .id(errorReport.getId())
             .createdAt(errorReport.getCreatedAt())
             .message(errorReport.getMessage())

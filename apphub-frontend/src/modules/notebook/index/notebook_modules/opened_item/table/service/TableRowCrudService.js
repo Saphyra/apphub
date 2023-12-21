@@ -4,7 +4,7 @@ import MoveDirection from "../../../../../common/MoveDirection";
 import TableRowData from "../../../../../common/table/row/TableRowData";
 import TableColumnData from "../../../../../common/table/row/column/TableColumnData";
 import ColumnType from "../../../../../common/table/row/column/type/ColumnType";
-import RowIndexRange from "../RowIndexRange";
+import RowIndexRange from "../../../../../common/table/row/RowIndexRange";
 
 export const newRow = (rows, tableHeads, setRows, indexRange, custom) => {
     const rowIndex = indexRange(rows);

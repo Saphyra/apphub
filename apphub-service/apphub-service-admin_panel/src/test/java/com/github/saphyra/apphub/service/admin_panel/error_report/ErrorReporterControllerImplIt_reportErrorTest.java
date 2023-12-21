@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.StackTraceModel;
@@ -12,8 +12,8 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.ErrorResponseValidator;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
@@ -93,7 +93,7 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
 
     @Test
     public void idFilled() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .id(UUID.randomUUID())
             .message(MESSAGE)
             .build();
@@ -107,7 +107,7 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
 
     @Test
     public void blankMessage() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .message(" ")
             .build();
 
@@ -133,7 +133,7 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
             .stackTrace(Arrays.asList(stackTraceModel))
             .build();
 
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .message(MESSAGE)
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
@@ -150,9 +150,9 @@ public class ErrorReporterControllerImplIt_reportErrorTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        List<ErrorReport> reports = errorReportDao.findAll();
+        List<ErrorReportDto> reports = errorReportDao.findAll();
         assertThat(reports).hasSize(1);
-        ErrorReport report = reports.get(0);
+        ErrorReportDto report = reports.get(0);
         assertThat(report.getId()).isNotNull();
         assertThat(report.getCreatedAt()).isNotNull();
         assertThat(report.getMessage()).isEqualTo(MESSAGE);

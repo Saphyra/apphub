@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -49,10 +47,7 @@ class UserBannedDescriptionResolver {
     private String getLatestBanExpiration(List<BanDetailsResponse> relevantBans) {
         return relevantBans.stream()
             .map(BanDetailsResponse::getExpiration)
-            .sorted((o1, o2) -> Long.compare(o2, o1))
-            .map(epochSeconds -> LocalDateTime.ofEpochSecond(epochSeconds, 0, ZoneOffset.UTC))
-            .findFirst()
-            .map(LocalDateTime::toString)
+            .max(CharSequence::compare)
             .orElse("");
     }
 }

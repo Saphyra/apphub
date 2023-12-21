@@ -32,8 +32,8 @@ public class NewChecklistActions {
             .collect(Collectors.toList());
     }
 
-    public static void addItem(WebDriver driver) {
-        driver.findElement(By.id("notebook-new-checklist-new-item-button"))
+    public static void addItemToEnd(WebDriver driver) {
+        driver.findElement(By.id("notebook-new-checklist-add-item-to-end"))
             .click();
     }
 }

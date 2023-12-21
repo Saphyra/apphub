@@ -131,7 +131,7 @@ const FileMetadataTable = ({ fileMetadata, localizationHandler, editingEnabled, 
                             <Button
                                 className="notebook-table-download-file-button"
                                 onclick={() => downloadFile(storedFileId)}
-                                title={localizationHandler.get("overwrite-file")}
+                                title={localizationHandler.get("download-file")}
                             />
                         </td>
                     }

@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.integration.core;
 
+import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -16,14 +18,22 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Objects.isNull;
 
 @Slf4j
 @Listeners(SkipDisabledTestsInterceptor.class)
@@ -35,6 +45,7 @@ public class TestBase {
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
     private static final ThreadLocal<Stopwatch> DURATION_STOPWATCH = new ThreadLocal<>();
+    private static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
     public static String getEmailDomain() {
         return EMAIL_DOMAIN.get();
@@ -131,6 +142,30 @@ public class TestBase {
         DURATION_STOPWATCH.remove();
 
         log.debug("Test {} completed", methodName);
+
+        if (ITestResult.FAILURE == testResult.getStatus()) {
+            saveStackTrace(testResult.getName(), testResult.getThrowable());
+        }
+    }
+
+    @SneakyThrows
+    private void saveStackTrace(String method, Throwable throwable) {
+        String directory = getReportDirectory(method);
+        String fileName = directory + "/exception.json";
+        log.info("Exception fileName: {}", fileName);
+
+        String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsPrettyString(ExceptionConverter.map(throwable));
+
+        Path path = Paths.get(fileName);
+        File file = new File(fileName);
+        file.getParentFile()
+            .mkdirs();
+        file.createNewFile();
+        Files.writeString(path, exception);
+    }
+
+    protected String getReportDirectory(String method) {
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method + "-" + UUID.randomUUID();
     }
 
     private synchronized static void deleteTestUsers(String method) {

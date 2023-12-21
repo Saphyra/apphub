@@ -1,4 +1,10 @@
-#notebook-new-checklist-no-items{
+#notebook-new-checklist-no-items {
     text-align: center;
     font-size: 24px;
+}
+
+.notebook-new-checklist-add-button {
+    display: block;
+    margin: auto;
+    width: 50%;
 }

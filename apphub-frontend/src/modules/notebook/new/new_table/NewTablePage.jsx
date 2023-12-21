@@ -17,8 +17,6 @@ import Utils from "../../../../common/js/Utils";
 import TableColumnData from "../../common/table/row/column/TableColumnData";
 import TableRowData from "../../common/table/row/TableRowData";
 import create from "./service/NewTableSaver";
-import { newColumn } from "./service/NewTableColumnCrudService";
-import { newRow } from "./service/NewTableRowCrudService";
 import getTable from "./service/NewTableAssembler";
 import ColumnType from "../../common/table/row/column/type/ColumnType";
 import Spinner from "../../../../common/component/Spinner";
@@ -79,26 +77,6 @@ const NewTablePage = ({ checklist, custom }) => {
             </main>
 
             <Footer
-                leftButtons={[
-                    <Button
-                        key="new-column"
-                        id="notebook-new-table-new-column-button"
-                        label={localizationHandler.get("new-column")}
-                        onclick={() => newColumn(tableHeads, setTableHeads, rows, updateRows, custom)}
-                    />,
-                    <Button
-                        key="new-row"
-                        id="notebook-new-table-new-row-button"
-                        label={localizationHandler.get("new-row")}
-                        onclick={() => newRow(
-                            rows,
-                            tableHeads,
-                            setRows,
-                            custom
-                        )}
-                    />
-                ]}
-
                 centerButtons={
                     <Button
                         id="notebook-new-table-create-button"

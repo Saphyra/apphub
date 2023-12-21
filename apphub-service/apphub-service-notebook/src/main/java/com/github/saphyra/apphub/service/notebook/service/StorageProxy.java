@@ -33,10 +33,6 @@ public class StorageProxy {
         storageClient.deleteFile(fileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
     }
 
-    public UUID duplicateFile(UUID fileId) {
-        return storageClient.duplicateFile(fileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
-    }
-
     public StoredFileResponse getFileMetadata(UUID storedFileId) {
         try {
             return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());

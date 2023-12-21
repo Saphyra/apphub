@@ -1,0 +1,15 @@
+===FEATURES===
+    Integration tests
+        Save stack trace in case of test failure
+    Notebook
+        Do not duplicate the file on disk if a list item is cloned. Multiple references can point to the same storedFileId
+        Implement new add item/row/column layout to create pages
+
+===BUGFIXES===
+    Utils
+        Delete LogParameterVisibility when user deletes account
+    Fix time issues by returning formatted time instead of epoch
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===

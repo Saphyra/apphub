@@ -33,7 +33,7 @@ class CalendarSearchResultMapper {
     private EventSearchResponse mapEvent(Event event, List<Occurrence> occurrences) {
         return EventSearchResponse.builder()
             .eventId(event.getEventId())
-            .time(LocalDateTime.of(event.getStartDate(), Optional.ofNullable(event.getTime()).orElseGet(dateTimeUtil::getCurrentTime)))
+            .time(dateTimeUtil.format(LocalDateTime.of(event.getStartDate(), Optional.ofNullable(event.getTime()).orElseGet(dateTimeUtil::getCurrentTime)), false))
             .repetitionType(event.getRepetitionType())
             .repetitionData(event.getRepetitionData())
             .title(event.getTitle())

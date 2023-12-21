@@ -10,4 +10,6 @@ interface FileRepository extends CrudRepository<FileEntity, String> {
     void deleteByUserId(String userId);
 
     void deleteByParent(String parent);
+
+    int  countByStoredFileId(String storedFileId);
 }

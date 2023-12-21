@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.api.admin_panel.server;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public interface ErrorReporterController {
     @PutMapping(Endpoints.ADMIN_PANEL_INTERNAL_REPORT_ERROR)
-    void reportError(@RequestBody ErrorReportModel model);
+    void reportError(@RequestBody ErrorReport model);
 
     @PostMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORTS)
     List<ErrorReportOverview> getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
@@ -32,7 +33,7 @@ public interface ErrorReporterController {
     void markErrorReports(@RequestBody List<UUID> ids, @PathVariable("status") String status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.ADMIN_PANEL_GET_ERROR_REPORT)
-    ErrorReportModel getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    ErrorReportResponse getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.ADMIN_PANEL_DELETE_READ_ERROR_REPORTS)
     void deleteReadErrorReports(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

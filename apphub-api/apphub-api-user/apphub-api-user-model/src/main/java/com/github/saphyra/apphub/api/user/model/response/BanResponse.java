@@ -18,5 +18,5 @@ public class BanResponse {
     private String email;
     private List<BanDetailsResponse> bans;
     private Boolean markedForDeletion;
-    private Long markedForDeletionAt;
+    private String markedForDeletionAt;
 }
