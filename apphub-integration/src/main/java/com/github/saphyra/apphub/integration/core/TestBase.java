@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -144,13 +145,13 @@ public class TestBase {
         log.debug("Test {} completed", methodName);
 
         if (ITestResult.FAILURE == testResult.getStatus()) {
-            saveStackTrace(testResult.getName(), testResult.getThrowable());
+            saveStackTrace(testResult.getTestClass().getRealClass().getName(), testResult.getName(), testResult.getThrowable());
         }
     }
 
     @SneakyThrows
-    private void saveStackTrace(String method, Throwable throwable) {
-        String directory = getReportDirectory(method);
+    private void saveStackTrace(String className, String method, Throwable throwable) {
+        String directory = getReportDirectory(className, method);
         String fileName = directory + "/exception.json";
         log.info("Exception fileName: {}", fileName);
 
@@ -164,8 +165,11 @@ public class TestBase {
         Files.writeString(path, exception);
     }
 
-    protected String getReportDirectory(String method) {
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method + "-" + UUID.randomUUID();
+    protected String getReportDirectory(String className, String method) {
+        String[] split = className.split("\\.");
+        String clazz = split[split.length - 1];
+
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + clazz + "." + method + "_" + HexFormat.of().formatHex(className.getBytes());
     }
 
     private synchronized static void deleteTestUsers(String method) {
