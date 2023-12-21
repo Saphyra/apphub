@@ -10,8 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -27,10 +25,7 @@ class UserBannedDescriptionResolverTest {
     private static final String REQUIRED_ROLES = String.format("%s,%s", ROLE_1, ROLE_2);
     private static final String LOCALE = "locale";
     private static final String RESOLVED_LOCALIZATION = "resolved-{expiration}localization";
-    private static final LocalDateTime EXPIRATION = LocalDateTime.now()
-        .withNano(0);
-    private static final Long EXPIRATION_EPOCH = EXPIRATION.toEpochSecond(ZoneOffset.UTC);
-
+    private static final String EXPIRATION = "expiration";
     @Mock
     private RelevantBanQueryService relevantBanQueryService;
 
@@ -63,12 +58,12 @@ class UserBannedDescriptionResolverTest {
         given(relevantBanQueryService.getRelevantBans(USER_ID, List.of(ROLE_1, ROLE_2))).willReturn(List.of(ban));
         given(ban.getPermanent()).willReturn(false);
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
-        given(ban.getExpiration()).willReturn(EXPIRATION_EPOCH);
+        given(ban.getExpiration()).willReturn(EXPIRATION);
         given(translationService.translate(LocalizationKey.USER_BANNED, LOCALE)).willReturn(RESOLVED_LOCALIZATION);
 
         String result = underTest.resolve(USER_ID, REQUIRED_ROLES);
 
-        assertThat(result).isEqualTo(RESOLVED_LOCALIZATION.replace("{expiration}", EXPIRATION.toString()));
+        assertThat(result).isEqualTo(RESOLVED_LOCALIZATION.replace("{expiration}", EXPIRATION));
     }
 
     @Test

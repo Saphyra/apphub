@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.details;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ public class ErrorReportToResponseConverterTest {
 
     @Test
     public void convert() {
-        ErrorReport errorReport = ErrorReport.builder()
+        ErrorReportDto errorReport = ErrorReportDto.builder()
             .id(ID)
             .createdAt(CREATED_AT)
             .message(MESSAGE)
@@ -43,7 +43,7 @@ public class ErrorReportToResponseConverterTest {
             .service(SERVICE)
             .build();
 
-        ErrorReportModel result = underTest.convert(errorReport);
+        ErrorReport result = underTest.convert(errorReport);
 
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);

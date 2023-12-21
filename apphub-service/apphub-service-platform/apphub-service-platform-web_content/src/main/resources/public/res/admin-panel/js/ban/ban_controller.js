@@ -92,9 +92,7 @@
                     const expirationCell = document.createElement("TD");
                         expirationCell.classList.add("nowrap");
                         if(ban.expiration != null){
-                            const date = new Date(0);
-                                date.setUTCSeconds(ban.expiration);
-                            expirationCell.innerText = formatDate(date);
+                            expirationCell.innerText = ban.expiration;
                         }
                 row.appendChild(expirationCell);
 
@@ -144,10 +142,7 @@
                 markedForDeletionAtContainer.style.display = "block";
                 unmarkForDeletionButton.style.display = "block";
 
-                const date = new Date(0);
-                     date.setUTCSeconds(response.markedForDeletionAt);
-
-                markedForDeletionAtValue.innerText = formatDate(date);
+                markedForDeletionAtValue.innerText = response.markedForDeletionAt;
             }else{
                 deleteUserInputContainer.style.display = "block";
                 markedForDeletionAtContainer.style.display = "none";

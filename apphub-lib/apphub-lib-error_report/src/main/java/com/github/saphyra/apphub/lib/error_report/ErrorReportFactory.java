@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-class ErrorReportModelFactory {
+class ErrorReportFactory {
     private final DateTimeUtil dateTimeUtil;
     private final ObjectMapperWrapper objectMapperWrapper;
     private final ExceptionMapper exceptionMapper;
     private final CommonConfigProperties commonConfigProperties;
 
-    ErrorReportModel create(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
+    ErrorReport create(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
         ExceptionModel exceptionModel = exceptionMapper.map(exception);
-        return ErrorReportModel.builder()
+        return ErrorReport.builder()
             .createdAt(dateTimeUtil.getCurrentDateTime())
             .message(NullSafeConverter.safeConvert(exception, throwable -> String.format("%s on thread %s: %s", exceptionModel.getType(), exceptionModel.getThread(), throwable.getMessage()), "No message"))
             .responseStatus(status.value())
@@ -33,14 +33,14 @@ class ErrorReportModelFactory {
             .build();
     }
 
-    ErrorReportModel create(String message) {
+    ErrorReport create(String message) {
         return create(message, null);
     }
 
-    public ErrorReportModel create(String message, Throwable exception) {
+    public ErrorReport create(String message, Throwable exception) {
         ExceptionModel exceptionModel = NullSafeConverter.safeConvert(exception, exceptionMapper::map);
 
-        return ErrorReportModel.builder()
+        return ErrorReport.builder()
             .createdAt(dateTimeUtil.getCurrentDateTime())
             .message(message)
             .exception(exceptionModel)

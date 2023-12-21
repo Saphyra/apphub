@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ErrorReportModelFactoryTest {
+public class ErrorReportFactoryTest {
     private static final LocalDateTime CURRENT_DATE = LocalDateTime.now();
     private static final String ERROR_RESPONSE = "error-response";
     private static final String MESSAGE = "message";
@@ -40,7 +40,7 @@ public class ErrorReportModelFactoryTest {
     private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
-    private ErrorReportModelFactory underTest;
+    private ErrorReportFactory underTest;
 
     @Mock
     private ErrorResponse errorResponse;
@@ -61,7 +61,7 @@ public class ErrorReportModelFactoryTest {
         given(exceptionModel.getType()).willReturn(TYPE);
         given(commonConfigProperties.getApplicationName()).willReturn(APPLICATION_NAME);
 
-        ErrorReportModel result = underTest.create(HttpStatus.NOT_FOUND, errorResponse, exception);
+        ErrorReport result = underTest.create(HttpStatus.NOT_FOUND, errorResponse, exception);
 
         assertThat(result.getId()).isNull();
         assertThat(result.getCreatedAt()).isEqualTo(CURRENT_DATE);
@@ -78,7 +78,7 @@ public class ErrorReportModelFactoryTest {
         given(exceptionMapper.map(exception)).willReturn(exceptionModel);
         given(commonConfigProperties.getApplicationName()).willReturn(APPLICATION_NAME);
 
-        ErrorReportModel result = underTest.create(MESSAGE, exception);
+        ErrorReport result = underTest.create(MESSAGE, exception);
 
         assertThat(result.getId()).isNull();
         assertThat(result.getCreatedAt()).isEqualTo(CURRENT_DATE);

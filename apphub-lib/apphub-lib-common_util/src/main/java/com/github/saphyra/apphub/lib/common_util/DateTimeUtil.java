@@ -10,6 +10,10 @@ import java.util.Optional;
 
 @Component
 public class DateTimeUtil {
+    private static final String DATE_FORMAT = "%s-%s-%s";
+    private static final String TIME_FORMAT = "%s:%s:%s";
+    private static final String SHORT_TIME_FORMAT = "%s:%s";
+
     public LocalTime getCurrentTime() {
         return LocalTime.now(ZoneOffset.UTC);
     }
@@ -32,5 +36,36 @@ public class DateTimeUtil {
         return getCurrentDateTime()
             .toInstant(ZoneOffset.UTC)
             .toEpochMilli();
+    }
+
+    public String format(LocalDateTime dateTime) {
+        return format(dateTime, true);
+    }
+
+    public String format(LocalDateTime dateTime, boolean withSeconds) {
+        return format(dateTime.toLocalDate()) + " " + (withSeconds ? format(dateTime.toLocalTime()) : formatWithoutSeconds(dateTime.toLocalTime()));
+    }
+
+    public String format(LocalDate date) {
+        return DATE_FORMAT.formatted(
+            date.getYear(),
+            CommonUtils.withLeadingZeros(date.getMonthValue(), 2),
+            CommonUtils.withLeadingZeros(date.getDayOfMonth(), 2)
+        );
+    }
+
+    public String format(LocalTime time) {
+        return TIME_FORMAT.formatted(
+            CommonUtils.withLeadingZeros(time.getHour(), 2),
+            CommonUtils.withLeadingZeros(time.getMinute(), 2),
+            CommonUtils.withLeadingZeros(time.getSecond(), 2)
+        );
+    }
+
+    public String formatWithoutSeconds(LocalTime time) {
+        return SHORT_TIME_FORMAT.formatted(
+            CommonUtils.withLeadingZeros(time.getHour(), 2),
+            CommonUtils.withLeadingZeros(time.getMinute(), 2)
+        );
     }
 }

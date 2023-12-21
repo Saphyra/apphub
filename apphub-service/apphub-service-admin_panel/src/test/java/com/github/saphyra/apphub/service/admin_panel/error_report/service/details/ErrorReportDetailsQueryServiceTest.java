@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.details;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ public class ErrorReportDetailsQueryServiceTest {
     private ErrorReportDetailsQueryService underTest;
 
     @Mock
-    private ErrorReport errorReport;
+    private ErrorReportDto errorReport;
 
     @Mock
-    private ErrorReportModel model;
+    private ErrorReport model;
 
     @Test
     public void findById_notFound() {
@@ -55,7 +55,7 @@ public class ErrorReportDetailsQueryServiceTest {
         given(converter.convert(errorReport)).willReturn(model);
         given(errorReport.getStatus()).willReturn(ErrorReportStatus.UNREAD);
 
-        ErrorReportModel result = underTest.findById(ID);
+        ErrorReport result = underTest.findById(ID);
 
         assertThat(result).isEqualTo(model);
         verify(errorReport).setStatus(ErrorReportStatus.READ);
@@ -68,7 +68,7 @@ public class ErrorReportDetailsQueryServiceTest {
         given(converter.convert(errorReport)).willReturn(model);
         given(errorReport.getStatus()).willReturn(ErrorReportStatus.READ);
 
-        ErrorReportModel result = underTest.findById(ID);
+        ErrorReport result = underTest.findById(ID);
 
         assertThat(result).isEqualTo(model);
         verify(errorReport, times(0)).setStatus(any());

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
 import com.github.saphyra.apphub.service.admin_panel.ws.ErrorReportWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -30,7 +30,7 @@ public class ReportErrorServiceTest {
     private static final String SERVICE = "service";
 
     @Mock
-    private ErrorReportFactory errorReportFactory;
+    private ErrorReportDtoFactory errorReportDtoFactory;
 
     @Mock
     private ErrorReportDao errorReportDao;
@@ -45,14 +45,14 @@ public class ReportErrorServiceTest {
     private ReportErrorService underTest;
 
     @Mock
-    private ErrorReport errorReport;
+    private ErrorReportDto errorReport;
 
     @Mock
     private ErrorReportOverview errorReportOverview;
 
     @Test
     public void notNullModelId() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .id(UUID.randomUUID())
             .message(MESSAGE)
             .service(SERVICE)
@@ -65,7 +65,7 @@ public class ReportErrorServiceTest {
 
     @Test
     public void blankMessage() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .message(" ")
             .service(SERVICE)
             .build();
@@ -77,7 +77,7 @@ public class ReportErrorServiceTest {
 
     @Test
     public void blankService() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .service(" ")
             .message(MESSAGE)
             .build();
@@ -89,14 +89,14 @@ public class ReportErrorServiceTest {
 
     @Test
     public void saveReport() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .message(MESSAGE)
             .service(SERVICE)
             .build();
 
         given(converter.convert(errorReport)).willReturn(errorReportOverview);
 
-        given(errorReportFactory.create(model)).willReturn(errorReport);
+        given(errorReportDtoFactory.create(model)).willReturn(errorReport);
 
         underTest.saveReport(model);
 

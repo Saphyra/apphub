@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service;
 
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class MarkErrorReportServiceTest {
     private MarkErrorReportService underTest;
 
     @Mock
-    private ErrorReport errorReport;
+    private ErrorReportDto errorReport;
 
     @Test
     public void mark() {

@@ -8,6 +8,7 @@
 ===BUGFIXES===
     Utils
         Delete LogParameterVisibility when user deletes account
+    Fix time issues by returning formatted time instead of epoch
 
 ===PLATFORM CHANGES===
 

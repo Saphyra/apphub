@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ErrorReporterService {
     private final ErrorReporterClient errorReporterClient;
-    private final ErrorReportModelFactory errorReportFactory;
+    private final ErrorReportFactory errorReportFactory;
     private final CommonConfigProperties commonConfigProperties;
 
     public void report(HttpStatus status, ErrorResponse errorResponse, Throwable exception) {
         try {
-            ErrorReportModel model = errorReportFactory.create(status, errorResponse, exception);
+            ErrorReport model = errorReportFactory.create(status, errorResponse, exception);
             errorReporterClient.reportError(model, commonConfigProperties.getDefaultLocale());
         } catch (Exception e) {
             log.error("Failed reporting error", e);
@@ -28,7 +28,7 @@ public class ErrorReporterService {
 
     public void report(String message) {
         try {
-            ErrorReportModel model = errorReportFactory.create(message);
+            ErrorReport model = errorReportFactory.create(message);
             errorReporterClient.reportError(model, commonConfigProperties.getDefaultLocale());
         } catch (Exception e) {
             log.error("Failed reporting error", e);
@@ -37,7 +37,7 @@ public class ErrorReporterService {
 
     public void report(String message, Throwable exception) {
         try {
-            ErrorReportModel model = errorReportFactory.create(message, exception);
+            ErrorReport model = errorReportFactory.create(message, exception);
             errorReporterClient.reportError(model, commonConfigProperties.getDefaultLocale());
         } catch (Exception e) {
             log.error("Failed reporting error", e);

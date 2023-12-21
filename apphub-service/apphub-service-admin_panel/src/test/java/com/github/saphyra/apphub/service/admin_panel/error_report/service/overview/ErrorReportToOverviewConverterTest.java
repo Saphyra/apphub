@@ -1,17 +1,20 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.overview;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class ErrorReportToOverviewConverterTest {
@@ -20,13 +23,17 @@ public class ErrorReportToOverviewConverterTest {
     private static final Integer RESPONSE_STATUS = 24;
     private static final String MESSAGE = "message";
     private static final String SERVICE = "service";
+    private static final String FORMATTED_CREATED_AT = "formatted-created-at";
+
+    @Mock
+    private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
     private ErrorReportToOverviewConverter underTest;
 
     @Test
     public void convert() {
-        ErrorReport errorReport = ErrorReport.builder()
+        ErrorReportDto errorReport = ErrorReportDto.builder()
             .id(ID)
             .createdAt(CREATED_AT)
             .responseStatus(RESPONSE_STATUS)
@@ -34,11 +41,12 @@ public class ErrorReportToOverviewConverterTest {
             .status(ErrorReportStatus.UNREAD)
             .service(SERVICE)
             .build();
+        given(dateTimeUtil.format(CREATED_AT)).willReturn(FORMATTED_CREATED_AT);
 
         ErrorReportOverview result = underTest.convert(errorReport);
 
         assertThat(result.getId()).isEqualTo(ID);
-        assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT.toString());
+        assertThat(result.getCreatedAt()).isEqualTo(FORMATTED_CREATED_AT);
         assertThat(result.getMessage()).isEqualTo(MESSAGE);
         assertThat(result.getService()).isEqualTo(SERVICE);
         assertThat(result.getStatus()).isEqualTo(ErrorReportStatus.UNREAD.name());

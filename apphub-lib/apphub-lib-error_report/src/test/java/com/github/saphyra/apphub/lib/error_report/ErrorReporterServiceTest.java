@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.error_report;
 
 import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class ErrorReporterServiceTest {
     private ErrorReporterClient errorReporterClient;
 
     @Mock
-    private ErrorReportModelFactory errorReportFactory;
+    private ErrorReportFactory errorReportFactory;
 
     @Mock
     private CommonConfigProperties commonConfigProperties;
@@ -33,7 +33,7 @@ public class ErrorReporterServiceTest {
     private ErrorReporterService underTest;
 
     @Mock
-    private ErrorReportModel model;
+    private ErrorReport model;
 
     @Mock
     private RuntimeException exception;

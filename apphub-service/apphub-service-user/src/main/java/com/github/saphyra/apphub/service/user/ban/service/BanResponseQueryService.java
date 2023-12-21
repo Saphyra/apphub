@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.user.model.response.BanDetailsResponse;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class BanResponseQueryService {
     private final BanDao banDao;
     private final UserDao userDao;
+    private final DateTimeUtil dateTimeUtil;
 
     public BanResponse getBans(UUID bannedUserId) {
         User bannedUser = userDao.findByIdValidated(bannedUserId);
@@ -37,7 +38,7 @@ public class BanResponseQueryService {
             .email(bannedUser.getEmail())
             .bans(bans)
             .markedForDeletion(bannedUser.isMarkedForDeletion())
-            .markedForDeletionAt(Optional.ofNullable(bannedUser.getMarkedForDeletionAt()).map(localDateTime -> localDateTime.toEpochSecond(ZoneOffset.UTC)).orElse(null))
+            .markedForDeletionAt(Optional.ofNullable(bannedUser.getMarkedForDeletionAt()).map(dateTimeUtil::format).orElse(null))
             .build();
     }
 
@@ -47,7 +48,7 @@ public class BanResponseQueryService {
         return BanDetailsResponse.builder()
             .id(ban.getId())
             .bannedRole(ban.getBannedRole())
-            .expiration(Optional.ofNullable(ban.getExpiration()).map(localDateTime -> localDateTime.toEpochSecond(ZoneOffset.UTC)).orElse(null))
+            .expiration(Optional.ofNullable(ban.getExpiration()).map(dateTimeUtil::format).orElse(null))
             .permanent(ban.getPermanent())
             .reason(ban.getReason())
             .bannedById(ban.getBannedBy())

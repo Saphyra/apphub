@@ -20,7 +20,6 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -120,7 +119,7 @@ public class CalendarSearchTest extends BackEndTest {
     private void verifySearchResult(List<EventSearchResponse> searchResult) {
         assertThat(searchResult).hasSize(1);
         EventSearchResponse eventSearchResponse = searchResult.get(0);
-        assertThat(eventSearchResponse.getTime()).isEqualTo(LocalDateTime.of(EVENT_DATE, EVENT_TIME));
+        assertThat(eventSearchResponse.getTime()).isEqualTo(String.format("%s %s", EVENT_DATE, EVENT_TIME));
         assertThat(eventSearchResponse.getRepetitionType()).isEqualTo(RepetitionType.ONE_TIME);
         assertThat(eventSearchResponse.getTitle()).isEqualTo(TITLE);
         assertThat(eventSearchResponse.getContent()).isEqualTo(CONTENT);

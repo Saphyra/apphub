@@ -37,7 +37,7 @@ public class ErrorReportDaoTest {
     private ErrorReportDao underTest;
 
     @Mock
-    private ErrorReport domain;
+    private ErrorReportDto domain;
 
     @Mock
     private ErrorReportEntity entity;
@@ -57,7 +57,7 @@ public class ErrorReportDaoTest {
         given(page.toList()).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
-        List<ErrorReport> result = underTest.getOverview(specification, pageable);
+        List<ErrorReportDto> result = underTest.getOverview(specification, pageable);
 
         assertThat(result).containsExactly(domain);
     }
@@ -68,7 +68,7 @@ public class ErrorReportDaoTest {
         given(repository.findById(ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
-        Optional<ErrorReport> result = underTest.findById(ID);
+        Optional<ErrorReportDto> result = underTest.findById(ID);
 
         assertThat(result).contains(domain);
     }
@@ -89,7 +89,7 @@ public class ErrorReportDaoTest {
         given(repository.findAllById(Arrays.asList(ID_STRING))).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(entity)).willReturn(domain);
 
-        List<ErrorReport> result = underTest.findAllById(Arrays.asList(ID));
+        List<ErrorReportDto> result = underTest.findAllById(Arrays.asList(ID));
 
         assertThat(result).containsExactly(domain);
     }

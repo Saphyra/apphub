@@ -54,7 +54,7 @@ public class ErrorReportConverterTest {
             .service(SERVICE)
             .build();
 
-        ErrorReport result = underTest.convertEntity(entity);
+        ErrorReportDto result = underTest.convertEntity(entity);
 
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
@@ -71,7 +71,7 @@ public class ErrorReportConverterTest {
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
         given(objectMapperWrapper.writeValueAsString(exceptionModel)).willReturn(EXCEPTION_STRING);
 
-        ErrorReport domain = ErrorReport.builder()
+        ErrorReportDto domain = ErrorReportDto.builder()
             .id(ID)
             .createdAt(CREATED_AT)
             .message(MESSAGE)

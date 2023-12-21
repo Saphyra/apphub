@@ -36,6 +36,7 @@ public class CalendarSearchResultMapperTest {
     private static final LocalDate OCCURRENCE_DATE = EVENT_START_DATE.plusDays(1);
     private static final LocalTime OCCURRENCE_TIME = CURRENT_TIME.plusSeconds(1);
     private static final String NOTE = "note";
+    private static final String FORMATTED_EVENT_TIME = "formatted-event-time";
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -73,13 +74,14 @@ public class CalendarSearchResultMapperTest {
         given(virtualOccurrence.getStatus()).willReturn(OccurrenceStatus.VIRTUAL);
         given(virtualOccurrence.getEventId()).willReturn(EVENT_ID);
         given(anotherOccurrence.getEventId()).willReturn(UUID.randomUUID());
+        given(dateTimeUtil.format(LocalDateTime.of(EVENT_START_DATE, CURRENT_TIME), false)).willReturn(FORMATTED_EVENT_TIME);
 
         List<EventSearchResponse> result = underTest.map(Set.of(EVENT_ID), CollectionUtils.singleValueMap(EVENT_ID, event), List.of(occurrence, virtualOccurrence, anotherOccurrence));
 
         assertThat(result).hasSize(1);
         EventSearchResponse eventSearchResponse = result.get(0);
         assertThat(eventSearchResponse.getEventId()).isEqualTo(EVENT_ID);
-        assertThat(eventSearchResponse.getTime()).isEqualTo(LocalDateTime.of(EVENT_START_DATE, CURRENT_TIME));
+        assertThat(eventSearchResponse.getTime()).isEqualTo(FORMATTED_EVENT_TIME);
         assertThat(eventSearchResponse.getRepetitionType()).isEqualTo(RepetitionType.DAYS_OF_WEEK);
         assertThat(eventSearchResponse.getRepetitionData()).isEqualTo(REPETITION_DATA);
         assertThat(eventSearchResponse.getTitle()).isEqualTo(TITLE);

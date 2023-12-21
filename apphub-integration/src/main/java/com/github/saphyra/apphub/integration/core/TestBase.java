@@ -165,7 +165,7 @@ public class TestBase {
     }
 
     protected String getReportDirectory(String method) {
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method;
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method + "-" + UUID.randomUUID();
     }
 
     private synchronized static void deleteTestUsers(String method) {

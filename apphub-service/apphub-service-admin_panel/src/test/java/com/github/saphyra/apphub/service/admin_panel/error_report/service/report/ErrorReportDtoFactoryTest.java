@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.service.report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportModel;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReport;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ErrorReportFactoryTest {
+public class ErrorReportDtoFactoryTest {
     private static final UUID ID = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
     private static final String MESSAGE = "message";
@@ -34,14 +34,14 @@ public class ErrorReportFactoryTest {
     private DateTimeUtil dateTimeUtil;
 
     @InjectMocks
-    private ErrorReportFactory underTest;
+    private ErrorReportDtoFactory underTest;
 
     @Mock
     private ExceptionModel exceptionModel;
 
     @Test
     public void create() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .id(ID)
             .createdAt(CREATED_AT)
             .message(MESSAGE)
@@ -51,7 +51,7 @@ public class ErrorReportFactoryTest {
             .service(SERVICE)
             .build();
 
-        ErrorReport result = underTest.create(model);
+        ErrorReportDto result = underTest.create(model);
 
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
@@ -65,7 +65,7 @@ public class ErrorReportFactoryTest {
 
     @Test
     public void create_generateForMissing() {
-        ErrorReportModel model = ErrorReportModel.builder()
+        ErrorReport model = ErrorReport.builder()
             .message(MESSAGE)
             .responseStatus(RESPONSE_STATUS)
             .responseBody(RESPONSE_BODY)
@@ -76,7 +76,7 @@ public class ErrorReportFactoryTest {
         given(idGenerator.randomUuid()).willReturn(ID);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CREATED_AT);
 
-        ErrorReport result = underTest.create(model);
+        ErrorReportDto result = underTest.create(model);
 
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
