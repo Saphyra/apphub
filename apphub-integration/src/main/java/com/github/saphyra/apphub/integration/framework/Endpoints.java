@@ -33,7 +33,7 @@ public class Endpoints {
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/ws/skyxplore-data/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore-lobby/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
-    public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME_MAIN = "/api/ws/skyxplore-game/game";
 
     //LOGIN
     public static final String LOGIN = "/api/user/authentication/login";

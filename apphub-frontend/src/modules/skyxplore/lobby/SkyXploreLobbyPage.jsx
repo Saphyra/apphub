@@ -42,7 +42,7 @@ const SkyXploreLobbyPage = () => {
         webSocketUrl,
         {
             share: true,
-            shouldReconnect: () => false,
+            shouldReconnect: () => true,
         }
     );
     const [alliances, setAlliances] = useState([]);

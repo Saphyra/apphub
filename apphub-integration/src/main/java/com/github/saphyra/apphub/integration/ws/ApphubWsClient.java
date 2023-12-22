@@ -83,7 +83,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId, name);
+            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

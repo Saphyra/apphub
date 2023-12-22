@@ -24,6 +24,9 @@ const WebSocketEventName = {
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED: "skyxplore-lobby-game-creation-initiated",
     SKYXPLORE_LOBBY_GAME_LOADED: "skyxplore-lobby-game-loaded",
     SKYXPLORE_MAIN_MENU_CANCEL_INVITATION: "skyxplore-main-menu-cancel-invitation",
+
+    //SkyXplore Game
+    SKYXPLORE_GAME_PAUSED: "skyxplore-game-paused",
 }
 
 export default WebSocketEventName;

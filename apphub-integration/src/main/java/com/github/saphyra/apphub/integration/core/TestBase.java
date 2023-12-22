@@ -153,7 +153,7 @@ public class TestBase {
     private void saveStackTrace(String className, String method, Throwable throwable) {
         String directory = getReportDirectory(className, method);
         String fileName = directory + "/exception.json";
-        log.info("Exception fileName: {}", fileName);
+        log.debug("Exception fileName: {}", fileName);
 
         String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsPrettyString(ExceptionConverter.map(throwable));
 

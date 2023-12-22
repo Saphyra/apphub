@@ -25,6 +25,7 @@ import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
 import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
 import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMonitoring';
 import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
+import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/web/skyxplore/lobby",
     element: <SkyXploreLobbyPage />
+  },
+  {
+    path: "/web/skyxplore/game",
+    element: <SkyXploreGamePage />
   },
   {
     path: "/web/notebook",

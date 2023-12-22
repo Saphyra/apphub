@@ -219,6 +219,10 @@ const Endpoints = {
     SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}"),
     SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
 
+    //SkyXplore Game
+    SKYXPLORE_GAME_PAUSE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause"),
+    SKYXPLORE_EXIT_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game"),
+
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),
     NOTEBOOK_GET_PINNED_ITEMS: new Endpoint(RequestMethod.GET, "/api/notebook/item/pinned"),

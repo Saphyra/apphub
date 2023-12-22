@@ -51,6 +51,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
                 .sorted((a, b) => -1 * (a.lastPlayed - b.lastPlayed))
                 .map(savedGame =>
                     <SavedGame
+                        key={savedGame.gameId}
                         savedGame={savedGame}
                         localizationHandler={localizationHandler}
                         deleteGameCallback={askDeleteGame}

@@ -54,10 +54,16 @@ const forLobby = () => {
     redirectToGameIfInOne();
 }
 
+const forGame = () => {
+    redirectToCharacterIfNotPresent();
+    redirectToLobbyIfInOne();
+}
+
 const Redirection = {
     forMainMenu: forMainMenu,
     forCharacter: forCharacter,
-    forLobby: forLobby
+    forLobby: forLobby,
+    forGame: forGame
 }
 
 export default Redirection;
