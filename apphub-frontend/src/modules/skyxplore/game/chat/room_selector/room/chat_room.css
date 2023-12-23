@@ -1,0 +1,7 @@
+.skyxplore-game-chat-room.unread {
+    border-color: red;
+}
+
+.skyxplore-game-chat-room.current {
+    border-color: lime;
+}

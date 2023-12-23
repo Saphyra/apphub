@@ -11,10 +11,19 @@ import Footer from "../../../common/component/Footer";
 import PauseAndResumeGameButton from "./pause_and_resume/PauseAndResumeGameButton";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import ExitGameButton from "./exit_game/ExitGameButton";
+import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
+import Chat from "./chat/Chat";
 
 const SkyXploreGamePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    useEffect(() => Redirection.forGame(), []);
+    useEffect(sessionChecker, []);
+    useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    //===WebSocket
     const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_GAME_MAIN;
     const [lastEvent, setLastEvent] = useState(null);
     const { sendMessage, lastMessage } = useWebSocket(
@@ -24,18 +33,7 @@ const SkyXploreGamePage = () => {
             shouldReconnect: () => true,
         }
     );
-
-    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-
-    useEffect(() => checkRedirection(), []);
-    useEffect(sessionChecker, []);
-    useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => handleMessage(), [lastMessage]);
-
-    //Platform
-    const checkRedirection = () => {
-        Redirection.forGame()
-    }
 
     const handleMessage = () => {
         if (lastMessage === null) {
@@ -50,6 +48,12 @@ const SkyXploreGamePage = () => {
 
         setLastEvent(message);
     }
+    //===End WebSocket
+
+    //===Chat
+    const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
+    const [displayChat, setDisplayChat] = useState(false);
+    //===End Chat
 
     return (
         <div>
@@ -67,10 +71,22 @@ const SkyXploreGamePage = () => {
                             />
                         ]}
                         centerButtons={[]}
-                        rightButtons={[]}
+                        rightButtons={[
+                            <ToggleChatButton
+                                key="toggle-chat"
+                                hasUnreadMessage={hasUnreadMessage}
+                                toggleCallback={() => setDisplayChat(!displayChat)}
+                            />
+                        ]}
                     />
                 </div>
             </div>
+
+            <Chat
+                displayChat={displayChat}
+                setHasUnreadMessage={setHasUnreadMessage}
+                lastEvent={lastEvent}
+            />
 
             {confirmationDialogData &&
                 <ConfirmationDialog

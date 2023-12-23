@@ -223,6 +223,8 @@ public class Endpoints {
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
     public static final String SKYXPLORE_GAME_LEAVE_CHAT_ROOM = "/api/skyxplore/game/chat/room/{roomId}";
+    public static final String SKYXPLORE_GAME_GET_CHAT_ROOMS = "/api/skyxplore/game/chat/room";
+
     public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
     public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
     public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";

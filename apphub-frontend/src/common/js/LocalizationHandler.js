@@ -1,4 +1,5 @@
 import MapStream from "./collection/MapStream";
+import Optional from "./collection/Optional";
 import Constants from "./Constants";
 import Utils from "./Utils";
 
@@ -8,24 +9,34 @@ const LocalizationHandler = class {
     }
 
     get(key, params = {}) {
+        return this.getOptional(key, params)
+            .orElseThrow("IllegalArgument", "No localization found for key " + key + " and locale " + this.getLocale());
+    }
+
+    getOrDefault(key, defaultValue, params = {}) {
+        return this.getOptional(key, params)
+            .orElse(defaultValue);
+    }
+
+    getOptional(key, params) {
         const locale = this.getLocale();
 
         const item = this.localization[key];
 
         if (!item) {
-            Utils.throwException("IllegalArgument", key + " is not found.");
+            return new Optional();
         }
 
         let result = item[locale];
 
         if (!result) {
-            Utils.throwException("IllegalArgument", "No localization found for key " + key + " and locale " + locale);
+            new Optional(result);
         }
 
         new MapStream(params)
             .forEach((key, value) => result = result.replace("{" + key + "}", value));
 
-        return result;
+        return new Optional(result);
     }
 
     getLocale() {

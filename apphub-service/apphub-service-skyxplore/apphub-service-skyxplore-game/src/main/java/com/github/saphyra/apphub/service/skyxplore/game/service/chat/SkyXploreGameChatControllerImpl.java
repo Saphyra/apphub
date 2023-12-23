@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.chat.create.CreateChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,19 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     public void leaveChatRoom(String roomId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to leave room {}", accessTokenHeader.getUserId(), roomId);
         leaveChatRoomService.leave(accessTokenHeader.getUserId(), roomId);
+    }
+
+    @Override
+    //TODO unit test
+    public List<String> getChatRooms(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know his chat rooms.", accessTokenHeader.getUserId());
+
+        return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
+            .getChat()
+            .getRooms()
+            .stream()
+            .filter(chatRoom -> chatRoom.getMembers().contains(accessTokenHeader.getUserId()))
+            .map(ChatRoom::getId)
+            .collect(Collectors.toList());
     }
 }
