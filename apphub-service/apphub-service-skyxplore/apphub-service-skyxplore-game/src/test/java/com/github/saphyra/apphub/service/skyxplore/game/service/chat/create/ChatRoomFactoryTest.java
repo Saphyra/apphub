@@ -19,6 +19,7 @@ public class ChatRoomFactoryTest {
     private static final String CHAT_ROOM_ID = "chat-room-id";
     private static final UUID CREATOR = UUID.randomUUID();
     private static final UUID MEMBER = UUID.randomUUID();
+    private static final String ROOM_TITLE = "room-title";
 
     @Mock
     private IdGenerator idGenerator;
@@ -30,9 +31,10 @@ public class ChatRoomFactoryTest {
     public void create() {
         given(idGenerator.generateRandomId()).willReturn(CHAT_ROOM_ID);
 
-        ChatRoom result = underTest.create(CREATOR, Arrays.asList(MEMBER));
+        ChatRoom result = underTest.create(CREATOR, ROOM_TITLE, Arrays.asList(MEMBER));
 
         assertThat(result.getId()).isEqualTo(CHAT_ROOM_ID);
+        assertThat(result.getRoomTitle()).isEqualTo(ROOM_TITLE);
         assertThat(result.getMembers()).containsExactlyInAnyOrder(CREATOR, MEMBER);
     }
 }

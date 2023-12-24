@@ -84,6 +84,20 @@ const copyAndSet = (items, set) => {
     set(copy);
 }
 
+const addAndSet = (items, item, set) => {
+    const copy = new Stream(items)
+        .add(item)
+        .toList();
+    set(copy);
+}
+
+const removeAndSet = (items, remove, set) => {
+    const copy = new Stream(items)
+        .remove(remove)
+        .toList();
+    set(copy);
+}
+
 const bytesToMegabytes = (bytes) => {
     return Math.round(bytes / 1024 / 1024);
 }
@@ -112,6 +126,8 @@ const Utils = {
     formatFileSize: formatFileSize,
     bytesToMegabytes: bytesToMegabytes,
     copyAndSet: copyAndSet,
+    addAndSet: addAndSet,
+    removeAndSet: removeAndSet,
     isTrue: isTrue,
 }
 

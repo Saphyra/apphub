@@ -134,6 +134,11 @@ const Stream = class {
         return this.filter(item => !predicate(item));
     }
 
+    reverse(){
+        this.items.reverse();
+        return this;
+    }
+
     sorted(comparator) {
         const arr = this.items.slice();
 

@@ -1,5 +1,5 @@
 #skyxplore-game-chat-message-input-container{
-    border-top: var(--skyxplore-chat-border-width) ridge white;
+    border-bottom: var(--skyxplore-chat-border-width) ridge white;
     text-align: center;
 }
 

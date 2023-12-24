@@ -13,8 +13,11 @@ import ConfirmationDialog from "../../../common/component/confirmation_dialog/Co
 import ExitGameButton from "./exit_game/ExitGameButton";
 import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
 import Chat from "./chat/Chat";
+import Endpoints from "../../../common/js/dao/dao";
+import { ToastContainer } from "react-toastify";
 
 const SkyXploreGamePage = () => {
+    //===Platform
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
@@ -22,6 +25,20 @@ const SkyXploreGamePage = () => {
     useEffect(() => Redirection.forGame(), []);
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    const [userId, setUserId] = useState("");
+
+    useEffect(() => fetchUserId(), []);
+
+    const fetchUserId = () => {
+        const fetch = async () => {
+            const response = await Endpoints.GET_OWN_USER_ID.createRequest()
+                .send();
+            setUserId(response.value);
+        }
+        fetch();
+    }
+    //===End Platform
 
     //===WebSocket
     const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_GAME_MAIN;
@@ -86,6 +103,8 @@ const SkyXploreGamePage = () => {
                 displayChat={displayChat}
                 setHasUnreadMessage={setHasUnreadMessage}
                 lastEvent={lastEvent}
+                userId={userId}
+                sendMessage={sendMessage}
             />
 
             {confirmationDialogData &&
@@ -96,6 +115,8 @@ const SkyXploreGamePage = () => {
                     choices={confirmationDialogData.choices}
                 />
             }
+
+            <ToastContainer />
         </div>
     )
 }

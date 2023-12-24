@@ -8,9 +8,9 @@
     right: var(--main-page-border-width);
     bottom: calc(var(--footer-height) + var(--footer-border-width));
     max-width: 50vw;
-    max-height: 75wh;
+    max-height: 75vh;
     border-top: var(--skyxplore-chat-border-width) ridge white;
     border-left: var(--skyxplore-chat-border-width) ridge white;
-    display: grid;
-    grid-template-rows: auto auto auto;
+    display: flex;
+    flex-direction: column;
 }

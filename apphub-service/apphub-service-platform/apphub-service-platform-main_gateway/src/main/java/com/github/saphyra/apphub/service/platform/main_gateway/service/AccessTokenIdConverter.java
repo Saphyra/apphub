@@ -16,7 +16,7 @@ public class AccessTokenIdConverter {
 
     public Optional<UUID> convertAccessTokenId(String accessTokenIdString) {
         try {
-            return uuidConverter.convertEntity(Optional.of(accessTokenIdString));
+            return uuidConverter.convertEntity(Optional.ofNullable(accessTokenIdString));
         } catch (Exception ex) {
             log.warn("Failed to parse accessToken: {}", ex.getMessage());
             return Optional.empty();

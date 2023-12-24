@@ -7,24 +7,31 @@ import GameConstants from "../GameConstants";
 import Utils from "../../../../common/js/Utils";
 import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import MapStream from "../../../../common/js/collection/MapStream";
+import ChatGroupCreator from "./group_creator/ChatGroupCreator";
 
 const CHAT_EVENTS = [
     WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
+    WebSocketEventName.SKYXPLORE_GAME_USER_LEFT,
+    WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE,
 ];
 
 const Chat = ({
     displayChat,
     setHasUnreadMessage,
-    lastEvent
+    lastEvent,
+    userId,
+    sendMessage
 }) => {
     const [currentChatRoom, setCurrentChatRoom] = useState(GameConstants.GENERAL_CHAT_ROOM);
     const [messages, setMessages] = useState({});
     const [unreadMessages, setUnreadMessages] = useState({});
+    const [displayGroupCreator, setDisplayGroupCreator] = useState(false);
 
     useEffect(() => handleEvent(), [lastEvent]);
     useEffect(() => updateUnreadMessage(), [messages]);
     useEffect(() => updateHasUnreadMessage(), [unreadMessages]);
     useEffect(() => setMessageStatus(currentChatRoom, false), [currentChatRoom]);
+    useEffect(() => setDisplayGroupCreator(false), [displayChat]);
 
     const handleEvent = () => {
         if (!Utils.hasValue(lastEvent)) {
@@ -76,23 +83,33 @@ const Chat = ({
     }
 
     if (displayChat) {
-        return (
-            <div id="skyxplore-game-chat">
-                <RoomSelector
-                    currentChatRoom={currentChatRoom}
-                    setCurrentChatRoom={setCurrentChatRoom}
-                    unreadMessages={unreadMessages}
-                />
+        if (!displayGroupCreator) {
+            return (
+                <div id="skyxplore-game-chat">
+                    <MessageInput
+                        sendMessage={sendMessage}
+                        currentChatRoom={currentChatRoom}
+                    />
 
-                <Messages
+                    <Messages
+                        messages={messages[currentChatRoom]}
+                        userId={userId}
+                    />
 
-                />
-
-                <MessageInput
-
-                />
-            </div>
-        );
+                    <RoomSelector
+                        currentChatRoom={currentChatRoom}
+                        setCurrentChatRoom={setCurrentChatRoom}
+                        unreadMessages={unreadMessages}
+                        setDisplayGroupCreator={setDisplayGroupCreator}
+                        lastEvent={lastEvent}
+                    />
+                </div>
+            );
+        } else {
+            return <ChatGroupCreator
+                setDisplayGroupCreator={setDisplayGroupCreator}
+            />
+        }
     }
 }
 

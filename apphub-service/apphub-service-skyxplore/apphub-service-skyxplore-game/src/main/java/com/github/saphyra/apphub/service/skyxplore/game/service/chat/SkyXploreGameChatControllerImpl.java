@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameChatController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.chat.create.CreateChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     private final LeaveChatRoomService leaveChatRoomService;
 
     @Override
-    public List<SkyXploreCharacterModel> getPlayers(AccessTokenHeader accessTokenHeader) {
+    public List<SkyXploreCharacterModel> getPlayers(Boolean excludeSelf, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the players of game.", accessTokenHeader.getUserId());
         return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
             .getPlayers()
@@ -32,6 +32,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
             .stream()
             .filter(player -> !player.isAi())
             .filter(Player::isConnected)
+            .filter(player -> !excludeSelf || !player.getUserId().equals(accessTokenHeader.getUserId()))
             .map(player -> SkyXploreCharacterModel.builder()
                 .id(player.getUserId())
                 .name(player.getPlayerName())
@@ -54,7 +55,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
 
     @Override
     //TODO unit test
-    public List<String> getChatRooms(AccessTokenHeader accessTokenHeader) {
+    public List<ChatRoomResponse> getChatRooms(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his chat rooms.", accessTokenHeader.getUserId());
 
         return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
@@ -62,7 +63,10 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
             .getRooms()
             .stream()
             .filter(chatRoom -> chatRoom.getMembers().contains(accessTokenHeader.getUserId()))
-            .map(ChatRoom::getId)
+            .map(chatRoom -> ChatRoomResponse.builder()
+                .roomId(chatRoom.getId())
+                .roomTitle(chatRoom.getRoomTitle())
+                .build())
             .collect(Collectors.toList());
     }
 }

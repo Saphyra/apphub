@@ -35,6 +35,8 @@ public class Endpoints {
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
     public static final String SEND_EVENT = "/internal/event-gateway";
 
+    public static final String GET_OWN_USER_ID = "/user/id";
+
     //EVENTS
     public static final String EVENT_TRIGGER_MEMORY_STATUS_UPDATE = "/event/trigger-memory-monitoring";
     public static final String EVENT_MEMORY_MONITORING = "/event/memory-monitoring";

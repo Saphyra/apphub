@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat.create;
 
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -26,12 +27,12 @@ public class CreateChatRoomService {
 
         createChatRoomRequestValidator.validate(request, game);
 
-        ChatRoom chatRoom = chatRoomFactory.create(userId, request.getMembers());
+        ChatRoom chatRoom = chatRoomFactory.create(userId, request.getRoomTitle(), request.getMembers());
 
         game.getChat()
             .addRoom(chatRoom);
 
-        ChatRoomCreatedMessage payload = new ChatRoomCreatedMessage(chatRoom.getId(), request.getRoomTitle());
+        ChatRoomResponse payload = new ChatRoomResponse(chatRoom.getId(), request.getRoomTitle());
 
         webSocketHandler.sendEvent(chatRoom.getMembers(), WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED, payload);
     }

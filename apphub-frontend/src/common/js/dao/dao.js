@@ -168,6 +168,7 @@ export const ResponseStatus = {
 const Endpoints = {
     //Platform
     CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
+    GET_OWN_USER_ID: new Endpoint(RequestMethod.GET, "/user/id"),
 
     //User
     USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
@@ -223,6 +224,9 @@ const Endpoints = {
     SKYXPLORE_GAME_PAUSE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause"),
     SKYXPLORE_EXIT_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game"),
     SKYXPLORE_GAME_GET_CHAT_ROOMS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/chat/room"),
+    SKYXPLORE_GAME_GET_PLAYERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/player"),
+    SKYXPLORE_GAME_CREATE_CHAT_ROOM: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/chat/room"),
+    SKYXPLORE_GAME_LEAVE_CHAT_ROOM: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/chat/room/{roomId}"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

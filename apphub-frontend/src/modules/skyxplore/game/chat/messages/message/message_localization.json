@@ -1,0 +1,10 @@
+{
+    "skyxplore-game-user-joined": {
+        "en": "{name} joined.",
+        "hu": "{} csatlakozott."
+    },
+    "skyxplore-game-user-left": {
+        "en": "{name} disconnected.",
+        "hu": "{} elhagyta a szobát."
+    }
+}

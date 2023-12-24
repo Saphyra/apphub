@@ -64,6 +64,7 @@ public class SkyXploreGameChatControllerImplTest {
         given(player3.isAi()).willReturn(false);
         given(player2.isConnected()).willReturn(false);
         given(player3.isConnected()).willReturn(true);
+        given(player3.getUserId()).willReturn(UUID.randomUUID());
 
         given(player3.getUserId()).willReturn(USER_ID_2);
         given(player3.getPlayerName()).willReturn(CHARACTER_NAME);
@@ -74,7 +75,27 @@ public class SkyXploreGameChatControllerImplTest {
             new BiWrapper<>(UUID.randomUUID(), player2),
             new BiWrapper<>(UUID.randomUUID(), player3)
         ));
-        List<SkyXploreCharacterModel> result = underTest.getPlayers(ACCESS_TOKEN_HEADER);
+        List<SkyXploreCharacterModel> result = underTest.getPlayers(false, ACCESS_TOKEN_HEADER);
+
+        assertThat(result).containsExactly(SkyXploreCharacterModel.builder().id(USER_ID_2).name(CHARACTER_NAME).build());
+    }
+
+    @Test
+    public void getPlayers_excludeSelf() {
+        given(player1.isAi()).willReturn(false);
+        given(player1.isConnected()).willReturn(true);
+        given(player1.getUserId()).willReturn(USER_ID_1);
+        given(player2.getPlayerName()).willReturn(CHARACTER_NAME);
+        given(player2.isAi()).willReturn(false);
+        given(player2.isConnected()).willReturn(true);
+        given(player2.getUserId()).willReturn(USER_ID_2);
+
+        given(gameDao.findByUserIdValidated(USER_ID_1)).willReturn(game);
+        given(game.getPlayers()).willReturn(CollectionUtils.toMap(
+            new BiWrapper<>(UUID.randomUUID(), player1),
+            new BiWrapper<>(UUID.randomUUID(), player2)
+        ));
+        List<SkyXploreCharacterModel> result = underTest.getPlayers(true, ACCESS_TOKEN_HEADER);
 
         assertThat(result).containsExactly(SkyXploreCharacterModel.builder().id(USER_ID_2).name(CHARACTER_NAME).build());
     }

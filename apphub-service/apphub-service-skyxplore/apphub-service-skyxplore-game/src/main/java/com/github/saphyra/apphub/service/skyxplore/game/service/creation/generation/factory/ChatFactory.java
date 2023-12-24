@@ -76,6 +76,7 @@ public class ChatFactory {
     private ChatRoom createRoom(String id, Collection<UUID> members) {
         return ChatRoom.builder()
             .id(id)
+            .roomTitle(id)
             .members(new ArrayList<>(members))
             .build();
     }

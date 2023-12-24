@@ -1,7 +1,21 @@
+.skyxplore-game-chat-room{
+    display: inline;
+}
+
 .skyxplore-game-chat-room.unread {
     border-color: red;
 }
 
 .skyxplore-game-chat-room.current {
     border-color: lime;
+}
+
+.skyxplore-game-chat-room.custom{
+    padding-right: 0;
+}
+
+.skyxplore-game-chat-room-close-button{
+    border-width: 2px;
+    padding: 1px;
+    font-size: 14px;
 }
