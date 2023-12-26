@@ -6,7 +6,7 @@ import ChatRoom from "./room/ChatRoom";
 import Utils from "../../../../../common/js/Utils";
 import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
 
-const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayGroupCreator, lastEvent }) => {
+const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, lastEvent }) => {
     const [chatRooms, setChatRooms] = useState([]);
     useEffect(() => loadChatRooms(), []);
     useEffect(() => handleEvent(), [lastEvent]);
@@ -58,7 +58,7 @@ const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, set
             <div
                 id="skyxplore-game-chat-room-create-button"
                 className="button"
-                onClick={() => setDisplayGroupCreator(true)}
+                onClick={() => setDisplayRoomCreator(true)}
             >
                 +
             </div>

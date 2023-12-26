@@ -4,6 +4,8 @@ const SolarSystemConstants = {
     STAR_RADIUS: 40,
     PLANET_RADIUS: 20,
     PLANET_NAME_OFFSET: 30,
+
+    SOLAR_SYSTEM_NAME_MAX_LENGTH: 30,
 }
 
 export default SolarSystemConstants;

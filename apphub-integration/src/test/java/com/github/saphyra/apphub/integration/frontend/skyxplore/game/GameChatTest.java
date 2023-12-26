@@ -7,14 +7,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
-import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
-import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
+import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatRoom;
@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -92,7 +93,7 @@ public class GameChatTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver1);
 
-        AwaitilityWrapper.create(60, 2)
+        AwaitilityWrapper.create(10, 1)
             .until(() -> Stream.of(player1, player2, player3).allMatch(player -> SkyXploreGameActions.isGameLoaded(player.getEntity1())))
             .assertTrue("Game not loaded for all users");
 
@@ -118,7 +119,7 @@ public class GameChatTest extends SeleniumTest {
 
         verifyMessageArrived(driver1, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, true);
         verifyMessageArrived(driver2, ALLIANCE_ROOM_NAME, userData1.getUsername(), MESSAGE_2, false);
-        verifyMessageNotArrived(driver3, ALLIANCE_ROOM_NAME);
+        verifyMessageNotArrived(driver3, ALLIANCE_ROOM_NAME, MESSAGE_2);
     }
 
     private void chatInCustomRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1, RegistrationParameters userData3) {
@@ -133,20 +134,23 @@ public class GameChatTest extends SeleniumTest {
     private void verifyMessageArrived(WebDriver driver, String roomName, String from, String message, boolean own) {
         SkyXploreGameChatActions.selectChatRoom(driver, roomName);
 
-        GameChatMessage chatMessage = SkyXploreGameChatActions.getMessages(driver)
-            .stream()
+        List<GameChatMessage> messages = SkyXploreGameChatActions.getMessages(driver);
+        Collections.reverse(messages);
+
+        GameChatMessage chatMessage = messages.stream()
+            .filter(gameChatMessage -> gameChatMessage.getFrom().equals(from))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Chat message not found in room " + roomName));
 
         assertThat(chatMessage.getFrom()).isEqualTo(from);
         assertThat(chatMessage.isOwnMessage()).isEqualTo(own);
 
-        assertThat(chatMessage.getMessages()).containsExactly(message);
+        assertThat(chatMessage.getMessage()).isEqualTo(message);
     }
 
-    private void verifyMessageNotArrived(WebDriver driver, String roomName) {
+    private void verifyMessageNotArrived(WebDriver driver, String roomName, String message) {
         SkyXploreGameChatActions.selectChatRoom(driver, roomName);
 
-        assertThat(SkyXploreGameChatActions.getMessages(driver)).isEmpty();
+        assertThat(SkyXploreGameChatActions.getMessages(driver).stream().noneMatch(gameChatMessage -> gameChatMessage.getMessage().equals(message))).isTrue();
     }
 }

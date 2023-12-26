@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.GameChatRoom;
 import org.openqa.selenium.By;
@@ -17,15 +18,16 @@ import static com.github.saphyra.apphub.integration.framework.WebElementUtils.cl
 
 public class SkyXploreGameChatActions {
     public static void openChat(WebDriver driver) {
-        if (!GamePage.chat(driver).isDisplayed()) {
-            GamePage.chatButton(driver).click();
+        if (!WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-chat")))) {
+            driver.findElement(By.id("skyxplore-game-toggle-chat-button"))
+                .click();
         }
     }
 
     public static void postMessageToRoom(WebDriver driver, String roomName, String message) {
         selectChatRoom(driver, roomName);
 
-        WebElement chatInput = GamePage.chatInput(driver);
+        WebElement chatInput = driver.findElement(By.id("skyxplore-game-chat-message-input"));
         clearAndFill(chatInput, message);
 
         chatInput.sendKeys(Keys.RETURN);
@@ -41,14 +43,14 @@ public class SkyXploreGameChatActions {
     }
 
     public static List<GameChatRoom> getRooms(WebDriver driver) {
-        return GamePage.chatRooms(driver)
+        return driver.findElements(By.className("skyxplore-game-chat-room"))
             .stream()
             .map(GameChatRoom::new)
             .collect(Collectors.toList());
     }
 
     public static List<GameChatMessage> getMessages(WebDriver driver) {
-        return GamePage.messages(driver)
+        return driver.findElements(By.className("skyxplore-game-chat-message"))
             .stream()
             .map(GameChatMessage::new)
             .collect(Collectors.toList());
@@ -57,18 +59,20 @@ public class SkyXploreGameChatActions {
     public static void createChatRoom(WebDriver driver, String roomName, String... invitedUsers) {
         openChat(driver);
 
-        GamePage.openCreateChatRoomDialogButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-chat-room-create-button"))
+            .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> GamePage.createChatRoomDialog(driver).isDisplayed())
-            .assertTrue("CreateChatRoomDialog is not opened");
+            .until(() -> WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-chat-room-creator"))))
+            .assertTrue("ChatRoomCreator is not displayed");
 
         fillNewChatRoomName(driver, roomName);
 
         Arrays.stream(invitedUsers)
             .forEach(s -> inviteUserToChatRoom(driver, s));
 
-        GamePage.createChatRoomButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-chat-room-save-button"))
+                .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> getRooms(driver).stream().map(GameChatRoom::getName).anyMatch(s -> s.equals(roomName)))
@@ -76,15 +80,15 @@ public class SkyXploreGameChatActions {
     }
 
     private static void inviteUserToChatRoom(WebDriver driver, String username) {
-        GamePage.playerListForChatRoomCreation(driver)
+        driver.findElements(By.cssSelector("#skyxplore-game-chat-room-creator-available-players .skyxplore-game-chat-room-creator-player"))
             .stream()
-            .filter(element -> element.findElement(By.cssSelector(":scope span")).getText().equals(username))
+            .filter(element -> element.getText().equals(username))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Player not found"))
             .click();
     }
 
     private static void fillNewChatRoomName(WebDriver driver, String roomName) {
-        clearAndFill(GamePage.createChatRoomTitleInput(driver), roomName);
+        clearAndFill(driver.findElement(By.id("skyxplore-game-chat-room-creator-name-input")), roomName);
     }
 }

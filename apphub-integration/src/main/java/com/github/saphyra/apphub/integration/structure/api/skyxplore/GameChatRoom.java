@@ -25,6 +25,6 @@ public class GameChatRoom {
 
     private boolean isSelected() {
         return WebElementUtils.getClasses(webElement)
-            .contains("active-room-button");
+            .contains("current");
     }
 }

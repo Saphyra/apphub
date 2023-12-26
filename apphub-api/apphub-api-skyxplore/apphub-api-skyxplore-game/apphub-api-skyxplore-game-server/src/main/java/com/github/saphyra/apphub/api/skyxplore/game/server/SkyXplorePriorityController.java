@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.api.skyxplore.game.server;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 public interface SkyXplorePriorityController {
     @GetMapping(Endpoints.SKYXPLORE_PLANET_GET_PRIORITIES)
+    @ForRemoval("skyxplore-react")
     Map<String, Integer> getPriorities(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY)

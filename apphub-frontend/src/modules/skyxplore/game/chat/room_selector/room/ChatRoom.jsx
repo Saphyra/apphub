@@ -24,11 +24,10 @@ const ChatRoom = ({ roomId, roomTitle, hasUnread, currentChatRoom, setCurrentCha
 
                 <div
                     className="button skyxplore-game-chat-room-close-button inline"
-                    label="X"
                     onClick={() => exitChatRoom(roomId)}
                 >
                     X
-                    </div>
+                </div>
             </span>
         )
     }
@@ -38,7 +37,7 @@ const ChatRoom = ({ roomId, roomTitle, hasUnread, currentChatRoom, setCurrentCha
         className={"button skyxplore-game-chat-room" + (hasUnread ? " unread" : "") + (roomId === currentChatRoom ? " current" : "") + (isCustomRoom() ? " custom" : "")}
         onClick={() => setCurrentChatRoom(roomId)}
     >
-        {localizationHandler.getOrDefault(roomId, roomTitle)}
+        <span>{localizationHandler.getOrDefault(roomId, roomTitle)}</span>
 
         {isCustomRoom() && getCloseButton()}
     </div>

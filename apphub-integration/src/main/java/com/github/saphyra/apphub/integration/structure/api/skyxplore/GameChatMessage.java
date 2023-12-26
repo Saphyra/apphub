@@ -5,27 +5,26 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 public class GameChatMessage {
     private final WebElement webElement;
 
     public String getFrom() {
-        return webElement.findElement(By.cssSelector(":scope .sender-name"))
+        return getSenderElement()
             .getText();
     }
 
+    private WebElement getSenderElement() {
+        return webElement.findElement(By.className("skyxplore-game-chat-message-sender"));
+    }
+
     public boolean isOwnMessage() {
-        return WebElementUtils.getClasses(webElement)
+        return WebElementUtils.getClasses(getSenderElement())
             .contains("own-message");
     }
 
-    public List<String> getMessages() {
-        return webElement.findElements(By.cssSelector(":scope .message-list .chat-message"))
-            .stream()
-            .map(WebElement::getText)
-            .collect(Collectors.toList());
+    public String getMessage() {
+        return webElement.findElement(By.className("skyxplore-game-chat-message-content"))
+            .getText();
     }
 }

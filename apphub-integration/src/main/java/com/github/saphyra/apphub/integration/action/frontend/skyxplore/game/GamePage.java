@@ -1,71 +1,16 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@ForRemoval("skyxplore-react")
 class GamePage {
-    public static List<WebElement> systemMessages(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#general-chat-message-container .system-message"));
-    }
-
-    public static List<WebElement> solarSystems(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#map-svg-container circle"));
-    }
-
-    public static WebElement chatButton(WebDriver driver) {
-        return driver.findElement(By.id("chat-button"));
-    }
-
-    public static WebElement chat(WebDriver driver) {
-        return driver.findElement(By.id("chat"));
-    }
-
-    public static List<WebElement> chatRooms(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#chat-rooms .chat-button"));
-    }
-
-    public static List<WebElement> messages(WebDriver driver) {
-        return driver.findElements(By.cssSelector(".chat-message-container"))
-            .stream()
-            .filter(WebElement::isDisplayed)
-            .flatMap(element -> element.findElements(By.cssSelector(":scope .message-sender-container")).stream())
-            .collect(Collectors.toList());
-    }
-
-    public static WebElement chatInput(WebDriver driver) {
-        return driver.findElement(By.id("send-message-input"));
-    }
-
-    public static WebElement openCreateChatRoomDialogButton(WebDriver driver) {
-        return driver.findElement(By.id("open-create-chat-room-dialog"));
-    }
-
-    public static WebElement createChatRoomDialog(WebDriver driver) {
-        return driver.findElement(By.id("create-chat-room-container"));
-    }
-
-    public static WebElement createChatRoomTitleInput(WebDriver driver) {
-        return driver.findElement(By.id("create-chat-room-title-input"));
-    }
-
-    public static List<WebElement> playerListForChatRoomCreation(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#create-chat-room-players .create-chat-room-player"));
-    }
-
-    public static WebElement createChatRoomButton(WebDriver driver) {
-        return driver.findElement(By.id("create-chat-room-button"));
-    }
-
     public static WebElement solarSystemPage(WebDriver driver) {
         return driver.findElement(By.id("solar-system"));
-    }
-
-    public static List<WebElement> planets(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#solar-system-svg-container .planet-svg-element"));
     }
 
     public static WebElement planetPage(WebDriver driver) {
@@ -150,34 +95,6 @@ class GamePage {
 
     public static WebElement populationOverviewShowAllSkillsButton(WebDriver driver) {
         return driver.findElement(By.id("population-overview-show-all-skills"));
-    }
-
-    public static WebElement exitButton(WebDriver driver) {
-        return driver.findElement(By.id("exit-button"));
-    }
-
-    public static WebElement solarSystemName(WebDriver driver) {
-        return driver.findElement(By.id("solar-system-name"));
-    }
-
-    public static WebElement solarSystemSvg(WebDriver driver) {
-        return driver.findElement(By.id("solar-system-svg-container"));
-    }
-
-    public static WebElement closeSolarSystemButton(WebDriver driver) {
-        return driver.findElement(By.id("close-solar-system-button"));
-    }
-
-    public static WebElement planetName(WebDriver driver) {
-        return driver.findElement(By.id("planet-name"));
-    }
-
-    public static WebElement planetRightBar(WebDriver driver) {
-        return driver.findElement(By.id("planet-right-bar"));
-    }
-
-    public static WebElement closePlanetButton(WebDriver driver) {
-        return driver.findElement(By.id("close-planet-button"));
     }
 
     public static List<WebElement> surfacesOfPlanet(WebDriver driver) {

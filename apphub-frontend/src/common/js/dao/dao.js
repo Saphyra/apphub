@@ -230,6 +230,8 @@ const Endpoints = {
     SKYXPLORE_GAME_MAP: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/universe"),
     SKYXPLORE_GET_SOLAR_SYSTEM: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/solar-system/{solarSystemId}"),
     SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/solar-system/{solarSystemId}/name"),
+    SKYXPLORE_PLANET_RENAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/planet/{planetId}/name"),
+    SKYXPLORE_PLANET_GET_OVERVIEW: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/planet/{planetId}/overview"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

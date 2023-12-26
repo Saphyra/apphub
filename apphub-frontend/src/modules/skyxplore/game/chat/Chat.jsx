@@ -7,7 +7,7 @@ import GameConstants from "../GameConstants";
 import Utils from "../../../../common/js/Utils";
 import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import MapStream from "../../../../common/js/collection/MapStream";
-import ChatGroupCreator from "./group_creator/ChatGroupCreator";
+import ChatRoomCreator from "./room_creator/ChatRoomCreator";
 
 const CHAT_EVENTS = [
     WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
@@ -25,13 +25,13 @@ const Chat = ({
     const [currentChatRoom, setCurrentChatRoom] = useState(GameConstants.GENERAL_CHAT_ROOM);
     const [messages, setMessages] = useState({});
     const [unreadMessages, setUnreadMessages] = useState({});
-    const [displayGroupCreator, setDisplayGroupCreator] = useState(false);
+    const [displayRoomCreator, setDisplayRoomCreator] = useState(false);
 
     useEffect(() => handleEvent(), [lastEvent]);
     useEffect(() => updateUnreadMessage(), [messages]);
     useEffect(() => updateHasUnreadMessage(), [unreadMessages]);
     useEffect(() => setMessageStatus(currentChatRoom, false), [currentChatRoom]);
-    useEffect(() => setDisplayGroupCreator(false), [displayChat]);
+    useEffect(() => setDisplayRoomCreator(false), [displayChat]);
     useEffect(() => setMessageStatus(currentChatRoom, false), [displayChat]);
 
     const handleEvent = () => {
@@ -84,7 +84,7 @@ const Chat = ({
     }
 
     if (displayChat) {
-        if (!displayGroupCreator) {
+        if (!displayRoomCreator) {
             return (
                 <div id="skyxplore-game-chat">
                     <MessageInput
@@ -101,14 +101,14 @@ const Chat = ({
                         currentChatRoom={currentChatRoom}
                         setCurrentChatRoom={setCurrentChatRoom}
                         unreadMessages={unreadMessages}
-                        setDisplayGroupCreator={setDisplayGroupCreator}
+                        setDisplayRoomCreator={setDisplayRoomCreator}
                         lastEvent={lastEvent}
                     />
                 </div>
             );
         } else {
-            return <ChatGroupCreator
-                setDisplayGroupCreator={setDisplayGroupCreator}
+            return <ChatRoomCreator
+                setDisplayRoomCreator={setDisplayRoomCreator}
             />
         }
     }

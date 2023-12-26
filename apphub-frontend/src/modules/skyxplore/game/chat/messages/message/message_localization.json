@@ -6,5 +6,9 @@
     "skyxplore-game-user-left": {
         "en": "{name} disconnected.",
         "hu": "{} elhagyta a szobát."
+    },
+    "system": {
+        "en": "System",
+        "hu": "Rendszer"
     }
 }

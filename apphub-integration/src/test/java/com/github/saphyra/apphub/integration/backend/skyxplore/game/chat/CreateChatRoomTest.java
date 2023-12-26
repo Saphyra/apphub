@@ -123,6 +123,6 @@ public class CreateChatRoomTest extends BackEndTest {
             .map(skyXploreGameWsClient -> skyXploreGameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED))
             .map(webSocketEvent -> webSocketEvent.orElseThrow(() -> new RuntimeException("ChatRoomCreated message has not arrived")))
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
-            .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getTitle()).isEqualTo(ROOM_TITLE));
+            .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getRoomTitle()).isEqualTo(ROOM_TITLE));
     }
 }

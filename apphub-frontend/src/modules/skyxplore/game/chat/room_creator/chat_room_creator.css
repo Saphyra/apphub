@@ -1,4 +1,4 @@
-#skyxplore-game-chat-group-creator {
+#skyxplore-game-chat-room-creator {
     background-color: black;
     position: fixed;
     right: var(--main-page-border-width);
@@ -10,7 +10,7 @@
     min-width: 300px;
 }
 
-#skyxplore-game-chat-group-creator-title {
+#skyxplore-game-chat-room-creator-title {
     border-bottom: var(--skyxplore-chat-border-width) ridge white;
     text-align: center;
     position: relative;
@@ -18,37 +18,37 @@
     padding: 3px;
 }
 
-#skyxplore-game-chat-group-creator-close-button {
+#skyxplore-game-chat-room-creator-close-button {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-#skyxplore-game-chat-group-creator-id-input {
+#skyxplore-game-chat-room-creator-name-input {
     width: 90%;
     display: block;
     margin: 3px auto;
 }
 
-#skyxplore-game-chat-group-create-button-wrapper {
+#skyxplore-game-chat-room-save-button-wrapper {
     border-top: var(--skyxplore-chat-border-width) ridge white;
 }
 
-#skyxplore-game-chat-group-create-button {
+#skyxplore-game-chat-room-save-button {
     display: block;
     margin: 3px auto;
     width: 50%;
 }
 
-#skyxplore-game-chat-group-creator-players>table {
+#skyxplore-game-chat-room-creator-players>table {
     margin: 5px auto;
 }
 
-.skyxplore-game-chat-group-creator-player {
+.skyxplore-game-chat-room-creator-player {
     display: block;
     margin: auto;
 }
 
-#skyxplore-game-chat-group-creator-no-available-player {
+#skyxplore-game-chat-room-creator-no-available-player {
     text-align: center;
 }

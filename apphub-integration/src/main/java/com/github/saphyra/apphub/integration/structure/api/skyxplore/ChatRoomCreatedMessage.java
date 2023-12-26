@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ChatRoomCreatedMessage {
-    private String id;
-    private String title;
+    private String roomId;
+    private String roomTitle;
 }

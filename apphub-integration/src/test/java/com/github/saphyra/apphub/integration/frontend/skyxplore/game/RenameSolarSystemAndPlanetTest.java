@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -10,9 +9,11 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -51,29 +52,50 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
         String oldSolarSystemName = AwaitilityWrapper.getWithWait(() -> SkyXploreSolarSystemActions.getSolarSystemName(driver), s -> s.length() > 0)
             .orElseThrow(() -> new RuntimeException("SolarSystem name not loaded."));
 
-        solarSystem_blank(driver, oldSolarSystemName);
-        solarSystem_tooLong(driver, oldSolarSystemName);
+        solarSystem_blank(driver);
+        solarSystem_tooLong(driver);
+        solarSystem_discard(driver, oldSolarSystemName);
         solarSystem_rename(driver);
-        String oldPlanetName = planet_blank(driver);
-        planet_tooLong(driver, oldPlanetName);
+
+        SkyXploreSolarSystemActions.getPlanet(driver)
+            .click();
+        String oldPlanetName = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.getPlanetName(driver), s -> s.length() > 0)
+            .orElseThrow(() -> new RuntimeException("Planet name not loaded."));
+
+        planet_blank(driver);
+        planet_tooLong(driver);
+        planet_discard(driver, oldPlanetName);
         planet_rename(driver);
     }
 
-    private static void solarSystem_blank(WebDriver driver, String oldSolarSystemName) {
+    private static void solarSystem_blank(WebDriver driver) {
+        SkyXploreSolarSystemActions.enableNameEditing(driver);
         SkyXploreSolarSystemActions.renameSolarSystem(driver, " ");
-        assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(oldSolarSystemName);
+        SkyXploreSolarSystemActions.saveNewSolarSystemName(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_BLANK);
     }
 
-    private static void solarSystem_tooLong(WebDriver driver, String oldSolarSystemName) {
+    private static void solarSystem_tooLong(WebDriver driver) {
         SkyXploreSolarSystemActions.renameSolarSystem(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        SkyXploreSolarSystemActions.saveNewSolarSystemName(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_TOO_LONG);
+    }
+
+    private void solarSystem_discard(WebDriver driver, String oldSolarSystemName) {
+        SkyXploreSolarSystemActions.renameSolarSystem(driver, NEW_SOLAR_SYSTEM_NAME);
+        SkyXploreSolarSystemActions.discardNewSolarSystemName(driver);
         assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(oldSolarSystemName);
-        NotificationUtil.verifyErrorNotification(driver, "Solar System name too long (Max. 30 characters).");
-        NotificationUtil.clearNotifications(driver);
     }
 
     private static void solarSystem_rename(WebDriver driver) {
+        SkyXploreSolarSystemActions.enableNameEditing(driver);
         SkyXploreSolarSystemActions.renameSolarSystem(driver, NEW_SOLAR_SYSTEM_NAME);
-        assertThat(SkyXploreSolarSystemActions.getSolarSystemName(driver)).isEqualTo(NEW_SOLAR_SYSTEM_NAME);
+        SkyXploreSolarSystemActions.saveNewSolarSystemName(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreSolarSystemActions.getSolarSystemName(driver).equals(NEW_SOLAR_SYSTEM_NAME))
+            .assertTrue("Solar System name is not changed.");
+
         SkyXploreSolarSystemActions.closeSolarSystem(driver);
         SkyXploreMapActions.getSolarSystem(driver)
             .click();
@@ -82,29 +104,36 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
             .assertTrue("SolarSystem name is not changed.");
     }
 
-    private static String planet_blank(WebDriver driver) {
-        SkyXploreSolarSystemActions.getPlanet(driver)
-            .click();
-        String oldPlanetName = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.getPlanetName(driver), s -> s.length() > 0)
-            .orElseThrow(() -> new RuntimeException("Planet name not loaded."));
+    private static void planet_blank(WebDriver driver) {
+        SkyXplorePlanetActions.enableNameEditing(driver);
 
         SkyXplorePlanetActions.renamePlanet(driver, " ");
-        AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetActions.getPlanetName(driver).equals(oldPlanetName))
-            .assertTrue(String.format("Planet name changed. It was '%s'", SkyXplorePlanetActions.getPlanetName(driver)));
-        return oldPlanetName;
+        SkyXplorePlanetActions.saveNewPlanetName(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_PLANET_NAME_BLANK);
     }
 
-    private static void planet_tooLong(WebDriver driver, String oldPlanetName) {
+    private static void planet_tooLong(WebDriver driver) {
         SkyXplorePlanetActions.renamePlanet(driver, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        SkyXplorePlanetActions.saveNewPlanetName(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_PLANET_NAME_TOO_LONG);
+    }
+
+    private void planet_discard(WebDriver driver, String oldPlanetName) {
+        SkyXplorePlanetActions.renamePlanet(driver, NEW_PLANET_NAME);
+        SkyXplorePlanetActions.discardNewPlanetName(driver);
+
         assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(oldPlanetName);
-        NotificationUtil.verifyErrorNotification(driver, "Planet name too long (Max. 30 characters).");
-        NotificationUtil.clearNotifications(driver);
     }
 
     private static void planet_rename(WebDriver driver) {
+        SkyXplorePlanetActions.enableNameEditing(driver);
         SkyXplorePlanetActions.renamePlanet(driver, NEW_PLANET_NAME);
-        assertThat(SkyXplorePlanetActions.getPlanetName(driver)).isEqualTo(NEW_PLANET_NAME);
+        SkyXplorePlanetActions.saveNewPlanetName(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getPlanetName(driver).equals(NEW_PLANET_NAME))
+            .assertTrue("Planet name is not changed.");
+
         SkyXplorePlanetActions.closePlanet(driver);
         SkyXploreSolarSystemActions.getPlanet(driver)
             .click();

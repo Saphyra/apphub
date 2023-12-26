@@ -42,7 +42,10 @@ const Navigation = ({ footer }) => {
             />
         case PageName.PLANET:
             return <Planet
-
+                footer={footer}
+                planetId={lastPage.data}
+                closePage={closePage}
+                openPage={openPage}
             />
         default:
             Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

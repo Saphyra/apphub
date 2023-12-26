@@ -3,7 +3,7 @@
         "en": "Create chat room",
         "hu": "Új chat szoba"
     },
-    "room-id": {
+    "room-name": {
         "en": "Room name",
         "hu": "Szoba neve"
     },
@@ -23,7 +23,7 @@
         "en": "No available player.",
         "hu": "Nincs elérhető játékos."
     },
-    "room-id-blank": {
+    "room-name-blank": {
         "en": "Room name must not be blank.",
         "hu": "Szoba neve nem lehet üres."
     }

@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetQueueItem;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageOverview;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Surface;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFillContentEditable;
 
 
 public class SkyXplorePlanetActions {
@@ -30,16 +30,17 @@ public class SkyXplorePlanetActions {
     }
 
     public static String getPlanetName(WebDriver driver) {
-        return GamePage.planetName(driver).getText();
+        return driver.findElement(By.id("skyxplore-game-planet-name"))
+            .getText();
     }
 
     public static void renamePlanet(WebDriver driver, String newPlanetName) {
-        clearAndFillContentEditable(driver, GamePage.planetName(driver), newPlanetName);
-        GamePage.planetRightBar(driver).click();
+        WebElementUtils.clearAndFill(driver.findElement(By.id("skyxplore-game-planet-name-edit-input")), newPlanetName);
     }
 
     public static void closePlanet(WebDriver driver) {
-        GamePage.closePlanetButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-planet-close-button"))
+            .click();
     }
 
     public static Surface findEmptySurface(WebDriver driver, String surfaceType) {
@@ -88,5 +89,20 @@ public class SkyXplorePlanetActions {
             .filter(surface -> surface.getBuildingDataId().filter(s -> s.equals(dataId)).isPresent())
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No surface found with building " + dataId));
+    }
+
+    public static void enableNameEditing(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-planet-name-edit-button"))
+            .click();
+    }
+
+    public static void saveNewPlanetName(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-planet-name-save-button"))
+            .click();
+    }
+
+    public static void discardNewPlanetName(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-planet-name-discard-button"))
+            .click();
     }
 }

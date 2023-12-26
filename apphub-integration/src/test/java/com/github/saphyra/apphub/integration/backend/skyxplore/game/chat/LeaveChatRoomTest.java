@@ -75,7 +75,7 @@ public class LeaveChatRoomTest extends BackEndTest {
         SkyXploreGameChatActions.createChatRoom(language, accessTokenId2, createChatRoomRequest);
         String roomId = gameWsClients.get(accessTokenId2).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
-            .map(ChatRoomCreatedMessage::getId)
+            .map(ChatRoomCreatedMessage::getRoomId)
             .orElseThrow(() -> new RuntimeException("ChatRoom was not created"));
         Response leaveChatRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(language, accessTokenId1, roomId);
 

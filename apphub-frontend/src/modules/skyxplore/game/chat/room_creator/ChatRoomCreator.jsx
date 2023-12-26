@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./chat_group_creator.css";
-import localizationData from "./chat_group_creator_localization.json";
+import "./chat_room_creator.css";
+import localizationData from "./chat_room_creator_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
@@ -9,7 +9,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import Utils from "../../../../../common/js/Utils";
 
-const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
+const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const [roomId, setRoomId] = useState("");
     const [players, setPlayers] = useState([]);
@@ -45,7 +45,7 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
             .filter(player => invitedPlayers.indexOf(player) < 0)
             .map(player => <Button
                 key={player.id}
-                className="skyxplore-game-chat-group-creator-player"
+                className="skyxplore-game-chat-room-creator-player"
                 label={player.name}
                 onclick={() => invite(player)}
             />)
@@ -56,7 +56,7 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
         return new Stream(invitedPlayers)
             .map(player => <Button
                 key={player.id}
-                className="skyxplore-game-chat-group-creator-player"
+                className="skyxplore-game-chat-room-creator-player"
                 label={player.name}
                 onclick={() => uninvite(player)}
             />)
@@ -64,12 +64,12 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
     }
 
     const getPlayers = () => {
-        if (players.length == 0) {
+        if (players.length === 0) {
             return (
                 <tr>
                     <td
                         colSpan={2}
-                        id="skyxplore-game-chat-group-creator-no-available-player"
+                        id="skyxplore-game-chat-room-creator-no-available-player"
                     >
                         {localizationHandler.get("no-available-player")}
                     </td>
@@ -78,8 +78,8 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
         } else {
             return (
                 <tr>
-                    <td id="skyxplore-game-chat-group-creator-available-players">{getAvailablePlayers()}</td>
-                    <td id="skyxplore-game-chat-group-creator-invited-players">{getInvitedPlayers()}</td>
+                    <td id="skyxplore-game-chat-room-creator-available-players">{getAvailablePlayers()}</td>
+                    <td id="skyxplore-game-chat-room-creator-invited-players">{getInvitedPlayers()}</td>
                 </tr>
             );
         }
@@ -87,7 +87,7 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
 
     const create = async () => {
         if (Utils.isBlank(roomId)) {
-            NotificationService.showError(localizationHandler.get("room-id-blank"));
+            NotificationService.showError(localizationHandler.get("room-name-blank"));
             return;
         }
 
@@ -103,30 +103,30 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
         await Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM.createRequest(payload)
             .send();
 
-        setDisplayGroupCreator(false);
+        setDisplayRoomCreator(false);
     }
 
     return (
-        <div id="skyxplore-game-chat-group-creator">
-            <div id="skyxplore-game-chat-group-creator-title">
+        <div id="skyxplore-game-chat-room-creator">
+            <div id="skyxplore-game-chat-room-creator-title">
                 {localizationHandler.get("title")}
 
                 <Button
-                    id="skyxplore-game-chat-group-creator-close-button"
+                    id="skyxplore-game-chat-room-creator-close-button"
                     label="X"
-                    onclick={() => setDisplayGroupCreator(false)}
+                    onclick={() => setDisplayRoomCreator(false)}
                 />
             </div>
 
             <InputField
-                id="skyxplore-game-chat-group-creator-id-input"
+                id="skyxplore-game-chat-room-creator-name-input"
                 type="text"
                 onchangeCallback={setRoomId}
                 value={roomId}
-                placeholder={localizationHandler.get("room-id")}
+                placeholder={localizationHandler.get("room-name")}
             />
 
-            <div id="skyxplore-game-chat-group-creator-players">
+            <div id="skyxplore-game-chat-room-creator-players">
                 <table className="formatted-table">
                     <thead>
                         <tr>
@@ -141,9 +141,9 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
                 </table>
             </div>
 
-            <div id="skyxplore-game-chat-group-create-button-wrapper">
+            <div id="skyxplore-game-chat-room-save-button-wrapper">
                 <Button
-                    id="skyxplore-game-chat-group-create-button"
+                    id="skyxplore-game-chat-room-save-button"
                     label={localizationHandler.get("create")}
                     onclick={create}
                 />
@@ -152,4 +152,4 @@ const ChatGroupCreator = ({ setDisplayGroupCreator }) => {
     );
 }
 
-export default ChatGroupCreator;
+export default ChatRoomCreator;

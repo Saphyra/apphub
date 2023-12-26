@@ -25,6 +25,12 @@ public enum LocalizedText {
     SKYXPLORE_LOBBY_PLAYERS_NOT_READY("Not all the players are ready."),
     SKYXPLORE_LOBBY_INVITATION_SENT_RECENTLY("You have invited this player recently. Please wait a few seconds before trying again."),
     SKYXPLORE_LOBBY_ONLY_ONE_ALLIANCE("Every player is in the same alliance. Game is boring with no one to conquer."),
+
+    //SKYXPLORE GAME
+    SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_BLANK("Solar System name must not be blank."),
+    SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_TOO_LONG("Solar System name too long. (Maximum 30 characters.)"),
+    SKYXPLORE_GAME_PLANET_NAME_BLANK("Planet name must not be blank."),
+    SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
     ;
 
     private final String text;

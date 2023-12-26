@@ -1,0 +1,5 @@
+#skyxplore-game-planet{
+    display: flex;
+    padding: 0;
+    flex-direction: row;
+}

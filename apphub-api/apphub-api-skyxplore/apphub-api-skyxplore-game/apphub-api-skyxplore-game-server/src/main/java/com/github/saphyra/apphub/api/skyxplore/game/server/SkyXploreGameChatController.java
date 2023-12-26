@@ -21,7 +21,7 @@ public interface SkyXploreGameChatController {
      * Listing all the players connected to the game
      */
     @GetMapping(Endpoints.SKYXPLORE_GAME_GET_PLAYERS)
-    List<SkyXploreCharacterModel> getPlayers(@RequestParam(value = "excludeSelf", required = false, defaultValue = "boolean") Boolean excludeSelf, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SkyXploreCharacterModel> getPlayers(@RequestParam(value = "excludeSelf", required = false, defaultValue = "false") Boolean excludeSelf, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PutMapping(Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM)
     void createChatRoom(@RequestBody CreateChatRoomRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

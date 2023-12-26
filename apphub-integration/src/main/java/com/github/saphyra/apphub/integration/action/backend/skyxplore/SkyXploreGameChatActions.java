@@ -9,7 +9,9 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCh
 import io.restassured.response.Response;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SkyXploreGameChatActions {
     public static List<SkyXploreCharacterModel> getPlayers(Language language, UUID accessTokenId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_PLAYERS));
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_PLAYERS, Collections.emptyMap(), Map.of("excludeSelf", true)));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

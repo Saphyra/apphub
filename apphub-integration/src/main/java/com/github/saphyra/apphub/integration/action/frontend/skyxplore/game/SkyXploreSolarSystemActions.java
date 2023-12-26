@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
-
-import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFillContentEditable;
 
 
 public class SkyXploreSolarSystemActions {
@@ -22,19 +22,33 @@ public class SkyXploreSolarSystemActions {
     }
 
     private static List<WebElement> getPlanets(WebDriver driver) {
-        return GamePage.planets(driver);
+        return driver.findElements(By.className("skyxplore-game-solar-system-planet"));
     }
 
     public static String getSolarSystemName(WebDriver driver) {
-        return GamePage.solarSystemName(driver).getText();
+        return driver.findElement(By.id("skyxplore-game-solar-system-name")).getText();
     }
 
     public static void renameSolarSystem(WebDriver driver, String newSolarSystemName) {
-        clearAndFillContentEditable(driver, GamePage.solarSystemName(driver), newSolarSystemName);
-        GamePage.solarSystemSvg(driver).click();
+        WebElementUtils.clearAndFill(driver.findElement(By.id("skyxplore-game-solar-system-name-edit-input")), newSolarSystemName);
+    }
+
+    public static void saveNewSolarSystemName(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-solar-system-name-save-button")).click();
     }
 
     public static void closeSolarSystem(WebDriver driver) {
-        GamePage.closeSolarSystemButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-solar-system-close-button"))
+            .click();
+    }
+
+    public static void enableNameEditing(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-solar-system-name-edit-button"))
+            .click();
+    }
+
+    public static void discardNewSolarSystemName(WebDriver driver) {
+        driver.findElement(By.id("skyxplore-game-solar-system-name-discard-button"))
+            .click();
     }
 }

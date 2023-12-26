@@ -14,7 +14,7 @@ const Message = ({ message, userId }) => {
             <div className="skyxplore-game-chat-message">
                 <span className={"skyxplore-game-chat-message-sender" + (userId === messageData.senderId ? " own-message" : "")}>{messageData.senderName}</span>
                 <span>: </span>
-                {messageData.message}
+                <span className="skyxplore-game-chat-message-content">{messageData.message}</span>
             </div>
         );
     } else {
@@ -30,8 +30,12 @@ const Message = ({ message, userId }) => {
 
 const SystemMessage = ({ messageType, messageData, localizationHandler }) => {
     return (
-        <div className="skyxplore-game-chat-message system-message">
-            {localizationHandler.get(messageType, { name: messageData.characterName })}
+        <div className="skyxplore-game-chat-message">
+            <span className="skyxplore-game-chat-message-sender system-message">{localizationHandler.get("system")}</span>
+            <span>: </span>
+            <span className="skyxplore-game-chat-message-content">
+                {localizationHandler.get(messageType, { name: messageData.characterName })}
+            </span>
         </div>
     );
 }
