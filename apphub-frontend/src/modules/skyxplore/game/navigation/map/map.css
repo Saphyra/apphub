@@ -1,0 +1,25 @@
+#skyxplore-game-map {
+    padding: 0;
+}
+
+#skyxplore-game-map-container {
+    border: 3px inset white;
+    margin: 10px;
+}
+
+#skyxplore-game-map-svg{
+    min-width: 100%;
+}
+
+.skyxplore-game-map-solar-system:hover{
+    stroke: blue;
+    stroke-width: 3px;
+}
+
+.skyxplore-game-map-solar-system-name{
+    fill: cyan;
+    font-size: 20px;
+    font-weight: 700;
+    stroke: #0073e6;
+    stroke-width: 1px;
+}

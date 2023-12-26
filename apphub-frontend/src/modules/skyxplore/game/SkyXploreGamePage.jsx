@@ -15,6 +15,7 @@ import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
 import Chat from "./chat/Chat";
 import Endpoints from "../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
+import Navigation from "./navigation/Navigation";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -72,29 +73,35 @@ const SkyXploreGamePage = () => {
     const [displayChat, setDisplayChat] = useState(false);
     //===End Chat
 
+    const footer = () => {
+        return <Footer
+            leftButtons={[
+                <ExitGameButton
+                    key="exit"
+                    setConfirmationDialogData={setConfirmationDialogData}
+                />,
+                <PauseAndResumeGameButton
+                    key="pause-and-resume"
+                    lastEvent={lastEvent}
+                />
+            ]}
+            centerButtons={[]}
+            rightButtons={[
+                <ToggleChatButton
+                    key="toggle-chat"
+                    hasUnreadMessage={hasUnreadMessage}
+                    toggleCallback={() => setDisplayChat(!displayChat)}
+                />
+            ]}
+        />
+    }
+
     return (
         <div>
             <div className="skyxplore-background">
                 <div id="skyxplore-game" className="main-page skyxplore-main" >
-                    <Footer
-                        leftButtons={[
-                            <ExitGameButton
-                                key="exit"
-                                setConfirmationDialogData={setConfirmationDialogData}
-                            />,
-                            <PauseAndResumeGameButton
-                                key="pause-and-resume"
-                                lastEvent={lastEvent}
-                            />
-                        ]}
-                        centerButtons={[]}
-                        rightButtons={[
-                            <ToggleChatButton
-                                key="toggle-chat"
-                                hasUnreadMessage={hasUnreadMessage}
-                                toggleCallback={() => setDisplayChat(!displayChat)}
-                            />
-                        ]}
+                    <Navigation
+                        footer={footer()}
                     />
                 </div>
             </div>

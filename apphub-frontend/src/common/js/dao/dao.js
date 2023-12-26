@@ -227,6 +227,9 @@ const Endpoints = {
     SKYXPLORE_GAME_GET_PLAYERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/player"),
     SKYXPLORE_GAME_CREATE_CHAT_ROOM: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/chat/room"),
     SKYXPLORE_GAME_LEAVE_CHAT_ROOM: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/chat/room/{roomId}"),
+    SKYXPLORE_GAME_MAP: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/universe"),
+    SKYXPLORE_GET_SOLAR_SYSTEM: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/solar-system/{solarSystemId}"),
+    SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/solar-system/{solarSystemId}/name"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

@@ -1,0 +1,61 @@
+#skyxplore-game-solar-system-header {
+    position: relative;
+}
+
+#skyxplore-game-solar-system-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 26px;
+}
+
+#skyxplore-game-solar-system-name-edit-button {
+    background-image: url("../../../../../common/style/img/edit.png");
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+}
+
+#skyxplore-game-solar-system-name-edit-input {
+    font-size: 26px;
+}
+
+#skyxplore-game-solar-system-name-save-button {
+    background-image: url("../../../../../common/style/img/save.png");
+    background-size: cover;
+    width: 43px;
+    height: 43px;
+    color: transparent;
+    font-size: 26px;
+}
+
+#skyxplore-game-solar-system-name-discard-button {
+    font-size: 26px;
+}
+
+#skyxplore-game-solar-system-svg {
+    min-width: 100%;
+}
+
+#skyxplore-game-solar-system-edge {
+    fill: transparent;
+    stroke: white;
+    stroke-width: 10px;
+}
+
+#skyxplore-game-solar-system-star {
+    fill: yellow;
+}
+
+.skyxplore-game-solar-system-planet:hover{
+    stroke: blue;
+    stroke-width: 3px;
+}
+
+.skyxplore-game-solar-system-planet-name{
+    fill: cyan;
+    font-size: 20px;
+    font-weight: 700;
+    stroke: #0073e6;
+    stroke-width: 1px;
+}

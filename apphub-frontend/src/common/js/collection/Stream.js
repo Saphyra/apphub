@@ -78,6 +78,14 @@ const Stream = class {
             .join(delimiter);
     }
 
+    last() {
+        if (!this.items.length) {
+            return new Optional();
+        }
+
+        return new Optional(this.items[this.items.length - 1]);
+    }
+
     map(mapper) {
         return new Stream(this.items.map(mapper));
     }
@@ -134,7 +142,7 @@ const Stream = class {
         return this.filter(item => !predicate(item));
     }
 
-    reverse(){
+    reverse() {
         this.items.reverse();
         return this;
     }

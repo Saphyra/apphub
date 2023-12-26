@@ -1,0 +1,14 @@
+{
+    "solar-system-name": {
+        "en": "Solar System name",
+        "hu": "Csillagrendszer neve"
+    },
+    "solar-system-name-blank": {
+        "en": "Solar System name must not be blank.",
+        "hu": "Csillagrendszer neve nem lehet üres."
+    },
+    "solar-system-name-too-long": {
+        "en": "Solar System name too long. (Maximum 30 characters.)",
+        "hu": "Csillagrendszer neve túl hosszú. (Maximum 30 karakter.)"
+    }
+}

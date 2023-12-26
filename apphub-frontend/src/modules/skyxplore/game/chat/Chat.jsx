@@ -32,6 +32,7 @@ const Chat = ({
     useEffect(() => updateHasUnreadMessage(), [unreadMessages]);
     useEffect(() => setMessageStatus(currentChatRoom, false), [currentChatRoom]);
     useEffect(() => setDisplayGroupCreator(false), [displayChat]);
+    useEffect(() => setMessageStatus(currentChatRoom, false), [displayChat]);
 
     const handleEvent = () => {
         if (!Utils.hasValue(lastEvent)) {
