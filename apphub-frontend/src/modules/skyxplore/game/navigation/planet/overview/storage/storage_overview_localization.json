@@ -1,0 +1,34 @@
+{
+    "tab-title": {
+        "en": "Storage",
+        "hu": "Raktár"
+    },
+    "storage-settings": {
+        "en": "Storage settings",
+        "hu": "Raktér beállítások"
+    },
+    "energy": {
+        "en": "Energy",
+        "hu": "Energia"
+    },
+    "liquid": {
+        "en": "Liquid",
+        "hu": "Folyadék"
+    },
+    "bulk": {
+        "en": "Bulk",
+        "hu": "Teher"
+    },
+    "reserved": {
+        "en": "Reserved",
+        "hu": "Lefoglalt"
+    },
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "reserved-storage": {
+        "en": "Reserved storage",
+        "hu": "Lefoglalt raktár"
+    }
+}

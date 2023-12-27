@@ -31,7 +31,7 @@ class PlanetOverviewQueryService {
         Planet planet = gameDao.findByUserIdValidated(userId)
             .getData()
             .getPlanets()
-            .get(planetId);
+            .findByIdValidated(planetId);
 
         return PlanetOverviewResponse.builder()
             .planetName(getPlanetName(userId, planet))

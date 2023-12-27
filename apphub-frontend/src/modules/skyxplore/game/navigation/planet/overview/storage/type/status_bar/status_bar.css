@@ -1,0 +1,21 @@
+.skyxplore-game-planet-overview-storage-status-bar-actual {
+    background-color: blue;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.skyxplore-game-planet-overview-storage-status-bar-allocated {
+    background-color: darkblue;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.skyxplore-game-planet-overview-storage-status-bar-reserved {
+    background-color: purple;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}

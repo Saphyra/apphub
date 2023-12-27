@@ -94,6 +94,7 @@ public class PlanetOverviewQueryServiceTest {
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
         given(surfaceResponseQueryService.getSurfaceOfPlanet(USER_ID, PLANET_ID)).willReturn(List.of(surfaceResponse));
         given(planetStorageOverviewQueryService.getStorage(USER_ID, PLANET_ID)).willReturn(storageResponse);
