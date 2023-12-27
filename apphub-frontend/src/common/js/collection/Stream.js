@@ -155,6 +155,19 @@ const Stream = class {
         return new Stream(arr);
     }
 
+    sum() {
+        let result = 0;
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            }
+
+            result += item;
+        });
+
+        return result;
+    }
+
     toList() {
         return this.items;
     }

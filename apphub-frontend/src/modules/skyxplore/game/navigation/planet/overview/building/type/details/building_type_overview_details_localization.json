@@ -1,0 +1,14 @@
+{
+    "building": {
+        "en": "Building",
+        "hu": "Épület"
+    },
+    "total-level": {
+        "en": "Total level",
+        "hu": "Össz szint"
+    },
+    "used-slots": {
+        "en": "Used slots",
+        "hu": "Felhasznált helyek"
+    }
+}
