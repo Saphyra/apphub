@@ -9,6 +9,7 @@ import PlanetQueue from "./queue/PlanetQueue";
 const Planet = ({ footer, planetId, closePage, openPage }) => {
     const [planetName, setPlanetName] = useState("");
     const [storage, setStorage] = useState(null);
+    const [population, setPopulation] = useState({});
 
     useEffect(() => loadPlanet(), []);
 
@@ -19,6 +20,7 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
 
             setPlanetName(response.planetName);
             setStorage(response.storage)
+            setPopulation(response.population);
         }
         fetch();
     }
@@ -35,6 +37,7 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
             <main id="skyxplore-game-planet">
                 <PlanetOverview
                     storage={storage}
+                    population={population}
                 />
 
                 <PlanetSurface

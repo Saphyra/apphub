@@ -1,0 +1,15 @@
+#skyxplore-game-planet-overview-population-status{
+    position: relative;
+}
+
+#skyxplore-game-planet-overview-population-status-bar{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5px;
+}
+
+#skyxplore-game-planet-overview-population-status-text{
+    text-align: center;
+    position: relative;
+}
