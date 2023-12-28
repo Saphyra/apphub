@@ -6,7 +6,7 @@ import localizationData from "./surface_tile_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import SurfaceTileContent from "./content/SurfaceTileContent";
 
-const SurfaceTile = ({ surface, setConfirmationDialogData, planetId }) => {
+const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const isEmpty = () => {
@@ -23,6 +23,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId }) => {
                 surface={surface}
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
+                openPage={openPage}
             />
         }
     }

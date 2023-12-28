@@ -6,6 +6,8 @@ import Utils from "../../../../common/js/Utils";
 import Map from "./map/Map";
 import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
+import UpgradeBuilding from "./upgrade_building/UpgradeBuilding";
+import "./navigation.css";
 
 const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
@@ -27,6 +29,8 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
         .last()
         .orElse(new NavigationHistoryItem(PageName.MAP));
 
+    const data = lastPage.data;
+
     switch (lastPage.pageName) {
         case PageName.MAP:
             return <Map
@@ -35,7 +39,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
             />
         case PageName.SOLAR_SYSTEM:
             return <SolarSystem
-                solarSystemId={lastPage.data}
+                solarSystemId={data}
                 footer={footer}
                 closePage={closePage}
                 openPage={openPage}
@@ -43,10 +47,20 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
         case PageName.PLANET:
             return <Planet
                 footer={footer}
-                planetId={lastPage.data}
+                planetId={data}
                 closePage={closePage}
                 openPage={openPage}
                 setConfirmationDialogData={setConfirmationDialogData}
+            />
+        case PageName.UPGRADE_BUILDING:
+            return <UpgradeBuilding
+                closePage={closePage}
+                footer={footer}
+                dataId={data.dataId}
+                currentLevel={data.currentLevel}
+                surfaceType={data.surfaceType}
+                planetId={data.planetId}
+                buildingId={data.buildingId}
             />
         default:
             Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

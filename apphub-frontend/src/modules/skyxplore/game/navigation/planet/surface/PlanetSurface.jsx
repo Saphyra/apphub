@@ -3,7 +3,7 @@ import "./planet_surface.css";
 import Stream from "../../../../../../common/js/collection/Stream";
 import SurfaceTile from "./tile/SurfaceTile";
 
-const PlanetSurface = ({ surfaces, setConfirmationDialogData, planetId }) => {
+const PlanetSurface = ({ surfaces, setConfirmationDialogData, planetId, openPage }) => {
     const getSurfaces = () => {
         return new Stream(surfaces)
             .sorted((a, b) => {
@@ -18,6 +18,7 @@ const PlanetSurface = ({ surfaces, setConfirmationDialogData, planetId }) => {
                 surface={surface}
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
+                openPage={openPage}
             />)
             .toList();
     }

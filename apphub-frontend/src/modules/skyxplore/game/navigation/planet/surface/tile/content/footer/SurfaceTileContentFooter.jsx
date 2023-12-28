@@ -8,9 +8,11 @@ import LocalizationHandler from "../../../../../../../../../common/js/Localizati
 import ConfirmationDialogData from "../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import buildingLocalizationData from "../../../../../../common/localization/building_localization.json";
 import SurfaceTileContentFooterProgressBar from "./progress_bar/SurfaceTileContentFooterProgressBar";
+import NavigationHistoryItem from "../../../../../NavigationHistoryItem";
+import PageName from "../../../../../PageName";
 
 //TODO split
-const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId }) => {
+const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
 
@@ -105,7 +107,18 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                                 className="skyxplore-game-planet-surface-building-upgrade-button"
                                 label="."
                                 title={localizationHandler.get("upgrade")}
-                                onclick={() => { }} //TODO upgrade building
+                                onclick={() => openPage(
+                                    new NavigationHistoryItem(
+                                        PageName.UPGRADE_BUILDING,
+                                        {
+                                            dataId: building.dataId,
+                                            currentLevel: building.level,
+                                            planetId: planetId,
+                                            buildingId: building.buildingId,
+                                            surfaceType: surface.surfaceType
+                                        }
+                                    )
+                                )}
                             />
                         }
                     </div>

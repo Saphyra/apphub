@@ -2,5 +2,17 @@
     "raw_food": {
         "en": "Raw food",
         "hu": "Nyers étel"
+    },
+    "ore": {
+        "en": "Ore",
+        "hu": "Érc"
+    },
+    "energy": {
+        "en": "Energy",
+        "hu": "Energia"
+    },
+    "wood": {
+        "en": "Wood",
+        "hu": "Fa"
     }
 }

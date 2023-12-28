@@ -1,0 +1,22 @@
+{
+    "produces": {
+        "en": "Produces",
+        "hu": "Termel"
+    },
+    "commodity": {
+        "en": "Commodity",
+        "hu": "Termék"
+    },
+    "components": {
+        "en": "Components",
+        "hu": "Összetevők"
+    },
+    "required-work-points": {
+        "en": "Work points",
+        "hu": "Munkapontok"
+    },
+    "workplaces": {
+        "en": "Workplaces",
+        "hu": "Munkahelyek"
+    }
+}

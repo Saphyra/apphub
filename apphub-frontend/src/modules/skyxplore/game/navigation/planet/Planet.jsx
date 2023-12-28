@@ -55,6 +55,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                     surfaces={surfaces}
                     setConfirmationDialogData={setConfirmationDialogData}
                     planetId={planetId}
+                    openPage={openPage}
                 />
 
                 <PlanetQueue
