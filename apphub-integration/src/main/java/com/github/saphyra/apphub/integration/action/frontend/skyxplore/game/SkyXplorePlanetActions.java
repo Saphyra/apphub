@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class SkyXplorePlanetActions {
     public static boolean isLoaded(WebDriver driver) {
-        return GamePage.planetPage(driver).isDisplayed();
+        return WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-planet")));
     }
 
     public static void openStorageSettingWindow(WebDriver driver) {

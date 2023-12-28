@@ -9,14 +9,6 @@ import java.util.List;
 
 @ForRemoval("skyxplore-react")
 class GamePage {
-    public static WebElement solarSystemPage(WebDriver driver) {
-        return driver.findElement(By.id("solar-system"));
-    }
-
-    public static WebElement planetPage(WebDriver driver) {
-        return driver.findElement(By.id("planet"));
-    }
-
     public static WebElement openStorageSettingButton(WebDriver driver) {
         return driver.findElement(By.id("planet-storage-settings-button"));
     }

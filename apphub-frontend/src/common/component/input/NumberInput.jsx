@@ -2,6 +2,7 @@ import React from "react";
 
 const NumberInput = ({
     id,
+    type="number",
     className,
     placeholder,
     onchangeCallback,
@@ -23,7 +24,7 @@ const NumberInput = ({
         <input
             id={id}
             className={className}
-            type="number"
+            type={type}
             value={value}
             placeholder={placeholder}
             onChange={onchange}

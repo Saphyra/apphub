@@ -12,6 +12,7 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
     const [population, setPopulation] = useState({});
     const [buildings, setBuildings] = useState({});
     const [surfaces, setSurfaces] = useState([]);
+    const [priorities, setPriorities] = useState({});
 
     useEffect(() => loadPlanet(), []);
 
@@ -25,6 +26,7 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
             setPopulation(response.population);
             setBuildings(response.buildings);
             setSurfaces(response.surfaces);
+            setPriorities(response.priorities);
         }
         fetch();
     }
@@ -44,6 +46,9 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
                     population={population}
                     buildings={buildings}
                     planetSize={surfaces.length}
+                    priorities={priorities}
+                    setPriorities={setPriorities}
+                    planetId={planetId}
                 />
 
                 <PlanetSurface

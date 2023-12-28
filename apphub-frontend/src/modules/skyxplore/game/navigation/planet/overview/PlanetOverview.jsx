@@ -3,12 +3,16 @@ import "./planet_overview.css";
 import StorageOverview from "./storage/StorageOverview";
 import PopulationOverview from "./population/PopulationOverview";
 import BuildingOverview from "./building/BuildingOverview";
+import PriorityOverview from "./priority/PriorityOverview";
 
 const PlanetOverview = ({
+    planetId,
     storage,
     population,
     buildings,
-    planetSize
+    planetSize,
+    priorities,
+    setPriorities
 }) => {
     return (
         <div id="skyxplore-game-planet-overview">
@@ -24,6 +28,12 @@ const PlanetOverview = ({
             <BuildingOverview
                 buildings={buildings}
                 planetSize={planetSize}
+            />
+
+            <PriorityOverview
+                priorities={priorities}
+                setPriorities={setPriorities}
+                planetId={planetId}
             />
         </div>
     );

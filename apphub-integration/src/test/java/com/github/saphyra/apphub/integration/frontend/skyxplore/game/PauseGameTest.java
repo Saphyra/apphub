@@ -47,13 +47,15 @@ public class PauseGameTest extends SeleniumTest {
             .until(() -> SkyXploreGameActions.isGameLoaded(driver))
             .assertTrue("Game not loaded.");
 
-        SkyXploreMapActions.getSolarSystem(driver).click();
+        SkyXploreMapActions.getSolarSystem(driver)
+            .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreSolarSystemActions.isOpened(driver))
             .assertTrue("SolarSystem is not opened.");
 
-        SkyXploreSolarSystemActions.getPlanet(driver).click();
+        SkyXploreSolarSystemActions.getPlanet(driver)
+            .click();
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");

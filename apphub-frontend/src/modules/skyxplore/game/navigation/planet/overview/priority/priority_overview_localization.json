@@ -1,0 +1,38 @@
+{
+    "tab-title": {
+        "en": "Priorities",
+        "hu": "Prioritások"
+    },
+    "construction": {
+        "en": "Construction",
+        "hu": "Építkezés"
+    },
+    "education": {
+        "en": "Education",
+        "hu": "Oktatás"
+    },
+    "industry": {
+        "en": "Industry",
+        "hu": "Ipar"
+    },
+    "well_being": {
+        "en": "Well being",
+        "hu": "Életszínvonal"
+    },
+    "well_being-title": {
+        "en": "When to send the citizens to eating/resting",
+        "hu": "Városlakók étkezése és pihenése"
+    },
+    "industry-title": {
+        "en": "Extracting / processing commodities",
+        "hu": "Bányászat és termelés"
+    },
+    "education-title": {
+        "en": "Gaining experience in school(s)",
+        "hu": "Tapasztalatszerzés iskolákban"
+    },
+    "construction-title": {
+        "en": "Constructing / upgrading buildings, terraforming",
+        "hu": "Épületek építése / fejlesztése, terraformálás"
+    }
+}

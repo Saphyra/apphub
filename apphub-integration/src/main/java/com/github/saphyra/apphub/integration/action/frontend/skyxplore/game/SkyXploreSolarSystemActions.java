@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SkyXploreSolarSystemActions {
     public static boolean isOpened(WebDriver driver) {
-        return GamePage.solarSystemPage(driver).isDisplayed();
+        return WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-solar-system")));
     }
 
     public static WebElement getPlanet(WebDriver driver) {
