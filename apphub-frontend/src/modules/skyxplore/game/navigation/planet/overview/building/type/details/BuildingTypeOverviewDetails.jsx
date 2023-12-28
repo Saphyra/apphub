@@ -1,7 +1,7 @@
 import React from "react";
 import localizationData from "./building_type_overview_details_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
-import buildingLocalizationData from "../../../../../../common/building_localization.json";
+import buildingLocalizationData from "../../../../../../common/localization/building_localization.json";
 import "./building_type_overview_details.css";
 import Stream from "../../../../../../../../../common/js/collection/Stream";
 

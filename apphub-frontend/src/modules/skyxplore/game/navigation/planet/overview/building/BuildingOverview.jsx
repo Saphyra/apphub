@@ -3,7 +3,7 @@ import localizationData from "./building_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import MapStream from "../../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../../common/js/collection/Stream";
-import surfaceLocalizationData from "../../../../common/surface_localization.json";
+import surfaceLocalizationData from "../../../../common/localization/surface_localization.json";
 import BuildingTypeOverview from "./type/BuildingTypeOverview";
 
 const BuildingOverview = ({ buildings, planetSize }) => {

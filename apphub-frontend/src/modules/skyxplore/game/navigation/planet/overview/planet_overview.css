@@ -1,12 +1,13 @@
 #skyxplore-game-planet-overview {
     border-right: 3px ridge white;
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 .skyxplore-gamep-planet-overview-tab {
     border: 2px outset white;
     margin: 10px;
     border-radius: 5px;
+    overflow: auto;
 }
 
 .skyxplore-game-planet-overview-tab-title {
@@ -22,6 +23,7 @@
     margin: 3px;
     padding: 3px;
     font-size: 20px;
+    white-space: nowrap;
 }
 
 .skyxplore-game-planet-overview-tab-item-expand-button {

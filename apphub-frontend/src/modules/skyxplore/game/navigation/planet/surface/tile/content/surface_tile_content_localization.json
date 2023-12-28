@@ -1,0 +1,14 @@
+{
+    "level": {
+        "en": "Level",
+        "hu": "Szint"
+    },
+    "deconstruct": {
+        "en": "Deconstruct",
+        "hu": "Lerombol"
+    },
+    "upgrade": {
+        "en": "Upgrade",
+        "hu": "Fejlesztés"
+    }
+}

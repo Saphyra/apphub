@@ -1,5 +1,5 @@
 #skyxplore-game-planet{
-    display: flex;
+    display: grid;
     padding: 0;
-    flex-direction: row;
+    grid-template-columns: auto auto auto;
 }

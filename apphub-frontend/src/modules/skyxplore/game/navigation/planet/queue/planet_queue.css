@@ -1,4 +1,10 @@
 #skyxplore-game-planet-queue {
     border-left: 3px ridge white;
-    ;
+}
+
+#skyxplore-game-planet-queue-title{
+    text-align: center;
+    border-bottom: 2px solid white;
+    font-size: 20px;
+    padding: 3px;
 }

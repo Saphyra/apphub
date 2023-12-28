@@ -1,0 +1,87 @@
+.skyxplore-game-planet-surface-tile-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    background-position: center;
+    background-size: cover;
+}
+
+.skyxplore-game-planet-surface-tile-content.battery {
+    background-image: url("../../../../../common/img/building/battery.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.camp {
+    background-image: url("../../../../../common/img/building/camp.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.water_pump {
+    background-image: url("../../../../../common/img/building/water_pump.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.solar_panel {
+    background-image: url("../../../../../common/img/building/solar_panel.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.sawmill {
+    background-image: url("../../../../../common/img/building/sawmill.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.house {
+    background-image: url("../../../../../common/img/building/house.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.hospital {
+    background-image: url("../../../../../common/img/building/hospital.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.excavator {
+    background-image: url("../../../../../common/img/building/excavator.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.depot {
+    background-image: url("../../../../../common/img/building/depot.png");
+}
+
+.skyxplore-game-planet-surface-tile-content.water_tower {
+    background-image: url("../../../../../common/img/building/water_tower.png");
+}
+
+.skyxplore-game-planet-surface-tile-content-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid white;
+    background-color: black;
+    text-align: center;
+    padding: 1px;
+}
+
+.skyxplore-game-planet-surface-tile-content-footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    text-align: center;
+    border-top: 1px solid white;
+}
+
+.skyxplore-game-planet-surface-tile-content-footer button{
+    border-width: 1px;
+    margin: 1px;
+    padding: 1px;
+    border-radius: 0;
+    height: 16px;
+    width: 16px;
+}
+
+.skyxplore-game-planet-surface-building-upgrade-button{
+    background-position: center;
+    background-size: cover;
+    border-width: 1px;
+    background-image: url("../../../../../../../../common/style/img/upgrade.png");
+}

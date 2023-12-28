@@ -1,0 +1,72 @@
+:root {
+    --skyxplore-game-planet-surface-tile-size: 100px;
+}
+
+.skyxplore-game-planet-surface-tile {
+    height: var(--skyxplore-game-planet-surface-tile-size);
+    border: 1px solid white;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+.skyxplore-game-planet-surface-tile:hover {
+    border-color: red;
+}
+
+.skyxplore-game-planet-surface-tile.volcano {
+    background-image: url("../../../../common/img/surface_type/volcano.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.forest {
+    background-image: url("../../../../common/img/surface_type/forest.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.coal_field {
+    background-image: url("../../../../common/img/surface_type/coal_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.oil_field {
+    background-image: url("../../../../common/img/surface_type/oil_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.ore_field {
+    background-image: url("../../../../common/img/surface_type/ore_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.desert {
+    background-image: url("../../../../common/img/surface_type/desert.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.lake {
+    background-image: url("../../../../common/img/surface_type/lake.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.mountain {
+    background-image: url("../../../../common/img/surface_type/mountain.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.concrete {
+    background-image: url("../../../../common/img/surface_type/concrete.jpg");
+}
+
+.skyxplore-game-planet-surface-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid white;
+    background-color: black;
+    text-align: center;
+}
+
+.skyxplore-game-planet-surface-modify-button {
+    background-position: center;
+    background-size: cover;
+    border-width: 1px;
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    height: 16px;
+    width: 16px;
+    margin: 1px;
+    border-radius: 0;
+}

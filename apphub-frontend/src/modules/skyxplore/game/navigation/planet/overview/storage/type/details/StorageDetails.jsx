@@ -1,6 +1,6 @@
 import React from "react";
 import "./storage_details.css";
-import resourceLocalizationData from "../../../../../../common/resource_localization.json";
+import resourceLocalizationData from "../../../../../../common/localization/resource_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import Stream from "../../../../../../../../../common/js/collection/Stream";
 

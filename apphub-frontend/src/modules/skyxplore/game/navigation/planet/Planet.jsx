@@ -52,7 +52,7 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
                 />
 
                 <PlanetSurface
-
+                    surfaces={surfaces}
                 />
 
                 <PlanetQueue

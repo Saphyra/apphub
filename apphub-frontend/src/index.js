@@ -26,6 +26,7 @@ import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
 import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMonitoring';
 import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const router = createBrowserRouter([
   {
@@ -130,7 +131,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/notebook/new/checklist-table/:parent",
-    element: <NewTablePage checklist={true} custom={false}/>,
+    element: <NewTablePage checklist={true} custom={false} />,
     loader: ({ params }) => {
       return {
         parent: params.parent
@@ -174,7 +175,11 @@ const router = createBrowserRouter([
   }
 ]);
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <RouterProvider router={router} />
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );
