@@ -3,11 +3,11 @@ import Button from "../../../../../../common/component/input/Button";
 import localizationData from "./chat_room_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./chat_room.css";
-import GameConstants from "../../../GameConstants";
+import ChatConstants from "../../ChatConstants";
 
 const DEFAULT_CHAT_ROOMS = [
-    GameConstants.GENERAL_CHAT_ROOM,
-    GameConstants.ALLIANCE_CHAT_ROOM,
+    ChatConstants.GENERAL_CHAT_ROOM,
+    ChatConstants.ALLIANCE_CHAT_ROOM,
 ];
 
 const ChatRoom = ({ roomId, roomTitle, hasUnread, currentChatRoom, setCurrentChatRoom, exitChatRoom }) => {

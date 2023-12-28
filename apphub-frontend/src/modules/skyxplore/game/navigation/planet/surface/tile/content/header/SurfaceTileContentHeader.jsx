@@ -1,12 +1,20 @@
 import React from "react";
 import Utils from "../../../../../../../../../common/js/Utils";
+import localizationData from "./surface_tile_content_header_localization.json";
+import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 
-const SurfaceTileContentHeader = ({ surface, localizationHandler }) => {
+const SurfaceTileContentHeader = ({ surface }) => {
+    const localizationHandler = new LocalizationHandler(localizationData);
+
     const getContent = () => {
         if (Utils.hasValue(surface.building)) {
             const building = surface.building;
             if (Utils.hasValue(building.construction)) {
                 //TODO Construction in progress
+            } else if (Utils.hasValue(building.deconstruction)) {
+                return (
+                    <span>{localizationHandler.get("deconstructing")}</span>
+                );
             } else {
                 return (
                     <div>
@@ -20,7 +28,7 @@ const SurfaceTileContentHeader = ({ surface, localizationHandler }) => {
             const terraformation = surface.terraformation;
             //TODO terraformation in progress
         } else {
-            Utils.throwException("IllegalState", "Surface has no building or terraformation in progress.")
+            Utils.throwException("IllegalState", "Surface has no building or terraformation in progress. It should be an empty surface.")
         }
     }
 

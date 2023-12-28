@@ -3,7 +3,7 @@ import "./chat.css";
 import RoomSelector from "./room_selector/RoomSelector";
 import Messages from "./messages/Messages";
 import MessageInput from "./message_input/MessageInput";
-import GameConstants from "../GameConstants";
+import ChatConstants from "./ChatConstants";
 import Utils from "../../../../common/js/Utils";
 import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import MapStream from "../../../../common/js/collection/MapStream";
@@ -22,7 +22,7 @@ const Chat = ({
     userId,
     sendMessage
 }) => {
-    const [currentChatRoom, setCurrentChatRoom] = useState(GameConstants.GENERAL_CHAT_ROOM);
+    const [currentChatRoom, setCurrentChatRoom] = useState(ChatConstants.GENERAL_CHAT_ROOM);
     const [messages, setMessages] = useState({});
     const [unreadMessages, setUnreadMessages] = useState({});
     const [displayRoomCreator, setDisplayRoomCreator] = useState(false);

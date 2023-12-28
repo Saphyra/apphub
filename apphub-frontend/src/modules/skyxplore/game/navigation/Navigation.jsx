@@ -7,7 +7,7 @@ import Map from "./map/Map";
 import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
 
-const Navigation = ({ footer }) => {
+const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
     useEffect(() => { sessionStorage.skyXplorePageHistory = JSON.stringify(history) }, [history]);
 
@@ -46,6 +46,7 @@ const Navigation = ({ footer }) => {
                 planetId={lastPage.data}
                 closePage={closePage}
                 openPage={openPage}
+                setConfirmationDialogData={setConfirmationDialogData}
             />
         default:
             Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

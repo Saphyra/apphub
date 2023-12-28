@@ -102,6 +102,7 @@ const SkyXploreGamePage = () => {
                 <div id="skyxplore-game" className="main-page skyxplore-main" >
                     <Navigation
                         footer={footer()}
+                        setConfirmationDialogData={setConfirmationDialogData}
                     />
                 </div>
             </div>

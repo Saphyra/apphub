@@ -3,7 +3,7 @@ import "./planet_surface.css";
 import Stream from "../../../../../../common/js/collection/Stream";
 import SurfaceTile from "./tile/SurfaceTile";
 
-const PlanetSurface = ({ surfaces }) => {
+const PlanetSurface = ({ surfaces, setConfirmationDialogData, planetId }) => {
     const getSurfaces = () => {
         return new Stream(surfaces)
             .sorted((a, b) => {
@@ -16,6 +16,8 @@ const PlanetSurface = ({ surfaces }) => {
             .map(surface => <SurfaceTile
                 key={surface.surfaceId}
                 surface={surface}
+                setConfirmationDialogData={setConfirmationDialogData}
+                planetId={planetId}
             />)
             .toList();
     }

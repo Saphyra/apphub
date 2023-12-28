@@ -6,7 +6,7 @@ import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
 
-const Planet = ({ footer, planetId, closePage, openPage }) => {
+const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     const [planetName, setPlanetName] = useState("");
     const [storage, setStorage] = useState(null);
     const [population, setPopulation] = useState({});
@@ -53,6 +53,8 @@ const Planet = ({ footer, planetId, closePage, openPage }) => {
 
                 <PlanetSurface
                     surfaces={surfaces}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    planetId={planetId}
                 />
 
                 <PlanetQueue
