@@ -219,9 +219,12 @@ const Endpoints = {
     SKYXPLORE_LOBBY_START_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start"),
     SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}"),
     SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
+    SKYXPLORE_BUILDING_CONSTRUCT_NEW: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/building/{planetId}/{surfaceId}"),
 
     //SkyXplore Data
     SKYXPLORE_GET_ITEM_DATA: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{dataId}"),
+    SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/{surfaceType}/terraforming-possibilities"),
+    SKYXPLORE_DATA_AVAILABLE_BUILDINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{surfaceType}/buildings"),
 
 
     //SkyXplore Game
@@ -240,6 +243,7 @@ const Endpoints = {
     SKYXPLORE_BUILDING_DECONSTRUCT: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct"),
     SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct"),
     SKYXPLORE_BUILDING_UPGRADE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
+    SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

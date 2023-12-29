@@ -85,8 +85,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
                     {Utils.hasValue(itemData) &&
                         <ConstructionCost
                             id="skyxplore-game-upgrade-building-construction-cost"
-                            itemData={itemData}
-                            targetLevel={currentLevel + 1}
+                            constructionRequirements={itemData.constructionRequirements[currentLevel + 1]}
                         />
                     }
 

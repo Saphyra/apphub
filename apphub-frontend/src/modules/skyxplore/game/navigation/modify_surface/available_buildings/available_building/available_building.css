@@ -1,0 +1,37 @@
+.skyxplore-game-available-building {
+    margin: 10px;
+    border: 3px ridge white;
+    border-radius: 10px;
+}
+
+.skyxplore-game-available-building-header {
+    text-align: center;
+    font-size: 26px;
+    padding: 5px;
+    border-bottom: 3px ridge white;
+}
+
+.skyxplore-game-available-building-description {
+    text-align: center;
+    margin: 10px;
+    margin-bottom: 0;
+}
+
+.skyxplore-game-available-building-table-wrapper {
+    padding: 10px;
+}
+
+.skyxplore-game-available-building-effect {
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.skyxplore-game-available-building-construction-requirements {
+    margin: auto;
+}
+
+.skyxplore-game-construct-new-building-button {
+    display: block;
+    margin: 10px auto;
+    margin-top: 0;
+}

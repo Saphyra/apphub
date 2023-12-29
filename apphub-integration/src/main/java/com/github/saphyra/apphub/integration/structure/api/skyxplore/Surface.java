@@ -30,24 +30,23 @@ public class Surface {
     }
 
     public boolean isEmpty() {
-        return WebElementUtils.getClasses(getContent())
-            .contains("empty-surface-content");
+        return getContent()
+            .isEmpty();
     }
 
     public void openModifySurfaceWindow(WebDriver driver) {
         assertThat(isEmpty()).isTrue();
 
-        getContent()
-            .findElement(By.cssSelector(":scope .surface-footer .empty-surface-modify-button"))
-            .click();
+        webElement.findElement(By.className("skyxplore-game-planet-surface-modify-button"))
+                .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreModifySurfaceActions.isDisplayed(driver))
             .assertTrue("Construct new building window is not displayed.");
     }
 
-    private WebElement getContent() {
-        return webElement.findElement(By.cssSelector(":scope .surface-content"));
+    private Optional<WebElement> getContent() {
+        return WebElementUtils.getIfPresent(() -> webElement.findElement(By.className("skyxplore-game-planet-surface-tile-content")));
     }
 
     public String getSurfaceId() {
@@ -55,7 +54,7 @@ public class Surface {
     }
 
     public Optional<String> getBuildingDataId() {
-        return WebElementUtils.getClasses(getContent())
+        return WebElementUtils.getClasses(getContent().orElseThrow(() -> new IllegalStateException("Surface content not found.")))
             .stream()
             .filter(s -> s.startsWith(BUILDING_PREFIX))
             .findFirst()
@@ -63,10 +62,8 @@ public class Surface {
     }
 
     public int getBuildingLevel() {
-        String result = getContent()
-            .findElement(By.cssSelector(":scope .surface-header"))
-            .getText()
-            .split(": ")[1];
+        String result = webElement.findElement(By.className("skyxplore-planet-surface-header-building-level"))
+            .getText();
         return Integer.parseInt(result);
     }
 
@@ -78,6 +75,7 @@ public class Surface {
 
     private Optional<WebElement> getFooter() {
         return getContent()
+            .orElseThrow(() -> new IllegalStateException("Surface content not found."))
             .findElements(By.cssSelector(":scope .surface-footer"))
             .stream()
             .findFirst();

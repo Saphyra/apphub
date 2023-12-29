@@ -31,6 +31,7 @@ const getBrowserLanguage = () => {
 const throwException = (name, message) => {
     name = name === undefined ? "" : name;
     message = message === undefined ? "" : message;
+    console.error(name + " - " + message);
     throw { name: name, message: message, stackTrace: (new Error()).stack };
 }
 

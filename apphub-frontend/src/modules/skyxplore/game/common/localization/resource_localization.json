@@ -14,5 +14,33 @@
     "wood": {
         "en": "Wood",
         "hu": "Fa"
+    },
+    "stone": {
+        "en": "Stone",
+        "hu": "Kő"
+    },
+    "water": {
+        "en": "Water",
+        "hu": "Víz"
+    },
+    "sand": {
+        "en": "Sand",
+        "hu": "Homok"
+    },
+    "wheat": {
+        "en": "Wheat",
+        "hu": "Gabona"
+    },
+    "leather": {
+        "en": "Leather",
+        "hu": "Bőr"
+    },
+    "iron": {
+        "en": "Iron",
+        "hu": "Vas"
+    },
+    "plank": {
+        "en": "Plank",
+        "hu": "Deszka"
     }
 }

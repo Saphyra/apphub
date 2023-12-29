@@ -71,8 +71,15 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
         setConfirmationDialogData(null);
     }
 
+    //TODO confirmation dialog
     const cancelDeconstruction = () => {
         Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+            .send();
+    }
+
+    //TODO confirmation dialog
+    const cancelConstruction = () => {
+        Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
             .send();
     }
 
@@ -81,10 +88,16 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
             const building = surface.building;
 
             if (Utils.hasValue(building.construction)) {
-                //TODO Construction in progress
+                const construction = building.construction;
+
+                return <SurfaceTileContentFooterProgressBar
+                    actual={construction.currentWorkPoints}
+                    max={construction.requiredWorkPoints}
+                    title={localizationHandler.get("cancel-construction")}
+                    cancelCallback={cancelConstruction}
+                />
             } else if (Utils.hasValue(building.deconstruction)) {
                 const deconstruction = building.deconstruction;
-                console.log(deconstruction);
 
                 return <SurfaceTileContentFooterProgressBar
                     actual={deconstruction.currentWorkPoints}

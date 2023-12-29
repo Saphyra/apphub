@@ -7,7 +7,7 @@ import SurfaceTileContentFooter from "./footer/SurfaceTileContentFooter";
 const SurfaceTileContent = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     //TODO add building description
     return (
-        <div className={"skyxplore-game-planet-surface-tile-content" + (Utils.hasValue(surface.building) ? " " + surface.building.dataId : "")}>
+        <div className={"skyxplore-game-planet-surface-tile-content" + (Utils.hasValue(surface.building) ? " building-" + surface.building.dataId : "")}>
             <SurfaceTileContentHeader
                 surface={surface}
             />

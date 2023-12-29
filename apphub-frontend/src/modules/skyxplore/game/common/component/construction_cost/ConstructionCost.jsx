@@ -4,11 +4,9 @@ import LocalizationHandler from "../../../../../../common/js/LocalizationHandler
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import resourceLocalizationData from "../../localization/resource_localization.json";
 
-const ConstructionCost = ({ id, itemData, targetLevel }) => {
+const ConstructionCost = ({ id, className,  constructionRequirements }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
-
-    const constructionRequirements = itemData.constructionRequirements[targetLevel];
 
     const getResourceRequirements = () => {
         return new MapStream(constructionRequirements.requiredResources)
@@ -22,7 +20,7 @@ const ConstructionCost = ({ id, itemData, targetLevel }) => {
     }
 
     return (
-        <table id={id} className="formatted-table">
+        <table id={id} className={className + " formatted-table"}>
             <thead>
                 <tr>
                     <td colSpan={2}>{localizationHandler.get("construction-cost")}</td>

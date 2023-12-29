@@ -8,6 +8,7 @@ import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
 import UpgradeBuilding from "./upgrade_building/UpgradeBuilding";
 import "./navigation.css";
+import ModifySurface from "./modify_surface/ModifySurface";
 
 const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
@@ -61,6 +62,14 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 surfaceType={data.surfaceType}
                 planetId={data.planetId}
                 buildingId={data.buildingId}
+            />
+        case PageName.MODIFY_SURFACE:
+            return <ModifySurface
+                closePage={closePage}
+                footer={footer}
+                planetId={data.planetId}
+                surfaceId={data.surfaceId}
+                surfaceType={data.surfaceType}
             />
         default:
             Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

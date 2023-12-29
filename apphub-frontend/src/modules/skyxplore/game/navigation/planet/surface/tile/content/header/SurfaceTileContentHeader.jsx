@@ -10,7 +10,15 @@ const SurfaceTileContentHeader = ({ surface }) => {
         if (Utils.hasValue(surface.building)) {
             const building = surface.building;
             if (Utils.hasValue(building.construction)) {
-                //TODO Construction in progress
+                return (
+                    <div>
+                        <span>{localizationHandler.get("level")}</span>
+                        <span>: </span>
+                        <span className="skyxplore-planet-surface-header-building-level">{building.level}</span>
+                        <span>{" => "}</span>
+                        <span className="skyxplore-planet-surface-header-building-new-level">{building.level + 1}</span>
+                    </div>
+                )
             } else if (Utils.hasValue(building.deconstruction)) {
                 return (
                     <span>{localizationHandler.get("deconstructing")}</span>
@@ -20,7 +28,7 @@ const SurfaceTileContentHeader = ({ surface }) => {
                     <div>
                         <span>{localizationHandler.get("level")}</span>
                         <span>: </span>
-                        <span>{building.level}</span>
+                        <span className="skyxplore-planet-surface-header-building-level">{building.level}</span>
                     </div>
                 )
             }

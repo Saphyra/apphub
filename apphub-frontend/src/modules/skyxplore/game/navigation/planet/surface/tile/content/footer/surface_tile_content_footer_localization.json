@@ -22,5 +22,9 @@
     "cancel-deconstruction": {
         "en": "Cancel deconstruction",
         "hu": "Lerombolás visszavonása"
+    },
+    "cancel-construction": {
+        "en": "Cancel construction",
+        "hu": "Építkezés visszavonása"
     }
 }

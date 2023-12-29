@@ -13,6 +13,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     const [buildings, setBuildings] = useState({});
     const [surfaces, setSurfaces] = useState([]);
     const [priorities, setPriorities] = useState({});
+    const [queue, setQueue] = useState([]);
 
     useEffect(() => loadPlanet(), []);
 
@@ -27,6 +28,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
             setBuildings(response.buildings);
             setSurfaces(response.surfaces);
             setPriorities(response.priorities);
+            setQueue(response.queue);
         }
         fetch();
     }
@@ -59,7 +61,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                 />
 
                 <PlanetQueue
-
+                    queue={queue}
                 />
             </main>
 

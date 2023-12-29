@@ -3,7 +3,7 @@ import "./planet_queue.css"
 import localizationData from "./planet_queue_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 
-const PlanetQueue = ({ }) => {
+const PlanetQueue = ({ queue }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     return (

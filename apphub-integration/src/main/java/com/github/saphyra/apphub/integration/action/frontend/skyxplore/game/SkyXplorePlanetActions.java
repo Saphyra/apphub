@@ -44,7 +44,7 @@ public class SkyXplorePlanetActions {
     }
 
     public static Surface findEmptySurface(WebDriver driver, String surfaceType) {
-        return GamePage.surfacesOfPlanet(driver)
+        return driver.findElements(By.className("skyxplore-game-planet-surface-tile"))
             .stream()
             .map(Surface::new)
             .filter(surface -> surface.getSurfaceType().equalsIgnoreCase(surfaceType))

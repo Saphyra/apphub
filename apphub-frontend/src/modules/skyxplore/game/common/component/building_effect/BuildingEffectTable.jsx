@@ -7,7 +7,7 @@ import MapStream from "../../../../../../common/js/collection/MapStream";
 import resourceLocalizationData from "../../localization/resource_localization.json";
 
 //TODO split
-const BuildingEffectTable = ({ id, surfaceType, itemData, currentLevel }) => {
+const BuildingEffectTable = ({ id, className, surfaceType, itemData, currentLevel }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
@@ -84,7 +84,7 @@ const BuildingEffectTable = ({ id, surfaceType, itemData, currentLevel }) => {
     }
 
     return (
-        <table id={id} className="formatted-table">
+        <table id={id} className={className + " formatted-table"}>
             {getTableHead()}
             {getTableBody()}
         </table>

@@ -14,39 +14,39 @@
     border-color: red;
 }
 
-.skyxplore-game-planet-surface-tile.volcano {
+.skyxplore-game-planet-surface-tile.surface-type-volcano {
     background-image: url("../../../../common/img/surface_type/volcano.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.forest {
+.skyxplore-game-planet-surface-tile.surface-type-forest {
     background-image: url("../../../../common/img/surface_type/forest.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.coal_field {
+.skyxplore-game-planet-surface-tile.surface-type-coal_field {
     background-image: url("../../../../common/img/surface_type/coal_field.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.oil_field {
+.skyxplore-game-planet-surface-tile.surface-type-oil_field {
     background-image: url("../../../../common/img/surface_type/oil_field.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.ore_field {
+.skyxplore-game-planet-surface-tile.surface-type-ore_field {
     background-image: url("../../../../common/img/surface_type/ore_field.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.desert {
+.skyxplore-game-planet-surface-tile.surface-type-desert {
     background-image: url("../../../../common/img/surface_type/desert.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.lake {
+.skyxplore-game-planet-surface-tile.surface-type-lake {
     background-image: url("../../../../common/img/surface_type/lake.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.mountain {
+.skyxplore-game-planet-surface-tile.surface-type-mountain {
     background-image: url("../../../../common/img/surface_type/mountain.jpg");
 }
 
-.skyxplore-game-planet-surface-tile.concrete {
+.skyxplore-game-planet-surface-tile.surface-type-concrete {
     background-image: url("../../../../common/img/surface_type/concrete.jpg");
 }
 
