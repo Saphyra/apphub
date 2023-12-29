@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.main.handler;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import org.junit.jupiter.api.Test;

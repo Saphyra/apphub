@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.service;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.main.service;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +51,7 @@ class PlayerDisconnectedServiceTest {
     private CommonSkyXploreConfiguration configuration;
 
     @Mock
-    private SkyXploreGameWebSocketHandler webSocketHandler;
+    private SkyXploreGameMainWebSocketHandler webSocketHandler;
 
     @InjectMocks
     private PlayerDisconnectedService underTest;

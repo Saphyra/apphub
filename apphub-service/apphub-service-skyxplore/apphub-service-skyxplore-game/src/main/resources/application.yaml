@@ -7,6 +7,10 @@ skyXploreDataHost: skyxplore-data:8080
 
 game:
   tickTimeMillis: 100
+  messageDelay:
+    planetSurface: 100
+    planetQueue: 100
+    planetStorage: 1000
   deconstruction:
     requiredWorkPoints: 20000
   itemSaverMaxChunkSize: 500

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class CreateChatRoomService {
     private final ChatRoomFactory chatRoomFactory;
     private final GameDao gameDao;
-    private final SkyXploreGameWebSocketHandler webSocketHandler;
+    private final SkyXploreGameMainWebSocketHandler webSocketHandler;
     private final CreateChatRoomRequestValidator createChatRoomRequestValidator;
 
     public void createChatRoom(UUID userId, CreateChatRoomRequest request) {

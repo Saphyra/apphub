@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cach
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.then;
 class MessageCacheTest {
     private static final UUID RECIPIENT = UUID.randomUUID();
     @Mock
-    private SkyXploreGameWebSocketHandler webSocketHandler;
+    private SkyXploreGameMainWebSocketHandler webSocketHandler;
 
     @InjectMocks
     private MessageCache underTest;

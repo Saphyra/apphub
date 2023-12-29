@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ public class SkyXploreGameAccountDeletedEventControllerTest {
     private GameDao gameDao;
 
     @Mock
-    private SkyXploreGameWebSocketHandler webSocketHandler;
+    private SkyXploreGameMainWebSocketHandler webSocketHandler;
 
     @InjectMocks
     private SkyXploreGameAccountDeletedEventController underTest;

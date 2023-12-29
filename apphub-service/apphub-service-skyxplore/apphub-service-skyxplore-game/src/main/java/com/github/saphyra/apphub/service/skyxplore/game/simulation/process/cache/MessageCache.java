@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 class MessageCache extends ConcurrentHashMap<WsMessageKey, Supplier<WebSocketMessage>> {
     @NonNull
-    private final SkyXploreGameWebSocketHandler webSocketHandler;
+    private final SkyXploreGameMainWebSocketHandler webSocketHandler;
 
     void process(Game game) {
         entrySet()

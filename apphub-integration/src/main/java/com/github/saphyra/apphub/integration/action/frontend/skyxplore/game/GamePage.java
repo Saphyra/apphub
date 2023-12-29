@@ -93,32 +93,12 @@ class GamePage {
         return driver.findElements(By.cssSelector("#planet-surface-container .surface-table-cell"));
     }
 
-    public static WebElement modifySurfaceWindow(WebDriver driver) {
-        return driver.findElement(By.id("modify-surface"));
-    }
-
-    public static List<WebElement> availableBuildings(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#available-buildings .available-building"));
-    }
-
     public static WebElement terraformationWindow(WebDriver driver) {
         return driver.findElement(By.id("terraformation"));
     }
 
     public static List<WebElement> terraformingPossibilities(WebDriver driver) {
         return driver.findElements(By.cssSelector(".terraforming-possibility"));
-    }
-
-    public static List<WebElement> planetQueue(WebDriver driver) {
-        return driver.findElements(By.cssSelector(".queue-item"));
-    }
-
-    public static WebElement resumeGameButton(WebDriver driver) {
-        return driver.findElement(By.id("resume-game-button"));
-    }
-
-    public static WebElement pauseGameButton(WebDriver driver) {
-        return driver.findElement(By.id("pause-game-button"));
     }
 
     public static WebElement closeStorageSettingsButton(WebDriver driver) {

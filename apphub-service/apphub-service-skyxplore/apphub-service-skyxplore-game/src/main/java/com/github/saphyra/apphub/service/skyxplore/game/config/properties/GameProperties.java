@@ -20,6 +20,7 @@ public class GameProperties {
     private SurfaceProperties surface;
     private CitizenProperties citizen;
     private DeconstructionProperties deconstruction;
+    private MessageDelay messageDelay;
 
     @PostConstruct
     public void after() {

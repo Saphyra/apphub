@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service;
 
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.service.PlayerDisconnectedService;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.service.PlayerDisconnectedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class ExitFromGameService {
-    private final SkyXploreGameWebSocketHandler webSocketHandler;
+    private final SkyXploreGameMainWebSocketHandler webSocketHandler;
     private final PlayerDisconnectedService playerDisconnectedService;
     private final GameDao gameDao;
 

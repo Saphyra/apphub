@@ -5,8 +5,13 @@ import "./planet.css";
 import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
+import WebSocketEndpoint from "../../../../../common/js/ws/WebSocketEndpoint";
+import useWebSocket from "react-use-websocket";
+import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
+import Utils from "../../../../../common/js/Utils";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
+    //Planet data
     const [planetName, setPlanetName] = useState("");
     const [storage, setStorage] = useState(null);
     const [population, setPopulation] = useState({});
@@ -16,14 +21,56 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     const [queue, setQueue] = useState([]);
 
     useEffect(() => loadPlanet(), []);
+    //End planet data
 
+    //===WebSocket
+    const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_GAME_PLANET;
+    const [lastEvent, setLastEvent] = useState(null);
+    const { sendMessage, lastMessage } = useWebSocket(
+        webSocketUrl,
+        {
+            share: true,
+            shouldReconnect: () => true,
+        }
+    );
+    useEffect(() => handleMessage(), [lastMessage]);
+    useEffect(() => sendPlanetId(), [sendMessage]);
+
+    const sendPlanetId = () => {
+        if (!Utils.hasValue(sendMessage)) {
+            return;
+        }
+
+        const event = {
+            eventName: WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED,
+            payload: planetId
+        };
+        sendMessage(JSON.stringify(event));
+    }
+
+    const handleMessage = () => {
+        if (lastMessage === null) {
+            return;
+        }
+
+        const message = JSON.parse(lastMessage.data);
+
+        if (message.eventName === WebSocketEventName.PING) {
+            sendMessage(lastMessage.data);
+        }
+
+        setLastEvent(message);
+    }
+    //===End WebSocket
+
+    //Data handling
     const loadPlanet = () => {
         const fetch = async () => {
             const response = await Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW.createRequest(null, { planetId: planetId })
                 .send();
 
             setPlanetName(response.planetName);
-            setStorage(response.storage)
+            setStorage(response.storage);
             setPopulation(response.population);
             setBuildings(response.buildings);
             setSurfaces(response.surfaces);
@@ -32,6 +79,31 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
         }
         fetch();
     }
+
+    useEffect(() => handleEvent(), [lastEvent]);
+
+    const handleEvent = () => {
+        if (!Utils.hasValue(lastEvent)) {
+            return;
+        }
+
+        switch (lastEvent.eventName) {
+            case WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED:
+                const payload = lastEvent.payload;
+                if (Utils.hasValue(payload.queue)) {
+                    setQueue(payload.queue);
+                }
+                if (Utils.hasValue(payload.storage)) {
+                    setStorage(payload.storage);
+                }
+                if (Utils.hasValue(payload.surfaces)) {
+                    setSurfaces(payload.surfaces);
+                }
+                break;
+        }
+    }
+
+    //Data handling
 
     return (
         <div>

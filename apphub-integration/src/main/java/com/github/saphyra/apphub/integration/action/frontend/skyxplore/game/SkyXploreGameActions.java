@@ -34,6 +34,7 @@ public class SkyXploreGameActions {
     }
 
     public static void pauseGame(WebDriver driver) {
-        GamePage.pauseGameButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-pause-game-button"))
+            .click();
     }
 }

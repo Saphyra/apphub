@@ -1,11 +1,11 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.service;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.main.service;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class PlayerConnectedService {
     private final GameDao gameDao;
     private final CharacterProxy characterProxy;
 
-    public void playerConnected(UUID userId, SkyXploreGameWebSocketHandler webSocketHandler){
+    public void playerConnected(UUID userId, SkyXploreGameMainWebSocketHandler webSocketHandler){
         Game game = gameDao.findByUserIdValidated(userId);
 
         game.getPlayers()

@@ -37,10 +37,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             .lastUpdate(context.getDateTimeUtil().getCurrentDateTime())
             .build();
         sessions.put(session.getId(), sessionWrapper);
-        afterConnection(getUserId(session.getPrincipal()));
+        afterConnection(getUserId(session.getPrincipal()), session.getId());
     }
 
-    protected void afterConnection(UUID userId) {
+    protected void afterConnection(UUID userId, String sessionId) {
 
     }
 
@@ -48,10 +48,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
         log.info("User {} disconnected from {}", session.getPrincipal().getName(), getEndpoint());
         sessions.remove(session.getId());
-        afterDisconnection(getUserId(session.getPrincipal()));
+        afterDisconnection(getUserId(session.getPrincipal()), session.getId());
     }
 
-    protected void afterDisconnection(UUID userId) {
+    protected void afterDisconnection(UUID userId, String sessionId) {
 
     }
 
@@ -65,13 +65,13 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             event = context.getObjectMapperWrapper().readValue(payload, WebSocketEvent.class);
             Optional.ofNullable(sessions.get(session.getId()))
                 .ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime()));
-            handleMessage(userId, event);
+            handleMessage(userId, event, session.getId());
         } catch (Exception e) {
             log.error("Failed processing event {} from {} in {}", event.getEventName(), userId, getEndpoint(), e);
         }
     }
 
-    protected void handleMessage(UUID userId, WebSocketEvent event) {
+    protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
         if (event.getEventName() == WebSocketEventName.PING) {
             log.info("Ping arrived from {} to {}", userId, getEndpoint());
         } else {
@@ -83,6 +83,11 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
         return Optional.ofNullable(principal.getName())
             .map(s -> context.getUuidConverter().convertEntity(s))
             .orElse(null);
+    }
+
+    protected UUID getUserId(String sessionId) {
+        WebSocketSessionWrapper sessionWrapper = sessions.get(sessionId);
+        return getUserId(sessionWrapper.getSession().getPrincipal());
     }
 
     public void sendPingRequest() {
@@ -134,6 +139,10 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
         log.info("Sending {} event in {} to {} number of recipients", event.getEventName(), getEndpoint(), recipients.size());
         log.debug("Recipients: {}", recipients);
         recipients.forEach(userId -> sendEventToUser(userId, event));
+    }
+
+    public void sendEventToSession(String sessionId, WebSocketEvent event) {
+        sendEventToSession(sessions.get(sessionId), event);
     }
 
     private void sendEventToUser(UUID recipient, WebSocketEvent event) {

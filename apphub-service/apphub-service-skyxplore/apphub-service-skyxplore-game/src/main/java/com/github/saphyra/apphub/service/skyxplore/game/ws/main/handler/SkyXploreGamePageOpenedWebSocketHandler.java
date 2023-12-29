@@ -1,12 +1,13 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.handler;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.main.handler;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@ForRemoval("skyxplore-react")
 class SkyXploreGamePageOpenedWebSocketHandler implements WebSocketEventHandler {
     private final GameDao gameDao;
     private final ObjectMapperWrapper objectMapperWrapper;
@@ -26,7 +28,7 @@ class SkyXploreGamePageOpenedWebSocketHandler implements WebSocketEventHandler {
     }
 
     @Override
-    public void handle(UUID from, WebSocketEvent event, SkyXploreGameWebSocketHandler webSocketHandler) {
+    public void handle(UUID from, WebSocketEvent event, SkyXploreGameMainWebSocketHandler webSocketHandler) {
         OpenedPage openedPage = objectMapperWrapper.convertValue(event.getPayload(), OpenedPage.class);
 
         ValidationUtil.notNull(openedPage.getPageType(), "pageType");

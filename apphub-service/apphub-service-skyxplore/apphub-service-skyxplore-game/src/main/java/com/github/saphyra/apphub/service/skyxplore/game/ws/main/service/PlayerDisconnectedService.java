@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.ws.service;
+package com.github.saphyra.apphub.service.skyxplore.game.ws.main.service;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.CommonSkyXploreConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class PlayerDisconnectedService {
     private final DateTimeUtil dateTimeUtil;
     private final CommonSkyXploreConfiguration configuration;
 
-    public void playerDisconnected(UUID userId, SkyXploreGameWebSocketHandler webSocketHandler){
+    public void playerDisconnected(UUID userId, SkyXploreGameMainWebSocketHandler webSocketHandler){
         gameDao.findByUserId(userId).ifPresent(game -> {
             game.getPlayers()
                 .get(userId)
