@@ -1,0 +1,14 @@
+{
+    "level": {
+        "en": "level",
+        "hu": "szint"
+    },
+    "priority": {
+        "en": "Priority",
+        "hu": "Prioritás"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

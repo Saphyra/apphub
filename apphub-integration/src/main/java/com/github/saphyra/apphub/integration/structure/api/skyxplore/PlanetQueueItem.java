@@ -23,12 +23,8 @@ public class PlanetQueueItem {
     }
 
     public double getStatus() {
-        String stringValue = webElement.findElement(By.cssSelector(":scope .progress-bar-background"))
-            .getCssValue("width")
-            .split("%")
-            [0]
-            .split("px")
-            [0];
+        String stringValue = webElement.findElement(By.className("skyxplore-game-planet-queue-item-progress-bar-label-value"))
+            .getText();
         return Double.parseDouble(stringValue);
     }
 }

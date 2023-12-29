@@ -29,7 +29,8 @@ public class SkyXploreGameActions {
     }
 
     public static void resumeGame(WebDriver driver) {
-        GamePage.resumeGameButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-resume-game-button"))
+            .click();
     }
 
     public static void pauseGame(WebDriver driver) {

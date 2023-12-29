@@ -72,7 +72,7 @@ public class SkyXplorePlanetActions {
     }
 
     public static List<PlanetQueueItem> getQueue(WebDriver driver) {
-        return GamePage.planetQueue(driver)
+        return driver.findElements(By.className("skyxplore-game-planet-queue-item"))
             .stream()
             .map(PlanetQueueItem::new)
             .collect(Collectors.toList());
