@@ -13,18 +13,18 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeconstructionTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
-
     @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelDeconstruction() {
         WebDriver driver = extractDriver();
@@ -65,13 +65,16 @@ public class DeconstructionTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_DEPOT);
         surface.deconstructBuilding(driver);
 
-        NotificationUtil.verifyErrorNotification(driver, "Storage still in use. Free up some space before you deconstruct it.");
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_STORAGE_USED);
+
+        driver.findElement(By.id("skyxplore-game-planet-surface-confirm-deconstruct-building-cancel-button"))
+            .click();
     }
 
     private static Surface deconstruct(WebDriver driver, Surface surface, String surfaceId) {
         surface.deconstructBuilding(driver);
 
-        surface = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Surface::isDeconstructionInProgress)
+        surface = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId), Surface::isDeconstructionInProgress)
             .orElseThrow(() -> new RuntimeException("Deconstruction not started"));
         return surface;
     }
@@ -80,7 +83,7 @@ public class DeconstructionTest extends SeleniumTest {
         surface.cancelDeconstruction(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> !SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId).isDeconstructionInProgress())
+            .until(() -> !SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isDeconstructionInProgress())
             .assertTrue("Deconstruction not cancelled");
     }
 
@@ -117,7 +120,7 @@ public class DeconstructionTest extends SeleniumTest {
         String surfaceId = surface.getSurfaceId();
         surface.deconstructBuilding(driver);
 
-        AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Surface::isDeconstructionInProgress)
+        AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId), Surface::isDeconstructionInProgress)
             .orElseThrow(() -> new RuntimeException("Deconstruction not started"));
 
         SkyXploreGameActions.resumeGame(driver);
@@ -126,7 +129,7 @@ public class DeconstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Deconstruction is not finished.");
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isTrue();
     }
 }

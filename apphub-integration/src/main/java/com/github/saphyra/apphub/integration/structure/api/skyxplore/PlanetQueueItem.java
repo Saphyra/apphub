@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.structure.api.skyxplore;
 
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,15 +10,16 @@ public class PlanetQueueItem {
     private final WebElement webElement;
 
     public String getTitle() {
-        return webElement.findElement(By.cssSelector(":scope .queue-item-title"))
+        return webElement.findElement(By.className("skyxplore-game-planet-queue-item-header"))
             .getText();
     }
 
     public void cancelItem(WebDriver driver) {
-        webElement.findElement(By.cssSelector(":scope .cancel-queue-item-button"))
+        webElement.findElement(By.className("skyxplore-game-planet-queue-item-cancel-button"))
             .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "cancel-queue-item-confirmation-dialog");
+        driver.findElement(By.id("skyxplore-game-planet-queue-item-cancel-button"))
+            .click();
     }
 
     public double getStatus() {

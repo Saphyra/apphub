@@ -35,7 +35,10 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
     }
 
     return (
-        <div className={"skyxplore-game-planet-surface-tile surface-type-" + surface.surfaceType.toLowerCase()}>
+        <div
+            id={surface.surfaceId}
+            className={"skyxplore-game-planet-surface-tile surface-type-" + surface.surfaceType.toLowerCase()}
+        >
             {getContent()}
         </div>
     );

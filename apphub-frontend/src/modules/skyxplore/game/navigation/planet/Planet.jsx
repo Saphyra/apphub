@@ -135,6 +135,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                 <PlanetQueue
                     queue={queue}
                     planetId={planetId}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             </main>
 

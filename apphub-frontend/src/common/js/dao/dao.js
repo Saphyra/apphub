@@ -221,6 +221,9 @@ const Endpoints = {
     SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
     SKYXPLORE_BUILDING_CONSTRUCT_NEW: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/building/{planetId}/{surfaceId}"),
     SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority"),
+    SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/{planetId}/{type}/{itemId}"),
+    SKYXPLORE_GAME_TERRAFORM_SURFACE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform"),
+    SKYXPLORE_GAME_CANCEL_TERRAFORMATION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform"),
 
     //SkyXplore Data
     SKYXPLORE_GET_ITEM_DATA: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{dataId}"),

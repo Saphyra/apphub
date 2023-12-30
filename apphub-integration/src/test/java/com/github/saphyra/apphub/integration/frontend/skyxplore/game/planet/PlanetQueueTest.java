@@ -72,7 +72,7 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Water pump lvl 0 => 1");
+        assertThat(queueItem.getTitle()).isEqualTo("Water pump level 0 => 1");
 
         queueItem.cancelItem(driver);
 
@@ -93,7 +93,7 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Lake => Desert");
+        assertThat(queueItem.getTitle()).isEqualTo("Terraforming: Lake => Desert");
 
         queueItem.cancelItem(driver);
 

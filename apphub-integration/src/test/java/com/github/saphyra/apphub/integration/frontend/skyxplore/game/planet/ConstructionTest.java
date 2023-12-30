@@ -22,6 +22,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,7 +73,8 @@ public class ConstructionTest extends SeleniumTest {
 
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_WATER_PUMP);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = AwaitilityWrapper.getOptionalWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Surface not found."));
         assertThat(surface.isEmpty()).isFalse();
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_WATER_PUMP);
         assertThat(surface.getBuildingLevel()).isZero();
@@ -83,14 +85,15 @@ public class ConstructionTest extends SeleniumTest {
     private static void cancelConstruction(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelConstruction(driver);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
-        assertThat(surface.isEmpty()).isTrue();
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isEmpty())
+            .assertTrue("Construction is not cancelled.");
     }
 
     private static Surface upgradeBuilding(WebDriver driver, Surface surface, String surfaceId) {
         surface.upgradeBuilding(driver);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isConstructionInProgress()).isTrue();
         return surface;
     }
@@ -98,7 +101,7 @@ public class ConstructionTest extends SeleniumTest {
     private static void cancelUpgrade(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelConstruction(driver);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isConstructionInProgress()).isFalse();
     }
 
@@ -137,7 +140,7 @@ public class ConstructionTest extends SeleniumTest {
 
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_CAMP);
         assertThat(surface.getBuildingLevel()).isZero();
@@ -152,7 +155,7 @@ public class ConstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Construction is not finished.");
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_CAMP);
         assertThat(surface.getBuildingLevel()).isEqualTo(1);

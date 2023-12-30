@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Optional;
+
 public class SkyXploreModifySurfaceActions {
     public static Boolean isDisplayed(WebDriver driver) {
         return WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-modify-surface")));
@@ -25,11 +27,8 @@ public class SkyXploreModifySurfaceActions {
     }
 
     public static void confirmUpgrade(WebDriver driver) {
-        AwaitilityWrapper.createDefault()
-            .until(() -> GamePage.upgradeBuildingWindow(driver).isDisplayed())
-            .assertTrue("UpgradeBuilding window is not displayed");
-
-        GamePage.upgradeBuildingButton(driver)
+        AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("skyxplore-game-upgrade-building-button"))), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Upgrade building button is not displayed."))
             .click();
     }
 }

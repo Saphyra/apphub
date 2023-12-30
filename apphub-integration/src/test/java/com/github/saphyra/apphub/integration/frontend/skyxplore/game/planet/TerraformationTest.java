@@ -65,7 +65,7 @@ public class TerraformationTest extends SeleniumTest {
 
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
 
         assertThat(surface.isTerraformationInProgress()).isTrue();
         return surface;
@@ -74,8 +74,9 @@ public class TerraformationTest extends SeleniumTest {
     private static void cancelTerraformation(WebDriver driver, Surface surface, String surfaceId) {
         surface.cancelTerraformation(driver);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
-        assertThat(surface.isTerraformationInProgress()).isFalse();
+        AwaitilityWrapper.createDefault()
+            .until(() -> !SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isTerraformationInProgress())
+            .assertTrue("Terraformation is not cancelled.");
     }
 
     @Test(groups = {"fe", "skyxplore"})
@@ -113,7 +114,7 @@ public class TerraformationTest extends SeleniumTest {
 
         SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isTerraformationInProgress()).isTrue();
 
         SkyXploreGameActions.resumeGame(driver);
@@ -122,7 +123,7 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Construction is not finished.");
 
-        surface = SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId);
+        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
 
         assertThat(surface.isConstructionInProgress()).isFalse();
         assertThat(surface.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);

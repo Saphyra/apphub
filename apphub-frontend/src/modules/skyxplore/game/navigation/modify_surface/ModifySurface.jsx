@@ -32,6 +32,9 @@ const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) 
 
                 <TerraformingPossibilities
                     surfaceType={surfaceType}
+                    planetId={planetId}
+                    surfaceId={surfaceId}
+                    closePage={closePage}
                 />
             </main>
 

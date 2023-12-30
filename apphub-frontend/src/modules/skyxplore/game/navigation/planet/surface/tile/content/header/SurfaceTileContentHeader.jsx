@@ -2,9 +2,11 @@ import React from "react";
 import Utils from "../../../../../../../../../common/js/Utils";
 import localizationData from "./surface_tile_content_header_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
+import surfaceLocalizationData from "../../../../../../common/localization/surface_localization.json";
 
 const SurfaceTileContentHeader = ({ surface }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
+    const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);
 
     const getContent = () => {
         if (Utils.hasValue(surface.building)) {
@@ -18,10 +20,10 @@ const SurfaceTileContentHeader = ({ surface }) => {
                         <span>{" => "}</span>
                         <span className="skyxplore-planet-surface-header-building-new-level">{building.level + 1}</span>
                     </div>
-                )
+                );
             } else if (Utils.hasValue(building.deconstruction)) {
                 return (
-                    <span>{localizationHandler.get("deconstructing")}</span>
+                    <span className="skyxplore-planet-surface-header-deconstructing">{localizationHandler.get("deconstructing")}</span>
                 );
             } else {
                 return (
@@ -30,11 +32,16 @@ const SurfaceTileContentHeader = ({ surface }) => {
                         <span>: </span>
                         <span className="skyxplore-planet-surface-header-building-level">{building.level}</span>
                     </div>
-                )
+                );
             }
         } else if (Utils.hasValue(surface.terraformation)) {
             const terraformation = surface.terraformation;
-            //TODO terraformation in progress
+            return (
+                <div>
+                    <span>{"=> "}</span>
+                    <span className="skyxplore-planet-surface-header-terraformation-target">{surfaceLocalizationHandler.get(terraformation.data)}</span>
+                </div>
+            )
         } else {
             Utils.throwException("IllegalState", "Surface has no building or terraformation in progress. It should be an empty surface.")
         }

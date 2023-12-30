@@ -18,5 +18,9 @@
     "sawmill": {
         "en": "Produces logs, and cuts them to planks.",
         "hu": "Farönköket termel, amiket deszkává aprít."
+    },
+    "water_pump": {
+        "en": "Provides water from lakes.",
+        "hu": "Vizet szolgáltat a tóból."
     }
 }

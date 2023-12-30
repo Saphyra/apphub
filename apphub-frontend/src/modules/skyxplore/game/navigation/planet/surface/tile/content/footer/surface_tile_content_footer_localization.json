@@ -26,5 +26,45 @@
     "cancel-construction": {
         "en": "Cancel construction",
         "hu": "Építkezés visszavonása"
+    },
+    "cancel-construction-title": {
+        "en": "Cancel construction?",
+        "hu": "Építkezés megszakítása?"
+    },
+    "cancel-construction-content": {
+        "en": "Are you sure you want to cancel construction of {buildingName}?",
+        "hu": "Biztosan meg akarod szakítani a(z) {buildingName} építését?"
+    },
+    "continue-construction": {
+        "en": "Continue construction",
+        "hu": "Építkezés folytatása"
+    },
+    "cancel-deconstruction-title": {
+        "en": "Cancel deconstruction?",
+        "hu": "Lerombolás megszakítása?"
+    },
+    "cancel-deconstruction-content": {
+        "en": "Are you sure you want to cancel deconstruction of {buildingName}?",
+        "hu": "Biztosan meg akarod szakítani a(z) {buildingName} lerombolását?"
+    },
+    "continue-deconstruction": {
+        "en": "Continue deconstruction",
+        "hu": "Lerombolás folytatása"
+    },
+    "cancel-terraformation": {
+        "en": "Cancel terraformation",
+        "hu": "Terraformálás visszavonása"
+    },
+    "cancel-terraformation-title": {
+        "en": "Cancel terraformation?",
+        "hu": "Terraformálás visszavonása?"
+    },
+    "cancel-terraformation-content": {
+        "en": "Are you sure you want to cancel terraformation of {surfaceType}?",
+        "hu": "Biztosan vissza akarod vonni a(z) {surfaceType} terraformálását?"
+    },
+    "continue-terraformation": {
+        "en": "Continue terraformation",
+        "hu": "Terraformálás folytatása"
     }
 }

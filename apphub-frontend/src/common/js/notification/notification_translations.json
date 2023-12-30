@@ -78,5 +78,9 @@
     "DATA_NOT_FOUND": {
         "en": "Data not found.",
         "hu": "Az adat nem található."
+    },
+    "SKYXPLORE_STORAGE_USED": {
+        "en": "Storage still in use. Free up some space before you deconstruct it.",
+        "hu": "Raktár használatban. Szabadíts fel egy kis helyet, mielőtt lerombolod."
     }
 }

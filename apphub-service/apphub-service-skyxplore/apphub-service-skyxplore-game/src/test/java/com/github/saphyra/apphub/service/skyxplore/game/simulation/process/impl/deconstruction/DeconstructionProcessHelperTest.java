@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -107,6 +108,7 @@ class DeconstructionProcessHelperTest {
         underTest.finishDeconstruction(syncCache, gameData, DECONSTRUCTION_ID);
 
         verify(buildings).remove(building);
+        then(deconstructions).should().remove(deconstruction);
         verify(syncCache).deconstructionFinished(OWNER_ID, LOCATION, deconstruction, building, surface);
     }
 }

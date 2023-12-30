@@ -7,6 +7,7 @@ import localizationData from "./surface_tile_content_footer_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import ConfirmationDialogData from "../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import buildingLocalizationData from "../../../../../../common/localization/building_localization.json";
+import surfaceLocalizationData from "../../../../../../common/localization/surface_localization.json";
 import SurfaceTileContentFooterProgressBar from "./progress_bar/SurfaceTileContentFooterProgressBar";
 import NavigationHistoryItem from "../../../../../NavigationHistoryItem";
 import PageName from "../../../../../PageName";
@@ -15,13 +16,15 @@ import PageName from "../../../../../PageName";
 const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
+    const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);
 
     const [maxLevel, setMaxLevel] = useState(0);
 
     const { data: itemData } = useQuery(
-        surface.building.dataId,
+        Utils.hasValue(surface.building) ? surface.building.dataId : null,
         async () => {
-            return await Endpoints.SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: surface.building.dataId })
+            const dataId = Utils.hasValue(surface.building) ? surface.building.dataId : null;
+            return await Endpoints.SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: dataId })
                 .send()
         },
         {
@@ -71,16 +74,97 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
         setConfirmationDialogData(null);
     }
 
-    //TODO confirmation dialog
-    const cancelDeconstruction = () => {
-        Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
-            .send();
+    const confirmCancelDeconstruction = () => {
+        const confirmationDialogData = new ConfirmationDialogData(
+            "skyxplore-game-planet-confirm-cancel-deconstruction",
+            localizationHandler.get("cancel-deconstruction-title"),
+            localizationHandler.get("cancel-deconstruction-content", { buildingName: buildingLocalizationHandler.get(surface.building.dataId) }),
+            [
+                <Button
+                    key="cancel-cdeonstruction"
+                    id="skyxplore-game-planet-cancel-deconstruction-button"
+                    label={localizationHandler.get("cancel-deconstruction")}
+                    onclick={cancelDeconstruction}
+                />,
+                <Button
+                    key="continue-construction"
+                    id="skyxplore-game-planet-continue-deconstruction-button"
+                    label={localizationHandler.get("continue-deconstruction")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        );
+
+        setConfirmationDialogData(confirmationDialogData);
     }
 
-    //TODO confirmation dialog
-    const cancelConstruction = () => {
-        Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+    const cancelDeconstruction = async () => {
+        await Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
             .send();
+
+        setConfirmationDialogData(null);
+    }
+
+    const confirmCancelConstruction = () => {
+        const confirmationDialogData = new ConfirmationDialogData(
+            "skyxplore-game-planet-confirm-cancel-construction",
+            localizationHandler.get("cancel-construction-title"),
+            localizationHandler.get("cancel-construction-content", { buildingName: buildingLocalizationHandler.get(surface.building.dataId) }),
+            [
+                <Button
+                    key="cancel-construction"
+                    id="skyxplore-game-planet-cancel-construction-button"
+                    label={localizationHandler.get("cancel-construction")}
+                    onclick={cancelConstruction}
+                />,
+                <Button
+                    key="continue-construction"
+                    id="skyxplore-game-planet-continue-construction-button"
+                    label={localizationHandler.get("continue-construction")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        );
+
+        setConfirmationDialogData(confirmationDialogData);
+    }
+
+    const cancelConstruction = async () => {
+        await Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+            .send();
+
+        setConfirmationDialogData(null);
+    }
+
+    const confirmCancelTerraformation = () => {
+        const confirmationDialogData = new ConfirmationDialogData(
+            "skyxplore-game-planet-confirm-cancel-terraformation",
+            localizationHandler.get("cancel-terraformation-title"),
+            localizationHandler.get("cancel-terraformation-content", { surfaceType: surfaceLocalizationHandler.get(surface.terraformation.data) }),
+            [
+                <Button
+                    key="cancel"
+                    id="skyxplore-game-planet-cancel-terraformation-button"
+                    label={localizationHandler.get("cancel-terraformation")}
+                    onclick={cancelTerraformation}
+                />,
+                <Button
+                    key="continue"
+                    id="skyxplore-game-planet-continue-terraformation-button"
+                    label={localizationHandler.get("continue-terraformation")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        );
+
+        setConfirmationDialogData(confirmationDialogData);
+    }
+
+    const cancelTerraformation = async () => {
+        await Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION.createRequest(null, { planetId: planetId, surfaceId: surface.surfaceId })
+            .send();
+
+        setConfirmationDialogData(null);
     }
 
     const getContent = () => {
@@ -94,7 +178,7 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                     actual={construction.currentWorkPoints}
                     max={construction.requiredWorkPoints}
                     title={localizationHandler.get("cancel-construction")}
-                    cancelCallback={cancelConstruction}
+                    cancelCallback={confirmCancelConstruction}
                 />
             } else if (Utils.hasValue(building.deconstruction)) {
                 const deconstruction = building.deconstruction;
@@ -103,7 +187,7 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                     actual={deconstruction.currentWorkPoints}
                     max={deconstruction.requiredWorkPoints}
                     title={localizationHandler.get("cancel-deconstruction")}
-                    cancelCallback={cancelDeconstruction}
+                    cancelCallback={confirmCancelDeconstruction}
                 />
             } else {
                 return (
@@ -138,7 +222,14 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                 );
             }
         } else if (Utils.hasValue(surface.terraformation)) {
-            //TODO Terraformation in progress
+            const terraformation = surface.terraformation;
+
+            return <SurfaceTileContentFooterProgressBar
+                actual={terraformation.currentWorkPoints}
+                max={terraformation.requiredWorkPoints}
+                title={localizationHandler.get("cancel-terraformation")}
+                cancelCallback={confirmCancelTerraformation}
+            />
         }
     }
 

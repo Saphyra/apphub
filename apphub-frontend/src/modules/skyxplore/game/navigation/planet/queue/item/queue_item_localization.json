@@ -10,5 +10,29 @@
     "cancel": {
         "en": "Cancel",
         "hu": "Mégse"
+    },
+    "deconstruct": {
+        "en": "Deconstruct",
+        "hu": "Lerombolás"
+    },
+    "confirm-cancel-queue-item-title": {
+        "en": "Cancel production?",
+        "hu": "Termelés leállítása?"
+    },
+    "confirm-cancel-queue-item-content": {
+        "en": "Are you sure you want to cancel production?",
+        "hu": "Biztosan le akarod állítani a termelést?"
+    },
+    "cancel-queue-item": {
+        "en": "Cancel production",
+        "hu": "Termelés leállítása"
+    },
+    "continue-queue-item": {
+        "en": "Continue production",
+        "hu": "Termelés folytatása"
+    },
+    "terraformation": {
+        "en": "Terraforming",
+        "hu": "Terraformálás"
     }
 }

@@ -31,6 +31,7 @@ public enum LocalizedText {
     SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_TOO_LONG("Solar System name too long. (Maximum 30 characters.)"),
     SKYXPLORE_GAME_PLANET_NAME_BLANK("Planet name must not be blank."),
     SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
+    SKYXPLORE_GAME_STORAGE_USED("Storage still in use. Free up some space before you deconstruct it."),
     ;
 
     private final String text;

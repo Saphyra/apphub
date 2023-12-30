@@ -5,7 +5,7 @@ import Utils from "../../../../../../common/js/Utils";
 import Stream from "../../../../../../common/js/collection/Stream";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
 
-const TerraformingPossibilities = ({ surfaceType }) => {
+const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);
 
     const { data: terraformingData } = useQuery(
@@ -29,8 +29,11 @@ const TerraformingPossibilities = ({ surfaceType }) => {
         [terraformingData]
     );
 
-    const terraform = (targetSurfaceType) => {
-        //TODO implement
+    const terraform = async (targetSurfaceType) => {
+        await Endpoints.SKYXPLORE_GAME_TERRAFORM_SURFACE.createRequest({ value: targetSurfaceType }, { planetId: planetId, surfaceId: surfaceId })
+            .send();
+
+        closePage();
     }
 
     const getContent = () => {

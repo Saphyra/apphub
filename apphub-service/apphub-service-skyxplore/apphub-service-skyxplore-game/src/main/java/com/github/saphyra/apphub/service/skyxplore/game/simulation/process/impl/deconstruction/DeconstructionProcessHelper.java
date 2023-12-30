@@ -46,6 +46,9 @@ class DeconstructionProcessHelper {
             .get(deconstruction.getLocation())
             .getOwner();
 
+        gameData.getDeconstructions()
+                .remove(deconstruction);
+
         syncCache.deconstructionFinished(ownerId, deconstruction.getLocation(), deconstruction, building, surface);
     }
 }

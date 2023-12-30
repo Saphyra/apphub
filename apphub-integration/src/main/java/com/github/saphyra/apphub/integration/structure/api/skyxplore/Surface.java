@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.structure.api.skyxplore;
 
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
@@ -38,7 +37,7 @@ public class Surface {
         assertThat(isEmpty()).isTrue();
 
         webElement.findElement(By.className("skyxplore-game-planet-surface-modify-button"))
-                .click();
+            .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreModifySurfaceActions.isDisplayed(driver))
@@ -54,6 +53,10 @@ public class Surface {
     }
 
     public Optional<String> getBuildingDataId() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+
         return WebElementUtils.getClasses(getContent().orElseThrow(() -> new IllegalStateException("Surface content not found.")))
             .stream()
             .filter(s -> s.startsWith(BUILDING_PREFIX))
@@ -68,9 +71,7 @@ public class Surface {
     }
 
     public boolean isConstructionInProgress() {
-        return getFooter()
-            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.construction-progress-bar")).isEmpty())
-            .isPresent();
+        return WebElementUtils.isPresent(() -> webElement.findElement(By.className("skyxplore-planet-surface-header-building-new-level")));
     }
 
     private Optional<WebElement> getFooter() {
@@ -84,33 +85,25 @@ public class Surface {
     public void cancelConstruction(WebDriver driver) {
         assertThat(isConstructionInProgress()).isTrue();
 
-        getFooter()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
-            .findElement(By.cssSelector(":scope .cancel-construction-button"))
+        webElement.findElement(By.className("skyxplore-game-planet-surface-footer-cancel-button"))
             .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "cancel-construction-confirmation-dialog");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.isStale(webElement))
-            .assertTrue("Planet surface was not reloaded.");
+        driver.findElement(By.id("skyxplore-game-planet-cancel-construction-button"))
+            .click();
     }
 
     public boolean canUpgradeBuilding() {
-        if (isEmpty()) {
-            return false;
-        }
+        return WebElementUtils.isPresent(this::upgradeBuildingButton);
+    }
 
-        return webElement.findElements(By.cssSelector(":scope .upgrade-building-button"))
-            .size() == 1;
+    private WebElement upgradeBuildingButton() {
+        return webElement.findElement(By.className("skyxplore-game-planet-surface-building-upgrade-button"));
     }
 
     public void upgradeBuilding(WebDriver driver) {
         assertThat(canUpgradeBuilding()).isTrue();
 
-        getFooter()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
-            .findElement(By.cssSelector(":scope .upgrade-building-button"))
+        upgradeBuildingButton()
             .click();
 
         SkyXploreModifySurfaceActions.confirmUpgrade(driver);
@@ -121,51 +114,38 @@ public class Surface {
     }
 
     public boolean isTerraformationInProgress() {
-        return getFooter()
-            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.terraformation-progress-bar")).isEmpty())
-            .isPresent();
+        return WebElementUtils.isPresent(() -> webElement.findElement(By.className("skyxplore-planet-surface-header-terraformation-target")));
     }
 
     public void cancelTerraformation(WebDriver driver) {
         assertThat(isTerraformationInProgress()).isTrue();
 
-        getFooter()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
-            .findElement(By.cssSelector(":scope .cancel-terraformation-button"))
-            .click();
+        webElement.findElement(By.className("skyxplore-game-planet-surface-footer-cancel-button"))
+                .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "cancel-terraformation-confirmation-dialog");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.isStale(webElement))
-            .assertTrue("Planet surface was not reloaded.");
+        driver.findElement(By.id("skyxplore-game-planet-cancel-terraformation-button"))
+                .click();
     }
 
     public void deconstructBuilding(WebDriver driver) {
-        webElement.findElement(By.cssSelector(":scope .deconstruct-building-button"))
+        webElement.findElement(By.className("skyxplore-game-planet-surface-building-deconstruct-button"))
             .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "deconstruct-building-confirmation-dialog");
+        driver.findElement(By.id("skyxplore-game-planet-surface-confirm-deconstruct-building-button"))
+            .click();
     }
 
     public boolean isDeconstructionInProgress() {
-        return getFooter()
-            .filter(footerElement -> !footerElement.findElements(By.cssSelector(":scope .progress-bar-container.deconstruction-progress-bar")).isEmpty())
-            .isPresent();
+        return WebElementUtils.isPresent(() -> webElement.findElement(By.className("skyxplore-planet-surface-header-deconstructing")));
     }
 
     public void cancelDeconstruction(WebDriver driver) {
         assertThat(isDeconstructionInProgress()).isTrue();
 
-        getFooter()
-            .orElseThrow(() -> new RuntimeException("Surface footer not present."))
-            .findElement(By.cssSelector(":scope .cancel-deconstruction-button"))
+        webElement.findElement(By.className("skyxplore-game-planet-surface-footer-cancel-button"))
             .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "cancel-deconstruction-confirmation-dialog");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.isStale(webElement))
-            .assertTrue("Planet surface was not reloaded.");
+        driver.findElement(By.id("skyxplore-game-planet-cancel-deconstruction-button"))
+            .click();
     }
 }

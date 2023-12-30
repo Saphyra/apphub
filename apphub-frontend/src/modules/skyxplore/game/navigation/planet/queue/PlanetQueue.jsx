@@ -5,7 +5,7 @@ import LocalizationHandler from "../../../../../../common/js/LocalizationHandler
 import Stream from "../../../../../../common/js/collection/Stream";
 import QueueItem from "./item/QueueItem";
 
-const PlanetQueue = ({ queue, planetId }) => {
+const PlanetQueue = ({ queue, planetId, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
@@ -15,6 +15,7 @@ const PlanetQueue = ({ queue, planetId }) => {
                 key={queueItem.itemId}
                 queueItem={queueItem}
                 planetId={planetId}
+                setConfirmationDialogData={setConfirmationDialogData}
             />)
             .toList();
     }

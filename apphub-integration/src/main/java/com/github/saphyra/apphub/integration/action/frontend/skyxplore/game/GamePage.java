@@ -89,10 +89,6 @@ class GamePage {
         return driver.findElement(By.id("population-overview-show-all-skills"));
     }
 
-    public static List<WebElement> surfacesOfPlanet(WebDriver driver) {
-        return driver.findElements(By.cssSelector("#planet-surface-container .surface-table-cell"));
-    }
-
     public static WebElement terraformationWindow(WebDriver driver) {
         return driver.findElement(By.id("terraformation"));
     }

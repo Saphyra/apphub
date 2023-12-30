@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -44,28 +45,36 @@ public class SkyXplorePlanetActions {
     }
 
     public static Surface findEmptySurface(WebDriver driver, String surfaceType) {
-        return driver.findElements(By.className("skyxplore-game-planet-surface-tile"))
+        return getSurfaces(driver)
             .stream()
-            .map(Surface::new)
             .filter(surface -> surface.getSurfaceType().equalsIgnoreCase(surfaceType))
             .filter(Surface::isEmpty)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Empty surface not found with type " + surfaceType));
     }
 
-    public static Surface findBySurfaceId(WebDriver driver, String surfaceId) {
-        return GamePage.surfacesOfPlanet(driver)
-            .stream()
-            .map(Surface::new)
-            .filter(surface -> surface.getSurfaceId().equals(surfaceId))
-            .findFirst()
+    public static Surface findBySurfaceIdValidated(WebDriver driver, String surfaceId) {
+        return findBySurfaceId(driver, surfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found with id " + surfaceId));
     }
 
-    public static Surface findSurfaceWithUpgradableBuilding(WebDriver driver) {
-        return GamePage.surfacesOfPlanet(driver)
+    public static Optional<Surface> findBySurfaceId(WebDriver driver, String surfaceId) {
+        return getSurfaces(driver)
+            .stream()
+            .filter(surface -> surface.getSurfaceId().equals(surfaceId))
+            .findFirst();
+    }
+
+    private static List<Surface> getSurfaces(WebDriver driver) {
+        return driver.findElements(By.className("skyxplore-game-planet-surface-tile"))
             .stream()
             .map(Surface::new)
+            .collect(Collectors.toList());
+    }
+
+    public static Surface findSurfaceWithUpgradableBuilding(WebDriver driver) {
+        return getSurfaces(driver)
+            .stream()
             .filter(Surface::canUpgradeBuilding)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No surface with upgradable building"));
@@ -83,9 +92,8 @@ public class SkyXplorePlanetActions {
     }
 
     public static Surface findSurfaceWithBuilding(WebDriver driver, String dataId) {
-        return GamePage.surfacesOfPlanet(driver)
+        return getSurfaces(driver)
             .stream()
-            .map(Surface::new)
             .filter(surface -> surface.getBuildingDataId().filter(s -> s.equals(dataId)).isPresent())
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No surface found with building " + dataId));
