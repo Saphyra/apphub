@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.population;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenHitPointsProperties;
@@ -33,8 +34,8 @@ class CitizenFactory {
             .citizenId(idGenerator.randomUuid())
             .name(randomNameProvider.getRandomName(Collections.emptyList()))
             .location(location)
-            .morale(citizenProperties.getMorale().getMax())
-            .satiety(citizenProperties.getSatiety().getMax())
+            .morale(citizenProperties.getMaxStatValues().get(CitizenStat.MORALE))
+            .satiety(citizenProperties.getMaxStatValues().get(CitizenStat.SATIETY))
             .build();
 
         gameData.getCitizens()

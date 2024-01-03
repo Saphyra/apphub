@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.WsSessionPlanetMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -32,9 +32,9 @@ public class PlanetSurfaceMessageProvider implements PlanetMessageProvider {
     private final Map<String, LastMessage<List<SurfaceResponse>>> lastMessages = new ConcurrentHashMap<>();
 
     @Override
-    public void clearDisconnectedUserData(List<WsSessionPlanetMapping> connectedUsers) {
+    public void clearDisconnectedUserData(List<WsSessionPlanetIdMapping> connectedUsers) {
         List<String> connectedSessions = connectedUsers.stream()
-            .map(WsSessionPlanetMapping::getSessionId)
+            .map(WsSessionPlanetIdMapping::getSessionId)
             .toList();
 
         List<String> entriesToRemove = lastMessages.keySet()

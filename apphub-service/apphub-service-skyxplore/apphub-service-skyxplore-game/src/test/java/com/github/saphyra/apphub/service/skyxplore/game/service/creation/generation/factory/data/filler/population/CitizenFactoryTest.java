@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.population;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenHitPointsProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
-import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
@@ -24,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,12 +66,6 @@ class CitizenFactoryTest {
     private CitizenProperties citizenProperties;
 
     @Mock
-    private CitizenMoraleProperties citizenMoraleProperties;
-
-    @Mock
-    private CitizenSatietyProperties citizenSatietyProperties;
-
-    @Mock
     private Citizens citizens;
 
     @Mock
@@ -92,10 +86,10 @@ class CitizenFactoryTest {
         given(idGenerator.randomUuid())
             .willReturn(CITIZEN_ID)
             .willReturn(DURABILITY_ID);
-        given(citizenProperties.getMorale()).willReturn(citizenMoraleProperties);
-        given(citizenMoraleProperties.getMax()).willReturn(MORALE);
-        given(citizenProperties.getSatiety()).willReturn(citizenSatietyProperties);
-        given(citizenSatietyProperties.getMax()).willReturn(SATIETY);
+        given(citizenProperties.getMaxStatValues()).willReturn(Map.of(
+            CitizenStat.MORALE, MORALE,
+            CitizenStat.SATIETY, SATIETY
+        ));
         given(gameData.getCitizens()).willReturn(citizens);
         given(randomNameProvider.getRandomName(Collections.emptyList())).willReturn(NAME);
         given(skillFactory.create(any(), eq(CITIZEN_ID))).willReturn(skill);

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -48,10 +49,10 @@ public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandle
         }
     }
 
-    public List<WsSessionPlanetMapping> getConnectedUsers() {
+    public List<WsSessionPlanetIdMapping> getConnectedUsers() {
         return openedPlanetIds.entrySet()
             .stream()
-            .map(entry -> WsSessionPlanetMapping.builder()
+            .map(entry -> WsSessionPlanetIdMapping.builder()
                 .sessionId(entry.getKey())
                 .planetId(entry.getValue())
                 .userId(getUserId(entry.getKey()))

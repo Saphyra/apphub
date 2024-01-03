@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.MessageSender;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.WsSessionPlanetMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ class PlanetMessageSender implements MessageSender {
 
     @Override
     public List<Future<ExecutionResult<Boolean>>> sendMessages() {
-        List<WsSessionPlanetMapping> connectedUsers = planetWebSocketHandler.getConnectedUsers();
+        List<WsSessionPlanetIdMapping> connectedUsers = planetWebSocketHandler.getConnectedUsers();
 
         clearDisconnectedUserData(connectedUsers);
 
@@ -40,7 +40,7 @@ class PlanetMessageSender implements MessageSender {
             .toList();
     }
 
-    private void clearDisconnectedUserData(List<WsSessionPlanetMapping> connectedUsers) {
+    private void clearDisconnectedUserData(List<WsSessionPlanetIdMapping> connectedUsers) {
         messageProviders.forEach(planetMessageProvider -> planetMessageProvider.clearDisconnectedUserData(connectedUsers));
     }
 

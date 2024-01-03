@@ -1,0 +1,12 @@
+.skyxplore-game-population-citizen {
+    display: inline-block;
+    border: 3px ridge white;
+    border-radius: 10px;
+    margin: 5px;
+    max-width: 600px;
+}
+
+.skyxplore-game-population-citizen-content{
+    padding: 10px;
+    padding-top: 0;
+}

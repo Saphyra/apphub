@@ -8,6 +8,11 @@ const LocalizationHandler = class {
         this.localization = localization;
     }
 
+    getKeys() {
+        return new MapStream(this.localization)
+            .toList(key => key);
+    }
+
     get(key, params = {}) {
         return this.getOptional(key, params)
             .orElseThrow("IllegalArgument", "No localization found for key " + key + " and locale " + this.getLocale());

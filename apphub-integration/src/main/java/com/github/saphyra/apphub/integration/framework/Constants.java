@@ -54,6 +54,7 @@ public class Constants {
     public final int DEFAULT_PRIORITY = 5;
     public static final String DEFAULT_GAME_NAME = "game-name";
     public static final int MAX_CITIZEN_MORALE = 10000;
+    public static final int MAX_CITIZEN_SATIETY = 10000;
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
 

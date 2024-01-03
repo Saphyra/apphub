@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;

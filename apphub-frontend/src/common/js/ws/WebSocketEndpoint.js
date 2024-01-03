@@ -4,6 +4,7 @@ const WebSocketEndpoint = {
     SKYXPLORE_LOBBY: "/api/ws/skyxplore-lobby/lobby",
     SKYXPLORE_GAME_MAIN: "/api/ws/skyxplore-game/game",
     SKYXPLORE_GAME_PLANET: "/api/ws/skyxplore-game/game/planet",
+    SKYXPLORE_GAME_POPULATION: "/api/ws/skyxplore-game/game/population",
     ADMIN_PANEL_MEMORY_MONITORING: "/api/ws/admin-panel/monitoring/memory",
 }
 

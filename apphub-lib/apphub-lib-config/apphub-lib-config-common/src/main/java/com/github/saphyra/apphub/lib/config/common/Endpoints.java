@@ -60,6 +60,7 @@ public class Endpoints {
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
     public static final String WS_CONNECTION_SKYXPLORE_GAME_PLANET = "/api/ws/skyxplore-game/game/planet";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME_POPULATION = "/api/ws/skyxplore-game/game/population";
     public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
 
     //ERROR REPORTING
@@ -191,6 +192,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_CHARACTER_NAME = "/api/skyxplore/data/character/name";
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
     public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
+    public static final String SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS = "/api/skyxplore/data/citizen/stats-and-skills";
 
     //SKYXPLORE-LOBBY
     public static final String SKYXPLORE_INTERNAL_GAME_LOADED = "/allowed-internal/skyxplore/lobby/{gameId}/loaded";

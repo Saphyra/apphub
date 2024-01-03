@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.SkillResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.StatResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ class CitizenConverterTest {
     @Mock
     private SkillConverter skillConverter;
 
+    @Mock
+    private StatConverter statConverter;
+
     @InjectMocks
     private CitizenConverter underTest;
 
@@ -39,6 +44,9 @@ class CitizenConverterTest {
 
     @Mock
     private SkillResponse skillResponse;
+
+    @Mock
+    private StatResponse statResponse;
 
     @Test
     void toModel() {
@@ -72,13 +80,13 @@ class CitizenConverterTest {
             .build();
 
         given(skillConverter.toResponse(gameData, CITIZEN_ID)).willReturn(Map.of(SKILL, skillResponse));
+        given(statConverter.convert(citizen)).willReturn(Map.of(CitizenStat.MORALE, statResponse));
 
         CitizenResponse result = underTest.toResponse(gameData, citizen);
 
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getName()).isEqualTo(NAME);
-        assertThat(result.getMorale()).isEqualTo(MORALE);
-        assertThat(result.getSatiety()).isEqualTo(SATIETY);
+        assertThat(result.getStats()).containsEntry(CitizenStat.MORALE, statResponse);
         assertThat(result.getSkills()).containsEntry(SKILL, skillResponse);
     }
 }

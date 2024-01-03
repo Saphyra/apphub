@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -11,15 +10,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetPopulationOverviewActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Citizen;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -33,7 +31,6 @@ public class CitizenOverviewTest extends SeleniumTest {
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
     @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
-    @Ignore //TODO fix and restore
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -84,7 +81,12 @@ public class CitizenOverviewTest extends SeleniumTest {
             .collect(Collectors.toList());
 
         for (int i = 0; i < citizenNames.size(); i++) {
-            renameCitizen(driver, citizenNames.get(i), newNames.get(i));
+            String newName = newNames.get(i);
+            renameCitizen(driver, citizenNames.get(i), newName);
+
+            AwaitilityWrapper.createDefault()
+                .until(() -> SkyXplorePlanetPopulationOverviewActions.findCitizen(driver, newName).isPresent())
+                .assertTrue("Citizen is not renamed.");
         }
         return newNames;
     }
@@ -126,8 +128,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     }
 
     private void renameCitizen(WebDriver driver, String oldName, String newName) {
-        Citizen citizen = SkyXplorePlanetPopulationOverviewActions.findCitizen(driver, oldName);
-        citizen.setName(driver, newName);
-        NotificationUtil.clearNotifications(driver);
+        Citizen citizen = SkyXplorePlanetPopulationOverviewActions.findCitizenValidated(driver, oldName);
+        citizen.setName(newName);
     }
 }

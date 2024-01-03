@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkillResponse;
@@ -88,8 +89,8 @@ public class PopulationTest extends BackEndTest {
     private void validate(CitizenResponse citizenResponse) {
         assertThat(citizenResponse.getCitizenId()).isNotNull();
         assertThat(citizenResponse.getName()).isNotNull();
-        assertThat(citizenResponse.getMorale()).isEqualTo(Constants.MAX_CITIZEN_MORALE);
-        assertThat(citizenResponse.getSatiety()).isEqualTo(10000);
+        assertThat(citizenResponse.getStats().get(CitizenStat.MORALE).getValue()).isEqualTo(Constants.MAX_CITIZEN_MORALE);
+        assertThat(citizenResponse.getStats().get(CitizenStat.SATIETY).getValue()).isEqualTo(Constants.MAX_CITIZEN_SATIETY);
 
         assertThat(citizenResponse.getSkills()).hasSize(SkillType.values().length);
 

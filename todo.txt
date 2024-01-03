@@ -6,3 +6,5 @@ TODO delete old SkyXplore UI
 TODO MessageSender for population
 TODO MessageSender for Planet building overview
 TODO delete unused WebSocketEventNames from both BE and FE side
+TODO remove redundant messages from main websocket channel
+TODO investigate timing of webSockets - Population is updated in every tick instead of every second. Same applies to planet storage overview

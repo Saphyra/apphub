@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
@@ -59,13 +60,13 @@ public class MoraleRecoveryTest extends BackEndTest {
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().anyMatch(citizenResponse -> citizenResponse.getMorale() < Constants.MAX_CITIZEN_MORALE))
+            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().anyMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() < Constants.MAX_CITIZEN_MORALE))
             .assertTrue("Morale is not decreased for citizens");
 
         AwaitilityWrapper.create(180, 10)
             .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
                 .stream()
-                .allMatch(citizenResponse -> citizenResponse.getMorale() > 9000)
+                .allMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() > 9000)
             )
             .assertTrue("Morale is not recharged for citizens");
     }

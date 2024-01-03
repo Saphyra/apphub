@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
 import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreGameDataController;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStatsAndSkills;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -70,5 +74,14 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
 
         return new ArrayList<>(terraformingPossibilitiesService.getOptional(surfaceType)
             .orElse(new TerraformingPossibilities()));
+    }
+
+    @Override
+    //TODO unit test
+    public CitizenStatsAndSkills getStatsAndSkills() {
+        return CitizenStatsAndSkills.builder()
+            .stats(Arrays.stream(CitizenStat.values()).map(Enum::name).toList())
+            .skills(Arrays.stream(SkillType.values()).map(Enum::name).toList())
+            .build();
     }
 }

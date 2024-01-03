@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.response.game.planet;
+package com.github.saphyra.apphub.api.skyxplore.response.game.citizen;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,6 @@ import java.util.UUID;
 public class CitizenResponse {
     private UUID citizenId;
     private String name;
-    private int morale;
-    private int satiety;
+    private Map<CitizenStat, StatResponse> stats;
     private Map<String, SkillResponse> skills;
 }

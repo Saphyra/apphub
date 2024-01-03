@@ -1,0 +1,19 @@
+.skyxplore-game-population-citizen-name-wrapper {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.skyxplore-game-population-citizen-rename-button {
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    background-size: cover;
+    width: 22px;
+    height: 22px;
+}
+
+.skyxplore-game-population-citizen-name-save-button {
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    background-size: cover;
+    width: 27px;
+    height: 27px;
+    color: transparent;
+}

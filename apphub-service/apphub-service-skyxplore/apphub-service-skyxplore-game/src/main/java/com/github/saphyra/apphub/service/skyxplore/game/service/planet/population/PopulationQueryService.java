@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;

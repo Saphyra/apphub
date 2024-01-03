@@ -1,0 +1,22 @@
+{
+    "name": {
+        "en": "Citizen name",
+        "hu": "Városlakó neve"
+    },
+    "rename": {
+        "en": "Rename",
+        "hu": "Átnevezés"
+    },
+    "discard": {
+        "en": "Discard",
+        "hu": "Elvetés"
+    },
+    "citizen-name-blank": {
+        "en": "Citizen name must not be blank.",
+        "hu": "Városlakó neve nem lehet üres."
+    },
+    "citizen-name-too-long": {
+        "en": "Citizen name too long. (Maximum 30 characters.)",
+        "hu": "Városlakó neve túl hosszú. (Maximum 30 karakter.)"
+    }
+}

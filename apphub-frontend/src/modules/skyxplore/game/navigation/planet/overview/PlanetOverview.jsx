@@ -12,7 +12,8 @@ const PlanetOverview = ({
     buildings,
     planetSize,
     priorities,
-    setPriorities
+    setPriorities,
+    openPage
 }) => {
     return (
         <div id="skyxplore-game-planet-overview">
@@ -23,6 +24,8 @@ const PlanetOverview = ({
             <PopulationOverview
                 population={population.population}
                 capacity={population.capacity}
+                planetId={planetId}
+                openPage={openPage}
             />
 
             <BuildingOverview

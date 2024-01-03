@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,8 +2,10 @@ import React from "react";
 import "./population_overview.css";
 import localizationData from "./population_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
+import NavigationHistoryItem from "../../../NavigationHistoryItem";
+import PageName from "../../../PageName";
 
-const PopulationOverview = ({ population, capacity }) => {
+const PopulationOverview = ({ population, capacity, openPage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const percentage = population / capacity * 100;
@@ -46,7 +48,7 @@ const PopulationOverview = ({ population, capacity }) => {
             <div
                 id="skyxplore-game-planet-overview-population-details-button"
                 className="button"
-            //TODO add onclick
+                onClick={() => openPage(new NavigationHistoryItem(PageName.POPULATION, planetId))}
             >
                 {localizationHandler.get("population-details")}
             </div>

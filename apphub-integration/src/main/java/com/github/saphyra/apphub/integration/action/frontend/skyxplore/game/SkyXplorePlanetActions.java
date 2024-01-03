@@ -27,7 +27,8 @@ public class SkyXplorePlanetActions {
     }
 
     public static void openPopulationOverview(WebDriver driver) {
-        GamePage.openCitizenOverviewButton(driver).click();
+        driver.findElement(By.id("skyxplore-game-planet-overview-population-details-button"))
+            .click();
     }
 
     public static String getPlanetName(WebDriver driver) {

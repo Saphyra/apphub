@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.integration.structure.api.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 @RequiredArgsConstructor
@@ -12,23 +10,40 @@ public class Citizen {
     private final WebElement webElement;
 
     public String getName() {
-        return getCitizenNameInput().getText();
+        if (editingEnabled()) {
+            return getCitizenNameInput()
+                .getAttribute("value");
+        } else {
+            return webElement.findElement(By.className("skyxplore-game-population-citizen-name"))
+                .getText();
+        }
+    }
+
+    private boolean editingEnabled() {
+        return WebElementUtils.isPresent(this::getCitizenNameInput);
     }
 
     private WebElement getCitizenNameInput() {
-        return webElement.findElement(By.cssSelector(":scope .population-overview-citizen-name"));
+        return webElement.findElement(By.className("skyxplore-game-population-citizen-name-input"));
     }
 
-    public void setName(WebDriver driver, String newName) {
+    public void setName(String newName) {
+        if (!editingEnabled()) {
+            enableEditing();
+        }
         WebElement nameInput = getCitizenNameInput();
-        nameInput.click();
-        WebElementUtils.clearAndFillContentEditable(driver, nameInput, newName);
-        webElement.click();
+        WebElementUtils.clearAndFill(nameInput, newName);
 
-        NotificationUtil.verifySuccessNotification(driver, "Rename successful.");
+        webElement.findElement(By.className("skyxplore-game-population-citizen-name-save-button"))
+            .click();
+    }
+
+    private void enableEditing() {
+        webElement.findElement(By.className("skyxplore-game-population-citizen-rename-button"))
+            .click();
     }
 
     public int getDisplayedSkillCount() {
-        return webElement.findElements(By.cssSelector(":scope .population-overview-citizen-skills .population-overview-citizen-progress-bar")).size();
+        return webElement.findElements(By.className("skyxplore-game-population-citizen-status-bar-bar")).size();
     }
 }

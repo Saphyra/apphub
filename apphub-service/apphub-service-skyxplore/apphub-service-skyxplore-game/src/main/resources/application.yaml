@@ -11,6 +11,7 @@ game:
     planetSurface: 100
     planetQueue: 100
     planetStorage: 1000
+    population: 1000
   deconstruction:
     requiredWorkPoints: 20000
   itemSaverMaxChunkSize: 500
@@ -53,7 +54,6 @@ game:
     workPointsPerTick: 100
     maxWorkPointsBatch: 1000
     morale:
-      max: 10000
       workEfficiencyDropUnder: 5000
       minEfficiency: 0.25
       moralePerWorkPoints: 1
@@ -65,8 +65,11 @@ game:
     skill:
       experiencePerLevel: 1000
       skillLevelMultiplier: 0.1
+    maxStatValues:
+      # Don't forget adding new item to StatConverter's mapper
+      MORALE: 10000
+      SATIETY: 10000
     satiety:
-      max: 10000
       satietyDecreasedPerTick: 5
     hitPoints:
       perLevel: 1000

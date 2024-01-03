@@ -61,9 +61,10 @@ const Chat = ({
     }
 
     const updateUnreadMessage = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!Utils.hasValue(lastEvent) || !Utils.hasValue(lastEvent.payload) || !Utils.hasValue(lastEvent.payload.room)) {
             return;
         }
+
         if (!displayChat || lastEvent.payload.room !== currentChatRoom) {
             setMessageStatus(lastEvent.payload.room, true);
         }

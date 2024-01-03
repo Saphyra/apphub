@@ -229,7 +229,7 @@ const Endpoints = {
     SKYXPLORE_GET_ITEM_DATA: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{dataId}"),
     SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/{surfaceType}/terraforming-possibilities"),
     SKYXPLORE_DATA_AVAILABLE_BUILDINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{surfaceType}/buildings"),
-
+    SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/citizen/stats-and-skills"),
 
     //SkyXplore Game
     SKYXPLORE_GAME_PAUSE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause"),
@@ -248,6 +248,8 @@ const Endpoints = {
     SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct"),
     SKYXPLORE_BUILDING_UPGRADE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
     SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
+    SKYXPLORE_PLANET_GET_POPULATION: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/planet/{planetId}/citizen"),
+    SKYXPLORE_PLANET_RENAME_CITIZEN: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/citizen/{citizenId}/rename"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

@@ -123,6 +123,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                     priorities={priorities}
                     setPriorities={setPriorities}
                     planetId={planetId}
+                    openPage={openPage}
                 />
 
                 <PlanetSurface

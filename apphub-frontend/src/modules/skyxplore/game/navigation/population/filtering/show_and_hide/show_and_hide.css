@@ -1,0 +1,15 @@
+.skyxplore-game-population-show-and-hide-checkbox-label {
+    display: block;
+    padding: 3px;
+    font-size: 20px;
+    margin: 3px;
+    border: 1px solid white;
+}
+
+.skyxplore-game-population-show-and-hide-checkbox-label:hover {
+    border-color: red;
+}
+
+.skyxplore-game-population-show-and-hide-checkbox-label input {
+    transform: scale(1.5);
+}
