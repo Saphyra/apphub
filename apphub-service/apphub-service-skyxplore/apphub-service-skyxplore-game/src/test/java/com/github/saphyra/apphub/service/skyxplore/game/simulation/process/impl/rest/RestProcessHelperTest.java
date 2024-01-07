@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
@@ -45,6 +47,9 @@ class RestProcessHelperTest {
     @Mock
     private CitizenAllocationConverter citizenAllocationConverter;
 
+    @Mock
+    private CitizenConverter citizenConverter;
+
     @InjectMocks
     private RestProcessHelper underTest;
 
@@ -74,6 +79,9 @@ class RestProcessHelperTest {
 
     @Mock
     private SyncCache syncCache;
+
+    @Mock
+    private CitizenModel citizenModel;
 
     @Test
     void getMoraleBasedMultiplier() {
@@ -121,10 +129,12 @@ class RestProcessHelperTest {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMorale()).willReturn(citizenMoraleProperties);
         given(citizenMoraleProperties.getRegenPerTick()).willReturn(REGEN_PER_TICK);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
 
         underTest.increaseMorale(syncCache, gameData, CITIZEN_ID);
 
         verify(citizen).increaseMorale(REGEN_PER_TICK);
-        verify(syncCache).citizenModified(citizen);
+        verify(syncCache).saveGameItem(citizenModel);
     }
 }

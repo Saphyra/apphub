@@ -10,13 +10,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,6 +36,7 @@ public class UpgradeBuildingService {
     private final ResourceAllocationService resourceAllocationService;
     private final ConstructionProcessFactory constructionProcessFactory;
     private final SyncCacheFactory syncCacheFactory;
+    private final ConstructionConverter constructionConverter;
 
     public void upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -70,16 +71,7 @@ public class UpgradeBuildingService {
             constructionRequirements.getRequiredWorkPoints()
         );
 
-        Surface surface = game.getData()
-            .getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
-
-        UUID ownerId = game.getData()
-            .getPlanets()
-            .get(planetId)
-            .getOwner();
-
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         game.getEventLoop()
             .processWithWait(() -> {
@@ -87,7 +79,6 @@ public class UpgradeBuildingService {
                     syncCache,
                     game.getData(),
                     planetId,
-                    ownerId,
                     construction.getConstructionId(),
                     constructionRequirements.getRequiredResources()
                 );
@@ -102,7 +93,8 @@ public class UpgradeBuildingService {
                     .getProcesses()
                     .add(constructionProcess);
 
-                syncCache.constructionCreated(userId, planetId, construction, surface, constructionProcess);
+                syncCache.saveGameItem(constructionProcess.toModel());
+                syncCache.saveGameItem(constructionConverter.toModel(game.getGameId(), construction));
             }, syncCache)
             .getOrThrow();
     }

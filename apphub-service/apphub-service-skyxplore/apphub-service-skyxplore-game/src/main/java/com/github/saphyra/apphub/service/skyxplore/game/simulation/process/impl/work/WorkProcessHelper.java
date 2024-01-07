@@ -90,7 +90,7 @@ class WorkProcessHelper {
 
         citizenUpdateService.updateCitizen(syncCache, gameData, citizenId, completedWorkPoints, skillType);
 
-        updateTargetService.updateTarget(syncCache, gameData, processType, citizen.getLocation(), targetId, completedWorkPoints);
+        updateTargetService.updateTarget(syncCache, gameData, processType, targetId, completedWorkPoints);
 
         return completedWorkPoints;
     }

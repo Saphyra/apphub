@@ -1,16 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,14 +35,19 @@ class CitizenUpdateServiceTest {
     private static final Integer NEXT_LEVEL = 235;
     private static final Integer EXPERIENCE_PER_LEVEL = 2356;
     private static final Integer LEVEL = 567;
-    private static final UUID LOCATION = UUID.randomUUID();
-    private static final UUID OWNER_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameProperties gameProperties;
 
     @Mock
     private CitizenEfficiencyCalculator citizenEfficiencyCalculator;
+
+    @Mock
+    private CitizenConverter citizenConverter;
+
+    @Mock
+    private SkillConverter skillConverter;
 
     @InjectMocks
     private CitizenUpdateService underTest;
@@ -70,7 +77,10 @@ class CitizenUpdateServiceTest {
     private CitizenSkillProperties skillProperties;
 
     @Mock
-    private Planet planet;
+    private SkillModel skillModel;
+
+    @Mock
+    private CitizenModel citizenModel;
 
     @Test
     void updateCitizen() {
@@ -85,9 +95,9 @@ class CitizenUpdateServiceTest {
         given(citizenProperties.getSkill()).willReturn(skillProperties);
         given(skillProperties.getExperiencePerLevel()).willReturn(EXPERIENCE_PER_LEVEL);
         given(skill.getLevel()).willReturn(LEVEL);
-        given(citizen.getLocation()).willReturn(LOCATION);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
+        given(skillConverter.toModel(GAME_ID, skill)).willReturn(skillModel);
 
         underTest.updateCitizen(syncCache, gameData, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
 
@@ -95,6 +105,7 @@ class CitizenUpdateServiceTest {
         verify(skill).increaseLevel();
         verify(skill).setExperience(EXPERIENCE - NEXT_LEVEL);
         verify(skill).setNextLevel(LEVEL * EXPERIENCE_PER_LEVEL);
-        verify(syncCache).citizenExperienceEarned(OWNER_ID, citizen, skill);
+        then(syncCache).should().saveGameItem(citizenModel);
+        then(syncCache).should().saveGameItem(skillModel);
     }
 }

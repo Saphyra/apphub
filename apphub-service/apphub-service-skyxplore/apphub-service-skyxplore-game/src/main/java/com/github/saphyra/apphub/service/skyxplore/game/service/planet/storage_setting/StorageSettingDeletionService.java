@@ -29,7 +29,7 @@ public class StorageSettingDeletionService {
     public List<StorageSettingApiModel> deleteStorageSetting(UUID userId, UUID storageSettingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         StorageSetting storageSetting = game.getData()
             .getStorageSettings()

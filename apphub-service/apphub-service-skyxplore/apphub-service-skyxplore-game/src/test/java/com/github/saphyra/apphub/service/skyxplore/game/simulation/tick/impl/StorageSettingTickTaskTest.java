@@ -7,8 +7,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDa
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
@@ -44,7 +42,6 @@ class StorageSettingTickTaskTest {
     private static final Integer PRODUCED_AMOUNT = 34;
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final Integer FREE_STORAGE = 23;
-    private static final UUID OWNER_ID = UUID.randomUUID();
     private static final Integer MAX_BATCH_SIZE = FREE_STORAGE - 1;
 
     @Mock
@@ -85,9 +82,6 @@ class StorageSettingTickTaskTest {
 
     @Mock
     private ProcessModel processModel;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private ResourceData resourceData;
@@ -169,8 +163,6 @@ class StorageSettingTickTaskTest {
         given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(FREE_STORAGE);
         given(storageSettingProcessFactory.create(gameData, storageSetting, MAX_BATCH_SIZE)).willReturn(storageSettingProcess);
         given(storageSettingProcess.toModel()).willReturn(processModel);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(MAX_BATCH_SIZE);
 
@@ -178,6 +170,5 @@ class StorageSettingTickTaskTest {
 
         verify(processes).add(storageSettingProcess);
         verify(syncCache).saveGameItem(processModel);
-        verify(syncCache).storageModified(OWNER_ID, LOCATION);
     }
 }

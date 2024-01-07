@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cach
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,22 +15,12 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class SyncCacheTest {
     private static final UUID GAME_ITEM_ID = UUID.randomUUID();
-    private static final UUID RECIPIENT = UUID.randomUUID();
-
-    @Mock
-    private MessageCache messageCache;
 
     @Mock
     private GameItemCache gameItemCache;
 
-    @Mock
-    private SyncCacheContext context;
-
     @InjectMocks
     private SyncCache underTest;
-
-    @Mock
-    private Game game;
 
     @Mock
     private GameItem gameItem;
@@ -55,6 +44,5 @@ public class SyncCacheTest {
         underTest.process();
 
         verify(gameItemCache).process();
-        verify(messageCache).process(game);
     }
 }

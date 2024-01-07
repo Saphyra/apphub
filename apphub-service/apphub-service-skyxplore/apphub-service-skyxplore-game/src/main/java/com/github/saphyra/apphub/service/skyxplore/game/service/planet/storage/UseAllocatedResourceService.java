@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,13 +17,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UseAllocatedResourceService {
-    public void resolveAllocations(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference) {
+    private final StoredResourceConverter storedResourceConverter;
+    private final AllocatedResourceConverter allocatedResourceConverter;
+
+    public void resolveAllocations(SyncCache syncCache, GameData gameData, UUID location, UUID externalReference) {
         gameData.getReservedStorages()
             .getByExternalReference(externalReference)
-            .forEach(rs -> resolveAllocation(syncCache, gameData, location, ownerId, externalReference, rs));
+            .forEach(rs -> resolveAllocation(syncCache, gameData, location, externalReference, rs));
     }
 
-    private void resolveAllocation(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference, ReservedStorage reservedStorage) {
+    private void resolveAllocation(SyncCache syncCache, GameData gameData, UUID location, UUID externalReference, ReservedStorage reservedStorage) {
         log.info("Resolving allocation for {}", reservedStorage);
 
         AllocatedResource allocatedResource = gameData.getAllocatedResources()
@@ -33,6 +38,7 @@ public class UseAllocatedResourceService {
         log.info("{} left.", storedResource);
         allocatedResource.setAmount(0);
 
-        syncCache.allocatedResourceResolved(ownerId, location, allocatedResource, storedResource);
+        syncCache.saveGameItem(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
+        syncCache.saveGameItem(storedResourceConverter.toModel(gameData.getGameId(), storedResource));
     }
 }

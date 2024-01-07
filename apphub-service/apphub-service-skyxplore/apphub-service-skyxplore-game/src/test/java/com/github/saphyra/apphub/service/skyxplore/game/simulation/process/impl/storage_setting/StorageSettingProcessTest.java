@@ -4,12 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -41,7 +38,6 @@ class StorageSettingProcessTest {
     private static final Integer AMOUNT = 234;
     private static final Integer PLANET_PRIORITY = 342;
     private static final Integer STORAGE_SETTING_PRIORITY = 34;
-    private static final UUID OWNER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -81,9 +77,6 @@ class StorageSettingProcessTest {
 
     @Mock
     private Process process;
-
-    @Mock
-    private Planet planet;
 
     @BeforeEach
     void setUp() {
@@ -145,8 +138,6 @@ class StorageSettingProcessTest {
     void cleanup() {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
 
         underTest.cleanup(syncCache);
@@ -154,8 +145,7 @@ class StorageSettingProcessTest {
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
         verify(process).cleanup(syncCache);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, OWNER_ID, PROCESS_ID);
-        verify(syncCache).storageModified(OWNER_ID, LOCATION);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PROCESS_ID);
         verify(syncCache).saveGameItem(underTest.toModel());
     }
 

@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class AllocationRemovalService {
-    public void removeAllocationsAndReservations(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference) {
+    public void removeAllocationsAndReservations(SyncCache syncCache, GameData gameData, UUID externalReference) {
         log.info("Removing allocatedResources and ReservedStorages for externalReference {}", externalReference);
         AllocatedResources allocatedResources = gameData.getAllocatedResources();
         allocatedResources.getByExternalReference(externalReference)
@@ -30,7 +30,5 @@ public class AllocationRemovalService {
             .peek(reservedStorage -> log.info("Deleting {}", reservedStorage))
             .peek(rs -> syncCache.deleteGameItem(rs.getReservedStorageId(), GameItemType.RESERVED_STORAGE))
             .forEach(reservedStorages::remove);
-
-        syncCache.storageModified(ownerId, location);
     }
 }

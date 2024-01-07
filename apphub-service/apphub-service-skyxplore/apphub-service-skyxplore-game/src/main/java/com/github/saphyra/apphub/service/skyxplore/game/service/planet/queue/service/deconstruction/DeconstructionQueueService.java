@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
@@ -27,6 +28,7 @@ public class DeconstructionQueueService implements QueueService {
     private final CancelDeconstructionService cancelDeconstructionService;
     private final PriorityValidator priorityValidator;
     private final SyncCacheFactory syncCacheFactory;
+    private final DeconstructionConverter deconstructionConverter;
 
     @Override
     public List<QueueItem> getQueue(GameData gameData, UUID location) {
@@ -51,19 +53,19 @@ public class DeconstructionQueueService implements QueueService {
             .getDeconstructions()
             .findByDeconstructionId(deconstructionId);
 
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         game.getEventLoop()
             .processWithWait(() -> {
                 deconstruction.setPriority(priority);
 
-                syncCache.deconstructionModified(userId, planetId, deconstruction);
+                syncCache.saveGameItem(deconstructionConverter.toModel(game.getGameId(), deconstruction));
             }, syncCache)
             .getOrThrow();
     }
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID deconstructionId) {
-        cancelDeconstructionService.cancelDeconstructionOfDeconstruction(userId, planetId, deconstructionId);
+        cancelDeconstructionService.cancelDeconstructionOfDeconstruction(userId, deconstructionId);
     }
 }

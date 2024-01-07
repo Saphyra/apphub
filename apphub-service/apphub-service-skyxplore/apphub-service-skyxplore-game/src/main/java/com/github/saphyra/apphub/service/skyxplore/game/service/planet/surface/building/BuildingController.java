@@ -39,7 +39,7 @@ public class BuildingController implements SkyXploreGameBuildingController {
     @Override
     public void cancelConstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel construction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        cancelConstructionService.cancelConstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        cancelConstructionService.cancelConstructionOfBuilding(accessTokenHeader.getUserId(), buildingId);
     }
 
     @Override
@@ -51,6 +51,6 @@ public class BuildingController implements SkyXploreGameBuildingController {
     @Override
     public void cancelDeconstruction(UUID planetId, UUID buildingId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel deconstruction of building {} on planet {}", accessTokenHeader.getUserId(), buildingId, planetId);
-        cancelDeconstructionService.cancelDeconstructionOfBuilding(accessTokenHeader.getUserId(), planetId, buildingId);
+        cancelDeconstructionService.cancelDeconstructionOfBuilding(accessTokenHeader.getUserId(), buildingId);
     }
 }

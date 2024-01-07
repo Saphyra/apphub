@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -81,10 +79,5 @@ class StorageSettingTickTask implements TickTask {
             .add(process);
 
         syncCache.saveGameItem(process.toModel());
-
-        UUID ownerId = gameData.getPlanets()
-            .get(storageSetting.getLocation())
-            .getOwner();
-        syncCache.storageModified(ownerId, storageSetting.getLocation());
     }
 }

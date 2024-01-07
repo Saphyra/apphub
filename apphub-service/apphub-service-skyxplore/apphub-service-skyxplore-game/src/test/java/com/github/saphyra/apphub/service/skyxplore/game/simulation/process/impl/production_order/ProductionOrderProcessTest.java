@@ -4,12 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
@@ -42,7 +39,6 @@ class ProductionOrderProcessTest {
     private static final Integer PRIORITY = 342;
     private static final String RESOURCE_DATA_ID = "resource-data-id";
     private static final String PRODUCER_DATA_ID = "producer-data-id";
-    private static final UUID OWNER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -76,9 +72,6 @@ class ProductionOrderProcessTest {
 
     @Mock
     private ReservedStorage reservedStorage;
-
-    @Mock
-    private Planet planet;
 
     @BeforeEach
     void setUp() {
@@ -188,8 +181,6 @@ class ProductionOrderProcessTest {
 
     @Test
     void cleanup() {
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
@@ -199,7 +190,7 @@ class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, OWNER_ID, PROCESS_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PROCESS_ID);
         verify(process).cleanup(syncCache);
         verify(syncCache).saveGameItem(underTest.toModel());
     }

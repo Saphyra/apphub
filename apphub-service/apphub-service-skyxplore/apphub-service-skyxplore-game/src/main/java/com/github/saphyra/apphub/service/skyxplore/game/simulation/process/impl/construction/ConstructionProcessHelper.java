@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -24,18 +24,16 @@ class ConstructionProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
     private final ProductionOrderService productionOrderService;
+    private final BuildingConverter buildingConverter;
 
     void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
 
         useAllocatedResourceService.resolveAllocations(
             syncCache,
             gameData,
             construction.getLocation(),
-            planet.getOwner(),
             constructionId
         );
 
@@ -56,9 +54,6 @@ class ConstructionProcessHelper {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
-
         Building building = gameData.getBuildings()
             .findByBuildingId(construction.getExternalReference());
 
@@ -68,11 +63,10 @@ class ConstructionProcessHelper {
         gameData.getConstructions()
             .remove(construction);
 
-        Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
+        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, constructionId);
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, construction.getLocation(), planet.getOwner(), constructionId);
-        syncCache.constructionFinished(planet.getOwner(), construction.getLocation(), construction, building, surface);
+        syncCache.deleteGameItem(constructionId, GameItemType.CONSTRUCTION);
+        syncCache.saveGameItem(buildingConverter.toModel(gameData.getGameId(), building));
     }
 
     public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {

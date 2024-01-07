@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -36,19 +36,13 @@ class DeconstructionProcessHelper {
         Building building = gameData.getBuildings()
             .findByBuildingId(deconstruction.getExternalReference());
 
-        Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
-
         gameData.getBuildings()
             .remove(building);
 
-        UUID ownerId = gameData.getPlanets()
-            .get(deconstruction.getLocation())
-            .getOwner();
-
         gameData.getDeconstructions()
-                .remove(deconstruction);
+            .remove(deconstruction);
 
-        syncCache.deconstructionFinished(ownerId, deconstruction.getLocation(), deconstruction, building, surface);
+        syncCache.deleteGameItem(deconstructionId, GameItemType.DECONSTRUCTION);
+        syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
     }
 }

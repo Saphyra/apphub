@@ -95,7 +95,7 @@ public class StorageSettingDeletionServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
         //noinspection unchecked

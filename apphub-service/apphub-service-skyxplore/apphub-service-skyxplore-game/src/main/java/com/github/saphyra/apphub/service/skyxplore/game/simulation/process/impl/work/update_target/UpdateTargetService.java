@@ -18,11 +18,11 @@ public class UpdateTargetService {
     private final TerraformationUpdateService terraformationUpdateService;
     private final DeconstructionUpdateService deconstructionUpdateService;
 
-    public void updateTarget(SyncCache syncCache, GameData gameData, WorkProcessType processType, UUID location, UUID targetId, int completedWorkPoints) {
+    public void updateTarget(SyncCache syncCache, GameData gameData, WorkProcessType processType, UUID targetId, int completedWorkPoints) {
         switch (processType) {
-            case CONSTRUCTION -> constructionUpdateService.updateConstruction(syncCache, gameData, location, targetId, completedWorkPoints);
-            case DECONSTRUCTION -> deconstructionUpdateService.updateDeconstruction(syncCache, gameData, location, targetId, completedWorkPoints);
-            case TERRAFORMATION -> terraformationUpdateService.updateTerraformation(syncCache, gameData, location, targetId, completedWorkPoints);
+            case CONSTRUCTION -> constructionUpdateService.updateConstruction(syncCache, gameData, targetId, completedWorkPoints);
+            case DECONSTRUCTION -> deconstructionUpdateService.updateDeconstruction(syncCache, gameData, targetId, completedWorkPoints);
+            case TERRAFORMATION -> terraformationUpdateService.updateTerraformation(syncCache, gameData, targetId, completedWorkPoints);
             case OTHER -> log.info("No status update needed.");
             default -> throw ExceptionFactory.reportedException("No handler for requestWorkProcessType " + processType);
         }

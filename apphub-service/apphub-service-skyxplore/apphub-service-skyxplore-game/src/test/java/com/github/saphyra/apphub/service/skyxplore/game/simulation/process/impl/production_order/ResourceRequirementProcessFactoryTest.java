@@ -67,10 +67,10 @@ class ResourceRequirementProcessFactoryTest {
         given(productionBuildingData.getGives()).willReturn(Map.of(RESOURCE_DATA_ID, productionData));
         given(productionData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(REQUIRED_RESOURCE_DATA_ID, REQUIRED_AMOUNT));
-        given(productionRequirementsAllocationService.allocate(syncCache, gameData, LOCATION, OWNER_ID, PROCESS_ID, REQUIRED_RESOURCE_DATA_ID, AMOUNT * REQUIRED_AMOUNT)).willReturn(RESERVED_STORAGE_ID);
+        given(productionRequirementsAllocationService.allocate(syncCache, gameData, LOCATION, PROCESS_ID, REQUIRED_RESOURCE_DATA_ID, AMOUNT * REQUIRED_AMOUNT)).willReturn(RESERVED_STORAGE_ID);
         given(productionOrderProcessFactory.create(gameData, PROCESS_ID, LOCATION, RESERVED_STORAGE_ID)).willReturn(List.of(productionOrderProcess));
 
-        List<ProductionOrderProcess> result = underTest.createResourceRequirementProcesses(syncCache, gameData, PROCESS_ID, LOCATION, OWNER_ID, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID);
+        List<ProductionOrderProcess> result = underTest.createResourceRequirementProcesses(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID);
 
         assertThat(result).containsExactly(productionOrderProcess);
     }

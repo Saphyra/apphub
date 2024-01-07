@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
@@ -15,19 +16,18 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +46,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +56,7 @@ public class TerraformationServiceTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 436;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
@@ -74,6 +76,9 @@ public class TerraformationServiceTest {
     @Mock
     private SyncCacheFactory syncCacheFactory;
 
+    @Mock
+    private ConstructionConverter constructionConverter;
+
     @InjectMocks
     private TerraformationService underTest;
 
@@ -82,9 +87,6 @@ public class TerraformationServiceTest {
 
     @Mock
     private GameData gameData;
-
-    @Mock
-    private Planet planet;
 
     @Mock
     private Surface surface;
@@ -124,6 +126,12 @@ public class TerraformationServiceTest {
 
     @Mock
     private SyncCache syncCache;
+
+    @Mock
+    private ProcessModel processModel;
+
+    @Mock
+    private ConstructionModel constructionModel;
 
     @Test
     public void invalidSurfaceType() {
@@ -216,9 +224,10 @@ public class TerraformationServiceTest {
         given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(terraformationProcess.toModel()).willReturn(processModel);
+        given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
 
         underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
@@ -227,9 +236,10 @@ public class TerraformationServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
-        verify(syncCache).terraformationCreated(USER_ID, PLANET_ID, terraformation, surface, terraformationProcess);
+        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(processes).add(terraformationProcess);
         verify(executionResult).getOrThrow();
+        then(syncCache).should().saveGameItem(processModel);
+        then(syncCache).should().saveGameItem(constructionModel);
     }
 }

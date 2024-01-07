@@ -32,7 +32,7 @@ public class StorageSettingEditionService {
 
         Game game = gameDao.findByUserIdValidated(userId);
 
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         return game.getEventLoop()
             .processWithResponse(() -> {

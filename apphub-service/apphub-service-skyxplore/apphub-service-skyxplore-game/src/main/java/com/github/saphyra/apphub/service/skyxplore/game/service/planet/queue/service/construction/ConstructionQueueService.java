@@ -32,11 +32,11 @@ class ConstructionQueueService implements QueueService {
 
     @Override
     public void setPriority(UUID userId, UUID planetId, UUID itemId, Integer priority) {
-        constructionQueueItemPriorityUpdateService.updatePriority(userId, planetId, itemId, priority);
+        constructionQueueItemPriorityUpdateService.updatePriority(userId, itemId, priority);
     }
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelConstructionService.cancelConstructionOfConstruction(userId, planetId, itemId);
+        cancelConstructionService.cancelConstructionOfConstruction(userId, itemId);
     }
 }

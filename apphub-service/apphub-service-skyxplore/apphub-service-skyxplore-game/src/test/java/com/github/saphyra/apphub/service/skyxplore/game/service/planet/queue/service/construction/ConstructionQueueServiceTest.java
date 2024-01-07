@@ -60,13 +60,13 @@ public class ConstructionQueueServiceTest {
     public void setPriority() {
         underTest.setPriority(USER_ID, LOCATION, ITEM_ID, PRIORITY);
 
-        verify(constructionQueueItemPriorityUpdateService).updatePriority(USER_ID, LOCATION, ITEM_ID, PRIORITY);
+        verify(constructionQueueItemPriorityUpdateService).updatePriority(USER_ID, ITEM_ID, PRIORITY);
     }
 
     @Test
     public void cancel() {
         underTest.cancel(USER_ID, LOCATION, ITEM_ID);
 
-        verify(cancelConstructionService).cancelConstructionOfConstruction(USER_ID, LOCATION, ITEM_ID);
+        verify(cancelConstructionService).cancelConstructionOfConstruction(USER_ID, ITEM_ID);
     }
 }

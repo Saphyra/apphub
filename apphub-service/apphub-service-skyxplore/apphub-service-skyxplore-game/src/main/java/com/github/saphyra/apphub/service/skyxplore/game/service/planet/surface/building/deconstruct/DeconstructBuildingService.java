@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
@@ -26,6 +26,7 @@ public class DeconstructBuildingService {
     private final DeconstructionProcessFactory deconstructionProcessFactory;
     private final SyncCacheFactory syncCacheFactory;
     private final DeconstructionPreconditions deconstructionPreconditions;
+    private final DeconstructionConverter deconstructionConverter;
 
     public void deconstructBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -40,11 +41,7 @@ public class DeconstructBuildingService {
 
         deconstructionPreconditions.checkIfBuildingCanBeDeconstructed(game.getData(), building);
 
-        Surface surface = game.getData()
-            .getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
-
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
 
@@ -56,7 +53,8 @@ public class DeconstructBuildingService {
 
                 DeconstructionProcess process = deconstructionProcessFactory.create(game.getData(), planetId, deconstruction.getDeconstructionId());
 
-                syncCache.deconstructionCreated(userId, planetId, deconstruction, surface, process);
+                syncCache.saveGameItem(process.toModel());
+                syncCache.saveGameItem(deconstructionConverter.toModel(game.getGameId(), deconstruction));
 
                 game.getData()
                     .getProcesses()

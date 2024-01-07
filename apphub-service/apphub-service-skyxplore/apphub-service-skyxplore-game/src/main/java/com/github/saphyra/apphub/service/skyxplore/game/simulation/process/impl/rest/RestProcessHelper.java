@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
@@ -22,6 +23,7 @@ class RestProcessHelper {
     private final GameProperties gameProperties;
     private final CitizenAllocationFactory citizenAllocationFactory;
     private final CitizenAllocationConverter citizenAllocationConverter;
+    private final CitizenConverter citizenConverter;
 
     double getMoraleBasedMultiplier(GameData gameData, UUID citizenId) {
         CitizenMoraleProperties moraleProperties = gameProperties.getCitizen()
@@ -65,6 +67,6 @@ class RestProcessHelper {
 
         citizen.increaseMorale(moraleRegen);
 
-        syncCache.citizenModified(citizen);
+        syncCache.saveGameItem(citizenConverter.toModel(gameData.getGameId(), citizen));
     }
 }

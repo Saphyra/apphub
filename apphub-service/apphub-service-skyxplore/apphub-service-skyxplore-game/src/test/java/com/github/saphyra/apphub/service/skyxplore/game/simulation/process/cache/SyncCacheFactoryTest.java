@@ -15,11 +15,6 @@ public class SyncCacheFactoryTest {
     @Mock
     private GameItemCacheFactory gameItemCacheFactory;
 
-    @Mock
-    private MessageCacheFactory messageCacheFactory;
-
-    @Mock
-    private SyncCacheContext syncCacheContext;
 
     @InjectMocks
     private SyncCacheFactory underTest;
@@ -30,14 +25,11 @@ public class SyncCacheFactoryTest {
     @Mock
     private GameItemCache gameItemCache;
 
-    @Mock
-    private MessageCache messageCache;
 
     @Test
     public void create() {
         given(gameItemCacheFactory.create()).willReturn(gameItemCache);
-        given(messageCacheFactory.create()).willReturn(messageCache);
 
-        assertThat(underTest.create(game)).isNotNull();
+        assertThat(underTest.create()).isNotNull();
     }
 }

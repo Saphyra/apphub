@@ -20,7 +20,7 @@ class ResourceRequirementProcessFactory {
     private final ProductionRequirementsAllocationService productionRequirementsAllocationService;
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
-    List<ProductionOrderProcess> createResourceRequirementProcesses(SyncCache syncCache, GameData gameData, UUID processId, UUID location, UUID ownerId, String dataId, int amount, String producerBuildingDataId) {
+    List<ProductionOrderProcess> createResourceRequirementProcesses(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
         return productionBuildingService.get(producerBuildingDataId)
             .getGives()
             .get(dataId)
@@ -30,7 +30,7 @@ class ResourceRequirementProcessFactory {
             .stream()
             .map(entry -> new BiWrapper<>(entry.getKey(), entry.getValue() * amount))
             .peek(biWrapper -> log.info("Required {} of {}", biWrapper.getEntity2(), biWrapper.getEntity1()))
-            .map(entry -> productionRequirementsAllocationService.allocate(syncCache, gameData, location, ownerId, processId, entry.getEntity1(), entry.getEntity2()))
+            .map(entry -> productionRequirementsAllocationService.allocate(syncCache, gameData, location, processId, entry.getEntity1(), entry.getEntity2()))
             .flatMap(reservedStorageId -> productionOrderProcessFactory.create(gameData, processId, location, reservedStorageId).stream())
             .collect(Collectors.toList());
     }

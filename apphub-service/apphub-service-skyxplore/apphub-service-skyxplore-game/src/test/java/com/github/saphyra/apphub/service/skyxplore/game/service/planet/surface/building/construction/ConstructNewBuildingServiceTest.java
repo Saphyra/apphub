@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -12,22 +14,22 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +48,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,6 +60,7 @@ public class ConstructNewBuildingServiceTest {
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 2314;
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -78,6 +82,9 @@ public class ConstructNewBuildingServiceTest {
 
     @Mock
     private SyncCacheFactory syncCacheFactory;
+
+    @Mock
+    private ConstructionConverter constructionConverter;
 
     @InjectMocks
     private ConstructNewBuildingService underTest;
@@ -125,10 +132,13 @@ public class ConstructNewBuildingServiceTest {
     private Buildings buildings;
 
     @Mock
-    private Planet planet;
+    private SyncCache syncCache;
 
     @Mock
-    private SyncCache syncCache;
+    private ConstructionModel constructionModel;
+
+    @Mock
+    private ProcessModel processModel;
 
     @Test
     public void invalidDataId() {
@@ -187,7 +197,7 @@ public class ConstructNewBuildingServiceTest {
     }
 
     @Test
-    public void constructNewBuilding() throws Exception {
+    public void constructNewBuilding() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.of(buildingData));
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -212,9 +222,10 @@ public class ConstructNewBuildingServiceTest {
         given(constructionProcessFactory.create(gameData, PLANET_ID, CONSTRUCTION_ID)).willReturn(constructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
 
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(PLANET_ID, planet, new Planets()));
-        given(planet.getOwner()).willReturn(USER_ID);
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
+        given(constructionProcess.toModel()).willReturn(processModel);
 
         underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
 
@@ -225,9 +236,10 @@ public class ConstructNewBuildingServiceTest {
 
         verify(constructions).add(construction);
         verify(buildings).add(building);
-        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(processes).add(constructionProcess);
-        verify(syncCache).constructionCreated(USER_ID, PLANET_ID, construction, surface, constructionProcess);
+        then(syncCache).should().saveGameItem(constructionModel);
+        then(syncCache).should().saveGameItem(processModel);
         verify(executionResult).getOrThrow();
     }
 }

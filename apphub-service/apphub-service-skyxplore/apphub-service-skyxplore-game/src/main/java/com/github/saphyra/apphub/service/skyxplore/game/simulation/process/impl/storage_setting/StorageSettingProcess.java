@@ -99,14 +99,8 @@ public class StorageSettingProcess implements Process {
             .getByExternalReference(processId)
             .forEach(process -> process.cleanup(syncCache));
 
-        UUID ownerId = gameData.getPlanets()
-            .get(location)
-            .getOwner();
-
         applicationContextProxy.getBean(AllocationRemovalService.class)
-            .removeAllocationsAndReservations(syncCache, gameData, location, ownerId, processId);
-
-        syncCache.storageModified(ownerId, location);
+            .removeAllocationsAndReservations(syncCache, gameData, processId);
 
         status = ProcessStatus.READY_TO_DELETE;
 

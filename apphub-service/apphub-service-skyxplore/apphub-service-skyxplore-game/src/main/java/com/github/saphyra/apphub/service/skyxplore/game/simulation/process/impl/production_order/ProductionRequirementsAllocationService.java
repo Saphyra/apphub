@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AvailableResourceCounter;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -20,11 +22,13 @@ class ProductionRequirementsAllocationService {
     private final AvailableResourceCounter availableResourceCounter;
     private final AllocatedResourceFactory allocatedResourceFactory;
     private final ReservedStorageFactory reservedStorageFactory;
+    private final AllocatedResourceConverter allocatedResourceConverter;
+    private final ReservedStorageConverter reservedStorageConverter;
 
     /**
      * @return reservedStorageId
      */
-    UUID allocate(SyncCache syncCache, GameData gameData, UUID location, UUID ownerId, UUID externalReference, String dataId, Integer amount) {
+    UUID allocate(SyncCache syncCache, GameData gameData, UUID location, UUID externalReference, String dataId, Integer amount) {
         log.info("Allocating {} of {}", amount, dataId);
         int availableAmount = availableResourceCounter.countAvailableAmount(gameData, location, dataId);
 
@@ -44,7 +48,8 @@ class ProductionRequirementsAllocationService {
         gameData.getReservedStorages()
             .add(reservedStorage);
 
-        syncCache.resourceAllocated(ownerId, location, allocatedResource, reservedStorage);
+        syncCache.saveGameItem(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
+        syncCache.saveGameItem(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
 
         return reservedStorage.getReservedStorageId();
     }

@@ -108,7 +108,7 @@ class TickSchedulerTest {
             .willReturn(START_TIME_2)
             .willReturn(END_TIME_2);
 
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(syncCacheFactory.create()).willReturn(syncCache);
 
         underTest.run();
 

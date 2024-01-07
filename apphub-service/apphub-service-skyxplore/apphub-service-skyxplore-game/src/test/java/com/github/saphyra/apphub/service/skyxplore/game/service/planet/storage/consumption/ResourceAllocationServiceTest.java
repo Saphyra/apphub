@@ -1,13 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -26,6 +30,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +52,12 @@ public class ResourceAllocationServiceTest {
 
     @Mock
     private RequiredEmptyStorageCalculator requiredEmptyStorageCalculator;
+
+    @Mock
+    private AllocatedResourceConverter allocatedResourceConverter;
+
+    @Mock
+    private ReservedStorageConverter reservedStorageConverter;
 
     @InjectMocks
     private ResourceAllocationService underTest;
@@ -75,6 +86,12 @@ public class ResourceAllocationServiceTest {
     @Mock
     private SyncCache syncCache;
 
+    @Mock
+    private AllocatedResourceModel allocatedResourceModel;
+
+    @Mock
+    private ReservedStorageModel reservedStorageModel;
+
     @BeforeEach
     public void setUp() {
         given(consumptionCalculator.calculate(gameData, PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, REQUIRED_AMOUNT)).willReturn(consumptionResult);
@@ -85,7 +102,7 @@ public class ResourceAllocationServiceTest {
     public void notEnoughStorage() {
         given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
 
-        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
+        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
 
         ExceptionValidator.validateNotLoggedException(
             ex,
@@ -109,10 +126,14 @@ public class ResourceAllocationServiceTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 
-        underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, USER_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
+        given(allocatedResourceConverter.toModel(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
+        given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
+
+        underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);
-        verify(syncCache).resourceAllocated(USER_ID, PLANET_ID, allocatedResource, reservedStorage);
+        then(syncCache).should().saveGameItem(reservedStorageModel);
+        then(syncCache).should().saveGameItem(allocatedResourceModel);
     }
 }

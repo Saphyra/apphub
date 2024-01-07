@@ -46,7 +46,7 @@ class TickScheduler implements Runnable {
                 .getCurrentTimeEpochMillis();
 
             SyncCache syncCache = context.getSyncCacheFactory()
-                .create(game);
+                .create();
 
             game.getEventLoop()
                 .process(

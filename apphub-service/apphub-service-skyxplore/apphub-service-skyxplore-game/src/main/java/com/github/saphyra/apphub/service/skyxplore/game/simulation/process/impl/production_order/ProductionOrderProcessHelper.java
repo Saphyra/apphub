@@ -4,7 +4,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -27,6 +29,8 @@ class ProductionOrderProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final StoredResourceFactory storedResourceFactory;
     private final AllocatedResourceConverter allocatedResourceConverter;
+    private final StoredResourceConverter storedResourceConverter;
+    private final ReservedStorageConverter reservedStorageConverter;
 
     String findProductionBuilding(GameData gameData, UUID location, String dataId) {
         return producerBuildingFinderService.findProducerBuildingDataId(gameData, location, dataId)
@@ -34,11 +38,7 @@ class ProductionOrderProcessHelper {
     }
 
     void processResourceRequirements(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
-        UUID ownerId = gameData.getPlanets()
-            .get(location)
-            .getOwner();
-
-        resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, gameData, processId, location, ownerId, dataId, amount, producerBuildingDataId)
+        resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, gameData, processId, location, dataId, amount, producerBuildingDataId)
             .forEach(productionOrderProcess -> {
                 gameData.getProcesses()
                     .add(productionOrderProcess);
@@ -52,11 +52,7 @@ class ProductionOrderProcessHelper {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findByReservedStorageIdValidated(reservedStorageId);
 
-        UUID ownerId = gameData.getPlanets()
-            .get(reservedStorage.getLocation())
-            .getOwner();
-
-        useAllocatedResourceService.resolveAllocations(syncCache, gameData, reservedStorage.getLocation(), ownerId, processId);
+        useAllocatedResourceService.resolveAllocations(syncCache, gameData, reservedStorage.getLocation(), processId);
 
         workProcessFactory.createForProduction(gameData, processId, reservedStorage.getLocation(), producerBuildingDataId, reservedStorage.getDataId(), reservedStorage.getAmount())
             .forEach(requestWorkProcess -> {
@@ -86,10 +82,7 @@ class ProductionOrderProcessHelper {
         storedResource.increaseAmount(amount);
         reservedStorage.decreaseAmount(amount);
 
-        UUID ownerId = gameData.getPlanets()
-            .get(location)
-            .getOwner();
-
-        syncCache.resourceStored(ownerId, location, storedResource, reservedStorage);
+        syncCache.saveGameItem(storedResourceConverter.toModel(gameData.getGameId(), storedResource));
+        syncCache.saveGameItem(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
     }
 }

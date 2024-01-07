@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
@@ -24,18 +25,16 @@ class TerraformationProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
     private final ProductionOrderService productionOrderService;
+    private final SurfaceConverter surfaceConverter;
 
     void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID terraformationId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(terraformationId);
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
 
         useAllocatedResourceService.resolveAllocations(
             syncCache,
             gameData,
             construction.getLocation(),
-            planet.getOwner(),
             terraformationId
         );
 
@@ -57,10 +56,7 @@ class TerraformationProcessHelper {
         Construction terraformation = gameData.getConstructions()
             .findByConstructionIdValidated(terraformationId);
 
-        Planet planet = gameData.getPlanets()
-            .get(terraformation.getLocation());
-
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, terraformation.getLocation(), planet.getOwner(), terraformationId);
+        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, terraformationId);
 
         Surface surface = gameData.getSurfaces()
             .findBySurfaceId(terraformation.getExternalReference());
@@ -72,7 +68,8 @@ class TerraformationProcessHelper {
         gameData.getConstructions()
             .remove(terraformation);
 
-        syncCache.terraformationFinished(planet.getOwner(), terraformation.getLocation(), terraformation, surface);
+        syncCache.saveGameItem(surfaceConverter.toModel(gameData.getGameId(), surface));
+        syncCache.deleteGameItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
     }
 
     public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID terraformationId) {

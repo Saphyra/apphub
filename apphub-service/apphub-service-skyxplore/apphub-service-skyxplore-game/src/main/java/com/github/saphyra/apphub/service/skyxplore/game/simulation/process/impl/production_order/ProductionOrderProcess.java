@@ -123,12 +123,8 @@ public class ProductionOrderProcess implements Process {
     public void cleanup(SyncCache syncCache) {
         log.info("Cleaning up {}", this);
 
-        UUID ownerId = gameData.getPlanets()
-            .get(location)
-            .getOwner();
-
         applicationContextProxy.getBean(AllocationRemovalService.class)
-            .removeAllocationsAndReservations(syncCache, gameData, location, ownerId, processId);
+            .removeAllocationsAndReservations(syncCache, gameData, processId);
 
         gameData.getProcesses()
             .getByExternalReference(processId)

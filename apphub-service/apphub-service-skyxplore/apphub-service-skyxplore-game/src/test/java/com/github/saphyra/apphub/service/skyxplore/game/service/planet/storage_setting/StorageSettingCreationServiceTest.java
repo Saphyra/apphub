@@ -101,7 +101,7 @@ public class StorageSettingCreationServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
 
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         //noinspection unchecked
         given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);

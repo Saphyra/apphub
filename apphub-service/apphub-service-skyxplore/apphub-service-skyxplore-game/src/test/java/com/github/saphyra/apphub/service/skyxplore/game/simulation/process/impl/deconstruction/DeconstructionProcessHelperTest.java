@@ -1,17 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
@@ -34,8 +30,6 @@ class DeconstructionProcessHelperTest {
     private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
-    private static final UUID SURFACE_ID = UUID.randomUUID();
-    private static final UUID OWNER_ID = UUID.randomUUID();
 
     @Mock
     private WorkProcessFactory workProcessFactory;
@@ -70,15 +64,6 @@ class DeconstructionProcessHelperTest {
     @Mock
     private Building building;
 
-    @Mock
-    private Surfaces surfaces;
-
-    @Mock
-    private Surface surface;
-
-    @Mock
-    private Planet planet;
-
     @Test
     void startWork() {
         given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(workProcess));
@@ -92,23 +77,19 @@ class DeconstructionProcessHelperTest {
     }
 
     @Test
-    void finishDeconstruction(){
+    void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
-        given(building.getSurfaceId()).willReturn(SURFACE_ID);
-        given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(deconstruction.getLocation()).willReturn(LOCATION);
-        given(planet.getOwner()).willReturn(OWNER_ID);
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
 
         underTest.finishDeconstruction(syncCache, gameData, DECONSTRUCTION_ID);
 
         verify(buildings).remove(building);
         then(deconstructions).should().remove(deconstruction);
-        verify(syncCache).deconstructionFinished(OWNER_ID, LOCATION, deconstruction, building, surface);
+        then(syncCache).should().deleteGameItem(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(syncCache).should().deleteGameItem(BUILDING_ID, GameItemType.BUILDING);
     }
 }

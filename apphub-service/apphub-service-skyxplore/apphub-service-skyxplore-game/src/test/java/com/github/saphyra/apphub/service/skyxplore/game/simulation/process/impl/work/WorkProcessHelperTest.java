@@ -180,7 +180,6 @@ class WorkProcessHelperTest {
         given(gameData.getCitizens()).willReturn(citizens);
         given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
         given(citizenEfficiencyCalculator.calculateEfficiency(gameData, citizen, SkillType.AIMING)).willReturn(CITIZEN_EFFICIENCY);
-        given(citizen.getLocation()).willReturn(LOCATION);
 
         int result = underTest.work(syncCache, gameData, PROCESS_ID, SkillType.AIMING, WORK_POINTS_LEFT, WorkProcessType.CONSTRUCTION, TARGET_ID);
 
@@ -188,7 +187,7 @@ class WorkProcessHelperTest {
         assertThat(result).isEqualTo(completedWorkPoints);
 
         verify(citizenUpdateService).updateCitizen(syncCache, gameData, CITIZEN_ID, completedWorkPoints, SkillType.AIMING);
-        verify(updateTargetService).updateTarget(syncCache, gameData, WorkProcessType.CONSTRUCTION, LOCATION, TARGET_ID, completedWorkPoints);
+        verify(updateTargetService).updateTarget(syncCache, gameData, WorkProcessType.CONSTRUCTION, TARGET_ID, completedWorkPoints);
     }
 
     @Test

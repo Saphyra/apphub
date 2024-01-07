@@ -37,7 +37,7 @@ public class StorageSettingCreationService {
         StorageSetting storageSetting = storageSettingFactory.create(request, planetId);
         log.debug("StorageSetting created: {}", storageSetting);
 
-        SyncCache syncCache = syncCacheFactory.create(game);
+        SyncCache syncCache = syncCacheFactory.create();
 
         return game.getEventLoop()
             .processWithResponse(() -> {

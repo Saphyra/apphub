@@ -5,10 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class SkyXploreSurfaceActions {
-    public static boolean isDisplayed(WebDriver driver) {
-        return GamePage.terraformationWindow(driver).isDisplayed();
-    }
-
     public static void startTerraformation(WebDriver driver, String surfaceType) {
         driver.findElements(By.className("skyxplore-game-terraforming-possibility"))
             .stream()
