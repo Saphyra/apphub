@@ -257,6 +257,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES = "/api/skyxplore/data/{surfaceType}/terraforming-possibilities";
+    public static final String SKYXPLORE_DATA_RESOURCES = "/api/skyxplore/data/resources";
 
     public static final String SKYXPLORE_PLANET_GET_QUEUE = "/api/skyxplore/game/{planetId}/queue";
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";

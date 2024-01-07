@@ -3,7 +3,7 @@ import "./message_input.css";
 import InputField from "../../../../../common/component/input/InputField";
 import localizationData from "./message_input_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
-import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 
 const MessageInput = ({ sendMessage, currentChatRoom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

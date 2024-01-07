@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

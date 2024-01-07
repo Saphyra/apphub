@@ -42,5 +42,37 @@
     "plank": {
         "en": "Plank",
         "hu": "Deszka"
+    },
+    "steel": {
+        "en": "Steel",
+        "hu": "Acél"
+    },
+    "glass": {
+        "en": "Glass",
+        "hu": "Üveg"
+    },
+    "fuel": {
+        "en": "Fuel",
+        "hu": "Üzemanyag"
+    },
+    "food": {
+        "en": "Food",
+        "hu": "Étel"
+    },
+    "plastic": {
+        "en": "Plastic",
+        "hu": "Műanyag"
+    },
+    "oil": {
+        "en": "Oil",
+        "hu": "Olaj"
+    },
+    "silicon": {
+        "en": "Silicon",
+        "hu": "Szilikon"
+    },
+    "coal": {
+        "en": "Coal",
+        "hu": "Szén"
     }
 }

@@ -14,7 +14,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.Citizen;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Citizen;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;

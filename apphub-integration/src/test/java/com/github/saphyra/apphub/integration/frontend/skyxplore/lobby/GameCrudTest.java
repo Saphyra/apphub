@@ -12,7 +12,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayer;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;

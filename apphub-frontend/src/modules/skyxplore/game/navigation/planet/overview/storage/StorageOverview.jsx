@@ -5,8 +5,10 @@ import "./storage_overview.css";
 import StorageTypeOverview from "./type/StorageTypeOverview";
 import StorageType from "./StorageType";
 import Utils from "../../../../../../../common/js/Utils";
+import NavigationHistoryItem from "../../../NavigationHistoryItem";
+import PageName from "../../../PageName";
 
-const StorageOverview = ({ storage }) => {
+const StorageOverview = ({ storage, openPage, planetId }) => {
     if (!Utils.hasValue(storage)) {
         return null;
     }
@@ -36,11 +38,11 @@ const StorageOverview = ({ storage }) => {
             />
 
             <div
-                id="skyxplore-game-planet-overview-storage-settings"
+                id="skyxplore-game-planet-overview-open-storage-button"
                 className="button"
-            //TODO add onclick
+                onClick={() => openPage(new NavigationHistoryItem(PageName.STORAGE, planetId))}
             >
-                {localizationHandler.get("storage-settings")}
+                {localizationHandler.get("open-storage")}
             </div>
         </div>
     );

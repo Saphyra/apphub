@@ -5,9 +5,9 @@ import Messages from "./messages/Messages";
 import MessageInput from "./message_input/MessageInput";
 import ChatConstants from "./ChatConstants";
 import Utils from "../../../../common/js/Utils";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import MapStream from "../../../../common/js/collection/MapStream";
 import ChatRoomCreator from "./room_creator/ChatRoomCreator";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const CHAT_EVENTS = [
     WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,

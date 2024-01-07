@@ -6,12 +6,12 @@ import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import Citizen from "./citizen/Citizen";
 import "./population.css";
-import useConnectToWebSocket from "../../../../../common/js/ws/WebSocketFacade";
-import WebSocketEndpoint from "../../../../../common/js/ws/WebSocketEndpoint";
-import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
 import PopulationFiltering from "./filtering/PopulationFiltering";
 import { ByNameCitizenComparator } from "./filtering/sort/CitizenComparator";
 import Order from "./filtering/sort/Order";
+import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade";
+import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 
 const Population = ({ footer, closePage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

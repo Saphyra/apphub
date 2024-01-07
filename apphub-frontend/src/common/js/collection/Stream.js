@@ -132,6 +132,10 @@ const Stream = class {
         return new Optional(currentMin);
     }
 
+    noneMatch(predicate) {
+        return !this.anyMatch(predicate);
+    }
+
     peek(consumer) {
         this.forEach(consumer);
 

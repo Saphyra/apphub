@@ -5,6 +5,7 @@ const PageName = {
     UPGRADE_BUILDING: "upgrade-building",
     MODIFY_SURFACE: "modify-surface",
     POPULATION: "population",
+    STORAGE: "storage",
 }
 
 export default PageName;

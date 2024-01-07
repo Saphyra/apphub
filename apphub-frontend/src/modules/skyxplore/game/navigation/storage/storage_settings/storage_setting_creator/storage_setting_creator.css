@@ -1,0 +1,25 @@
+#skyxplore-game-storage-setting-creator {
+    border-right: 1px solid white;
+}
+
+#skyxplore-game-storage-setting-creator-title {
+    font-size: 20px;
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid white;
+}
+
+#skyxplore-game-storage-setting-creator-content {
+    text-align: center;
+    padding: 0 10px;
+}
+
+#skyxplore-game-storage-setting-creator-content label {
+    font-size: 20px;
+    display: block;
+    margin: 10px auto;
+}
+
+#skyxplore-game-storage-setting-creator-amount{
+    width: 75px;
+}

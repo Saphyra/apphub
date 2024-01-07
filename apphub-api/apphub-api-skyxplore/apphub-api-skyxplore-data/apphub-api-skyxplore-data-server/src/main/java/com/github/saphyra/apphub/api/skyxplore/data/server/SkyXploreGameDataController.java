@@ -25,4 +25,7 @@ public interface SkyXploreGameDataController {
 
     @GetMapping(Endpoints.SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS)
     CitizenStatsAndSkills getStatsAndSkills();
+
+    @GetMapping(Endpoints.SKYXPLORE_DATA_RESOURCES)
+    List<String> getResourceDataIds();
 }

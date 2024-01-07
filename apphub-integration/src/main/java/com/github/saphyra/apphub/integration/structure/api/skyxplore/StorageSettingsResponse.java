@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.api.skyxplore;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
+@ForRemoval("skyxplore-react")
 public class StorageSettingsResponse {
     private List<StorageSettingModel> currentSettings;
     private List<String> availableResources;

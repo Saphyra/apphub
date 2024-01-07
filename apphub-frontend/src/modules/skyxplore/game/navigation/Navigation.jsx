@@ -10,6 +10,7 @@ import UpgradeBuilding from "./upgrade_building/UpgradeBuilding";
 import "./navigation.css";
 import ModifySurface from "./modify_surface/ModifySurface";
 import Population from "./population/Population";
+import Storage from "./storage/Storage";
 
 const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
@@ -77,6 +78,13 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 closePage={closePage}
                 footer={footer}
                 planetId={data}
+            />
+        case PageName.STORAGE:
+            return <Storage
+                closePage={closePage}
+                footer={footer}
+                planetId={data}
+                setConfirmationDialogData={setConfirmationDialogData}
             />
         default:
             Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

@@ -1,7 +1,8 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.SelectMenu;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

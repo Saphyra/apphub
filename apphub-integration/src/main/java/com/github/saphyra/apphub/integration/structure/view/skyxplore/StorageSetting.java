@@ -1,7 +1,7 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.RangeInput;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
@@ -16,7 +16,8 @@ public class StorageSetting {
     private final WebElement webElement;
 
     public String getResourceName() {
-        return webElement.findElement(By.cssSelector(":scope h3")).getText();
+        return webElement.findElement(By.className("skyxplore-game-storage-setting-title"))
+            .getText();
     }
 
     public int getAmount() {
@@ -24,7 +25,7 @@ public class StorageSetting {
     }
 
     private WebElement getAmountInput() {
-        return webElement.findElement(By.cssSelector(":scope label:first-child input"));
+        return webElement.findElement(By.className("skyxplore-game-storage-setting-amount"));
     }
 
     public int getPriority() {
@@ -32,7 +33,7 @@ public class StorageSetting {
     }
 
     private WebElement getPriorityInput() {
-        return webElement.findElement(By.cssSelector(":scope label:nth-child(2) input"));
+        return webElement.findElement(By.className("skyxplore-game-storage-setting-priority"));
     }
 
     public void setAmount(int amount) {
@@ -47,14 +48,19 @@ public class StorageSetting {
     public void saveChanges(WebDriver driver) {
         webElement.findElement(By.cssSelector(":scope button:first-child")).click();
 
-        NotificationUtil.verifySuccessNotification(driver, "Storage setting saved.");
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_GAME_STORAGE_SETTING_SAVED);
     }
 
     public void delete(WebDriver driver) {
-        webElement.findElement(By.cssSelector(":scope button:nth-child(2)")).click();
+        webElement.findElement(By.className("skyxplore-game-storage-setting-delete-button"))
+            .click();
 
-        CommonPageActions.confirmConfirmationDialog(driver, "delete-storage-setting-confirmation-dialog");
+        driver.findElement(By.id("skyxplore-game-storage-setting-delete-button"))
+                .click();
+    }
 
-        NotificationUtil.verifySuccessNotification(driver, "Storage setting deleted.");
+    public String getDataId() {
+        return webElement.getAttribute("id")
+            .replace("skyxplore-game-storage-settings-", "");
     }
 }

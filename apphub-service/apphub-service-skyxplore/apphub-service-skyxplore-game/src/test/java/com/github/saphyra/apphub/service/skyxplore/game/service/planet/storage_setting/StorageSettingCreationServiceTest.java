@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
@@ -21,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -50,10 +52,10 @@ public class StorageSettingCreationServiceTest {
     private StorageSettingConverter storageSettingConverter;
 
     @Mock
-    private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
+    private SyncCacheFactory syncCacheFactory;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
+    private StorageSettingsResponseQueryService storageSettingsResponseQueryService;
 
     @InjectMocks
     private StorageSettingCreationService underTest;
@@ -68,19 +70,16 @@ public class StorageSettingCreationServiceTest {
     private StorageSettingApiModel request;
 
     @Mock
-    private StorageSettingApiModel response;
-
-    @Mock
     private SyncCache syncCache;
 
     @Mock
     private EventLoop eventLoop;
 
     @Mock
-    private ExecutionResult<StorageSettingApiModel> executionResult;
+    private ExecutionResult<List<StorageSettingApiModel>> executionResult;
 
     @Mock
-    private Future<ExecutionResult<StorageSettingApiModel>> future;
+    private Future<ExecutionResult<List<StorageSettingApiModel>>> future;
 
     @Mock
     private StorageSettings storageSettings;
@@ -91,8 +90,11 @@ public class StorageSettingCreationServiceTest {
     @Mock
     private StorageSettingModel model;
 
+    @Mock
+    private StorageSettingApiModel apiModel;
+
     @Captor
-    private ArgumentCaptor<Callable<StorageSettingApiModel>> argumentCaptor;
+    private ArgumentCaptor<Callable<List<StorageSettingApiModel>>> argumentCaptor;
 
     @Test
     public void create() throws Exception {
@@ -104,15 +106,15 @@ public class StorageSettingCreationServiceTest {
         //noinspection unchecked
         given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);
         given(future.get()).willReturn(executionResult);
-        given(executionResult.getOrThrow()).willReturn(response);
+        given(executionResult.getOrThrow()).willReturn(List.of(apiModel));
 
         given(storageSettingFactory.create(request, PLANET_ID)).willReturn(storageSetting);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(game.getGameId()).willReturn(GAME_ID);
         given(storageSettingConverter.toModel(GAME_ID, storageSetting)).willReturn(model);
-        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(response);
+        given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(apiModel));
 
-        StorageSettingApiModel result = underTest.createStorageSetting(USER_ID, PLANET_ID, request);
+        List<StorageSettingApiModel> result = underTest.createStorageSetting(USER_ID, PLANET_ID, request);
 
         verify(storageSettingsModelValidator).validate(gameData, PLANET_ID, request);
 
@@ -122,6 +124,6 @@ public class StorageSettingCreationServiceTest {
 
         verify(storageSettings).add(storageSetting);
         verify(syncCache).saveGameItem(model);
-        assertThat(result).isEqualTo(response);
+        assertThat(result).containsExactly(apiModel);
     }
 }

@@ -4,7 +4,7 @@ import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import ChatRoom from "./room/ChatRoom";
 import Utils from "../../../../../common/js/Utils";
-import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 
 const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, lastEvent }) => {
     const [chatRooms, setChatRooms] = useState([]);

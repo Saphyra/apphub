@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;

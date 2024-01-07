@@ -20,7 +20,6 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocat
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingsResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
@@ -69,7 +68,11 @@ public class StorageSettingTest extends BackEndTest {
 
     private static StorageSettingModel createForCrud(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
-        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel);
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId1, planet.getPlanetId(), createModel)
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(createModel.getDataId()))
+            .findAny()
+            .orElseThrow(() -> new RuntimeException("StorageSetting is not created."));
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
         assertThat(created.getTargetAmount()).isEqualTo(createModel.getTargetAmount());
         assertThat(created.getPriority()).isEqualTo(createModel.getPriority());
@@ -80,7 +83,6 @@ public class StorageSettingTest extends BackEndTest {
     private static void get(Language language, UUID accessTokenId1, PlanetLocationResponse planet, StorageSettingModel createModel) {
         StorageSettingModel created;
         List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
-            .getCurrentSettings()
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .toList();
@@ -99,7 +101,6 @@ public class StorageSettingTest extends BackEndTest {
 
     private UUID edit_validation(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
-            .getCurrentSettings()
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .findFirst()
@@ -123,14 +124,17 @@ public class StorageSettingTest extends BackEndTest {
             .priority(2)
             .dataId(createModel.getDataId())
             .build();
-        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, editModel);
+        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(language, accessTokenId1, editModel)
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getStorageSettingId().equals(storageSettingId))
+            .findAny()
+            .orElseThrow(() -> new RuntimeException("Edited StorageSetting not found."));
         assertThat(edited.getDataId()).isEqualTo(editModel.getDataId());
         assertThat(edited.getTargetAmount()).isEqualTo(editModel.getTargetAmount());
         assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
 
         List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())
-            .getCurrentSettings()
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .toList();
@@ -144,8 +148,7 @@ public class StorageSettingTest extends BackEndTest {
 
     private static void delete(Language language, UUID accessTokenId1, PlanetLocationResponse planet, UUID storageSettingId) {
         SkyXploreStorageSettingActions.deleteStorageSetting(language, accessTokenId1, storageSettingId);
-        StorageSettingsResponse storageSettingsResponse = SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId());
-        assertThat(storageSettingsResponse.getCurrentSettings()).hasSize(1);
+        assertThat(SkyXploreStorageSettingActions.getStorageSettings(language, accessTokenId1, planet.getPlanetId())).hasSize(1);
 
         ApphubWsClient.cleanUpConnections();
     }
@@ -171,7 +174,11 @@ public class StorageSettingTest extends BackEndTest {
 
     private static StorageSettingModel create(Language language, UUID accessTokenId, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
-        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId, planet.getPlanetId(), createModel);
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(language, accessTokenId, planet.getPlanetId(), createModel)
+            .stream()
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(createModel.getDataId()))
+            .findAny()
+            .orElseThrow(() -> new RuntimeException("StorageSetting was not created."));
         assertThat(created.getDataId()).isEqualTo(createModel.getDataId());
         return createModel;
     }

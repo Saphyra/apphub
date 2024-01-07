@@ -5,10 +5,10 @@ import "./planet.css";
 import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
-import WebSocketEndpoint from "../../../../../common/js/ws/WebSocketEndpoint";
 import useWebSocket from "react-use-websocket";
-import WebSocketEventName from "../../../../../common/js/ws/WebSocketEventName";
 import Utils from "../../../../../common/js/Utils";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     //Planet data
@@ -102,7 +102,6 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                 break;
         }
     }
-
     //Data handling
 
     return (

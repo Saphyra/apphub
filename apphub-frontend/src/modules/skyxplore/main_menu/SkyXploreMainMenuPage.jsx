@@ -11,10 +11,10 @@ import { ToastContainer } from "react-toastify";
 import Contacts from "./main_menu_page/Contacts";
 import NewGameConfirmationDialog from "./main_menu_page/NewGameConfirmationDialog";
 import MainMenuButtons from "./main_menu_page/MainMenuButtons";
-import WebSocketEndpoint from "../../../common/js/ws/WebSocketEndpoint";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Invitations from "./main_menu_page/Invitations";
+import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
+import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
 
 const SkyXploreMainMenuPage = () => {
     const mainMenuWsUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_MAIN_MENU;

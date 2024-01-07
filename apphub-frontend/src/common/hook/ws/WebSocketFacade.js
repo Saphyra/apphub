@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "./WebSocketEventName";
-import Utils from "../Utils";
+import Utils from "../../js/Utils";
 
 const useConnectToWebSocket = (
     endpoint,

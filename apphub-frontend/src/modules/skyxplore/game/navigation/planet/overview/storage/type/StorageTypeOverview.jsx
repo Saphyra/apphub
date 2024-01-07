@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../../../../../../../../common/component/input/Button";
 import StatusBar from "./status_bar/StatusBar";
-import StorageDetails from "./details/StorageDetails";
+import StorageOverviewDetails from "./details/StorageOverviewDetails";
 
 const StorageTypeOverview = ({ storageType, localizationHandler, data }) => {
     const [displayDetails, setDisplayDetails] = useState(false);
@@ -22,13 +22,13 @@ const StorageTypeOverview = ({ storageType, localizationHandler, data }) => {
                 <div className="skyxplore-game-planet-overview-storage-label">
                     <span>{localizationHandler.get(storageType)}</span>
                     <span>: </span>
-                    <span className="skyxplore-game-planet-overviev-storage-label-actual">{data.actualResourceAmount}</span>
+                    <span className="skyxplore-game-planet-overview-storage-label-actual">{data.actualResourceAmount}</span>
                     <span> (</span>
-                    <span className="skyxplore-game-planet-overviev-storage-label-allocated">{data.allocatedResourceAmount}</span>
+                    <span className="skyxplore-game-planet-overview-storage-label-allocated">{data.allocatedResourceAmount}</span>
                     <span>) / </span>
                     <span>{data.capacity}</span>
                     <span> - {localizationHandler.get("reserved")}: </span>
-                    <span className="skyxplore-game-planet-overviev-storage-label-reserved">{data.reservedStorageAmount}</span>
+                    <span className="skyxplore-game-planet-overview-storage-label-reserved">{data.reservedStorageAmount}</span>
 
                     {data.resourceDetails.length > 0 &&
                         <Button
@@ -41,7 +41,7 @@ const StorageTypeOverview = ({ storageType, localizationHandler, data }) => {
             </div>
 
             {displayDetails &&
-                <StorageDetails
+                <StorageOverviewDetails
                     resources={data.resourceDetails}
                     localizationHandler={localizationHandler}
                 />

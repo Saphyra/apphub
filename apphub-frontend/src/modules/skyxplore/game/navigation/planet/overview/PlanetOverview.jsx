@@ -19,6 +19,8 @@ const PlanetOverview = ({
         <div id="skyxplore-game-planet-overview">
             <StorageOverview
                 storage={storage}
+                planetId={planetId}
+                openPage={openPage}
             />
 
             <PopulationOverview

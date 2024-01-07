@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import Stream from "../../../../common/js/collection/Stream";
 import Endpoints from "../../../../common/js/dao/dao";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import Ai from "./ais/Ai";
 import PanelTitle from "./PanelTitle";
 import ValidatedInputField from "../../../../common/component/input/ValidatedInputField";
@@ -10,6 +9,7 @@ import ValidatedField from "../../../../common/js/validation/ValidatedField";
 import validate from "../../../../common/js/validation/Validator";
 import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
     const [ais, setAis] = useState([]);

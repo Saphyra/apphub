@@ -1,7 +1,7 @@
 import React from "react";
 import Stream from "../../js/collection/Stream";
 
-const SelectInput = ({ id, className, value, options = [], onchangeCallback }) => {
+const SelectInput = ({ id, className, value, options = [], onchangeCallback, disabled = false }) => {
     const getOptions = () => {
         return new Stream(options)
             .map((option, index) =>
@@ -24,7 +24,8 @@ const SelectInput = ({ id, className, value, options = [], onchangeCallback }) =
             id={id}
             className={className}
             onChange={onchange}
-            defaultValue={value}
+            value={value}
+            disabled={disabled}
         >
             {getOptions()}
         </select>

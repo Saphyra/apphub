@@ -4,7 +4,7 @@ import resourceLocalizationData from "../../../../../../common/localization/reso
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import Stream from "../../../../../../../../../common/js/collection/Stream";
 
-const StorageDetails = ({ resources, localizationHandler }) => {
+const StorageOverviewDetails = ({ resources, localizationHandler }) => {
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
     const getItems = () => {
@@ -49,4 +49,4 @@ const ResourceItem = ({ resource, localizationHandler, resourceLocalizationHandl
     );
 }
 
-export default StorageDetails;
+export default StorageOverviewDetails;

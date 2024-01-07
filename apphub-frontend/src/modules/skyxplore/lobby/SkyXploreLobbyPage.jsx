@@ -11,9 +11,7 @@ import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import Endpoints from "../../../common/js/dao/dao";
 import Button from "../../../common/component/input/Button";
-import WebSocketEndpoint from "../../../common/js/ws/WebSocketEndpoint";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Chat from "./lobby_page/Chat";
 import Settings from "./lobby_page/Settings";
 import Ais from "./lobby_page/Ais";
@@ -23,6 +21,8 @@ import Constants from "../../../common/js/Constants";
 import Spinner from "../../../common/component/Spinner";
 import Stream from "../../../common/js/collection/Stream";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
+import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
+import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

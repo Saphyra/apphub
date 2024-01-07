@@ -3,9 +3,9 @@
         "en": "Storage",
         "hu": "Raktár"
     },
-    "storage-settings": {
-        "en": "Storage settings",
-        "hu": "Raktér beállítások"
+    "open-storage": {
+        "en": "Open storage",
+        "hu": "Raktár"
     },
     "energy": {
         "en": "Energy",

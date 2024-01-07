@@ -14,10 +14,4 @@ public class ResourceDetailsResponse {
     private int reservedStorageAmount;
     private int actualAmount;
     private int allocatedResourceAmount;
-
-    public boolean valuePresent() {
-        return reservedStorageAmount > 0
-            || actualAmount > 0
-            || allocatedResourceAmount > 0;
-    }
 }

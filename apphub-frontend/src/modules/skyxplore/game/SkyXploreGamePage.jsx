@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import localizationData from "./skyxplore_game_page_localization.json";
-import WebSocketEndpoint from "../../../common/js/ws/WebSocketEndpoint";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Redirection from "../Redirection";
 import useWebSocket from "react-use-websocket";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Footer from "../../../common/component/Footer";
 import PauseAndResumeGameButton from "./pause_and_resume/PauseAndResumeGameButton";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
@@ -16,6 +14,8 @@ import Chat from "./chat/Chat";
 import Endpoints from "../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import Navigation from "./navigation/Navigation";
+import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
+import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
 
 const SkyXploreGamePage = () => {
     //===Platform

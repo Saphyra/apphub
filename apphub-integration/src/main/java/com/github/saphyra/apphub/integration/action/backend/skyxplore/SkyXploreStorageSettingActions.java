@@ -5,20 +5,21 @@ import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingsResponse;
 import io.restassured.response.Response;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreStorageSettingActions {
-    public static StorageSettingModel createStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+    public static List<StorageSettingModel> createStorageSetting(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
         Response response = getCreateStorageSettingResponse(language, accessTokenId, planetId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return response.getBody().as(StorageSettingModel.class);
+        return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
     public static Response getCreateStorageSettingResponse(Language language, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
@@ -27,13 +28,13 @@ public class SkyXploreStorageSettingActions {
             .put(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_CREATE_STORAGE_SETTING, "planetId", planetId));
     }
 
-    public static StorageSettingsResponse getStorageSettings(Language language, UUID accessTokenId, UUID planetId) {
+    public static List<StorageSettingModel> getStorageSettings(Language language, UUID accessTokenId, UUID planetId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS, "planetId", planetId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return response.getBody().as(StorageSettingsResponse.class);
+        return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
     public static void deleteStorageSetting(Language language, UUID accessTokenId, UUID storageSettingId) {
@@ -43,12 +44,12 @@ public class SkyXploreStorageSettingActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static StorageSettingModel editStorageSetting(Language language, UUID accessTokenId, StorageSettingModel model) {
+    public static List<StorageSettingModel> editStorageSetting(Language language, UUID accessTokenId, StorageSettingModel model) {
         Response response = getEditStorageSettingResponse(language, accessTokenId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return response.getBody().as(StorageSettingModel.class);
+        return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
     public static Response getEditStorageSettingResponse(Language language, UUID accessTokenId, StorageSettingModel model) {

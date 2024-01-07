@@ -109,6 +109,10 @@ public class WebElementUtils {
         return getIfPresent(search).isPresent();
     }
 
+    public static boolean isPresent(WebDriver driver, By selector) {
+        return isPresent(() -> driver.findElement(selector));
+    }
+
     public static Optional<WebElement> getIfPresent(Supplier<WebElement> search) {
         try {
             return Optional.of(search.get());

@@ -1,8 +1,8 @@
 import React from "react";
-import WebSocketEventName from "../../../../../../common/js/ws/WebSocketEventName";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import localizationData from "./message_localization.json";
 import "./message.css";
+import WebSocketEventName from "../../../../../../common/hook/ws/WebSocketEventName";
 
 const Message = ({ message, userId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

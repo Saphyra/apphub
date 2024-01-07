@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +32,12 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     private final Map<String, ? extends GameDataItem> items;
     private final Map<String, ? extends BuildingData> buildings;
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
+    private final List<String> resources;
 
     public GameDataControllerImpl(
         List<AbstractDataService<?, ? extends GameDataItem>> dataServices,
-        TerraformingPossibilitiesService terraformingPossibilitiesService
+        TerraformingPossibilitiesService terraformingPossibilitiesService,
+        ResourceDataService resourceDataService
     ) {
         this.items = dataServices.stream()
             .flatMap(dataService -> dataService.values().stream())
@@ -46,6 +49,10 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
             .filter(gameDataItem -> gameDataItem instanceof BuildingData)
             .map(gameDataItem -> (BuildingData) gameDataItem)
             .collect(Collectors.toMap(GameDataItem::getId, Function.identity()));
+
+        this.resources = resourceDataService.keySet()
+            .stream()
+            .toList();
     }
 
     @Override
@@ -83,5 +90,11 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
             .stats(Arrays.stream(CitizenStat.values()).map(Enum::name).toList())
             .skills(Arrays.stream(SkillType.values()).map(Enum::name).toList())
             .build();
+    }
+
+    @Override
+    //TODO unit test
+    public List<String> getResourceDataIds() {
+        return resources;
     }
 }

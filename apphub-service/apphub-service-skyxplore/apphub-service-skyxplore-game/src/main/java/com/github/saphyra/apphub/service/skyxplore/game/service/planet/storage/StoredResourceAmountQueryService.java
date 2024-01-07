@@ -28,9 +28,9 @@ public class StoredResourceAmountQueryService {
 
     public int getActualAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
-        log.info("DataIds for StorageType {}: {}", storageType, dataIdsByStorageType);
+        log.debug("DataIds for StorageType {}: {}", storageType, dataIdsByStorageType);
 
-        log.info("StoredResources: {}", gameData.getStoredResources());
+        log.debug("StoredResources: {}", gameData.getStoredResources());
 
         return gameData.getStoredResources()
             .getByLocation(location)

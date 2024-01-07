@@ -1,0 +1,29 @@
+.skyxplore-game-storage-setting {
+    border: 2px ridge white;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.skyxplore-game-storage-setting-title {
+    text-align: center;
+    font-size: 22px;
+    padding: 5px;
+    border-bottom: 2px ridge white;
+}
+
+.skyxplore-game-storage-setting-properties {
+    padding: 10px;
+    text-align: center;
+}
+
+.skyxplore-game-storage-setting-properties label {
+    font-size: 20px;
+}
+
+.skyxplore-game-storage-setting-amount{
+    width: 75px;
+}
+
+.skyxplore-game-storage-setting-buttons {
+    text-align: center;
+}
