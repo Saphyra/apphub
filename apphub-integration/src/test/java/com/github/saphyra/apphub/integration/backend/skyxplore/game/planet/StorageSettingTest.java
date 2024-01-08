@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetStorageActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreStorageSettingActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
@@ -191,13 +191,13 @@ public class StorageSettingTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getReservedStorageAmount() > 0)
+            .until(() -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planet.getPlanetId()).getStorage().getBulk().getReservedStorageAmount() > 0)
             .assertTrue("Storage not reserved.");
     }
 
     private static void checkResourceProduced(Language language, UUID accessTokenId, PlanetLocationResponse planet, StorageSettingModel createModel) {
         AwaitilityWrapper.create(60, 10)
-            .until(() -> SkyXplorePlanetStorageActions.getStorageOverview(language, accessTokenId, planet.getPlanetId()).getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
+            .until(() -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planet.getPlanetId()).getStorage().getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
             .assertTrue("Resource not produced.");
     }
 

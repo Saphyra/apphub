@@ -87,7 +87,7 @@ public class GetPlayersTest extends BackEndTest {
 
         lobbyWsClient1.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED);
 
-        ApphubWsClient.createSkyXploreGame(language, accessTokenId2, accessTokenId2);
+        ApphubWsClient.createSkyXploreGameMain(language, accessTokenId2, accessTokenId2);
 
         List<SkyXploreCharacterModel> characters = SkyXploreGameChatActions.getPlayers(language, accessTokenId1);
 

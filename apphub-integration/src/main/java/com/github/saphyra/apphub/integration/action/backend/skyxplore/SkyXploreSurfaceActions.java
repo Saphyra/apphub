@@ -35,8 +35,8 @@ public class SkyXploreSurfaceActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static UUID findEmptySurfaceId(Language language, UUID accessTokenId, UUID planetId, String surfaceType) {
-        return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)
+    public static UUID findEmptySurfaceId(UUID accessTokenId, UUID planetId, String surfaceType) {
+        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
             .stream()
             .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
             .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))

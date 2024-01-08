@@ -1,25 +1,24 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.queue;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetQueueActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.WsActions;
-import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -46,23 +45,22 @@ public class TerraformationQueueTest extends BackEndTest {
             .getPlanetId();
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        QueueResponse queueResponse = getQueueResponse(language, accessTokenId, planetId);
+        QueueResponse queueResponse = getQueueResponse(accessTokenId, planetId);
         updatePriority_invalidType(language, accessTokenId, planetId, queueResponse);
         updatePriority_priorityTooLow(language, accessTokenId, planetId, queueResponse);
         updatePriority_priorityTooHigh(language, accessTokenId, planetId, queueResponse);
-        BiWrapper<QueueResponse, QueueResponse> updateResult = updatePriority(language, accessTokenId, planetId, queueResponse, gameWsClient);
-        queueResponse = updateResult.getEntity1();
-        QueueResponse queueItemModifiedEvent = updateResult.getEntity2();
+        queueResponse = updatePriority(language, accessTokenId, planetId, queueResponse);
         cancelConstruction_invalidType(language, accessTokenId, planetId, queueResponse);
-        cancelConstruction(language, accessTokenId, gameWsClient, planetId, queueResponse, queueItemModifiedEvent);
+        cancelConstruction(language, accessTokenId, gameWsClient, planetId, queueResponse, surfaceId);
     }
 
-    private static QueueResponse getQueueResponse(Language language, UUID accessTokenId, UUID planetId) {
-        List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);
+    private static QueueResponse getQueueResponse(UUID accessTokenId, UUID planetId) {
+        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+            .getQueue();
 
         assertThat(queue).hasSize(1);
         QueueResponse queueResponse = queue.get(0);
@@ -91,22 +89,16 @@ public class TerraformationQueueTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooHighResponse, "priority", "too high");
     }
 
-    private BiWrapper<QueueResponse, QueueResponse> updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse, ApphubWsClient gameWsClient) {
-        gameWsClient.clearMessages();
+    private QueueResponse updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         SkyXplorePlanetQueueActions.setPriority(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
-        queueResponse = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)
+        queueResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+            .getQueue()
             .get(0);
 
         assertThat(queueResponse.getOwnPriority()).isEqualTo(7);
 
-        QueueResponse queueItemModifiedEvent = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED + " event not arrived"))
-            .getPayloadAs(QueueResponse.class);
-
-        assertThat(queueItemModifiedEvent.getOwnPriority()).isEqualTo(7);
-
-        return new BiWrapper<>(queueResponse, queueItemModifiedEvent);
+        return queueResponse;
     }
 
     private static void cancelConstruction_invalidType(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
@@ -115,21 +107,12 @@ public class TerraformationQueueTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, cancelConstruction_invalidTypeResponse, "type", "invalid value");
     }
 
-    private static void cancelConstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, QueueResponse queueResponse, QueueResponse queueItemModifiedEvent) {
+    private static void cancelConstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, QueueResponse queueResponse, UUID surfaceId) {
         SkyXplorePlanetQueueActions.cancelItem(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
-        assertThat(SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)).isEmpty();
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
-        UUID payload = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED + " event not arrived"))
-            .getPayloadAs(UUID.class);
-
-        assertThat(payload).isEqualTo(queueItemModifiedEvent.getItemId());
-
-        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED + " event not arrived"))
-            .getPayloadAs(SurfaceResponse.class);
-
-        assertThat(surfaceResponse.getBuilding()).isNull();
+        assertThat(planetOverviewResponse.getQueue()).isEmpty();
+        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), surfaceId).orElseThrow(() -> new RuntimeException("Surface not found")).getTerraformation()).isNull();
     }
 }

@@ -9,20 +9,17 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreP
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetQueueActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
-import com.github.saphyra.apphub.integration.ws.WsActions;
-import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -43,32 +40,28 @@ public class DeconstructionQueueTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
-            .get(accessTokenId);
+        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1));
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
             .getPlanetId();
-        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
-        UUID buildingId = findBuilding(language, accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
+        UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
         SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
-        SurfaceResponse surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
-            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
-            .getPayloadAs(SurfaceResponse.class);
+        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), buildingId)
+            .orElseThrow(() -> new RuntimeException("Surface not found."));
 
-        QueueResponse queueResponse = getQueue(language, accessTokenId, planetId, surfaceResponse);
+        QueueResponse queueResponse = getQueue(accessTokenId, planetId, surfaceResponse);
         updatePriority_invalidType(language, accessTokenId, planetId, queueResponse);
         updatePriority_priorityTooLow(language, accessTokenId, planetId, queueResponse);
         updatePriority_priorityTooHigh(language, accessTokenId, planetId, queueResponse);
-        BiWrapper<QueueResponse, QueueResponse> updateResult = updatePriority(language, accessTokenId, planetId, queueResponse, gameWsClient);
-        queueResponse = updateResult.getEntity1();
-        QueueResponse queueItemModifiedEvent = updateResult.getEntity2();
-        cancelDeconstruction(language, accessTokenId, gameWsClient, planetId, queueResponse, queueItemModifiedEvent);
+        queueResponse = updatePriority(language, accessTokenId, planetId, queueResponse);
+        cancelDeconstruction(language, accessTokenId, planetId, queueResponse, buildingId);
     }
 
-    private static QueueResponse getQueue(Language language, UUID accessTokenId, UUID planetId, SurfaceResponse surfaceResponse) {
-        List<QueueResponse> queue = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId);
+    private static QueueResponse getQueue(UUID accessTokenId, UUID planetId, SurfaceResponse surfaceResponse) {
+        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+            .getQueue();
 
         assertThat(queue).hasSize(1);
         QueueResponse queueResponse = queue.get(0);
@@ -98,53 +91,35 @@ public class DeconstructionQueueTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooHighResponse, "priority", "too high");
     }
 
-    private BiWrapper<QueueResponse, QueueResponse> updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse, ApphubWsClient gameWsClient) {
-        gameWsClient.clearMessages();
+    private QueueResponse updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
         SkyXplorePlanetQueueActions.setPriority(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
-        queueResponse = SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)
+        queueResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+            .getQueue()
             .get(0);
 
         assertThat(queueResponse.getOwnPriority()).isEqualTo(7);
 
-        QueueResponse queueItemModifiedEvent = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_MODIFIED + " event not arrived"))
-            .getPayloadAs(QueueResponse.class);
 
-        assertThat(queueItemModifiedEvent.getOwnPriority()).isEqualTo(7);
-
-        return new BiWrapper<>(queueResponse, queueItemModifiedEvent);
+        return queueResponse;
     }
 
-    private static void cancelDeconstruction(Language language, UUID accessTokenId, ApphubWsClient gameWsClient, UUID planetId, QueueResponse queueResponse, QueueResponse queueItemModifiedEvent) {
-        SurfaceResponse surfaceResponse;
-        gameWsClient.clearMessages();
-
+    private static void cancelDeconstruction(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse, UUID buildingId) {
         SkyXplorePlanetQueueActions.cancelItem(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
-        assertThat(SkyXplorePlanetQueueActions.getQueue(language, accessTokenId, planetId)).isEmpty();
+        PlanetOverviewResponse planetOverview = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        assertThat(planetOverview.getQueue()).isEmpty();
 
-        UUID payload = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_QUEUE_ITEM_DELETED + " event not arrived"))
-            .getPayloadAs(UUID.class);
-
-        assertThat(payload).isEqualTo(queueItemModifiedEvent.getItemId());
-
-        surfaceResponse = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED + " event not arrived"))
-            .getPayloadAs(SurfaceResponse.class);
+        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverview.getSurfaces(), buildingId)
+            .orElseThrow(() -> new RuntimeException("Surface not found."));
 
         assertThat(surfaceResponse.getBuilding().getDeconstruction()).isNull();
 
-        Object buildingDetails = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED)
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_BUILDING_DETAILS_MODIFIED + " event not arrived"))
-            .getPayload();
-
-        PlanetBuildingDetailsValidator.verifyBuildingDetails(buildingDetails, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverview.getBuildings(), Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
     }
 
-    private UUID findBuilding(Language language, UUID accessTokenId, UUID planetId, String dataId) {
-        return SkyXplorePlanetActions.getSurfaces(language, accessTokenId, planetId)
+    private UUID findBuilding(UUID accessTokenId, UUID planetId, String dataId) {
+        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
             .stream()
             .map(SurfaceResponse::getBuilding)
             .filter(building -> !isNull(building))

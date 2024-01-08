@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePriorityActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.StringIntMap;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -41,17 +40,15 @@ public class PriorityTest extends BackEndTest {
 
         PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId1);
 
-        get(language, accessTokenId1, planet);
+        get(accessTokenId1, planet);
         unknownValue(language, accessTokenId1, planet);
         tooLow(language, accessTokenId1, planet);
         tooHigh(language, accessTokenId1, planet);
         update(language, accessTokenId1, planet);
     }
 
-    private static void get(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
-        Response getResponse = SkyXplorePriorityActions.getPrioritiesResponse(language, accessTokenId1, planet.getPlanetId());
-        assertThat(getResponse.getStatusCode()).isEqualTo(200);
-        Map<String, Integer> priorities = getResponse.getBody().as(StringIntMap.class);
+    private static void get(UUID accessTokenId1, PlanetLocationResponse planet) {
+        Map<String, Integer> priorities = SkyXplorePriorityActions.getPriorities(accessTokenId1, planet.getPlanetId());
         assertThat(priorities).hasSize(PriorityType.values().length);
         Arrays.stream(PriorityType.values())
             .forEach(priorityType -> assertThat(priorities).containsEntry(priorityType.name().toLowerCase(), 5));
@@ -75,7 +72,7 @@ public class PriorityTest extends BackEndTest {
     private static void update(Language language, UUID accessTokenId1, PlanetLocationResponse planet) {
         Response updateResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(language, accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 7);
         assertThat(updateResponse.getStatusCode()).isEqualTo(200);
-        Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(language, accessTokenId1, planet.getPlanetId());
+        Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(accessTokenId1, planet.getPlanetId());
         assertThat(modifiedPriorities).containsEntry(PriorityType.CONSTRUCTION.name().toLowerCase(), 7);
 
         ApphubWsClient.cleanUpConnections();

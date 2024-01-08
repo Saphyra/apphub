@@ -36,6 +36,10 @@ public class ApphubWsClient extends WebSocketClient {
     private volatile boolean opened;
     private final Object name;
 
+    private ApphubWsClient(String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
+        this(TestConfiguration.DEFAULT_LANGUAGE, endpoint, accessTokenId, name);
+    }
+
     private ApphubWsClient(Language language, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
         super(
             new URI(String.format("ws://localhost:%s%s", TestConfiguration.SERVER_PORT, endpoint)),
@@ -81,7 +85,7 @@ public class ApphubWsClient extends WebSocketClient {
         }
     }
 
-    public static ApphubWsClient createSkyXploreGame(Language language, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreGameMain(Language language, UUID accessTokenId, Object name) {
         try {
             return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
         } catch (URISyntaxException e) {
@@ -96,6 +100,20 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static List<WebSocketClient> getClients() {
         return WS_CONNECTIONS.get();
+    }
+
+    @SneakyThrows
+    public static ApphubWsClient createSkyXploreGamePlanet(UUID accessTokenId, UUID planetId) {
+        ApphubWsClient client = new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
+
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED)
+            .payload(planetId)
+            .build();
+
+        client.send(event);
+
+        return client;
     }
 
     public void send(WebSocketEvent event) {

@@ -15,20 +15,17 @@ import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
-import com.github.saphyra.apphub.integration.ws.WsActions;
-import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @Slf4j
 public class MoraleRecoveryTest extends BackEndTest {
+    public static final int REFERENCE_MORALE = 9000;
+
     @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void checkMoraleRecovery() {
         Language language = Language.HUNGARIAN;
@@ -44,23 +41,17 @@ public class MoraleRecoveryTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
             .getPlanetId();
 
-        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
-
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
-        SurfaceResponse modifiedSurface = gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> webSocketEvent.getPayloadAs(SurfaceResponse.class).getSurfaceId().equals(surfaceId))
-            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"))
-            .getPayloadAs(SurfaceResponse.class);
-
-        assertThat(modifiedSurface.getTerraformation()).isNotNull();
 
         gameWsClient.clearMessages();
-
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId).stream().anyMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() < Constants.MAX_CITIZEN_MORALE))
+        AwaitilityWrapper.create(60, 5)
+            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
+                .stream()
+                .anyMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() < REFERENCE_MORALE)
+            )
             .assertTrue("Morale is not decreased for citizens");
 
         AwaitilityWrapper.create(180, 10)

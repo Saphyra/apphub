@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePlanetQueueActions {
+    @ForRemoval("skyxplore-react")
     public static List<QueueResponse> getQueue(Language language, UUID accessTokenId, UUID planetId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_QUEUE, "planetId", planetId));

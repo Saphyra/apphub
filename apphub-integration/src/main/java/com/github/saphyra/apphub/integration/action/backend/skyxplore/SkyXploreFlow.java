@@ -70,6 +70,6 @@ public class SkyXploreFlow {
             .forEach(WebSocketClient::close);
 
         return Stream.concat(Stream.of(host), Arrays.stream(players))
-            .collect(Collectors.toMap(Player::getAccessTokenId, player -> ApphubWsClient.createSkyXploreGame(language, player.getAccessTokenId(), player.getUserId())));
+            .collect(Collectors.toMap(Player::getAccessTokenId, player -> ApphubWsClient.createSkyXploreGameMain(language, player.getAccessTokenId(), player.getUserId())));
     }
 }

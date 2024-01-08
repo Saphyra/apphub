@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ForRemoval("skyxplore-react")
 public class SkyXplorePlanetStorageActions {
     public static PlanetStorageResponse getStorageOverview(Language language, UUID accessTokenId, UUID planetId) {
         Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)

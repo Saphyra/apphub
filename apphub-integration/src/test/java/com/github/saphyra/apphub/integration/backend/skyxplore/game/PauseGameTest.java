@@ -1,22 +1,22 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
-import com.github.saphyra.apphub.integration.ws.WsActions;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import org.testng.annotations.Test;
 
@@ -42,35 +42,50 @@ public class PauseGameTest extends BackEndTest {
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
             .getPlanetId();
+        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
-        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(language, accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
-
+        //Create construction
+        planetWsClient.clearMessages();
         SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
-        gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_SURFACE_MODIFIED, webSocketEvent -> !isNull(webSocketEvent.getPayloadAs(SurfaceResponse.class).getBuilding()))
-            .orElseThrow(() -> new RuntimeException("SurfaceModified event not arrived"));
+        planetWsClient.awaitForEvent(
+                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
+                webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(
+                        webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(),
+                        surfaceId
+                    )
+                    .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
+                    .isPresent()
+            )
+            .orElseThrow(() -> new RuntimeException("Construction was not created."));
 
+        //Resume game
         gameWsClient.clearMessages();
-
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
-        assertThat(gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)).isPresent();
+        //Check if game is running
+        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
 
+        //Pause game
         SkyXploreGameActions.setPaused(language, accessTokenId, true);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not paused"));
 
+        //Check if game is not running
+        planetWsClient.clearMessages();
+
+        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED, 15)).isEmpty();
+
+        //Resume game
         gameWsClient.clearMessages();
-
-        assertThat(gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED, 15)).isEmpty();
-
         SkyXploreGameActions.setPaused(language, accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
-        assertThat(gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_STORAGE_MODIFIED)).isPresent();
+        //Check if game is running again
+        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
     }
 }
