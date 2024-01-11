@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.integration.backend.calendar;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
@@ -28,10 +27,10 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
-    public void markOccurrenceDone(Language language) {
+    @Test(groups = {"be", "calendar"})
+    public void markOccurrenceDone() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -43,7 +42,7 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         CalendarResponse calendarResponse = responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())
@@ -52,41 +51,41 @@ public class MarkOccurrenceDoneTest extends BackEndTest {
         OccurrenceResponse occurrenceResponse = calendarResponse.getEvents()
             .get(0);
 
-        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
-        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
-        markOccurrenceDone(language, accessTokenId, occurrenceResponse);
+        nullReferenceDateDay(accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(accessTokenId, occurrenceResponse);
+        markOccurrenceDone(accessTokenId, occurrenceResponse);
     }
 
-    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static void nullReferenceDateDay(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
 
-    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static void nullReferenceDateMonth(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDoneResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
 
-    private static void markOccurrenceDone(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static void markOccurrenceDone(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         List<CalendarResponse> responses;
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        responses = OccurrenceActions.markOccurrenceDone(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        responses = OccurrenceActions.markOccurrenceDone(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         OccurrenceResponse occurrence = responses.stream()
             .flatMap(cr -> cr.getEvents().stream())

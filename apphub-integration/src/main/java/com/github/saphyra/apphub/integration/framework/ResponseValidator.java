@@ -20,6 +20,10 @@ public class ResponseValidator {
         return verifyErrorResponse(language, response, 400, errorCode);
     }
 
+    public static ErrorResponse verifyBadRequest(Response response, ErrorCode errorCode) {
+        return verifyErrorResponse(response, 400, errorCode);
+    }
+
     @Deprecated
     public static ErrorResponse verifyErrorResponse(Language language, Response response, int status, ErrorCode errorCode) {
         assertThat(response.getStatusCode()).isEqualTo(status);

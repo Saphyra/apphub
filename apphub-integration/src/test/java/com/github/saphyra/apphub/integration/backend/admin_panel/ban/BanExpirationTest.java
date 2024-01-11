@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.integration.backend.admin_panel.ban;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
@@ -25,13 +24,12 @@ public class BanExpirationTest extends BackEndTest {
 
     @Test(priority = Integer.MIN_VALUE, groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin( userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        UUID testAccessTokenId = IndexPageActions.registerAndLogin(language, testUser);
+        UUID testAccessTokenId = IndexPageActions.registerAndLogin( testUser);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         //Ban
@@ -45,10 +43,10 @@ public class BanExpirationTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        BanActions.ban(language, accessTokenId, banRequest);
+        BanActions.ban(accessTokenId, banRequest);
 
         Response response = ModulesActions.getModulesResponse(testAccessTokenId);
-        ResponseValidator.verifyErrorResponse(language, response, 403, ErrorCode.MISSING_ROLE);
+        ResponseValidator.verifyErrorResponse(response, 403, ErrorCode.MISSING_ROLE);
 
         AwaitilityWrapper.create(300, 10)
             .until(() -> {

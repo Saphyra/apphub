@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.community.blacklist;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
-import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -16,22 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BlacklistSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchUsersToBlacklist() {
-        Language language = Language.HUNGARIAN;
-
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerAndLogin(language, testUserData);
+        IndexPageActions.registerAndLogin(testUserData);
 
-        List<SearchResultItem> searchResult = BlacklistActions.search(language, accessTokenId, getEmailDomain());
+        List<SearchResultItem> searchResult = BlacklistActions.search(accessTokenId, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.get(0).getUsername()).isEqualTo(testUserData.getUsername());
         assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
 
-        BlacklistActions.createBlacklist(language, accessTokenId, searchResult.get(0).getUserId());
+        BlacklistActions.createBlacklist(accessTokenId, searchResult.get(0).getUserId());
 
-        assertThat(BlacklistActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(BlacklistActions.search(accessTokenId, getEmailDomain())).isEmpty();
     }
 }

@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.integration.backend.calendar;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
@@ -29,10 +28,10 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
     private static final LocalDate REFERENCE_DATE_MONTH = CURRENT_DATE;
     private static final String TITLE = "title";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
-    public void markOccurrenceSnoozed(Language language) {
+    @Test(groups = {"be", "calendar"})
+    public void markOccurrenceSnoozed() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -44,7 +43,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         CalendarResponse calendarResponse = responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())
@@ -53,42 +52,42 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
         OccurrenceResponse occurrenceResponse = calendarResponse.getEvents()
             .get(0);
 
-        nullReferenceDateDay(language, accessTokenId, occurrenceResponse);
-        nullReferenceDateMonth(language, accessTokenId, occurrenceResponse);
-        ReferenceDate referenceDate = markOccurrenceSnoozed(language, accessTokenId, occurrenceResponse);
-        markDoneSnoozed(language, accessTokenId, occurrenceResponse, referenceDate);
+        nullReferenceDateDay(accessTokenId, occurrenceResponse);
+        nullReferenceDateMonth(accessTokenId, occurrenceResponse);
+        ReferenceDate referenceDate = markOccurrenceSnoozed(accessTokenId, occurrenceResponse);
+        markDoneSnoozed(accessTokenId, occurrenceResponse, referenceDate);
     }
 
-    private static void nullReferenceDateDay(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static void nullReferenceDateDay(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
 
-    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static void nullReferenceDateMonth(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
 
-    private static ReferenceDate markOccurrenceSnoozed(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
+    private static ReferenceDate markOccurrenceSnoozed(UUID accessTokenId, OccurrenceResponse occurrenceResponse) {
         List<CalendarResponse> responses;
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        responses = OccurrenceActions.markOccurrenceSnoozed(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        responses = OccurrenceActions.markOccurrenceSnoozed(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         OccurrenceResponse occurrence = responses.stream()
             .flatMap(cr -> cr.getEvents().stream())
@@ -100,11 +99,11 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
         return referenceDate;
     }
 
-    private static void markDoneSnoozed(Language language, UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
-        OccurrenceActions.markOccurrenceDone(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+    private static void markDoneSnoozed(UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
+        OccurrenceActions.markOccurrenceDone(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
-        Response markDoneSnoozedResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(language, accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        Response markDoneSnoozedResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
-        ResponseValidator.verifyErrorResponse(language, markDoneSnoozedResponse, 409, ErrorCode.INVALID_STATUS);
+        ResponseValidator.verifyErrorResponse(markDoneSnoozedResponse, 409, ErrorCode.INVALID_STATUS);
     }
 }

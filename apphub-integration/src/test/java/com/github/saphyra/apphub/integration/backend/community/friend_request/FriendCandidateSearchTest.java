@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.integration.backend.community.friend_request;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -19,23 +18,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FriendCandidateSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchFriendCandidates() {
-        Language language = Language.HUNGARIAN;
-
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(language, testUserData);
+        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(testUserData);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUserData.getEmail());
 
-        search(language, accessTokenId, testUserData, testUserId);
-        FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(language, accessTokenId, testUserId);
-        friendshipAlreadyExists(language, accessTokenId, testUserAccessTokenId, friendRequestResponse);
-        blacklisted(language, accessTokenId, testUserId);
+        search(accessTokenId, testUserData, testUserId);
+        FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(accessTokenId, testUserId);
+        friendshipAlreadyExists(accessTokenId, testUserAccessTokenId, friendRequestResponse);
+        blacklisted(accessTokenId, testUserId);
     }
 
-    private static void search(Language language, UUID accessTokenId, RegistrationParameters testUserData, UUID testUserId) {
-        List<SearchResultItem> searchResult = FriendRequestActions.search(language, accessTokenId, getEmailDomain());
+    private static void search(UUID accessTokenId, RegistrationParameters testUserData, UUID testUserId) {
+        List<SearchResultItem> searchResult = FriendRequestActions.search(accessTokenId, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.get(0).getUserId()).isEqualTo(testUserId);
@@ -43,22 +40,22 @@ public class FriendCandidateSearchTest extends BackEndTest {
         assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
     }
 
-    private static FriendRequestResponse friendRequestAlreadySent(Language language, UUID accessTokenId, UUID testUserId) {
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(language, accessTokenId, testUserId);
+    private static FriendRequestResponse friendRequestAlreadySent(UUID accessTokenId, UUID testUserId) {
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, testUserId);
 
-        assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
         return friendRequestResponse;
     }
 
-    private static void friendshipAlreadyExists(Language language, UUID accessTokenId, UUID testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        FriendRequestActions.acceptFriendRequest(language, testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+    private static void friendshipAlreadyExists(UUID accessTokenId, UUID testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
+        FriendRequestActions.acceptFriendRequest(testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
     }
 
-    private static void blacklisted(Language language, UUID accessTokenId, UUID testUserId) {
-        BlacklistActions.createBlacklist(language, accessTokenId, testUserId);
+    private static void blacklisted(UUID accessTokenId, UUID testUserId) {
+        BlacklistActions.createBlacklist(accessTokenId, testUserId);
 
-        assertThat(FriendRequestActions.search(language, accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
     }
 }

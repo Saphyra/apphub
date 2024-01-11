@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.integration.backend.account;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.AccountActions;
-import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.LanguageResponse;
+import com.github.saphyra.apphub.integration.structure.api.user.LoginResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
@@ -29,27 +32,44 @@ public class ChangeLanguageTest extends BackEndTest {
     @Test(dataProvider = "bilanguageDataProvider", groups = {"be", "account"})
     public void changeLanguage(Language registerLanguage, Language changeLanguage) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(registerLanguage, userData);
+        UUID accessTokenId = registerAndLogin(registerLanguage, userData);
 
-        nullLanguage(registerLanguage, accessTokenId);
-        unsupportedLanguage(registerLanguage, accessTokenId);
-        changeLanguage(registerLanguage, changeLanguage, accessTokenId);
+        nullLanguage(accessTokenId);
+        unsupportedLanguage(accessTokenId);
+        changeLanguage(changeLanguage, accessTokenId);
     }
 
-    private static void nullLanguage(Language registerLanguage, UUID accessTokenId) {
-        Response nullLanguageResponse = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, null);
-        ResponseValidator.verifyInvalidParam(registerLanguage, nullLanguageResponse, "value", "must not be null");
+    private UUID registerAndLogin(Language registerLanguage, RegistrationParameters userData) {
+        Response registerResponse = RequestFactory.createRequest(registerLanguage)
+            .body(userData.toRegistrationRequest())
+            .post(UrlFactory.create(Endpoints.ACCOUNT_REGISTER));
+        assertThat(registerResponse.getStatusCode()).isEqualTo(200);
+
+        Response loginResponse = RequestFactory.createRequest()
+            .body(userData.toLoginRequest())
+            .post(UrlFactory.create(Endpoints.LOGIN));
+
+        assertThat(loginResponse.getStatusCode()).isEqualTo(200);
+
+        return loginResponse.getBody()
+            .as(LoginResponse.class)
+            .getAccessTokenId();
     }
 
-    private static void unsupportedLanguage(Language registerLanguage, UUID accessTokenId) {
-        Response response = AccountActions.getChangeLanguageResponse(registerLanguage, accessTokenId, "asd");
-        ResponseValidator.verifyInvalidParam(registerLanguage, response, "value", "not supported");
+    private static void nullLanguage(UUID accessTokenId) {
+        Response nullLanguageResponse = AccountActions.getChangeLanguageResponse(accessTokenId, null);
+        ResponseValidator.verifyInvalidParam(nullLanguageResponse, "value", "must not be null");
     }
 
-    private static void changeLanguage(Language registerLanguage, Language changeLanguage, UUID accessTokenId) {
-        AccountActions.changeLanguage(registerLanguage, accessTokenId, changeLanguage.getLocale());
+    private static void unsupportedLanguage(UUID accessTokenId) {
+        Response response = AccountActions.getChangeLanguageResponse(accessTokenId, "asd");
+        ResponseValidator.verifyInvalidParam(response, "value", "not supported");
+    }
 
-        List<LanguageResponse> languageResponses = AccountActions.getLanguages(registerLanguage, accessTokenId);
+    private static void changeLanguage(Language changeLanguage, UUID accessTokenId) {
+        AccountActions.changeLanguage(accessTokenId, changeLanguage.getLocale());
+
+        List<LanguageResponse> languageResponses = AccountActions.getLanguages(accessTokenId);
 
         assertThat(
             languageResponses.stream()

@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.integration.localization;
 
+import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 
+@ForRemoval("skyxplore-react")
 public enum LocalizationKey {
     ACCOUNT_LOCKED,
     ALREADY_EXISTS,

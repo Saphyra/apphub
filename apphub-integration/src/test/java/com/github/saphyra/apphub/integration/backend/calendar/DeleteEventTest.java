@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.calendar;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
@@ -29,10 +28,10 @@ public class DeleteEventTest extends BackEndTest {
     private static final String CONTENT = "content";
     public static final int REPETITION_DAYS = 3;
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
-    public void deleteEvent(Language language) {
+    @Test(groups = {"be", "calendar"})
+    public void deleteEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -46,7 +45,7 @@ public class DeleteEventTest extends BackEndTest {
             .repetitionDays(REPETITION_DAYS)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         UUID eventId = responses.stream()
             .filter(calendarResponse -> !calendarResponse.getEvents().isEmpty())
@@ -56,40 +55,40 @@ public class DeleteEventTest extends BackEndTest {
             .map(OccurrenceResponse::getEventId)
             .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        nullReferenceDateDay(language, accessTokenId, eventId);
-        nullReferenceDateMonth(language, accessTokenId, eventId);
-        deleteEvent(language, accessTokenId, eventId);
+        nullReferenceDateDay(accessTokenId, eventId);
+        nullReferenceDateMonth(accessTokenId, eventId);
+        deleteEvent(accessTokenId, eventId);
     }
 
-    private static void nullReferenceDateDay(Language language, UUID accessTokenId, UUID eventId) {
+    private static void nullReferenceDateDay(UUID accessTokenId, UUID eventId) {
         ReferenceDate nullReferenceDateDay = ReferenceDate.builder()
             .day(null)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = EventActions.getDeleteEventResponse(language, accessTokenId, eventId, nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = EventActions.getDeleteEventResponse(accessTokenId, eventId, nullReferenceDateDay);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
 
-    private static void nullReferenceDateMonth(Language language, UUID accessTokenId, UUID eventId) {
+    private static void nullReferenceDateMonth(UUID accessTokenId, UUID eventId) {
         ReferenceDate nullReferenceDateMonth = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = EventActions.getDeleteEventResponse(language, accessTokenId, eventId, nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = EventActions.getDeleteEventResponse(accessTokenId, eventId, nullReferenceDateMonth);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
 
-    private static void deleteEvent(Language language, UUID accessTokenId, UUID eventId) {
+    private static void deleteEvent(UUID accessTokenId, UUID eventId) {
         ReferenceDate referenceDate = ReferenceDate.builder()
             .day(REFERENCE_DATE_DAY)
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        List<CalendarResponse> deleteEventResponse = EventActions.deleteEvent(language, accessTokenId, eventId, referenceDate);
+        List<CalendarResponse> deleteEventResponse = EventActions.deleteEvent(accessTokenId, eventId, referenceDate);
 
         deleteEventResponse.forEach(calendarResponse -> assertThat(calendarResponse.getEvents()).isEmpty());
     }

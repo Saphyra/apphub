@@ -22,5 +22,9 @@
     "water_pump": {
         "en": "Provides water from lakes.",
         "hu": "Vizet szolgáltat a tóból."
+    },
+    "battery": {
+        "en": "Stores energy.",
+        "hu": "Energiát tárol."
     }
 }

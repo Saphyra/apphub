@@ -23,7 +23,7 @@ public class CalendarTest extends BackEndTest {
     public void getCalendar() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin( userData);
 
         List<CalendarResponse> calendarResponses = CalendarActions.getCalendar(language, accessTokenId, DATE)
             .stream()

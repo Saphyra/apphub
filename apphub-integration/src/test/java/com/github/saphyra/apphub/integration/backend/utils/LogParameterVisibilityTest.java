@@ -23,7 +23,7 @@ public class LogParameterVisibilityTest extends BackEndTest {
         Language language = Language.HUNGARIAN;
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin( userData);
 
         List<LogParameterVisibilityResponse> createData = UtilsActions.getVisibilities(language, accessTokenId, Arrays.asList(PARAMETER));
 

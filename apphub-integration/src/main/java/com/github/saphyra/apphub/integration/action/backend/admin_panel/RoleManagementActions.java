@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.admin_panel;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.UserRoleResponse;
@@ -17,8 +16,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementActions {
-    public static List<UserRoleResponse> getRoles(Language language, UUID accessTokenId, String queryString) {
-        Response response = getRolesResponse(language, accessTokenId, queryString);
+    public static List<UserRoleResponse> getRoles(UUID accessTokenId, String queryString) {
+        Response response = getRolesResponse(accessTokenId, queryString);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -26,30 +25,30 @@ public class RoleManagementActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getRolesResponse(Language language, UUID accessTokenId, String queryString) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getRolesResponse(UUID accessTokenId, String queryString) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(queryString))
             .post(UrlFactory.create(Endpoints.USER_DATA_GET_USER_ROLES));
     }
 
-    public static void addRole(Language language, UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getAddRoleResponse(language, accessTokenId, roleRequest);
+    public static void addRole(UUID accessTokenId, RoleRequest roleRequest) {
+        Response response = getAddRoleResponse(accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getAddRoleResponse(Language language, UUID accessTokenId, RoleRequest roleRequest) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getAddRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(roleRequest)
             .put(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE));
     }
 
-    public static void removeRole(Language language, UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getRemoveRoleResponse(language, accessTokenId, roleRequest);
+    public static void removeRole(UUID accessTokenId, RoleRequest roleRequest) {
+        Response response = getRemoveRoleResponse(accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getRemoveRoleResponse(Language language, UUID accessTokenId, RoleRequest roleRequest) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getRemoveRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(roleRequest)
             .delete(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE));
     }
