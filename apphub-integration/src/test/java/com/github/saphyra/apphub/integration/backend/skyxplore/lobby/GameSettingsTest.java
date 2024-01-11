@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.lobby;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.Range;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
@@ -31,15 +30,14 @@ public class GameSettingsTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"})
     public void gameSettings() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
 
-        SkyXploreLobbyActions.createLobby(language, accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(accessTokenId1, GAME_NAME);
 
-        SkyXploreGameSettings settings = SkyXploreLobbyActions.getGameSettings(language, accessTokenId1);
+        SkyXploreGameSettings settings = SkyXploreLobbyActions.getGameSettings(accessTokenId1);
 
         assertThat(settings.getMaxPlayersPerSolarSystem()).isEqualTo(2);
         assertThat(settings.getAdditionalSolarSystems()).isEqualTo(new Range<>(1, 2));
@@ -64,8 +62,8 @@ public class GameSettingsTest extends BackEndTest {
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 21)), accessTokenId1, "planetSize.max", "too high");
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 12)), accessTokenId1, "planetSize.max", "too low");
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(language, accessTokenId1, accessTokenId1);
-        Response response = SkyXploreLobbyActions.getEditSettingsResponse(language, accessTokenId1, VALID_SETTINGS);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(accessTokenId1, accessTokenId1);
+        Response response = SkyXploreLobbyActions.getEditSettingsResponse(accessTokenId1, VALID_SETTINGS);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -77,7 +75,7 @@ public class GameSettingsTest extends BackEndTest {
     }
 
     private void validation(SkyXploreGameSettings.SkyXploreGameSettingsBuilder builder, UUID accessTokenId, String field, String value) {
-        Response response = SkyXploreLobbyActions.getEditSettingsResponse(Language.HUNGARIAN, accessTokenId, builder.build());
+        Response response = SkyXploreLobbyActions.getEditSettingsResponse(accessTokenId, builder.build());
 
         ResponseValidator.verifyInvalidParam(response, field, value);
     }

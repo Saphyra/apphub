@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.DeconstructionResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageResponse;
@@ -38,40 +37,40 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeconstructBuildingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
-    public void deconstructBuilding(Language language) {
+    @Test(groups = {"be", "skyxplore"})
+    public void deconstructBuilding() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
         ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
-        storageInUse(language, accessTokenId, planetId);
+        storageInUse(accessTokenId, planetId);
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
-        buildingUnderConstruction(language, accessTokenId, planetWsClient, emptyDesertSurfaceId, planetId);
+        buildingUnderConstruction(accessTokenId, planetWsClient, emptyDesertSurfaceId, planetId);
         gameWsClient.clearMessages();
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_BATTERY);
-        deconstructBuilding(language, accessTokenId, planetWsClient, planetId, buildingId);
-        cancelDeconstruction(language, accessTokenId, planetWsClient, planetId, buildingId);
+        deconstructBuilding(accessTokenId, planetWsClient, planetId, buildingId);
+        cancelDeconstruction(accessTokenId, planetWsClient, planetId, buildingId);
     }
 
-    private void storageInUse(Language language, UUID accessTokenId, UUID planetId) {
+    private void storageInUse(UUID accessTokenId, UUID planetId) {
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_DEPOT);
-        Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
+        Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(accessTokenId, planetId, buildingId);
 
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.SKYXPLORE_STORAGE_USED);
     }
 
-    private static void buildingUnderConstruction(Language language, UUID accessTokenId, ApphubWsClient planetWsClient, UUID emptyDesertSurfaceId, UUID planetId) {
+    private static void buildingUnderConstruction(UUID accessTokenId, ApphubWsClient planetWsClient, UUID emptyDesertSurfaceId, UUID planetId) {
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
+        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
         UUID buildingId = planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
                 webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), emptyDesertSurfaceId).isPresent()
@@ -86,15 +85,15 @@ public class DeconstructBuildingTest extends BackEndTest {
             .getBuilding()
             .getBuildingId();
 
-        Response constructionInProgressResponse = SkyXploreBuildingActions.getDeconstructBuildingResponse(language, accessTokenId, planetId, buildingId);
+        Response constructionInProgressResponse = SkyXploreBuildingActions.getDeconstructBuildingResponse(accessTokenId, planetId, buildingId);
 
-        ResponseValidator.verifyForbiddenOperation(language, constructionInProgressResponse);
+        ResponseValidator.verifyForbiddenOperation(constructionInProgressResponse);
     }
 
-    private static void deconstructBuilding(Language language, UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
+    private static void deconstructBuilding(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
         planetWsClient.clearMessages();
 
-        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
 
         PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
@@ -128,10 +127,10 @@ public class DeconstructBuildingTest extends BackEndTest {
         assertThat(storageResponse.getEnergy().getCapacity()).isEqualTo(0);
     }
 
-    private static void cancelDeconstruction(Language language, UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
+    private static void cancelDeconstruction(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
         planetWsClient.clearMessages();
 
-        SkyXploreBuildingActions.cancelDeconstruction(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.cancelDeconstruction(accessTokenId, planetId, buildingId);
 
         PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
@@ -153,27 +152,26 @@ public class DeconstructBuildingTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"})
     public void finishDeconstruction() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
         ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
 
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        SkyXploreGameActions.setPaused(accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 

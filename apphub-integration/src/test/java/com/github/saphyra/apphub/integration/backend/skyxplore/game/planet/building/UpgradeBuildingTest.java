@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -33,39 +32,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UpgradeBuildingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
-    public void upgradeBuilding(Language language) {
+    @Test(groups = {"be", "skyxplore"})
+    public void upgradeBuilding() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
-            .get(accessTokenId);
+        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
         ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
-        buildingAtMaxLevel(language, accessTokenId, planetId);
+        buildingAtMaxLevel(accessTokenId, planetId);
         UUID upgradableBuildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
-        upgradeBuilding(language, accessTokenId, planetWsClient, planetId, upgradableBuildingId);
-        constructionAlreadyInProgress(language, accessTokenId, planetId, upgradableBuildingId);
-        cancel(language, accessTokenId, planetWsClient, planetId, upgradableBuildingId);
+        upgradeBuilding(accessTokenId, planetWsClient, planetId, upgradableBuildingId);
+        constructionAlreadyInProgress(accessTokenId, planetId, upgradableBuildingId);
+        cancel(accessTokenId, planetWsClient, planetId, upgradableBuildingId);
     }
 
-    private void buildingAtMaxLevel(Language language, UUID accessTokenId, UUID planetId) {
+    private void buildingAtMaxLevel(UUID accessTokenId, UUID planetId) {
         UUID maxLevelBuildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_WATER_PUMP);
 
-        Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, maxLevelBuildingId);
+        Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(accessTokenId, planetId, maxLevelBuildingId);
 
-        ResponseValidator.verifyForbiddenOperation(language, maxLevelResponse);
+        ResponseValidator.verifyForbiddenOperation(maxLevelResponse);
     }
 
-    private static void upgradeBuilding(Language language, UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
+    private static void upgradeBuilding(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.upgradeBuilding(language, accessTokenId, planetId, upgradableBuildingId);
+        SkyXploreBuildingActions.upgradeBuilding(accessTokenId, planetId, upgradableBuildingId);
 
         PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
@@ -100,15 +98,15 @@ public class UpgradeBuildingTest extends BackEndTest {
         assertThat(queueItemModifiedEvent.getData()).containsEntry("currentLevel", 1);
     }
 
-    private static void constructionAlreadyInProgress(Language language, UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
-        Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(language, accessTokenId, planetId, upgradableBuildingId);
+    private static void constructionAlreadyInProgress(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
+        Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(accessTokenId, planetId, upgradableBuildingId);
 
-        ResponseValidator.verifyErrorResponse(language, inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+        ResponseValidator.verifyErrorResponse(inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
-    private void cancel(Language language, UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
+    private void cancel(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.cancelConstruction(language, accessTokenId, planetId, upgradableBuildingId);
+        SkyXploreBuildingActions.cancelConstruction(accessTokenId, planetId, upgradableBuildingId);
 
         PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
@@ -130,8 +128,8 @@ public class UpgradeBuildingTest extends BackEndTest {
     private SurfaceBuildingResponse findByBuildingId(UUID accessTokenId, UUID planetId, UUID buildingId) {
         return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
             .stream()
-            .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
             .map(SurfaceResponse::getBuilding)
+            .filter(building -> !isNull(building))
             .filter(surfaceBuildingResponse -> surfaceBuildingResponse.getBuildingId().equals(buildingId))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Building not found by buildingId " + buildingId));
@@ -140,8 +138,8 @@ public class UpgradeBuildingTest extends BackEndTest {
     private UUID findBuilding(UUID accessTokenId, UUID planetId, String dataId) {
         return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
             .stream()
-            .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
             .map(SurfaceResponse::getBuilding)
+            .filter(building -> !isNull(building))
             .filter(surfaceBuildingResponse -> surfaceBuildingResponse.getDataId().equals(dataId))
             .map(SurfaceBuildingResponse::getBuildingId)
             .findFirst()

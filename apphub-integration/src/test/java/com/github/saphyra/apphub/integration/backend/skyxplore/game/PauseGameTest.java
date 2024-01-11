@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreS
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -30,17 +29,16 @@ public class PauseGameTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"})
     public void pauseAndResumeGame() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
         ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
@@ -48,7 +46,7 @@ public class PauseGameTest extends BackEndTest {
 
         //Create construction
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.constructNewBuilding(language, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
         planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
                 webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(
@@ -62,7 +60,7 @@ public class PauseGameTest extends BackEndTest {
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        SkyXploreGameActions.setPaused(accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
@@ -70,7 +68,7 @@ public class PauseGameTest extends BackEndTest {
         assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
 
         //Pause game
-        SkyXploreGameActions.setPaused(language, accessTokenId, true);
+        SkyXploreGameActions.setPaused(accessTokenId, true);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not paused"));
 
@@ -81,7 +79,7 @@ public class PauseGameTest extends BackEndTest {
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        SkyXploreGameActions.setPaused(accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 

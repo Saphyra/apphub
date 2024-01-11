@@ -69,33 +69,33 @@ public class ApphubWsClient extends WebSocketClient {
         }
     }
 
-    public static ApphubWsClient createSkyXploreMainMenu(Language language, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreMainMenu(UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
+            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreLobby(Language language, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreLobby(UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
+            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreGameMain(Language language, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreGameMain(UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
+            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
     @SneakyThrows
-    public static ApphubWsClient createSkyXploreLobbyInvitation(Language language, UUID accessTokenId, Object name) {
-        return new ApphubWsClient(language, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
+    public static ApphubWsClient createSkyXploreLobbyInvitation(UUID accessTokenId, Object name) {
+        return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
     }
 
     public static List<WebSocketClient> getClients() {

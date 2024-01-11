@@ -1,6 +1,5 @@
 TODO elimination
 TODO add to release notes
-TODO make BE tests locale independent for SkyXplore
 TODO delete old SkyXplore UI
 TODO MessageSender for population
 TODO MessageSender for Planet building overview

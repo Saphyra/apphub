@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageResponse;
@@ -31,14 +30,14 @@ public class SkyXplorePlanetActions {
             .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW, "planetId", planetId));
     }
 
-    public static Response getRenamePlanetResponse(Language language, UUID accessTokenId, UUID planetId, String planetName) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getRenamePlanetResponse(UUID accessTokenId, UUID planetId, String planetName) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(planetName))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_RENAME, "planetId", planetId));
     }
 
-    public static void renamePlanet(Language language, UUID accessTokenId, UUID planetId, String planetName) {
-        Response response = getRenamePlanetResponse(language, accessTokenId, planetId, planetName);
+    public static void renamePlanet(UUID accessTokenId, UUID planetId, String planetName) {
+        Response response = getRenamePlanetResponse(accessTokenId, planetId, planetName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }

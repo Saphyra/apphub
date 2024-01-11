@@ -57,12 +57,19 @@ public class AccountActions {
             .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_PASSWORD));
     }
 
-    public static void deleteAccount(Language language, UUID accessTokenId, String password) {
-        Response response = getDeleteAccountResponse(language, accessTokenId, new OneParamRequest<>(password));
+    public static void deleteAccount(UUID accessTokenId, String password) {
+        Response response = getDeleteAccountResponse(accessTokenId, new OneParamRequest<>(password));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
+    public static Response getDeleteAccountResponse(UUID accessTokenId, OneParamRequest<String> request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(request)
+            .delete(UrlFactory.create(Endpoints.ACCOUNT_DELETE_ACCOUNT));
+    }
+
+    @Deprecated
     public static Response getDeleteAccountResponse(Language locale, UUID accessTokenId, OneParamRequest<String> request) {
         return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
             .body(request)

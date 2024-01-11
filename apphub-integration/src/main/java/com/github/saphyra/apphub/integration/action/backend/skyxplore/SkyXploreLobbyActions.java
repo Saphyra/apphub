@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.OneParamResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayer;
@@ -19,92 +18,92 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreLobbyActions {
-    public static void createLobby(Language language, UUID accessTokenId, String gameName) {
-        Response response = getCreateLobbyResponse(language, accessTokenId, gameName);
+    public static void createLobby(UUID accessTokenId, String gameName) {
+        Response response = getCreateLobbyResponse(accessTokenId, gameName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateLobbyResponse(Language language, UUID accessTokenId, String gameName) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateLobbyResponse(UUID accessTokenId, String gameName) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(gameName))
             .put(UrlFactory.create(Endpoints.SKYXPLORE_CREATE_LOBBY));
     }
 
-    public static void inviteToLobby(Language language, UUID accessTokenId, UUID friendId) {
-        Response response = getInviteToLobbyResponse(language, accessTokenId, friendId);
+    public static void inviteToLobby(UUID accessTokenId, UUID friendId) {
+        Response response = getInviteToLobbyResponse(accessTokenId, friendId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getInviteToLobbyResponse(Language language, UUID accessTokenId, UUID friendId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getInviteToLobbyResponse(UUID accessTokenId, UUID friendId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_INVITE_TO_LOBBY, "friendId", friendId));
     }
 
-    public static void acceptInvitation(Language language, UUID accessTokenId, UUID senderId) {
-        Response response = getAcceptInvitationResponse(language, accessTokenId, senderId);
+    public static void acceptInvitation(UUID accessTokenId, UUID senderId) {
+        Response response = getAcceptInvitationResponse(accessTokenId, senderId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getAcceptInvitationResponse(Language language, UUID accessTokenId, UUID senderId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getAcceptInvitationResponse(UUID accessTokenId, UUID senderId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_ACCEPT_INVITATION, "invitorId", senderId));
     }
 
-    public static void startGame(Language language, UUID accessTokenId) {
-        Response response = getStartGameResponse(language, accessTokenId);
+    public static void startGame(UUID accessTokenId) {
+        Response response = getStartGameResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getStartGameResponse(Language language, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getStartGameResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_START_GAME));
     }
 
-    public static List<LobbyPlayerResponse> getLobbyPlayers(Language language, UUID accessTokenId) {
-        Response response = getLobbyPlayersResponse(language, accessTokenId);
+    public static List<LobbyPlayerResponse> getLobbyPlayers(UUID accessTokenId) {
+        Response response = getLobbyPlayersResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(LobbyPlayerResponse[].class));
     }
 
-    public static Response getLobbyPlayersResponse(Language language, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getLobbyPlayersResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_PLAYERS));
     }
 
-    public static void exitFromLobby(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static void exitFromLobby(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static SkyXploreGameSettings getGameSettings(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static SkyXploreGameSettings getGameSettings(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(SkyXploreGameSettings.class);
     }
 
-    public static Response getLoadGameResponse(Language language, UUID accessTokenId, UUID gameId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getLoadGameResponse(UUID accessTokenId, UUID gameId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_LOAD_GAME, "gameId", gameId));
     }
 
-    public static void loadGame(Language language, UUID accessTokenId, UUID gameId) {
-        Response response = getLoadGameResponse(language, accessTokenId, gameId);
+    public static void loadGame(UUID accessTokenId, UUID gameId) {
+        Response response = getLoadGameResponse(accessTokenId, gameId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static boolean isUserInLobby(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static boolean isUserInLobby(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -116,20 +115,20 @@ public class SkyXploreLobbyActions {
             .getValue();
     }
 
-    public static void createOrModifyAi(Language language, UUID accessTokenId, AiPlayer aiPlayer) {
-        Response response = getCreateOrModifyAiResponse(language, accessTokenId, aiPlayer);
+    public static void createOrModifyAi(UUID accessTokenId, AiPlayer aiPlayer) {
+        Response response = getCreateOrModifyAiResponse(accessTokenId, aiPlayer);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateOrModifyAiResponse(Language language, UUID accessTokenId, AiPlayer aiPlayer) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateOrModifyAiResponse(UUID accessTokenId, AiPlayer aiPlayer) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(aiPlayer)
             .put(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI));
     }
 
-    public static List<AiPlayer> getAis(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<AiPlayer> getAis(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_AIS));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -137,39 +136,39 @@ public class SkyXploreLobbyActions {
         return Arrays.asList(response.getBody().as(AiPlayer[].class));
     }
 
-    public static void removeAi(Language language, UUID accessTokenId1, UUID aiId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId1)
+    public static void removeAi(UUID accessTokenId1, UUID aiId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId1)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_REMOVE_AI, "userId", aiId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static void changeAllianceOfPlayer(Language language, UUID accessTokenId, UUID userId, Object alliance) {
-        Response response = getChangeAllianceOfPlayerResponse(language, accessTokenId, userId, alliance);
+    public static void changeAllianceOfPlayer(UUID accessTokenId, UUID userId, Object alliance) {
+        Response response = getChangeAllianceOfPlayerResponse(accessTokenId, userId, alliance);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getChangeAllianceOfPlayerResponse(Language language, UUID accessTokenId, UUID userId, Object alliance) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getChangeAllianceOfPlayerResponse(UUID accessTokenId, UUID userId, Object alliance) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(alliance))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER, "userId", userId));
     }
 
-    public static void changeAllianceOfAI(Language language, UUID accessTokenId, UUID aiId, Object alliance) {
-        Response response = getChangeAllianceOfAiResponse(language, accessTokenId, aiId, alliance);
+    public static void changeAllianceOfAI(UUID accessTokenId, UUID aiId, Object alliance) {
+        Response response = getChangeAllianceOfAiResponse(accessTokenId, aiId, alliance);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getChangeAllianceOfAiResponse(Language language, UUID accessTokenId, UUID aiId, Object alliance) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getChangeAllianceOfAiResponse(UUID accessTokenId, UUID aiId, Object alliance) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(alliance))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, "userId", aiId));
     }
 
-    public static Response getEditSettingsResponse(Language language, UUID accessTokenId, SkyXploreGameSettings settings) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getEditSettingsResponse(UUID accessTokenId, SkyXploreGameSettings settings) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(settings)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_EDIT_SETTINGS));
     }

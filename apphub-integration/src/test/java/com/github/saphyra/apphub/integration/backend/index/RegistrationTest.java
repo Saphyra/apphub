@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationRequest;
 import io.restassured.response.Response;
@@ -18,82 +17,82 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BackEndTest {
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "index"})
-    public void register(Language language) {
-        invalidEmail(language);
-        usernameTooShort(language);
-        usernameTooLong(language);
-        passwordTooShort(language);
-        passwordTooLong(language);
-        RegistrationRequest existingUserRequest = existingEmail(language);
-        existingUsername(language, existingUserRequest);
-        successfulRegistration(language);
+    @Test(groups = {"be", "index"})
+    public void register() {
+        invalidEmail();
+        usernameTooShort();
+        usernameTooLong();
+        passwordTooShort();
+        passwordTooLong();
+        RegistrationRequest existingUserRequest = existingEmail();
+        existingUsername(existingUserRequest);
+        successfulRegistration();
     }
 
-    private static void invalidEmail(Language language) {
+    private static void invalidEmail() {
         RegistrationRequest invalidEmailRequest = RegistrationParameters.invalidEmailParameters()
             .toRegistrationRequest();
-        Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(language, invalidEmailRequest);
-        verifyInvalidParam(language, invalidEmailResponse, "email", "invalid format");
+        Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(invalidEmailRequest);
+        verifyInvalidParam(invalidEmailResponse, "email", "invalid format");
     }
 
-    private static void usernameTooShort(Language language) {
+    private static void usernameTooShort() {
         RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
             .toRegistrationRequest();
-        Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(language, usernameTooShortRequest);
-        verifyInvalidParam(language, usernameTooShortResponse, "username", "too short");
+        Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(usernameTooShortRequest);
+        verifyInvalidParam(usernameTooShortResponse, "username", "too short");
     }
 
-    private static void usernameTooLong(Language language) {
+    private static void usernameTooLong() {
         RegistrationRequest usernameTooLongRequest = RegistrationParameters.tooLongUsernameParameters()
             .toRegistrationRequest();
-        Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(language, usernameTooLongRequest);
-        verifyInvalidParam(language, usernameTooLongResponse, "username", "too long");
+        Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(usernameTooLongRequest);
+        verifyInvalidParam(usernameTooLongResponse, "username", "too long");
     }
 
-    private static void passwordTooShort(Language language) {
+    private static void passwordTooShort() {
         RegistrationRequest passwordTooShortRequest = RegistrationParameters.tooShortPasswordParameters()
             .toRegistrationRequest();
-        Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(language, passwordTooShortRequest);
-        verifyInvalidParam(language, passwordTooShortResponse, "password", "too short");
+        Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(passwordTooShortRequest);
+        verifyInvalidParam(passwordTooShortResponse, "password", "too short");
     }
 
-    private static void passwordTooLong(Language language) {
+    private static void passwordTooLong() {
         RegistrationRequest passwordTooLongRequest = RegistrationParameters.tooLongPasswordParameters()
             .toRegistrationRequest();
-        Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(language, passwordTooLongRequest);
-        verifyInvalidParam(language, passwordTooLongResponse, "password", "too long");
+        Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(passwordTooLongRequest);
+        verifyInvalidParam(passwordTooLongResponse, "password", "too long");
     }
 
-    private static RegistrationRequest existingEmail(Language language) {
+    private static RegistrationRequest existingEmail() {
         RegistrationRequest existingUserRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        IndexPageActions.registerUser(language, existingUserRequest);
+        IndexPageActions.registerUser(existingUserRequest);
 
         RegistrationRequest existingEmailRequest = RegistrationParameters.validParameters()
             .toBuilder()
             .email(existingUserRequest.getEmail())
             .build()
             .toRegistrationRequest();
-        Response existingEmailResponse = IndexPageActions.getRegistrationResponse(language, existingEmailRequest);
-        verifyErrorResponse(language, existingEmailResponse, 409, ErrorCode.EMAIL_ALREADY_EXISTS);
+        Response existingEmailResponse = IndexPageActions.getRegistrationResponse(existingEmailRequest);
+        verifyErrorResponse(existingEmailResponse, 409, ErrorCode.EMAIL_ALREADY_EXISTS);
         return existingUserRequest;
     }
 
-    private static void existingUsername(Language language, RegistrationRequest existingUserRequest) {
+    private static void existingUsername(RegistrationRequest existingUserRequest) {
         RegistrationRequest existingUsernameRequest = RegistrationParameters.validParameters()
             .toBuilder()
             .username(existingUserRequest.getUsername())
             .build()
             .toRegistrationRequest();
-        Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(language, existingUsernameRequest);
-        verifyErrorResponse(language, existingUsernameResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
+        Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(existingUsernameRequest);
+        verifyErrorResponse(existingUsernameResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
     }
 
-    private static void successfulRegistration(Language language) {
+    private static void successfulRegistration() {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        Response response = IndexPageActions.getRegistrationResponse(language, registrationRequest);
+        Response response = IndexPageActions.getRegistrationResponse(registrationRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
         assertThat(roles).containsExactlyInAnyOrder(

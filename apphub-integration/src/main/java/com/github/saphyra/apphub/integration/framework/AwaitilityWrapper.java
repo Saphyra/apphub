@@ -89,6 +89,10 @@ public class AwaitilityWrapper {
         return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
     }
 
+    public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate, int timeoutSeconds, int pollInterval) {
+        return getWithWait(supplier, predicate, timeoutSeconds, TimeUnit.SECONDS, pollInterval, TimeUnit.SECONDS);
+    }
+
     public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate, int timeout, TimeUnit timeoutUnit, int pollInterval, TimeUnit pollUnit) {
         GetWithWaitHelper<T> helper = new GetWithWaitHelper<>(supplier, predicate);
         create(timeout, timeoutUnit, pollInterval, pollUnit)

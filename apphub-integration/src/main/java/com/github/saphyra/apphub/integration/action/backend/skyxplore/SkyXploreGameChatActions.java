@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import io.restassured.response.Response;
@@ -18,8 +17,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameChatActions {
-    public static List<SkyXploreCharacterModel> getPlayers(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<SkyXploreCharacterModel> getPlayers(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_PLAYERS, Collections.emptyMap(), Map.of("excludeSelf", true)));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -28,20 +27,20 @@ public class SkyXploreGameChatActions {
             .collect(Collectors.toList());
     }
 
-    public static void createChatRoom(Language language, UUID accessTokenId, CreateChatRoomRequest request) {
-        Response response = getCreateChatRoomResponse(language, accessTokenId, request);
+    public static void createChatRoom(UUID accessTokenId, CreateChatRoomRequest request) {
+        Response response = getCreateChatRoomResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateChatRoomResponse(Language language, UUID accessTokenId, CreateChatRoomRequest request) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateChatRoomResponse(UUID accessTokenId, CreateChatRoomRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM));
     }
 
-    public static Response getLeaveChatRoomResponse(Language language, UUID accessTokenId, String roomId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getLeaveChatRoomResponse(UUID accessTokenId, String roomId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", roomId));
     }
 }

@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
@@ -32,31 +31,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeconstructionQueueTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
-    public void deconstructionQueueCrud(Language language) {
+    @Test(groups = {"be", "skyxplore"})
+    public void deconstructionQueueCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
 
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
 
-        SkyXploreBuildingActions.deconstructBuilding(language, accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), buildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
 
         QueueResponse queueResponse = getQueue(accessTokenId, planetId, surfaceResponse);
-        updatePriority_invalidType(language, accessTokenId, planetId, queueResponse);
-        updatePriority_priorityTooLow(language, accessTokenId, planetId, queueResponse);
-        updatePriority_priorityTooHigh(language, accessTokenId, planetId, queueResponse);
-        queueResponse = updatePriority(language, accessTokenId, planetId, queueResponse);
-        cancelDeconstruction(language, accessTokenId, planetId, queueResponse, buildingId);
+        updatePriority_invalidType(accessTokenId, planetId, queueResponse);
+        updatePriority_priorityTooLow(accessTokenId, planetId, queueResponse);
+        updatePriority_priorityTooHigh(accessTokenId, planetId, queueResponse);
+        queueResponse = updatePriority(accessTokenId, planetId, queueResponse);
+        cancelDeconstruction(accessTokenId, planetId, queueResponse, buildingId);
     }
 
     private static QueueResponse getQueue(UUID accessTokenId, UUID planetId, SurfaceResponse surfaceResponse) {
@@ -73,26 +72,26 @@ public class DeconstructionQueueTest extends BackEndTest {
         return queueResponse;
     }
 
-    private static void updatePriority_invalidType(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
+    private static void updatePriority_invalidType(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
 
-        ResponseValidator.verifyInvalidParam(language, setPriority_invalidTypeResponse, "type", "invalid value");
+        ResponseValidator.verifyInvalidParam(setPriority_invalidTypeResponse, "type", "invalid value");
     }
 
-    private static void updatePriority_priorityTooLow(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
+    private static void updatePriority_priorityTooLow(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
 
-        ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooLowResponse, "priority", "too low");
+        ResponseValidator.verifyInvalidParam(setPriority_priorityTooLowResponse, "priority", "too low");
     }
 
-    private static void updatePriority_priorityTooHigh(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
+    private static void updatePriority_priorityTooHigh(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
 
-        ResponseValidator.verifyInvalidParam(language, setPriority_priorityTooHighResponse, "priority", "too high");
+        ResponseValidator.verifyInvalidParam(setPriority_priorityTooHighResponse, "priority", "too high");
     }
 
-    private QueueResponse updatePriority(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        SkyXplorePlanetQueueActions.setPriority(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
+    private QueueResponse updatePriority(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
+        SkyXplorePlanetQueueActions.setPriority(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
         queueResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
             .getQueue()
@@ -104,8 +103,8 @@ public class DeconstructionQueueTest extends BackEndTest {
         return queueResponse;
     }
 
-    private static void cancelDeconstruction(Language language, UUID accessTokenId, UUID planetId, QueueResponse queueResponse, UUID buildingId) {
-        SkyXplorePlanetQueueActions.cancelItem(language, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+    private static void cancelDeconstruction(UUID accessTokenId, UUID planetId, QueueResponse queueResponse, UUID buildingId) {
+        SkyXplorePlanetQueueActions.cancelItem(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
         PlanetOverviewResponse planetOverview = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
         assertThat(planetOverview.getQueue()).isEmpty();

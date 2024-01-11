@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -28,34 +27,33 @@ public class MoraleRecoveryTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
     public void checkMoraleRecovery() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        SkyXploreGameActions.setPaused(accessTokenId, false);
         AwaitilityWrapper.create(60, 5)
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
+            .until(() -> SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
                 .stream()
                 .anyMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() < REFERENCE_MORALE)
             )
             .assertTrue("Morale is not decreased for citizens");
 
         AwaitilityWrapper.create(180, 10)
-            .until(() -> SkyXplorePopulationActions.getPopulation(language, accessTokenId, planetId)
+            .until(() -> SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
                 .stream()
                 .allMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() > 9000)
             )

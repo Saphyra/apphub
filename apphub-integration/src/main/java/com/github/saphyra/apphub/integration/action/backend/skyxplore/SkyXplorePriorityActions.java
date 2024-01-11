@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PriorityType;
 import io.restassured.response.Response;
@@ -19,12 +18,12 @@ public class SkyXplorePriorityActions {
             .getPriorities();
     }
 
-    public static Response getUpdatePriorityResponse(Language language, UUID accessTokenId, UUID planetId, PriorityType priorityType, int newPriority) {
-        return getUpdatePriorityResponse(language, accessTokenId, planetId, priorityType.name(), newPriority);
+    public static Response getUpdatePriorityResponse(UUID accessTokenId, UUID planetId, PriorityType priorityType, int newPriority) {
+        return getUpdatePriorityResponse(accessTokenId, planetId, priorityType.name(), newPriority);
     }
 
-    public static Response getUpdatePriorityResponse(Language language, UUID accessTokenId, UUID planetId, String priorityType, int newPriority) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getUpdatePriorityResponse(UUID accessTokenId, UUID planetId, String priorityType, int newPriority) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(newPriority))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("priorityType", priorityType))));
     }

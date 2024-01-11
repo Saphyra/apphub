@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
@@ -33,53 +32,53 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "skyxplore"})
-    public void terraformCD(Language language) {
+    @Test(groups = {"be", "skyxplore"})
+    public void terraformCD() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         UUID emptySurfaceId = findEmptySurface(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        invalidSurfaceType(language, accessTokenId, planetId, emptySurfaceId);
-        surfaceNotEmpty(language, accessTokenId, planetId);
-        incompatibleSurfaceType(language, accessTokenId, planetId, emptySurfaceId);
-        terraform(language, accessTokenId, planetId, emptySurfaceId);
-        terraformationAlreadyInProgress(language, accessTokenId, planetId, emptySurfaceId);
-        cancel(language, accessTokenId, planetId, emptySurfaceId);
+        invalidSurfaceType(accessTokenId, planetId, emptySurfaceId);
+        surfaceNotEmpty(accessTokenId, planetId);
+        incompatibleSurfaceType(accessTokenId, planetId, emptySurfaceId);
+        terraform(accessTokenId, planetId, emptySurfaceId);
+        terraformationAlreadyInProgress(accessTokenId, planetId, emptySurfaceId);
+        cancel(accessTokenId, planetId, emptySurfaceId);
     }
 
-    private static void invalidSurfaceType(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, "asd");
+    private static void invalidSurfaceType(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
+        Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(accessTokenId, planetId, emptySurfaceId, "asd");
 
-        ResponseValidator.verifyInvalidParam(language, invalidSurfaceTypeResponse, "surfaceType", "invalid value");
+        ResponseValidator.verifyInvalidParam(invalidSurfaceTypeResponse, "surfaceType", "invalid value");
     }
 
-    private void surfaceNotEmpty(Language language, UUID accessTokenId, UUID planetId) {
+    private void surfaceNotEmpty(UUID accessTokenId, UUID planetId) {
         UUID occupiedSurfaceId = findOccupiedDesert(accessTokenId, planetId);
 
-        Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
+        Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        ResponseValidator.verifyForbiddenOperation(language, surfaceOccupiedResponse);
+        ResponseValidator.verifyForbiddenOperation(surfaceOccupiedResponse);
     }
 
-    private static void incompatibleSurfaceType(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response incompatibleSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_OIL_FIELD);
+    private static void incompatibleSurfaceType(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
+        Response incompatibleSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_OIL_FIELD);
 
-        ResponseValidator.verifyForbiddenOperation(language, incompatibleSurfaceTypeResponse);
+        ResponseValidator.verifyForbiddenOperation(incompatibleSurfaceTypeResponse);
     }
 
-    private void terraform(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+    private void terraform(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
+        SkyXploreSurfaceActions.terraform(accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
 
         PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
         SurfaceResponse modifiedSurfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), emptySurfaceId)
@@ -97,14 +96,14 @@ public class TerraformTest extends BackEndTest {
         assertThat(queueItemModifiedEvent.getData()).containsEntry("targetSurfaceType", Constants.SURFACE_TYPE_LAKE);
     }
 
-    private static void terraformationAlreadyInProgress(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response alreadyInProgressResponse = SkyXploreSurfaceActions.getTerraformResponse(language, accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+    private static void terraformationAlreadyInProgress(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
+        Response alreadyInProgressResponse = SkyXploreSurfaceActions.getTerraformResponse(accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        ResponseValidator.verifyErrorResponse(language, alreadyInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
+        ResponseValidator.verifyErrorResponse(alreadyInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
-    private void cancel(Language language, UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        SkyXploreSurfaceActions.cancelTerraformation(language, accessTokenId, planetId, emptySurfaceId);
+    private void cancel(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
+        SkyXploreSurfaceActions.cancelTerraformation(accessTokenId, planetId, emptySurfaceId);
 
         PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
@@ -116,26 +115,25 @@ public class TerraformTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"})
     public void finishTerraformation() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(language, accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(language, GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(language, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
 
         WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SkyXploreSurfaceActions.terraform(language, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
-        SkyXploreGameActions.setPaused(language, accessTokenId, false);
+        SkyXploreGameActions.setPaused(accessTokenId, false);
 
         AwaitilityWrapper.create(120, 5)
             .until(() -> isTerraformationFinished(accessTokenId, planetId, surfaceId))
