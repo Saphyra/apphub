@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -86,7 +85,7 @@ public class PlanetQueueTest extends SeleniumTest {
         Surface surface;
         surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
+        SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
 
         queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
             .stream()

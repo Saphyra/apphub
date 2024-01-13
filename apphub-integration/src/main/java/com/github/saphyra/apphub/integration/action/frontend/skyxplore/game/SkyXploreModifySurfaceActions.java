@@ -31,4 +31,18 @@ public class SkyXploreModifySurfaceActions {
             .orElseThrow(() -> new RuntimeException("Upgrade building button is not displayed."))
             .click();
     }
+
+    public static void startTerraformation(WebDriver driver, String surfaceType) {
+        driver.findElements(By.className("skyxplore-game-terraforming-possibility"))
+            .stream()
+            .filter(webElement -> webElement.getAttribute("id").equals("skyxplore-game-terraforming-possibility-" + surfaceType.toLowerCase()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("TerraformingPossibility not found with surfaceType " + surfaceType))
+            .findElement(By.className("skyxplore-game-terraform-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.isLoaded(driver))
+            .assertTrue("Planet is not loaded.");
+    }
 }

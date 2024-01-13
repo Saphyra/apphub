@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet.population;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -7,14 +7,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetPopulationOverviewActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePopulationOverviewActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.Citizen;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.citizen.Citizen;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +30,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
-    @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "skyxplore"})
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -61,7 +61,7 @@ public class CitizenOverviewTest extends SeleniumTest {
 
         SkyXplorePlanetActions.openPopulationOverview(driver);
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetPopulationOverviewActions.isLoaded(driver))
+            .until(() -> SkyXplorePopulationOverviewActions.isLoaded(driver))
             .assertTrue("PopulationOverview is not opened.");
 
         List<String> newNames = renameCitizens(driver);
@@ -70,7 +70,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     }
 
     private List<String> renameCitizens(WebDriver driver) {
-        List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
+        List<String> citizenNames = SkyXplorePopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
             .toList();
@@ -85,41 +85,41 @@ public class CitizenOverviewTest extends SeleniumTest {
             renameCitizen(driver, citizenNames.get(i), newName);
 
             AwaitilityWrapper.createDefault()
-                .until(() -> SkyXplorePlanetPopulationOverviewActions.findCitizen(driver, newName).isPresent())
+                .until(() -> SkyXplorePopulationOverviewActions.findCitizen(driver, newName).isPresent())
                 .assertTrue("Citizen is not renamed.");
         }
         return newNames;
     }
 
     private void orderCitizens(WebDriver driver, List<String> newNames) {
-        SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.DESCENDING);
+        SkyXplorePopulationOverviewActions.orderCitizens(driver, CitizenOrder.DESCENDING);
         verifyCitizenOrder(driver, CitizenOrder.DESCENDING, newNames);
 
-        SkyXplorePlanetPopulationOverviewActions.orderCitizens(driver, CitizenOrder.ASCENDING);
+        SkyXplorePopulationOverviewActions.orderCitizens(driver, CitizenOrder.ASCENDING);
         verifyCitizenOrder(driver, CitizenOrder.ASCENDING, newNames);
     }
 
     private void displayAndHideSkills(WebDriver driver) {
-        SkyXplorePlanetPopulationOverviewActions.toggleSkillDisplay(driver, "AIMING");
+        SkyXplorePopulationOverviewActions.toggleSkillDisplay(driver, "AIMING");
         verifyDisplayedSkillCount(driver);
 
-        SkyXplorePlanetPopulationOverviewActions.hideAllSkills(driver);
+        SkyXplorePopulationOverviewActions.hideAllSkills(driver);
         verifyDisplayedSkillCount(driver);
 
-        SkyXplorePlanetPopulationOverviewActions.showAllSkills(driver);
+        SkyXplorePopulationOverviewActions.showAllSkills(driver);
         verifyDisplayedSkillCount(driver);
     }
 
     private void verifyDisplayedSkillCount(WebDriver driver) {
-        int displayedSkillCount = SkyXplorePlanetPopulationOverviewActions.getDisplayedSkillCount(driver);
+        int displayedSkillCount = SkyXplorePopulationOverviewActions.getDisplayedSkillCount(driver);
 
-        SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
+        SkyXplorePopulationOverviewActions.getCitizens(driver)
             .forEach(citizen -> assertThat(citizen.getDisplayedSkillCount()).isEqualTo(displayedSkillCount));
     }
 
     private void verifyCitizenOrder(WebDriver driver, CitizenOrder order, List<String> names) {
         List<String> expectedOrder = order.sort(names);
-        List<String> citizenNames = SkyXplorePlanetPopulationOverviewActions.getCitizens(driver)
+        List<String> citizenNames = SkyXplorePopulationOverviewActions.getCitizens(driver)
             .stream()
             .map(Citizen::getName)
             .collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class CitizenOverviewTest extends SeleniumTest {
     }
 
     private void renameCitizen(WebDriver driver, String oldName, String newName) {
-        Citizen citizen = SkyXplorePlanetPopulationOverviewActions.findCitizenValidated(driver, oldName);
+        Citizen citizen = SkyXplorePopulationOverviewActions.findCitizenValidated(driver, oldName);
         citizen.setName(newName);
     }
 }

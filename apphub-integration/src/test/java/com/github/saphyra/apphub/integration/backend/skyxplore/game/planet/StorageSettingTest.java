@@ -150,7 +150,7 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
-    @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
+    @Test(groups = {"be", "skyxplore"})
     public void produceResourcesForStorageSetting() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();

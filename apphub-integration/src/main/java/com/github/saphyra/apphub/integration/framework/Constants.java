@@ -96,4 +96,6 @@ public class Constants {
         "encryption",
         "storage"
     );
+
+    public static final String CITIZEN_PROPERTY_MORALE = "MORALE";
 }

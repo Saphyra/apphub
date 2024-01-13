@@ -22,7 +22,7 @@ import java.util.UUID;
 public class BanExpirationTest extends BackEndTest {
     private static final String REASON = "reason";
 
-    @Test(priority = Integer.MIN_VALUE, groups = {"be", "admin-panel"})
+    @Test(groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin( userData);

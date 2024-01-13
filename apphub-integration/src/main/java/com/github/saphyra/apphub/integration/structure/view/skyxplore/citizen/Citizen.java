@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.view.skyxplore;
+package com.github.saphyra.apphub.integration.structure.view.skyxplore.citizen;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +45,9 @@ public class Citizen {
 
     public int getDisplayedSkillCount() {
         return webElement.findElements(By.className("skyxplore-game-population-citizen-status-bar-bar")).size();
+    }
+
+    public CitizenStat getStat(String statName) {
+        return new CitizenStat(webElement.findElement(By.className("skyxplore-game-population-citizen-status-bar-" + statName)));
     }
 }

@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXplore
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
@@ -63,7 +63,7 @@ public class TerraformationTest extends SeleniumTest {
     private static Surface startTerraformation(WebDriver driver, Surface surface, String surfaceId) {
         surface.openModifySurfaceWindow(driver);
 
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
+        SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_LAKE);
 
         surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
 
@@ -120,7 +120,7 @@ public class TerraformationTest extends SeleniumTest {
         String surfaceId = surface.getSurfaceId();
         surface.openModifySurfaceWindow(driver);
 
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
 
         surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isTerraformationInProgress()).isTrue();

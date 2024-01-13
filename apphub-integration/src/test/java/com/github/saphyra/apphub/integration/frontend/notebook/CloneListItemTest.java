@@ -68,7 +68,7 @@ public class CloneListItemTest extends SeleniumTest {
         CUSTOM_TABLE_TITLE
     );
 
-    @Test(groups = {"fe", "notebook"}, priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "notebook"})
     public void cloneListItem() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

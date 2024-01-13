@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.Citizen;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.citizen.Citizen;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class SkyXplorePlanetPopulationOverviewActions {
+public class SkyXplorePopulationOverviewActions {
     public static boolean isLoaded(WebDriver driver) {
         return WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-population")));
     }

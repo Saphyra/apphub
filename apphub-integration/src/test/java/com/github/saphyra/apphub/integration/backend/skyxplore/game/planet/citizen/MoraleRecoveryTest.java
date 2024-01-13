@@ -25,7 +25,7 @@ import java.util.UUID;
 public class MoraleRecoveryTest extends BackEndTest {
     public static final int REFERENCE_MORALE = 9000;
 
-    @Test(groups = {"be", "skyxplore"}, priority = Integer.MIN_VALUE)
+    @Test(groups = {"be", "skyxplore"})
     public void checkMoraleRecovery() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
@@ -55,7 +55,7 @@ public class MoraleRecoveryTest extends BackEndTest {
         AwaitilityWrapper.create(180, 10)
             .until(() -> SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
                 .stream()
-                .allMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() > 9000)
+                .allMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() > REFERENCE_MORALE)
             )
             .assertTrue("Morale is not recharged for citizens");
     }

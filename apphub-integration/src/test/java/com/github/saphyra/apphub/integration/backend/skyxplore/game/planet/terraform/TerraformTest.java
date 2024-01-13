@@ -19,8 +19,6 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueRespon
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
-import com.github.saphyra.apphub.integration.ws.WsActions;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -40,12 +38,10 @@ public class TerraformTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
-            .get(accessTokenId);
+        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
-        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         UUID emptySurfaceId = findEmptySurface(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
@@ -121,13 +117,10 @@ public class TerraformTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
-            .get(accessTokenId);
+        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
-
-        WsActions.sendSkyXplorePageOpenedMessage(gameWsClient, Constants.PAGE_TYPE_PLANET, planetId);
 
         UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
