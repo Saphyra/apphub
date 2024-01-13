@@ -3,5 +3,4 @@ TODO add to release notes
 TODO MessageSender for population
 TODO MessageSender for Planet building overview
 TODO delete unused WebSocketEventNames from both BE, FE and integration side
-TODO investigate timing of webSockets - Population is updated in every tick instead of every second. Same applies to planet storage overview
 TODO process ForRemovals

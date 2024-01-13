@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +61,6 @@ public class PlanetStorageMessageProvider implements PlanetMessageProvider {
             return Optional.empty();
         }
 
-
         LastMessage<PlanetStorageResponse> latest = LastMessage.<PlanetStorageResponse>builder()
             .payload(actualPayload)
             .sentAt(dateTimeUtil.getCurrentDateTime())
@@ -76,6 +76,9 @@ public class PlanetStorageMessageProvider implements PlanetMessageProvider {
             return true;
         }
 
-        return lastMessage.getSentAt().isBefore(dateTimeUtil.getCurrentDateTime().minusNanos(gameProperties.getMessageDelay().getPlanetStorage() * 1000));
+        LocalDateTime lastMessageSentAt = lastMessage.getSentAt();
+        long pollingIntervalNanos = gameProperties.getMessageDelay().getPlanetStorage() * 1000000;
+        LocalDateTime nextPollingTime = dateTimeUtil.getCurrentDateTime().minusNanos(pollingIntervalNanos);
+        return lastMessageSentAt.isBefore(nextPollingTime);
     }
 }

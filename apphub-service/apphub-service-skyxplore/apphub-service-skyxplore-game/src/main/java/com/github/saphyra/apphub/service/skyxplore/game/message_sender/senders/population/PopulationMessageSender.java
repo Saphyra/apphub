@@ -124,6 +124,6 @@ public class PopulationMessageSender implements MessageSender {
             return true;
         }
 
-        return lastMessage.getSentAt().isBefore(dateTimeUtil.getCurrentDateTime().minusNanos(gameProperties.getMessageDelay().getPopulation() * 1000));
+        return lastMessage.getSentAt().isBefore(dateTimeUtil.getCurrentDateTime().minusNanos(gameProperties.getMessageDelay().getPopulation() * 1000000));
     }
 }

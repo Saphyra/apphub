@@ -35,9 +35,9 @@ public class StoredResourceAmountQueryService {
         return gameData.getStoredResources()
             .getByLocation(location)
             .stream()
-            .peek(storedResource -> log.info("Found: {}", storedResource))
+            .peek(storedResource -> log.debug("Found: {}", storedResource))
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
-            .peek(storedResource -> log.info("For StorageType {}: {}", storedResource, storedResource))
+            .peek(storedResource -> log.debug("For StorageType {}: {}", storedResource, storedResource))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
