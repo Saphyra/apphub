@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetBuildingOverview;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetStorageOverview;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
@@ -114,5 +115,9 @@ public class SkyXplorePlanetActions {
     public static void discardNewPlanetName(WebDriver driver) {
         driver.findElement(By.id("skyxplore-game-planet-name-discard-button"))
             .click();
+    }
+
+    public static PlanetBuildingOverview getBuildingOverview(WebDriver driver) {
+        return new PlanetBuildingOverview(driver);
     }
 }

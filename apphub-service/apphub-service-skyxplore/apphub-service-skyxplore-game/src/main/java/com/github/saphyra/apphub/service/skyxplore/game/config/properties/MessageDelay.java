@@ -13,5 +13,7 @@ public class MessageDelay {
     private Long planetSurface;
     private Long planetQueue;
     private Long planetStorage;
+    private Long planetPopulation;
+    private Long planetBuilding;
     private Long population;
 }

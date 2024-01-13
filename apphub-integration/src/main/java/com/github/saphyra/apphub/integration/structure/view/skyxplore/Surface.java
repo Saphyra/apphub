@@ -107,10 +107,6 @@ public class Surface {
             .click();
 
         SkyXploreModifySurfaceActions.confirmUpgrade(driver);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.isStale(webElement))
-            .assertTrue("Planet surface was not reloaded.");
     }
 
     public boolean isTerraformationInProgress() {

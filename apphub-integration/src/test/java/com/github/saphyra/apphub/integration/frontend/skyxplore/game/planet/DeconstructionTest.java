@@ -16,8 +16,9 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetBuildingOverviewItem;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -131,5 +132,12 @@ public class DeconstructionTest extends SeleniumTest {
 
         surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isTrue();
+
+        PlanetBuildingOverviewItem planetBuildingOverview = SkyXplorePlanetActions.getBuildingOverview(driver)
+            .getForSurfaceType(Constants.SURFACE_TYPE_DESERT);
+
+        planetBuildingOverview.toggleDetails();
+
+        assertThat(planetBuildingOverview.getForDataId(Constants.DATA_ID_SOLAR_PANEL)).isEmpty();
     }
 }

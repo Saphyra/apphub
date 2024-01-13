@@ -19,8 +19,6 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCh
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceBuildingResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
-import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -44,13 +42,12 @@ public class UpgradeBuildingTest extends BackEndTest {
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
-        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
         buildingAtMaxLevel(accessTokenId, planetId);
         UUID upgradableBuildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
-        upgradeBuilding(accessTokenId, planetWsClient, planetId, upgradableBuildingId);
+        upgradeBuilding(accessTokenId, planetId, upgradableBuildingId);
         constructionAlreadyInProgress(accessTokenId, planetId, upgradableBuildingId);
-        cancel(accessTokenId, planetWsClient, planetId, upgradableBuildingId);
+        cancel(accessTokenId, planetId, upgradableBuildingId);
     }
 
     private void buildingAtMaxLevel(UUID accessTokenId, UUID planetId) {
@@ -61,18 +58,10 @@ public class UpgradeBuildingTest extends BackEndTest {
         ResponseValidator.verifyForbiddenOperation(maxLevelResponse);
     }
 
-    private static void upgradeBuilding(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
-        planetWsClient.clearMessages();
+    private static void upgradeBuilding(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
         SkyXploreBuildingActions.upgradeBuilding(accessTokenId, planetId, upgradableBuildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceByBuildingId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), upgradableBuildingId)
-                    .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding().getConstruction()))
-                    .isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED + " event did not arrive."))
-            .getPayloadAs(PlanetOverviewResponse.class);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
         SurfaceResponse modifiedSurface = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), upgradableBuildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -81,9 +70,9 @@ public class UpgradeBuildingTest extends BackEndTest {
 
         PlanetStorageResponse storageResponse = planetOverviewResponse.getStorage();
 
-        assertThat(storageResponse.getEnergy().getReservedStorageAmount()).isEqualTo(10);
-        assertThat(storageResponse.getBulk().getReservedStorageAmount()).isEqualTo(10);
-        assertThat(storageResponse.getLiquid().getReservedStorageAmount()).isEqualTo(10);
+        assertThat(storageResponse.getEnergy().getReservedStorageAmount()).isEqualTo(500);
+        assertThat(storageResponse.getBulk().getReservedStorageAmount()).isEqualTo(200);
+        assertThat(storageResponse.getLiquid().getReservedStorageAmount()).isEqualTo(500);
 
         QueueResponse queueItemModifiedEvent = planetOverviewResponse.getQueue()
             .stream()
@@ -104,16 +93,10 @@ public class UpgradeBuildingTest extends BackEndTest {
         ResponseValidator.verifyErrorResponse(inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
-    private void cancel(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID upgradableBuildingId) {
-        planetWsClient.clearMessages();
+    private void cancel(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
         SkyXploreBuildingActions.cancelConstruction(accessTokenId, planetId, upgradableBuildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceByBuildingId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), upgradableBuildingId).filter(surfaceResponse -> isNull(surfaceResponse.getBuilding().getConstruction())).isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED + " event did not arrive."))
-            .getPayloadAs(PlanetOverviewResponse.class);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
         SurfaceResponse modifiedSurface = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), upgradableBuildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));

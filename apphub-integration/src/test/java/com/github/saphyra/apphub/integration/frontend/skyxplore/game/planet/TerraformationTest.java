@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -11,12 +10,13 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -108,6 +108,14 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
+        int desertSlotCount = SkyXplorePlanetActions.getBuildingOverview(driver)
+            .getForSurfaceType(Constants.SURFACE_TYPE_DESERT)
+            .getTotalSots();
+
+        int concreteSlotCount = SkyXplorePlanetActions.getBuildingOverview(driver)
+            .getForSurfaceType(Constants.SURFACE_TYPE_CONCRETE)
+            .getTotalSots();
+
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
         String surfaceId = surface.getSurfaceId();
         surface.openModifySurfaceWindow(driver);
@@ -127,5 +135,8 @@ public class TerraformationTest extends SeleniumTest {
 
         assertThat(surface.isConstructionInProgress()).isFalse();
         assertThat(surface.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);
+
+        assertThat(SkyXplorePlanetActions.getBuildingOverview(driver).getForSurfaceType(Constants.SURFACE_TYPE_DESERT).getTotalSots()).isEqualTo(desertSlotCount - 1);
+        assertThat(SkyXplorePlanetActions.getBuildingOverview(driver).getForSurfaceType(Constants.SURFACE_TYPE_CONCRETE).getTotalSots()).isEqualTo(concreteSlotCount + 1);
     }
 }

@@ -12,9 +12,9 @@ const BuildingTypeOverview = ({ surfaceType, surfaceTypeDetails, surfaceLocaliza
         >
             <span>{surfaceLocalizationHandler.get(surfaceType)}</span>
             <span>: </span>
-            <span>{surfaceTypeDetails.usedSlots}</span>
+            <span className="skyxplore-game-planet-overview-building-used-slots">{surfaceTypeDetails.usedSlots}</span>
             <span> / </span>
-            <span>{surfaceTypeDetails.slots}</span>
+            <span className="skyxplore-game-planet-overview-building-total-slots">{surfaceTypeDetails.slots}</span>
 
             {surfaceTypeDetails.usedSlots > 0 &&
                 <Button

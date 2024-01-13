@@ -14,6 +14,7 @@ const BuildingTypeOverviewDetails = ({ buildingDetails }) => {
             .sorted((a, b) => buildingLocalizationHandler.get(a.dataId).localeCompare(buildingLocalizationHandler.get(b.dataId)))
             .map(buildingDetail => <BuildingDetailRow
                 key={buildingDetail.dataId}
+                dataId={buildingDetail.dataId}
                 name={buildingLocalizationHandler.get(buildingDetail.dataId)}
                 totalLevel={buildingDetail.levelSum}
                 usedSlots={buildingDetail.usedSlots}
@@ -39,12 +40,12 @@ const BuildingTypeOverviewDetails = ({ buildingDetails }) => {
     );
 }
 
-const BuildingDetailRow = ({ name, totalLevel, usedSlots }) => {
+const BuildingDetailRow = ({ dataId, name, totalLevel, usedSlots }) => {
     return (
-        <tr>
+        <tr className={"skyxplore-game-planet-overview-building-details-item-" + dataId}>
             <td>{name}</td>
-            <td>{totalLevel}</td>
-            <td>{usedSlots}</td>
+            <td className="skyxplore-game-planet-overview-building-details-item-total-level">{totalLevel}</td>
+            <td className="skyxplore-game-planet-overview-building-details-item-used-slots">{usedSlots}</td>
         </tr>
     );
 }

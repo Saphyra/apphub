@@ -68,7 +68,7 @@ class PlanetFactoryTest {
 
         assertThat(result.getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.getSolarSystemId()).isEqualTo(SOLAR_SYSTEM_ID);
-        assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME + " D");
+        assertThat(result.getDefaultName()).isEqualTo(DEFAULT_NAME + " " + (PLANET_INDEX + 1));
         assertThat(result.getSize()).isEqualTo(PLANET_SIZE);
         assertThat(result.getOrbitRadius()).isEqualTo(ORBIT_RADIUS);
         assertThat(result.getOrbitSpeed()).isEqualTo(ORBIT_SPEED);

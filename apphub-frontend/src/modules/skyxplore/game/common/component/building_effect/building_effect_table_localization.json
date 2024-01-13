@@ -18,5 +18,9 @@
     "workplaces": {
         "en": "Workplaces",
         "hu": "Munkahelyek"
+    },
+    "stores": {
+        "en": "Stores",
+        "hu": "Tárol"
     }
 }

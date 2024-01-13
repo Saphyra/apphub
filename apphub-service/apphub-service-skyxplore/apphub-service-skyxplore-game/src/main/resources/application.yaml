@@ -11,6 +11,8 @@ game:
     planetSurface: 100
     planetQueue: 100
     planetStorage: 1000
+    planetPopulation: 5000
+    planetBuilding: 1000
     population: 1000
   deconstruction:
     requiredWorkPoints: 20000

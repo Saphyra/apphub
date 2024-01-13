@@ -5,11 +5,14 @@ import BuildingType from "../../constants/BuildingType";
 import Utils from "../../../../../../common/js/Utils";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import resourceLocalizationData from "../../localization/resource_localization.json";
+import storageTypeLocalizationData from "../../localization/storageTypeLocalization.json";
+
 
 //TODO split
 const BuildingEffectTable = ({ id, className, surfaceType, itemData, currentLevel }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
+    const storageTypeLocalizationHandler = new LocalizationHandler(storageTypeLocalizationData);
 
     const getTableHead = () => {
         switch (itemData.buildingType) {
@@ -24,7 +27,15 @@ const BuildingEffectTable = ({ id, className, surfaceType, itemData, currentLeve
                             <th>{localizationHandler.get("components")}</th>
                         </tr>
                     </thead>
-                )
+                );
+                case BuildingType.STORAGE:
+                    return (
+                        <thead>
+                            <tr>
+                                <th colSpan={2} >{localizationHandler.get("stores")}</th>
+                            </tr>
+                        </thead>
+                    );
             default:
                 Utils.throwException("IllegalArgument", "Unhandled buildingType " + itemData.buildingType);
         }
@@ -78,6 +89,15 @@ const BuildingEffectTable = ({ id, className, surfaceType, itemData, currentLeve
                         </tr>
                     </tbody>
                 );
+            case BuildingType.STORAGE:
+                return (
+                    <tbody>
+                        <tr>
+                            <td>{storageTypeLocalizationHandler.get(itemData.stores)}</td>
+                            <td>{itemData.capacity}</td>
+                        </tr>
+                    </tbody>
+                )
             default:
                 Utils.throwException("IllegalArgument", "Unhandled buildingType " + itemData.buildingType);
         }

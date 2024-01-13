@@ -1,6 +1,4 @@
 TODO elimination
 TODO add to release notes
-TODO MessageSender for population
-TODO MessageSender for Planet building overview
 TODO delete unused WebSocketEventNames from both BE, FE and integration side
 TODO process ForRemovals

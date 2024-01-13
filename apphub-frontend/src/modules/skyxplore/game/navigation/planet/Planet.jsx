@@ -99,6 +99,12 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                 if (Utils.hasValue(payload.surfaces)) {
                     setSurfaces(payload.surfaces);
                 }
+                if (Utils.hasValue(payload.population)) {
+                    setPopulation(payload.population);
+                }
+                if (Utils.hasValue(payload.buildings)) {
+                    setBuildings(payload.buildings);
+                }
                 break;
         }
     }

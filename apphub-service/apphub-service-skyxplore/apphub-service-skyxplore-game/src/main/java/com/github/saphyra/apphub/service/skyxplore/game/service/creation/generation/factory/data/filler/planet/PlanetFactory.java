@@ -16,8 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class PlanetFactory {
-    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
-
     private final IdGenerator idGenerator;
     private final Random random;
     private final GameProperties gameProperties;
@@ -26,7 +24,7 @@ public class PlanetFactory {
         return Planet.builder()
             .planetId(idGenerator.randomUuid())
             .solarSystemId(solarSystem.getSolarSystemId())
-            .defaultName(String.format("%s %s", solarSystem.getDefaultName(), ALPHABET.charAt(planetIndex)))
+            .defaultName(String.format("%s %s", solarSystem.getDefaultName(), planetIndex + 1))
             .size(random.randInt(settings.getPlanetSize()))
             .orbitRadius(orbitRadius)
             .orbitSpeed(random.randDouble(gameProperties.getPlanet().getOrbitSpeed()))
