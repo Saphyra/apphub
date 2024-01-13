@@ -6,6 +6,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum LocalizedText {
+    //PLATFORM
+    ERROR_MISSING_ROLE("You are not allowed to perform this operation."),
+    NOTIFICATION_LANGUAGE_CHANGED_EN("Language changed."),
+    NOTIFICATION_LANGUAGE_CHANGED_HU("Nyelv megváltoztatva."),
+
     //INDEX/ACCOUNT
     INDEX_SUCCESSFULLY_LOGGED_OUT("Successfully logged out."),
     INDEX_BAD_CREDENTIALS("Unknown combination of e-mail address and password."),

@@ -1,32 +1,18 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.core.ForRemoval;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import io.restassured.response.Response;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePlanetQueueActions {
-    @ForRemoval("skyxplore-react")
-    public static List<QueueResponse> getQueue(UUID accessTokenId, UUID planetId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_QUEUE, "planetId", planetId));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return Arrays.asList(response.getBody().as(QueueResponse[].class));
-    }
-
     public static void setPriority(UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
         Response response = getSetPriorityResponse(accessTokenId, planetId, type, itemId, priority);
 

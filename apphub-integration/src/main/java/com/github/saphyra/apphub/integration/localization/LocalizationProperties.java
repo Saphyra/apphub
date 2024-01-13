@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.integration.localization;
 
-import com.github.saphyra.apphub.integration.core.ForRemoval;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import lombok.experimental.UtilityClass;
 
 import java.io.InputStream;
@@ -14,7 +13,6 @@ import java.util.stream.Stream;
 import static java.util.Objects.isNull;
 
 @UtilityClass
-@ForRemoval("skyxplore-react")
 public class LocalizationProperties {
     private final Map<String, Map<String, String>> PROPERTIES_MAP = new HashMap<>();
 
