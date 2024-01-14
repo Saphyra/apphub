@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./queue_item.css";
-import QueueItemType from "../../../../common/constants/QueueItemType";
-import Utils from "../../../../../../../common/js/Utils";
 import buildingLocalizationData from "../../../../common/localization/building_localization.json";
 import surfaceLocalizationData from "../../../../common/localization/surface_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
@@ -11,6 +9,7 @@ import NumberInput from "../../../../../../../common/component/input/NumberInput
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import Button from "../../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import QueueItemHeader from "./header/QueueItemHeader";
 
 const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
@@ -23,44 +22,6 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     const changePriority = (newPriority) => {
         Endpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
             .send();
-    }
-
-    //TODO extract
-    const getHeader = () => {
-        switch (queueItem.type) {
-            case QueueItemType.CONSTRUCTION:
-                return (
-                    <div className="skyxplore-game-planet-queue-item-header">
-                        <span className="skyxplore-game-planet-queue-item-header-building">{buildingLocalizationHandler.get(queueItem.data.dataId)}</span>
-                        <span> </span>
-                        <span>{localizationHandler.get("level")}</span>
-                        <span> </span>
-                        <span className="skyxplore-game-planet-queue-item-header-current-level">{queueItem.data.currentLevel}</span>
-                        <span>{" => "}</span>
-                        <span className="skyxplore-game-planet-queue-item-header-target-level">{queueItem.data.currentLevel + 1}</span>
-                    </div>
-                );
-            case QueueItemType.DECONSTRUCTION:
-                return (
-                    <div className="skyxplore-game-planet-queue-item-header">
-                        <span>{localizationHandler.get("deconstruct")}</span>
-                        <span>: </span>
-                        <span className="skyxplore-game-planet-queue-item-header-building">{buildingLocalizationHandler.get(queueItem.data.dataId)}</span>
-                    </div>
-                );
-            case QueueItemType.TERRAFORMATION:
-                return (
-                    <div className="skyxplore-game-planet-queue-item-header">
-                        <span>{localizationHandler.get("terraformation")}</span>
-                        <span>: </span>
-                        <span>{surfaceLocalizationHandler.get(queueItem.data.currentSurfaceType)}</span>
-                        <span>{" => "}</span>
-                        <span>{surfaceLocalizationHandler.get(queueItem.data.targetSurfaceType)}</span>
-                    </div>
-                );
-            default:
-                Utils.throwException("IllegalArgument", "Unhandled QueueItemType " + queueItem.type);
-        }
     }
 
     const confirmCancelQueueItem = () => {
@@ -96,7 +57,10 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
 
     return (
         <div className="skyxplore-game-planet-queue-item">
-            {getHeader()}
+            <QueueItemHeader
+                queueItem={queueItem}
+                localizationHandler={localizationHandler}
+            />
 
             <ProgressBar
                 currentWorkPoints={queueItem.currentWorkPoints}

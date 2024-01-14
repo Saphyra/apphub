@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomCreatedMessage;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -18,6 +20,7 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,6 +57,7 @@ public class CreateChatRoomTest extends BackEndTest {
         roomTitleTooShort(accessTokenId1);
         roomTitleTooLong(accessTokenId1);
         create(accessTokenId1, userId2, gameWsClients);
+        getChetRooms(accessTokenId1);
     }
 
     private static void nullMembers(UUID accessTokenId1) {
@@ -123,5 +127,11 @@ public class CreateChatRoomTest extends BackEndTest {
             .map(webSocketEvent -> webSocketEvent.orElseThrow(() -> new RuntimeException("ChatRoomCreated message has not arrived")))
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getRoomTitle()).isEqualTo(ROOM_TITLE));
+    }
+
+    private void getChetRooms(UUID accessTokenId) {
+        List<ChatRoomResponse> chatRooms = SkyXploreGameChatActions.getChatRooms(accessTokenId);
+
+        assertThat(chatRooms).extracting(ChatRoomResponse::getRoomTitle).containsExactlyInAnyOrder(ROOM_TITLE, Constants.GENERAL_CHAT_ROOM_NAME, Constants.ALLIANCE_CHAT_ROOM_NAME);
     }
 }

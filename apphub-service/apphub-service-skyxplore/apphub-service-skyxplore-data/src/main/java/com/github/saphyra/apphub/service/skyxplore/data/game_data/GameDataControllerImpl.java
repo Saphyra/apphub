@@ -84,7 +84,6 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     }
 
     @Override
-    //TODO unit test
     public CitizenStatsAndSkills getStatsAndSkills() {
         return CitizenStatsAndSkills.builder()
             .stats(Arrays.stream(CitizenStat.values()).map(Enum::name).toList())
@@ -93,7 +92,6 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     }
 
     @Override
-    //TODO unit test
     public List<String> getResourceDataIds() {
         return resources;
     }

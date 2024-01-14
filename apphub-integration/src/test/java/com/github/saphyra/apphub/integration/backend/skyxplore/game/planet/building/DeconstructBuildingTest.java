@@ -50,15 +50,14 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
-        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
 
         storageInUse(accessTokenId, planetId);
         UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
-        buildingUnderConstruction(accessTokenId, planetWsClient, emptyDesertSurfaceId, planetId);
+        buildingUnderConstruction(accessTokenId, emptyDesertSurfaceId, planetId);
         gameWsClient.clearMessages();
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_BATTERY);
-        deconstructBuilding(accessTokenId, planetWsClient, planetId, buildingId);
-        cancelDeconstruction(accessTokenId, planetWsClient, planetId, buildingId);
+        deconstructBuilding(accessTokenId, planetId, buildingId);
+        cancelDeconstruction(accessTokenId, planetId, buildingId);
     }
 
     private void storageInUse(UUID accessTokenId, UUID planetId) {
@@ -68,15 +67,9 @@ public class DeconstructBuildingTest extends BackEndTest {
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.SKYXPLORE_STORAGE_USED);
     }
 
-    private static void buildingUnderConstruction(UUID accessTokenId, ApphubWsClient planetWsClient, UUID emptyDesertSurfaceId, UUID planetId) {
-        planetWsClient.clearMessages();
+    private static void buildingUnderConstruction(UUID accessTokenId, UUID emptyDesertSurfaceId, UUID planetId) {
         SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_WATER_PUMP);
-        UUID buildingId = planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), emptyDesertSurfaceId).isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException("PlanetModified event not arrived"))
-            .getPayloadAs(PlanetOverviewResponse.class)
+        UUID buildingId = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
             .getSurfaces()
             .stream()
             .filter(surfaceResponse -> surfaceResponse.getSurfaceId().equals(emptyDesertSurfaceId))
@@ -90,17 +83,10 @@ public class DeconstructBuildingTest extends BackEndTest {
         ResponseValidator.verifyForbiddenOperation(constructionInProgressResponse);
     }
 
-    private static void deconstructBuilding(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
-        planetWsClient.clearMessages();
-
+    private static void deconstructBuilding(UUID accessTokenId, UUID planetId, UUID buildingId) {
         SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceByBuildingId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), buildingId).isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException("PlanetModified event not arrived"))
-            .getPayloadAs(PlanetOverviewResponse.class);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), buildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -119,25 +105,17 @@ public class DeconstructBuildingTest extends BackEndTest {
         assertThat(queueItem.getType()).isEqualTo(Constants.QUEUE_TYPE_DECONSTRUCTION);
         assertThat(queueItem.getData()).containsEntry("dataId", Constants.DATA_ID_BATTERY);
 
-        //TODO restore when buildingDetails message sender is created
-        //PlanetBuildingDetailsValidator.verifyBuildingDetails(updatedPlanetOverview.getBuildings(), Constants.SURFACE_TYPE_CONCRETE, Constants.DATA_ID_BATTERY, 1, 0);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverviewResponse.getBuildings(), Constants.SURFACE_TYPE_CONCRETE, Constants.DATA_ID_BATTERY, 1, 0);
 
         PlanetStorageResponse storageResponse = SkyXplorePlanetActions.getStorageOverview(accessTokenId, planetId);
 
         assertThat(storageResponse.getEnergy().getCapacity()).isEqualTo(0);
     }
 
-    private static void cancelDeconstruction(UUID accessTokenId, ApphubWsClient planetWsClient, UUID planetId, UUID buildingId) {
-        planetWsClient.clearMessages();
-
+    private static void cancelDeconstruction(UUID accessTokenId, UUID planetId, UUID buildingId) {
         SkyXploreBuildingActions.cancelDeconstruction(accessTokenId, planetId, buildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceByBuildingId(webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(), buildingId).isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException("PlanetModified event not arrived"))
-            .getPayloadAs(PlanetOverviewResponse.class);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
 
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), buildingId)
             .orElseThrow(() -> new RuntimeException("SurfaceResponse not found"));
@@ -146,8 +124,7 @@ public class DeconstructBuildingTest extends BackEndTest {
 
         assertThat(planetOverviewResponse.getQueue()).extracting(QueueResponse::getType).doesNotContain(Constants.QUEUE_TYPE_DECONSTRUCTION);
 
-        //TODO restore when buildingDetails message sender is created
-        //PlanetBuildingDetailsValidator.verifyBuildingDetails(updatedPlanetOverview.getBuildings(), Constants.SURFACE_TYPE_CONCRETE, Constants.DATA_ID_BATTERY, 1, 1);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverviewResponse.getBuildings(), Constants.SURFACE_TYPE_CONCRETE, Constants.DATA_ID_BATTERY, 1, 1);
     }
 
     @Test(groups = {"be", "skyxplore"})

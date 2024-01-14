@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStatsAndSkills;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
@@ -21,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -120,6 +124,19 @@ public class GameDataControllerImplTest {
         List<Object> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
 
         assertThat(result).containsExactly(terraformingPossibility);
+    }
+
+    @Test
+    void getStatsAndSkills() {
+        CitizenStatsAndSkills result = underTest.getStatsAndSkills();
+
+        assertThat(new HashSet<>(result.getSkills())).hasSize(SkillType.values().length);
+        assertThat(new HashSet<>(result.getStats())).hasSize(CitizenStat.values().length);
+    }
+
+    @Test
+    void getResourceDataIds() {
+        assertThat(underTest.getResourceDataIds()).containsExactly(RESOURCE_DATA_ID);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

@@ -45,7 +45,6 @@ public class RootController {
     }
 
     @GetMapping(Endpoints.GET_OWN_USER_ID)
-    //TODO unit tesxt
     ResponseEntity<OneParamResponse<UUID>> getOwnUserId(@CookieValue(value = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessTokenId) {
         return accessTokenQueryService.getAccessToken(accessTokenId)
             .map(InternalAccessTokenResponse::getUserId)

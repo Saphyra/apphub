@@ -17,7 +17,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
 
     const getContent = () => {
         if (isEmpty()) {
-            return <EmptySurfaceFooter
+            return <EmptySurface
                 localizationHandler={localizationHandler}
                 planetId={planetId}
                 surfaceId={surface.surfaceId}
@@ -44,7 +44,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
     );
 }
 
-const EmptySurfaceFooter = ({ localizationHandler, planetId, surfaceId, surfaceType, openPage }) => {
+const EmptySurface = ({ localizationHandler, planetId, surfaceId, surfaceType, openPage }) => {
     return (
         <div className="skyxplore-game-planet-surface-footer">
             <Button

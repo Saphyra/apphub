@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
 public class SolarSystems extends Vector<SolarSystem> {
     public SolarSystem findByIdValidated(UUID solarSystemId) {
         return stream()

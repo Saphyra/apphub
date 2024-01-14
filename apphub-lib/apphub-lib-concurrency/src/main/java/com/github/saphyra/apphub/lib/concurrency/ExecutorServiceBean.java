@@ -44,11 +44,11 @@ public class ExecutorServiceBean {
     private <T> Callable<ExecutionResult<T>> wrap(Callable<T> command) {
         return () -> {
             try {
-                return new ExecutionResult<>(command.call(), null, true);
+                return ExecutionResult.success(command.call());
             } catch (Exception e) {
                 log.error("Unexpected error during processing:", e);
                 errorReporterService.report("Unexpected error during processing: " + e.getMessage(), e);
-                return new ExecutionResult<>(null, e, false);
+                return ExecutionResult.failure(e);
             }
         };
     }

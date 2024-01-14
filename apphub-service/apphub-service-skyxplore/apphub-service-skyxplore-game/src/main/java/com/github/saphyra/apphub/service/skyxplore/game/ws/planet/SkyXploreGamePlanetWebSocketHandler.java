@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,15 +18,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
-//TODO unit test
 public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandler {
     private final UuidConverter uuidConverter;
+    private final GameDao gameDao;
 
     private final Map<String, UUID> openedPlanetIds = new ConcurrentHashMap<>();
 
-    public SkyXploreGamePlanetWebSocketHandler(WebSocketHandlerContext context) {
+    public SkyXploreGamePlanetWebSocketHandler(WebSocketHandlerContext context, GameDao gameDao, UuidConverter uuidConverter) {
         super(context);
-        this.uuidConverter = context.getUuidConverter();
+        this.uuidConverter = uuidConverter;
+        this.gameDao = gameDao;
     }
 
     @Override
@@ -45,7 +47,8 @@ public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandle
             UUID planetId = uuidConverter.convertEntity(event.getPayload().toString());
             log.info("{} opened planet {}", userId, planetId);
 
-            openedPlanetIds.put(sessionId, planetId);
+            gameDao.findByUserId(userId)
+                .ifPresent(game -> openedPlanetIds.put(sessionId, planetId));
         }
     }
 

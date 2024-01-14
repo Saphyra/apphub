@@ -25,6 +25,7 @@ public class Constants {
 
     //Alliances
     public final String GENERAL_CHAT_ROOM_NAME = "general";
+    public final String ALLIANCE_CHAT_ROOM_NAME = "alliance";
     public static final String NEW_ALLIANCE_LABEL = "New alliance";
     public static final String NEW_ALLIANCE_VALUE = "new-alliance";
     public final String NO_ALLIANCE_LABEL = "No alliance";

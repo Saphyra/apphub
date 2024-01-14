@@ -26,5 +26,9 @@
     "battery": {
         "en": "Stores energy.",
         "hu": "Energiát tárol."
+    },
+    "oil_rig": {
+        "en": "Extracts oil.",
+        "hu": "Olajat termel."
     }
 }

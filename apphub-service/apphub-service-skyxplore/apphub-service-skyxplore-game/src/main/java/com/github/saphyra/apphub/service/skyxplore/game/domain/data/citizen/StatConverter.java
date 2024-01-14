@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StatConverter {
     private static final Map<CitizenStat, Function<Citizen, Integer>> CITIZEN_PROPERTY_EXTRACTORS = new HashMap<>() {{
         put(CitizenStat.MORALE, Citizen::getMorale);

@@ -54,7 +54,6 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     }
 
     @Override
-    //TODO unit test
     public List<ChatRoomResponse> getChatRooms(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his chat rooms.", accessTokenHeader.getUserId());
 

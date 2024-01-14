@@ -2,11 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.service.chat.create.CreateChatRoomService;
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,7 @@ public class SkyXploreGameChatControllerImplTest {
     private static final UUID USER_ID_2 = UUID.randomUUID();
     private static final String CHARACTER_NAME = "character-name";
     private static final String ROOM_ID = "room-id";
+    private static final String ROOM_TITLE = "room-title";
 
     @Mock
     private GameDao gameDao;
@@ -56,6 +60,12 @@ public class SkyXploreGameChatControllerImplTest {
 
     @Mock
     private CreateChatRoomRequest createChatRoomRequest;
+
+    @Mock
+    private Chat chat;
+
+    @Mock
+    private ChatRoom chatRoom;
 
     @Test
     public void getPlayers() {
@@ -112,5 +122,19 @@ public class SkyXploreGameChatControllerImplTest {
         underTest.leaveChatRoom(ROOM_ID, ACCESS_TOKEN_HEADER);
 
         verify(leaveChatRoomService).leave(USER_ID_1, ROOM_ID);
+    }
+
+    @Test
+    void getChatRooms(){
+        given(gameDao.findByUserIdValidated(USER_ID_1)).willReturn(game);
+        given(game.getChat()).willReturn(chat);
+        given(chat.getRooms()).willReturn(List.of(chatRoom));
+        given(chatRoom.getId()).willReturn(ROOM_ID);
+        given(chatRoom.getRoomTitle()).willReturn(ROOM_TITLE);
+        given(chatRoom.getMembers()).willReturn(List.of(USER_ID_1));
+
+        List<ChatRoomResponse> result = underTest.getChatRooms(ACCESS_TOKEN_HEADER);
+
+        assertThat(result).containsExactly(ChatRoomResponse.builder().roomId(ROOM_ID).roomTitle(ROOM_TITLE).build());
     }
 }

@@ -3,6 +3,8 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+SkyXplore Game
+    Migrate to React
 
 ===TECHNICAL DEBTS===
 

@@ -1,19 +1,25 @@
 package com.github.saphyra.apphub.lib.concurrency;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 public class ExecutionResult<T> {
     private final T value;
     private final Exception exception;
     private final boolean success;
+
+    static <T> ExecutionResult<T> success(T value) {
+        return new ExecutionResult<>(value, null, true);
+    }
+
+    static <T> ExecutionResult<T> failure(Exception e) {
+        return new ExecutionResult<>(null, e, false);
+    }
 
     public T getOrThrow() {
         if (success) {
@@ -29,19 +35,5 @@ public class ExecutionResult<T> {
                 return new RuntimeException(e);
             })
             .orElseGet(() -> new IllegalStateException("Both value and exception was null of this result."));
-    }
-
-    //TODO unit test
-    public BiWrapper<Boolean, T> getOrHandle(Consumer<Exception> errorHandler) {
-        if (success) {
-            return new BiWrapper<>(true, value);
-        }
-
-        Exception e = Optional.ofNullable(exception)
-            .orElseGet(() -> new IllegalStateException("Both value and exception was null of this result."));
-
-        errorHandler.accept(e);
-
-        return new BiWrapper<>(false, null);
     }
 }

@@ -4,6 +4,7 @@ import localizationData from "./surface_tile_content_header_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import surfaceLocalizationData from "../../../../../../common/localization/surface_localization.json";
 
+//TODO split
 const SurfaceTileContentHeader = ({ surface }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);

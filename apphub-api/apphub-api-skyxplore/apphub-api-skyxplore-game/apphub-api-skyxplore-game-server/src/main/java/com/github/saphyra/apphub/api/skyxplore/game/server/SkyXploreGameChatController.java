@@ -30,6 +30,5 @@ public interface SkyXploreGameChatController {
     void leaveChatRoom(@PathVariable("roomId") String roomId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS)
-    //TODO API test
     List<ChatRoomResponse> getChatRooms(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

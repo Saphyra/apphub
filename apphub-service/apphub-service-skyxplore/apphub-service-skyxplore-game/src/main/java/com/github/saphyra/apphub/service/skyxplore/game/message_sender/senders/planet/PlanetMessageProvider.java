@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PlanetMessageProvider {
+interface PlanetMessageProvider {
     void clearDisconnectedUserData(List<WsSessionPlanetIdMapping> connectedUsers);
 
     Optional<PlanetUpdateItem> getMessage(String sessionId, UUID userId, UUID planetId);

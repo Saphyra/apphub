@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import io.restassured.response.Response;
@@ -42,5 +43,14 @@ public class SkyXploreGameChatActions {
     public static Response getLeaveChatRoomResponse(UUID accessTokenId, String roomId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", roomId));
+    }
+
+    public static List<ChatRoomResponse> getChatRooms(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(ChatRoomResponse[].class));
     }
 }

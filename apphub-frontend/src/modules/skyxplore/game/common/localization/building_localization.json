@@ -38,5 +38,9 @@
     "farm": {
         "en": "Farm",
         "hu": "Farm"
+    },
+    "oil_rig": {
+        "en": "Oil rig",
+        "hu": "Olajfúró"
     }
 }
