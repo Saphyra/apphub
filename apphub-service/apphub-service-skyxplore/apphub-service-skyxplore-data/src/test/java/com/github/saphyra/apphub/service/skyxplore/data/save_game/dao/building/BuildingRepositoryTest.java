@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -73,5 +74,24 @@ public class BuildingRepositoryTest {
         Optional<BuildingEntity> result = underTest.findBySurfaceId(SURFACE_ID_1);
 
         assertThat(result).contains(entity1);
+    }
+
+    @Test
+    void getByGameId() {
+        BuildingEntity entity1 = BuildingEntity.builder()
+            .buildingId(BUILDING_ID_1)
+            .gameId(GAME_ID_1)
+            .surfaceId(SURFACE_ID_1)
+            .build();
+
+        BuildingEntity entity2 = BuildingEntity.builder()
+            .buildingId(BUILDING_ID_2)
+            .gameId(GAME_ID_2)
+            .surfaceId(SURFACE_ID_2)
+            .build();
+
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        assertThat(underTest.getByGameId(GAME_ID_1, PageRequest.of(0, 1))).containsExactly(entity1);
     }
 }
