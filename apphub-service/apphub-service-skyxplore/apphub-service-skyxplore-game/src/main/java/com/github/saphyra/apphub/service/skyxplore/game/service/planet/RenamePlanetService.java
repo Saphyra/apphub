@@ -23,6 +23,7 @@ class RenamePlanetService {
     private final GameDataProxy gameDataProxy;
     private final PlanetConverter planetConverter;
 
+    //TODO use eventLoop
     void rename(UUID userId, UUID planetId, String newName) {
         if (isBlank(newName)) {
             throw ExceptionFactory.invalidParam("newName", "must not be null or blank");
@@ -41,6 +42,6 @@ class RenamePlanetService {
             .put(userId, newName);
 
         PlanetModel model = planetConverter.toModel(game.getGameId(), planet);
-        gameDataProxy.saveItem(model);
+        gameDataProxy.saveItem(model); //TODO do not save directly
     }
 }

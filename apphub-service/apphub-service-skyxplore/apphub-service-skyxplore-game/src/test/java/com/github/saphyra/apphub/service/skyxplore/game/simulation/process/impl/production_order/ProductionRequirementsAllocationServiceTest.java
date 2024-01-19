@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
@@ -12,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AvailableResourceCounter;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,7 +55,7 @@ class ProductionRequirementsAllocationServiceTest {
     private ProductionRequirementsAllocationService underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -90,13 +90,13 @@ class ProductionRequirementsAllocationServiceTest {
         given(allocatedResourceConverter.toModel(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
         given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
 
-        UUID result = underTest.allocate(syncCache, gameData, LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        UUID result = underTest.allocate(progressDiff, gameData, LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result).isEqualTo(RESERVED_STORAGE_ID);
 
         verify(allocatedResources).add(allocatedResource);
         verify(reservedStorages).add(reservedStorage);
-        then(syncCache).should().saveGameItem(allocatedResourceModel);
-        then(syncCache).should().saveGameItem(reservedStorageModel);
+        then(progressDiff).should().save(allocatedResourceModel);
+        then(progressDiff).should().save(reservedStorageModel);
     }
 }

@@ -44,7 +44,7 @@ class RenameSolarSystemService {
                     .put(userId, newName);
 
                 SolarSystemModel model = solarSystemConverter.toModel(gameData.getGameId(), solarSystem);
-                gameDataProxy.saveItem(model);
+                gameDataProxy.saveItem(model); //TODO do not save directly
             })
             .getOrThrow();
     }

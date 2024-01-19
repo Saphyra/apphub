@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache;
+package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,28 +18,26 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 @RequiredArgsConstructor
-class GameItemCache {
+//TODO unit test
+public class GameProgressDiff {
     private final Map<UUID, GameItem> items = new ConcurrentHashMap<>();
     private final List<BiWrapper<UUID, GameItemType>> deletedItems = new Vector<>();
 
-    @NonNull
-    private final GameDataProxy gameDataProxy;
-
-    void saveAll(List<GameItem> gameItems) {
+    public void save(List<GameItem> gameItems) {
         gameItems.forEach(this::save);
     }
 
-    void save(GameItem gameItem) {
+    public void save(GameItem gameItem) {
         log.debug("Saving {} to cache", gameItem);
         items.put(gameItem.getId(), gameItem);
     }
 
-    void delete(UUID id, GameItemType type) {
+    public void delete(UUID id, GameItemType type) {
         items.remove(id);
         deletedItems.add(new BiWrapper<>(id, type));
     }
 
-    void process() {
+    public void process(GameDataProxy gameDataProxy) {
         log.debug("Saving {} number of gameItems", items.size());
 
         if (!items.isEmpty()) {
@@ -51,5 +48,8 @@ class GameItemCache {
         if (!deletedItems.isEmpty()) {
             gameDataProxy.deleteItems(deletedItems);
         }
+
+        items.clear();
+        deletedItems.clear();
     }
 }

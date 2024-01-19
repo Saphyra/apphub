@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -33,6 +34,7 @@ public class WorkProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
+    private final GameDao gameDao;
 
     @Override
     public ProcessType getType() {
@@ -44,7 +46,7 @@ public class WorkProcessFactory implements ProcessFactory {
         return create(
             model.getId(),
             model.getExternalReference(),
-            game.getData(),
+            game,
             model.getLocation(),
             model.getStatus(),
             model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
@@ -128,7 +130,7 @@ public class WorkProcessFactory implements ProcessFactory {
         return create(
             idGenerator.randomUuid(),
             externalReference,
-            gameData,
+            gameDao.findById(gameData.getGameId()),
             location,
             ProcessStatus.CREATED,
             buildingDataId,
@@ -143,7 +145,7 @@ public class WorkProcessFactory implements ProcessFactory {
     private WorkProcess create(
         UUID processId,
         UUID externalReference,
-        GameData gameData,
+        Game game,
         UUID location,
         ProcessStatus status,
         String buildingDataId,
@@ -157,7 +159,7 @@ public class WorkProcessFactory implements ProcessFactory {
             .processId(processId)
             .status(status)
             .externalReference(externalReference)
-            .gameData(gameData)
+            .gameData(game.getData())
             .location(location)
             .buildingDataId(buildingDataId)
             .skillType(skillType)
@@ -166,6 +168,7 @@ public class WorkProcessFactory implements ProcessFactory {
             .targetId(targetId)
             .applicationContextProxy(applicationContextProxy)
             .completedWorkPoints(completedWorkPoints)
+            .game(game)
             .build();
     }
 }

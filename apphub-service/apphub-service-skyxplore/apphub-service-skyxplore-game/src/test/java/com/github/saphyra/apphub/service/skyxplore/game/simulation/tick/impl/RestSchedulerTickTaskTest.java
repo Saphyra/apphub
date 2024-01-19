@@ -6,13 +6,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest.RestProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest.RestProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
@@ -56,10 +56,7 @@ class RestSchedulerTickTaskTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
-
-    @Mock
-    private Citizens citizens;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private Citizen allocatedCitizen;
@@ -127,17 +124,18 @@ class RestSchedulerTickTaskTest {
         given(moraleProperties.getExhaustedMorale()).willReturn(EXHAUSTED_MORALE_LIMIT);
         given(moraleProperties.getMinRestTicks()).willReturn(MIN_REST_TICKS);
         given(moraleProperties.getExhaustedRestTicks()).willReturn(EXHAUSTED_REST_TICKS);
-        given(restProcessFactory.create(gameData, idleCitizen, MIN_REST_TICKS)).willReturn(idleProcess);
-        given(restProcessFactory.create(gameData, tiredCitizen, EXHAUSTED_REST_TICKS)).willReturn(tiredProcess);
+        given(restProcessFactory.create(game, idleCitizen, MIN_REST_TICKS)).willReturn(idleProcess);
+        given(restProcessFactory.create(game, tiredCitizen, EXHAUSTED_REST_TICKS)).willReturn(tiredProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(idleProcess.toModel()).willReturn(idleModel);
         given(tiredProcess.toModel()).willReturn(tiredModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(processes).add(tiredProcess);
         verify(processes).add(idleProcess);
-        verify(syncCache).saveGameItem(idleModel);
-        verify(syncCache).saveGameItem(tiredModel);
+        verify(progressDiff).save(idleModel);
+        verify(progressDiff).save(tiredModel);
     }
 }

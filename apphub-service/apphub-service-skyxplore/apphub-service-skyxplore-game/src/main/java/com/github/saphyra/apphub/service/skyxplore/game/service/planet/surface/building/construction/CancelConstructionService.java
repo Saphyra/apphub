@@ -4,12 +4,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import java.util.UUID;
 @Slf4j
 public class CancelConstructionService {
     private final GameDao gameDao;
-    private final SyncCacheFactory syncCacheFactory;
     private final AllocationRemovalService allocationRemovalService;
 
     public void cancelConstructionOfConstruction(UUID userId, UUID constructionId) {
@@ -56,28 +54,27 @@ public class CancelConstructionService {
     private void processCancellation(Game game, Building building, Construction construction) {
         GameData gameData = game.getData();
 
-        SyncCache syncCache = syncCacheFactory.create();
         game.getEventLoop()
             .processWithWait(() -> {
-                    gameData.getProcesses()
-                        .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
-                        .cleanup(syncCache);
+                gameData.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCTION)
+                    .cleanup();
 
-                    gameData.getConstructions()
-                        .remove(construction);
+                gameData.getConstructions()
+                    .remove(construction);
 
-                    allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, construction.getConstructionId());
+                GameProgressDiff progressDiff = game.getProgressDiff();
+                allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, construction.getConstructionId());
 
-                    syncCache.deleteGameItem(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+                progressDiff
+                    .delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
 
-                    if (building.getLevel() == 0) {
-                        gameData.getBuildings()
-                            .remove(building);
-                        syncCache.deleteGameItem(building.getBuildingId(), GameItemType.BUILDING);
-                    }
-                },
-                syncCache
-            )
+                if (building.getLevel() == 0) {
+                    gameData.getBuildings()
+                        .remove(building);
+                    progressDiff.delete(building.getBuildingId(), GameItemType.BUILDING);
+                }
+            })
             .getOrThrow();
     }
 }

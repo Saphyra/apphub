@@ -3,12 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ public class DeconstructBuildingService {
     private final GameDao gameDao;
     private final DeconstructionFactory deconstructionFactory;
     private final DeconstructionProcessFactory deconstructionProcessFactory;
-    private final SyncCacheFactory syncCacheFactory;
     private final DeconstructionPreconditions deconstructionPreconditions;
     private final DeconstructionConverter deconstructionConverter;
 
@@ -41,8 +39,6 @@ public class DeconstructBuildingService {
 
         deconstructionPreconditions.checkIfBuildingCanBeDeconstructed(game.getData(), building);
 
-        SyncCache syncCache = syncCacheFactory.create();
-
         Deconstruction deconstruction = deconstructionFactory.create(buildingId, planetId);
 
         game.getEventLoop()
@@ -51,15 +47,16 @@ public class DeconstructBuildingService {
                     .getDeconstructions()
                     .add(deconstruction);
 
-                DeconstructionProcess process = deconstructionProcessFactory.create(game.getData(), planetId, deconstruction.getDeconstructionId());
+                DeconstructionProcess process = deconstructionProcessFactory.create(game, planetId, deconstruction.getDeconstructionId());
 
-                syncCache.saveGameItem(process.toModel());
-                syncCache.saveGameItem(deconstructionConverter.toModel(game.getGameId(), deconstruction));
+                GameProgressDiff progressDiff = game.getProgressDiff();
+                progressDiff.save(process.toModel());
+                progressDiff.save(deconstructionConverter.toModel(game.getGameId(), deconstruction));
 
                 game.getData()
                     .getProcesses()
                     .add(process);
-            }, syncCache)
+            })
             .getOrThrow();
     }
 }

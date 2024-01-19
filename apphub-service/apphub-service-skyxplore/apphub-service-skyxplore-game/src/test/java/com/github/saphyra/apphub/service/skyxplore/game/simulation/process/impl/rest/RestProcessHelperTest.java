@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
@@ -14,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allo
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -78,7 +78,7 @@ class RestProcessHelperTest {
     private CitizenAllocationModel citizenAllocationModel;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private CitizenModel citizenModel;
@@ -104,10 +104,10 @@ class RestProcessHelperTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(citizenAllocationConverter.toModel(GAME_ID, citizenAllocation)).willReturn(citizenAllocationModel);
 
-        underTest.allocateCitizen(syncCache, gameData, PROCESS_ID, CITIZEN_ID);
+        underTest.allocateCitizen(progressDiff, gameData, PROCESS_ID, CITIZEN_ID);
 
         verify(citizenAllocations).add(citizenAllocation);
-        verify(syncCache).saveGameItem(citizenAllocationModel);
+        verify(progressDiff).save(citizenAllocationModel);
     }
 
     @Test
@@ -116,10 +116,10 @@ class RestProcessHelperTest {
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
 
-        underTest.releaseCitizen(syncCache, gameData, PROCESS_ID);
+        underTest.releaseCitizen(progressDiff, gameData, PROCESS_ID);
 
         verify(citizenAllocations).remove(citizenAllocation);
-        verify(syncCache).deleteGameItem(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
+        verify(progressDiff).delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
     }
 
     @Test
@@ -132,9 +132,9 @@ class RestProcessHelperTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
 
-        underTest.increaseMorale(syncCache, gameData, CITIZEN_ID);
+        underTest.increaseMorale(progressDiff, gameData, CITIZEN_ID);
 
         verify(citizen).increaseMorale(REGEN_PER_TICK);
-        verify(syncCache).saveGameItem(citizenModel);
+        verify(progressDiff).save(citizenModel);
     }
 }

@@ -8,13 +8,12 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildin
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ public class UpgradeBuildingService {
     private final ConstructionFactory constructionFactory;
     private final ResourceAllocationService resourceAllocationService;
     private final ConstructionProcessFactory constructionProcessFactory;
-    private final SyncCacheFactory syncCacheFactory;
     private final ConstructionConverter constructionConverter;
 
     public void upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
@@ -71,12 +69,12 @@ public class UpgradeBuildingService {
             constructionRequirements.getRequiredWorkPoints()
         );
 
-        SyncCache syncCache = syncCacheFactory.create();
-
         game.getEventLoop()
             .processWithWait(() -> {
+                GameProgressDiff progressDiff = game.getProgressDiff();
+
                 resourceAllocationService.processResourceRequirements(
-                    syncCache,
+                    progressDiff,
                     game.getData(),
                     planetId,
                     construction.getConstructionId(),
@@ -87,15 +85,15 @@ public class UpgradeBuildingService {
                     .getConstructions()
                     .add(construction);
 
-                ConstructionProcess constructionProcess = constructionProcessFactory.create(game.getData(), planetId, construction.getConstructionId());
+                ConstructionProcess constructionProcess = constructionProcessFactory.create(game, planetId, construction.getConstructionId());
 
                 game.getData()
                     .getProcesses()
                     .add(constructionProcess);
 
-                syncCache.saveGameItem(constructionProcess.toModel());
-                syncCache.saveGameItem(constructionConverter.toModel(game.getGameId(), construction));
-            }, syncCache)
+                progressDiff.save(constructionProcess.toModel());
+                progressDiff.save(constructionConverter.toModel(game.getGameId(), construction));
+            })
             .getOrThrow();
     }
 }

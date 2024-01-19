@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
@@ -9,7 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resou
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,39 +37,39 @@ class ProductionOrderProcessHelper {
             .orElse(null);
     }
 
-    void processResourceRequirements(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
-        resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, gameData, processId, location, dataId, amount, producerBuildingDataId)
+    void processResourceRequirements(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
+        resourceRequirementProcessFactory.createResourceRequirementProcesses(progressDiff, gameData, processId, location, dataId, amount, producerBuildingDataId)
             .forEach(productionOrderProcess -> {
                 gameData.getProcesses()
                     .add(productionOrderProcess);
-                syncCache.saveGameItem(productionOrderProcess.toModel());
+                progressDiff.save(productionOrderProcess.toModel());
             });
     }
 
-    void startWork(SyncCache syncCache, GameData gameData, UUID processId, String producerBuildingDataId, UUID reservedStorageId) {
+    void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, String producerBuildingDataId, UUID reservedStorageId) {
         log.info("RequestWorkProcess is not present. Resolving allocations...");
 
         ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findByReservedStorageIdValidated(reservedStorageId);
 
-        useAllocatedResourceService.resolveAllocations(syncCache, gameData, reservedStorage.getLocation(), processId);
+        useAllocatedResourceService.resolveAllocations(progressDiff, gameData, reservedStorage.getLocation(), processId);
 
         workProcessFactory.createForProduction(gameData, processId, reservedStorage.getLocation(), producerBuildingDataId, reservedStorage.getDataId(), reservedStorage.getAmount())
             .forEach(requestWorkProcess -> {
                 gameData.getProcesses()
                     .add(requestWorkProcess);
-                syncCache.saveGameItem(requestWorkProcess.toModel());
+                progressDiff.save(requestWorkProcess.toModel());
             });
     }
 
-    void storeResource(SyncCache syncCache, GameData gameData, UUID location, UUID reservedStorageId, UUID allocatedResourceId, int amount) {
+    void storeResource(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID reservedStorageId, UUID allocatedResourceId, int amount) {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findByReservedStorageIdValidated(reservedStorageId);
         log.info("ProductionOrder finished. Storing {} of {}", amount, reservedStorage.getDataId());
 
         StoredResource storedResource = gameData.getStoredResources()
             .findByLocationAndDataId(location, reservedStorage.getDataId())
-            .orElseGet(() -> storedResourceFactory.create(syncCache, gameData, location, reservedStorage.getDataId()));
+            .orElseGet(() -> storedResourceFactory.create(progressDiff, gameData, location, reservedStorage.getDataId()));
 
         if (nonNull(allocatedResourceId)) {
             AllocatedResource allocatedResource = gameData.getAllocatedResources()
@@ -77,12 +77,12 @@ class ProductionOrderProcessHelper {
 
             allocatedResource.increaseAmount(amount);
 
-            syncCache.saveGameItem(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
+            progressDiff.save(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
         }
         storedResource.increaseAmount(amount);
         reservedStorage.decreaseAmount(amount);
 
-        syncCache.saveGameItem(storedResourceConverter.toModel(gameData.getGameId(), storedResource));
-        syncCache.saveGameItem(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
+        progressDiff.save(storedResourceConverter.toModel(gameData.getGameId(), storedResource));
+        progressDiff.save(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
     }
 }

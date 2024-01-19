@@ -41,7 +41,7 @@ public class PriorityUpdateService {
                 priority.setValue(newPriority);
 
                 PriorityModel model = priorityConverter.toModel(game.getGameId(), priority);
-                gameDataProxy.saveItem(model);
+                gameDataProxy.saveItem(model); //TODO do not save directly
             })
             .getOrThrow();
     }

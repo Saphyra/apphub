@@ -54,8 +54,9 @@ class StorageSettingProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(storageSetting.getLocation()).willReturn(LOCATION);
+        given(game.getData()).willReturn(gameData);
 
-        StorageSettingProcess result = underTest.create(gameData, storageSetting, AMOUNT);
+        StorageSettingProcess result = underTest.create(game, storageSetting, AMOUNT);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);

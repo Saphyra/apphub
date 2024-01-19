@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
@@ -12,8 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -39,9 +37,6 @@ public class CancelTerraformationServiceTest {
 
     @Mock
     private GameDao gameDao;
-
-    @Mock
-    private SyncCacheFactory syncCacheFactory;
 
     @Mock
     private AllocationRemovalService allocationRemovalService;
@@ -59,7 +54,7 @@ public class CancelTerraformationServiceTest {
     private Construction terraformation;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private EventLoop eventLoop;
@@ -84,27 +79,27 @@ public class CancelTerraformationServiceTest {
         given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
 
         //Common
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
 
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.cancelTerraformationQueueItem(USER_ID, CONSTRUCTION_ID);
 
         //Common
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(process).cleanup(syncCache);
+        verify(process).cleanup();
         verify(constructions).remove(terraformation);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, CONSTRUCTION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();
-        then(syncCache).should().deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
     }
 
     @Test
@@ -115,25 +110,25 @@ public class CancelTerraformationServiceTest {
         given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
 
         //Common
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
 
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.cancelTerraformationOfSurface(USER_ID, SURFACE_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(process).cleanup(syncCache);
+        verify(process).cleanup();
         verify(constructions).remove(terraformation);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, CONSTRUCTION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();
-        then(syncCache).should().deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
     }
 }

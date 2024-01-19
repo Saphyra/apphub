@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
@@ -13,7 +14,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_sett
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
@@ -63,7 +63,7 @@ class StorageSettingTickTaskTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private StorageSetting storageSetting;
@@ -102,7 +102,7 @@ class StorageSettingTickTaskTest {
         given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
         given(storedResource.getAmount()).willReturn(TARGET_AMOUNT);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(gameData, times(0)).getProcesses();
     }
@@ -122,7 +122,7 @@ class StorageSettingTickTaskTest {
         given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(List.of(storageSettingProcess));
         given(storageSettingProcess.getAmount()).willReturn(PRODUCED_AMOUNT);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(freeStorageQueryService, times(0)).getFreeStorage(gameData, LOCATION, DATA_ID);
     }
@@ -142,7 +142,7 @@ class StorageSettingTickTaskTest {
         given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Collections.emptyList());
         given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(0);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verifyNoInteractions(storageSettingProcessFactory);
     }
@@ -161,14 +161,15 @@ class StorageSettingTickTaskTest {
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Collections.emptyList());
         given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(FREE_STORAGE);
-        given(storageSettingProcessFactory.create(gameData, storageSetting, MAX_BATCH_SIZE)).willReturn(storageSettingProcess);
+        given(storageSettingProcessFactory.create(game, storageSetting, MAX_BATCH_SIZE)).willReturn(storageSettingProcess);
         given(storageSettingProcess.toModel()).willReturn(processModel);
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
         given(resourceData.getMaxProductionBatchSize()).willReturn(MAX_BATCH_SIZE);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(processes).add(storageSettingProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 }

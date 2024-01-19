@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ class ConstructionProcessHelper {
     private final ProductionOrderService productionOrderService;
     private final BuildingConverter buildingConverter;
 
-    void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
+    void startWork(GameProgressDiff gameProgressDiff, GameData gameData, UUID processId, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
         useAllocatedResourceService.resolveAllocations(
-            syncCache,
+            gameProgressDiff,
             gameData,
             construction.getLocation(),
             constructionId
@@ -46,11 +46,11 @@ class ConstructionProcessHelper {
         ).forEach(requestWorkProcess -> {
             gameData.getProcesses()
                 .add(requestWorkProcess);
-            syncCache.saveGameItem(requestWorkProcess.toModel());
+            gameProgressDiff.save(requestWorkProcess.toModel());
         });
     }
 
-    void finishConstruction(SyncCache syncCache, GameData gameData, UUID constructionId) {
+    void finishConstruction(GameProgressDiff gameProgressDiff, GameData gameData, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
@@ -63,13 +63,13 @@ class ConstructionProcessHelper {
         gameData.getConstructions()
             .remove(construction);
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, constructionId);
+        allocationRemovalService.removeAllocationsAndReservations(gameProgressDiff, gameData, constructionId);
 
-        syncCache.deleteGameItem(constructionId, GameItemType.CONSTRUCTION);
-        syncCache.saveGameItem(buildingConverter.toModel(gameData.getGameId(), building));
+        gameProgressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
+        gameProgressDiff.save(buildingConverter.toModel(gameData.getGameId(), building));
     }
 
-    public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
-        productionOrderService.createProductionOrdersForReservedStorages(syncCache, gameData, processId, constructionId);
+    public void createProductionOrders(GameProgressDiff gameProgressDiff, GameData gameData, UUID processId, UUID constructionId) {
+        productionOrderService.createProductionOrdersForReservedStorages(gameProgressDiff, gameData, processId, constructionId);
     }
 }

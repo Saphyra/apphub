@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
@@ -16,8 +17,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -33,7 +32,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -54,9 +52,6 @@ class DeconstructBuildingServiceTest {
 
     @Mock
     private DeconstructionProcessFactory deconstructionProcessFactory;
-
-    @Mock
-    private SyncCacheFactory syncCacheFactory;
 
     @Mock
     private DeconstructionPreconditions deconstructionPreconditions;
@@ -104,7 +99,7 @@ class DeconstructBuildingServiceTest {
     private Deconstructions deconstructions;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private DeconstructionModel deconstructionModel;
@@ -136,28 +131,28 @@ class DeconstructBuildingServiceTest {
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
 
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
-        given(deconstructionProcessFactory.create(gameData, PLANET_ID, DECONSTRUCTION_ID)).willReturn(deconstructionProcess);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
+        given(deconstructionProcessFactory.create(game, PLANET_ID, DECONSTRUCTION_ID)).willReturn(deconstructionProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getGameId()).willReturn(GAME_ID);
         given(deconstructionConverter.toModel(GAME_ID, deconstruction)).willReturn(deconstructionModel);
         given(deconstructionProcess.toModel()).willReturn(processModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
         verify(deconstructionPreconditions).checkIfBuildingCanBeDeconstructed(gameData, building);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
         verify(executionResult).getOrThrow();
         verify(deconstructions).add(deconstruction);
-        then(syncCache).should().saveGameItem(processModel);
-        then(syncCache).should().saveGameItem(deconstructionModel);
+        then(progressDiff).should().save(processModel);
+        then(progressDiff).should().save(deconstructionModel);
         verify(processes).add(deconstructionProcess);
     }
 }

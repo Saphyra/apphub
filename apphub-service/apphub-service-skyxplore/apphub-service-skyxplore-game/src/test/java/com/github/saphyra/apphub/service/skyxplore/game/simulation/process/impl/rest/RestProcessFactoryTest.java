@@ -60,8 +60,9 @@ class RestProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(citizen.getCitizenId()).willReturn(CITIZEN_ID);
         given(citizen.getLocation()).willReturn(LOCATION);
+        given(game.getData()).willReturn(gameData);
 
-        RestProcess result = underTest.create(gameData, citizen, REST_FOR_TICKS);
+        RestProcess result = underTest.create(game, citizen, REST_FOR_TICKS);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(CITIZEN_ID);

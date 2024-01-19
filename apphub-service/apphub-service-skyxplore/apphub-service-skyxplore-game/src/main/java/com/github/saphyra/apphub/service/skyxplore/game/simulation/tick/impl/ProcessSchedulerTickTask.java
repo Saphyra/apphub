@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTask;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ class ProcessSchedulerTickTask implements TickTask {
     }
 
     @Override
-    public void process(Game game, SyncCache syncCache) {
+    public void process(Game game) {
         log.info("Scheduling processes of game {}", game.getGameId());
 
         game.getData()
@@ -28,6 +27,6 @@ class ProcessSchedulerTickTask implements TickTask {
             .stream()
             .filter(process -> process.getStatus() == ProcessStatus.IN_PROGRESS || process.getStatus() == ProcessStatus.CREATED)
             .sorted(Process::compareTo)
-            .forEach(process -> game.getEventLoop().process(() -> process.scheduleWork(syncCache), syncCache));
+            .forEach(process -> game.getEventLoop().process(() -> process.scheduleWork(game.getProgressDiff())));
     }
 }

@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.UUID;
 class ConstructionUpdateService {
     private final ConstructionConverter constructionConverter;
 
-    void updateConstruction(SyncCache syncCache, GameData gameData, UUID constructionId, int completedWorkPoints) {
+    void updateConstruction(GameProgressDiff progressDiff, GameData gameData, UUID constructionId, int completedWorkPoints) {
         log.info("Adding {} workPoints to CONSTRUCTION {}", completedWorkPoints, constructionId);
 
         Construction construction = gameData.getConstructions()
@@ -26,6 +26,6 @@ class ConstructionUpdateService {
         construction.increaseCurrentWorkPoints(completedWorkPoints);
         log.info("After update: {}", construction);
 
-        syncCache.saveGameItem(constructionConverter.toModel(gameData.getGameId(), construction));
+        progressDiff.save(constructionConverter.toModel(gameData.getGameId(), construction));
     }
 }

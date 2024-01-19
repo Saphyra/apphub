@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ class DeconstructionUpdateServiceTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private DeconstructionModel deconstructionModel;
@@ -52,9 +52,9 @@ class DeconstructionUpdateServiceTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(deconstructionConverter.toModel(GAME_ID, deconstruction)).willReturn(deconstructionModel);
 
-        underTest.updateDeconstruction(syncCache, gameData, DECONSTRUCTION_ID, COMPLETED_WORK_POINTS);
+        underTest.updateDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 
         verify(deconstruction).increaseWorkPoints(COMPLETED_WORK_POINTS);
-        then(syncCache).should().saveGameItem(deconstructionModel);
+        then(progressDiff).should().save(deconstructionModel);
     }
 }

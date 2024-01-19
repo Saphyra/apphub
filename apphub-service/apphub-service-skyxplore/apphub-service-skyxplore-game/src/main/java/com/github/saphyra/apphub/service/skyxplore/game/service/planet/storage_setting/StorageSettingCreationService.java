@@ -7,8 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,6 @@ public class StorageSettingCreationService {
     private final StorageSettingsModelValidator storageSettingsModelValidator;
     private final StorageSettingFactory storageSettingFactory;
     private final StorageSettingConverter storageSettingConverter;
-    private final SyncCacheFactory syncCacheFactory;
     private final StorageSettingsResponseQueryService storageSettingsResponseQueryService;
 
     @SneakyThrows
@@ -37,20 +34,17 @@ public class StorageSettingCreationService {
         StorageSetting storageSetting = storageSettingFactory.create(request, planetId);
         log.debug("StorageSetting created: {}", storageSetting);
 
-        SyncCache syncCache = syncCacheFactory.create();
-
         return game.getEventLoop()
             .processWithResponse(() -> {
-                    game.getData()
-                        .getStorageSettings()
-                        .add(storageSetting);
+                game.getData()
+                    .getStorageSettings()
+                    .add(storageSetting);
 
-                    syncCache.saveGameItem(storageSettingConverter.toModel(game.getGameId(), storageSetting));
+                game.getProgressDiff()
+                    .save(storageSettingConverter.toModel(game.getGameId(), storageSetting));
 
-                    return storageSettingsResponseQueryService.getStorageSettings(userId, planetId);
-                },
-                syncCache
-            )
+                return storageSettingsResponseQueryService.getStorageSettings(userId, planetId);
+            })
             .get()
             .getOrThrow();
     }

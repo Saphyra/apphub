@@ -6,12 +6,13 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +50,9 @@ class RestProcessTest {
     @Mock
     private RestProcessConditions conditions;
 
+    @Mock
+    private Game game;
+
     private RestProcess underTest;
 
     @Mock
@@ -58,7 +62,7 @@ class RestProcessTest {
     private Priority priority;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @BeforeEach
     void setUp() {
@@ -71,6 +75,7 @@ class RestProcessTest {
             .restForTicks(REST_FOR_TICKS)
             .restedForTicks(RESTED_FOR_TICKS)
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 
@@ -100,7 +105,7 @@ class RestProcessTest {
         given(applicationContextProxy.getBean(RestProcessConditions.class)).willReturn(conditions);
         given(conditions.citizenAllocated(gameData, CITIZEN_ID)).willReturn(true);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
@@ -115,24 +120,26 @@ class RestProcessTest {
             .willReturn(false)
             .willReturn(false)
             .willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
 
-        underTest.work(syncCache);
-        underTest.work(syncCache);
+        underTest.work();
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(helper).allocateCitizen(syncCache, gameData, PROCESS_ID, CITIZEN_ID);
-        verify(helper).increaseMorale(syncCache, gameData, CITIZEN_ID);
+        verify(helper).allocateCitizen(progressDiff, gameData, PROCESS_ID, CITIZEN_ID);
+        verify(helper).increaseMorale(progressDiff, gameData, CITIZEN_ID);
     }
 
     @Test
     void cleanup() {
         given(applicationContextProxy.getBean(RestProcessHelper.class)).willReturn(helper);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.cleanup(syncCache);
+        underTest.cleanup();
 
-        verify(helper).releaseCitizen(syncCache, gameData, PROCESS_ID);
+        verify(helper).releaseCitizen(progressDiff, gameData, PROCESS_ID);
     }
 
     @Test

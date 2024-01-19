@@ -7,13 +7,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,6 +50,9 @@ public class StorageSettingProcess implements Process {
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
+    @NonNull
+    private final Game game;
+
     @Override
     public UUID getExternalReference() {
         return storageSettingId;
@@ -74,13 +78,13 @@ public class StorageSettingProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         StorageSettingProcessHelper helper = applicationContextProxy.getBean(StorageSettingProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {
-            helper.orderResources(syncCache, gameData, processId, findStorageSetting(), amount);
+            helper.orderResources(game.getProgressDiff(), gameData, processId, findStorageSetting(), amount);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -92,19 +96,21 @@ public class StorageSettingProcess implements Process {
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         log.info("Cleaning up {}", this);
 
         gameData.getProcesses()
             .getByExternalReference(processId)
-            .forEach(process -> process.cleanup(syncCache));
+            .forEach(Process::cleanup);
+
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         applicationContextProxy.getBean(AllocationRemovalService.class)
-            .removeAllocationsAndReservations(syncCache, gameData, processId);
+            .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        progressDiff.save(toModel());
     }
 
     @Override

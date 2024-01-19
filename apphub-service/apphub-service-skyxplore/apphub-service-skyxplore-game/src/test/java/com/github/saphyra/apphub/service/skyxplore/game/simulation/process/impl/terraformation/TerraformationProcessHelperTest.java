@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
@@ -13,7 +14,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
@@ -58,7 +58,7 @@ class TerraformationProcessHelperTest {
     private TerraformationProcessHelper underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -97,11 +97,11 @@ class TerraformationProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(workProcess.toModel()).willReturn(processModel);
 
-        underTest.startWork(syncCache, gameData, PROCESS_ID, TERRAFORMATION_ID);
+        underTest.startWork(progressDiff, gameData, PROCESS_ID, TERRAFORMATION_ID);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, TERRAFORMATION_ID);
+        verify(useAllocatedResourceService).resolveAllocations(progressDiff, gameData, LOCATION, TERRAFORMATION_ID);
         verify(processes).add(workProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 
     @Test
@@ -116,19 +116,19 @@ class TerraformationProcessHelperTest {
         given(surfaceConverter.toModel(GAME_ID, surface)).willReturn(surfaceModel);
         given(terraformation.getConstructionId()).willReturn(TERRAFORMATION_ID);
 
-        underTest.finishTerraformation(syncCache, gameData, TERRAFORMATION_ID);
+        underTest.finishTerraformation(progressDiff, gameData, TERRAFORMATION_ID);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, TERRAFORMATION_ID);
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, TERRAFORMATION_ID);
         verify(surface).setSurfaceType(SurfaceType.CONCRETE);
         verify(constructions).remove(terraformation);
-        verify(syncCache).deleteGameItem(TERRAFORMATION_ID, GameItemType.CONSTRUCTION);
-        then(syncCache).should().saveGameItem(surfaceModel);
+        verify(progressDiff).delete(TERRAFORMATION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().save(surfaceModel);
     }
 
     @Test
     void createProductionOrders() {
-        underTest.createProductionOrders(syncCache, gameData, PROCESS_ID, TERRAFORMATION_ID);
+        underTest.createProductionOrders(progressDiff, gameData, PROCESS_ID, TERRAFORMATION_ID);
 
-        verify(productionOrderService).createProductionOrdersForReservedStorages(syncCache, gameData, PROCESS_ID, TERRAFORMATION_ID);
+        verify(productionOrderService).createProductionOrdersForReservedStorages(progressDiff, gameData, PROCESS_ID, TERRAFORMATION_ID);
     }
 }

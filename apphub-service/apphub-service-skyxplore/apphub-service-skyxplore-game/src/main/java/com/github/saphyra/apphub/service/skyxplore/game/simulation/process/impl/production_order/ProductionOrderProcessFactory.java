@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
@@ -29,6 +30,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
     private final ResourceDataService resourceDataService;
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
+    private final GameDao gameDao;
 
     public List<ProductionOrderProcess> create(GameData gameData, UUID externalReference, UUID location, UUID reservedStorageId) {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
@@ -63,6 +65,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
                 .reservedStorageId(reservedStorage.getReservedStorageId())
                 .applicationContextProxy(applicationContextProxy)
                 .amount(toCreate)
+                .game(gameDao.findById(gameData.getGameId()))
                 .build();
             log.info("{} created.", process);
 
@@ -90,6 +93,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
             .reservedStorageId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESERVED_STORAGE_ID)))
             .amount(Integer.parseInt(model.getData().get(ProcessParamKeys.AMOUNT)))
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 }

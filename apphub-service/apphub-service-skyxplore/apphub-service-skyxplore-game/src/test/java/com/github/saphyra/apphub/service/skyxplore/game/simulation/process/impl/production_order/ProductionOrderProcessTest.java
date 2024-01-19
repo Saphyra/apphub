@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
@@ -13,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,6 +57,9 @@ class ProductionOrderProcessTest {
     @Mock
     private AllocationRemovalService allocationRemovalService;
 
+    @Mock
+    private Game game;
+
     private ProductionOrderProcess underTest;
 
     @Mock
@@ -65,7 +69,7 @@ class ProductionOrderProcessTest {
     private Process process;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private ReservedStorages reservedStorages;
@@ -85,6 +89,7 @@ class ProductionOrderProcessTest {
             .location(LOCATION)
             .amount(AMOUNT)
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 
@@ -111,7 +116,7 @@ class ProductionOrderProcessTest {
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(null);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.CREATED);
     }
@@ -126,12 +131,13 @@ class ProductionOrderProcessTest {
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_DATA_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).processResourceRequirements(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
         verify(conditions, times(0)).workStarted(gameData, PROCESS_ID);
     }
 
@@ -147,14 +153,15 @@ class ProductionOrderProcessTest {
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workStarted(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workDone(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).processResourceRequirements(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
-        verify(helper).startWork(syncCache, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
-        verify(helper, times(0)).storeResource(syncCache, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
+        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
+        verify(helper, times(0)).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
     }
 
     @Test
@@ -169,14 +176,15 @@ class ProductionOrderProcessTest {
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workStarted(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workDone(gameData, PROCESS_ID)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
 
-        verify(helper).processResourceRequirements(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
-        verify(helper).startWork(syncCache, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
-        verify(helper).storeResource(syncCache, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
+        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
+        verify(helper).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
     }
 
     @Test
@@ -185,14 +193,15 @@ class ProductionOrderProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(new UuidConverter());
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.cleanup(syncCache);
+        underTest.cleanup();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, PROCESS_ID);
-        verify(process).cleanup(syncCache);
-        verify(syncCache).saveGameItem(underTest.toModel());
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, PROCESS_ID);
+        verify(process).cleanup();
+        verify(progressDiff).save(underTest.toModel());
     }
 
     @Test

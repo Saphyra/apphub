@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
@@ -12,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
@@ -57,7 +57,7 @@ class ConstructionProcessHelperTest {
     private ConstructionProcessHelper underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -96,11 +96,11 @@ class ConstructionProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(workProcess.toModel()).willReturn(processModel);
 
-        underTest.startWork(syncCache, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        underTest.startWork(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, CONSTRUCTION_ID);
+        verify(useAllocatedResourceService).resolveAllocations(progressDiff, gameData, LOCATION, CONSTRUCTION_ID);
         verify(processes).add(workProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 
     @Test
@@ -113,19 +113,19 @@ class ConstructionProcessHelperTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingConverter.toModel(GAME_ID, building)).willReturn(buildingModel);
 
-        underTest.finishConstruction(syncCache, gameData, CONSTRUCTION_ID);
+        underTest.finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 
         verify(building).increaseLevel();
         verify(constructions).remove(construction);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, CONSTRUCTION_ID);
-        then(syncCache).should().deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
-        then(syncCache).should().saveGameItem(buildingModel);
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().save(buildingModel);
     }
 
     @Test
     void createProductionOrders() {
-        underTest.createProductionOrders(syncCache, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        underTest.createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
 
-        verify(productionOrderService).createProductionOrdersForReservedStorages(syncCache, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        verify(productionOrderService).createProductionOrdersForReservedStorages(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
     }
 }

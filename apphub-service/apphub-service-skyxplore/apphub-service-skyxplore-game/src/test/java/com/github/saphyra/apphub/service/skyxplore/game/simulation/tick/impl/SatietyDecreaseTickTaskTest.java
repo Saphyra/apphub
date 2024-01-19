@@ -6,11 +6,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +46,7 @@ class SatietyDecreaseTickTaskTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private Citizen citizen;
@@ -74,10 +74,11 @@ class SatietyDecreaseTickTaskTest {
         given(satietyProperties.getSatietyDecreasedPerTick()).willReturn(SATIETY_DECREASED_PER_TICK);
         given(game.getGameId()).willReturn(GAME_ID);
         given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(citizen).decreaseSatiety(SATIETY_DECREASED_PER_TICK);
-        then(syncCache).should().saveGameItem(citizenModel);
+        then(progressDiff).should().save(citizenModel);
     }
 }

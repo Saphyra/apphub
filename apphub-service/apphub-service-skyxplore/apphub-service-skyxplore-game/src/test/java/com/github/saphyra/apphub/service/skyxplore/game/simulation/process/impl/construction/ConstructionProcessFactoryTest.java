@@ -44,8 +44,9 @@ class ConstructionProcessFactoryTest {
     @Test
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(game.getData()).willReturn(gameData);
 
-        ConstructionProcess result = underTest.create(gameData, LOCATION, CONSTRUCTION_ID);
+        ConstructionProcess result = underTest.create(game, LOCATION, CONSTRUCTION_ID);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);

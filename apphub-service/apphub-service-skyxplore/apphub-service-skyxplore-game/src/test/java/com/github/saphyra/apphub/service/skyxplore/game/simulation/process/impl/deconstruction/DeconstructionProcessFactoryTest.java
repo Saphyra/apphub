@@ -66,8 +66,9 @@ class DeconstructionProcessFactoryTest {
     @Test
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(game.getData()).willReturn(gameData);
 
-        DeconstructionProcess result = underTest.create(gameData, LOCATION, DECONSTRUCTION_ID);
+        DeconstructionProcess result = underTest.create(game, LOCATION, DECONSTRUCTION_ID);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(DECONSTRUCTION_ID);

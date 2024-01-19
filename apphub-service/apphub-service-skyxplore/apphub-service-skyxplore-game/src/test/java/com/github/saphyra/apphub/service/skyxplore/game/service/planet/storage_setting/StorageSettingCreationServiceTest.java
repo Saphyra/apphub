@@ -6,14 +6,13 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -29,7 +28,6 @@ import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -52,9 +50,6 @@ public class StorageSettingCreationServiceTest {
     private StorageSettingConverter storageSettingConverter;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
-
-    @Mock
     private StorageSettingsResponseQueryService storageSettingsResponseQueryService;
 
     @InjectMocks
@@ -70,7 +65,7 @@ public class StorageSettingCreationServiceTest {
     private StorageSettingApiModel request;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private EventLoop eventLoop;
@@ -101,10 +96,9 @@ public class StorageSettingCreationServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
 
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
         //noinspection unchecked
-        given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);
+        given(eventLoop.processWithResponse(any(Callable.class))).willReturn(future);
         given(future.get()).willReturn(executionResult);
         given(executionResult.getOrThrow()).willReturn(List.of(apiModel));
 
@@ -113,17 +107,18 @@ public class StorageSettingCreationServiceTest {
         given(game.getGameId()).willReturn(GAME_ID);
         given(storageSettingConverter.toModel(GAME_ID, storageSetting)).willReturn(model);
         given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(apiModel));
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         List<StorageSettingApiModel> result = underTest.createStorageSetting(USER_ID, PLANET_ID, request);
 
         verify(storageSettingsModelValidator).validate(gameData, PLANET_ID, request);
 
-        verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponse(argumentCaptor.capture());
         argumentCaptor.getValue()
             .call();
 
         verify(storageSettings).add(storageSetting);
-        verify(syncCache).saveGameItem(model);
+        verify(progressDiff).save(model);
         assertThat(result).containsExactly(apiModel);
     }
 }

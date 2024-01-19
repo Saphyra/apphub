@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
@@ -14,8 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -43,9 +41,6 @@ class CancelConstructionServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
-
-    @Mock
     private AllocationRemovalService allocationRemovalService;
 
     @InjectMocks
@@ -58,7 +53,7 @@ class CancelConstructionServiceTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private Constructions constructions;
@@ -92,9 +87,8 @@ class CancelConstructionServiceTest {
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
 
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(gameData.getProcesses()).willReturn(processes);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
@@ -103,10 +97,10 @@ class CancelConstructionServiceTest {
     @AfterEach
     void validate() {
         verify(executionResult).getOrThrow();
-        verify(process).cleanup(syncCache);
+        verify(process).cleanup();
         verify(constructions).remove(construction);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, CONSTRUCTION_ID);
-        then(syncCache).should().deleteGameItem(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
     }
 
     @Test
@@ -114,11 +108,12 @@ class CancelConstructionServiceTest {
         given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getExternalReference()).willReturn(BUILDING_ID);
         given(building.getLevel()).willReturn(1);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.cancelConstructionOfConstruction(USER_ID, CONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
     }
@@ -128,15 +123,16 @@ class CancelConstructionServiceTest {
         given(building.getBuildingId()).willReturn(BUILDING_ID);
         given(constructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(construction);
         given(building.getLevel()).willReturn(0);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.cancelConstructionOfBuilding(USER_ID, BUILDING_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
         verify(buildings).remove(building);
-        verify(syncCache).deleteGameItem(BUILDING_ID, GameItemType.BUILDING);
+        verify(progressDiff).delete(BUILDING_ID, GameItemType.BUILDING);
     }
 }

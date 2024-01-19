@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
@@ -13,7 +14,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,7 +53,7 @@ class CitizenUpdateServiceTest {
     private CitizenUpdateService underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -99,13 +99,13 @@ class CitizenUpdateServiceTest {
         given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
         given(skillConverter.toModel(GAME_ID, skill)).willReturn(skillModel);
 
-        underTest.updateCitizen(syncCache, gameData, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
+        underTest.updateCitizen(progressDiff, gameData, CITIZEN_ID, WORK_POINTS, SkillType.AIMING);
 
         verify(skill).increaseExperience(MORALE_USED);
         verify(skill).increaseLevel();
         verify(skill).setExperience(EXPERIENCE - NEXT_LEVEL);
         verify(skill).setNextLevel(LEVEL * EXPERIENCE_PER_LEVEL);
-        then(syncCache).should().saveGameItem(citizenModel);
-        then(syncCache).should().saveGameItem(skillModel);
+        then(progressDiff).should().save(citizenModel);
+        then(progressDiff).should().save(skillModel);
     }
 }

@@ -6,11 +6,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +42,8 @@ public class DeconstructionProcess implements Process {
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
+    @NonNull
+    private final Game game;
 
     @Override
     public UUID getExternalReference() {
@@ -63,11 +66,12 @@ public class DeconstructionProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         DeconstructionProcessConditions conditions = applicationContextProxy.getBean(DeconstructionProcessConditions.class);
         DeconstructionProcessHelper helper = applicationContextProxy.getBean(DeconstructionProcessHelper.class);
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
             if (conditions.buildingUtilized(gameData, deconstructionId)) {
@@ -75,7 +79,7 @@ public class DeconstructionProcess implements Process {
                 return;
             }
 
-            helper.startWork(syncCache, gameData, processId, location, deconstructionId);
+            helper.startWork(progressDiff, gameData, processId, location, deconstructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -85,19 +89,20 @@ public class DeconstructionProcess implements Process {
             return;
         }
 
-        helper.finishDeconstruction(syncCache, gameData, deconstructionId);
+        helper.finishDeconstruction(progressDiff, gameData, deconstructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         gameData.getProcesses()
             .getByExternalReference(processId)
-            .forEach(process -> process.cleanup(syncCache));
+            .forEach(Process::cleanup);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        game.getProgressDiff()
+            .save(toModel());
     }
 
     @Override

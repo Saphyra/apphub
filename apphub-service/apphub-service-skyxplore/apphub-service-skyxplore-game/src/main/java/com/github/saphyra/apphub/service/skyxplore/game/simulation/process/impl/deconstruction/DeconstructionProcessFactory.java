@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,16 @@ public class DeconstructionProcessFactory implements ProcessFactory {
             .gameData(game.getData())
             .location(model.getLocation())
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 
-    public DeconstructionProcess create(GameData gameData, UUID location, UUID deconstructionId) {
+    public DeconstructionProcess create(Game game, UUID location, UUID deconstructionId) {
         return DeconstructionProcess.builder()
             .processId(idGenerator.randomUuid())
             .deconstructionId(deconstructionId)
-            .gameData(gameData)
+            .gameData(game.getData())
+            .game(game)
             .location(location)
             .applicationContextProxy(applicationContextProxy)
             .build();

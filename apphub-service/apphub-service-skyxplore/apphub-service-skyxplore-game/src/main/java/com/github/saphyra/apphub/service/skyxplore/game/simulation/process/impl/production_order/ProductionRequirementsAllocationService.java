@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
@@ -8,7 +9,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_re
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AvailableResourceCounter;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ class ProductionRequirementsAllocationService {
     /**
      * @return reservedStorageId
      */
-    UUID allocate(SyncCache syncCache, GameData gameData, UUID location, UUID externalReference, String dataId, Integer amount) {
+    UUID allocate(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID externalReference, String dataId, Integer amount) {
         log.info("Allocating {} of {}", amount, dataId);
         int availableAmount = availableResourceCounter.countAvailableAmount(gameData, location, dataId);
 
@@ -48,8 +48,8 @@ class ProductionRequirementsAllocationService {
         gameData.getReservedStorages()
             .add(reservedStorage);
 
-        syncCache.saveGameItem(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
-        syncCache.saveGameItem(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
+        progressDiff.save(allocatedResourceConverter.toModel(gameData.getGameId(), allocatedResource));
+        progressDiff.save(reservedStorageConverter.toModel(gameData.getGameId(), reservedStorage));
 
         return reservedStorage.getReservedStorageId();
     }

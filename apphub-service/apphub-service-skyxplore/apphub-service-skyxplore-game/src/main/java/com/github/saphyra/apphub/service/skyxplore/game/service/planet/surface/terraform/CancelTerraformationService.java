@@ -7,8 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +19,6 @@ import java.util.UUID;
 @Slf4j
 public class CancelTerraformationService {
     private final GameDao gameDao;
-    private final SyncCacheFactory syncCacheFactory;
     private final AllocationRemovalService allocationRemovalService;
 
     public void cancelTerraformationQueueItem(UUID userId, UUID constructionId) {
@@ -46,24 +43,22 @@ public class CancelTerraformationService {
 
     @SneakyThrows
     private void processCancellation(Game game, Construction terraformation) {
-        SyncCache syncCache = syncCacheFactory.create();
         game.getEventLoop()
             .processWithWait(() -> {
-                    game.getData()
-                        .getProcesses()
-                        .findByExternalReferenceAndTypeValidated(terraformation.getConstructionId(), ProcessType.TERRAFORMATION)
-                        .cleanup(syncCache);
+                game.getData()
+                    .getProcesses()
+                    .findByExternalReferenceAndTypeValidated(terraformation.getConstructionId(), ProcessType.TERRAFORMATION)
+                    .cleanup();
 
-                    game.getData()
-                        .getConstructions()
-                        .remove(terraformation);
+                game.getData()
+                    .getConstructions()
+                    .remove(terraformation);
 
-                    allocationRemovalService.removeAllocationsAndReservations(syncCache, game.getData(), terraformation.getConstructionId());
+                allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), game.getData(), terraformation.getConstructionId());
 
-                    syncCache.deleteGameItem(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
-                },
-                syncCache
-            )
+                game.getProgressDiff()
+                    .delete(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
+            })
             .getOrThrow();
     }
 }

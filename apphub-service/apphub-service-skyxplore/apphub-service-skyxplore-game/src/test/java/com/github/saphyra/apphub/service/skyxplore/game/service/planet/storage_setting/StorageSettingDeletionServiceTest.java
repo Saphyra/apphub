@@ -6,15 +6,14 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,7 +30,6 @@ import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -43,9 +41,6 @@ public class StorageSettingDeletionServiceTest {
 
     @Mock
     private GameDao gameDao;
-
-    @Mock
-    private SyncCacheFactory syncCacheFactory;
 
     @Mock
     private StorageSettingsResponseQueryService storageSettingsResponseQueryService;
@@ -60,7 +55,7 @@ public class StorageSettingDeletionServiceTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private EventLoop eventLoop;
@@ -95,11 +90,10 @@ public class StorageSettingDeletionServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
         //noinspection unchecked
-        given(eventLoop.processWithResponse(any(Callable.class), any())).willReturn(future);
+        given(eventLoop.processWithResponse(any(Callable.class))).willReturn(future);
         given(future.get()).willReturn(executionResult);
 
         given(gameData.getProcesses()).willReturn(processes);
@@ -107,17 +101,18 @@ public class StorageSettingDeletionServiceTest {
         given(storageSetting.getLocation()).willReturn(PLANET_ID);
         given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(apiModel));
         given(executionResult.getOrThrow()).willReturn(List.of(apiModel));
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         List<StorageSettingApiModel> result = underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
 
-        verify(eventLoop).processWithResponse(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponse(argumentCaptor.capture());
         argumentCaptor.getValue()
             .call();
 
-        verify(process).cleanup(syncCache);
+        verify(process).cleanup();
         verify(executionResult).getOrThrow();
         verify(storageSettings).remove(storageSetting);
-        verify(syncCache).deleteGameItem(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
+        verify(progressDiff).delete(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
 
         assertThat(result).containsExactly(apiModel);
     }

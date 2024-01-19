@@ -41,7 +41,7 @@ class RenameCitizenService {
             .processWithResponseAndWait(() -> {
                 citizen.setName(newName);
                 gameDataProxy.saveItem(citizenConverter.toModel(game.getGameId(), citizen));
-                return citizenConverter.toResponse(game.getData(), citizen);
+                return citizenConverter.toResponse(game.getData(), citizen); //TODO do not save directly
             })
             .getOrThrow();
     }

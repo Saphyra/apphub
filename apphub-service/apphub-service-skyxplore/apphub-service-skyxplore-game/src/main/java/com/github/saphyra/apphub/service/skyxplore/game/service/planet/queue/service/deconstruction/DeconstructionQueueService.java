@@ -10,8 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +25,6 @@ public class DeconstructionQueueService implements QueueService {
     private final BuildingDeconstructionToQueueItemConverter buildingDeconstructionToQueueItemConverter;
     private final CancelDeconstructionService cancelDeconstructionService;
     private final PriorityValidator priorityValidator;
-    private final SyncCacheFactory syncCacheFactory;
     private final DeconstructionConverter deconstructionConverter;
 
     @Override
@@ -53,14 +50,13 @@ public class DeconstructionQueueService implements QueueService {
             .getDeconstructions()
             .findByDeconstructionId(deconstructionId);
 
-        SyncCache syncCache = syncCacheFactory.create();
-
         game.getEventLoop()
             .processWithWait(() -> {
                 deconstruction.setPriority(priority);
 
-                syncCache.saveGameItem(deconstructionConverter.toModel(game.getGameId(), deconstruction));
-            }, syncCache)
+                game.getProgressDiff()
+                    .save(deconstructionConverter.toModel(game.getGameId(), deconstruction));
+            })
             .getOrThrow();
     }
 

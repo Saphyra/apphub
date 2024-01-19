@@ -9,12 +9,13 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,6 +58,8 @@ public class ProductionOrderProcess implements Process {
     private final int amount;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
+    @NonNull
+    private final Game game;
 
     @Override
     public int getPriority() {
@@ -76,11 +79,12 @@ public class ProductionOrderProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
 
+        GameProgressDiff progressDiff = game.getProgressDiff();
         if (status == ProcessStatus.CREATED) {
             String dataId = findReservedStorage()
                 .getDataId();
@@ -90,7 +94,7 @@ public class ProductionOrderProcess implements Process {
                 log.info("Creating ResourceRequirementProcesses for {}", this);
 
 
-                helper.processResourceRequirements(syncCache, gameData, processId, location, dataId, amount, producerBuildingDataId);
+                helper.processResourceRequirements(progressDiff, gameData, processId, location, dataId, amount, producerBuildingDataId);
                 status = ProcessStatus.IN_PROGRESS;
             } else {
                 log.info("Available ProductionBuilding not found for {}", dataId);
@@ -106,11 +110,11 @@ public class ProductionOrderProcess implements Process {
             }
 
             if (!conditions.workStarted(gameData, processId)) {
-                helper.startWork(syncCache, gameData, processId, producerBuildingDataId, reservedStorageId);
+                helper.startWork(progressDiff, gameData, processId, producerBuildingDataId, reservedStorageId);
             }
 
             if (conditions.workDone(gameData, processId)) {
-                helper.storeResource(syncCache, gameData, location, reservedStorageId, allocatedResourceId, amount);
+                helper.storeResource(progressDiff, gameData, location, reservedStorageId, allocatedResourceId, amount);
 
                 status = ProcessStatus.DONE;
             } else {
@@ -120,19 +124,21 @@ public class ProductionOrderProcess implements Process {
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         log.info("Cleaning up {}", this);
 
+        GameProgressDiff progressDiff = game.getProgressDiff();
+
         applicationContextProxy.getBean(AllocationRemovalService.class)
-            .removeAllocationsAndReservations(syncCache, gameData, processId);
+            .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
         gameData.getProcesses()
             .getByExternalReference(processId)
-            .forEach(process -> process.cleanup(syncCache));
+            .forEach(Process::cleanup);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        progressDiff.save(toModel());
     }
 
     @Override

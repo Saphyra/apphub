@@ -6,11 +6,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +45,9 @@ public class ConstructionProcess implements Process {
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
+    @NonNull
+    private final Game game;
+
     @Override
     public UUID getExternalReference() {
         return constructionId;
@@ -65,13 +69,14 @@ public class ConstructionProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         ConstructionProcessHelper helper = applicationContextProxy.getBean(ConstructionProcessHelper.class);
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(syncCache, gameData, processId, constructionId);
+            helper.createProductionOrders(progressDiff, gameData, processId, constructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -84,7 +89,7 @@ public class ConstructionProcess implements Process {
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(syncCache, gameData, processId, constructionId);
+            helper.startWork(progressDiff, gameData, processId, constructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -92,19 +97,19 @@ public class ConstructionProcess implements Process {
             return;
         }
 
-        helper.finishConstruction(syncCache, gameData, constructionId);
+        helper.finishConstruction(progressDiff, gameData, constructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         gameData.getProcesses()
             .getByExternalReference(processId)
-            .forEach(process -> process.cleanup(syncCache));
+            .forEach(Process::cleanup);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        game.getProgressDiff().save(toModel());
     }
 
     @Override

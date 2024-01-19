@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ class TerraformationUpdateServiceTest {
     private TerraformationUpdateService underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -51,8 +51,8 @@ class TerraformationUpdateServiceTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
 
-        underTest.updateTerraformation(syncCache, gameData, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
+        underTest.updateTerraformation(progressDiff, gameData, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 
-        then(syncCache).should().saveGameItem(constructionModel);
+        then(progressDiff).should().save(constructionModel);
     }
 }

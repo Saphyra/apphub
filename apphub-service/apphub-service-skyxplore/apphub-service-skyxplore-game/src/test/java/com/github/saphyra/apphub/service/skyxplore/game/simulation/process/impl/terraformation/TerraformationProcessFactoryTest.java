@@ -50,8 +50,9 @@ class TerraformationProcessFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(terraformation.getConstructionId()).willReturn(TERRAFORMATION_ID);
+        given(game.getData()).willReturn(gameData);
 
-        TerraformationProcess result = underTest.create(gameData, LOCATION, terraformation);
+        TerraformationProcess result = underTest.create(game, LOCATION, terraformation);
 
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(TERRAFORMATION_ID);

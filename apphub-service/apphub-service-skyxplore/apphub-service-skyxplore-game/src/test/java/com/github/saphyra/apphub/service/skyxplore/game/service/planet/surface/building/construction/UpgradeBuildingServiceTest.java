@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.AllBuildin
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
@@ -23,8 +24,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -43,7 +42,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -73,9 +71,6 @@ public class UpgradeBuildingServiceTest {
 
     @Mock
     private ConstructionProcessFactory constructionProcessFactory;
-
-    @Mock
-    private SyncCacheFactory syncCacheFactory;
 
     @Mock
     private ConstructionConverter constructionConverter;
@@ -126,7 +121,7 @@ public class UpgradeBuildingServiceTest {
     private Buildings buildings;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private ConstructionModel constructionModel;
@@ -208,25 +203,25 @@ public class UpgradeBuildingServiceTest {
 
         given(gameData.getProcesses()).willReturn(processes);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
 
-        given(constructionProcessFactory.create(gameData, PLANET_ID, CONSTRUCTION_ID)).willReturn(constructionProcess);
-        given(syncCacheFactory.create()).willReturn(syncCache);
+        given(constructionProcessFactory.create(game, PLANET_ID, CONSTRUCTION_ID)).willReturn(constructionProcess);
         given(game.getGameId()).willReturn(GAME_ID);
         given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
         given(constructionProcess.toModel()).willReturn(processModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(resourceAllocationService).processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(constructions).add(construction);
-        then(syncCache).should().saveGameItem(constructionModel);
-        then(syncCache).should().saveGameItem(processModel);
+        then(progressDiff).should().save(constructionModel);
+        then(progressDiff).should().save(processModel);
         verify(processes).add(constructionProcess);
         verify(executionResult).getOrThrow();
     }

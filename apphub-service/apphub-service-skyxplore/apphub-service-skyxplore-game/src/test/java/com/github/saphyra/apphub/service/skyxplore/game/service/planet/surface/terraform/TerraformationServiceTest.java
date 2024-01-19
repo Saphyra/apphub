@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.Terraf
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
@@ -24,8 +25,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -44,7 +43,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -72,9 +70,6 @@ public class TerraformationServiceTest {
 
     @Mock
     private TerraformationProcessFactory terraformationProcessFactory;
-
-    @Mock
-    private SyncCacheFactory syncCacheFactory;
 
     @Mock
     private ConstructionConverter constructionConverter;
@@ -125,7 +120,7 @@ public class TerraformationServiceTest {
     private Buildings buildings;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private ProcessModel processModel;
@@ -218,28 +213,28 @@ public class TerraformationServiceTest {
         given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
-        given(terraformationProcessFactory.create(gameData, PLANET_ID, terraformation)).willReturn(terraformationProcess);
+        given(terraformationProcessFactory.create(game, PLANET_ID, terraformation)).willReturn(terraformationProcess);
         given(gameData.getProcesses()).willReturn(processes);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any(Runnable.class), eq(syncCache))).willReturn(executionResult);
+        given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(syncCacheFactory.create()).willReturn(syncCache);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(terraformationProcess.toModel()).willReturn(processModel);
         given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(resourceAllocationService).processResourceRequirements(syncCache, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        verify(resourceAllocationService).processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(processes).add(terraformationProcess);
         verify(executionResult).getOrThrow();
-        then(syncCache).should().saveGameItem(processModel);
-        then(syncCache).should().saveGameItem(constructionModel);
+        then(progressDiff).should().save(processModel);
+        then(progressDiff).should().save(constructionModel);
     }
 }

@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
@@ -14,7 +16,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Pri
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +51,9 @@ class ConstructionProcessTest {
     @Mock
     private ConstructionProcessConditions conditions;
 
+    @Mock
+    private Game game;
+
     private ConstructionProcess underTest;
 
     @Mock
@@ -65,7 +69,7 @@ class ConstructionProcessTest {
     private Construction construction;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private Processes processes;
@@ -82,6 +86,7 @@ class ConstructionProcessTest {
             .constructionId(CONSTRUCTION_ID)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 
@@ -113,12 +118,13 @@ class ConstructionProcessTest {
         given(applicationContextProxy.getBean(ConstructionProcessConditions.class)).willReturn(conditions);
 
         given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).createProductionOrders(syncCache, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        verify(helper).createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
         verify(conditions, times(0)).hasWorkProcesses(gameData, PROCESS_ID);
     }
 
@@ -130,13 +136,14 @@ class ConstructionProcessTest {
         given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).startWork(syncCache, gameData, PROCESS_ID, CONSTRUCTION_ID);
-        verify(helper, times(0)).finishConstruction(syncCache, gameData, CONSTRUCTION_ID);
+        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        verify(helper, times(0)).finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
     }
 
     @Test
@@ -147,25 +154,27 @@ class ConstructionProcessTest {
         given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(helper).finishConstruction(syncCache, gameData, CONSTRUCTION_ID);
+        verify(helper).finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
     }
 
     @Test
     void cleanup() {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.cleanup(syncCache);
+        underTest.cleanup();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(process).cleanup(syncCache);
-        verify(syncCache).saveGameItem(underTest.toModel());
+        verify(process).cleanup();
+        verify(progressDiff).save(underTest.toModel());
     }
 
     @Test

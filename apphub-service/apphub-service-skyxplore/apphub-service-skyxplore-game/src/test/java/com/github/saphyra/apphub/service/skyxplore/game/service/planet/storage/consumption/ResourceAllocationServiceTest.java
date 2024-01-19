@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
@@ -14,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +84,7 @@ public class ResourceAllocationServiceTest {
     private AllocatedResources allocatedResources;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private AllocatedResourceModel allocatedResourceModel;
@@ -102,7 +102,7 @@ public class ResourceAllocationServiceTest {
     public void notEnoughStorage() {
         given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
 
-        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
+        Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(progressDiff, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
 
         ExceptionValidator.validateNotLoggedException(
             ex,
@@ -129,11 +129,11 @@ public class ResourceAllocationServiceTest {
         given(allocatedResourceConverter.toModel(GAME_ID, allocatedResource)).willReturn(allocatedResourceModel);
         given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
 
-        underTest.processResourceRequirements(syncCache, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
+        underTest.processResourceRequirements(progressDiff, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT));
 
         verify(reservedStorages).add(reservedStorage);
         verify(allocatedResources).add(allocatedResource);
-        then(syncCache).should().saveGameItem(reservedStorageModel);
-        then(syncCache).should().saveGameItem(allocatedResourceModel);
+        then(progressDiff).should().save(reservedStorageModel);
+        then(progressDiff).should().save(allocatedResourceModel);
     }
 }

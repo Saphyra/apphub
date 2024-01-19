@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.UUID;
 class DeconstructionUpdateService {
     private final DeconstructionConverter deconstructionConverter;
 
-    void updateDeconstruction(SyncCache syncCache, GameData gameData, UUID deconstructionId, int completedWorkPoints) {
+    void updateDeconstruction(GameProgressDiff progressDiff, GameData gameData, UUID deconstructionId, int completedWorkPoints) {
         log.info("Adding {} workPoints to DECONSTRUCTION {}", completedWorkPoints, deconstructionId);
 
         Deconstruction deconstruction = gameData.getDeconstructions()
@@ -26,6 +26,6 @@ class DeconstructionUpdateService {
         deconstruction.increaseWorkPoints(completedWorkPoints);
         log.info("After update: {}", deconstruction);
 
-        syncCache.saveGameItem(deconstructionConverter.toModel(gameData.getGameId(), deconstruction));
+        progressDiff.save(deconstructionConverter.toModel(gameData.getGameId(), deconstruction));
     }
 }

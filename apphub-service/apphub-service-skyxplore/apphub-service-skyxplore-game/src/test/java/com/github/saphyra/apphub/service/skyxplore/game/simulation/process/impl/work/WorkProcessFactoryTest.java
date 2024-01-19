@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -44,6 +45,7 @@ class WorkProcessFactoryTest {
     private static final Integer AMOUNT = 10;
     private static final Integer WORK_POINTS_PER_RESOURCE = 5;
     private static final Integer MAX_WORK_POINT_BATCH = 100;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private ProductionBuildingService productionBuildingService;
@@ -59,6 +61,9 @@ class WorkProcessFactoryTest {
 
     @Mock
     private IdGenerator idGenerator;
+
+    @Mock
+    private GameDao gameDao;
 
     @InjectMocks
     private WorkProcessFactory underTest;
@@ -126,6 +131,10 @@ class WorkProcessFactoryTest {
         given(citizenProperties.getMaxWorkPointsBatch()).willReturn(MAX_WORK_POINT_BATCH);
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
+        given(gameDao.findById(GAME_ID)).willReturn(game);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getData()).willReturn(gameData);
+
 
         List<WorkProcess> result = underTest.createForProduction(gameData, EXTERNAL_REFERENCE, LOCATION, BUILDING_DATA_ID, RESOURCE_DATA_ID, AMOUNT);
 
@@ -142,6 +151,9 @@ class WorkProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
+        given(gameDao.findById(GAME_ID)).willReturn(game);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getData()).willReturn(gameData);
 
         List<WorkProcess> result = underTest.createForDeconstruction(gameData, EXTERNAL_REFERENCE, TARGET_ID, LOCATION);
 
@@ -156,6 +168,10 @@ class WorkProcessFactoryTest {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMaxWorkPointsBatch()).willReturn(MAX_WORK_POINT_BATCH);
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(gameDao.findById(GAME_ID)).willReturn(game);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getData()).willReturn(gameData);
+
 
         List<WorkProcess> result = underTest.createForTerraformation(gameData, EXTERNAL_REFERENCE, TARGET_ID, LOCATION, REQUIRED_WORK_POINTS);
 
@@ -170,6 +186,10 @@ class WorkProcessFactoryTest {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMaxWorkPointsBatch()).willReturn(MAX_WORK_POINT_BATCH);
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(gameDao.findById(GAME_ID)).willReturn(game);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getData()).willReturn(gameData);
+
 
         List<WorkProcess> result = underTest.createForConstruction(gameData, EXTERNAL_REFERENCE, TARGET_ID, LOCATION, REQUIRED_WORK_POINTS);
 

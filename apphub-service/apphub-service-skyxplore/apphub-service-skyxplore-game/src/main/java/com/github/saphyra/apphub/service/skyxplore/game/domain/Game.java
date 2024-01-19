@@ -38,6 +38,9 @@ public class Game {
     private final EventLoop eventLoop;
 
     @Builder.Default
+    private final GameProgressDiff progressDiff = new GameProgressDiff();
+
+    @Builder.Default
     private volatile boolean gamePaused = true;
     @Builder.Default
     private volatile boolean terminated = false;

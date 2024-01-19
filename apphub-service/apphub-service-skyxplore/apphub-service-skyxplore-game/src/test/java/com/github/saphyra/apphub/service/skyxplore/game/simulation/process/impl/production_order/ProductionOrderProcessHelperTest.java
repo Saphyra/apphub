@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
@@ -17,7 +18,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resou
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -77,7 +77,7 @@ class ProductionOrderProcessHelperTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private ProductionOrderProcess productionOrderProcess;
@@ -127,14 +127,14 @@ class ProductionOrderProcessHelperTest {
 
     @Test
     void processResourceRequirements() {
-        given(resourceRequirementProcessFactory.createResourceRequirementProcesses(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID)).willReturn(List.of(productionOrderProcess));
+        given(resourceRequirementProcessFactory.createResourceRequirementProcesses(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID)).willReturn(List.of(productionOrderProcess));
         given(gameData.getProcesses()).willReturn(processes);
         given(productionOrderProcess.toModel()).willReturn(processModel);
 
-        underTest.processResourceRequirements(syncCache, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID);
+        underTest.processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_DATA_ID);
 
         verify(processes).add(productionOrderProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 
     @Test
@@ -148,11 +148,11 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(workProcess.toModel()).willReturn(processModel);
 
-        underTest.startWork(syncCache, gameData, PROCESS_ID, BUILDING_DATA_ID, RESERVED_STORAGE_ID);
+        underTest.startWork(progressDiff, gameData, PROCESS_ID, BUILDING_DATA_ID, RESERVED_STORAGE_ID);
 
-        verify(useAllocatedResourceService).resolveAllocations(syncCache, gameData, LOCATION, PROCESS_ID);
+        verify(useAllocatedResourceService).resolveAllocations(progressDiff, gameData, LOCATION, PROCESS_ID);
         verify(processes).add(workProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 
     @Test
@@ -170,15 +170,15 @@ class ProductionOrderProcessHelperTest {
         given(storedResourceConverter.toModel(GAME_ID, storedResource)).willReturn(storedResourceModel);
         given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
 
-        underTest.storeResource(syncCache, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
+        underTest.storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
 
         verify(allocatedResource).increaseAmount(AMOUNT);
-        verify(syncCache).saveGameItem(allocatedResourceModel);
+        verify(progressDiff).save(allocatedResourceModel);
 
         verify(storedResource).increaseAmount(AMOUNT);
         verify(reservedStorage).decreaseAmount(AMOUNT);
-        then(syncCache).should().saveGameItem(storedResourceModel);
-        then(syncCache).should().saveGameItem(reservedStorageModel);
+        then(progressDiff).should().save(storedResourceModel);
+        then(progressDiff).should().save(reservedStorageModel);
     }
 
     @Test
@@ -188,16 +188,16 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(storedResources.findByLocationAndDataId(LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(storedResourceFactory.create(syncCache, gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(storedResource);
+        given(storedResourceFactory.create(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(storedResource);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(storedResourceConverter.toModel(GAME_ID, storedResource)).willReturn(storedResourceModel);
         given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
 
-        underTest.storeResource(syncCache, gameData, LOCATION, RESERVED_STORAGE_ID, null, AMOUNT);
+        underTest.storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, null, AMOUNT);
 
         verify(storedResource).increaseAmount(AMOUNT);
         verify(reservedStorage).decreaseAmount(AMOUNT);
-        then(syncCache).should().saveGameItem(storedResourceModel);
-        then(syncCache).should().saveGameItem(reservedStorageModel);
+        then(progressDiff).should().save(storedResourceModel);
+        then(progressDiff).should().save(reservedStorageModel);
     }
 }

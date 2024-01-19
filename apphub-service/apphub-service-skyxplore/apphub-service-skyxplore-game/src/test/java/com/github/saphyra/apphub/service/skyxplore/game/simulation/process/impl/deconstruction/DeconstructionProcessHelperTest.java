@@ -2,13 +2,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class DeconstructionProcessHelperTest {
     private DeconstructionProcessHelper underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -70,10 +70,10 @@ class DeconstructionProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(workProcess.toModel()).willReturn(processModel);
 
-        underTest.startWork(syncCache, gameData, PROCESS_ID, LOCATION, DECONSTRUCTION_ID);
+        underTest.startWork(progressDiff, gameData, PROCESS_ID, LOCATION, DECONSTRUCTION_ID);
 
         verify(processes).add(workProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 
     @Test
@@ -85,11 +85,11 @@ class DeconstructionProcessHelperTest {
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
         given(building.getBuildingId()).willReturn(BUILDING_ID);
 
-        underTest.finishDeconstruction(syncCache, gameData, DECONSTRUCTION_ID);
+        underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 
         verify(buildings).remove(building);
         then(deconstructions).should().remove(deconstruction);
-        then(syncCache).should().deleteGameItem(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
-        then(syncCache).should().deleteGameItem(BUILDING_ID, GameItemType.BUILDING);
+        then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(BUILDING_ID, GameItemType.BUILDING);
     }
 }

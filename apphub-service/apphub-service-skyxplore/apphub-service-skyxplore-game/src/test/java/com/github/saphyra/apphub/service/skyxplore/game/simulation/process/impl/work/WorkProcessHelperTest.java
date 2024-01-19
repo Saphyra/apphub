@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
@@ -17,7 +18,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allo
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target.UpdateTargetService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,7 +89,7 @@ class WorkProcessHelperTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private BuildingAllocations buildingAllocations;
@@ -123,7 +123,7 @@ class WorkProcessHelperTest {
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
         given(buildingAllocations.getByBuildingId(EXTERNAL_REFERENCE)).willReturn(List.of(buildingAllocation));
 
-        underTest.allocateParentAsBuildingIfPossible(syncCache, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
+        underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
         verifyNoInteractions(buildingAllocationFactory);
     }
@@ -136,10 +136,10 @@ class WorkProcessHelperTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingAllocationConverter.toModel(GAME_ID, buildingAllocation)).willReturn(buildingAllocationModel);
 
-        underTest.allocateParentAsBuildingIfPossible(syncCache, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
+        underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
         verify(buildingAllocations).add(buildingAllocation);
-        verify(syncCache).saveGameItem(buildingAllocationModel);
+        verify(progressDiff).save(buildingAllocationModel);
     }
 
     @Test
@@ -150,10 +150,10 @@ class WorkProcessHelperTest {
         given(buildingAllocationConverter.toModel(GAME_ID, buildingAllocation)).willReturn(buildingAllocationModel);
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
 
-        underTest.allocateBuildingIfPossible(syncCache, gameData, PROCESS_ID, LOCATION, BUILDING_DATA_ID);
+        underTest.allocateBuildingIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, BUILDING_DATA_ID);
 
         verify(buildingAllocations).add(buildingAllocation);
-        verify(syncCache).saveGameItem(buildingAllocationModel);
+        verify(progressDiff).save(buildingAllocationModel);
     }
 
     @Test
@@ -164,10 +164,10 @@ class WorkProcessHelperTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(citizenAllocationConverter.toModel(GAME_ID, citizenAllocation)).willReturn(citizenAllocationModel);
 
-        underTest.allocateCitizenIfPossible(syncCache, gameData, PROCESS_ID, LOCATION, SkillType.AIMING, REQUESTED_WORK_POINTS);
+        underTest.allocateCitizenIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, SkillType.AIMING, REQUESTED_WORK_POINTS);
 
         verify(citizenAllocations).add(citizenAllocation);
-        verify(syncCache).saveGameItem(citizenAllocationModel);
+        verify(progressDiff).save(citizenAllocationModel);
     }
 
     @Test
@@ -181,13 +181,13 @@ class WorkProcessHelperTest {
         given(citizens.findByCitizenIdValidated(CITIZEN_ID)).willReturn(citizen);
         given(citizenEfficiencyCalculator.calculateEfficiency(gameData, citizen, SkillType.AIMING)).willReturn(CITIZEN_EFFICIENCY);
 
-        int result = underTest.work(syncCache, gameData, PROCESS_ID, SkillType.AIMING, WORK_POINTS_LEFT, WorkProcessType.CONSTRUCTION, TARGET_ID);
+        int result = underTest.work(progressDiff, gameData, PROCESS_ID, SkillType.AIMING, WORK_POINTS_LEFT, WorkProcessType.CONSTRUCTION, TARGET_ID);
 
         int completedWorkPoints = (int) (CITIZEN_EFFICIENCY * WORK_POINTS_PER_TICK);
         assertThat(result).isEqualTo(completedWorkPoints);
 
-        verify(citizenUpdateService).updateCitizen(syncCache, gameData, CITIZEN_ID, completedWorkPoints, SkillType.AIMING);
-        verify(updateTargetService).updateTarget(syncCache, gameData, WorkProcessType.CONSTRUCTION, TARGET_ID, completedWorkPoints);
+        verify(citizenUpdateService).updateCitizen(progressDiff, gameData, CITIZEN_ID, completedWorkPoints, SkillType.AIMING);
+        verify(updateTargetService).updateTarget(progressDiff, gameData, WorkProcessType.CONSTRUCTION, TARGET_ID, completedWorkPoints);
     }
 
     @Test
@@ -200,12 +200,12 @@ class WorkProcessHelperTest {
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
 
-        underTest.releaseBuildingAndCitizen(syncCache, gameData, PROCESS_ID);
+        underTest.releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
 
         verify(buildingAllocations).remove(buildingAllocation);
-        verify(syncCache).deleteGameItem(BUILDING_ALLOCATION_ID, GameItemType.BUILDING_ALLOCATION);
+        verify(progressDiff).delete(BUILDING_ALLOCATION_ID, GameItemType.BUILDING_ALLOCATION);
 
         verify(citizenAllocations).remove(citizenAllocation);
-        verify(syncCache).deleteGameItem(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
+        verify(progressDiff).delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
     }
 }

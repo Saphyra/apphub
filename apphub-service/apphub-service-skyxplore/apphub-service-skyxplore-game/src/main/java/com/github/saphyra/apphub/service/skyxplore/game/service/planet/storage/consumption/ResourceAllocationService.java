@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class ResourceAllocationService {
     private final AllocatedResourceConverter allocatedResourceConverter;
     private final ReservedStorageConverter reservedStorageConverter;
 
-    public void processResourceRequirements(SyncCache syncCache, GameData gameData, UUID location, UUID externalReference, Map<String, Integer> requiredResources) {
+    public void processResourceRequirements(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, UUID externalReference, Map<String, Integer> requiredResources) {
         Map<String, ConsumptionResult> consumptions = requiredResources.entrySet()
             .stream()
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> consumptionCalculator.calculate(gameData, location, externalReference, entry.getKey(), entry.getValue())));
@@ -51,8 +51,8 @@ public class ResourceAllocationService {
                 gameData.getAllocatedResources().add(consumptionResult.getAllocation());
                 gameData.getReservedStorages().add(consumptionResult.getReservation());
 
-                syncCache.saveGameItem(allocatedResourceConverter.toModel(gameData.getGameId(), consumptionResult.getAllocation()));
-                syncCache.saveGameItem(reservedStorageConverter.toModel(gameData.getGameId(), consumptionResult.getReservation()));
+                gameProgressDiff.save(allocatedResourceConverter.toModel(gameData.getGameId(), consumptionResult.getAllocation()));
+                gameProgressDiff.save(reservedStorageConverter.toModel(gameData.getGameId(), consumptionResult.getReservation()));
             });
     }
 }

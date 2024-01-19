@@ -8,11 +8,12 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,9 @@ public class RestProcess implements Process {
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
+    @NonNull
+    private final Game game;
+
     @Override
     public ProcessType getType() {
         return ProcessType.REST;
@@ -71,7 +75,7 @@ public class RestProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         RestProcessConditions conditions = applicationContextProxy.getBean(RestProcessConditions.class);
@@ -87,9 +91,10 @@ public class RestProcess implements Process {
         }
 
         RestProcessHelper helper = applicationContextProxy.getBean(RestProcessHelper.class);
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (!conditions.citizenAllocated(gameData, citizenId)) {
-            helper.allocateCitizen(syncCache, gameData, processId, citizenId);
+            helper.allocateCitizen(progressDiff, gameData, processId, citizenId);
         }
 
         if (restedForTicks >= restForTicks) {
@@ -98,14 +103,14 @@ public class RestProcess implements Process {
         }
 
         restedForTicks += 1;
-        helper.increaseMorale(syncCache, gameData, citizenId);
+        helper.increaseMorale(progressDiff, gameData, citizenId);
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         RestProcessHelper helper = applicationContextProxy.getBean(RestProcessHelper.class);
 
-        helper.releaseCitizen(syncCache, gameData, processId);
+        helper.releaseCitizen(game.getProgressDiff(), gameData, processId);
     }
 
     @Override

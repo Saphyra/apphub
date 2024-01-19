@@ -2,12 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_reso
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +39,7 @@ public class StoredResourceFactoryTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private StoredResourceModel storedResourceModel;
@@ -58,7 +54,7 @@ public class StoredResourceFactoryTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(storedResourceConverter.toModel(eq(GAME_ID), any(StoredResource.class))).willReturn(storedResourceModel);
 
-        StoredResource result = underTest.create(syncCache, gameData, LOCATION, DATA_ID, AMOUNT);
+        StoredResource result = underTest.create(progressDiff, gameData, LOCATION, DATA_ID, AMOUNT);
 
         assertThat(result.getStoredResourceId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
@@ -66,6 +62,6 @@ public class StoredResourceFactoryTest {
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
 
         verify(storedResources).add(result);
-        verify(syncCache).saveGameItem(storedResourceModel);
+        verify(progressDiff).save(storedResourceModel);
     }
 }
