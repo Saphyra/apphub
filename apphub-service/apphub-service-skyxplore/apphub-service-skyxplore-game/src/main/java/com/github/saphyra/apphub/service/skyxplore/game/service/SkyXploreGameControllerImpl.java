@@ -50,4 +50,14 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
 
         gameDao.delete(gameId);
     }
+
+    @Override
+    //TODO unit test
+    public OneParamResponse<Boolean> isHost(AccessTokenHeader accessTokenHeader) {
+        log.info("Checking if {} is game host.", accessTokenHeader.getUserId());
+        boolean isHost = gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
+            .getHost()
+            .equals(accessTokenHeader.getUserId());
+        return new OneParamResponse<>(isHost);
+    }
 }

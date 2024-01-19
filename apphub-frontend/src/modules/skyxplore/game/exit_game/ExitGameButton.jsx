@@ -6,14 +6,14 @@ import ConfirmationDialogData from "../../../../common/component/confirmation_di
 import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
 
-const ExitGameButton = ({ setConfirmationDialogData }) => {
+const ExitGameButton = ({ setConfirmationDialogData, isHost }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const openConfirmationDialog = () => {
         const confirmationDialogData = new ConfirmationDialogData(
             "skyxplore-game-confirm-exit-confirmation-dialog",
             localizationHandler.get("title"),
-            localizationHandler.get("content"),
+            localizationHandler.get(isHost ? "content-host" : "content"),
             [
                 <Button
                     key="exit"
@@ -21,6 +21,14 @@ const ExitGameButton = ({ setConfirmationDialogData }) => {
                     label={localizationHandler.get("exit")}
                     onclick={exit}
                 />,
+                (isHost ?
+                    <Button
+                        key="save-and-exit"
+                        id="skyxplore-game-confirm-save-and-exit-button"
+                        label={localizationHandler.get("save-and-exit")}
+                        onclick={saveAndExit}
+                    />
+                    : []),
                 <Button
                     key="cancel"
                     id="skyxplore-game-cancel-exit-button"
@@ -38,6 +46,12 @@ const ExitGameButton = ({ setConfirmationDialogData }) => {
             .send();
 
         window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+    }
+
+    const saveAndExit = async () => {
+        //TODO save
+
+        exit();
     }
 
     return <Button

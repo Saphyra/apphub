@@ -38,4 +38,8 @@ public interface SkyXploreGameController {
      */
     @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_DELETE_GAME)
     void deleteGame(@PathVariable("gameId") UUID gameId);
+
+    //TODO api test
+    @GetMapping(Endpoints.SKYXPLORE_GAME_IS_HOST)
+    OneParamResponse<Boolean> isHost(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

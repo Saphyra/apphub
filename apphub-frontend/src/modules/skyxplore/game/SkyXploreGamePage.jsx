@@ -15,7 +15,8 @@ import Endpoints from "../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import Navigation from "./navigation/Navigation";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
-import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
+import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
+import Button from "../../../common/component/input/Button";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -23,13 +24,16 @@ const SkyXploreGamePage = () => {
     document.title = localizationHandler.get("title");
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [userId, setUserId] = useState("");
+    const [isHost, setIsHost] = useState(false);
+
     useEffect(() => Redirection.forGame(), []);
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
-    const [userId, setUserId] = useState("");
-
     useEffect(() => fetchUserId(), []);
+    useEffect(() => fetchIsHost(), []);
+
+    const { lastEvent, sendMessage } = useConnectToWebSocket(WebSocketEndpoint.SKYXPLORE_GAME_MAIN, undefined,)
 
     const fetchUserId = () => {
         const fetch = async () => {
@@ -39,34 +43,16 @@ const SkyXploreGamePage = () => {
         }
         fetch();
     }
-    //===End Platform
 
-    //===WebSocket
-    const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_GAME_MAIN;
-    const [lastEvent, setLastEvent] = useState(null);
-    const { sendMessage, lastMessage } = useWebSocket(
-        webSocketUrl,
-        {
-            share: true,
-            shouldReconnect: () => true,
+    const fetchIsHost = () => {
+        const fetch = async () => {
+            const response = await Endpoints.SKYXPLORE_GAME_IS_HOST.createRequest()
+                .send();
+            setIsHost(response.value);
         }
-    );
-    useEffect(() => handleMessage(), [lastMessage]);
-
-    const handleMessage = () => {
-        if (lastMessage === null) {
-            return;
-        }
-
-        const message = JSON.parse(lastMessage.data);
-
-        if (message.eventName === WebSocketEventName.PING) {
-            sendMessage(lastMessage.data);
-        }
-
-        setLastEvent(message);
+        fetch();
     }
-    //===End WebSocket
+    //===End Platform
 
     //===Chat
     const [hasUnreadMessage, setHasUnreadMessage] = useState(false);
@@ -76,9 +62,17 @@ const SkyXploreGamePage = () => {
     const footer = () => {
         return <Footer
             leftButtons={[
+                (isHost ?
+                    <Button
+                        key="save"
+                        label={localizationHandler.get("save")}
+                        onclick={save}
+                    />
+                    : []),
                 <ExitGameButton
                     key="exit"
                     setConfirmationDialogData={setConfirmationDialogData}
+                    isHost={isHost}
                 />,
                 <PauseAndResumeGameButton
                     key="pause-and-resume"
@@ -94,6 +88,10 @@ const SkyXploreGamePage = () => {
                 />
             ]}
         />
+    }
+
+    const save = async () => {
+        //TODO implement
     }
 
     return (

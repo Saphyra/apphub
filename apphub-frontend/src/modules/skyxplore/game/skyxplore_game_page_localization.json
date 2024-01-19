@@ -2,5 +2,9 @@
     "title": {
         "en": "SkyXplore - Apphub",
         "hu": "SkyXplore - Apphub"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
     }
 }

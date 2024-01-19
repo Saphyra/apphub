@@ -255,6 +255,7 @@ const Endpoints = {
     SKYXPLORE_PLANET_CREATE_STORAGE_SETTING: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/planet/{planetId}/storage-settings"),
     SKYXPLORE_PLANET_EDIT_STORAGE_SETTING: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/storage-settings"),
     SKYXPLORE_PLANET_DELETE_STORAGE_SETTING: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/storage-settings/{storageSettingId}"),
+    SKYXPLORE_GAME_IS_HOST: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/host"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),
