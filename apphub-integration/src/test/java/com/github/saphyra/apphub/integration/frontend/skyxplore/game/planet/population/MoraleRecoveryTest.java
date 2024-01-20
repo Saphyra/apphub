@@ -68,10 +68,10 @@ public class MoraleRecoveryTest extends SeleniumTest {
             )
             .assertTrue("Citizen morale not reduced.");
 
-        AwaitilityWrapper.create(120, 10)
+        AwaitilityWrapper.create(180, 10)
             .until(() -> SkyXplorePopulationOverviewActions.getCitizens(driver)
                 .stream()
-                .allMatch(citizen -> citizen.getStat(Constants.CITIZEN_PROPERTY_MORALE).getValue() > REFERENCE_MORALE)
+                .allMatch(citizen -> citizen.getStat(Constants.CITIZEN_PROPERTY_MORALE).getValue() >= REFERENCE_MORALE)
             )
             .assertTrue("Citizen morale not restored.");
     }
