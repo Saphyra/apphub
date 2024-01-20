@@ -42,4 +42,8 @@ public interface SkyXploreGameController {
     //TODO api test
     @GetMapping(Endpoints.SKYXPLORE_GAME_IS_HOST)
     OneParamResponse<Boolean> isHost(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    //TODO api test
+    @PostMapping(Endpoints.SKYXPLORE_GAME_SAVE)
+    void saveGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

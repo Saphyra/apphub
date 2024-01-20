@@ -6,5 +6,9 @@
     "save": {
         "en": "Save",
         "hu": "Mentés"
+    },
+    "game-saved": {
+        "en": "Game saved.",
+        "hu": "Játék elmentve."
     }
 }

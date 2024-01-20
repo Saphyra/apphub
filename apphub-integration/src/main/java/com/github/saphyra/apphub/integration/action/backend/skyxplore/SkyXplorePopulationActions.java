@@ -25,12 +25,10 @@ public class SkyXplorePopulationActions {
             .collect(Collectors.toList());
     }
 
-    public static CitizenResponse renameCitizen(UUID accessTokenId, UUID citizenId, String newName) {
+    public static void renameCitizen(UUID accessTokenId, UUID citizenId, String newName) {
         Response response = getRenameCitizenResponse(accessTokenId, citizenId, newName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody().as(CitizenResponse.class);
     }
 
     public static Response getRenameCitizenResponse(UUID accessTokenId, UUID citizenId, String newName) {

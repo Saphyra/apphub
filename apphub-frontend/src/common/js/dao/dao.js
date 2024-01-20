@@ -233,6 +233,7 @@ const Endpoints = {
     SKYXPLORE_DATA_RESOURCES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/resources"),
 
     //SkyXplore Game
+    SKYXPLORE_GAME_SAVE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game"),
     SKYXPLORE_GAME_PAUSE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause"),
     SKYXPLORE_EXIT_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game"),
     SKYXPLORE_GAME_GET_CHAT_ROOMS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/chat/room"),

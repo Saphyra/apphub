@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class SkyXplorePlanetPopulationControllerImplTest {
@@ -55,10 +56,8 @@ public class SkyXplorePlanetPopulationControllerImplTest {
 
     @Test
     public void renameCitizen() {
-        given(renameCitizenService.renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME)).willReturn(citizenResponse);
+        underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
 
-        CitizenResponse result = underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(citizenResponse);
+        then(renameCitizenService).should().renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME);
     }
 }

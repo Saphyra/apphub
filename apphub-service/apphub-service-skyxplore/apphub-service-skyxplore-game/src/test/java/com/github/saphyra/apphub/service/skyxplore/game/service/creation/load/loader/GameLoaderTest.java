@@ -3,14 +3,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
@@ -44,9 +42,6 @@ class GameLoaderTest {
     private static final String LOCALE = "locale";
 
     @Mock
-    private DateTimeUtil dateTimeUtil;
-
-    @Mock
     private GameDao gameDao;
 
     @Mock
@@ -57,9 +52,6 @@ class GameLoaderTest {
 
     @Mock
     private ChatFactory chatFactory;
-
-    @Mock
-    private GameDataProxy gameDataProxy;
 
     @Mock
     private SkyXploreLobbyApiClient lobbyClient;
@@ -102,7 +94,6 @@ class GameLoaderTest {
 
     @Test
     void loadGame() {
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(gameModel.getId()).willReturn(GAME_ID);
         Map<UUID, Player> players = Map.of(USER_ID, player);
         given(playerLoader.load(GAME_ID, List.of(USER_ID))).willReturn(players);
@@ -120,8 +111,6 @@ class GameLoaderTest {
 
         underTest.loadGame(gameModel, List.of(USER_ID));
 
-        verify(gameModel).setLastPlayed(CURRENT_TIME);
-
         ArgumentCaptor<Game> gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
         verify(gameDao).save(gameArgumentCaptor.capture());
         Game game = gameArgumentCaptor.getValue();
@@ -138,7 +127,6 @@ class GameLoaderTest {
         assertThat(game.getMarkedForDeletionAt()).isNull();
 
         verify(processLoader).loadProcesses(game);
-        verify(gameDataProxy).saveItem(gameModel);
         verify(tickSchedulerLauncher).launch(game);
 
         then(lobbyClient).should().gameLoaded(GAME_ID, LOCALE);

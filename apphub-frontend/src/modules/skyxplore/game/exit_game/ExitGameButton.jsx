@@ -49,7 +49,8 @@ const ExitGameButton = ({ setConfirmationDialogData, isHost }) => {
     }
 
     const saveAndExit = async () => {
-        //TODO save
+        await Endpoints.SKYXPLORE_GAME_SAVE.createRequest()
+            .send();
 
         exit();
     }

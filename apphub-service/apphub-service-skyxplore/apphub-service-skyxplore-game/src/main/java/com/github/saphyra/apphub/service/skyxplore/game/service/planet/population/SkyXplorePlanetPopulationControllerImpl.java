@@ -25,8 +25,8 @@ class SkyXplorePlanetPopulationControllerImpl implements SkyXplorePlanetPopulati
     }
 
     @Override
-    public CitizenResponse renameCitizen(OneParamRequest<String> newName, UUID citizenId, AccessTokenHeader accessTokenHeader) {
+    public void renameCitizen(OneParamRequest<String> newName, UUID citizenId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename citizen {}", accessTokenHeader.getUserId(), citizenId);
-        return renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), citizenId, newName.getValue());
+         renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), citizenId, newName.getValue());
     }
 }

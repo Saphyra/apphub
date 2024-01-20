@@ -49,7 +49,7 @@ public class PopulationTest extends BackEndTest {
         blankName(accessTokenId1, citizen);
         tooLongName(accessTokenId1, citizen);
         notFound(accessTokenId1);
-        rename(accessTokenId1, citizen);
+        rename(accessTokenId1, planet.getPlanetId(), citizen);
     }
 
     private CitizenResponse getCitizenResponse(UUID accessTokenId1, PlanetLocationResponse planet) {
@@ -76,8 +76,14 @@ public class PopulationTest extends BackEndTest {
         assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
     }
 
-    private static void rename(UUID accessTokenId1, CitizenResponse citizen) {
-        CitizenResponse citizenResponse = SkyXplorePopulationActions.renameCitizen(accessTokenId1, citizen.getCitizenId(), NEW_NAME);
+    private static void rename(UUID accessTokenId, UUID planetId, CitizenResponse citizen) {
+        SkyXplorePopulationActions.renameCitizen(accessTokenId, citizen.getCitizenId(), NEW_NAME);
+
+        CitizenResponse citizenResponse = SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
+            .stream()
+            .filter(cr -> cr.getCitizenId().equals(citizen.getCitizenId()))
+            .findAny()
+            .orElseThrow(() -> new RuntimeException("Citizen not found."));
 
         assertThat(citizenResponse.getName()).isEqualTo(NEW_NAME);
 

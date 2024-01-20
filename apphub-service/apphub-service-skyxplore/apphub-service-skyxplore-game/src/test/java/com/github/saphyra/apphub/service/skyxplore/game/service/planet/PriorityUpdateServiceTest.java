@@ -5,14 +5,14 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityUpdateService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -45,9 +45,6 @@ public class PriorityUpdateServiceTest {
     @Mock
     private PriorityConverter priorityConverter;
 
-    @Mock
-    private GameDataProxy gameDataProxy;
-
     @InjectMocks
     private PriorityUpdateService underTest;
 
@@ -72,6 +69,9 @@ public class PriorityUpdateServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
+    @Mock
+    private GameProgressDiff progressDiff;
+
     @AfterEach
     public void validate() {
         verify(priorityValidator).validate(NEW_PRIORITY);
@@ -95,6 +95,7 @@ public class PriorityUpdateServiceTest {
         given(priorityConverter.toModel(GAME_ID, priority)).willReturn(model);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.updatePriority(USER_ID, PLANET_ID, PriorityType.CONSTRUCTION.toString(), NEW_PRIORITY);
 
@@ -104,6 +105,6 @@ public class PriorityUpdateServiceTest {
             .run();
 
         verify(priority).setValue(NEW_PRIORITY);
-        verify(gameDataProxy).saveItem(model);
+        verify(progressDiff).save(model);
     }
 }

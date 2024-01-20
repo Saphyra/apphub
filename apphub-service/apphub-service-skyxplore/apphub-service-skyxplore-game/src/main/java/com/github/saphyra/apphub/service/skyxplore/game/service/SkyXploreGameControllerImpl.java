@@ -19,6 +19,7 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final ExpiredGameCleanupService expiredGameCleanupService;
     private final ExitFromGameService exitFromGameService;
     private final PauseGameService pauseGameService;
+    private final SaveGameService saveGameService;
 
     @Override
     public OneParamResponse<Boolean> isUserInGame(AccessTokenHeader accessTokenHeader) {
@@ -59,5 +60,12 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
             .getHost()
             .equals(accessTokenHeader.getUserId());
         return new OneParamResponse<>(isHost);
+    }
+
+    //TODO unit test
+    @Override
+    public void saveGame(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to save game.", accessTokenHeader.getUserId());
+        saveGameService.saveGame(accessTokenHeader.getUserId());
     }
 }

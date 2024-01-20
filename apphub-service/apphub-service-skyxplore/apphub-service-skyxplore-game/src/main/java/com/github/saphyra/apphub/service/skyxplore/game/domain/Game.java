@@ -29,7 +29,7 @@ public class Game {
     private final Map<UUID, Player> players; //<UserId, Player>
     private final Map<UUID, Alliance> alliances;
     private final GameData data;
-    private final LocalDateTime lastPlayed;
+    private LocalDateTime lastPlayed;
     private final Boolean markedForDeletion;
     private final LocalDateTime markedForDeletionAt;
     private LocalDateTime expiresAt;

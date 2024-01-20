@@ -19,5 +19,5 @@ public interface SkyXplorePlanetPopulationController {
     List<CitizenResponse> getPopulation(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN)
-    CitizenResponse renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./skyxplore_game_page_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Redirection from "../Redirection";
-import useWebSocket from "react-use-websocket";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import Footer from "../../../common/component/Footer";
@@ -91,7 +90,10 @@ const SkyXploreGamePage = () => {
     }
 
     const save = async () => {
-        //TODO implement
+        await Endpoints.SKYXPLORE_GAME_SAVE.createRequest()
+            .send();
+
+        NotificationService.showSuccess(localizationHandler.get("game-saved"));
     }
 
     return (
