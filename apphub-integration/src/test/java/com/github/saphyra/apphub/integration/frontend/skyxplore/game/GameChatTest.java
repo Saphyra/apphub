@@ -56,6 +56,7 @@ public class GameChatTest extends SeleniumTest {
         BiWrapper<WebDriver, RegistrationParameters> player2 = new BiWrapper<>(driver2, userData2);
         BiWrapper<WebDriver, RegistrationParameters> player3 = new BiWrapper<>(driver3, userData3);
         Stream.of(player1, player2, player3)
+            .parallel()
             .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
                 Navigation.toIndexPage(biWrapper.getEntity1());
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());

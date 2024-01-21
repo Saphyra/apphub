@@ -6,5 +6,9 @@
     "pause-game": {
         "en": "Pause",
         "hu": "Leállítás"
+    },
+    "paused": {
+        "en": "Paused",
+        "hu": "Megállítva"
     }
 }

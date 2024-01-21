@@ -114,8 +114,6 @@ class PlayerDisconnectedServiceTest {
         then(game).should(times(0)).setExpiresAt(any());
         then(player).should().setConnected(false);
         then(player).should().setDisconnectedAt(CURRENT_TIME);
-        then(game).should().setGamePaused(true);
-        then(webSocketHandler).should().sendEvent(List.of(CONNECTED_USER_ID), WebSocketEventName.SKYXPLORE_GAME_PAUSED, true);
         then(webSocketHandler).should().sendEvent(List.of(CONNECTED_USER_ID), WebSocketEventName.SKYXPLORE_GAME_USER_LEFT, new SystemMessage(CHAT_ROOM_ID, CHARACTER_NAME, USER_ID));
     }
 }

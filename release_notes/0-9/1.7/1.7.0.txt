@@ -1,6 +1,7 @@
 ===FEATURES===
 SkyXplore Game
     Save mechanism
+    Pause game when someone disconnected
 
 ===BUGFIXES===
 

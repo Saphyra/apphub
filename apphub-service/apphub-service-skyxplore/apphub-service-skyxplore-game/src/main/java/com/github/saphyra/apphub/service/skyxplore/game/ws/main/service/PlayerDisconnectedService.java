@@ -35,9 +35,6 @@ public class PlayerDisconnectedService {
                 return;
             }
 
-            game.setGamePaused(true);
-            webSocketHandler.sendEvent(game.getConnectedPlayers(), WebSocketEventName.SKYXPLORE_GAME_PAUSED, true);
-
             String characterName = characterProxy.getCharacterName(userId);
 
             game.getChat()

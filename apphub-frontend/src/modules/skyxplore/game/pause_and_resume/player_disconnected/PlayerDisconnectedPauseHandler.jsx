@@ -74,7 +74,7 @@ const PlayerDisconnectedPauseHandler = ({ lastEvent, setConfirmationDialogData }
         }
 
         const confirmationDialogData = new ConfirmationDialogData(
-            "skyxplore-game-player-disconnected-dialog",
+            "skyxplore-game-player-reconnected-dialog",
             localizationHandler.get("player-reconnected-title"),
             localizationHandler.get("player-reconnected-detail", { playerName: lastEvent.payload.value }),
             [

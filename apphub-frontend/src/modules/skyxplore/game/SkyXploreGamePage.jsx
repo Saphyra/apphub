@@ -74,12 +74,11 @@ const SkyXploreGamePage = () => {
                     setConfirmationDialogData={setConfirmationDialogData}
                     isHost={isHost}
                 />,
-                (isHost ? <PauseAndResumeGameButton
+                <PauseAndResumeGameButton
                     key="pause-and-resume"
                     lastEvent={lastEvent}
+                    isHost={isHost}
                 />
-                    : []
-                )
             ]}
             centerButtons={[]}
             rightButtons={[

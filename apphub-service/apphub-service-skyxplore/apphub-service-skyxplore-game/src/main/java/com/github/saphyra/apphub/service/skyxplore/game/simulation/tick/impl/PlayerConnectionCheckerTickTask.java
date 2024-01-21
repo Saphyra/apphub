@@ -39,6 +39,7 @@ public class PlayerConnectionCheckerTickTask implements TickTask {
         Optional<Player> maybeDisconnectedPlayer = getDisconnectedPlayer(game.getPlayers().values());
         if (maybeDisconnectedPlayer.isPresent()) {
             Player disconnectedPlayer = maybeDisconnectedPlayer.get();
+            log.info("Player {} is disconnected. Pausing game...", disconnectedPlayer.getUserId());
 
             pauseGameService.setPausedStatus(true, game);
 

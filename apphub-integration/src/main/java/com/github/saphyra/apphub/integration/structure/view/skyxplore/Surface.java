@@ -74,14 +74,6 @@ public class Surface {
         return WebElementUtils.isPresent(() -> webElement.findElement(By.className("skyxplore-planet-surface-header-building-new-level")));
     }
 
-    private Optional<WebElement> getFooter() {
-        return getContent()
-            .orElseThrow(() -> new IllegalStateException("Surface content not found."))
-            .findElements(By.cssSelector(":scope .surface-footer"))
-            .stream()
-            .findFirst();
-    }
-
     public void cancelConstruction(WebDriver driver) {
         assertThat(isConstructionInProgress()).isTrue();
 

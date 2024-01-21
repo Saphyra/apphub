@@ -7,7 +7,7 @@ import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./pause_and_resume.css";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 
-const PauseAndResumeGameButton = ({ lastEvent }) => {
+const PauseAndResumeGameButton = ({ lastEvent, isHost }) => {
     const localizationHandler = new LocalizationHandler(localizationData)
     const [paused, setPaused] = useState(true);
 
@@ -28,19 +28,25 @@ const PauseAndResumeGameButton = ({ lastEvent }) => {
             .send();
     }
 
-    if (paused) {
+    if (isHost) {
+        if (paused) {
+            return <Button
+                id="skyxplore-game-resume-game-button"
+                onclick={() => updatePaused(false)}
+                label={localizationHandler.get("resume-game")}
+            />
+        } else {
+            return <Button
+                id="skyxplore-game-pause-game-button"
+                onclick={() => updatePaused(true)}
+                label={localizationHandler.get("pause-game")}
+            />
+        }
+    } else if (paused) {
         return <Button
-            id="skyxplore-game-resume-game-button"
-            className=""
-            onclick={() => updatePaused(false)}
-            label={localizationHandler.get("resume-game")}
-        />
-    } else {
-        return <Button
-            id="skyxplore-game-pause-game-button"
-            className=""
-            onclick={() => updatePaused(true)}
-            label={localizationHandler.get("pause-game")}
+            id="skyxplore-game-paused"
+            label={localizationHandler.get("paused")}
+            disabled={true}
         />
     }
 }
