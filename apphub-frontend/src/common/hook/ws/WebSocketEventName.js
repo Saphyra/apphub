@@ -35,6 +35,8 @@ const WebSocketEventName = {
     SKYXPLORE_GAME_PLANET_MODIFIED: "skyxplore-game-planet-modified",
     SKYXPLORE_GAME_POPULATION_OPENED: "skyxplore-game-population-opened",
     SKYXPLORE_GAME_POPULATION_MODIFIED: "skyxplore-game-population-modified",
+    SKYXPLORE_GAME_PLAYER_DISCONNECTED: "skyxplore-game-player-disconnected",
+    SKYXPLORE_GAME_PLAYER_RECONNECTED: "skyxplore-game-player-reconnected",
 }
 
 export default WebSocketEventName;

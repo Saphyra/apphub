@@ -5,7 +5,7 @@ import Redirection from "../Redirection";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import Footer from "../../../common/component/Footer";
-import PauseAndResumeGameButton from "./pause_and_resume/PauseAndResumeGameButton";
+import PauseAndResumeGameButton from "./pause_and_resume/button/PauseAndResumeGameButton";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import ExitGameButton from "./exit_game/ExitGameButton";
 import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
@@ -16,6 +16,7 @@ import Navigation from "./navigation/Navigation";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
 import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
+import PlayerDisconnectedPauseHandler from "./pause_and_resume/player_disconnected/PlayerDisconnectedPauseHandler";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -73,10 +74,12 @@ const SkyXploreGamePage = () => {
                     setConfirmationDialogData={setConfirmationDialogData}
                     isHost={isHost}
                 />,
-                <PauseAndResumeGameButton
+                (isHost ? <PauseAndResumeGameButton
                     key="pause-and-resume"
                     lastEvent={lastEvent}
                 />
+                    : []
+                )
             ]}
             centerButtons={[]}
             rightButtons={[
@@ -121,6 +124,13 @@ const SkyXploreGamePage = () => {
                     title={confirmationDialogData.title}
                     content={confirmationDialogData.content}
                     choices={confirmationDialogData.choices}
+                />
+            }
+
+            {isHost &&
+                <PlayerDisconnectedPauseHandler
+                    lastEvent={lastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             }
 

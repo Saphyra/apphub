@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,9 +45,20 @@ public class PauseGameServiceTest {
     }
 
     @Test
+    void notHost() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getHost()).willReturn(UUID.randomUUID());
+
+        Throwable ex = catchThrowable(() -> underTest.setPausedStatus(USER_ID, true));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
+    }
+
+    @Test
     public void setPausedStatus() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getConnectedPlayers()).willReturn(List.of(USER_ID));
+        given(game.getHost()).willReturn(USER_ID);
 
         underTest.setPausedStatus(USER_ID, true);
 

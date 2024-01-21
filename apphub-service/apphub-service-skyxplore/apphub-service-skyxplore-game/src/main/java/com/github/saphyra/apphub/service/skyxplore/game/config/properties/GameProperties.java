@@ -15,6 +15,7 @@ public class GameProperties {
     private int itemSaverMaxChunkSize;
     private int creationQueueSize;
     private int tickTimeMillis;
+    private int pauseGameAfterDisconnectionSeconds;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;

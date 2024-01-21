@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum TickTaskOrder {
+    PLAYER_CONNECTION_CHECKER(0),
     SATIETY_DECREASE(0),
     STORAGE_SETTING(0),
     PROCESS_SCHEDULER(1000),

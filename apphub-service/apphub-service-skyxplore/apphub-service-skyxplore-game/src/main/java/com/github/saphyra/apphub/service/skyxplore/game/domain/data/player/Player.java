@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,5 @@ public class Player {
     private UUID allianceId;
     private boolean ai;
     private volatile boolean connected;
+    private volatile LocalDateTime disconnectedAt;
 }

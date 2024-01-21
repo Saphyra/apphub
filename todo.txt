@@ -1,3 +1,4 @@
 TODO add to release notes
 TODO elimination
 TODO integration tests for exiting without and with saving
+TODO integration tests for pausing game for disconnected users

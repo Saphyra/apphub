@@ -92,6 +92,7 @@ class PlayerDisconnectedServiceTest {
 
         then(game).should().setExpiresAt(CURRENT_TIME.plusSeconds(ABANDONED_GAME_EXPIRATION_MINUTES));
         then(player).should().setConnected(false);
+        then(player).should().setDisconnectedAt(CURRENT_TIME);
         then(webSocketHandler).shouldHaveNoInteractions();
     }
 
@@ -106,11 +107,13 @@ class PlayerDisconnectedServiceTest {
         given(usedChatRoom.getMembers()).willReturn(List.of(CONNECTED_USER_ID, USER_ID));
         given(game.filterConnectedPlayersFrom(List.of(CONNECTED_USER_ID, USER_ID))).willReturn(List.of(CONNECTED_USER_ID));
         given(usedChatRoom.getId()).willReturn(CHAT_ROOM_ID);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         underTest.playerDisconnected(USER_ID, webSocketHandler);
 
         then(game).should(times(0)).setExpiresAt(any());
         then(player).should().setConnected(false);
+        then(player).should().setDisconnectedAt(CURRENT_TIME);
         then(game).should().setGamePaused(true);
         then(webSocketHandler).should().sendEvent(List.of(CONNECTED_USER_ID), WebSocketEventName.SKYXPLORE_GAME_PAUSED, true);
         then(webSocketHandler).should().sendEvent(List.of(CONNECTED_USER_ID), WebSocketEventName.SKYXPLORE_GAME_USER_LEFT, new SystemMessage(CHAT_ROOM_ID, CHARACTER_NAME, USER_ID));

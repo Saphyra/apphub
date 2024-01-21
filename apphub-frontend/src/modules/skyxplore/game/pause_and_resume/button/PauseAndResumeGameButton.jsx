@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../../../common/component/input/Button";
-import Utils from "../../../../common/js/Utils";
-import Endpoints from "../../../../common/js/dao/dao";
+import Button from "../../../../../common/component/input/Button";
+import Utils from "../../../../../common/js/Utils";
+import Endpoints from "../../../../../common/js/dao/dao";
 import localizationData from "./pause_and_resume_localization.json";
-import LocalizationHandler from "../../../../common/js/LocalizationHandler";
+import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./pause_and_resume.css";
-import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 
 const PauseAndResumeGameButton = ({ lastEvent }) => {
     const localizationHandler = new LocalizationHandler(localizationData)

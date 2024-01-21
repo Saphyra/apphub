@@ -39,16 +39,20 @@ public enum WebSocketEventName {
     SKYXPLORE_LOBBY_GAME_CREATION_INITIATED("skyxplore-lobby-game-creation-initiated"),
     SKYXPLORE_LOBBY_GAME_LOADED("skyxplore-lobby-game-loaded"),
 
-    //SkyXplore GamePlatform
+    //SkyXplore Game Main
     SKYXPLORE_GAME_CHAT_SEND_MESSAGE("skyxplore-game-chat-send-message"),
     SKYXPLORE_GAME_USER_JOINED("skyxplore-game-user-joined"),
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),
     SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created"),
     SKYXPLORE_GAME_PAUSED("skyxplore-game-paused"),
+    SKYXPLORE_GAME_PLAYER_DISCONNECTED("skyxplore-game-player-disconnected"),
+    SKYXPLORE_GAME_PLAYER_RECONNECTED("skyxplore-game-player-reconnected"),
 
-    //SkyXplore GameEvent
+    //SkyXplore Game Planet
     SKYXPLORE_GAME_PLANET_OPENED("skyxplore-game-planet-opened"),
     SKYXPLORE_GAME_PLANET_MODIFIED("skyxplore-game-planet-modified"),
+
+    //SkyXplore Game Population
     SKYXPLORE_GAME_POPULATION_OPENED("skyxplore-game-population-opened"),
     SKYXPLORE_GAME_POPULATION_MODIFIED("skyxplore-game-population-modified"),
     ;
