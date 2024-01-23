@@ -20,7 +20,6 @@ class RenamePlanetService {
     private final GameDao gameDao;
     private final PlanetConverter planetConverter;
 
-    //TODO use eventLoop
     void rename(UUID userId, UUID planetId, String newName) {
         if (isBlank(newName)) {
             throw ExceptionFactory.invalidParam("newName", "must not be null or blank");

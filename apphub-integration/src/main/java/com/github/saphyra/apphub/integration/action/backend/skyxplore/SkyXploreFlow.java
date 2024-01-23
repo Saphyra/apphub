@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -21,6 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class SkyXploreFlow {
+    public static Map<UUID, ApphubWsClient> startGame(Player host, Player... players) {
+        return startGame(Constants.DEFAULT_GAME_NAME, host, players);
+    }
+
     public static Map<UUID, ApphubWsClient> startGame(String gameName, Player host, Player... players) {
         Arrays.stream(players)
             .forEach(player -> SkyXploreFriendActions.setUpFriendship(host.getAccessTokenId(), player.getAccessTokenId(), player.getUserId()));

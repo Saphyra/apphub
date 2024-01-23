@@ -36,7 +36,7 @@ public class ReservedStorageQueryService {
         return gameData.getReservedStorages()
             .getByLocation(location)
             .stream()
-            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId())) //TODO filter reserved storage for production - if needed
+            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }
@@ -54,7 +54,7 @@ public class ReservedStorageQueryService {
         return gameData.getReservedStorages()
             .getByLocation(location)
             .stream()
-            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId())) //TODO filter reserved storage for production - if needed
+            .filter(reservedStorage -> dataIdsByStorageType.contains(reservedStorage.getDataId()))
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }

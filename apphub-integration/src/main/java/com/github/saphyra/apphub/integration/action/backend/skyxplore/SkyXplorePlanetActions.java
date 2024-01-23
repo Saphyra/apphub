@@ -65,4 +65,14 @@ public class SkyXplorePlanetActions {
                 .findAny()
             );
     }
+
+    public static UUID findEmptySurface(UUID accessTokenId, UUID planetId, String surfaceType) {
+        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+            .stream()
+            .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
+            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))
+            .findFirst()
+            .map(SurfaceResponse::getSurfaceId)
+            .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
+    }
 }

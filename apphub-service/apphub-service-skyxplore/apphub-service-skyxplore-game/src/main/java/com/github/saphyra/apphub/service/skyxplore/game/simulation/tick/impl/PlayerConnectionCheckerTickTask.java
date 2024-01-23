@@ -22,7 +22,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PlayerConnectionCheckerTickTask implements TickTask {
     private final PauseGameService pauseGameService;
     private final GameProperties gameProperties;

@@ -53,7 +53,6 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     }
 
     @Override
-    //TODO unit test
     public OneParamResponse<Boolean> isHost(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if {} is game host.", accessTokenHeader.getUserId());
         boolean isHost = gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
@@ -62,7 +61,6 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
         return new OneParamResponse<>(isHost);
     }
 
-    //TODO unit test
     @Override
     public void saveGame(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to save game.", accessTokenHeader.getUserId());

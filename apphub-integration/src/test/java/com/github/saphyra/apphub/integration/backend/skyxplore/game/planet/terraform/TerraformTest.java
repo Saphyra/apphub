@@ -43,7 +43,7 @@ public class TerraformTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
 
-        UUID emptySurfaceId = findEmptySurface(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID emptySurfaceId = SkyXplorePlanetActions.findEmptySurface(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         invalidSurfaceType(accessTokenId, planetId, emptySurfaceId);
         surfaceNotEmpty(accessTokenId, planetId);
@@ -137,16 +137,6 @@ public class TerraformTest extends BackEndTest {
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), surfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found"));
         return surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_CONCRETE) && isNull(surfaceResponse.getTerraformation());
-    }
-
-    private UUID findEmptySurface(UUID accessTokenId, UUID planetId, String surfaceType) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
-            .stream()
-            .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
-            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))
-            .findFirst()
-            .map(SurfaceResponse::getSurfaceId)
-            .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
     }
 
     private UUID findOccupiedDesert(UUID accessTokenId, UUID planetId) {

@@ -161,6 +161,9 @@ public class Endpoints {
     public static final String SKYXPLORE_SOLAR_SYSTEM_RENAME = "/api/skyxplore/game/solar-system/{solarSystemId}/name";
     public static final String SKYXPLORE_PLANET_GET_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/overview";
     public static final String SKYXPLORE_GAME_GET_CHAT_ROOMS = "/api/skyxplore/game/chat/room";
+    public static final String SKYXPLORE_GAME_IS_HOST = "/api/skyxplore/game/host";
+    public static final String SKYXPLORE_GAME_SAVE = "/api/skyxplore/game";
+    public static final String SKYXPLORE_EXIT_GAME = "/api/skyxplore/game";
 
     public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
     public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";

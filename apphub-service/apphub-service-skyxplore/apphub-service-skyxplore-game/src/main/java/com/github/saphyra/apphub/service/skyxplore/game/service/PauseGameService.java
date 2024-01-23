@@ -31,6 +31,9 @@ public class PauseGameService {
         }
 
         setPausedStatus(isPaused, game);
+
+        game.getPlayers()
+            .forEach((uuid, player) -> player.setDisconnectedAt(null));
     }
 
     public void setPausedStatus(Boolean isPaused, Game game) {

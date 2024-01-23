@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 @RequiredArgsConstructor
-//TODO unit testa
 public class GameProgressDiff {
     private final Map<UUID, GameItem> items = new ConcurrentHashMap<>();
     private final List<BiWrapper<UUID, GameItemType>> deletedItems = new Vector<>();
@@ -41,12 +41,12 @@ public class GameProgressDiff {
         log.debug("Saving {} number of gameItems", items.size());
 
         if (!items.isEmpty()) {
-            gameDataProxy.saveItems(items.values());
+            gameDataProxy.saveItems(new ArrayList<>(items.values()));
         }
 
         log.debug("Deleting {} number of gameItems", deletedItems.size());
         if (!deletedItems.isEmpty()) {
-            gameDataProxy.deleteItems(deletedItems);
+            gameDataProxy.deleteItems(new ArrayList<>(deletedItems));
         }
 
         items.clear();

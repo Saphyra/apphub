@@ -19,7 +19,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SaveGameService {
     private final GameDao gameDao;
     private final GameDataProxy gameDataProxy;
