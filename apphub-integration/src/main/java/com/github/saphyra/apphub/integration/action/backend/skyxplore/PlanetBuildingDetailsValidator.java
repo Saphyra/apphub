@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetBuild
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanetBuildingDetailsValidator {
@@ -13,6 +14,10 @@ public class PlanetBuildingDetailsValidator {
         assertThat(buildingDetails).isNotNull();
 
         PlanetBuildingOverviewResponse response = buildingDetails.get(surfaceType);
+
+        if (isNull(response)) {
+            throw new RuntimeException("No surface with type " + surfaceType + " is present in buildingDetails.");
+        }
 
         Optional<PlanetBuildingOverviewDetailedResponse> maybeBuildingDetail = response.getBuildingDetails()
             .stream()

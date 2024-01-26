@@ -1,17 +1,22 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class BuildingCapacityCalculator {
     private final ProductionBuildingService productionBuildingService;
+    private final HeadquartersUtil headquartersUtil;
 
     /**
      * result = number of workplaces * level - allocated workplaces
@@ -21,8 +26,9 @@ public class BuildingCapacityCalculator {
             log.info("Building is being deconstructed");
             return 0;
         }
-        Integer workers = productionBuildingService.get(building.getDataId())
-            .getWorkers();
+        Integer workers = Optional.ofNullable(productionBuildingService.get(building.getDataId()))
+            .map(ProductionBuildingData::getWorkers)
+            .orElseGet(headquartersUtil::getWorkers);
         int maxWorkers = building.getLevel() * workers;
 
         int assignedWorkplaces = gameData.getBuildingAllocations()

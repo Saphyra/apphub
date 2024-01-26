@@ -28,16 +28,11 @@ public class StoredResourceAmountQueryService {
 
     public int getActualAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
-        log.debug("DataIds for StorageType {}: {}", storageType, dataIdsByStorageType);
-
-        log.debug("StoredResources: {}", gameData.getStoredResources());
 
         return gameData.getStoredResources()
             .getByLocation(location)
             .stream()
-            .peek(storedResource -> log.debug("Found: {}", storedResource))
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
-            .peek(storedResource -> log.debug("For StorageType {}: {}", storedResource, storedResource))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
@@ -47,16 +42,5 @@ public class StoredResourceAmountQueryService {
             .stream()
             .map(GameDataItem::getId)
             .collect(Collectors.toList());
-    }
-
-    public int getActualStorageAmount(GameData gameData, UUID location, StorageType storageType) {
-        List<String> dataIdsByStorageType = fetchResourceIdsForStorageType(storageType);
-
-        return gameData.getStoredResources()
-            .getByLocation(location)
-            .stream()
-            .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
-            .mapToInt(StoredResource::getAmount)
-            .sum();
     }
 }

@@ -77,7 +77,7 @@ public class AwaitilityWrapper {
         createDefault()
             .until(helper::get);
 
-        return helper.getResult(Function.identity());
+        return helper.getResult(t -> Optional.ofNullable(t).map(Optional::get));
     }
 
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {

@@ -14,6 +14,9 @@ const BuildingEffectTableHead = ({ buildingType, localizationHandler }) => {
             return <StorageTableHead
                 localizationHandler={localizationHandler}
             />
+        case BuildingType.MISCELLANEOUS:
+            //TODO implement
+            break;
         default:
             Utils.throwException("IllegalArgument", "Unhandled buildingType " + buildingType);
     }

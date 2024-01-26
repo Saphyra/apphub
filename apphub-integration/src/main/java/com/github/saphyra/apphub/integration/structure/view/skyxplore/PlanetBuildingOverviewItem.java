@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 public class PlanetBuildingOverviewItem {
     private final WebElement webElement;
@@ -25,6 +27,9 @@ public class PlanetBuildingOverviewItem {
     }
 
     public int getTotalSots() {
+        if (isNull(webElement)) {
+            return 0;
+        }
         return Integer.parseInt(webElement.findElement(By.className("skyxplore-game-planet-overview-building-total-slots")).getText());
     }
 }

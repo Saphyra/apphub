@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.queu
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.PlanetBuildingDetailsValidator;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
@@ -44,7 +45,9 @@ public class DeconstructionQueueTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
 
-        UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingFlow.constructBuilding(accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+
+        UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_CAMP);
 
         SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), buildingId)
@@ -68,7 +71,7 @@ public class DeconstructionQueueTest extends BackEndTest {
         assertThat(queueResponse.getType()).isEqualTo(Constants.QUEUE_TYPE_DECONSTRUCTION);
         assertThat(queueResponse.getRequiredWorkPoints()).isEqualTo(surfaceResponse.getBuilding().getDeconstruction().getRequiredWorkPoints());
         assertThat(queueResponse.getOwnPriority()).isEqualTo(Constants.DEFAULT_PRIORITY);
-        assertThat(queueResponse.getData()).containsEntry("dataId", Constants.DATA_ID_SOLAR_PANEL);
+        assertThat(queueResponse.getData()).containsEntry("dataId", Constants.DATA_ID_CAMP);
         return queueResponse;
     }
 
@@ -114,7 +117,7 @@ public class DeconstructionQueueTest extends BackEndTest {
 
         assertThat(surfaceResponse.getBuilding().getDeconstruction()).isNull();
 
-        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverview.getBuildings(), Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverview.getBuildings(), Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP, 1, 1);
     }
 
     private UUID findBuilding(UUID accessTokenId, UUID planetId, String dataId) {

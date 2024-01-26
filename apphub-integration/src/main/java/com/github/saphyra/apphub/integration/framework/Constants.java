@@ -37,6 +37,7 @@ public class Constants {
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String SURFACE_TYPE_FOREST = "FOREST";
     public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
+    public static final String SURFACE_TYPE_MILITARY = "MILITARY";
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
@@ -45,6 +46,7 @@ public class Constants {
     public final String DATA_ID_CAMP = "camp";
     public final String DATA_ID_ORE = "ore";
     public static final String DATA_ID_DEPOT = "depot";
+    public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";

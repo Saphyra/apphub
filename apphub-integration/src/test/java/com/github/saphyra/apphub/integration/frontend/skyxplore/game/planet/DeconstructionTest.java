@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreBuildingFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
@@ -56,14 +57,15 @@ public class DeconstructionTest extends SeleniumTest {
             .assertTrue("Planet is not opened.");
 
         storageInUse(driver);
-        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_BATTERY);
+        SkyXploreBuildingFlow.constructBuilding(driver, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_CAMP);
         String surfaceId = surface.getSurfaceId();
         surface = deconstruct(driver, surface, surfaceId);
         cancelDeconstruction(driver, surface, surfaceId);
     }
 
     private static void storageInUse(WebDriver driver) {
-        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_DEPOT);
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_HEADQUARTERS);
         surface.deconstructBuilding(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_GAME_STORAGE_USED);
@@ -117,7 +119,9 @@ public class DeconstructionTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
-        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingFlow.constructBuilding(driver, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_CAMP);
         String surfaceId = surface.getSurfaceId();
         surface.deconstructBuilding(driver);
 

@@ -28,8 +28,6 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TerraformTest extends BackEndTest {
-    private static final String GAME_NAME = "game-name";
-
     @Test(groups = {"be", "skyxplore"})
     public void terraformCD() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -38,7 +36,7 @@ public class TerraformTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(new Player(accessTokenId, userId1));
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
@@ -60,7 +58,7 @@ public class TerraformTest extends BackEndTest {
     }
 
     private void surfaceNotEmpty(UUID accessTokenId, UUID planetId) {
-        UUID occupiedSurfaceId = findOccupiedDesert(accessTokenId, planetId);
+        UUID occupiedSurfaceId = findOccupiedMilitary(accessTokenId, planetId);
 
         Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
 
@@ -117,7 +115,7 @@ public class TerraformTest extends BackEndTest {
         SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(new Player(accessTokenId, userId1));
 
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
             .getPlanetId();
@@ -139,13 +137,13 @@ public class TerraformTest extends BackEndTest {
         return surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_CONCRETE) && isNull(surfaceResponse.getTerraformation());
     }
 
-    private UUID findOccupiedDesert(UUID accessTokenId, UUID planetId) {
+    private UUID findOccupiedMilitary(UUID accessTokenId, UUID planetId) {
         return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
             .stream()
             .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
-            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_DESERT))
+            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_MILITARY))
             .findFirst()
             .map(SurfaceResponse::getSurfaceId)
-            .orElseThrow(() -> new RuntimeException("Occupied Desert not found on planet " + planetId));
+            .orElseThrow(() -> new RuntimeException("Occupied Military not found on planet " + planetId));
     }
 }

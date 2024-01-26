@@ -16,7 +16,7 @@
     }
   },
   "workers": 1,
-  "defaultBuilding": true,
+  "defaultBuilding": false,
   "primarySurfaceType": "desert",
   "constructionRequirements": {
     "1": {

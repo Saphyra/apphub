@@ -17,6 +17,9 @@ const BuildingEffectTableBody = ({ itemData, surfaceType, localizationHandler, c
             return <StorageTableBody
                 itemData={itemData}
             />
+        case BuildingType.MISCELLANEOUS:
+            //TODO implement
+            break;
         default:
             Utils.throwException("IllegalArgument", "Unhandled buildingType " + itemData.buildingType);
     }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
@@ -8,9 +9,10 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,10 +33,26 @@ class ProductionOrderProcessHelper {
     private final AllocatedResourceConverter allocatedResourceConverter;
     private final StoredResourceConverter storedResourceConverter;
     private final ReservedStorageConverter reservedStorageConverter;
+    private final HeadquartersUtil headquartersUtil;
 
     String findProductionBuilding(GameData gameData, UUID location, String dataId) {
         return producerBuildingFinderService.findProducerBuildingDataId(gameData, location, dataId)
-            .orElse(null);
+            .orElseGet(() -> getHqIfSuitable(gameData, location, dataId));
+    }
+
+    private String getHqIfSuitable(GameData gameData, UUID location, String dataId) {
+        if (gameData.getBuildings().getByLocationAndDataId(location, GameConstants.DATA_ID_HEADQUARTERS).isEmpty()) {
+            log.debug("No Headquarters available on planet {}", location);
+            return null;
+        }
+
+        if (headquartersUtil.getGives().contains(dataId)) {
+            log.debug("Headquarters is able to produce {}", dataId);
+            return GameConstants.DATA_ID_HEADQUARTERS;
+        } else {
+            log.debug("Headquarters is not able to produce {}", dataId);
+            return null;
+        }
     }
 
     void processResourceRequirements(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {

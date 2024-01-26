@@ -9,8 +9,11 @@ public class GameConstants {
     public static final Coordinate ORIGO = new Coordinate(0, 0);
     public static final Integer DEFAULT_PRIORITY = 5;
     public static final Integer PROCESS_PRIORITY_MULTIPLIER = 100;
+
+    //DataIds
     public static final String DATA_ID_RAW_FOOD = "raw_food";
     public static final String DATA_ID_EXCAVATOR = "excavator";
+    public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
     //Message Sender item keys
     public static final String ITEM_KEY_SURFACES = "surfaces";

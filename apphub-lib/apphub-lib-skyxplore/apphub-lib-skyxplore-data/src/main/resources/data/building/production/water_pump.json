@@ -16,7 +16,7 @@
     }
   },
   "workers": 1,
-  "defaultBuilding": true,
+  "defaultBuilding": false,
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,

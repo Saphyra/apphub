@@ -49,6 +49,10 @@
     background-image: url("../../../../../common/img/building/water_tower.png");
 }
 
+.skyxplore-game-planet-surface-tile-content.building-headquarters {
+    background-image: url("../../../../../common/img/building/headquarters.png");
+}
+
 .skyxplore-game-planet-surface-tile-content-header {
     position: absolute;
     top: 0;

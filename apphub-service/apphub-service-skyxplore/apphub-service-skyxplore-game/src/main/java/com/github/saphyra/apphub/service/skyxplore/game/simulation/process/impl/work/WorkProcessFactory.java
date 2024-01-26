@@ -17,12 +17,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
+import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -35,6 +37,7 @@ public class WorkProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
     private final GameDao gameDao;
+    private final HeadquartersUtil headquartersUtil;
 
     @Override
     public ProcessType getType() {
@@ -61,9 +64,10 @@ public class WorkProcessFactory implements ProcessFactory {
     public List<WorkProcess> createForProduction(GameData gameData, UUID processId, UUID location, String producerBuildingDataId, String dataId, Integer amount) {
         log.info("Creating WorkPointProcesses...");
 
-        ProductionData productionData = productionBuildingService.get(producerBuildingDataId)
-            .getGives()
-            .get(dataId);
+        ProductionData productionData = Optional.ofNullable(productionBuildingService.get(producerBuildingDataId))
+            .map(productionBuildingData -> productionBuildingData.getGives().get(dataId))
+            .orElseGet(() -> headquartersUtil.getProductionData(dataId));
+
         ConstructionRequirements constructionRequirements = productionData.getConstructionRequirements();
         int requiredWorkPoints = amount * constructionRequirements.getRequiredWorkPoints();
 

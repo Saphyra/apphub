@@ -62,6 +62,10 @@ public class ExitGameTest extends SeleniumTest {
 
         loadGame(driver);
 
+        SkyXploreMapActions.getSolarSystem(driver).click();
+        SkyXploreSolarSystemActions.getPlanet(driver)
+            .click();
+
         surface = AwaitilityWrapper.getOptionalWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Game is not loaded"));
 
@@ -78,6 +82,10 @@ public class ExitGameTest extends SeleniumTest {
 
         loadGame(driver);
 
+        SkyXploreMapActions.getSolarSystem(driver).click();
+        SkyXploreSolarSystemActions.getPlanet(driver)
+            .click();
+
         surface = AwaitilityWrapper.getOptionalWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Game is not loaded"));
 
@@ -92,5 +100,8 @@ public class ExitGameTest extends SeleniumTest {
 
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXploreGameActions.isGameLoaded(driver));
     }
 }

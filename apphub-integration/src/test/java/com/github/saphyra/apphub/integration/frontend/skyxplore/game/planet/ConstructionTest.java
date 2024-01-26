@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreBuildingFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
@@ -29,8 +30,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstructionTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
-
     @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelConstruction() {
         WebDriver driver = extractDriver();
@@ -41,7 +40,7 @@ public class ConstructionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -120,7 +119,7 @@ public class ConstructionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -173,8 +172,8 @@ public class ConstructionTest extends SeleniumTest {
 
         PlanetBuildingOverviewItemDetails details = planetBuildingOverview.getForDataId(Constants.DATA_ID_CAMP)
             .orElseThrow(() -> new RuntimeException(Constants.DATA_ID_CAMP + " not found."));
-        assertThat(details.getTotalLevel()).isEqualTo(2);
-        assertThat(details.getUsedSlots()).isEqualTo(2);
+        assertThat(details.getTotalLevel()).isEqualTo(1);
+        assertThat(details.getUsedSlots()).isEqualTo(1);
     }
 
     @Test(groups = {"fe", "skyxplore"})
@@ -187,7 +186,7 @@ public class ConstructionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -205,6 +204,8 @@ public class ConstructionTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
+
+        SkyXploreBuildingFlow.constructBuilding(driver, Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL);
 
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
 

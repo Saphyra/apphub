@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @Builder(toBuilder = true)
 public class StorageSettingModel {
-    private static final Integer TARGET_AMOUNT = 300;
+    private static final Integer TARGET_AMOUNT = 10;
     private static final Integer PRIORITY = 4;
 
     private UUID storageSettingId;

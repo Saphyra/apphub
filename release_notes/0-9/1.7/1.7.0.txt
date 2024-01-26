@@ -2,6 +2,7 @@
 SkyXplore Game
     Save mechanism
     Pause game when someone disconnected
+    Add HQ as a starter building
 
 ===BUGFIXES===
 

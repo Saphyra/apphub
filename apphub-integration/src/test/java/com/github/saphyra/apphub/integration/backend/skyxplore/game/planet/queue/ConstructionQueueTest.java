@@ -118,6 +118,6 @@ public class ConstructionQueueTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Surface not found"));
         assertThat(surfaceResponse.getBuilding()).isNull();
 
-        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverviewResponse.getBuildings(), Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 1, 1);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverviewResponse.getBuildings(), Constants.SURFACE_TYPE_DESERT, Constants.DATA_ID_SOLAR_PANEL, 0, 0);
     }
 }

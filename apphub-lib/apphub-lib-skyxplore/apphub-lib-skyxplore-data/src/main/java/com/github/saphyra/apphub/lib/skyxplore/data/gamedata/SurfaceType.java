@@ -13,7 +13,9 @@ public enum SurfaceType {
     MOUNTAIN,
     OIL_FIELD,
     ORE_FIELD,
-    VOLCANO;
+    VOLCANO,
+    MILITARY,
+    ;
 
     @JsonCreator
     public static SurfaceType parse(String value) {

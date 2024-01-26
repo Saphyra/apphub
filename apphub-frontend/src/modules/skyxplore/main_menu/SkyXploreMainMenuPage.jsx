@@ -38,6 +38,7 @@ const SkyXploreMainMenuPage = () => {
     );
 
     useEffect(() => initPage(), []);
+    useEffect(() => {delete sessionStorage.skyXplorePageHistory}, [])
 
     useEffect(() => handleMessage(mainMenuLastMessage, sendMainMenuMessage), [mainMenuLastMessage]);
     useEffect(() => handleMessage(invitationLastMessage, sendInvitationMessage), [invitationLastMessage]);

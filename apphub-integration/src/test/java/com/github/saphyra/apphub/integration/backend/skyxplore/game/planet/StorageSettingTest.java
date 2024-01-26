@@ -192,7 +192,7 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private static void checkResourceProduced(UUID accessTokenId, PlanetLocationResponse planet, StorageSettingModel createModel) {
-        AwaitilityWrapper.create(60, 10)
+        AwaitilityWrapper.create(120, 10)
             .until(() -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planet.getPlanetId()).getStorage().getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
             .assertTrue("Resource not produced.");
     }

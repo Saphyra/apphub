@@ -3,7 +3,7 @@
   "buildingType": "storage",
   "stores": "liquid",
   "capacity": 1000,
-  "defaultBuilding": true,
+  "defaultBuilding": false,
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,

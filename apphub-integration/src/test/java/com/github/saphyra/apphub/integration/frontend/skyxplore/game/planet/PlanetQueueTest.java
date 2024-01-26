@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreBuildingFlow;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -24,8 +25,6 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanetQueueTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
-
     @Test(groups = {"fe", "skyxplore"})
     public void queueTest() {
         WebDriver driver = extractDriver();
@@ -36,7 +35,7 @@ public class PlanetQueueTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -102,17 +101,17 @@ public class PlanetQueueTest extends SeleniumTest {
     }
 
     private static void deconstructionItem(WebDriver driver) {
-        PlanetQueueItem queueItem;
-        Surface surface;
-        surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingFlow.constructBuilding(driver, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_CAMP);
         surface.deconstructBuilding(driver);
 
-        queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
+        PlanetQueueItem queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Deconstruct: Solar panel");
+        assertThat(queueItem.getTitle()).isEqualTo("Deconstruct: Camp");
 
         queueItem.cancelItem(driver);
 

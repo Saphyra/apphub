@@ -42,5 +42,9 @@
     "oil_rig": {
         "en": "Oil rig",
         "hu": "Olajfúró"
+    },
+    "headquarters": {
+        "en": "Headquarters",
+        "hu": "Parancsnokság"
     }
 }

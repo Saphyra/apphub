@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageSettingTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
+    public static final int AMOUNT = 10;
 
     @Test(groups = {"fe", "skyxplore"})
     public void storageSettingCrud() {
@@ -35,7 +35,7 @@ public class StorageSettingTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -116,7 +116,7 @@ public class StorageSettingTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -146,7 +146,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static void createStorageSetting(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, AMOUNT, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()
@@ -167,7 +167,7 @@ public class StorageSettingTest extends SeleniumTest {
 
     private static void checkResourceProduced(WebDriver driver) {
         AwaitilityWrapper.create(60, 10)
-            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 400)
+            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == AMOUNT + 100)
             .assertTrue("Resource not produced.");
     }
 }

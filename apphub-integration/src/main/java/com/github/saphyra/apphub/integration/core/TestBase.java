@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -159,9 +158,16 @@ public class TestBase {
 
         Path path = Paths.get(fileName);
         File file = new File(fileName);
-        file.getParentFile()
-            .mkdirs();
-        file.createNewFile();
+        if (!file.canWrite()) {
+            log.error("Why I can't write here? fileName: {}", fileName);
+        }
+        if (!file.getParentFile().mkdirs()) {
+            log.error("It would be great if API would tell why directory creation failed... DirName: " + directory);
+        }
+        if (!file.createNewFile()) {
+            log.error("It would be great if API would tell why file creation failed... FileName: " + fileName);
+        }
+
         Files.writeString(path, exception);
     }
 
@@ -169,7 +175,7 @@ public class TestBase {
         String[] split = className.split("\\.");
         String clazz = split[split.length - 1];
 
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + clazz + "." + method + "_" + HexFormat.of().formatHex(className.getBytes());
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + clazz + "_" + method + "_" + className.hashCode();
     }
 
     private synchronized static void deleteTestUsers(String method) {
