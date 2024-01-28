@@ -48,7 +48,8 @@ public class ExitGameTest extends SeleniumTest {
         SkyXploreSolarSystemActions.getPlanet(driver)
             .click();
 
-        Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
+        Surface surface = AwaitilityWrapper.getWithWait(() -> SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT), surface1 -> true)
+            .orElseThrow(() -> new RuntimeException("Surfaces are not loaded."));
         String surfaceId = surface.getSurfaceId();
         surface.openModifySurfaceWindow(driver);
 
