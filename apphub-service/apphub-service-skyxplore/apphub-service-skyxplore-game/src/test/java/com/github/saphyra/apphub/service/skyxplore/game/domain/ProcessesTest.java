@@ -30,6 +30,9 @@ public class ProcessesTest {
     @Mock
     private Process process;
 
+    @Mock
+    private Process root;
+
     @Test
     public void findByIdValidated_notFound() {
         Throwable ex = catchThrowable(() -> underTest.findByIdValidated(PROCESS_ID));
@@ -85,5 +88,18 @@ public class ProcessesTest {
         List<Process> result = underTest.getByExternalReference(EXTERNAL_REFERENCE);
 
         assertThat(result).containsExactly(process);
+    }
+
+    @Test
+    void getRootOf(){
+        underTest.add(process);
+        underTest.add(root);
+
+        given(process.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(process.getProcessId()).willReturn(UUID.randomUUID());
+        given(root.getProcessId()).willReturn(EXTERNAL_REFERENCE);
+        given(root.getExternalReference()).willReturn(PROCESS_ID);
+
+        assertThat(underTest.getRootOf(process)).isEqualTo(root);
     }
 }

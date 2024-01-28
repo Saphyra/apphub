@@ -48,7 +48,7 @@ class DeconstructionUpdateServiceTest {
     @Test
     void updateDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(deconstructionConverter.toModel(GAME_ID, deconstruction)).willReturn(deconstructionModel);
 

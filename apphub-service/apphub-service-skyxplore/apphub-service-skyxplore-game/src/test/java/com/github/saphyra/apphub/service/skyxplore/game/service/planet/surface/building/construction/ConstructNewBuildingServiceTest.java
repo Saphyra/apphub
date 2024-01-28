@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.construction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
@@ -15,6 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
@@ -46,7 +48,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ConstructNewBuildingServiceTest {
@@ -79,6 +80,9 @@ public class ConstructNewBuildingServiceTest {
 
     @Mock
     private ConstructionConverter constructionConverter;
+
+    @Mock
+    private BuildingConverter buildingConverter;
 
     @InjectMocks
     private ConstructNewBuildingService underTest;
@@ -134,6 +138,9 @@ public class ConstructNewBuildingServiceTest {
     @Mock
     private ProcessModel processModel;
 
+    @Mock
+    private BuildingModel buildingModel;
+
     @Test
     public void invalidDataId() {
         given(allBuildingService.getOptional(DATA_ID)).willReturn(Optional.empty());
@@ -177,7 +184,7 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -196,7 +203,7 @@ public class ConstructNewBuildingServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -220,20 +227,22 @@ public class ConstructNewBuildingServiceTest {
         given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
         given(constructionProcess.toModel()).willReturn(processModel);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(buildingConverter.toModel(GAME_ID, building)).willReturn(buildingModel);
 
         underTest.constructNewBuilding(USER_ID, DATA_ID, PLANET_ID, SURFACE_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        then(eventLoop).should().processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(constructions).add(construction);
-        verify(buildings).add(building);
-        verify(resourceAllocationService).processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
-        verify(processes).add(constructionProcess);
+        then(constructions).should().add(construction);
+        then(buildings).should().add(building);
+        then(resourceAllocationService).should().processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
+        then(processes).should().add(constructionProcess);
         then(progressDiff).should().save(constructionModel);
         then(progressDiff).should().save(processModel);
-        verify(executionResult).getOrThrow();
+        then(progressDiff).should().save(buildingModel);
+        then(executionResult).should().getOrThrow();
     }
 }

@@ -3,6 +3,7 @@ SkyXplore Game
     Save mechanism
     Pause game when someone disconnected
     Add HQ as a starter building
+    Display Citizen assignments
 
 ===BUGFIXES===
 

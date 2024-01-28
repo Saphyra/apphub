@@ -70,7 +70,7 @@ class CancelDeconstructionServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
 
         given(game.getEventLoop()).willReturn(eventLoop);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);

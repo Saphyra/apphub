@@ -59,7 +59,7 @@ class TerraformationProcessHelper {
         allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, terraformationId);
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(terraformation.getExternalReference());
+            .findBySurfaceIdValidated(terraformation.getExternalReference());
 
         surface.setSurfaceType(SurfaceType.valueOf(terraformation.getData()));
 

@@ -82,5 +82,29 @@
     "SKYXPLORE_STORAGE_USED": {
         "en": "Storage still in use. Free up some space before you deconstruct it.",
         "hu": "Raktár használatban. Szabadíts fel egy kis helyet, mielőtt lerombolod."
+    },
+    "NOT_ENOUGH_STORAGE": {
+        "en": "Not enough {storageType} storage.",
+        "hu": "Nincs elég {storageType} kapacitás.",
+        "params": {
+            "storageType": {
+                "ENERGY": {
+                    "en": "Energy",
+                    "hu": "Energia"
+                },
+                "LIQUID": {
+                    "en": "Liquid",
+                    "hu": "Folyadék"
+                },
+                "BULK": {
+                    "en": "Bulk",
+                    "hu": "Teher"
+                },
+                "CITIZEN": {
+                    "en": "Housing",
+                    "hu": "Lakhatás"
+                }
+            }
+        }
     }
 }

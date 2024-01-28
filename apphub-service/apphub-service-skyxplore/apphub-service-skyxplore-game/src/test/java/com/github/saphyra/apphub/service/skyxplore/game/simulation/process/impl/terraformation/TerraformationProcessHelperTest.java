@@ -110,7 +110,7 @@ class TerraformationProcessHelperTest {
         given(constructions.findByConstructionIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(terraformation.getData()).willReturn(SurfaceType.CONCRETE.name());
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(surfaceConverter.toModel(GAME_ID, surface)).willReturn(surfaceModel);

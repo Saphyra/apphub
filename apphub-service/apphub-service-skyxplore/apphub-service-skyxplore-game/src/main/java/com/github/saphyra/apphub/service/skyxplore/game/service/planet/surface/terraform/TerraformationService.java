@@ -51,7 +51,7 @@ class TerraformationService {
         }
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(surfaceId);
+            .findBySurfaceIdValidated(surfaceId);
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed."))

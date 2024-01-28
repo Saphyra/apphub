@@ -31,7 +31,7 @@ class DeconstructionProcessHelper {
         log.info("Finishing deconstruction...");
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionId(deconstructionId);
+            .findByDeconstructionIdValidated(deconstructionId);
 
         Building building = gameData.getBuildings()
             .findByBuildingId(deconstruction.getExternalReference());

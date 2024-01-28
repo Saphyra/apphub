@@ -48,7 +48,7 @@ public class DeconstructionQueueService implements QueueService {
         Game game = gameDao.findByUserIdValidated(userId);
         Deconstruction deconstruction = game.getData()
             .getDeconstructions()
-            .findByDeconstructionId(deconstructionId);
+            .findByDeconstructionIdValidated(deconstructionId);
 
         game.getEventLoop()
             .processWithWait(() -> {

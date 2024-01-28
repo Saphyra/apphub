@@ -19,7 +19,7 @@ class PlanetBuildingOverviewMapper {
         int usedSlots = (int) gameData.getBuildings()
             .getByLocation(planetId)
             .stream()
-            .filter(building -> gameData.getSurfaces().findBySurfaceId(building.getSurfaceId()).getSurfaceType() == surfaceType)
+            .filter(building -> gameData.getSurfaces().findBySurfaceIdValidated(building.getSurfaceId()).getSurfaceType() == surfaceType)
             .count();
 
         int planetSize = (int) gameData.getSurfaces()

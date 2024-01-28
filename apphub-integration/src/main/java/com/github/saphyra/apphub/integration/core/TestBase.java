@@ -18,7 +18,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -156,19 +155,14 @@ public class TestBase {
 
         String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsPrettyString(ExceptionConverter.map(throwable));
 
-        Path path = Paths.get(fileName);
-        File file = new File(fileName);
-        if (!file.canWrite()) {
-            log.error("Why I can't write here? fileName: {}", fileName);
-        }
-        if (!file.getParentFile().mkdirs()) {
-            log.error("It would be great if API would tell why directory creation failed... DirName: " + directory);
-        }
-        if (!file.createNewFile()) {
-            log.error("It would be great if API would tell why file creation failed... FileName: " + fileName);
+        Path filePath = Paths.get(fileName);
+        Path dirPath = Paths.get(directory);
+
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
         }
 
-        Files.writeString(path, exception);
+        Files.writeString(filePath, exception);
     }
 
     protected String getReportDirectory(String className, String method) {

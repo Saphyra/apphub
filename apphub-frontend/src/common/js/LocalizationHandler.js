@@ -39,9 +39,18 @@ const LocalizationHandler = class {
         }
 
         new MapStream(params)
-            .forEach((key, value) => result = result.replace("{" + key + "}", value));
+            .forEach((key, value) => result = result.replace("{" + key + "}", this.getParamValue(item, key, value)));
 
         return new Optional(result);
+    }
+
+    getParamValue(item, key, value){
+        if(!Utils.hasValue(item.params) || !Utils.hasValue(item.params[key])){
+            return value;
+        }
+
+        return new LocalizationHandler(item.params[key])
+            .get(value);
     }
 
     getLocale() {

@@ -22,7 +22,7 @@ public class CancelDeconstructionService {
 
         Deconstruction deconstruction = game.getData()
             .getDeconstructions()
-            .findByDeconstructionId(deconstructionId);
+            .findByDeconstructionIdValidated(deconstructionId);
 
         processCancellation(game, deconstruction);
     }

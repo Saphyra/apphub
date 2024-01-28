@@ -52,7 +52,7 @@ public class DeconstructionProcess implements Process {
 
     private Deconstruction findDeconstruction() {
         return gameData.getDeconstructions()
-            .findByDeconstructionId(deconstructionId);
+            .findByDeconstructionIdValidated(deconstructionId);
     }
 
     @Override

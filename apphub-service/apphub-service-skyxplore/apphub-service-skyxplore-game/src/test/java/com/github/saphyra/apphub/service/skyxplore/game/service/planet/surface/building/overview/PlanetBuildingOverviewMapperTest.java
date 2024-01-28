@@ -62,7 +62,7 @@ public class PlanetBuildingOverviewMapperTest {
         given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surfaceWithDifferentType, surface, surface, surface, surface));
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(building.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
 
         given(buildingDetailsMapper.createBuildingDetails(gameData, PLANET_ID, SurfaceType.CONCRETE)).willReturn(Arrays.asList(overviewDetailedResponse));
 

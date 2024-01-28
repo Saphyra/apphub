@@ -45,9 +45,11 @@ public class RestProcess implements Process {
     private UUID location;
 
     @NonNull
+    @Getter
     private final Integer restForTicks;
 
     @NonNull
+    @Getter
     private volatile Integer restedForTicks;
 
     @NonNull

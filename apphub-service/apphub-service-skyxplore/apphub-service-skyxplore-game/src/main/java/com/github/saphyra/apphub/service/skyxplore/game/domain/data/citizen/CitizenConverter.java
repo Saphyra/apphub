@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResp
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.assignment.CitizenAssignmentProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class CitizenConverter implements GameDataToModelConverter {
     private final SkillConverter skillConverter;
     private final StatConverter statConverter;
+    private final CitizenAssignmentProvider citizenAssignmentProvider;
 
     public List<CitizenModel> toModel(UUID gameId, Collection<Citizen> citizens) {
         return citizens.stream()
@@ -52,6 +54,7 @@ public class CitizenConverter implements GameDataToModelConverter {
             .name(citizen.getName())
             .skills(skillConverter.toResponse(gameData, citizen.getCitizenId()))
             .stats(statConverter.convert(citizen))
+            .assignment(citizenAssignmentProvider.getAssignment(gameData, citizen.getCitizenId()))
             .build();
     }
 

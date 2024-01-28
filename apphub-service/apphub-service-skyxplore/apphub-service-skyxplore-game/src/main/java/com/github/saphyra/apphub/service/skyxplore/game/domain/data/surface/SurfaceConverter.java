@@ -44,7 +44,7 @@ public class SurfaceConverter implements GameDataToModelConverter {
 
     public SurfaceResponse toResponse(GameData gameData, UUID surfaceId) {
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(surfaceId);
+            .findBySurfaceIdValidated(surfaceId);
 
         return toResponse(gameData, surface);
     }

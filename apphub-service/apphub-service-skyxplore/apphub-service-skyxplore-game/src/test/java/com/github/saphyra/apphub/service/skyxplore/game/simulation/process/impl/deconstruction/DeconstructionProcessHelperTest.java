@@ -79,7 +79,7 @@ class DeconstructionProcessHelperTest {
     @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);

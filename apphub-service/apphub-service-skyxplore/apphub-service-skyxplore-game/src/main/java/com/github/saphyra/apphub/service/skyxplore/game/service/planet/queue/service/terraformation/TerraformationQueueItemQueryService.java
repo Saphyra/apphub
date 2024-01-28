@@ -21,7 +21,7 @@ class TerraformationQueueItemQueryService {
         return gameData.getConstructions()
             .getByLocationAndType(location, ConstructionType.TERRAFORMATION)
             .stream()
-            .map(construction -> converter.convert(construction, gameData.getSurfaces().findBySurfaceId(construction.getExternalReference())))
+            .map(construction -> converter.convert(construction, gameData.getSurfaces().findBySurfaceIdValidated(construction.getExternalReference())))
             .collect(Collectors.toList());
     }
 }

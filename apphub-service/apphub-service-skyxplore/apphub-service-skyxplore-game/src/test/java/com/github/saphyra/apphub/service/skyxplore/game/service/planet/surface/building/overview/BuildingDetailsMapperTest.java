@@ -55,7 +55,7 @@ class BuildingDetailsMapperTest {
         given(buildings.getByLocation(PLANET_ID)).willReturn(List.of(building));
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(building.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(building.getDataId()).willReturn(DATA_ID);
         given(buildingDetailMapper.createBuildingDetail(gameData, DATA_ID, List.of(building))).willReturn(response);

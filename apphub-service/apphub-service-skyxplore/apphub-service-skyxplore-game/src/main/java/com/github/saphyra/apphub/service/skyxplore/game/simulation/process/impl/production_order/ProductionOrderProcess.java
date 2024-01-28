@@ -45,6 +45,7 @@ public class ProductionOrderProcess implements Process {
     private volatile String producerBuildingDataId;
     private volatile UUID allocatedResourceId;
     @NonNull
+    @Getter
     private volatile UUID reservedStorageId;
 
     @Getter

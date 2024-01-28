@@ -17,4 +17,5 @@ public class CitizenResponse {
     private String name;
     private Map<CitizenStat, StatResponse> stats;
     private Map<String, SkillResponse> skills;
+    private CitizenAssignmentResponse assignment;
 }

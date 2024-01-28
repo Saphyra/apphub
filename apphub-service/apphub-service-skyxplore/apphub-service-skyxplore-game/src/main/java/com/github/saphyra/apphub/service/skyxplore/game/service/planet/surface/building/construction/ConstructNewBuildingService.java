@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
@@ -37,6 +38,7 @@ public class ConstructNewBuildingService {
     private final ResourceAllocationService resourceAllocationService;
     private final ConstructionProcessFactory constructionProcessFactory;
     private final ConstructionConverter constructionConverter;
+    private final BuildingConverter buildingConverter;
 
     public void constructNewBuilding(UUID userId, String dataId, UUID planetId, UUID surfaceId) {
         Optional<BuildingData> maybeBuildingData = allBuildingService.getOptional(dataId);
@@ -60,7 +62,7 @@ public class ConstructNewBuildingService {
 
         Surface surface = game.getData()
             .getSurfaces()
-            .findBySurfaceId(surfaceId);
+            .findBySurfaceIdValidated(surfaceId);
 
         if (!buildingData.getPlaceableSurfaceTypes().contains(surface.getSurfaceType())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, dataId + " cannot be built to surfaceType " + surface.getSurfaceType());
@@ -100,10 +102,9 @@ public class ConstructNewBuildingService {
                     .getProcesses()
                     .add(constructionProcess);
 
-                progressDiff
-                    .save(constructionProcess.toModel());
-                progressDiff
-                    .save(constructionConverter.toModel(game.getGameId(), construction));
+                progressDiff.save(constructionProcess.toModel());
+                progressDiff.save(constructionConverter.toModel(game.getGameId(), construction));
+                progressDiff.save(buildingConverter.toModel(game.getGameId(), building));
             })
             .getOrThrow();
     }
