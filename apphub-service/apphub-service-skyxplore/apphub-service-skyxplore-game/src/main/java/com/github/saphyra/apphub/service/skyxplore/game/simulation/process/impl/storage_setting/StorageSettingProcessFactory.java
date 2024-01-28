@@ -3,10 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
@@ -21,12 +20,13 @@ public class StorageSettingProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
 
-    public StorageSettingProcess create(GameData gameData, StorageSetting storageSetting, int amount) {
+    public StorageSettingProcess create(Game game, StorageSetting storageSetting, int amount) {
         return StorageSettingProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
             .storageSettingId(storageSetting.getStorageSettingId())
-            .gameData(gameData)
+            .gameData(game.getData())
+            .game(game)
             .location(storageSetting.getLocation())
             .applicationContextProxy(applicationContextProxy)
             .amount(amount)
@@ -48,6 +48,7 @@ public class StorageSettingProcessFactory implements ProcessFactory {
             .location(model.getLocation())
             .applicationContextProxy(applicationContextProxy)
             .amount(Integer.parseInt(model.getData().get(ProcessParamKeys.AMOUNT)))
+            .game(game)
             .build();
     }
 }

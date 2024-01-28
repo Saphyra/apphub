@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.calendar;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarActions;
-import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -21,11 +20,10 @@ public class CalendarTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void getCalendar() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        List<CalendarResponse> calendarResponses = CalendarActions.getCalendar(language, accessTokenId, DATE)
+        List<CalendarResponse> calendarResponses = CalendarActions.getCalendar(accessTokenId, DATE)
             .stream()
             .sorted(Comparator.comparing(CalendarResponse::getDate))
             .collect(Collectors.toList());

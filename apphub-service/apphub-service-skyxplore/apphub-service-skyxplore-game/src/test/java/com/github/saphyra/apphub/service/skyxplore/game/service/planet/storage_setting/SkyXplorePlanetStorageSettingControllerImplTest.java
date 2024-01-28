@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class SkyXplorePlanetStorageSettingControllerImplTest {
@@ -42,9 +41,6 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private StorageSettingsResponse storageSettingsResponse;
-
-    @Mock
     private StorageSettingApiModel storageSettingModel;
 
     @BeforeEach
@@ -54,35 +50,37 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
 
     @Test
     public void getStorageSettings() {
-        given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(storageSettingsResponse);
+        given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(storageSettingModel));
 
-        StorageSettingsResponse result = underTest.getStorageSettings(PLANET_ID, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.getStorageSettings(PLANET_ID, accessTokenHeader);
 
-        assertThat(result).isEqualTo(storageSettingsResponse);
+        assertThat(result).containsExactly(storageSettingModel);
     }
 
     @Test
     public void createStorageSetting() {
-        given(storageSettingCreationService.createStorageSetting(USER_ID, PLANET_ID, storageSettingModel)).willReturn(storageSettingModel);
+        given(storageSettingCreationService.createStorageSetting(USER_ID, PLANET_ID, storageSettingModel)).willReturn(List.of(storageSettingModel));
 
-        StorageSettingApiModel result = underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
 
-        assertThat(result).isEqualTo(storageSettingModel);
+        assertThat(result).containsExactly(storageSettingModel);
     }
 
     @Test
     public void deleteStorageSetting() {
-        underTest.deleteStorageSetting(STORAGE_SETTING_ID, accessTokenHeader);
+        given(storageSettingDeletionService.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID)).willReturn(List.of(storageSettingModel));
 
-        verify(storageSettingDeletionService).deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
+        List<StorageSettingApiModel> result = underTest.deleteStorageSetting(STORAGE_SETTING_ID, accessTokenHeader);
+
+        assertThat(result).containsExactly(storageSettingModel);
     }
 
     @Test
     public void editStorageSetting() {
-        given(storageSettingEditionService.edit(USER_ID, storageSettingModel)).willReturn(storageSettingModel);
+        given(storageSettingEditionService.edit(USER_ID, storageSettingModel)).willReturn(List.of(storageSettingModel));
 
-        StorageSettingApiModel result = underTest.editStorageSetting(storageSettingModel, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.editStorageSetting(storageSettingModel, accessTokenHeader);
 
-        assertThat(result).isEqualTo(storageSettingModel);
+        assertThat(result).containsExactly(storageSettingModel);
     }
 }

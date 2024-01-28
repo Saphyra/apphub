@@ -18,7 +18,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -144,28 +143,33 @@ public class TestBase {
         log.debug("Test {} completed", methodName);
 
         if (ITestResult.FAILURE == testResult.getStatus()) {
-            saveStackTrace(testResult.getName(), testResult.getThrowable());
+            saveStackTrace(testResult.getTestClass().getRealClass().getName(), testResult.getName(), testResult.getThrowable());
         }
     }
 
     @SneakyThrows
-    private void saveStackTrace(String method, Throwable throwable) {
-        String directory = getReportDirectory(method);
+    private void saveStackTrace(String className, String method, Throwable throwable) {
+        String directory = getReportDirectory(className, method);
         String fileName = directory + "/exception.json";
-        log.info("Exception fileName: {}", fileName);
+        log.debug("Exception fileName: {}", fileName);
 
         String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsPrettyString(ExceptionConverter.map(throwable));
 
-        Path path = Paths.get(fileName);
-        File file = new File(fileName);
-        file.getParentFile()
-            .mkdirs();
-        file.createNewFile();
-        Files.writeString(path, exception);
+        Path filePath = Paths.get(fileName);
+        Path dirPath = Paths.get(directory);
+
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+
+        Files.writeString(filePath, exception);
     }
 
-    protected String getReportDirectory(String method) {
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh.mm.ss")) + "/" + method + "-" + UUID.randomUUID();
+    protected String getReportDirectory(String className, String method) {
+        String[] split = className.split("\\.");
+        String clazz = split[split.length - 1];
+
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + clazz + "_" + method + "_" + className.hashCode();
     }
 
     private synchronized static void deleteTestUsers(String method) {

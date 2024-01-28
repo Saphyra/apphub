@@ -1,5 +1,5 @@
 {
   "id": "energy",
   "storageType": "energy",
-  "maxProductionBatchSize": 1000
+  "maxProductionBatchSize": 100
 }

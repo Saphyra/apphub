@@ -12,5 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ChatRoom {
     private String id;
+    private String roomTitle;
     private List<UUID> members;
 }

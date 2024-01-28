@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.Friend;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequest;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Friend;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.SentFriendRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;

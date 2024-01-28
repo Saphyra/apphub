@@ -3,12 +3,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ class RestProcessHelper {
     private final GameProperties gameProperties;
     private final CitizenAllocationFactory citizenAllocationFactory;
     private final CitizenAllocationConverter citizenAllocationConverter;
+    private final CitizenConverter citizenConverter;
 
     double getMoraleBasedMultiplier(GameData gameData, UUID citizenId) {
         CitizenMoraleProperties moraleProperties = gameProperties.getCitizen()
@@ -37,25 +39,25 @@ class RestProcessHelper {
         return result;
     }
 
-    void allocateCitizen(SyncCache syncCache, GameData gameData, UUID processId, UUID citizenId) {
+    void allocateCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID citizenId) {
         CitizenAllocation citizenAllocation = citizenAllocationFactory.create(citizenId, processId);
 
         gameData.getCitizenAllocations()
             .add(citizenAllocation);
-        syncCache.saveGameItem(citizenAllocationConverter.toModel(gameData.getGameId(), citizenAllocation));
+        progressDiff.save(citizenAllocationConverter.toModel(gameData.getGameId(), citizenAllocation));
     }
 
-    void releaseCitizen(SyncCache syncCache, GameData gameData, UUID processId) {
+    void releaseCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
         gameData.getCitizenAllocations()
             .findByProcessId(processId)
             .ifPresent(citizenAllocation -> {
                 gameData.getCitizenAllocations()
                     .remove(citizenAllocation);
-                syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
             });
     }
 
-    void increaseMorale(SyncCache syncCache, GameData gameData, UUID citizenId) {
+    void increaseMorale(GameProgressDiff progressDiff, GameData gameData, UUID citizenId) {
         Citizen citizen = gameData.getCitizens()
             .findByCitizenIdValidated(citizenId);
 
@@ -65,6 +67,6 @@ class RestProcessHelper {
 
         citizen.increaseMorale(moraleRegen);
 
-        syncCache.citizenModified(citizen);
+        progressDiff.save(citizenConverter.toModel(gameData.getGameId(), citizen));
     }
 }

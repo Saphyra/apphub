@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting;
 
+import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -21,12 +22,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -34,12 +37,13 @@ import static org.mockito.Mockito.verify;
 public class StorageSettingDeletionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
+    private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
+    private StorageSettingsResponseQueryService storageSettingsResponseQueryService;
 
     @InjectMocks
     private StorageSettingDeletionService underTest;
@@ -51,16 +55,16 @@ public class StorageSettingDeletionServiceTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private EventLoop eventLoop;
 
     @Mock
-    private ExecutionResult<Void> executionResult;
+    private ExecutionResult<List<StorageSettingApiModel>> executionResult;
 
     @Mock
-    private Future<ExecutionResult<Void>> future;
+    private Future<ExecutionResult<List<StorageSettingApiModel>>> future;
 
     @Mock
     private Processes processes;
@@ -74,8 +78,11 @@ public class StorageSettingDeletionServiceTest {
     @Mock
     private StorageSetting storageSetting;
 
+    @Mock
+    private StorageSettingApiModel apiModel;
+
     @Captor
-    private ArgumentCaptor<Runnable> argumentCaptor;
+    private ArgumentCaptor<Callable<List<StorageSettingApiModel>>> argumentCaptor;
 
     @Test
     public void deleteStorageSetting() throws Exception {
@@ -83,24 +90,30 @@ public class StorageSettingDeletionServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
         given(game.getEventLoop()).willReturn(eventLoop);
 
-        given(eventLoop.process(any(Runnable.class), any())).willReturn(future);
+        //noinspection unchecked
+        given(eventLoop.processWithResponse(any(Callable.class))).willReturn(future);
         given(future.get()).willReturn(executionResult);
 
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Optional.of(process));
+        given(storageSetting.getLocation()).willReturn(PLANET_ID);
+        given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(apiModel));
+        given(executionResult.getOrThrow()).willReturn(List.of(apiModel));
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
+        List<StorageSettingApiModel> result = underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
 
-        verify(eventLoop).process(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithResponse(argumentCaptor.capture());
         argumentCaptor.getValue()
-            .run();
+            .call();
 
-        verify(process).cleanup(syncCache);
+        verify(process).cleanup();
         verify(executionResult).getOrThrow();
         verify(storageSettings).remove(storageSetting);
-        verify(syncCache).deleteGameItem(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
+        verify(progressDiff).delete(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
+
+        assertThat(result).containsExactly(apiModel);
     }
 }

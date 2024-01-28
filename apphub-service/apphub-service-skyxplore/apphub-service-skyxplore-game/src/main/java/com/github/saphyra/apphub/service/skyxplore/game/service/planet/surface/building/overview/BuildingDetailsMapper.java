@@ -22,7 +22,7 @@ class BuildingDetailsMapper {
         return gameData.getBuildings()
             .getByLocation(planetId)
             .stream()
-            .filter(building -> gameData.getSurfaces().findBySurfaceId(building.getSurfaceId()).getSurfaceType() == surfaceType)
+            .filter(building -> gameData.getSurfaces().findBySurfaceIdValidated(building.getSurfaceId()).getSurfaceType() == surfaceType)
             .collect(Collectors.groupingBy(Building::getDataId))
             .entrySet()
             .stream()

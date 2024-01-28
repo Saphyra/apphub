@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayerElement;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyChatMessage;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayer;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.OnlineFriend;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.AiPlayerElement;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyChatMessage;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;

@@ -37,6 +37,15 @@ const redirectToGameIfInOne = async () => {
     }
 }
 
+const redirectToMainMenuIfNotInGame = async () => {
+    const response = await Endpoints.SKYXPLORE_IS_USER_IN_GAME.createRequest()
+        .send()
+
+    if (!response.value) {
+        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+    }
+}
+
 const forMainMenu = () => {
     redirectToCharacterIfNotPresent();
     redirectToLobbyIfInOne();
@@ -49,15 +58,18 @@ const forCharacter = async () => {
 }
 
 const forLobby = () => {
-    redirectToCharacterIfNotPresent();
     redirectToMainMenuIfNotInLobby();
-    redirectToGameIfInOne();
+}
+
+const forGame = () => {
+    redirectToMainMenuIfNotInGame();
 }
 
 const Redirection = {
     forMainMenu: forMainMenu,
     forCharacter: forCharacter,
-    forLobby: forLobby
+    forLobby: forLobby,
+    forGame: forGame
 }
 
 export default Redirection;

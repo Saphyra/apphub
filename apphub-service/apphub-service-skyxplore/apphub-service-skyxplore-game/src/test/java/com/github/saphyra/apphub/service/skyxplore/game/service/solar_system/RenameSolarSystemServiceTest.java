@@ -6,12 +6,12 @@ import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystem;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystemConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystemConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,9 +41,6 @@ public class RenameSolarSystemServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private GameDataProxy gameDataProxy;
-
-    @Mock
     private SolarSystemConverter solarSystemConverter;
 
     @InjectMocks
@@ -69,6 +66,9 @@ public class RenameSolarSystemServiceTest {
 
     @Mock
     private SolarSystems solarSystems;
+
+    @Mock
+    private GameProgressDiff progressDiff;
 
     @Test
     public void blankName() {
@@ -97,6 +97,7 @@ public class RenameSolarSystemServiceTest {
         given(solarSystem.getCustomNames()).willReturn(customNames);
         given(solarSystemConverter.toModel(GAME_ID, solarSystem)).willReturn(model);
         given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.rename(USER_ID, SOLAR_SYSTEM_ID, NEW_NAME);
 
@@ -105,7 +106,7 @@ public class RenameSolarSystemServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(gameDataProxy).saveItem(model);
+        verify(progressDiff).save(model);
         assertThat(customNames).containsEntry(USER_ID, NEW_NAME);
     }
 }

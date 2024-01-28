@@ -1,0 +1,14 @@
+{
+    "resume-game": {
+        "en": "Resume",
+        "hu": "Folytatás"
+    },
+    "pause-game": {
+        "en": "Pause",
+        "hu": "Leállítás"
+    },
+    "paused": {
+        "en": "Paused",
+        "hu": "Megállítva"
+    }
+}

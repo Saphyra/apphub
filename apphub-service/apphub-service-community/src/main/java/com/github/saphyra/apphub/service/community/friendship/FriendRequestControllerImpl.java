@@ -54,13 +54,13 @@ class FriendRequestControllerImpl implements FriendRequestController {
 
     @Override
     public void delete(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete FriendRequest {}", accessTokenHeader, friendRequestId);
+        log.info("{} wants to delete FriendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
         friendRequestDeletionService.delete(accessTokenHeader.getUserId(), friendRequestId);
     }
 
     @Override
     public FriendshipResponse accept(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to accept FriendRequest {}", accessTokenHeader, friendRequestId);
+        log.info("{} wants to accept FriendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
         return acceptFriendRequestService.accept(accessTokenHeader.getUserId(), friendRequestId);
     }
 }

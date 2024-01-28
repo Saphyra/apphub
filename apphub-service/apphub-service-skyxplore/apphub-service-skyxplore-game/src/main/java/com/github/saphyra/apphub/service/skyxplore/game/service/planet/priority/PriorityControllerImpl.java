@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -15,13 +14,6 @@ import java.util.UUID;
 @Slf4j
 public class PriorityControllerImpl implements SkyXplorePriorityController {
     private final PriorityUpdateService priorityUpdateService;
-    private final PriorityQueryService priorityQueryService;
-
-    @Override
-    public Map<String, Integer> getPriorities(UUID planetId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the priorities of planet {}", accessTokenHeader.getUserId(), planetId);
-        return priorityQueryService.getPriorities(accessTokenHeader.getUserId(), planetId);
-    }
 
     @Override
     public void updatePriority(OneParamRequest<Integer> newPriority, UUID planetId, String priorityType, AccessTokenHeader accessTokenHeader) {

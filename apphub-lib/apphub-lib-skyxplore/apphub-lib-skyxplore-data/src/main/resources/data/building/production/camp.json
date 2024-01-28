@@ -28,13 +28,13 @@
     }
   },
   "workers": 1,
-  "defaultBuilding": true,
+  "defaultBuilding": false,
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 10000,
       "requiredResources": {
         "energy": 200,
-        "wood": 500
+        "wood": 200
       }
     }
   }

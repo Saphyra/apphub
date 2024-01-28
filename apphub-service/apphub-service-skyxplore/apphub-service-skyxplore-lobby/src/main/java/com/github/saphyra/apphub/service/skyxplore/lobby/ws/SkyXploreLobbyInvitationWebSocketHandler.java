@@ -23,12 +23,12 @@ public class SkyXploreLobbyInvitationWebSocketHandler extends AbstractWebSocketH
     }
 
     @Override
-    public void afterConnection(UUID userId) {
+    public void afterConnection(UUID userId, String sessionId) {
         userActiveNotificationService.userOnline(userId);
     }
 
     @Override
-    public void afterDisconnection(UUID userId) {
+    public void afterDisconnection(UUID userId, String sessionId) {
         userActiveNotificationService.userOffline(userId);
     }
 

@@ -24,6 +24,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class PlanetBuildingOverviewMapperTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private BuildingDetailsMapper buildingDetailsMapper;
@@ -60,6 +61,8 @@ public class PlanetBuildingOverviewMapperTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surfaceWithDifferentType, surface, surface, surface, surface));
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
+        given(building.getSurfaceId()).willReturn(SURFACE_ID);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
 
         given(buildingDetailsMapper.createBuildingDetails(gameData, PLANET_ID, SurfaceType.CONCRETE)).willReturn(Arrays.asList(overviewDetailedResponse));
 

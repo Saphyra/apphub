@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "Create chat room",
+        "hu": "Új chat szoba"
+    },
+    "room-name": {
+        "en": "Room name",
+        "hu": "Szoba neve"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "available": {
+        "en": "Available",
+        "hu": "Elérhető"
+    },
+    "invited": {
+        "en": "Invited",
+        "hu": "Meghívott"
+    },
+    "no-available-player": {
+        "en": "No available player.",
+        "hu": "Nincs elérhető játékos."
+    },
+    "room-name-blank": {
+        "en": "Room name must not be blank.",
+        "hu": "Szoba neve nem lehet üres."
+    }
+}

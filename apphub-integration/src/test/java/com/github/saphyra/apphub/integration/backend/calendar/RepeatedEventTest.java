@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.backend.calendar;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
@@ -30,9 +29,8 @@ public class RepeatedEventTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void oneTimeEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -46,7 +44,7 @@ public class RepeatedEventTest extends BackEndTest {
             .repeat(3)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();
@@ -55,9 +53,8 @@ public class RepeatedEventTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void daysOfWeekEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         List<DayOfWeek> daysOfWeek = List.of(DayOfWeek.MONDAY, DayOfWeek.THURSDAY);
         LocalDate date = getFirstOfMonth(FIRST_OF_MONTH, d -> d.getDayOfWeek() == DayOfWeek.MONDAY);
@@ -74,7 +71,7 @@ public class RepeatedEventTest extends BackEndTest {
             .repeat(2)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(findByDate(responses, date)).hasSize(1);
         assertThat(findByDate(responses, date.plusDays(1))).isNotEmpty();
@@ -87,9 +84,8 @@ public class RepeatedEventTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void daysOfMonthEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -104,7 +100,7 @@ public class RepeatedEventTest extends BackEndTest {
             .repeat(3)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();
@@ -123,9 +119,8 @@ public class RepeatedEventTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void everyXDaysEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -140,7 +135,7 @@ public class RepeatedEventTest extends BackEndTest {
             .repeat(3)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(findByDate(responses, FIRST_OF_MONTH)).hasSize(1);
         assertThat(findByDate(responses, FIRST_OF_MONTH.plusDays(1))).isNotEmpty();

@@ -7,8 +7,6 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,9 +43,6 @@ class TickSchedulerTest {
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
-
-    @Mock
     private GameProperties gameProperties;
 
     @Mock
@@ -55,9 +50,6 @@ class TickSchedulerTest {
 
     @InjectMocks
     private TickScheduler underTest;
-
-    @Mock
-    private SyncCache syncCache;
 
     private EventLoop eventLoop;
 
@@ -85,10 +77,9 @@ class TickSchedulerTest {
     }
 
     @Test
-    void run_schedule() throws Exception {
+    void run_schedule() {
         given(context.getSleepService()).willReturn(sleepService);
         given(context.getDateTimeUtil()).willReturn(dateTimeUtil);
-        given(context.getSyncCacheFactory()).willReturn(syncCacheFactory);
         given(context.getTickTasks()).willReturn(List.of(tickTask));
         given(context.getGameProperties()).willReturn(gameProperties);
         given(gameProperties.getTickTimeMillis()).willReturn(TICK_TIME_MILLIS);
@@ -108,12 +99,10 @@ class TickSchedulerTest {
             .willReturn(START_TIME_2)
             .willReturn(END_TIME_2);
 
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
-
         underTest.run();
 
         sleepService.sleep(1000);
 
-        verify(tickTask, times(2)).process(game, syncCache);
+        verify(tickTask, times(2)).process(game);
     }
 }

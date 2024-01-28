@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.community;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.community.BlacklistResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
@@ -16,8 +15,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistActions {
-    public static List<SearchResultItem> search(Language language, UUID accessTokenId, String query) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<SearchResultItem> search(UUID accessTokenId, String query) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
             .post(UrlFactory.create(Endpoints.COMMUNITY_BLACKLIST_SEARCH));
 
@@ -26,22 +25,22 @@ public class BlacklistActions {
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
     }
 
-    public static BlacklistResponse createBlacklist(Language language, UUID accessTokenId, UUID blockedUserId) {
-        Response response = getCreateResponse(language, accessTokenId, blockedUserId);
+    public static BlacklistResponse createBlacklist(UUID accessTokenId, UUID blockedUserId) {
+        Response response = getCreateResponse(accessTokenId, blockedUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BlacklistResponse.class);
     }
 
-    public static Response getCreateResponse(Language language, UUID accessTokenId, UUID blockedUserId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getCreateResponse(UUID accessTokenId, UUID blockedUserId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(blockedUserId))
             .put(UrlFactory.create(Endpoints.COMMUNITY_CREATE_BLACKLIST));
     }
 
-    public static List<BlacklistResponse> getBlacklists(Language language, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<BlacklistResponse> getBlacklists(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.COMMUNITY_GET_BLACKLIST));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -49,14 +48,14 @@ public class BlacklistActions {
         return Arrays.asList(response.getBody().as(BlacklistResponse[].class));
     }
 
-    public static void deleteBlacklist(Language language, UUID accessTokenId, UUID blacklistId) {
-        Response response = getDeleteBlacklistResponse(language, accessTokenId, blacklistId);
+    public static void deleteBlacklist(UUID accessTokenId, UUID blacklistId) {
+        Response response = getDeleteBlacklistResponse(accessTokenId, blacklistId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteBlacklistResponse(Language language, UUID accessTokenId, UUID blacklistId) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getDeleteBlacklistResponse(UUID accessTokenId, UUID blacklistId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.COMMUNITY_DELETE_BLACKLIST, "blacklistId", blacklistId));
     }
 }

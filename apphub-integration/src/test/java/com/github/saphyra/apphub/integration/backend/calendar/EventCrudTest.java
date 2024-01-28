@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Occurrence;
@@ -39,31 +38,31 @@ public class EventCrudTest extends BackEndTest {
     private static final Integer HOURS = 23;
     private static final Integer MINUTES = 24;
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
-    public void createEvent_validation(Language language) {
+    @Test(groups = {"be", "calendar"})
+    public void createEvent_validation() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        nullRepeat(language, accessTokenId);
-        repeatTooLow(language, accessTokenId);
-        repeatTooHigh(language, accessTokenId);
-        blankTitle(language, accessTokenId);
-        nullReferenceDate(language, accessTokenId);
-        nullReferenceDateMonth(language, accessTokenId);
-        nullReferenceDateDay(language, accessTokenId);
-        nullDate(language, accessTokenId);
-        nullRepetitionType(language, accessTokenId);
-        emptyRepetitionDaysOfWeek(language, accessTokenId);
-        zeroRepetitionDays(language, accessTokenId);
-        nullMinutes(language, accessTokenId);
-        minutesTooLow(language, accessTokenId);
-        minutesTooHigh(language, accessTokenId);
-        nullHours(language, accessTokenId);
-        hoursTooLow(language, accessTokenId);
-        hoursTooHigh(language, accessTokenId);
+        nullRepeat(accessTokenId);
+        repeatTooLow(accessTokenId);
+        repeatTooHigh(accessTokenId);
+        blankTitle(accessTokenId);
+        nullReferenceDate(accessTokenId);
+        nullReferenceDateMonth(accessTokenId);
+        nullReferenceDateDay(accessTokenId);
+        nullDate(accessTokenId);
+        nullRepetitionType(accessTokenId);
+        emptyRepetitionDaysOfWeek(accessTokenId);
+        zeroRepetitionDays(accessTokenId);
+        nullMinutes(accessTokenId);
+        minutesTooLow(accessTokenId);
+        minutesTooHigh(accessTokenId);
+        nullHours(accessTokenId);
+        hoursTooLow(accessTokenId);
+        hoursTooHigh(accessTokenId);
     }
 
-    private static void nullRepeat(Language language, UUID accessTokenId) {
+    private static void nullRepeat(UUID accessTokenId) {
         CreateEventRequest nullRepeatRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -75,12 +74,12 @@ public class EventCrudTest extends BackEndTest {
             .repeat(null)
             .build();
 
-        Response nullRepeatResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullRepeatRequest);
+        Response nullRepeatResponse = EventActions.getCreateEventResponse(accessTokenId, nullRepeatRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullRepeatResponse, "repeat", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullRepeatResponse, "repeat", "must not be null");
     }
 
-    private static void repeatTooLow(Language language, UUID accessTokenId) {
+    private static void repeatTooLow(UUID accessTokenId) {
         CreateEventRequest repeatTooLowRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -92,12 +91,12 @@ public class EventCrudTest extends BackEndTest {
             .repeat(0)
             .build();
 
-        Response repeatTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, repeatTooLowRequest);
+        Response repeatTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, repeatTooLowRequest);
 
-        ResponseValidator.verifyInvalidParam(language, repeatTooLowResponse, "repeat", "too low");
+        ResponseValidator.verifyInvalidParam(repeatTooLowResponse, "repeat", "too low");
     }
 
-    private static void repeatTooHigh(Language language, UUID accessTokenId) {
+    private static void repeatTooHigh(UUID accessTokenId) {
         CreateEventRequest repeatTooHighRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -109,12 +108,12 @@ public class EventCrudTest extends BackEndTest {
             .repeat(366)
             .build();
 
-        Response repeatTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, repeatTooHighRequest);
+        Response repeatTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, repeatTooHighRequest);
 
-        ResponseValidator.verifyInvalidParam(language, repeatTooHighResponse, "repeat", "too high");
+        ResponseValidator.verifyInvalidParam(repeatTooHighResponse, "repeat", "too high");
     }
 
-    private static void blankTitle(Language language, UUID accessTokenId) {
+    private static void blankTitle(UUID accessTokenId) {
         CreateEventRequest blankTitleRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -125,12 +124,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response blankTitleResponse = EventActions.getCreateEventResponse(language, accessTokenId, blankTitleRequest);
+        Response blankTitleResponse = EventActions.getCreateEventResponse(accessTokenId, blankTitleRequest);
 
-        ResponseValidator.verifyInvalidParam(language, blankTitleResponse, "title", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void nullReferenceDate(Language language, UUID accessTokenId) {
+    private static void nullReferenceDate(UUID accessTokenId) {
         CreateEventRequest nullReferenceDateRequest = CreateEventRequest.builder()
             .referenceDate(null)
             .date(EVENT_DATE)
@@ -138,12 +137,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullReferenceDateRequest);
+        Response nullReferenceDateResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateResponse, "referenceDate", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateResponse, "referenceDate", "must not be null");
     }
 
-    private static void nullReferenceDateMonth(Language language, UUID accessTokenId) {
+    private static void nullReferenceDateMonth(UUID accessTokenId) {
         CreateEventRequest nullReferenceDateMonthRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -154,12 +153,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateMonthResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullReferenceDateMonthRequest);
+        Response nullReferenceDateMonthResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateMonthRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
 
-    private static void nullReferenceDateDay(Language language, UUID accessTokenId) {
+    private static void nullReferenceDateDay(UUID accessTokenId) {
         CreateEventRequest nullReferenceDateDayRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(null)
@@ -170,12 +169,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateDayhResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullReferenceDateDayRequest);
+        Response nullReferenceDateDayhResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateDayRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullReferenceDateDayhResponse, "referenceDate.day", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullReferenceDateDayhResponse, "referenceDate.day", "must not be null");
     }
 
-    private static void nullDate(Language language, UUID accessTokenId) {
+    private static void nullDate(UUID accessTokenId) {
         CreateEventRequest nullDateRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -186,12 +185,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullDateResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullDateRequest);
+        Response nullDateResponse = EventActions.getCreateEventResponse(accessTokenId, nullDateRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullDateResponse, "date", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullDateResponse, "date", "must not be null");
     }
 
-    private static void nullRepetitionType(Language language, UUID accessTokenId) {
+    private static void nullRepetitionType(UUID accessTokenId) {
         CreateEventRequest nullRepetitionTypeRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -202,12 +201,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(null)
             .build();
 
-        Response nullRepetitionTypeResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullRepetitionTypeRequest);
+        Response nullRepetitionTypeResponse = EventActions.getCreateEventResponse(accessTokenId, nullRepetitionTypeRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullRepetitionTypeResponse, "repetitionType", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullRepetitionTypeResponse, "repetitionType", "must not be null");
     }
 
-    private static void emptyRepetitionDaysOfWeek(Language language, UUID accessTokenId) {
+    private static void emptyRepetitionDaysOfWeek(UUID accessTokenId) {
         CreateEventRequest emptyRepetitionTypeDaysOfWeekRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -219,12 +218,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfWeek(Collections.emptyList())
             .build();
 
-        Response emptyRepetitionTypeDaysOfWeekResponse = EventActions.getCreateEventResponse(language, accessTokenId, emptyRepetitionTypeDaysOfWeekRequest);
+        Response emptyRepetitionTypeDaysOfWeekResponse = EventActions.getCreateEventResponse(accessTokenId, emptyRepetitionTypeDaysOfWeekRequest);
 
-        ResponseValidator.verifyInvalidParam(language, emptyRepetitionTypeDaysOfWeekResponse, "repetitionDaysOfWeek", "must not be empty");
+        ResponseValidator.verifyInvalidParam(emptyRepetitionTypeDaysOfWeekResponse, "repetitionDaysOfWeek", "must not be empty");
     }
 
-    private static void zeroRepetitionDays(Language language, UUID accessTokenId) {
+    private static void zeroRepetitionDays(UUID accessTokenId) {
         CreateEventRequest zeroRepetitionTypeDaysRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -236,12 +235,12 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDays(0)
             .build();
 
-        Response zeroRepetitionTypeDaysResponse = EventActions.getCreateEventResponse(language, accessTokenId, zeroRepetitionTypeDaysRequest);
+        Response zeroRepetitionTypeDaysResponse = EventActions.getCreateEventResponse(accessTokenId, zeroRepetitionTypeDaysRequest);
 
-        ResponseValidator.verifyInvalidParam(language, zeroRepetitionTypeDaysResponse, "repetitionDays", "too low");
+        ResponseValidator.verifyInvalidParam(zeroRepetitionTypeDaysResponse, "repetitionDays", "too low");
     }
 
-    private static void nullMinutes(Language language, UUID accessTokenId) {
+    private static void nullMinutes(UUID accessTokenId) {
         CreateEventRequest nullMinutesRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -254,12 +253,12 @@ public class EventCrudTest extends BackEndTest {
             .minutes(null)
             .build();
 
-        Response nullMinutesResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullMinutesRequest);
+        Response nullMinutesResponse = EventActions.getCreateEventResponse(accessTokenId, nullMinutesRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullMinutesResponse, "minutes", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullMinutesResponse, "minutes", "must not be null");
     }
 
-    private static void minutesTooLow(Language language, UUID accessTokenId) {
+    private static void minutesTooLow(UUID accessTokenId) {
         CreateEventRequest minutesTooLowRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -272,12 +271,12 @@ public class EventCrudTest extends BackEndTest {
             .minutes(-1)
             .build();
 
-        Response minutesTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, minutesTooLowRequest);
+        Response minutesTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, minutesTooLowRequest);
 
-        ResponseValidator.verifyInvalidParam(language, minutesTooLowResponse, "minutes", "too low");
+        ResponseValidator.verifyInvalidParam(minutesTooLowResponse, "minutes", "too low");
     }
 
-    private static void minutesTooHigh(Language language, UUID accessTokenId) {
+    private static void minutesTooHigh(UUID accessTokenId) {
         CreateEventRequest minutesTooHighRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -290,12 +289,12 @@ public class EventCrudTest extends BackEndTest {
             .minutes(60)
             .build();
 
-        Response minutesTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, minutesTooHighRequest);
+        Response minutesTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, minutesTooHighRequest);
 
-        ResponseValidator.verifyInvalidParam(language, minutesTooHighResponse, "minutes", "too high");
+        ResponseValidator.verifyInvalidParam(minutesTooHighResponse, "minutes", "too high");
     }
 
-    private static void nullHours(Language language, UUID accessTokenId) {
+    private static void nullHours(UUID accessTokenId) {
         CreateEventRequest nullHoursRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -308,12 +307,12 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response nullHoursResponse = EventActions.getCreateEventResponse(language, accessTokenId, nullHoursRequest);
+        Response nullHoursResponse = EventActions.getCreateEventResponse(accessTokenId, nullHoursRequest);
 
-        ResponseValidator.verifyInvalidParam(language, nullHoursResponse, "hours", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullHoursResponse, "hours", "must not be null");
     }
 
-    private static void hoursTooLow(Language language, UUID accessTokenId) {
+    private static void hoursTooLow(UUID accessTokenId) {
         CreateEventRequest hoursTooLowRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -326,12 +325,12 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response hoursTooLowResponse = EventActions.getCreateEventResponse(language, accessTokenId, hoursTooLowRequest);
+        Response hoursTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, hoursTooLowRequest);
 
-        ResponseValidator.verifyInvalidParam(language, hoursTooLowResponse, "hours", "too low");
+        ResponseValidator.verifyInvalidParam(hoursTooLowResponse, "hours", "too low");
     }
 
-    private static void hoursTooHigh(Language language, UUID accessTokenId) {
+    private static void hoursTooHigh(UUID accessTokenId) {
         CreateEventRequest hoursTooHighRequest = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
                 .day(REFERENCE_DATE_DAY)
@@ -344,16 +343,15 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response hoursTooHighResponse = EventActions.getCreateEventResponse(language, accessTokenId, hoursTooHighRequest);
+        Response hoursTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, hoursTooHighRequest);
 
-        ResponseValidator.verifyInvalidParam(language, hoursTooHighResponse, "hours", "too high");
+        ResponseValidator.verifyInvalidParam(hoursTooHighResponse, "hours", "too high");
     }
 
     @Test(groups = {"be", "calendar"})
     public void createOneTimeEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -368,7 +366,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(MINUTES)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         responses.forEach(calendarResponse -> {
             if (calendarResponse.getDate().equals(EVENT_DATE)) {
@@ -402,9 +400,8 @@ public class EventCrudTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void createDaysOfWeekEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         List<DayOfWeek> daysOfWeek = List.of(DayOfWeek.MONDAY, DayOfWeek.THURSDAY);
         CreateEventRequest request = CreateEventRequest.builder()
@@ -419,7 +416,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfWeek(daysOfWeek)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
@@ -428,9 +425,8 @@ public class EventCrudTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void createDaysOfMonthEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -444,7 +440,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfMonth(List.of(REFERENCE_DATE_DAY.getDayOfMonth()))
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
@@ -453,9 +449,8 @@ public class EventCrudTest extends BackEndTest {
 
     @Test(groups = {"be", "calendar"})
     public void createEveryXDaysEvent() {
-        Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -469,7 +464,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDays(REPETITION_DAYS)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 

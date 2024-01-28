@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Stream from "../../../../common/js/collection/Stream";
 import Endpoints from "../../../../common/js/dao/dao";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import PanelTitle from "./PanelTitle";
 import "./friends/friends.css"
 import Button from "../../../../common/component/input/Button";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Friends = ({ localizationHandler, lastEvent }) => {
     const [friends, setFriends] = useState([]);

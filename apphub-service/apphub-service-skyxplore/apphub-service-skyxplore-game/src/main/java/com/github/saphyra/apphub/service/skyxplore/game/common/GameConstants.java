@@ -9,9 +9,18 @@ public class GameConstants {
     public static final Coordinate ORIGO = new Coordinate(0, 0);
     public static final Integer DEFAULT_PRIORITY = 5;
     public static final Integer PROCESS_PRIORITY_MULTIPLIER = 100;
-    public static final String DATA_ID_RAW_FOOD = "raw_food";
-    public static final String DATA_ID_HOUSE = "house";
-    public static final String DATA_ID_EXCAVATOR = "excavator";
 
-    public static final String DATA_KEY_MORALE_RECHARGE_MULTIPLIER = "moraleRechargeMultiplier";
+    //DataIds
+    public static final String DATA_ID_RAW_FOOD = "raw_food";
+    public static final String DATA_ID_EXCAVATOR = "excavator";
+    public static final String DATA_ID_HEADQUARTERS = "headquarters";
+
+    //Message Sender item keys
+    public static final String ITEM_KEY_SURFACES = "surfaces";
+    public static final String ITEM_KEY_STORAGE = "storage";
+    public static final String ITEM_KEY_QUEUE = "queue";
+    public static final String ITEM_KEY_BUILDINGS = "buildings";
+    public static final String ITEM_KEY_POPULATION = "population";
+
+    public static final String CITIZEN_ASSIGNMENT_TYPE_IDLE = "IDLE";
 }

@@ -16,13 +16,14 @@ import java.util.UUID;
 class ChatRoomFactory {
     private final IdGenerator idGenerator;
 
-    ChatRoom create(UUID creator, List<UUID> m) {
+    ChatRoom create(UUID creator, String roomTitle, List<UUID> m) {
         List<UUID> members = new ArrayList<>();
         members.add(creator);
         members.addAll(m);
 
         return ChatRoom.builder()
             .id(idGenerator.generateRandomId())
+            .roomTitle(roomTitle)
             .members(members)
             .build();
     }

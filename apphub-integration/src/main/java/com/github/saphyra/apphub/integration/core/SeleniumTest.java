@@ -34,12 +34,12 @@ public class SeleniumTest extends TestBase {
     public synchronized void afterMethod(ITestResult testResult) {
         try {
             List<WebDriverWrapper> wrappers = driverWrappers.get();
-            for (int i = 0; i < wrappers.size(); i++) {
-                WebDriverWrapper webDriverWrapper = wrappers.get(i);
+            for (int driverIndex = 0; driverIndex < wrappers.size(); driverIndex++) {
+                WebDriverWrapper webDriverWrapper = wrappers.get(driverIndex);
                 WebDriver driver = webDriverWrapper.getDriver();
                 if (ITestResult.FAILURE == testResult.getStatus()) {
-                    log.error("Current URL: {}", driver.getCurrentUrl());
-                    reportFailure(webDriverWrapper, testResult.getName(), i);
+                    log.debug("Current URL: {}", driver.getCurrentUrl());
+                    reportFailure(webDriverWrapper, testResult.getTestClass().getRealClass().getName(), testResult.getName(), driverIndex);
                     WebDriverFactory.invalidate(webDriverWrapper);
                 } else {
                     WebDriverFactory.release(webDriverWrapper);
@@ -51,15 +51,15 @@ public class SeleniumTest extends TestBase {
     }
 
     @SneakyThrows
-    private void reportFailure(WebDriverWrapper driver, String method, int driverIndex) {
-        String directory = getReportDirectory(method);
+    private void reportFailure(WebDriverWrapper driver, String className, String method, int driverIndex) {
+        String directory = getReportDirectory(className, method);
         takeScreenshot(driver, directory, driverIndex);
         saveLogs(driver, directory, driverIndex);
     }
 
     private static void takeScreenshot(WebDriverWrapper driver, String directory, int driverIndex) throws IOException {
         String fileName = directory + String.format("/screenshot_%s.png", driverIndex);
-        log.info("Screenshot fileName: {}", fileName);
+        log.debug("Screenshot fileName: {}", fileName);
 
         TakesScreenshot scrShot = ((TakesScreenshot) driver.getDriver());
         File srcFile = scrShot.getScreenshotAs(OutputType.FILE);
@@ -80,9 +80,9 @@ public class SeleniumTest extends TestBase {
             .setPrettyPrinting()
             .create()
             .toJson(entries);
-        log.info(fileContent);
+        log.debug(fileContent);
         String fileName = directory + String.format("/console_log_%s.json", driverIndex);
-        log.info("Console log fileName: {}", fileName);
+        log.debug("Console log fileName: {}", fileName);
 
         Path path = Paths.get(fileName);
         File file = new File(fileName);

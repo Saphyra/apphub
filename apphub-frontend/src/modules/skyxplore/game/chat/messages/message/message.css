@@ -1,0 +1,11 @@
+.skyxplore-game-chat-message {
+    margin: 3px;
+}
+
+.skyxplore-game-chat-message-sender.system-message {
+    color: yellow;
+}
+
+.skyxplore-game-chat-message-sender.own-message {
+    color: lime;
+}

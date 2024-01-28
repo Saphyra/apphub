@@ -16,12 +16,6 @@ import static io.restassured.RestAssured.given;
 import static java.util.Objects.isNull;
 
 public class RequestFactory {
-    @Deprecated
-    public static RequestSpecification createAuthorizedRequest(Language locale, UUID accessTokenId) {
-        return createRequest(locale)
-            .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);
-    }
-
     public static RequestSpecification createAuthorizedRequest(UUID accessTokenId) {
         return createRequest()
             .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);

@@ -226,17 +226,17 @@ class AbstractWebSocketHandlerTest {
         }
 
         @Override
-        protected void afterConnection(UUID userId) {
+        protected void afterConnection(UUID userId, String sessionId) {
             methodInterceptor.methodCall(AFTER_CONNECTION, userId);
         }
 
         @Override
-        protected void afterDisconnection(UUID userId) {
+        protected void afterDisconnection(UUID userId, String sessionId) {
             methodInterceptor.methodCall(AFTER_DISCONNECTION, userId);
         }
 
         @Override
-        protected void handleMessage(UUID userId, WebSocketEvent event) {
+        protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
             methodInterceptor.methodCall(HANDLE_MESSAGE, userId, event);
         }
     }

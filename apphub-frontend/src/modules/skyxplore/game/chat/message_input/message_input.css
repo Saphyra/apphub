@@ -1,0 +1,9 @@
+#skyxplore-game-chat-message-input-container{
+    border-bottom: var(--skyxplore-chat-border-width) ridge white;
+    text-align: center;
+}
+
+#skyxplore-game-chat-message-input{
+    width: 90%;
+    min-width: 300px;
+}

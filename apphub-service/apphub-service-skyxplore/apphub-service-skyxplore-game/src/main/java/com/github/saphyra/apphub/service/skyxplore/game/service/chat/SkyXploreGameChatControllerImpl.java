@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameChatController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
@@ -23,7 +24,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     private final LeaveChatRoomService leaveChatRoomService;
 
     @Override
-    public List<SkyXploreCharacterModel> getPlayers(AccessTokenHeader accessTokenHeader) {
+    public List<SkyXploreCharacterModel> getPlayers(Boolean excludeSelf, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the players of game.", accessTokenHeader.getUserId());
         return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
             .getPlayers()
@@ -31,6 +32,7 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
             .stream()
             .filter(player -> !player.isAi())
             .filter(Player::isConnected)
+            .filter(player -> !excludeSelf || !player.getUserId().equals(accessTokenHeader.getUserId()))
             .map(player -> SkyXploreCharacterModel.builder()
                 .id(player.getUserId())
                 .name(player.getPlayerName())
@@ -49,5 +51,21 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     public void leaveChatRoom(String roomId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to leave room {}", accessTokenHeader.getUserId(), roomId);
         leaveChatRoomService.leave(accessTokenHeader.getUserId(), roomId);
+    }
+
+    @Override
+    public List<ChatRoomResponse> getChatRooms(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know his chat rooms.", accessTokenHeader.getUserId());
+
+        return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
+            .getChat()
+            .getRooms()
+            .stream()
+            .filter(chatRoom -> chatRoom.getMembers().contains(accessTokenHeader.getUserId()))
+            .map(chatRoom -> ChatRoomResponse.builder()
+                .roomId(chatRoom.getId())
+                .roomTitle(chatRoom.getRoomTitle())
+                .build())
+            .collect(Collectors.toList());
     }
 }

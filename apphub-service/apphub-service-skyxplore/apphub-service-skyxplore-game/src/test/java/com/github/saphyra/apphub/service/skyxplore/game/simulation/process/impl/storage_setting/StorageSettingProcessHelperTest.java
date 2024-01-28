@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
@@ -9,7 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class StorageSettingProcessHelperTest {
     private StorageSettingProcessHelper underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -83,11 +83,11 @@ class StorageSettingProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
 
-        underTest.orderResources(syncCache, gameData, PROCESS_ID, storageSetting, AMOUNT);
+        underTest.orderResources(progressDiff, gameData, PROCESS_ID, storageSetting, AMOUNT);
 
         verify(reservedStorages).add(reservedStorage);
-        verify(syncCache).saveGameItem(reservedStorageModel);
+        verify(progressDiff).save(reservedStorageModel);
         verify(processes).add(productionOrderProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 }

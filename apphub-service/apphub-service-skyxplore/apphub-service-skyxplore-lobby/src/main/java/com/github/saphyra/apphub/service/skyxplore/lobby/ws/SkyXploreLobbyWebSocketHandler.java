@@ -38,21 +38,21 @@ public class SkyXploreLobbyWebSocketHandler extends AbstractWebSocketHandler {
     }
 
     @Override
-    protected void afterConnection(UUID userId) {
+    protected void afterConnection(UUID userId, String sessionId) {
         log.info("{} is joined to lobby", userId);
         applicationContextProxy.getBean(JoinToLobbyService.class)
             .userJoinedToLobby(userId);
     }
 
     @Override
-    protected void afterDisconnection(UUID userId) {
+    protected void afterDisconnection(UUID userId, String sessionId) {
         log.info("{} is disconnected from lobby", userId);
         applicationContextProxy.getBean(PlayerDisconnectedService.class)
             .playerDisconnected(userId);
     }
 
     @Override
-    protected void handleMessage(UUID userId, WebSocketEvent event) {
+    protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
         eventHandlers.stream()
             .filter(webSocketEventHandler -> webSocketEventHandler.canHandle(event.getEventName()))
             .forEach(webSocketEventHandler -> webSocketEventHandler.handle(userId, event, this));

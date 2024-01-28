@@ -22,7 +22,7 @@ public class Deconstructions extends Vector<Deconstruction> {
             .findAny();
     }
 
-    public Deconstruction findByDeconstructionId(UUID deconstructionId) {
+    public Deconstruction findByDeconstructionIdValidated(UUID deconstructionId) {
         return stream()
             .filter(deconstruction -> deconstruction.getDeconstructionId().equals(deconstructionId))
             .findAny()

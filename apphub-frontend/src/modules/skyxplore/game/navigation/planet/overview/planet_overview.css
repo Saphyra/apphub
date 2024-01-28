@@ -1,0 +1,36 @@
+#skyxplore-game-planet-overview {
+    border-right: 3px ridge white;
+    overflow-y: scroll;
+}
+
+.skyxplore-gamep-planet-overview-tab {
+    border: 2px outset white;
+    margin: 10px;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.skyxplore-game-planet-overview-tab-title {
+    border-bottom: 1px solid white;
+    text-align: center;
+    padding: 3px;
+    font-size: 20px;
+    background-color: black;
+}
+
+.skyxplore-gamep-planet-overview-tab-item {
+    border: 2px solid green;
+    margin: 3px;
+    padding: 3px;
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+.skyxplore-game-planet-overview-tab-item-expand-button {
+    font-size: 15px;
+    padding: 1px;
+    border-width: 2px;
+    margin: 0;
+    margin-left: 4px;
+    float: right;
+}

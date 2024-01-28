@@ -16,8 +16,8 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetQueueItem;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.Surface;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -47,13 +47,15 @@ public class PauseGameTest extends SeleniumTest {
             .until(() -> SkyXploreGameActions.isGameLoaded(driver))
             .assertTrue("Game not loaded.");
 
-        SkyXploreMapActions.getSolarSystem(driver).click();
+        SkyXploreMapActions.getSolarSystem(driver)
+            .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreSolarSystemActions.isOpened(driver))
             .assertTrue("SolarSystem is not opened.");
 
-        SkyXploreSolarSystemActions.getPlanet(driver).click();
+        SkyXploreSolarSystemActions.getPlanet(driver)
+            .click();
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");

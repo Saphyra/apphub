@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class SkyXplorePlanetPopulationControllerImplTest {
@@ -55,10 +56,8 @@ public class SkyXplorePlanetPopulationControllerImplTest {
 
     @Test
     public void renameCitizen() {
-        given(renameCitizenService.renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME)).willReturn(citizenResponse);
+        underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
 
-        CitizenResponse result = underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
-
-        assertThat(result).isEqualTo(citizenResponse);
+        then(renameCitizenService).should().renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME);
     }
 }

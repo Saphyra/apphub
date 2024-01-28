@@ -1,0 +1,22 @@
+{
+    "title": {
+        "en": "Create new",
+        "hu": "Új létrehozása"
+    },
+    "commodity": {
+        "en": "Commodity",
+        "hu": "Termék"
+    },
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "priority": {
+        "en": "Priority",
+        "hu": "Prioritás"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehozás"
+    }
+}

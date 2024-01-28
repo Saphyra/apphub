@@ -1,0 +1,14 @@
+{
+    "show-and-hide": {
+        "en": "Show / hide",
+        "hu": "Mutat / elrejt"
+    },
+    "show-all": {
+        "en": "Show all",
+        "hu": "Összes mutatása"
+    },
+    "hide-all": {
+        "en": "Hide all",
+        "hu": "Összes elrejtése"
+    }
+}

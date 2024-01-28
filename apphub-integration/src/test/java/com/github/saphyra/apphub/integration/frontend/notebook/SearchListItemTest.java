@@ -35,7 +35,7 @@ public class SearchListItemTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title-title";
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
 
-    @Test(groups = {"fe", "notebook"}, priority = Integer.MIN_VALUE + 1)
+    @Test(groups = {"fe", "notebook"})
     public void search() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);

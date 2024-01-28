@@ -24,6 +24,7 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class SkyXploreLobbyWebSocketHandlerTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final String SESSION_ID = "session-id";
 
     @Mock
     private WebSocketHandlerContext context;
@@ -63,7 +64,7 @@ class SkyXploreLobbyWebSocketHandlerTest {
     void afterConnection() {
         given(applicationContextProxy.getBean(JoinToLobbyService.class)).willReturn(joinToLobbyService);
 
-        underTest.afterConnection(USER_ID);
+        underTest.afterConnection(USER_ID, SESSION_ID);
 
         then(joinToLobbyService).should().userJoinedToLobby(USER_ID);
     }
@@ -72,7 +73,7 @@ class SkyXploreLobbyWebSocketHandlerTest {
     void afterDisconnection() {
         given(applicationContextProxy.getBean(PlayerDisconnectedService.class)).willReturn(playerDisconnectedService);
 
-        underTest.afterDisconnection(USER_ID);
+        underTest.afterDisconnection(USER_ID, SESSION_ID);
 
         then(playerDisconnectedService).should().playerDisconnected(USER_ID);
     }
@@ -82,7 +83,7 @@ class SkyXploreLobbyWebSocketHandlerTest {
         given(eventHandler.canHandle(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)).willReturn(true);
         given(event.getEventName()).willReturn(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED);
 
-        underTest.handleMessage(USER_ID, event);
+        underTest.handleMessage(USER_ID, event, SESSION_ID);
 
         then(eventHandler).should().handle(USER_ID, event, underTest);
     }

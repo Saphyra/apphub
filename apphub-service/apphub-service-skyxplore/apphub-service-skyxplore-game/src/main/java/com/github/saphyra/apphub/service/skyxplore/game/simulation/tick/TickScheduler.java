@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -45,17 +44,12 @@ class TickScheduler implements Runnable {
             long startTime = context.getDateTimeUtil()
                 .getCurrentTimeEpochMillis();
 
-            SyncCache syncCache = context.getSyncCacheFactory()
-                .create(game);
-
             game.getEventLoop()
                 .process(
                     () -> context.getTickTasks()
                         .stream()
                         .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
-                        .forEach(tickTask -> tickTask.process(game, syncCache)),
-                    syncCache
-                );
+                        .forEach(tickTask -> tickTask.process(game)));
 
             Future<ExecutionResult<Long>> future = game.getEventLoop()
                 .processWithResponse(() -> {
@@ -70,7 +64,7 @@ class TickScheduler implements Runnable {
                 .getOrThrow();
 
             sleepTime = Math.max(0, context.getGameProperties().getTickTimeMillis() - (processingTime));
-            log.info("Next tick for game {} is {}", game.getGameId(), sleepTime);
+            log.info("Next tick for game {} is will be started in {}ms.", game.getGameId(), sleepTime);
         }
 
         log.info("TickScheduler finished for game {}", game.getGameId());

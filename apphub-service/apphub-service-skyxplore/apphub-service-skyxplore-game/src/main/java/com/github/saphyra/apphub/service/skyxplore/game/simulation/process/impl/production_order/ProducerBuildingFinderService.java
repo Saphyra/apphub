@@ -45,7 +45,7 @@ class ProducerBuildingFinderService {
         if (gives.containsKey(dataId)) {
             return gives.get(dataId)
                 .getPlaced()
-                .contains(gameData.getSurfaces().findBySurfaceId(building.getSurfaceId()).getSurfaceType());
+                .contains(gameData.getSurfaces().findBySurfaceIdValidated(building.getSurfaceId()).getSurfaceType());
         }
         return false;
     }

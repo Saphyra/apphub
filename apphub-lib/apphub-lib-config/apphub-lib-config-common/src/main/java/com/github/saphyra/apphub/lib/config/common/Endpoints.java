@@ -12,8 +12,6 @@ public class Endpoints {
     public static final String ERROR_PAGE = "/web/error";
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
-    public static final String SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
-    public static final String SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
     public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
@@ -34,6 +32,8 @@ public class Endpoints {
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
     public static final String SEND_EVENT = "/internal/event-gateway";
+
+    public static final String GET_OWN_USER_ID = "/user/id";
 
     //EVENTS
     public static final String EVENT_TRIGGER_MEMORY_STATUS_UPDATE = "/event/trigger-memory-monitoring";
@@ -57,6 +57,8 @@ public class Endpoints {
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore-lobby/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME_PLANET = "/api/ws/skyxplore-game/game/planet";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME_POPULATION = "/api/ws/skyxplore-game/game/population";
     public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
 
     //ERROR REPORTING
@@ -188,6 +190,7 @@ public class Endpoints {
     public static final String SKYXPLORE_GET_CHARACTER_NAME = "/api/skyxplore/data/character/name";
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
     public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
+    public static final String SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS = "/api/skyxplore/data/citizen/stats-and-skills";
 
     //SKYXPLORE-LOBBY
     public static final String SKYXPLORE_INTERNAL_GAME_LOADED = "/allowed-internal/skyxplore/lobby/{gameId}/loaded";
@@ -217,19 +220,18 @@ public class Endpoints {
     public static final String SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION = "/internal/skyxplore/game/{gameId}/load-preview";
     public static final String SKYXPLORE_INTERNAL_DELETE_GAME = "/internal/skyxplore/game/{gameId}";
 
+    public static final String SKYXPLORE_GAME_SAVE = "/api/skyxplore/game";
+    public static final String SKYXPLORE_GAME_IS_HOST = "/api/skyxplore/game/host";
     public static final String SKYXPLORE_IS_USER_IN_GAME = "/api/skyxplore/game";
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";
     public static final String SKYXPLORE_GAME_LEAVE_CHAT_ROOM = "/api/skyxplore/game/chat/room/{roomId}";
+    public static final String SKYXPLORE_GAME_GET_CHAT_ROOMS = "/api/skyxplore/game/chat/room";
+
     public static final String SKYXPLORE_GET_SOLAR_SYSTEM = "/api/skyxplore/game/solar-system/{solarSystemId}";
-    public static final String SKYXPLORE_PLANET_GET_SURFACE = "/api/skyxplore/game/planet/{planetId}/surface";
-    public static final String SKYXPLORE_PLANET_GET_STORAGE = "/api/skyxplore/game/planet/{planetId}/storage";
     public static final String SKYXPLORE_PLANET_GET_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/overview";
-    public static final String SKYXPLORE_PLANET_GET_POPULATION_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/population";
-    public static final String SKYXPLORE_PLANET_GET_BUILDING_OVERVIEW = "/api/skyxplore/game/planet/{planetId}/building";
-    public static final String SKYXPLORE_PLANET_GET_PRIORITIES = "/api/skyxplore/game/planet/{planetId}/priority";
     public static final String SKYXPLORE_PLANET_GET_STORAGE_SETTINGS = "/api/skyxplore/game/planet/{planetId}/storage-settings";
     public static final String SKYXPLORE_PLANET_CREATE_STORAGE_SETTING = "/api/skyxplore/game/planet/{planetId}/storage-settings";
     public static final String SKYXPLORE_PLANET_DELETE_STORAGE_SETTING = "/api/skyxplore/game/storage-settings/{storageSettingId}";
@@ -250,8 +252,8 @@ public class Endpoints {
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES = "/api/skyxplore/data/{surfaceType}/terraforming-possibilities";
+    public static final String SKYXPLORE_DATA_RESOURCES = "/api/skyxplore/data/resources";
 
-    public static final String SKYXPLORE_PLANET_GET_QUEUE = "/api/skyxplore/game/{planetId}/queue";
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
     public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
 

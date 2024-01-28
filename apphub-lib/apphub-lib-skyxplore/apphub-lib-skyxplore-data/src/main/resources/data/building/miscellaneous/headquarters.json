@@ -1,0 +1,96 @@
+{
+  "id": "headquarters",
+  "buildingType": "miscellaneous",
+  "placeableSurfaceTypes": [
+    "military"
+  ],
+  "defaultBuilding": true,
+  "data": {
+    "stores": {
+      "BULK": 1000,
+      "ENERGY": 1000,
+      "LIQUID": 1000,
+      "CITIZEN": 10
+    },
+    "workers": 3,
+    "gives": {
+      "ore": {
+        "placed": [
+          "military"
+        ],
+        "constructionRequirements": {
+          "requiredWorkPoints": 25,
+          "requiredResources": {
+            "energy": 5
+          }
+        },
+        "requiredSkill": "MINING"
+      },
+      "energy": {
+        "placed": [
+          "military"
+        ],
+        "constructionRequirements": {
+          "requiredWorkPoints": 20,
+          "requiredResources": {
+          }
+        },
+        "requiredSkill": "ENGINEERING"
+      },
+      "wood": {
+        "placed": [
+          "military"
+        ],
+        "constructionRequirements": {
+          "requiredWorkPoints": 5,
+          "requiredResources": {
+            "energy": 5
+          }
+        },
+        "requiredSkill": "ENGINEERING"
+      },
+      "stone": {
+        "placed": [
+          "military"
+        ],
+        "constructionRequirements": {
+          "requiredWorkPoints": 50,
+          "requiredResources": {
+            "energy": 1
+          }
+        },
+        "requiredSkill": "MINING"
+      },
+      "water": {
+        "placed": [
+          "military"
+        ],
+        "constructionRequirements": {
+          "requiredWorkPoints": 50,
+          "requiredResources": {
+            "energy": 1
+          }
+        },
+        "requiredSkill": "ENGINEERING"
+      }
+    }
+  },
+  "constructionRequirements": {
+    "1": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1,
+        "stone": 1,
+        "wood": 1
+      }
+    },
+    "2": {
+      "requiredWorkPoints": 15000,
+      "requiredResources": {
+        "energy": 500,
+        "ore": 200,
+        "water": 500
+      }
+    }
+  }
+}

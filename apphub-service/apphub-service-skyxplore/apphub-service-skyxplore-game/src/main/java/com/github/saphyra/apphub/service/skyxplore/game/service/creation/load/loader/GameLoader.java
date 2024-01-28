@@ -3,11 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
-import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.ChatFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoopFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
@@ -25,12 +23,10 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Slf4j
 public class GameLoader {
-    private final DateTimeUtil dateTimeUtil;
     private final GameDao gameDao;
     private final PlayerLoader playerLoader;
     private final AllianceLoader allianceLoader;
     private final ChatFactory chatFactory;
-    private final GameDataProxy gameDataProxy;
     private final SkyXploreLobbyApiClient lobbyClient;
     private final EventLoopFactory eventLoopFactory;
     private final GameDataLoader gameDataLoader;
@@ -40,8 +36,6 @@ public class GameLoader {
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-
-        gameModel.setLastPlayed(dateTimeUtil.getCurrentDateTime());
 
         Map<UUID, Player> players = playerLoader.load(gameModel.getId(), members);
 
@@ -61,7 +55,6 @@ public class GameLoader {
 
         processLoader.loadProcesses(game);
 
-        gameDataProxy.saveItem(gameModel);
         gameDao.save(game);
         tickSchedulerLauncher.launch(game);
 

@@ -1,0 +1,76 @@
+:root {
+    --skyxplore-game-planet-surface-tile-size: 100px;
+}
+
+.skyxplore-game-planet-surface-tile {
+    height: var(--skyxplore-game-planet-surface-tile-size);
+    border: 1px solid white;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+.skyxplore-game-planet-surface-tile:hover {
+    border-color: red;
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-volcano {
+    background-image: url("../../../../common/img/surface_type/volcano.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-forest {
+    background-image: url("../../../../common/img/surface_type/forest.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-coal_field {
+    background-image: url("../../../../common/img/surface_type/coal_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-oil_field {
+    background-image: url("../../../../common/img/surface_type/oil_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-ore_field {
+    background-image: url("../../../../common/img/surface_type/ore_field.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-desert {
+    background-image: url("../../../../common/img/surface_type/desert.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-lake {
+    background-image: url("../../../../common/img/surface_type/lake.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-mountain {
+    background-image: url("../../../../common/img/surface_type/mountain.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-concrete {
+    background-image: url("../../../../common/img/surface_type/concrete.jpg");
+}
+
+.skyxplore-game-planet-surface-tile.surface-type-military {
+    background-image: url("../../../../common/img/surface_type/military.png");
+}
+
+.skyxplore-game-planet-surface-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid white;
+    background-color: black;
+    text-align: center;
+}
+
+.skyxplore-game-planet-surface-modify-button {
+    background-position: center;
+    background-size: cover;
+    border-width: 1px;
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    height: 16px;
+    width: 16px;
+    margin: 2px;
+    border-radius: 0;
+}

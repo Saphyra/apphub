@@ -9,16 +9,15 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +34,7 @@ class TerraformationService {
     private final ResourceAllocationService resourceAllocationService;
     private final ConstructionFactory constructionFactory;
     private final TerraformationProcessFactory terraformationProcessFactory;
-    private final SyncCacheFactory syncCacheFactory;
+    private final ConstructionConverter constructionConverter;
 
     void terraform(UUID userId, UUID planetId, UUID surfaceId, String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
@@ -52,7 +51,7 @@ class TerraformationService {
         }
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(surfaceId);
+            .findBySurfaceIdValidated(surfaceId);
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed."))
@@ -70,18 +69,15 @@ class TerraformationService {
             surfaceTypeString
         );
 
-        Planet planet = gameData.getPlanets()
-            .get(planetId);
-
-        SyncCache syncCache = syncCacheFactory.create(game);
 
         game.getEventLoop()
             .processWithWait(() -> {
+                GameProgressDiff progressDiff = game.getProgressDiff();
+
                 resourceAllocationService.processResourceRequirements(
-                    syncCache,
+                    progressDiff,
                     gameData,
                     planetId,
-                    planet.getOwner(),
                     terraformation.getConstructionId(),
                     constructionRequirements.getRequiredResources()
                 );
@@ -89,13 +85,14 @@ class TerraformationService {
                 gameData.getConstructions()
                     .add(terraformation);
 
-                TerraformationProcess terraformationProcess = terraformationProcessFactory.create(gameData, planetId, terraformation);
+                TerraformationProcess terraformationProcess = terraformationProcessFactory.create(game, planetId, terraformation);
 
                 gameData.getProcesses()
                     .add(terraformationProcess);
 
-                syncCache.terraformationCreated(userId, planetId, terraformation, surface, terraformationProcess);
-            }, syncCache)
+                progressDiff.save(terraformationProcess.toModel());
+                progressDiff.save(constructionConverter.toModel(gameData.getGameId(), terraformation));
+            })
             .getOrThrow();
     }
 }

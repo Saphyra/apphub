@@ -1,0 +1,16 @@
+:root {
+    --skyxplore-chat-border-width: 3px;
+}
+
+#skyxplore-game-chat {
+    background-color: black;
+    position: fixed;
+    right: var(--main-page-border-width);
+    bottom: calc(var(--footer-height) + var(--footer-border-width));
+    max-width: 50vw;
+    max-height: 75vh;
+    border-top: var(--skyxplore-chat-border-width) ridge white;
+    border-left: var(--skyxplore-chat-border-width) ridge white;
+    display: flex;
+    flex-direction: column;
+}

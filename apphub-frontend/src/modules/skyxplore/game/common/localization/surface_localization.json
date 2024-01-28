@@ -1,0 +1,42 @@
+{
+    "COAL_FIELD": {
+        "en": "Coal field",
+        "hu": "Szénmező"
+    },
+    "VOLCANO": {
+        "en": "Volcano",
+        "hu": "Vulkán"
+    },
+    "MOUNTAIN": {
+        "en": "Mountain",
+        "hu": "Hegység"
+    },
+    "ORE_FIELD": {
+        "en": "Ore field",
+        "hu": "Ércmező"
+    },
+    "DESERT": {
+        "en": "Desert",
+        "hu": "Sivatag"
+    },
+    "OIL_FIELD": {
+        "en": "Oil field",
+        "hu": "Olajmező"
+    },
+    "LAKE": {
+        "en": "Lake",
+        "hu": "Tó"
+    },
+    "CONCRETE": {
+        "en": "Concrete",
+        "hu": "Beton"
+    },
+    "FOREST": {
+        "en": "Forest",
+        "hu": "Erdőség"
+    },
+    "MILITARY": {
+        "en": "Military",
+        "hu": "Hadügy"
+    }
+}

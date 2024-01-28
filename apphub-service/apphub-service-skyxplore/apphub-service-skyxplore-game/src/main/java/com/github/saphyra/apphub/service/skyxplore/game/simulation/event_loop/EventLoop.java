@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,6 @@ public class EventLoop {
         );
     }
 
-    public ExecutionResult<Void> processWithWait(Runnable runnable, SyncCache syncCache) {
-        ExecutionResult<Void> result = processWithWait(runnable);
-
-        syncCache.process();
-
-        return result;
-    }
-
     @SneakyThrows
     public ExecutionResult<Void> processWithWait(Runnable runnable) {
         return process(runnable)
@@ -52,38 +43,14 @@ public class EventLoop {
         return eventLoopThread.execute(runnable);
     }
 
-    public Future<ExecutionResult<Void>> process(Runnable runnable, SyncCache syncCache) {
-        return eventLoopThread.execute(() -> {
-            runnable.run();
-
-            syncCache.process();
-        });
-    }
-
     @SneakyThrows
     public <T> ExecutionResult<T> processWithResponseAndWait(Callable<T> callable) {
         return eventLoopThread.asyncProcess(callable)
             .get(60, TimeUnit.SECONDS);
     }
 
-    @SneakyThrows
-    public <T> ExecutionResult<T> processWithResponseAndWait(Callable<T> callable, SyncCache syncCache) {
-        return processWithResponse(callable, syncCache)
-            .get(60, TimeUnit.SECONDS);
-    }
-
     public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable) {
         return eventLoopThread.asyncProcess(callable);
-    }
-
-    public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable, SyncCache syncCache) {
-        return eventLoopThread.asyncProcess(() -> {
-            T response = callable.call();
-
-            syncCache.process();
-
-            return response;
-        });
     }
 
     public int getQueueSize() {

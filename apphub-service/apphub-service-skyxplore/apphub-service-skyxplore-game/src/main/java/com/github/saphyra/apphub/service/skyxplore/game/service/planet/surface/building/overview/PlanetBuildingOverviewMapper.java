@@ -16,9 +16,11 @@ class PlanetBuildingOverviewMapper {
     private final BuildingDetailsMapper buildingDetailsMapper;
 
     PlanetBuildingOverviewResponse createOverview(GameData gameData, UUID planetId, SurfaceType surfaceType) {
-        int usedSlots = gameData.getBuildings()
+        int usedSlots = (int) gameData.getBuildings()
             .getByLocation(planetId)
-            .size();
+            .stream()
+            .filter(building -> gameData.getSurfaces().findBySurfaceIdValidated(building.getSurfaceId()).getSurfaceType() == surfaceType)
+            .count();
 
         int planetSize = (int) gameData.getSurfaces()
             .getByPlanetId(planetId)

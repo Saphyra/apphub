@@ -6,12 +6,20 @@ import lombok.Data;
 
 import java.util.Optional;
 
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 public class ExecutionResult<T> {
     private final T value;
     private final Exception exception;
     private final boolean success;
+
+    static <T> ExecutionResult<T> success(T value) {
+        return new ExecutionResult<>(value, null, true);
+    }
+
+    static <T> ExecutionResult<T> failure(Exception e) {
+        return new ExecutionResult<>(null, e, false);
+    }
 
     public T getOrThrow() {
         if (success) {

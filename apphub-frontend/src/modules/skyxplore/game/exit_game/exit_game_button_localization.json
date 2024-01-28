@@ -1,0 +1,26 @@
+{
+    "exit": {
+        "en": "Exit",
+        "hu": "Kilépés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "title": {
+        "en": "Exit game?",
+        "hu": "Ki akarsz lépni?"
+    },
+    "content": {
+        "en": "Do you want to exit the game? Other players might not think it is funny.",
+        "hu": "Biztosan ki akarsz lépni? A többi játékos esetleg ezt nem gondolja viccesnek."
+    },
+    "content-host": {
+        "en": "Do you want to exit the game? Other players might not think it is funny. All unsaved changes will be lost.",
+        "hu": "Biztosan ki akarsz lépni? A többi játékos esetleg ezt nem gondolja viccesnek. Az összes el nem mentett változás elveszik."
+    },
+    "save-and-exit": {
+        "en": "Save and exit",
+        "hu": "Mentés és kilépés"
+    }
+}

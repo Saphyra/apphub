@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class CitizenMoraleProperties {
-    private int max;
     private int workEfficiencyDropUnder;
     private double minEfficiency;
     private double moralePerWorkPoints;

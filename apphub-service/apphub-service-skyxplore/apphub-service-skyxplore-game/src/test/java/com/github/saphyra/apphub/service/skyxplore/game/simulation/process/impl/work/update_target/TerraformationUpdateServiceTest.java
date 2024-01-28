@@ -1,37 +1,36 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class TerraformationUpdateServiceTest {
-    private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final int COMPLETED_WORK_POINTS = 245;
-    private static final UUID BUILDING_ID = UUID.randomUUID();
-    private static final UUID SURFACE_ID = UUID.randomUUID();
-    private static final UUID OWNER_ID = UUID.randomUUID();
-
-    private final TerraformationUpdateService underTest = new TerraformationUpdateService();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private SyncCache syncCache;
+    private ConstructionConverter constructionConverter;
+
+    @InjectMocks
+    private TerraformationUpdateService underTest;
+
+    @Mock
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -43,26 +42,17 @@ class TerraformationUpdateServiceTest {
     private Construction terraformation;
 
     @Mock
-    private Surfaces surfaces;
-
-    @Mock
-    private Surface surface;
-
-    @Mock
-    private Planet planet;
+    private ConstructionModel constructionModel;
 
     @Test
     void updateConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
-        given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
-        given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
 
-        underTest.updateTerraformation(syncCache, gameData, LOCATION, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
+        underTest.updateTerraformation(progressDiff, gameData, CONSTRUCTION_ID, COMPLETED_WORK_POINTS);
 
-        verify(syncCache).terraformationUpdated(OWNER_ID, LOCATION, terraformation, surface);
+        then(progressDiff).should().save(constructionModel);
     }
 }

@@ -1,22 +1,24 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Optional;
+
 public class SkyXploreModifySurfaceActions {
     public static Boolean isDisplayed(WebDriver driver) {
-        return GamePage.modifySurfaceWindow(driver)
-            .isDisplayed();
+        return WebElementUtils.isPresent(() -> driver.findElement(By.id("skyxplore-game-modify-surface")));
     }
 
     public static void constructBuilding(WebDriver driver, String dataId) {
-        GamePage.availableBuildings(driver)
+        driver.findElements(By.className("skyxplore-game-available-building"))
             .stream()
-            .filter(webElement -> webElement.getAttribute("id").equalsIgnoreCase(dataId))
+            .filter(webElement -> webElement.getAttribute("id").replace("skyxplore-game-available-building-", "").equalsIgnoreCase(dataId))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No building available with dataId " + dataId))
-            .findElement(By.cssSelector(":scope .construct-new-building-button"))
+            .findElement(By.className("skyxplore-game-construct-new-building-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
@@ -25,11 +27,22 @@ public class SkyXploreModifySurfaceActions {
     }
 
     public static void confirmUpgrade(WebDriver driver) {
-        AwaitilityWrapper.createDefault()
-            .until(() -> GamePage.upgradeBuildingWindow(driver).isDisplayed())
-            .assertTrue("UpgradeBuilding window is not displayed");
-
-        GamePage.upgradeBuildingButton(driver)
+        AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("skyxplore-game-upgrade-building-button"))), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Upgrade building button is not displayed."))
             .click();
+    }
+
+    public static void startTerraformation(WebDriver driver, String surfaceType) {
+        driver.findElements(By.className("skyxplore-game-terraforming-possibility"))
+            .stream()
+            .filter(webElement -> webElement.getAttribute("id").equals("skyxplore-game-terraforming-possibility-" + surfaceType.toLowerCase()))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("TerraformingPossibility not found with surfaceType " + surfaceType))
+            .findElement(By.className("skyxplore-game-terraform-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.isLoaded(driver))
+            .assertTrue("Planet is not loaded.");
     }
 }

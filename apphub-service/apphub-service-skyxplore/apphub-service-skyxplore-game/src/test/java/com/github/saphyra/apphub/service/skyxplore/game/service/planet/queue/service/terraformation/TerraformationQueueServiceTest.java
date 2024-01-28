@@ -60,13 +60,13 @@ public class TerraformationQueueServiceTest {
     public void setPriority() {
         underTest.setPriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
 
-        verify(priorityUpdateService).updatePriority(USER_ID, PLANET_ID, ITEM_ID, PRIORITY);
+        verify(priorityUpdateService).updatePriority(USER_ID, ITEM_ID, PRIORITY);
     }
 
     @Test
     public void cancel() {
         underTest.cancel(USER_ID, PLANET_ID, ITEM_ID);
 
-        verify(cancelTerraformationService).cancelTerraformationQueueItem(USER_ID, PLANET_ID, ITEM_ID);
+        verify(cancelTerraformationService).cancelTerraformationQueueItem(USER_ID, ITEM_ID);
     }
 }

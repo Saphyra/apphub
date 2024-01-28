@@ -6,14 +6,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFac
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -24,12 +23,10 @@ public class StorageSettingCreationService {
     private final StorageSettingsModelValidator storageSettingsModelValidator;
     private final StorageSettingFactory storageSettingFactory;
     private final StorageSettingConverter storageSettingConverter;
-    private final StorageSettingToApiModelMapper storageSettingToApiModelMapper;
-    private final SyncCacheFactory syncCacheFactory;
-    private final StorageSettingProcessFactory storageSettingProcessFactory;
+    private final StorageSettingsResponseQueryService storageSettingsResponseQueryService;
 
     @SneakyThrows
-    public StorageSettingApiModel createStorageSetting(UUID userId, UUID planetId, StorageSettingApiModel request) {
+    public List<StorageSettingApiModel> createStorageSetting(UUID userId, UUID planetId, StorageSettingApiModel request) {
         Game game = gameDao.findByUserIdValidated(userId);
 
         storageSettingsModelValidator.validate(game.getData(), planetId, request);
@@ -37,20 +34,17 @@ public class StorageSettingCreationService {
         StorageSetting storageSetting = storageSettingFactory.create(request, planetId);
         log.debug("StorageSetting created: {}", storageSetting);
 
-        SyncCache syncCache = syncCacheFactory.create(game);
-
         return game.getEventLoop()
             .processWithResponse(() -> {
-                    game.getData()
-                        .getStorageSettings()
-                        .add(storageSetting);
+                game.getData()
+                    .getStorageSettings()
+                    .add(storageSetting);
 
-                    syncCache.saveGameItem(storageSettingConverter.toModel(game.getGameId(), storageSetting));
+                game.getProgressDiff()
+                    .save(storageSettingConverter.toModel(game.getGameId(), storageSetting));
 
-                    return storageSettingToApiModelMapper.convert(storageSetting);
-                },
-                syncCache
-            )
+                return storageSettingsResponseQueryService.getStorageSettings(userId, planetId);
+            })
             .get()
             .getOrThrow();
     }

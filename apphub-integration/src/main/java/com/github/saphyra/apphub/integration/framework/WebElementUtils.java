@@ -29,7 +29,7 @@ public class WebElementUtils {
     }
 
     public static void clearAndFillNotLooseFocus(WebElement webElement, String text, int oldTextLength) {
-        for(int i = 0; i < oldTextLength; i++){
+        for (int i = 0; i < oldTextLength; i++) {
             webElement.sendKeys(Keys.BACK_SPACE);
         }
         webElement.sendKeys(text);
@@ -103,6 +103,14 @@ public class WebElementUtils {
 
     public static List<String> getClasses(WebElement element) {
         return Arrays.asList(element.getAttribute("class").split(" "));
+    }
+
+    public static boolean isPresent(Supplier<WebElement> search) {
+        return getIfPresent(search).isPresent();
+    }
+
+    public static boolean isPresent(WebDriver driver, By selector) {
+        return isPresent(() -> driver.findElement(selector));
     }
 
     public static Optional<WebElement> getIfPresent(Supplier<WebElement> search) {

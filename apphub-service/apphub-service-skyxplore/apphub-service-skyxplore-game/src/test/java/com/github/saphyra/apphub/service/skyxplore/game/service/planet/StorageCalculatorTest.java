@@ -3,11 +3,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,32 +27,38 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class StorageCalculatorTest {
+    private static final Integer HQ_CAPACITY = 32;
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String DATA_ID = "data-id";
-    private static final Integer CAPACITY = 34;
-    private static final Integer LEVEL = 2;
-    private static final UUID BUILDING_ID = UUID.randomUUID();
+    private static final String STORAGE_BUILDING_DATA_ID = "storage-building-data-id";
+    private static final UUID STORAGE_BUILDING_ID = UUID.randomUUID();
+    private static final UUID HQ_BUILDING_ID = UUID.randomUUID();
+    private static final Integer HQ_BUILDING_LEVEL = 4;
+    private static final Integer STORAGE_BUILDING_LEVEL = 2;
+    private static final Integer STORAGE_BUILDING_CAPACITY = 56;
 
     @Mock
     private StorageBuildingService storageBuildingService;
+
+    @Mock
+    private HeadquartersUtil headquartersUtil;
 
     @InjectMocks
     private StorageCalculator underTest;
 
     @Mock
-    private GameData gameData;
+    private StorageBuildingData storageBuildingData;
 
     @Mock
-    private StorageBuildingData storageBuildingData;
+    private GameData gameData;
 
     @Mock
     private Buildings buildings;
 
     @Mock
-    private Building building;
+    private Building storageBuilding;
 
     @Mock
-    private Building deconstructedBuilding;
+    private Building hqBuilding;
 
     @Mock
     private Deconstructions deconstructions;
@@ -56,21 +66,49 @@ class StorageCalculatorTest {
     @Mock
     private Deconstruction deconstruction;
 
-    @Test
-    void calculateCapacity() {
-        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
+    @BeforeEach
+    void setUp() {
+        given(storageBuildingService.findByStorageType(StorageType.BULK)).willReturn(storageBuildingData);
+        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.BULK, HQ_CAPACITY));
         given(gameData.getBuildings()).willReturn(buildings);
-        given(storageBuildingData.getId()).willReturn(DATA_ID);
-        given(buildings.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(building, deconstructedBuilding));
-        given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
-        given(building.getLevel()).willReturn(LEVEL);
+        given(storageBuildingData.getId()).willReturn(STORAGE_BUILDING_DATA_ID);
+        given(buildings.getByLocationAndDataId(LOCATION, STORAGE_BUILDING_DATA_ID)).willReturn(List.of(storageBuilding));
+        given(buildings.getByLocationAndDataId(LOCATION, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(List.of(hqBuilding));
+        given(storageBuilding.getBuildingId()).willReturn(STORAGE_BUILDING_ID);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructedBuilding.getBuildingId()).willReturn(BUILDING_ID);
-        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(deconstruction));
-        given(deconstructions.findByExternalReference(null)).willReturn(Optional.empty());
+        given(hqBuilding.getBuildingId()).willReturn(HQ_BUILDING_ID);
+    }
 
-        int result = underTest.calculateCapacity(gameData, LOCATION, StorageType.CITIZEN);
+    @Test
+    void productionBuildingUnderDeconstruction() {
+        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.of(deconstruction));
+        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.empty());
+        given(hqBuilding.getLevel()).willReturn(HQ_BUILDING_LEVEL);
 
-        assertThat(result).isEqualTo(CAPACITY * LEVEL);
+
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY);
+    }
+
+    @Test
+    void hqUnderDeconstruction() {
+        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.empty());
+        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.of(deconstruction));
+        given(storageBuilding.getLevel()).willReturn(STORAGE_BUILDING_LEVEL);
+        given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
+
+
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
+    }
+
+    @Test
+    void noDeconstruction() {
+        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.empty());
+        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.empty());
+        given(storageBuilding.getLevel()).willReturn(STORAGE_BUILDING_LEVEL);
+        given(hqBuilding.getLevel()).willReturn(HQ_BUILDING_LEVEL);
+        given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
+
+
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY + STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
     }
 }

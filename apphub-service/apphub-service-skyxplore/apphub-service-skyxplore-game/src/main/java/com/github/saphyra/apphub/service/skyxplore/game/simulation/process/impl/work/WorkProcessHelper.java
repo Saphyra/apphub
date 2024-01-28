@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
@@ -11,7 +12,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allo
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target.UpdateTargetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,36 +34,36 @@ class WorkProcessHelper {
     private final CitizenUpdateService citizenUpdateService;
     private final UpdateTargetService updateTargetService;
 
-    public void allocateParentAsBuildingIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID externalReference) {
+    public void allocateParentAsBuildingIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID externalReference) {
         if (gameData.getBuildingAllocations().getByBuildingId(externalReference).isEmpty()) {
-            createAndSaveBuildingAllocation(syncCache, gameData, processId, externalReference);
+            createAndSaveBuildingAllocation(progressDiff, gameData, processId, externalReference);
         } else {
             log.debug("Someone is already working on {}", processId);
         }
     }
 
-    void allocateBuildingIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID location, String buildingDataId) {
+    void allocateBuildingIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String buildingDataId) {
         productionBuildingFinder.findSuitableProductionBuilding(gameData, location, buildingDataId)
             .ifPresentOrElse(
                 buildingId -> {
                     log.info("No suitable {} found at {}", buildingDataId, location);
 
-                    createAndSaveBuildingAllocation(syncCache, gameData, processId, buildingId);
+                    createAndSaveBuildingAllocation(progressDiff, gameData, processId, buildingId);
                 },
                 () -> log.info("No suitable {} found at {}", buildingDataId, location)
             );
     }
 
-    private void createAndSaveBuildingAllocation(SyncCache syncCache, GameData gameData, UUID processId, UUID buildingId) {
+    private void createAndSaveBuildingAllocation(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID buildingId) {
         BuildingAllocation buildingAllocation = buildingAllocationFactory.create(buildingId, processId);
 
         gameData.getBuildingAllocations()
             .add(buildingAllocation);
 
-        syncCache.saveGameItem(buildingAllocationConverter.toModel(gameData.getGameId(), buildingAllocation));
+        progressDiff.save(buildingAllocationConverter.toModel(gameData.getGameId(), buildingAllocation));
     }
 
-    void allocateCitizenIfPossible(SyncCache syncCache, GameData gameData, UUID processId, UUID location, SkillType requiredSkill, int requestedWorkPoints) {
+    void allocateCitizenIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, SkillType requiredSkill, int requestedWorkPoints) {
         citizenFinder.getSuitableCitizen(gameData, location, requiredSkill, requestedWorkPoints)
             .ifPresent(citizenId -> {
                 CitizenAllocation citizenAllocation = citizenAllocationFactory.create(citizenId, processId);
@@ -71,11 +71,11 @@ class WorkProcessHelper {
                 gameData.getCitizenAllocations()
                     .add(citizenAllocation);
 
-                syncCache.saveGameItem(citizenAllocationConverter.toModel(gameData.getGameId(), citizenAllocation));
+                progressDiff.save(citizenAllocationConverter.toModel(gameData.getGameId(), citizenAllocation));
             });
     }
 
-    public int work(SyncCache syncCache, GameData gameData, UUID processId, SkillType skillType, int workPointsLeft, WorkProcessType processType, UUID targetId) {
+    public int work(GameProgressDiff progressDiff, GameData gameData, UUID processId, SkillType skillType, int workPointsLeft, WorkProcessType processType, UUID targetId) {
         int defaultWorkPointsPerTick = gameProperties.getCitizen()
             .getWorkPointsPerTick();
 
@@ -88,21 +88,21 @@ class WorkProcessHelper {
         int maxWorkPoints = (int) Math.floor(citizenEfficiency * defaultWorkPointsPerTick);
         int completedWorkPoints = Math.min(maxWorkPoints, workPointsLeft);
 
-        citizenUpdateService.updateCitizen(syncCache, gameData, citizenId, completedWorkPoints, skillType);
+        citizenUpdateService.updateCitizen(progressDiff, gameData, citizenId, completedWorkPoints, skillType);
 
-        updateTargetService.updateTarget(syncCache, gameData, processType, citizen.getLocation(), targetId, completedWorkPoints);
+        updateTargetService.updateTarget(progressDiff, gameData, processType, targetId, completedWorkPoints);
 
         return completedWorkPoints;
     }
 
-    public void releaseBuildingAndCitizen(SyncCache syncCache, GameData gameData, UUID processId) {
+    public void releaseBuildingAndCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
         gameData.getBuildingAllocations()
             .findByProcessId(processId)
             .ifPresent(allocation -> {
                 gameData.getBuildingAllocations()
                     .remove(allocation);
 
-                syncCache.deleteGameItem(allocation.getBuildingAllocationId(), GameItemType.BUILDING_ALLOCATION);
+                progressDiff.delete(allocation.getBuildingAllocationId(), GameItemType.BUILDING_ALLOCATION);
             });
 
         gameData.getCitizenAllocations()
@@ -110,7 +110,7 @@ class WorkProcessHelper {
             .ifPresent(citizenAllocation -> {
                 gameData.getCitizenAllocations()
                     .remove(citizenAllocation);
-                syncCache.deleteGameItem(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
             });
     }
 }

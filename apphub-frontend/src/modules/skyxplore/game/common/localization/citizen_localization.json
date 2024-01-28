@@ -1,0 +1,54 @@
+{
+    "MORALE": {
+        "en": "Morale",
+        "hu": "Morál"
+    },
+    "SATIETY": {
+        "en": "Satiety",
+        "hu": "Jóllakottság"
+    },
+    "SUPPLYING": {
+        "en": "Supplying",
+        "hu": "Szállítás"
+    },
+    "DOCTORING": {
+        "en": "Doctoring",
+        "hu": "Orvoslás"
+    },
+    "ENTERTAINING": {
+        "en": "Entertaining",
+        "hu": "Szórakoztatás"
+    },
+    "BUILDING": {
+        "en": "Building",
+        "hu": "Építés"
+    },
+    "FARMING": {
+        "en": "Farming",
+        "hu": "Gazdálkodás"
+    },
+    "MELEE_FIGHTING": {
+        "en": "Melee fighting",
+        "hu": "Közelharc"
+    },
+    "STAMINA": {
+        "en": "Stamina",
+        "hu": "Állóképesség"
+    },
+    "AIMING": {
+        "en": "Aiming",
+        "hu": "Célzás"
+    },
+    "MINING": {
+        "en": "Mining",
+        "hu": "Bányászat"
+    },
+    "ENGINEERING": {
+        "en": "Engineering",
+        "hu": "Gépészet"
+    },
+    "PILOTING": {
+        "en": "Piloting",
+        "hu": "Űrhajóvezetés"
+    }
+}

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query;
 
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageSettingsResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -14,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,9 +27,6 @@ public class StorageSettingsResponseQueryServiceTest {
 
     @Mock
     private GameDao gameDao;
-
-    @Mock
-    private AvailableResourcesMapper availableResourcesMapper;
 
     @Mock
     private StorageSettingToApiModelMapper storageSettingToApiModelMapper;
@@ -61,12 +56,10 @@ public class StorageSettingsResponseQueryServiceTest {
         given(gameData.getStorageSettings()).willReturn(storageSettings);
         given(storageSettings.getByLocation(PLANET_ID)).willReturn(List.of(storageSetting));
 
-        given(storageSettingToApiModelMapper.convert(List.of(storageSetting))).willReturn(Arrays.asList(storageSettingModel));
-        given(availableResourcesMapper.getAvailableResources(List.of(storageSetting))).willReturn(Arrays.asList(AVAILABLE_RESOURCE_ID));
+        given(storageSettingToApiModelMapper.convert(storageSetting)).willReturn(storageSettingModel);
 
-        StorageSettingsResponse result = underTest.getStorageSettings(USER_ID, PLANET_ID);
+        List<StorageSettingApiModel> result = underTest.getStorageSettings(USER_ID, PLANET_ID);
 
-        assertThat(result.getCurrentSettings()).containsExactly(storageSettingModel);
-        assertThat(result.getAvailableResources()).containsExactly(AVAILABLE_RESOURCE_ID);
+        assertThat(result).containsExactly(storageSettingModel);
     }
 }

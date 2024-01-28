@@ -1,0 +1,10 @@
+#skyxplore-game-population{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+#skyxplore-game-population-citizens {
+    overflow: auto;
+    text-align: center;
+}

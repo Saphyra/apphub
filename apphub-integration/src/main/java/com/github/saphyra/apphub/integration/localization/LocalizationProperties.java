@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.localization;
 
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.saphyra.apphub.integration.core.TestBase;
 import lombok.experimental.UtilityClass;
 
 import java.io.InputStream;

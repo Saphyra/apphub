@@ -16,23 +16,23 @@
     }
   },
   "workers": 1,
-  "defaultBuilding": true,
+  "defaultBuilding": false,
   "primarySurfaceType": "desert",
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,
       "requiredResources": {
         "energy": 1,
-        "iron": 1,
+        "ore": 1,
         "water": 1
       }
     },
     "2": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 15000,
       "requiredResources": {
-        "energy": 10,
-        "iron": 10,
-        "water": 10
+        "energy": 500,
+        "ore": 200,
+        "water": 500
       }
     }
   }

@@ -2,10 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,8 +20,10 @@ import java.util.UUID;
 class CitizenUpdateService {
     private final GameProperties gameProperties;
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;
+    private final CitizenConverter citizenConverter;
+    private final SkillConverter skillConverter;
 
-    void updateCitizen(SyncCache syncCache, GameData gameData, UUID citizenId, int workPoints, SkillType skillType) {
+    void updateCitizen(GameProgressDiff progressDiff, GameData gameData, UUID citizenId, int workPoints, SkillType skillType) {
         Citizen citizen = gameData.getCitizens()
             .findByCitizenIdValidated(citizenId);
         log.info("Citizen {} in game {} used {} workPoints of skill {}", citizen, gameData.getGameId(), workPoints, skillType);
@@ -42,10 +46,7 @@ class CitizenUpdateService {
             skill.setNextLevel(skill.getLevel() * experiencePerLevel);
         }
 
-        UUID ownerId = gameData.getPlanets()
-            .get(citizen.getLocation())
-            .getOwner();
-
-        syncCache.citizenExperienceEarned(ownerId, citizen, skill);
+        progressDiff.save(citizenConverter.toModel(gameData.getGameId(), citizen));
+        progressDiff.save(skillConverter.toModel(gameData.getGameId(), skill));
     }
 }

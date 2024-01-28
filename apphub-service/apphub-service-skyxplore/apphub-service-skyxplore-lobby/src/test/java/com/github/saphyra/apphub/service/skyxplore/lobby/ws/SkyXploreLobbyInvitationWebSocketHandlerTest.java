@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class SkyXploreLobbyInvitationWebSocketHandlerTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final String SESSION_ID = "session-id";
 
     @Mock
     private WebSocketHandlerContext context;
@@ -34,14 +35,14 @@ class SkyXploreLobbyInvitationWebSocketHandlerTest {
 
     @Test
     void afterConnection() {
-        underTest.afterConnection(USER_ID);
+        underTest.afterConnection(USER_ID, SESSION_ID);
 
         then(userActiveNotificationService).should().userOnline(USER_ID);
     }
 
     @Test
     void afterDisconnection() {
-        underTest.afterDisconnection(USER_ID);
+        underTest.afterDisconnection(USER_ID, SESSION_ID);
 
         then(userActiveNotificationService).should().userOffline(USER_ID);
     }

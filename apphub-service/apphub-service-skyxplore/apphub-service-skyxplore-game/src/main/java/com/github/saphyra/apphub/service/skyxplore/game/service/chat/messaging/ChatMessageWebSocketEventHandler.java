@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.handler.WebSocketEventHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.handler.WebSocketEventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
     }
 
     @Override
-    public void handle(UUID from, WebSocketEvent event, SkyXploreGameWebSocketHandler webSocketHandler) {
+    public void handle(UUID from, WebSocketEvent event, SkyXploreGameMainWebSocketHandler webSocketHandler) {
         IncomingChatMessage incomingChatMessage = objectMapperWrapper.convertValue(event.getPayload(), IncomingChatMessage.class);
         log.info("{} sent a message to room {}", from, incomingChatMessage.getRoom());
 

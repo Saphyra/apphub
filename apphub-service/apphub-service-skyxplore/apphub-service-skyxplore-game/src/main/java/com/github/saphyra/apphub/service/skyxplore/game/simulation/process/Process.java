@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 
 import java.util.UUID;
 
@@ -18,19 +18,19 @@ public interface Process extends Comparable<Process> {
 
     ProcessStatus getStatus();
 
-    default void scheduleWork(SyncCache syncCache) {
+    default void scheduleWork(GameProgressDiff gameProgressDiff) {
         if (getStatus() == ProcessStatus.READY_TO_DELETE) {
             return;
         }
 
-        work(syncCache);
+        work();
 
-        syncCache.saveGameItem(toModel());
+        gameProgressDiff.save(toModel());
     }
 
-    void work(SyncCache syncCache);
+    void work();
 
-    void cleanup(SyncCache syncCache);
+    void cleanup();
 
     ProcessModel toModel();
 

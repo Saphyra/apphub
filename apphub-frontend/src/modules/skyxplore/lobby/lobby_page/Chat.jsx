@@ -4,8 +4,8 @@ import InputField from "../../../../common/component/input/InputField";
 import "./chat/chat.css";
 import Message from "./chat/Message";
 import Stream from "../../../../common/js/collection/Stream";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import MessageType from "./chat/MessageType";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
     const [messages, setMessages] = useState([]);

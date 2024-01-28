@@ -1,0 +1,11 @@
+#skyxplore-game-toggle-chat-button{
+    background-image: url("../../../../../common/style/img/chat.png");
+    background-size: cover;
+    width: 2.25rem;
+    height: 2.25rem;
+    float: right;
+}
+
+#skyxplore-game-toggle-chat-button.unread{
+    border-color: red;
+}

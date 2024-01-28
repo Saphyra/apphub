@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreSurfaceTerraformationController;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +25,6 @@ public class TerraformationController implements SkyXploreSurfaceTerraformationC
     @Override
     public void cancelTerraformation(UUID planetId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel terraformation on planet {} and surface {}", accessTokenHeader.getUserId(), planetId, surfaceId);
-        cancelTerraformationService.cancelTerraformationOfSurface(accessTokenHeader.getUserId(), planetId, surfaceId);
+        cancelTerraformationService.cancelTerraformationOfSurface(accessTokenHeader.getUserId(), surfaceId);
     }
 }

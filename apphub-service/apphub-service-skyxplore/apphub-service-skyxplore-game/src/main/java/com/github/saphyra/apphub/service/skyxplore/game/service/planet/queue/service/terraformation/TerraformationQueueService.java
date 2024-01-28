@@ -32,11 +32,11 @@ class TerraformationQueueService implements QueueService {
 
     @Override
     public void setPriority(UUID userId, UUID planetId, UUID itemId, Integer priority) {
-        priorityUpdateService.updatePriority(userId, planetId, itemId, priority);
+        priorityUpdateService.updatePriority(userId, itemId, priority);
     }
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelTerraformationService.cancelTerraformationQueueItem(userId, planetId, itemId);
+        cancelTerraformationService.cancelTerraformationQueueItem(userId, itemId);
     }
 }

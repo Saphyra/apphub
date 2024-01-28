@@ -6,6 +6,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum LocalizedText {
+    //PLATFORM
+    ERROR_MISSING_ROLE("You are not allowed to perform this operation."),
+    NOTIFICATION_LANGUAGE_CHANGED_EN("Language changed."),
+    NOTIFICATION_LANGUAGE_CHANGED_HU("Nyelv megváltoztatva."),
+
     //INDEX/ACCOUNT
     INDEX_SUCCESSFULLY_LOGGED_OUT("Successfully logged out."),
     INDEX_BAD_CREDENTIALS("Unknown combination of e-mail address and password."),
@@ -25,6 +30,14 @@ public enum LocalizedText {
     SKYXPLORE_LOBBY_PLAYERS_NOT_READY("Not all the players are ready."),
     SKYXPLORE_LOBBY_INVITATION_SENT_RECENTLY("You have invited this player recently. Please wait a few seconds before trying again."),
     SKYXPLORE_LOBBY_ONLY_ONE_ALLIANCE("Every player is in the same alliance. Game is boring with no one to conquer."),
+
+    //SKYXPLORE GAME
+    SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_BLANK("Solar System name must not be blank."),
+    SKYXPLORE_GAME_SOLAR_SYSTEM_NAME_TOO_LONG("Solar System name too long. (Maximum 30 characters.)"),
+    SKYXPLORE_GAME_PLANET_NAME_BLANK("Planet name must not be blank."),
+    SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
+    SKYXPLORE_GAME_STORAGE_USED("Storage still in use. Free up some space before you deconstruct it."),
+    SKYXPLORE_GAME_STORAGE_SETTING_SAVED("Storage setting saved."),
     ;
 
     private final String text;

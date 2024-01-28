@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_men
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.Friend;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.IncomingFriendRequest;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequest;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Friend;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.IncomingFriendRequest;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.SentFriendRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

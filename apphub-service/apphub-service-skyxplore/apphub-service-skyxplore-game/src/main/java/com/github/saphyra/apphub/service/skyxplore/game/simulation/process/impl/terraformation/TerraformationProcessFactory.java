@@ -3,10 +3,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +21,12 @@ public class TerraformationProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
     private final ApplicationContextProxy applicationContextProxy;
 
-    public TerraformationProcess create(GameData gameData, UUID location, Construction terraformation) {
+    public TerraformationProcess create(Game game, UUID location, Construction terraformation) {
         return TerraformationProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
-            .gameData(gameData)
+            .gameData(game.getData())
+            .game(game)
             .location(location)
             .terraformationId(terraformation.getConstructionId())
             .applicationContextProxy(applicationContextProxy)
@@ -47,6 +47,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
             .location(model.getLocation())
             .terraformationId(model.getExternalReference())
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 }

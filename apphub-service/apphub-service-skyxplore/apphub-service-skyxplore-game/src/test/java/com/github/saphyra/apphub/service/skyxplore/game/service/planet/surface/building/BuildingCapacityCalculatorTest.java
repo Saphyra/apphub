@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_all
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,9 @@ class BuildingCapacityCalculatorTest {
 
     @Mock
     private ProductionBuildingService productionBuildingService;
+
+    @Mock
+    private HeadquartersUtil headquartersUtil;
 
     @InjectMocks
     private BuildingCapacityCalculator underTest;
@@ -72,6 +76,21 @@ class BuildingCapacityCalculatorTest {
         given(building.getDataId()).willReturn(DATA_ID);
         given(productionBuildingService.get(DATA_ID)).willReturn(productionBuildingData);
         given(productionBuildingData.getWorkers()).willReturn(WORKERS);
+        given(building.getLevel()).willReturn(LEVEL);
+        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
+        given(buildingAllocations.getByBuildingId(BUILDING_ID)).willReturn(List.of(buildingAllocation));
+
+        assertThat(underTest.calculateCapacity(gameData, building)).isEqualTo(LEVEL * WORKERS - 1);
+    }
+
+    @Test
+    void calculateCapacity_hq() {
+        given(building.getBuildingId()).willReturn(BUILDING_ID);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
+        given(building.getDataId()).willReturn(DATA_ID);
+        given(productionBuildingService.get(DATA_ID)).willReturn(null);
+        given(headquartersUtil.getWorkers()).willReturn(WORKERS);
         given(building.getLevel()).willReturn(LEVEL);
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
         given(buildingAllocations.getByBuildingId(BUILDING_ID)).willReturn(List.of(buildingAllocation));

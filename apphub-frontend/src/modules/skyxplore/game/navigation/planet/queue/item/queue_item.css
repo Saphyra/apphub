@@ -1,0 +1,44 @@
+.skyxplore-game-planet-queue-item{
+    margin: 5px;
+    border: 3px ridge white;
+    border-radius: 5px;
+}
+
+.skyxplore-game-planet-queue-item-header{
+    text-align: center;
+    border-bottom: 1px solid white;
+    padding: 3px;
+}
+
+.skyxplore-game-planet-queue-item-progress-bar{
+    position: relative;
+    border: 1px solid white;
+    margin: 3px;;
+}
+
+.skyxplore-game-planet-queue-item-progress-bar-status{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: green;
+}
+
+.skyxplore-game-planet-queue-item-progress-bar-label{
+    position: relative;
+    text-align: center;
+}
+
+.skyxplore-game-planet-queue-item-priority-wrapper{
+    padding: 5px;
+}
+
+.skyxplore-game-planet-queue-item-priority{
+    margin: auto;
+}
+
+.skyxplore-game-planet-queue-item-cancel-button{
+    margin: auto;
+    display: block;
+    margin-bottom: 5px;
+}

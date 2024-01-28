@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ class ProductionOrderServiceTest {
     private ProductionOrderService underTest;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -60,9 +60,9 @@ class ProductionOrderServiceTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(productionOrderProcess.toModel()).willReturn(processModel);
 
-        underTest.createProductionOrdersForReservedStorages(syncCache, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
+        underTest.createProductionOrdersForReservedStorages(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
         verify(processes).add(productionOrderProcess);
-        verify(syncCache).saveGameItem(processModel);
+        verify(progressDiff).save(processModel);
     }
 }

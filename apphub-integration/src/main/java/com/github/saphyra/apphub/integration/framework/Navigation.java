@@ -17,4 +17,8 @@ public class Navigation {
                 .until(() -> driver.getCurrentUrl().equals(url));
         }
     }
+
+    public static void toUrl(WebDriver driver, String url) {
+        driver.navigate().to(url);
+    }
 }

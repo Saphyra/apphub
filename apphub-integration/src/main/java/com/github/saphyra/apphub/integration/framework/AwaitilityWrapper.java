@@ -77,7 +77,7 @@ public class AwaitilityWrapper {
         createDefault()
             .until(helper::get);
 
-        return helper.getResult(Function.identity());
+        return helper.getResult(t -> Optional.ofNullable(t).map(Optional::get));
     }
 
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
@@ -87,6 +87,10 @@ public class AwaitilityWrapper {
             .until(helper::get);
 
         return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
+    }
+
+    public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate, int timeoutSeconds, int pollInterval) {
+        return getWithWait(supplier, predicate, timeoutSeconds, TimeUnit.SECONDS, pollInterval, TimeUnit.SECONDS);
     }
 
     public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate, int timeout, TimeUnit timeoutUnit, int pollInterval, TimeUnit pollUnit) {

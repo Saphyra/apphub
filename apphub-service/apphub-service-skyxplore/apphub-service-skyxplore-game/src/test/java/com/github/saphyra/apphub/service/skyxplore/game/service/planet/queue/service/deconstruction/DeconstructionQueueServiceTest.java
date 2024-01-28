@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.deconstruction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.deconstruct.CancelDeconstructionService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCacheFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -25,8 +26,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,7 @@ class DeconstructionQueueServiceTest {
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final Integer PRIORITY = 6345;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -49,7 +51,7 @@ class DeconstructionQueueServiceTest {
     private PriorityValidator priorityValidator;
 
     @Mock
-    private SyncCacheFactory syncCacheFactory;
+    private DeconstructionConverter deconstructionConverter;
 
     @InjectMocks
     private DeconstructionQueueService underTest;
@@ -76,7 +78,10 @@ class DeconstructionQueueServiceTest {
     private Deconstructions deconstructions;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
+
+    @Mock
+    private DeconstructionModel deconstructionModel;
 
     @Test
     void getType() {
@@ -100,31 +105,33 @@ class DeconstructionQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionId(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
 
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.processWithWait(any(), eq(syncCache))).willReturn(executionResult);
-        given(syncCacheFactory.create(game)).willReturn(syncCache);
+        given(eventLoop.processWithWait(any())).willReturn(executionResult);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(deconstructionConverter.toModel(GAME_ID, deconstruction)).willReturn(deconstructionModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.setPriority(USER_ID, PLANET_ID, DECONSTRUCTION_ID, PRIORITY);
 
         verify(priorityValidator).validate(PRIORITY);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop).processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
         verify(deconstruction).setPriority(PRIORITY);
 
         verify(executionResult).getOrThrow();
-        verify(syncCache).deconstructionModified(USER_ID, PLANET_ID, deconstruction);
+        then(progressDiff).should().save(deconstructionModel);
     }
 
     @Test
     void cancel() {
         underTest.cancel(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
 
-        verify(cancelDeconstructionService).cancelDeconstructionOfDeconstruction(USER_ID, PLANET_ID, DECONSTRUCTION_ID);
+        verify(cancelDeconstructionService).cancelDeconstructionOfDeconstruction(USER_ID, DECONSTRUCTION_ID);
     }
 }

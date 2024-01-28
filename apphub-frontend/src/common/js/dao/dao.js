@@ -168,6 +168,7 @@ export const ResponseStatus = {
 const Endpoints = {
     //Platform
     CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
+    GET_OWN_USER_ID: new Endpoint(RequestMethod.GET, "/user/id"),
 
     //User
     USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
@@ -218,6 +219,44 @@ const Endpoints = {
     SKYXPLORE_LOBBY_START_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start"),
     SKYXPLORE_LOBBY_LOAD_GAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}"),
     SKYXPLORE_DELETE_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}"),
+    SKYXPLORE_BUILDING_CONSTRUCT_NEW: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/building/{planetId}/{surfaceId}"),
+    SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority"),
+    SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/{planetId}/{type}/{itemId}"),
+    SKYXPLORE_GAME_TERRAFORM_SURFACE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform"),
+    SKYXPLORE_GAME_CANCEL_TERRAFORMATION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform"),
+
+    //SkyXplore Game Data
+    SKYXPLORE_GET_ITEM_DATA: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{dataId}"),
+    SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/{surfaceType}/terraforming-possibilities"),
+    SKYXPLORE_DATA_AVAILABLE_BUILDINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/data/{surfaceType}/buildings"),
+    SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/citizen/stats-and-skills"),
+    SKYXPLORE_DATA_RESOURCES: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/resources"),
+
+    //SkyXplore Game
+    SKYXPLORE_GAME_SAVE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game"),
+    SKYXPLORE_GAME_PAUSE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause"),
+    SKYXPLORE_EXIT_GAME: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game"),
+    SKYXPLORE_GAME_GET_CHAT_ROOMS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/chat/room"),
+    SKYXPLORE_GAME_GET_PLAYERS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/player"),
+    SKYXPLORE_GAME_CREATE_CHAT_ROOM: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/chat/room"),
+    SKYXPLORE_GAME_LEAVE_CHAT_ROOM: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/chat/room/{roomId}"),
+    SKYXPLORE_GAME_MAP: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/universe"),
+    SKYXPLORE_GET_SOLAR_SYSTEM: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/solar-system/{solarSystemId}"),
+    SKYXPLORE_SOLAR_SYSTEM_RENAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/solar-system/{solarSystemId}/name"),
+    SKYXPLORE_PLANET_RENAME: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/planet/{planetId}/name"),
+    SKYXPLORE_PLANET_GET_OVERVIEW: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/planet/{planetId}/overview"),
+    SKYXPLORE_PLANET_UPDATE_PRIORITY: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/planet/{planetId}/priority/{priorityType}"),
+    SKYXPLORE_BUILDING_DECONSTRUCT: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct"),
+    SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct"),
+    SKYXPLORE_BUILDING_UPGRADE: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
+    SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/building/{planetId}/{buildingId}"),
+    SKYXPLORE_PLANET_GET_POPULATION: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/planet/{planetId}/citizen"),
+    SKYXPLORE_PLANET_RENAME_CITIZEN: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/citizen/{citizenId}/rename"),
+    SKYXPLORE_PLANET_GET_STORAGE_SETTINGS: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/planet/{planetId}/storage-settings"),
+    SKYXPLORE_PLANET_CREATE_STORAGE_SETTING: new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/planet/{planetId}/storage-settings"),
+    SKYXPLORE_PLANET_EDIT_STORAGE_SETTING: new Endpoint(RequestMethod.POST, "/api/skyxplore/game/storage-settings"),
+    SKYXPLORE_PLANET_DELETE_STORAGE_SETTING: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/storage-settings/{storageSettingId}"),
+    SKYXPLORE_GAME_IS_HOST: new Endpoint(RequestMethod.GET, "/api/skyxplore/game/host"),
 
     //Notebook
     NOTEBOOK_GET_CATEGORY_TREE: new Endpoint(RequestMethod.GET, "/api/notebook/category/tree"),

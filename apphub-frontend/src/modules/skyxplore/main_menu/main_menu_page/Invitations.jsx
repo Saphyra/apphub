@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MapStream from "../../../../common/js/collection/MapStream";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import Invitaion from "./invitations/Invitation";
 import "./invitations/invitations.css"
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Invitations = ({ localizationHandler, lastEvent }) => {
     const [invitations, setInvitations] = useState({});

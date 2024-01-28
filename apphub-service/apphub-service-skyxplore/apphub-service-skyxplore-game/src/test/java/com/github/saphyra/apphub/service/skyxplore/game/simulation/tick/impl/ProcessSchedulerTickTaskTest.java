@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,7 +40,7 @@ class ProcessSchedulerTickTaskTest {
     private Process lowPriorityProcess;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private EventLoop eventLoop;
@@ -59,23 +58,24 @@ class ProcessSchedulerTickTaskTest {
         given(lowPriorityProcess.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
         given(highPriorityProcess.getStatus()).willReturn(ProcessStatus.CREATED);
         given(game.getEventLoop()).willReturn(eventLoop);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop, times(2)).process(argumentCaptor.capture(), eq(syncCache));
+        verify(eventLoop, times(2)).process(argumentCaptor.capture());
 
         argumentCaptor.getAllValues()
             .get(0)
             .run();
 
-        verify(highPriorityProcess).scheduleWork(syncCache);
-        verify(lowPriorityProcess, times(0)).scheduleWork(syncCache);
+        verify(highPriorityProcess).scheduleWork(progressDiff);
+        verify(lowPriorityProcess, times(0)).scheduleWork(progressDiff);
 
         argumentCaptor.getAllValues()
             .get(1)
             .run();
 
-        verify(lowPriorityProcess).scheduleWork(syncCache);
+        verify(lowPriorityProcess).scheduleWork(progressDiff);
     }
 }

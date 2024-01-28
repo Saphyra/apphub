@@ -1,0 +1,18 @@
+{
+    "ENERGY": {
+        "en": "Energy",
+        "hu": "Energia"
+    },
+    "LIQUID": {
+        "en": "Liquid",
+        "hu": "Folyadék"
+    },
+    "BULK": {
+        "en": "Bulk",
+        "hu": "Teher"
+    },
+    "CITIZEN": {
+        "en": "Housing",
+        "hu": "Lakhatás"
+    }
+}

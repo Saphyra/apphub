@@ -1,0 +1,54 @@
+#skyxplore-game-chat-room-creator {
+    background-color: black;
+    position: fixed;
+    right: var(--main-page-border-width);
+    bottom: calc(var(--footer-height) + var(--footer-border-width));
+    border-top: var(--skyxplore-chat-border-width) ridge white;
+    border-left: var(--skyxplore-chat-border-width) ridge white;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+#skyxplore-game-chat-room-creator-title {
+    border-bottom: var(--skyxplore-chat-border-width) ridge white;
+    text-align: center;
+    position: relative;
+    font-size: 28px;
+    padding: 3px;
+}
+
+#skyxplore-game-chat-room-creator-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#skyxplore-game-chat-room-creator-name-input {
+    width: 90%;
+    display: block;
+    margin: 3px auto;
+}
+
+#skyxplore-game-chat-room-save-button-wrapper {
+    border-top: var(--skyxplore-chat-border-width) ridge white;
+}
+
+#skyxplore-game-chat-room-save-button {
+    display: block;
+    margin: 3px auto;
+    width: 50%;
+}
+
+#skyxplore-game-chat-room-creator-players>table {
+    margin: 5px auto;
+}
+
+.skyxplore-game-chat-room-creator-player {
+    display: block;
+    margin: auto;
+}
+
+#skyxplore-game-chat-room-creator-no-available-player {
+    text-align: center;
+}

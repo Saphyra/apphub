@@ -1,18 +1,16 @@
 package com.github.saphyra.apphub.integration.frontend.index;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.error.ErrorPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.localization.LocalizationKey;
-import com.github.saphyra.apphub.integration.localization.LocalizationProperties;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.ErrorMessageElement;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -112,6 +110,6 @@ public class RedirectionTest extends SeleniumTest {
 
         ErrorMessageElement errorMessageElement = ErrorPageActions.getErrorMessage(driver);
         assertThat(errorMessageElement.getErrorCode()).isEqualTo(ErrorCode.MISSING_ROLE.name());
-        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizationProperties.getProperty(Language.ENGLISH, LocalizationKey.MISSING_ROLE));
+        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizedText.ERROR_MISSING_ROLE.getText());
     }
 }

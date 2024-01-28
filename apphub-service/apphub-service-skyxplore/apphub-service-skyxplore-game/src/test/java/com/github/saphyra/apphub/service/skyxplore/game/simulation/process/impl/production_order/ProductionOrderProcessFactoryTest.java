@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
@@ -45,6 +46,7 @@ class ProductionOrderProcessFactoryTest {
     private static final UUID PROCESS_ID_2 = UUID.randomUUID();
     private static final String PRODUCER_BUILDING_DATA_ID = "producer-building-data-id";
     private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -57,6 +59,9 @@ class ProductionOrderProcessFactoryTest {
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
+
+    @Mock
+    private GameDao gameDao;
 
     @InjectMocks
     private ProductionOrderProcessFactory underTest;
@@ -105,6 +110,8 @@ class ProductionOrderProcessFactoryTest {
             .willReturn(PROCESS_ID_1)
             .willReturn(PROCESS_ID_2);
         given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
+        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(gameDao.findById(GAME_ID)).willReturn(game);
 
         List<ProductionOrderProcess> result = underTest.create(gameData, EXTERNAL_REFERENCE, LOCATION, RESERVED_STORAGE_ID);
 

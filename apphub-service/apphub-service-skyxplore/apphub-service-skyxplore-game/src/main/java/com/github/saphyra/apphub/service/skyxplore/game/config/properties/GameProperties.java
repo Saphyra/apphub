@@ -15,11 +15,13 @@ public class GameProperties {
     private int itemSaverMaxChunkSize;
     private int creationQueueSize;
     private int tickTimeMillis;
+    private int pauseGameAfterDisconnectionSeconds;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;
     private CitizenProperties citizen;
     private DeconstructionProperties deconstruction;
+    private MessageDelay messageDelay;
 
     @PostConstruct
     public void after() {

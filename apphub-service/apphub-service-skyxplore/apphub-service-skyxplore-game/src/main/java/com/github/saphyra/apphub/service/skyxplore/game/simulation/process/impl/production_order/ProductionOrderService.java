@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ProductionOrderService {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
-    public void createProductionOrdersForReservedStorages(SyncCache syncCache, GameData gameData, UUID processId, UUID externalReference) {
+    public void createProductionOrdersForReservedStorages(GameProgressDiff gameProgressDiff, GameData gameData, UUID processId, UUID externalReference) {
         log.info("Creating ProductionOrderProcesses for Construction...");
 
         gameData.getReservedStorages()
@@ -24,7 +24,7 @@ public class ProductionOrderService {
             .forEach(productionOrderProcess -> {
                 gameData.getProcesses()
                     .add(productionOrderProcess);
-                syncCache.saveGameItem(productionOrderProcess.toModel());
+                gameProgressDiff.save(productionOrderProcess.toModel());
             });
 
         log.info("ProductionOrderProcesses created.");

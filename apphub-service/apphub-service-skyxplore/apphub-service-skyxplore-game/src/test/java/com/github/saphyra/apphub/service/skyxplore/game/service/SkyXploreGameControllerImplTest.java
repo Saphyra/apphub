@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +34,9 @@ public class SkyXploreGameControllerImplTest {
 
     @Mock
     private PauseGameService pauseGameService;
+
+    @Mock
+    private SaveGameService saveGameService;
 
     @InjectMocks
     private SkyXploreGameControllerImpl underTest;
@@ -90,5 +94,14 @@ public class SkyXploreGameControllerImplTest {
         underTest.deleteGame(GAME_ID);
 
         verify(gameDao).delete(GAME_ID);
+    }
+
+    @Test
+    void saveGame() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.saveGame(accessTokenHeader);
+
+        then(saveGameService).should().saveGame(USER_ID);
     }
 }

@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class ProcessDeletionTickTaskTest {
     private Game game;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private GameData gameData;
@@ -54,11 +54,12 @@ class ProcessDeletionTickTaskTest {
         given(otherProcess.getStatus()).willReturn(ProcessStatus.DONE);
         given(readyToDeleteProcess.getStatus()).willReturn(ProcessStatus.READY_TO_DELETE);
         given(readyToDeleteProcess.getProcessId()).willReturn(PROCESS_ID);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
-        verify(readyToDeleteProcess).cleanup(syncCache);
-        verify(syncCache).deleteGameItem(PROCESS_ID, GameItemType.PROCESS);
+        verify(readyToDeleteProcess).cleanup();
+        verify(progressDiff).delete(PROCESS_ID, GameItemType.PROCESS);
         assertThat(processes).containsExactly(otherProcess);
     }
 }

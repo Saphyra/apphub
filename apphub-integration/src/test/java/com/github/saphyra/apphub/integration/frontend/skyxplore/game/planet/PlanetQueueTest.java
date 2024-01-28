@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
 
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreBuildingFlow;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -10,14 +11,13 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetQueueItem;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.Surface;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -25,8 +25,6 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanetQueueTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
-
     @Test(groups = {"fe", "skyxplore"})
     public void queueTest() {
         WebDriver driver = extractDriver();
@@ -37,7 +35,7 @@ public class PlanetQueueTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -72,7 +70,7 @@ public class PlanetQueueTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Water pump lvl 0 => 1");
+        assertThat(queueItem.getTitle()).isEqualTo("Water pump level 0 => 1");
 
         queueItem.cancelItem(driver);
 
@@ -86,14 +84,14 @@ public class PlanetQueueTest extends SeleniumTest {
         Surface surface;
         surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_LAKE);
         surface.openModifySurfaceWindow(driver);
-        SkyXploreSurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
+        SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
 
         queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Lake => Desert");
+        assertThat(queueItem.getTitle()).isEqualTo("Terraforming: Lake => Desert");
 
         queueItem.cancelItem(driver);
 
@@ -103,17 +101,17 @@ public class PlanetQueueTest extends SeleniumTest {
     }
 
     private static void deconstructionItem(WebDriver driver) {
-        PlanetQueueItem queueItem;
-        Surface surface;
-        surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingFlow.constructBuilding(driver, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+
+        Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_CAMP);
         surface.deconstructBuilding(driver);
 
-        queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
+        PlanetQueueItem queueItem = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetActions.getQueue(driver), planetQueueItems -> !planetQueueItems.isEmpty())
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Planet Queue is empty."));
 
-        assertThat(queueItem.getTitle()).isEqualTo("Deconstruct: Solar panel");
+        assertThat(queueItem.getTitle()).isEqualTo("Deconstruct: Camp");
 
         queueItem.cancelItem(driver);
 

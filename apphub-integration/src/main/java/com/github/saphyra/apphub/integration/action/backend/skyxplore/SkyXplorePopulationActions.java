@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenResponse;
 import io.restassured.response.Response;
@@ -16,8 +15,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePopulationActions {
-    public static List<CitizenResponse> getPopulation(Language language, UUID accessTokenId, UUID planetId) {
-        Response response = RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static List<CitizenResponse> getPopulation(UUID accessTokenId, UUID planetId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_POPULATION, "planetId", planetId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -26,16 +25,14 @@ public class SkyXplorePopulationActions {
             .collect(Collectors.toList());
     }
 
-    public static CitizenResponse renameCitizen(Language language, UUID accessTokenId, UUID citizenId, String newName) {
-        Response response = getRenameCitizenResponse(language, accessTokenId, citizenId, newName);
+    public static void renameCitizen(UUID accessTokenId, UUID citizenId, String newName) {
+        Response response = getRenameCitizenResponse(accessTokenId, citizenId, newName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return response.getBody().as(CitizenResponse.class);
     }
 
-    public static Response getRenameCitizenResponse(Language language, UUID accessTokenId, UUID citizenId, String newName) {
-        return RequestFactory.createAuthorizedRequest(language, accessTokenId)
+    public static Response getRenameCitizenResponse(UUID accessTokenId, UUID citizenId, String newName) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(newName))
             .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN, "citizenId", citizenId));
     }

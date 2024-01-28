@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +24,16 @@ class ConstructionProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
     private final ProductionOrderService productionOrderService;
+    private final BuildingConverter buildingConverter;
 
-    void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
+    void startWork(GameProgressDiff gameProgressDiff, GameData gameData, UUID processId, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
 
         useAllocatedResourceService.resolveAllocations(
-            syncCache,
+            gameProgressDiff,
             gameData,
             construction.getLocation(),
-            planet.getOwner(),
             constructionId
         );
 
@@ -48,16 +46,13 @@ class ConstructionProcessHelper {
         ).forEach(requestWorkProcess -> {
             gameData.getProcesses()
                 .add(requestWorkProcess);
-            syncCache.saveGameItem(requestWorkProcess.toModel());
+            gameProgressDiff.save(requestWorkProcess.toModel());
         });
     }
 
-    void finishConstruction(SyncCache syncCache, GameData gameData, UUID constructionId) {
+    void finishConstruction(GameProgressDiff gameProgressDiff, GameData gameData, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
-
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
 
         Building building = gameData.getBuildings()
             .findByBuildingId(construction.getExternalReference());
@@ -68,14 +63,13 @@ class ConstructionProcessHelper {
         gameData.getConstructions()
             .remove(construction);
 
-        Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(building.getSurfaceId());
+        allocationRemovalService.removeAllocationsAndReservations(gameProgressDiff, gameData, constructionId);
 
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, construction.getLocation(), planet.getOwner(), constructionId);
-        syncCache.constructionFinished(planet.getOwner(), construction.getLocation(), construction, building, surface);
+        gameProgressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
+        gameProgressDiff.save(buildingConverter.toModel(gameData.getGameId(), building));
     }
 
-    public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID constructionId) {
-        productionOrderService.createProductionOrdersForReservedStorages(syncCache, gameData, processId, constructionId);
+    public void createProductionOrders(GameProgressDiff gameProgressDiff, GameData gameData, UUID processId, UUID constructionId) {
+        productionOrderService.createProductionOrdersForReservedStorages(gameProgressDiff, gameData, processId, constructionId);
     }
 }

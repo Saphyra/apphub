@@ -21,7 +21,6 @@ public class Citizen {
     @NonNull
     private String name;
 
-
     private Integer morale;
     private Integer satiety;
 

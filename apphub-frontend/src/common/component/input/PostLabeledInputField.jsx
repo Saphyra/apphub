@@ -1,8 +1,8 @@
 import React from "react";
 
-const PostLabeledInputField = ({ label, input }) => {
+const PostLabeledInputField = ({ label, input, className }) => {
     return (
-        <label>
+        <label className={className}>
             {input}
             <span> </span>
             <span>{label}</span>

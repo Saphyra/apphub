@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,10 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -34,21 +31,9 @@ public class PlanetQueueControllerTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Mock
-    private QueueResponse queueResponse;
-
     @BeforeEach
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-    }
-
-    @Test
-    public void getQueue() {
-        given(queueFacade.getQueueOfPlanet(USER_ID, PLANET_ID)).willReturn(List.of(queueResponse));
-
-        List<QueueResponse> result = underTest.getQueue(PLANET_ID, accessTokenHeader);
-
-        assertThat(result).containsExactly(queueResponse);
     }
 
     @Test

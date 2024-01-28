@@ -1,0 +1,14 @@
+{
+    "by-name": {
+        "en": "By name",
+        "hu": "Név szerint"
+    },
+    "by-stat": {
+        "en": "By stat",
+        "hu": "Stat szerint"
+    },
+    "by-skill": {
+        "en": "By skill",
+        "hu": "Képesség szerint"
+    }
+}

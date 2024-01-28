@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +15,11 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class SkyXploreLobbyCreationFlow {
+    @SafeVarargs
+    public static void setUpLobbyWithPlayers(WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... players) {
+        setUpLobbyWithPlayers(Constants.DEFAULT_GAME_NAME, hostDriver, hostName, players);
+    }
+
     @SafeVarargs
     public static void setUpLobbyWithPlayers(String gameName, WebDriver hostDriver, String hostName, BiWrapper<WebDriver, String>... players) {
         log.debug("Setting up lobby...");

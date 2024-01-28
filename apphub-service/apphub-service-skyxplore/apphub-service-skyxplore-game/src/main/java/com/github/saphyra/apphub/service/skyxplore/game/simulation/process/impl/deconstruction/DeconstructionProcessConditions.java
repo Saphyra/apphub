@@ -15,7 +15,7 @@ import java.util.UUID;
 class DeconstructionProcessConditions {
     boolean buildingUtilized(GameData gameData, UUID deconstructionId) {
         UUID buildingId = gameData.getDeconstructions()
-            .findByDeconstructionId(deconstructionId)
+            .findByDeconstructionIdValidated(deconstructionId)
             .getExternalReference();
 
         return !gameData.getBuildingAllocations()

@@ -1,0 +1,14 @@
+{
+    "planet-name": {
+        "en": "Planet name",
+        "hu": "Bolgyó neve"
+    },
+    "planet-name-blank": {
+        "en": "Planet name must not be blank.",
+        "hu": "Bolygó neve nem lehet üres."
+    },
+    "planet-name-too-long": {
+        "en": "Planet name too long. (Maximum 30 characters.)",
+        "hu": "Bolgyó neve túl hosszú. (Maximum 30 karakter.)"
+    }
+}

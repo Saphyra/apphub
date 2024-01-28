@@ -4,10 +4,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
@@ -27,11 +26,12 @@ public class RestProcessFactory implements ProcessFactory {
         return ProcessType.REST;
     }
 
-    public RestProcess create(GameData gameData, Citizen citizen, int restForTicks) {
+    public RestProcess create(Game game, Citizen citizen, int restForTicks) {
         return RestProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
-            .gameData(gameData)
+            .gameData(game.getData())
+            .game(game)
             .citizenId(citizen.getCitizenId())
             .location(citizen.getLocation())
             .restForTicks(restForTicks)
@@ -51,6 +51,7 @@ public class RestProcessFactory implements ProcessFactory {
             .restForTicks(Integer.parseInt(model.getData().get(ProcessParamKeys.REST_FOR_TICKS)))
             .restedForTicks(Integer.parseInt(model.getData().get(ProcessParamKeys.RESTED_FOR_TICKS)))
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 }

@@ -1,0 +1,42 @@
+{
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "priority": {
+        "en": "Priority",
+        "hu": "Prioritás"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "delete-storage-setting-confirmation-dialog-title": {
+        "en": "Delete setting?",
+        "hu": "Beállítás törlése?"
+    },
+    "delete-storage-setting-confirmation-dialog-detail": {
+        "en": "Are you sure you want to delete storage setting of {commodity}?",
+        "hu": "Biztosan törölni szeretnéd {commodity} beállítását?"
+    },
+    "delete-storage-setting": {
+        "en": "Delete storage setting",
+        "hu": "Raktár beállítás törlése"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "storage-setting-saved": {
+        "en": "Storage setting saved.",
+        "hu": "Raktár beállítás elmentve."
+    }
+}

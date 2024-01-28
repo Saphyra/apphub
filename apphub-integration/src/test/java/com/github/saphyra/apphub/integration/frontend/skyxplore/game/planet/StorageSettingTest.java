@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSetting;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.StorageSetting;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageSettingTest extends SeleniumTest {
-    private static final String GAME_NAME = "game-name";
+    public static final int AMOUNT = 10;
 
     @Test(groups = {"fe", "skyxplore"})
     public void storageSettingCrud() {
@@ -35,7 +35,7 @@ public class StorageSettingTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -67,14 +67,17 @@ public class StorageSettingTest extends SeleniumTest {
     private static StorageSetting createStorageSettingForCrud(WebDriver driver) {
         SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 3);
 
-        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
-        StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
+        StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> storageSettings.size() == 2)
             .stream()
-            .findFirst()
+            .filter(ss -> ss.getDataId().equals(Constants.DATA_ID_ORE))
+            .findAny()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
+
         assertThat(storageSetting.getAmount()).isEqualTo(10);
         assertThat(storageSetting.getPriority()).isEqualTo(3);
+
+        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
+
         return storageSetting;
     }
 
@@ -103,7 +106,7 @@ public class StorageSettingTest extends SeleniumTest {
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
     }
 
-    @Test(groups = {"fe", "skyxplore"}, priority = Integer.MIN_VALUE)
+    @Test(groups = {"fe", "skyxplore"})
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
@@ -113,7 +116,7 @@ public class StorageSettingTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
-        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());
+        SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
         SkyXploreLobbyActions.setReady(driver);
         SkyXploreLobbyActions.startGameCreation(driver);
 
@@ -143,7 +146,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static void createStorageSetting(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 300, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, AMOUNT, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()
@@ -164,7 +167,7 @@ public class StorageSettingTest extends SeleniumTest {
 
     private static void checkResourceProduced(WebDriver driver) {
         AwaitilityWrapper.create(60, 10)
-            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == 400)
+            .until(() -> SkyXplorePlanetActions.getStorageOverview(driver).getBulk().getAvailable() == AMOUNT + 100)
             .assertTrue("Resource not produced.");
     }
 }

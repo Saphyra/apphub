@@ -71,7 +71,7 @@ class DeconstructionPreconditionsTest {
         given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY);
         given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storedResourceAmountQueryService.getActualStorageAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY);
 
         underTest.checkIfBuildingCanBeDeconstructed(gameData, building);
     }
@@ -85,7 +85,7 @@ class DeconstructionPreconditionsTest {
         given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY);
         given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storedResourceAmountQueryService.getActualStorageAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY + 1);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY + 1);
 
         Throwable ex = catchThrowable(() -> underTest.checkIfBuildingCanBeDeconstructed(gameData, building));
 

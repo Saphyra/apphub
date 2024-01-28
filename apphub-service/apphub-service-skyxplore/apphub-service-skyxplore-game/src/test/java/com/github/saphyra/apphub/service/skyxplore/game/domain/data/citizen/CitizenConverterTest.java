@@ -2,10 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SkillResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenAssignmentResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.SkillResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.StatResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.assignment.CitizenAssignmentProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +35,12 @@ class CitizenConverterTest {
     @Mock
     private SkillConverter skillConverter;
 
+    @Mock
+    private StatConverter statConverter;
+
+    @Mock
+    private CitizenAssignmentProvider citizenAssignmentProvider;
+
     @InjectMocks
     private CitizenConverter underTest;
 
@@ -39,6 +49,12 @@ class CitizenConverterTest {
 
     @Mock
     private SkillResponse skillResponse;
+
+    @Mock
+    private StatResponse statResponse;
+
+    @Mock
+    private CitizenAssignmentResponse assignment;
 
     @Test
     void toModel() {
@@ -72,13 +88,15 @@ class CitizenConverterTest {
             .build();
 
         given(skillConverter.toResponse(gameData, CITIZEN_ID)).willReturn(Map.of(SKILL, skillResponse));
+        given(statConverter.convert(citizen)).willReturn(Map.of(CitizenStat.MORALE, statResponse));
+        given(citizenAssignmentProvider.getAssignment(gameData, CITIZEN_ID)).willReturn(assignment);
 
         CitizenResponse result = underTest.toResponse(gameData, citizen);
 
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getName()).isEqualTo(NAME);
-        assertThat(result.getMorale()).isEqualTo(MORALE);
-        assertThat(result.getSatiety()).isEqualTo(SATIETY);
+        assertThat(result.getStats()).containsEntry(CitizenStat.MORALE, statResponse);
         assertThat(result.getSkills()).containsEntry(SKILL, skillResponse);
+        assertThat(result.getAssignment()).isEqualTo(assignment);
     }
 }

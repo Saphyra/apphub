@@ -25,6 +25,7 @@ public class Constants {
 
     //Alliances
     public final String GENERAL_CHAT_ROOM_NAME = "general";
+    public final String ALLIANCE_CHAT_ROOM_NAME = "alliance";
     public static final String NEW_ALLIANCE_LABEL = "New alliance";
     public static final String NEW_ALLIANCE_VALUE = "new-alliance";
     public final String NO_ALLIANCE_LABEL = "No alliance";
@@ -36,6 +37,7 @@ public class Constants {
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String SURFACE_TYPE_FOREST = "FOREST";
     public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
+    public static final String SURFACE_TYPE_MILITARY = "MILITARY";
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
@@ -44,6 +46,7 @@ public class Constants {
     public final String DATA_ID_CAMP = "camp";
     public final String DATA_ID_ORE = "ore";
     public static final String DATA_ID_DEPOT = "depot";
+    public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
     //QueueTypes
     public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
@@ -54,6 +57,7 @@ public class Constants {
     public final int DEFAULT_PRIORITY = 5;
     public static final String DEFAULT_GAME_NAME = "game-name";
     public static final int MAX_CITIZEN_MORALE = 10000;
+    public static final int MAX_CITIZEN_SATIETY = 10000;
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
 
@@ -95,4 +99,6 @@ public class Constants {
         "encryption",
         "storage"
     );
+
+    public static final String CITIZEN_PROPERTY_MORALE = "MORALE";
 }

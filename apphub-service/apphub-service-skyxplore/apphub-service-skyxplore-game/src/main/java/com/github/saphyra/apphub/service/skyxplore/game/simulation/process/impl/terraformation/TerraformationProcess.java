@@ -6,11 +6,12 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,9 @@ public class TerraformationProcess implements Process {
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
+    @NonNull
+    private final Game game;
+
     @Override
     public UUID getExternalReference() {
         return terraformationId;
@@ -64,13 +68,14 @@ public class TerraformationProcess implements Process {
     }
 
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
 
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(syncCache, gameData, processId, terraformationId);
+            helper.createProductionOrders(progressDiff, gameData, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -83,7 +88,7 @@ public class TerraformationProcess implements Process {
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(syncCache, gameData, processId, terraformationId);
+            helper.startWork(progressDiff, gameData, processId, terraformationId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -91,19 +96,20 @@ public class TerraformationProcess implements Process {
             return;
         }
 
-        helper.finishTerraformation(syncCache, gameData, terraformationId);
+        helper.finishTerraformation(progressDiff, gameData, terraformationId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
         gameData.getProcesses()
             .getByExternalReference(processId)
-            .forEach(process -> process.cleanup(syncCache));
+            .forEach(Process::cleanup);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        game.getProgressDiff()
+            .save(toModel());
     }
 
     @Override

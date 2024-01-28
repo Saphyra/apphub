@@ -1,0 +1,34 @@
+{
+    "current-activity": {
+        "en": "Current activity",
+        "hu": "Aktuális tevékenység"
+    },
+    "idle": {
+        "en": "Idle",
+        "hu": "Tétlen"
+    },
+    "construction": {
+        "en": "Constructs {building}",
+        "hu": "Épít: {building}"
+    },
+    "deconstruction": {
+        "en": "Deconstructs {building}",
+        "hu": "Lerombol: {building}"
+    },
+    "rest": {
+        "en": "Resting: {status}%",
+        "hu": "Pihenés: {status}%"
+    },
+    "terraformation": {
+        "en": "Terraforming: {originalSurfaceType} => {targetSurfaceType}",
+        "hu": "Terraformálás: {originalSurfaceType} => {targetSurfaceType}"
+    },
+    "production-order": {
+        "en": "Production: {resource}",
+        "hu": "Termelés: {resource}"
+    },
+    "storage-setting": {
+        "en": "Storage setting: {resource}",
+        "hu": "Raktár beállítás: {resource}"
+    }
+}

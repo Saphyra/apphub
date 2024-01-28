@@ -118,7 +118,7 @@ class ProducerBuildingFinderServiceTest {
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(producerBuilding.getSurfaceId()).willReturn(SURFACE_ID);
         given(occupiedBuilding.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceId(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(producerProductionData.getPlaced()).willReturn(List.of(SurfaceType.CONCRETE));
 

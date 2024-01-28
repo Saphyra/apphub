@@ -1,0 +1,20 @@
+.skyxplore-game-population-citizen-status-bar {
+    position: relative;
+    border: 1px solid white;
+    margin: 5px;
+}
+
+.skyxplore-game-population-citizen-status-bar-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: green;
+}
+
+.skyxplore-game-population-citizen-status-bar-label {
+    position: relative;
+    font-size: 20px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}

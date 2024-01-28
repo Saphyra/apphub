@@ -24,10 +24,10 @@
 
 .skyxplore-lobby-message-content {}
 
-.own-message {
+.skyxplore-lobby-message-wrapper.skyxplore-lobby-message.own-message {
     text-align: right;
 }
 
-.system-message {
+.skyxplore-lobby-message-wrapper.system-message {
     text-align: center;
 }

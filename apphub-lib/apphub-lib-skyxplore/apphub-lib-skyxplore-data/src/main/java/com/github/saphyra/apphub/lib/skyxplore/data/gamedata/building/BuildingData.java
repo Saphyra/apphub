@@ -22,6 +22,7 @@ public abstract class BuildingData extends GameDataItem {
 
     public abstract SurfaceType getPrimarySurfaceType();
 
+    //Used by ObjectMapper and WebUi
     public int getMaxLevel() {
         return constructionRequirements.size();
     }

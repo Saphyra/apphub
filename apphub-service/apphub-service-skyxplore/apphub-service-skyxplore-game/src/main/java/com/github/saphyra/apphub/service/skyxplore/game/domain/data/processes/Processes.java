@@ -29,10 +29,14 @@ public class Processes extends Vector<Process> {
     }
 
     public Process findByIdValidated(UUID processId) {
+        return findById(processId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found by processId " + processId));
+    }
+
+    private Optional<Process> findById(UUID processId) {
         return stream()
             .filter(process -> process.getProcessId().equals(processId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found by processId " + processId));
+            .findAny();
     }
 
     public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
@@ -45,5 +49,19 @@ public class Processes extends Vector<Process> {
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == processType)
             .findAny();
+    }
+
+    public Process getRootOf(Process process) {
+        Process root = process;
+        while (true) {
+            Optional<Process> maybeParent = findById(root.getExternalReference());
+            log.debug("MaybeParent of {} - {}: {} - {}", root.getProcessId(), root.getType(), maybeParent.map(Process::getProcessId), maybeParent.map(Process::getType));
+            if (maybeParent.isPresent()) {
+                root = maybeParent.get();
+            } else {
+                log.debug("Root is: {} - {}", root.getProcessId(), root.getType());
+                return root;
+            }
+        }
     }
 }

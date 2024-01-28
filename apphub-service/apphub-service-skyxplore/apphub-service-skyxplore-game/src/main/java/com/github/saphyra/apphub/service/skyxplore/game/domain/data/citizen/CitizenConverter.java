@@ -2,10 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.assignment.CitizenAssignmentProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CitizenConverter implements GameDataToModelConverter {
     private final SkillConverter skillConverter;
+    private final StatConverter statConverter;
+    private final CitizenAssignmentProvider citizenAssignmentProvider;
 
     public List<CitizenModel> toModel(UUID gameId, Collection<Citizen> citizens) {
         return citizens.stream()
@@ -49,9 +52,9 @@ public class CitizenConverter implements GameDataToModelConverter {
         return CitizenResponse.builder()
             .citizenId(citizen.getCitizenId())
             .name(citizen.getName())
-            .morale(citizen.getMorale())
-            .satiety(citizen.getSatiety())
             .skills(skillConverter.toResponse(gameData, citizen.getCitizenId()))
+            .stats(statConverter.convert(citizen))
+            .assignment(citizenAssignmentProvider.getAssignment(gameData, citizen.getCitizenId()))
             .build();
     }
 

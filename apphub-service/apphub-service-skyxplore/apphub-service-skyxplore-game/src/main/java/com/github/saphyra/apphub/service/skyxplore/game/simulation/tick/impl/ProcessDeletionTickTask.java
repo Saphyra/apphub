@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTask;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
@@ -24,7 +23,7 @@ public class ProcessDeletionTickTask implements TickTask {
     }
 
     @Override
-    public void process(Game game, SyncCache syncCache) {
+    public void process(Game game) {
         log.info("Deleting cleaned up processes of game {}", game.getGameId());
 
         Processes processes = game.getData()
@@ -34,8 +33,9 @@ public class ProcessDeletionTickTask implements TickTask {
             .toList();
 
         processesToRemove.stream()
-            .peek(process -> process.cleanup(syncCache))
-            .forEach(process -> syncCache.deleteGameItem(process.getProcessId(), GameItemType.PROCESS));
+            .peek(Process::cleanup)
+            .forEach(process -> game.getProgressDiff()
+                .delete(process.getProcessId(), GameItemType.PROCESS));
         processes.removeAll(processesToRemove);
     }
 }

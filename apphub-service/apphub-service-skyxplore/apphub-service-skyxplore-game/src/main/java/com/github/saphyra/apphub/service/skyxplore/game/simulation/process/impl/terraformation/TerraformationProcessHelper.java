@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,16 @@ class TerraformationProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
     private final ProductionOrderService productionOrderService;
+    private final SurfaceConverter surfaceConverter;
 
-    void startWork(SyncCache syncCache, GameData gameData, UUID processId, UUID terraformationId) {
+    void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID terraformationId) {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(terraformationId);
-        Planet planet = gameData.getPlanets()
-            .get(construction.getLocation());
 
         useAllocatedResourceService.resolveAllocations(
-            syncCache,
+            progressDiff,
             gameData,
             construction.getLocation(),
-            planet.getOwner(),
             terraformationId
         );
 
@@ -48,22 +47,19 @@ class TerraformationProcessHelper {
         ).forEach(workProcess -> {
             gameData.getProcesses()
                 .add(workProcess);
-            syncCache.saveGameItem(workProcess.toModel());
+            progressDiff.save(workProcess.toModel());
         });
     }
 
-    void finishTerraformation(SyncCache syncCache, GameData gameData, UUID terraformationId) {
+    void finishTerraformation(GameProgressDiff progressDiff, GameData gameData, UUID terraformationId) {
         log.info("Finishing terraformation...");
         Construction terraformation = gameData.getConstructions()
             .findByConstructionIdValidated(terraformationId);
 
-        Planet planet = gameData.getPlanets()
-            .get(terraformation.getLocation());
-
-        allocationRemovalService.removeAllocationsAndReservations(syncCache, gameData, terraformation.getLocation(), planet.getOwner(), terraformationId);
+        allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, terraformationId);
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceId(terraformation.getExternalReference());
+            .findBySurfaceIdValidated(terraformation.getExternalReference());
 
         surface.setSurfaceType(SurfaceType.valueOf(terraformation.getData()));
 
@@ -72,10 +68,11 @@ class TerraformationProcessHelper {
         gameData.getConstructions()
             .remove(terraformation);
 
-        syncCache.terraformationFinished(planet.getOwner(), terraformation.getLocation(), terraformation, surface);
+        progressDiff.save(surfaceConverter.toModel(gameData.getGameId(), surface));
+        progressDiff.delete(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
     }
 
-    public void createProductionOrders(SyncCache syncCache, GameData gameData, UUID processId, UUID terraformationId) {
-        productionOrderService.createProductionOrdersForReservedStorages(syncCache, gameData, processId, terraformationId);
+    public void createProductionOrders(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID terraformationId) {
+        productionOrderService.createProductionOrdersForReservedStorages(progressDiff, gameData, processId, terraformationId);
     }
 }

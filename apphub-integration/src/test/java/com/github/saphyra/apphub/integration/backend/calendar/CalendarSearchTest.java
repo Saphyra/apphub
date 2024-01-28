@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceA
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EditOccurrenceRequest;
@@ -38,10 +37,10 @@ public class CalendarSearchTest extends BackEndTest {
         .withNano(0)
         .withSecond(0);
 
-    @Test(dataProvider = "languageDataProvider", groups = {"be", "calendar"})
-    public void searchInCalendar(Language language) {
+    @Test(groups = {"be", "calendar"})
+    public void searchInCalendar() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -55,7 +54,7 @@ public class CalendarSearchTest extends BackEndTest {
             .content(CONTENT)
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
-        List<CalendarResponse> calendar = EventActions.createEvent(language, accessTokenId, request);
+        List<CalendarResponse> calendar = EventActions.createEvent(accessTokenId, request);
 
         UUID occurrenceId = calendar.stream()
             .filter(calendarResponse -> !calendarResponse.getEvents().isEmpty())
@@ -74,44 +73,44 @@ public class CalendarSearchTest extends BackEndTest {
             .content(CONTENT)
             .note(NOTE)
             .build();
-        OccurrenceActions.editOccurrence(language, accessTokenId, occurrenceId, editOccurrenceRequest);
+        OccurrenceActions.editOccurrence(accessTokenId, occurrenceId, editOccurrenceRequest);
 
-        queryTooShort(language, accessTokenId);
-        searchByEvent(language, accessTokenId);
-        searchByOccurrence(language, accessTokenId);
-        searchByDate(language, accessTokenId);
-        searchByTime(language, accessTokenId);
+        queryTooShort(accessTokenId);
+        searchByEvent(accessTokenId);
+        searchByOccurrence(accessTokenId);
+        searchByDate(accessTokenId);
+        searchByTime(accessTokenId);
     }
 
-    private static void queryTooShort(Language language, UUID accessTokenId) {
-        Response queryTooShortResponse = CalendarSearchActions.getSearchResponse(language, accessTokenId, "as");
+    private static void queryTooShort(UUID accessTokenId) {
+        Response queryTooShortResponse = CalendarSearchActions.getSearchResponse(accessTokenId, "as");
 
-        ResponseValidator.verifyInvalidParam(language, queryTooShortResponse, "value", "too short");
+        ResponseValidator.verifyInvalidParam(queryTooShortResponse, "value", "too short");
     }
 
-    private void searchByEvent(Language language, UUID accessTokenId) {
-        List<EventSearchResponse> searchResult = CalendarSearchActions.search(language, accessTokenId, TITLE);
+    private void searchByEvent(UUID accessTokenId) {
+        List<EventSearchResponse> searchResult = CalendarSearchActions.search(accessTokenId, TITLE);
 
         verifySearchResult(searchResult);
     }
 
-    private void searchByOccurrence(Language language, UUID accessTokenId) {
+    private void searchByOccurrence(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(language, accessTokenId, NOTE);
+        searchResult = CalendarSearchActions.search(accessTokenId, NOTE);
 
         verifySearchResult(searchResult);
     }
 
-    private void searchByDate(Language language, UUID accessTokenId) {
+    private void searchByDate(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(language, accessTokenId, EVENT_DATE.toString());
+        searchResult = CalendarSearchActions.search(accessTokenId, EVENT_DATE.toString());
 
         verifySearchResult(searchResult);
     }
 
-    private void searchByTime(Language language, UUID accessTokenId) {
+    private void searchByTime(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(language, accessTokenId, EVENT_TIME.toString());
+        searchResult = CalendarSearchActions.search(accessTokenId, EVENT_TIME.toString());
 
         verifySearchResult(searchResult);
     }

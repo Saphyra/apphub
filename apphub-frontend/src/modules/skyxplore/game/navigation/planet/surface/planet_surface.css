@@ -1,0 +1,7 @@
+#skyxplore-game-planet-surface{
+    overflow: scroll;
+}
+
+#skyxplore-game-planet-surface-container{
+    display: grid;
+}

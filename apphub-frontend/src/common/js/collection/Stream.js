@@ -78,6 +78,14 @@ const Stream = class {
             .join(delimiter);
     }
 
+    last() {
+        if (!this.items.length) {
+            return new Optional();
+        }
+
+        return new Optional(this.items[this.items.length - 1]);
+    }
+
     map(mapper) {
         return new Stream(this.items.map(mapper));
     }
@@ -124,6 +132,10 @@ const Stream = class {
         return new Optional(currentMin);
     }
 
+    noneMatch(predicate) {
+        return !this.anyMatch(predicate);
+    }
+
     peek(consumer) {
         this.forEach(consumer);
 
@@ -134,12 +146,30 @@ const Stream = class {
         return this.filter(item => !predicate(item));
     }
 
+    reverse() {
+        this.items.reverse();
+        return this;
+    }
+
     sorted(comparator) {
         const arr = this.items.slice();
 
         arr.sort(comparator);
 
         return new Stream(arr);
+    }
+
+    sum() {
+        let result = 0;
+        this.forEach(item => {
+            if (typeof item !== "number") {
+                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+            }
+
+            result += item;
+        });
+
+        return result;
     }
 
     toList() {

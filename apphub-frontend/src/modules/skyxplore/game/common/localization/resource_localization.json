@@ -1,0 +1,78 @@
+{
+    "raw_food": {
+        "en": "Raw food",
+        "hu": "Nyers étel"
+    },
+    "ore": {
+        "en": "Ore",
+        "hu": "Érc"
+    },
+    "energy": {
+        "en": "Energy",
+        "hu": "Energia"
+    },
+    "wood": {
+        "en": "Wood",
+        "hu": "Fa"
+    },
+    "stone": {
+        "en": "Stone",
+        "hu": "Kő"
+    },
+    "water": {
+        "en": "Water",
+        "hu": "Víz"
+    },
+    "sand": {
+        "en": "Sand",
+        "hu": "Homok"
+    },
+    "wheat": {
+        "en": "Wheat",
+        "hu": "Gabona"
+    },
+    "leather": {
+        "en": "Leather",
+        "hu": "Bőr"
+    },
+    "iron": {
+        "en": "Iron",
+        "hu": "Vas"
+    },
+    "plank": {
+        "en": "Plank",
+        "hu": "Deszka"
+    },
+    "steel": {
+        "en": "Steel",
+        "hu": "Acél"
+    },
+    "glass": {
+        "en": "Glass",
+        "hu": "Üveg"
+    },
+    "fuel": {
+        "en": "Fuel",
+        "hu": "Üzemanyag"
+    },
+    "food": {
+        "en": "Food",
+        "hu": "Étel"
+    },
+    "plastic": {
+        "en": "Plastic",
+        "hu": "Műanyag"
+    },
+    "oil": {
+        "en": "Oil",
+        "hu": "Olaj"
+    },
+    "silicon": {
+        "en": "Silicon",
+        "hu": "Szilikon"
+    },
+    "coal": {
+        "en": "Coal",
+        "hu": "Szén"
+    }
+}

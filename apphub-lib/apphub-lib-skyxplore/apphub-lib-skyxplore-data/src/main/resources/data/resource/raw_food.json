@@ -1,5 +1,5 @@
 {
   "id": "raw_food",
   "storageType": "bulk",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 10
 }

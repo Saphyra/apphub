@@ -44,7 +44,7 @@ class SurfacesTest {
 
         underTest.add(surface1);
 
-        assertThat(underTest.findBySurfaceId(SURFACE_ID)).isEqualTo(surface1);
+        assertThat(underTest.findBySurfaceIdValidated(SURFACE_ID)).isEqualTo(surface1);
     }
 
     @Test
@@ -53,7 +53,7 @@ class SurfacesTest {
 
         underTest.add(surface1);
 
-        Throwable ex = catchThrowable(() -> underTest.findBySurfaceId(SURFACE_ID));
+        Throwable ex = catchThrowable(() -> underTest.findBySurfaceIdValidated(SURFACE_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }

@@ -10,10 +10,11 @@ import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,6 +68,9 @@ public class WorkProcess implements Process {
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
+    @NonNull
+    private final Game game;
+
     @Override
     public int getPriority() {
         return gameData.getProcesses()
@@ -81,16 +85,18 @@ public class WorkProcess implements Process {
 
     @SneakyThrows
     @Override
-    public void work(SyncCache syncCache) {
+    public void work() {
         log.info("Working on {}", this);
+
         WorkProcessHelper helper = applicationContextProxy.getBean(WorkProcessHelper.class);
         WorkProcessConditions conditions = applicationContextProxy.getBean(WorkProcessConditions.class);
+        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
             if (isNull(buildingDataId)) {
-                helper.allocateParentAsBuildingIfPossible(syncCache, gameData, processId, externalReference);
+                helper.allocateParentAsBuildingIfPossible(progressDiff, gameData, processId, externalReference);
             } else {
-                helper.allocateBuildingIfPossible(syncCache, gameData, processId, location, buildingDataId);
+                helper.allocateBuildingIfPossible(progressDiff, gameData, processId, location, buildingDataId);
             }
 
             if (conditions.hasBuildingAllocated(gameData, processId)) {
@@ -106,7 +112,7 @@ public class WorkProcess implements Process {
         if (!conditions.hasCitizenAllocated(gameData, processId)) {
             log.info("Citizen is not allocated to work {}. Hiring one...", processId);
 
-            helper.allocateCitizenIfPossible(syncCache, gameData, processId, location, skillType, requiredWorkPoints);
+            helper.allocateCitizenIfPossible(progressDiff, gameData, processId, location, skillType, requiredWorkPoints);
 
             if (!conditions.hasCitizenAllocated(gameData, processId)) {
                 log.info("Failed allocating citizen to work {}", processId);
@@ -116,23 +122,25 @@ public class WorkProcess implements Process {
 
         int workPointsLeft = requiredWorkPoints - completedWorkPoints;
 
-        int finishedWork = helper.work(syncCache, gameData, processId, skillType, workPointsLeft, workProcessType, targetId);
+        int finishedWork = helper.work(progressDiff, gameData, processId, skillType, workPointsLeft, workProcessType, targetId);
         completedWorkPoints += finishedWork;
 
         if (completedWorkPoints >= requiredWorkPoints) {
-            helper.releaseBuildingAndCitizen(syncCache, gameData, processId);
+            helper.releaseBuildingAndCitizen(progressDiff, gameData, processId);
             status = ProcessStatus.DONE;
         }
     }
 
     @Override
-    public void cleanup(SyncCache syncCache) {
+    public void cleanup() {
+        GameProgressDiff progressDiff = game.getProgressDiff();
+
         applicationContextProxy.getBean(WorkProcessHelper.class)
-            .releaseBuildingAndCitizen(syncCache, gameData, processId);
+            .releaseBuildingAndCitizen(progressDiff, gameData, processId);
 
         status = ProcessStatus.READY_TO_DELETE;
 
-        syncCache.saveGameItem(toModel());
+        progressDiff.save(toModel());
     }
 
     @Override

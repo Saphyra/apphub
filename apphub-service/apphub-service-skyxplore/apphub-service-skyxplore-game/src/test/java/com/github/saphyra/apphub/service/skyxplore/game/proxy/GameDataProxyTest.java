@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,9 @@ public class GameDataProxyTest {
     @Mock
     private LocaleProvider localeProvider;
 
+    @Mock
+    private GameProperties gameProperties;
+
     @InjectMocks
     private GameDataProxy underTest;
 
@@ -49,6 +53,8 @@ public class GameDataProxyTest {
 
     @Test
     public void saveGameData() {
+        given(gameProperties.getItemSaverMaxChunkSize()).willReturn(1);
+
         underTest.saveItem(gameItem);
 
         verify(dataGameClient).saveGameData(Arrays.asList(gameItem), LOCALE);

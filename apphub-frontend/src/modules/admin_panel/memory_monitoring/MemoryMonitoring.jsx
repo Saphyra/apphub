@@ -8,9 +8,7 @@ import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
 import { ToastContainer } from "react-toastify";
-import WebSocketEndpoint from "../../../common/js/ws/WebSocketEndpoint";
 import useWebSocket from "react-use-websocket";
-import WebSocketEventName from "../../../common/js/ws/WebSocketEventName";
 import Durations from "./durations/Durations.jsx";
 import "./memory_monitoring.css";
 import Diagrams from "./diagrams/Diagrams";
@@ -18,6 +16,8 @@ import LocalDateTime from "../../../common/js/date/LocalDateTime";
 import serviceList from  "./services.json";
 import Stream from "../../../common/js/collection/Stream";
 import Switches from "./switches/Switches";
+import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint.js";
+import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName.js";
 
 const MemoryMonitoring = () => {
     const wsUrl = "ws://" + window.location.host + WebSocketEndpoint.ADMIN_PANEL_MEMORY_MONITORING;

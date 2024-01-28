@@ -16,6 +16,5 @@ interface BuildingRepository extends CrudRepository<BuildingEntity, String> {
 
     Optional<BuildingEntity> findBySurfaceId(String surfaceId);
 
-    //TOOD unit test
     List<BuildingEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

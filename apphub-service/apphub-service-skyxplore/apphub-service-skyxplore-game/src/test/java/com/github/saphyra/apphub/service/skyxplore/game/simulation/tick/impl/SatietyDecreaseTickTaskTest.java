@@ -1,14 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.CitizenConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,16 +18,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class SatietyDecreaseTickTaskTest {
     private static final Integer SATIETY_DECREASED_PER_TICK = 25;
+    private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private GameProperties gameProperties;
+
+    @Mock
+    private CitizenConverter citizenConverter;
 
     @InjectMocks
     private SatietyDecreaseTickTask underTest;
@@ -37,7 +46,7 @@ class SatietyDecreaseTickTaskTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private Citizen citizen;
@@ -47,6 +56,9 @@ class SatietyDecreaseTickTaskTest {
 
     @Mock
     private CitizenSatietyProperties satietyProperties;
+
+    @Mock
+    private CitizenModel citizenModel;
 
     @Test
     void getOrder() {
@@ -60,10 +72,13 @@ class SatietyDecreaseTickTaskTest {
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getSatiety()).willReturn(satietyProperties);
         given(satietyProperties.getSatietyDecreasedPerTick()).willReturn(SATIETY_DECREASED_PER_TICK);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(citizenConverter.toModel(GAME_ID, citizen)).willReturn(citizenModel);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.process(game, syncCache);
+        underTest.process(game);
 
         verify(citizen).decreaseSatiety(SATIETY_DECREASED_PER_TICK);
-        verify(syncCache).citizenModified(citizen);
+        then(progressDiff).should().save(citizenModel);
     }
 }

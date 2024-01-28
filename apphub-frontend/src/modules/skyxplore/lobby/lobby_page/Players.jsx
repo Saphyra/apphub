@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import MapStream from "../../../../common/js/collection/MapStream";
 import Stream from "../../../../common/js/collection/Stream";
 import Endpoints from "../../../../common/js/dao/dao";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
 import Player from "./players/Player";
 import PanelTitle from "./PanelTitle";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
     const [players, setPlayers] = useState({});
 
     useEffect(() => loadPlayers(), []);
     useEffect(() => handleEvent(), [lastEvent]);
-
 
     const handleEvent = () => {
         if (lastEvent === null) {

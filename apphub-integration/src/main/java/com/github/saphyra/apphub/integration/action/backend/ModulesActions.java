@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.ModulesResponse;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
 
 import java.util.HashMap;
@@ -18,14 +17,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesActions {
-    public static void logout(Language locale, UUID accessTokenId) {
-        Response response = getLogoutResponse(locale, accessTokenId);
+    public static void logout(UUID accessTokenId) {
+        Response response = getLogoutResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getLogoutResponse(Language locale, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(locale, accessTokenId)
+    public static Response getLogoutResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.LOGOUT));
     }
 

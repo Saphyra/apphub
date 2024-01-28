@@ -1,13 +1,17 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStatsAndSkills;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibility;
@@ -20,8 +24,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -32,11 +38,15 @@ public class GameDataControllerImplTest {
     private static final String DATA_ID = "data-id";
     private static final String BUILDING_DATA_ID = "building-data-id";
     private static final String MISC_BUILDING_DATA_ID = "misc-building-data-id";
+    private static final String RESOURCE_DATA_ID = "resource-data-id";
 
     private final AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
 
     @Mock
     private TerraformingPossibilitiesService terraformingPossibilitiesService;
+
+    @Mock
+    private ResourceDataService resourceDataService;
 
     private GameDataControllerImpl underTest;
 
@@ -50,8 +60,9 @@ public class GameDataControllerImplTest {
     public void setUp() {
         given(gameDataItem.getId()).willReturn(DATA_ID);
         dataService.put(DATA_ID, gameDataItem);
+        given(resourceDataService.keySet()).willReturn(Set.of(RESOURCE_DATA_ID));
 
-        underTest = new GameDataControllerImpl(Arrays.asList(dataService), terraformingPossibilitiesService);
+        underTest = new GameDataControllerImpl(Arrays.asList(dataService), terraformingPossibilitiesService, resourceDataService);
     }
 
     @Test
@@ -90,7 +101,7 @@ public class GameDataControllerImplTest {
         dataService.put(MISC_BUILDING_DATA_ID, miscellaneousBuilding);
         dataService.put(DATA_ID, gameDataItem);
 
-        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService);
+        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService, resourceDataService);
 
         List<String> result = underTest.getAvailableBuildings(SurfaceType.CONCRETE.name());
 
@@ -113,6 +124,19 @@ public class GameDataControllerImplTest {
         List<Object> result = underTest.getTerraformingPossibilities(SurfaceType.CONCRETE.name());
 
         assertThat(result).containsExactly(terraformingPossibility);
+    }
+
+    @Test
+    void getStatsAndSkills() {
+        CitizenStatsAndSkills result = underTest.getStatsAndSkills();
+
+        assertThat(new HashSet<>(result.getSkills())).hasSize(SkillType.values().length);
+        assertThat(new HashSet<>(result.getStats())).hasSize(CitizenStat.values().length);
+    }
+
+    @Test
+    void getResourceDataIds() {
+        assertThat(underTest.getResourceDataIds()).containsExactly(RESOURCE_DATA_ID);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.Chat;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.SystemMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.SkyXploreGameWebSocketHandler;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +44,7 @@ public class LeaveChatRoomServiceTest {
     private CharacterProxy characterProxy;
 
     @Mock
-    private SkyXploreGameWebSocketHandler webSocketHandler;
+    private SkyXploreGameMainWebSocketHandler webSocketHandler;
 
     @InjectMocks
     private LeaveChatRoomService underTest;

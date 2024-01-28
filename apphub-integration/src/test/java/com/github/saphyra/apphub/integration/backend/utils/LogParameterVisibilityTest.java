@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.utils;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.UtilsActions;
-import com.github.saphyra.apphub.integration.localization.Language;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.utils.LogParameterVisibilityResponse;
 import com.github.saphyra.apphub.integration.structure.api.utils.SetLogParameterVisibilityRequest;
@@ -20,12 +19,10 @@ public class LogParameterVisibilityTest extends BackEndTest {
 
     @Test(groups = {"be", "utils"})
     public void crudTest() {
-        Language language = Language.HUNGARIAN;
-
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(language, userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
 
-        List<LogParameterVisibilityResponse> createData = UtilsActions.getVisibilities(language, accessTokenId, Arrays.asList(PARAMETER));
+        List<LogParameterVisibilityResponse> createData = UtilsActions.getVisibilities(accessTokenId, Arrays.asList(PARAMETER));
 
         assertThat(createData).hasSize(1);
         assertThat(createData.get(0).getParameter()).isEqualTo(PARAMETER);
@@ -37,9 +34,9 @@ public class LogParameterVisibilityTest extends BackEndTest {
             .id(id)
             .visible(false)
             .build();
-        UtilsActions.setVisibility(language, accessTokenId, request);
+        UtilsActions.setVisibility(accessTokenId, request);
 
-        List<LogParameterVisibilityResponse> queryData = UtilsActions.getVisibilities(language, accessTokenId, Arrays.asList(PARAMETER));
+        List<LogParameterVisibilityResponse> queryData = UtilsActions.getVisibilities(accessTokenId, Arrays.asList(PARAMETER));
 
         assertThat(queryData).hasSize(1);
         assertThat(queryData.get(0).getParameter()).isEqualTo(PARAMETER);

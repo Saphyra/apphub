@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.player;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.OpenedPage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,6 +18,5 @@ public class Player {
     private UUID allianceId;
     private boolean ai;
     private volatile boolean connected;
-    @Builder.Default
-    private OpenedPage openedPage = OpenedPage.DEFAULT_PAGE;
+    private volatile LocalDateTime disconnectedAt;
 }

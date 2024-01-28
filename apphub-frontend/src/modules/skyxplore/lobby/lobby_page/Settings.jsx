@@ -5,7 +5,7 @@ import Setting from "./settings/Setting";
 import Constants from "../../../../common/js/Constants";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import Endpoints from "../../../../common/js/dao/dao";
-import WebSocketEventName from "../../../../common/js/ws/WebSocketEventName";
+import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 
 const Settings = ({ localizationHandler, isHost, lastEvent }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);

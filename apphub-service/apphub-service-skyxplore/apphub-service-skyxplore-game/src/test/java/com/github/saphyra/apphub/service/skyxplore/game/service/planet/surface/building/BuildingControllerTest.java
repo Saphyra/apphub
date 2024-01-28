@@ -71,7 +71,7 @@ public class BuildingControllerTest {
     void cancelConstruction() {
         underTest.cancelConstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        verify(cancelConstructionService).cancelConstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+        verify(cancelConstructionService).cancelConstructionOfBuilding(USER_ID, BUILDING_ID);
     }
 
     @Test
@@ -85,6 +85,6 @@ public class BuildingControllerTest {
     void cancelDeconstruction() {
         underTest.cancelDeconstruction(PLANET_ID, BUILDING_ID, accessTokenHeader);
 
-        verify(cancelDeconstructionService).cancelDeconstructionOfBuilding(USER_ID, PLANET_ID, BUILDING_ID);
+        verify(cancelDeconstructionService).cancelDeconstructionOfBuilding(USER_ID, BUILDING_ID);
     }
 }

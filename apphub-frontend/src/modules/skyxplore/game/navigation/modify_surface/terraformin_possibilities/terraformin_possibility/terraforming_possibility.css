@@ -1,0 +1,26 @@
+.skyxplore-game-terraforming-possibility{
+    margin: 10px;
+    border: 3px ridge white;
+    border-radius: 10px;
+}
+
+.skyxplore-game-terraforming-possibility-header{
+    text-align: center;
+    font-size: 26px;
+    padding: 5px;
+    border-bottom: 3px ridge white;
+}
+
+.skyxplore-game-terraforming-possibility-construction-requirements-wrapper{
+    padding: 10px;
+}
+
+.skyxplore-game-terraforming-possibility-construction-requirements{
+    margin: auto;
+}
+
+.skyxplore-game-terraform-button{
+    display: block;
+    margin: 10px auto;
+    margin-top: 0;
+}

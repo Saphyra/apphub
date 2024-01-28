@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXplorePlanetPopulationController;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ class SkyXplorePlanetPopulationControllerImpl implements SkyXplorePlanetPopulati
     }
 
     @Override
-    public CitizenResponse renameCitizen(OneParamRequest<String> newName, UUID citizenId, AccessTokenHeader accessTokenHeader) {
+    public void renameCitizen(OneParamRequest<String> newName, UUID citizenId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename citizen {}", accessTokenHeader.getUserId(), citizenId);
-        return renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), citizenId, newName.getValue());
+         renameCitizenService.renameCitizen(accessTokenHeader.getUserId(), citizenId, newName.getValue());
     }
 }

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GamePr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest.RestProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest.RestProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTask;
@@ -27,25 +26,25 @@ class RestSchedulerTickTask implements TickTask {
     }
 
     @Override
-    public void process(Game game, SyncCache syncCache) {
+    public void process(Game game) {
         game.getData()
             .getCitizens()
             .stream()
             .filter(citizen -> game.getData().getCitizenAllocations().findByCitizenId(citizen.getCitizenId()).isEmpty())
-            .filter(citizen -> citizen .getMorale() < gameProperties.getCitizen().getMorale().getRestingMoraleLimit())
-            .forEach(citizen -> scheduleRestIfNeeded(syncCache, game.getData(), citizen));
+            .filter(citizen -> citizen.getMorale() < gameProperties.getCitizen().getMorale().getRestingMoraleLimit())
+            .forEach(citizen -> scheduleRestIfNeeded(game, game.getData(), citizen));
     }
 
-    private void scheduleRestIfNeeded(SyncCache syncCache, GameData gameData, Citizen citizen) {
+    private void scheduleRestIfNeeded(Game game, GameData gameData, Citizen citizen) {
         CitizenMoraleProperties moraleProperties = gameProperties.getCitizen()
             .getMorale();
 
         int restForTicks = citizen.getMorale() > moraleProperties.getExhaustedMorale() ? moraleProperties.getMinRestTicks() : moraleProperties.getExhaustedRestTicks();
 
-        RestProcess restProcess = restProcessFactory.create(gameData, citizen, restForTicks);
+        RestProcess restProcess = restProcessFactory.create(game, citizen, restForTicks);
         gameData.getProcesses()
             .add(restProcess);
-        syncCache.saveGameItem(restProcess
-            .toModel());
+        game.getProgressDiff()
+            .save(restProcess.toModel());
     }
 }

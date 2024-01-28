@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.CitizenResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -23,7 +22,7 @@ class RenameCitizenService {
     private final CitizenConverter citizenConverter;
     private final GameDataProxy gameDataProxy;
 
-    CitizenResponse renameCitizen(UUID userId, UUID citizenId, String newName) {
+    void renameCitizen(UUID userId, UUID citizenId, String newName) {
         if (isBlank(newName)) {
             throw ExceptionFactory.invalidParam("value", "must not be null or blank");
         }
@@ -37,11 +36,11 @@ class RenameCitizenService {
             .getCitizens()
             .findByCitizenIdValidated(citizenId);
 
-        return game.getEventLoop()
-            .processWithResponseAndWait(() -> {
+        game.getEventLoop()
+            .processWithWait(() -> {
                 citizen.setName(newName);
-                gameDataProxy.saveItem(citizenConverter.toModel(game.getGameId(), citizen));
-                return citizenConverter.toResponse(game.getData(), citizen);
+                game.getProgressDiff()
+                    .save(citizenConverter.toModel(game.getGameId(), citizen));
             })
             .getOrThrow();
     }

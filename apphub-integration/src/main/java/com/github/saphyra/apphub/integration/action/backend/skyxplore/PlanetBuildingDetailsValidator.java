@@ -1,23 +1,23 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetBuildingOverviewDetailedResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetBuildingOverviewResponse;
 
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlanetBuildingDetailsValidator {
-    public static void verifyBuildingDetails(Object buildingDetailsObj, String surfaceType, String buildingDataId, int numberOfBuildings, int levelOfBuildings) {
-        TypeReference<Map<String, PlanetBuildingOverviewResponse>> typeReference = new TypeReference<>() {
-        };
-
-        Map<String, PlanetBuildingOverviewResponse> buildingDetails = TestBase.OBJECT_MAPPER_WRAPPER.convertValue(buildingDetailsObj, typeReference);
+    public static void verifyBuildingDetails(Map<String, PlanetBuildingOverviewResponse> buildingDetails, String surfaceType, String buildingDataId, int numberOfBuildings, int levelOfBuildings) {
+        assertThat(buildingDetails).isNotNull();
 
         PlanetBuildingOverviewResponse response = buildingDetails.get(surfaceType);
+
+        if (isNull(response)) {
+            throw new RuntimeException("No surface with type " + surfaceType + " is present in buildingDetails.");
+        }
 
         Optional<PlanetBuildingOverviewDetailedResponse> maybeBuildingDetail = response.getBuildingDetails()
             .stream()
@@ -32,7 +32,5 @@ public class PlanetBuildingDetailsValidator {
             assertThat(buildingDetail.getLevelSum()).isEqualTo(levelOfBuildings);
             assertThat(buildingDetail.getUsedSlots()).isEqualTo(numberOfBuildings);
         }
-
-
     }
 }

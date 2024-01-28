@@ -89,7 +89,7 @@ public class StoredResourceAmountQueryServiceTest {
         given(storedResource1.getAmount()).willReturn(AMOUNT);
         given(resourceData.getId()).willReturn(DATA_ID_1);
 
-        int result = underTest.getActualStorageAmount(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.BULK);
 
         assertThat(result).isEqualTo(AMOUNT);
     }

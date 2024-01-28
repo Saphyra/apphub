@@ -4,12 +4,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -19,7 +18,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_sett
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.cache.SyncCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +39,6 @@ class StorageSettingProcessTest {
     private static final Integer AMOUNT = 234;
     private static final Integer PLANET_PRIORITY = 342;
     private static final Integer STORAGE_SETTING_PRIORITY = 34;
-    private static final UUID OWNER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -51,7 +48,7 @@ class StorageSettingProcessTest {
     private GameData gameData;
 
     @Mock
-    private SyncCache syncCache;
+    private GameProgressDiff progressDiff;
 
     @Mock
     private StorageSettingProcessConditions conditions;
@@ -61,6 +58,9 @@ class StorageSettingProcessTest {
 
     @Mock
     private AllocationRemovalService allocationRemovalService;
+
+    @Mock
+    private Game game;
 
     private StorageSettingProcess underTest;
 
@@ -82,9 +82,6 @@ class StorageSettingProcessTest {
     @Mock
     private Process process;
 
-    @Mock
-    private Planet planet;
-
     @BeforeEach
     void setUp() {
         underTest = StorageSettingProcess.builder()
@@ -95,6 +92,7 @@ class StorageSettingProcessTest {
             .storageSettingId(STORAGE_SETTING_ID)
             .amount(AMOUNT)
             .applicationContextProxy(applicationContextProxy)
+            .game(game)
             .build();
     }
 
@@ -129,34 +127,33 @@ class StorageSettingProcessTest {
         given(conditions.isFinished(gameData, PROCESS_ID))
             .willReturn(false)
             .willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        underTest.work(syncCache);
+        underTest.work();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(helper).orderResources(syncCache, gameData, PROCESS_ID, storageSetting, AMOUNT);
+        verify(helper).orderResources(progressDiff, gameData, PROCESS_ID, storageSetting, AMOUNT);
     }
 
     @Test
     void cleanup() {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
-        given(gameData.getPlanets()).willReturn(CollectionUtils.singleValueMap(LOCATION, planet, new Planets()));
-        given(planet.getOwner()).willReturn(OWNER_ID);
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
-        underTest.cleanup(syncCache);
+        underTest.cleanup();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(process).cleanup(syncCache);
-        verify(allocationRemovalService).removeAllocationsAndReservations(syncCache, gameData, LOCATION, OWNER_ID, PROCESS_ID);
-        verify(syncCache).storageModified(OWNER_ID, LOCATION);
-        verify(syncCache).saveGameItem(underTest.toModel());
+        verify(process).cleanup();
+        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, PROCESS_ID);
+        verify(progressDiff).save(underTest.toModel());
     }
 
     @Test
