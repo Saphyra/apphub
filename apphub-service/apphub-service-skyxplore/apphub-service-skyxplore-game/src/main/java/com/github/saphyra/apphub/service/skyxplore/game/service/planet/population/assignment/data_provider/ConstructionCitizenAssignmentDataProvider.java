@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructionCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
     @Override
     public ProcessType getType() {

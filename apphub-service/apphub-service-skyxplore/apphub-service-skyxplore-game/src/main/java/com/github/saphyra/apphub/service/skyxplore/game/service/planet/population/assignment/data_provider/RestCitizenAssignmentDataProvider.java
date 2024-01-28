@@ -13,7 +13,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RestCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
     @Override
     public ProcessType getType() {

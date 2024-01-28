@@ -16,7 +16,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CitizenAssignmentQueryService {
     private final List<CitizenAssignmentDataProvider> dataProviders;
 

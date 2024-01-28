@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CitizenAssignmentProvider {
     private final CitizenAssignmentQueryService citizenAssignmentQueryService;
 

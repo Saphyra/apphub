@@ -14,7 +14,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TerraformationCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
     @Override
     public ProcessType getType() {
