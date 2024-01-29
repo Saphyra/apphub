@@ -166,7 +166,9 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
         try {
             TextMessage textMessage = new TextMessage(context.getObjectMapperWrapper().writeValueAsString(event));
             synchronized (session) {
-                session.sendMessage(textMessage);
+                if (session.isOpen()) {
+                    session.sendMessage(textMessage);
+                }
             }
             sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
         } catch (Exception e) {

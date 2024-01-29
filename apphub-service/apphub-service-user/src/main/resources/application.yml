@@ -43,3 +43,4 @@ settings:
     show-archived: true
 
 maxNumberOfUsersFound: 100
+deleteAccountBatchCount: 10

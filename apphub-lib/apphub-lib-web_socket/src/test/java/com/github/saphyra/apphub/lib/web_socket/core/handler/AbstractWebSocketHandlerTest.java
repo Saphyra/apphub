@@ -117,6 +117,7 @@ class AbstractWebSocketHandlerTest {
 
         WebSocketSessionWrapper sessionWrapper = WebSocketSessionWrapper.builder().session(session).build();
         underTest.sessions.put(SESSION_ID, sessionWrapper);
+        given(session.isOpen()).willReturn(true);
 
         underTest.sendPingRequest();
 
@@ -158,6 +159,7 @@ class AbstractWebSocketHandlerTest {
         given(objectMapperWrapper.writeValueAsString(event)).willReturn(SERIALIZED_EVENT);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
+        given(session.isOpen()).willReturn(true);
 
         underTest.sendEvent(USER_ID, event);
 

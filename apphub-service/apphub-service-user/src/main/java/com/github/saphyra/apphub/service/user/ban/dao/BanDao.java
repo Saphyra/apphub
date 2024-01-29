@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class BanDao extends AbstractDao<BanEntity, Ban, String, BanRepository> {
+public class BanDao extends AbstractDao<BanEntity, Ban, String, BanRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public BanDao(BanConverter converter, BanRepository repository, UuidConverter uuidConverter) {
@@ -19,6 +20,7 @@ public class BanDao extends AbstractDao<BanEntity, Ban, String, BanRepository> {
         this.uuidConverter = uuidConverter;
     }
 
+    @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }

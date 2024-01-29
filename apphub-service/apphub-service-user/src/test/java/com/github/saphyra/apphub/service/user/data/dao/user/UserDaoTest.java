@@ -102,7 +102,7 @@ public class UserDaoTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.existsById(USER_ID_STRING)).willReturn(true);
 
-        underTest.deleteById(USER_ID);
+        underTest.deleteByUserId(USER_ID);
 
         verify(repository).deleteById(USER_ID_STRING);
     }
