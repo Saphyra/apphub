@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -95,7 +96,6 @@ public class ListItemDaoTest {
     @Test
     public void deleteByUserId() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
         underTest.deleteByUserId(USER_ID);
 
@@ -105,12 +105,22 @@ public class ListItemDaoTest {
     @Test
     public void getByUserId() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByUserId(USER_ID_STRING)).willReturn(Arrays.asList(entity));
         given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(domain));
 
         List<ListItem> result = underTest.getByUserId(USER_ID);
 
         assertThat(result).containsExactly(domain);
+    }
+
+    @Test
+    void getByListItemTypeUnencrypted() {
+        given(repository.getByType(ListItemType.TEXT)).willReturn(List.of(entity));
+        given(entity.getUserId()).willReturn(USER_ID_STRING);
+        given(entity.getListItemId()).willReturn(LIST_ITEM_ID_STRING);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
+
+        assertThat(underTest.getByListItemTypeUnencrypted(ListItemType.TEXT)).containsExactly(new BiWrapper<>(USER_ID, LIST_ITEM_ID));
     }
 }

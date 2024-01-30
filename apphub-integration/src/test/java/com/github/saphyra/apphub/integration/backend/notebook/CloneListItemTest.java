@@ -11,20 +11,21 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.Range;
-import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableColumnModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableHeadModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
@@ -74,7 +75,8 @@ public class CloneListItemTest extends BackEndTest {
     private static final Double CUSTOM_TABLE_RANGE_MAX = 6d;
     private static final Double CUSTOM_TABLE_RANGE_STEP = 3d;
     private static final Double CUSTOM_TABLE_RANGE_VALUE = 5d;
-    private static final String CUSTOM_TABLE_COLUMN_LINK = "custom-table-column-link";
+    private static final String CUSTOM_TABLE_COLUMN_LINK_LABEL = "custom-table-column-link-label";
+    private static final String CUSTOM_TABLE_COLUMN_LINK_URL = "custom-table-column-link-url";
 
     @Test(groups = {"be", "notebook"})
     public void cloneListItem() {
@@ -224,7 +226,10 @@ public class CloneListItemTest extends BackEndTest {
                         TableColumnModel.builder()
                             .columnType(ColumnType.LINK)
                             .columnIndex(9)
-                            .data(CUSTOM_TABLE_COLUMN_LINK)
+                            .data(new Link(
+                                CUSTOM_TABLE_COLUMN_LINK_LABEL,
+                                CUSTOM_TABLE_COLUMN_LINK_URL
+                            ))
                             .build(),
                         TableColumnModel.builder()
                             .columnType(ColumnType.EMPTY)
@@ -342,7 +347,7 @@ public class CloneListItemTest extends BackEndTest {
                 Object.class
             )
         );
-        verifyCustomTableColumn(customTableData, 9, ColumnType.LINK, CUSTOM_TABLE_COLUMN_LINK);
+        verifyCustomTableColumn(customTableData, 9, ColumnType.LINK, OBJECT_MAPPER_WRAPPER.convertValue(new Link(CUSTOM_TABLE_COLUMN_LINK_LABEL, CUSTOM_TABLE_COLUMN_LINK_URL), Object.class));
         verifyCustomTableColumn(customTableData, 10, ColumnType.EMPTY, null);
     }
 

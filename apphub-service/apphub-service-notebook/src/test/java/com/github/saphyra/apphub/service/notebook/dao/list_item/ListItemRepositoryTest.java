@@ -122,4 +122,19 @@ public class ListItemRepositoryTest {
 
         assertThat(result).containsExactly(entity1);
     }
+
+    @Test
+    void getByType(){
+        ListItemEntity entity1 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_1)
+            .type(ListItemType.TEXT)
+            .build();
+        ListItemEntity entity2 = ListItemEntity.builder()
+            .listItemId(LIST_ITEM_ID_2)
+            .type(ListItemType.LINK)
+            .build();
+        underTest.saveAll(Arrays.asList(entity1, entity2));
+
+        assertThat(underTest.getByType(ListItemType.TEXT)).containsExactly(entity1);
+    }
 }

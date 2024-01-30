@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
 import ListItemType from "../../../../../common/ListItemType";
@@ -57,7 +56,6 @@ export const close = (editingEnabled, setConfirmationDialogData, localizationHan
 }
 
 const doClose = (setOpenedListItem, parent, setConfirmationDialogData) => {
-    console.log(setOpenedListItem);
     setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
     setConfirmationDialogData(null);
 }

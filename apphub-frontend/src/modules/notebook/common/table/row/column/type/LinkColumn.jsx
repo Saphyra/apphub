@@ -1,6 +1,7 @@
 import React from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
+import PreLabeledInputField from "../../../../../../../common/component/input/PreLabeledInputField";
 
 const LinkColumn = ({
     columnData,
@@ -9,20 +10,41 @@ const LinkColumn = ({
     selectType,
     localizationHandler
 }) => {
-    const updateContent = (newValue) => {
-        columnData.data = newValue;
+    const updateLabel = (newValue) => {
+        columnData.data.label = newValue;
         updateColumn();
     }
+
+    const updateUrl = (newValue) => {
+        columnData.data.url = newValue;
+        updateColumn();
+    }
+
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
                 <div className="table-column-wrapper">
                     <div className="table-column-content">
-                        <InputField
-                            className={"notebook-table-column-input"}
-                            type="text"
-                            onchangeCallback={updateContent}
-                            value={columnData.data}
+                        <PreLabeledInputField
+                            label={localizationHandler.get("label") + ":"}
+                            input={<InputField
+                                className={"notebook-table-column-input notebook-custom-table-column-link-label"}
+                                type="text"
+                                placeholder={localizationHandler.get("label")}
+                                onchangeCallback={updateLabel}
+                                value={columnData.data.label}
+                            />}
+                        />
+
+                        <PreLabeledInputField
+                            label={localizationHandler.get("url") + ":"}
+                            input={<InputField
+                                className={"notebook-table-column-input notebook-custom-table-column-link-url"}
+                                type="text"
+                                placeholder={localizationHandler.get("url")}
+                                onchangeCallback={updateUrl}
+                                value={columnData.data.url}
+                            />}
                         />
                     </div>
 
@@ -39,9 +61,9 @@ const LinkColumn = ({
             <td className="table-column">
                 <div
                     className="table-column-wrapper button"
-                    onClick={() => window.open(columnData.data)}
+                    onClick={() => window.open(columnData.data.url)}
                 >
-                    {columnData.data}
+                    {columnData.data.label}
                 </div>
             </td >
         );

@@ -15,7 +15,6 @@ const getDefaultDataForColumnType = (columnType) => {
                 max: 10
             }
         case ColumnType.TEXT:
-        case ColumnType.LINK:
         case ColumnType.DATE:
         case ColumnType.TIME:
         case ColumnType.DATE_TIME:
@@ -25,6 +24,11 @@ const getDefaultDataForColumnType = (columnType) => {
             return false;
         case ColumnType.COLOR:
             return "#000000";
+        case ColumnType.LINK:
+            return {
+                label: "",
+                url: ""
+            }
         default:
             return null;
     }

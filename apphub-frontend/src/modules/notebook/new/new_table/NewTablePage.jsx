@@ -37,10 +37,6 @@ const NewTablePage = ({ checklist, custom }) => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    const updateRows = () => {
-        Utils.copyAndSet(rows, setRows);
-    }
-
     const addFile = (rowIndex, columnIndex, file) => {
         const clone = new Stream(files)
             .remove(file => file.rowIndex == rowIndex && file.columnIndex == columnIndex)

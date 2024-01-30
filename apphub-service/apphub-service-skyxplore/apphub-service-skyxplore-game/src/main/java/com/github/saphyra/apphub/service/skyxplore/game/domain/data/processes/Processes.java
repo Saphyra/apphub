@@ -15,43 +15,43 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Processes extends Vector<Process> {
-    public List<Process> getByExternalReferenceAndType(UUID externalReference, ProcessType type) {
+    public synchronized List<Process> getByExternalReferenceAndType(UUID externalReference, ProcessType type) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == type)
             .collect(Collectors.toList());
     }
 
-    public List<Process> getByExternalReference(UUID externalReference) {
+    public synchronized List<Process> getByExternalReference(UUID externalReference) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .collect(Collectors.toList());
     }
 
-    public Process findByIdValidated(UUID processId) {
+    public synchronized Process findByIdValidated(UUID processId) {
         return findById(processId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found by processId " + processId));
     }
 
-    private Optional<Process> findById(UUID processId) {
+    private synchronized Optional<Process> findById(UUID processId) {
         return stream()
             .filter(process -> process.getProcessId().equals(processId))
             .findAny();
     }
 
-    public Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
+    public synchronized Process findByExternalReferenceAndTypeValidated(UUID externalReference, ProcessType processType) {
         return findByExternalReferenceAndType(externalReference, processType)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "No process found with externalReference " + externalReference + " and processType " + processType));
     }
 
-    public Optional<Process> findByExternalReferenceAndType(UUID externalReference, ProcessType processType) {
+    public synchronized Optional<Process> findByExternalReferenceAndType(UUID externalReference, ProcessType processType) {
         return stream()
             .filter(process -> process.getExternalReference().equals(externalReference))
             .filter(process -> process.getType() == processType)
             .findAny();
     }
 
-    public Process getRootOf(Process process) {
+    public synchronized Process getRootOf(Process process) {
         Process root = process;
         while (true) {
             Optional<Process> maybeParent = findById(root.getExternalReference());

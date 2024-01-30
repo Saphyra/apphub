@@ -120,7 +120,6 @@ const SkyXploreLobbyPage = () => {
     //Operations
     const startGame = async () => {
         if (lobbyData.lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW) {
-            console.log("New game can be started without confirmation");
             sendStartGameRequest();
             return;
         }
@@ -128,13 +127,9 @@ const SkyXploreLobbyPage = () => {
         const response = await Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
             .send();
 
-        console.log(response.length);
-
         if (response.length > 0) {
-            console.log("Asking the user if he wants to start the game without every player");
             setDisplayStartGameDialog(true);
         } else {
-            console.log("Every player is joined, starting the game without confirmation");
             sendStartGameRequest();
         }
     }

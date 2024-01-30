@@ -1,6 +1,8 @@
 ===FEATURES===
 Index
     Log in by pressing enter
+Notebook
+    Separate field for Link label in Custom Table
 
 ===BUGFIXES===
 

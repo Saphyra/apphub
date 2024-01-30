@@ -21,7 +21,7 @@ const getDefaultErrorHandler = () => {
                 }
 
             } else if (response.status == 0) {
-                console.log("Connection failed");
+                console.error("Connection failed");
             } else {
                 NotificationService.showError("Error response from BackEnd: " + response.toString());
             }
@@ -38,7 +38,7 @@ const getDefaultErrorHandler = () => {
                     return errorResponse.errorCode !== undefined
                         && errorResponse.params !== undefined;
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                     return false;
                 }
             }

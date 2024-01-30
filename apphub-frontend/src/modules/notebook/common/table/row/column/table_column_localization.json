@@ -38,5 +38,13 @@
     "download-file": {
         "en": "Download file",
         "hu": "Fájl letöltése"
+    },
+    "label": {
+        "en": "Label",
+        "hu": "Felirat"
+    },
+    "url": {
+        "en": "URL",
+        "hu": "URL"
     }
 }

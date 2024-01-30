@@ -38,6 +38,7 @@ public enum LocalizedText {
     SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
     SKYXPLORE_GAME_STORAGE_USED("Storage still in use. Free up some space before you deconstruct it."),
     SKYXPLORE_GAME_STORAGE_SETTING_SAVED("Storage setting saved."),
+    NOTEBOOK_LINK_LABEL_BLANK("Link label must not be blank."),
     ;
 
     private final String text;

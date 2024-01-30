@@ -80,13 +80,13 @@ const Table = ({
                                     <AddColumnButton
                                         id="notebook-content-table-add-column-to-start"
                                         label="|<+"
-                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN)}
+                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN, custom)}
                                     />
 
                                     <AddColumnButton
                                         id="notebook-content-table-add-column-to-end"
                                         label="+>|"
-                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX)}
+                                        callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX, custom)}
                                     />
                                 </th>
                             }

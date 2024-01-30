@@ -10,7 +10,7 @@ export const newRow = (rows, tableHeads, setRows, indexRange, custom) => {
 
     const columns = new Stream(tableHeads)
         .map(tableHead => tableHead.columnIndex)
-        .map(columnIndex => new TableColumnData(columnIndex, getColumnType(rows, indexRange, custom, columnIndex)))
+        .map(columnIndex => new TableColumnData(columnIndex, getColumnType(rows, rowIndex, columnIndex, custom)))
         .toList();
 
     const newRow = new TableRowData(rowIndex, columns);
@@ -21,17 +21,20 @@ export const newRow = (rows, tableHeads, setRows, indexRange, custom) => {
     setRows(copy);
 }
 
-const getColumnType = (maybeFirstRow, columnIndex, custom) => {
+const getColumnType = (rows, newRowIndex, columnIndex, custom) => {
     if (!custom) {
         return ColumnType.TEXT;
     }
 
-    return maybeFirstRow.map(
-        row => new Stream(row.columns)
-            .filter(column => column.columnIndex === columnIndex)
-            .findFirst()
-            .orElseThrow("IllegalState", "Column not found by columnIndex " + columnIndex)
-    )
+    return new Stream(rows)
+        .filter(row => row.rowIndex === newRowIndex - 1)
+        .findFirst()
+        .map(
+            row => new Stream(row.columns)
+                .filter(column => column.columnIndex === columnIndex)
+                .findFirst()
+                .orElseThrow("IllegalState", "Column not found by columnIndex " + columnIndex)
+        )
         .map(column => column.columnType)
         .orElse(ColumnType.EMPTY);
 }

@@ -4,7 +4,6 @@ import Utils from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import MoveDirection from "../../../../../common/MoveDirection";
-import ChecklistItemData from "../../../../../common/checklist_item/ChecklistItemData";
 import UpdateType from "../../../../../common/checklist_item/UpdateType";
 
 export const updateItem = (item, updateType, editingEnabled, items, setItems) => {
@@ -23,7 +22,6 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
         }
     }
 
-    console.log("update");
     Utils.copyAndSet(items, setItems);
 }
 

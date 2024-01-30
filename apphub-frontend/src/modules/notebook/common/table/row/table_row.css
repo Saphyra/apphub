@@ -3,7 +3,7 @@
 }
 
 .notebook-table-column-input {
-    width: calc(100% - 6px);
+    width: 300px;
 }
 
 .notebook-table-row-checked-cell {
