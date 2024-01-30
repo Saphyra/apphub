@@ -6,5 +6,8 @@
 
 ===TECHNICAL DEBTS===
     Configurable amount of user deletion batch size
+    Admin Panel
+        Ban
+            Include self
 
 ===ETC===

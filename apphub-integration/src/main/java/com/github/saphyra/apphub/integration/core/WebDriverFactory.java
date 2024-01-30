@@ -16,6 +16,7 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.html5.WebStorage;
 
@@ -123,6 +124,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 ChromeOptions options = new ChromeOptions();
                 options.setHeadless(TestConfiguration.WEB_DRIVER_HEADLESS_MODE);
                 options.addArguments("window-size=1920,1080");
+                options.setLogLevel(ChromeDriverLogLevel.ALL);
 
                 driver = new ChromeDriver(options);
                 log.debug("Driver created: {}", driver);

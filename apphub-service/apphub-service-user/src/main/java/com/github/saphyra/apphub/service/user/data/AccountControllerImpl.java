@@ -78,14 +78,14 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    public List<AccountResponse> searchAccount(OneParamRequest<String> search, Boolean includeMarkedForDeletion, AccessTokenHeader accessTokenHeader) {
+    public List<AccountResponse> searchAccount(OneParamRequest<String> search, Boolean includeMarkedForDeletion, Boolean includeSelf, AccessTokenHeader accessTokenHeader) {
         String searchText = search.getValue();
         log.info("{} wants to query users by {}", accessTokenHeader.getUserId(), searchText);
         ValidationUtil.minLength(searchText, 3, "value");
 
         return userDao.getByUsernameOrEmailContainingIgnoreCase(searchText)
             .stream()
-            .filter(user -> !user.getUserId().equals(accessTokenHeader.getUserId()))
+            .filter(user -> includeSelf || !user.getUserId().equals(accessTokenHeader.getUserId()))
             .filter(user -> includeMarkedForDeletion || !user.isMarkedForDeletion())
             .map(this::convert)
             .collect(Collectors.toList());

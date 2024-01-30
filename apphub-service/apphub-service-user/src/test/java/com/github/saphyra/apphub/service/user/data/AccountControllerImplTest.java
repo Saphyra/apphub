@@ -140,7 +140,7 @@ public class AccountControllerImplTest {
     public void searchAccounts_tooShort() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
 
-        Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, false, accessTokenHeader));
 
         ExceptionValidator.validateInvalidParam(ex, "value", "too short");
     }
@@ -152,9 +152,27 @@ public class AccountControllerImplTest {
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessTokenHeader);
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void searchAccounts_includeSelf() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+
+        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(user.getUserId()).willReturn(USER_ID_1);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, true, accessTokenHeader);
+
+        assertThat(result).hasSize(1);
+        AccountResponse response = result.get(0);
+        assertThat(response.getUserId()).isEqualTo(USER_ID_1);
+        assertThat(response.getEmail()).isEqualTo(EMAIL);
+        assertThat(response.getUsername()).isEqualTo(USERNAME);
     }
 
     @Test
@@ -168,7 +186,7 @@ public class AccountControllerImplTest {
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessTokenHeader);
 
         assertThat(result).hasSize(1);
         AccountResponse response = result.get(0);
@@ -185,7 +203,7 @@ public class AccountControllerImplTest {
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), true, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), true, false, accessTokenHeader);
 
         assertThat(result).hasSize(2);
     }
