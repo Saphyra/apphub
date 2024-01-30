@@ -1,4 +1,6 @@
 ===FEATURES===
+Index
+    Log in by pressing enter
 
 ===BUGFIXES===
 
