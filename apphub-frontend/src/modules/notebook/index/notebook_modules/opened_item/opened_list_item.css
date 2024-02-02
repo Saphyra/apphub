@@ -7,5 +7,8 @@
     flex-grow: 1;
     overflow: auto;
     border-top: 1px solid white;
-    border-bottom: 1px solid white;
+}
+
+.notebook-content-buttons{
+    border-top: 1px solid white;
 }

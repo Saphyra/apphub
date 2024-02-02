@@ -9,9 +9,8 @@ import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemQueryService;
-import com.github.saphyra.apphub.service.notebook.service.PinService;
-import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import com.github.saphyra.apphub.service.notebook.service.SearchService;
+import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +25,6 @@ class ListItemControllerIImpl implements ListItemController {
     private final ListItemCloneService listItemCloneService;
     private final ListItemDeletionService listItemDeletionService;
     private final ListItemEditionService listItemEditionService;
-    private final PinService pinService;
     private final SearchService searchService;
     private final ArchiveService archiveService;
     private final ListItemQueryService listItemQueryService;
@@ -58,18 +56,6 @@ class ListItemControllerIImpl implements ListItemController {
     public void cloneListItem(UUID listItemId) {
         log.info("Cloning listItem {}", listItemId);
         listItemCloneService.clone(listItemId);
-    }
-
-    @Override
-    public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change pin status of list item {}", accessTokenHeader.getUserId(), listItemId);
-        pinService.pinListItem(listItemId, pinned.getValue());
-    }
-
-    @Override
-    public List<NotebookView> getPinnedItems(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants wo query his pinned items", accessTokenHeader.getUserId());
-        return pinService.getPinnedItems(accessTokenHeader.getUserId());
     }
 
     @Override

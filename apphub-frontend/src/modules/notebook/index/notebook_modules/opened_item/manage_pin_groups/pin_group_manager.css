@@ -1,0 +1,57 @@
+#notebook-pin-group-manager .notebook-content-buttons {
+    text-align: center;
+}
+
+.notebook-new-pin-group-label span {
+    font-size: 20px;
+}
+
+#notebook-pin-group-manager-groups .notebook-pin-group {
+    border: 3px ridge white;
+    margin: 10px;
+    padding: 5px;
+    font-size: 20px;
+    position: relative;
+}
+
+.notebook-pin-group-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.notebook-pin-group-buttons button {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+}
+
+.notebook-pin-group-rename-button {
+    background-image: url("../../../../../../common/style/img/edit.png");
+}
+
+.notebook-pin-group-delete-button {
+    background-image: url("../../../../../../common/style/img/delete.png");
+}
+
+.notebook-pin-group-manager-pinned-item {
+    margin: 10px;
+    padding: 5px;
+    margin-left: 50px;
+    border-width: 3px;
+    border-style: ridge;
+    position: relative;
+}
+
+.notebook-pin-group-manager-pinned-item-buttons{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.notebook-pin-group-manager-pinned-item-buttons button{
+    margin: 2px;
+}

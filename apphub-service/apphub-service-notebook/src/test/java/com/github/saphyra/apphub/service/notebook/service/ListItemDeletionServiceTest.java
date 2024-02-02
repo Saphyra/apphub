@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
 import org.junit.jupiter.api.Test;
@@ -16,14 +17,13 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class ListItemDeletionServiceTest {
     private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
@@ -39,6 +39,9 @@ public class ListItemDeletionServiceTest {
 
     @Mock
     private FileDeletionService fileDeletionService;
+    
+    @Mock
+    private PinMappingDao pinMappingDao;
 
     @InjectMocks
     private ListItemDeletionService underTest;
@@ -61,10 +64,12 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(listItemDao).delete(child);
-        verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_1);
-        verify(listItemDao).getByUserIdAndParent(USER_ID, LIST_ITEM_ID_2);
+        then(listItemDao).should().delete(deleted);
+        then(listItemDao).should().delete(child);
+        then(listItemDao).should().getByUserIdAndParent(USER_ID, LIST_ITEM_ID_1);
+        then(listItemDao).should().getByUserIdAndParent(USER_ID, LIST_ITEM_ID_2);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_2);
     }
 
     @Test
@@ -75,8 +80,9 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
+        then(listItemDao).should().delete(deleted);
+        then(contentDao).should().deleteByParent(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
@@ -87,18 +93,21 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(contentDao).deleteByParent(LIST_ITEM_ID_1);
+        then(listItemDao).should().delete(deleted);
+        then(contentDao).should().deleteByParent(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
     public void deleteOnlyTitle() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getType()).willReturn(ListItemType.ONLY_TITLE);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
+        then(listItemDao).should().delete(deleted);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
@@ -109,30 +118,35 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(checklistDeletionService).delete(LIST_ITEM_ID_1);
+        then(listItemDao).should().delete(deleted);
+        then(checklistDeletionService).should().delete(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
     public void deleteTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getType()).willReturn(ListItemType.TABLE);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(tableDeletionService).delete(deleted);
+        then(listItemDao).should().delete(deleted);
+        then(tableDeletionService).should().delete(deleted);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
     public void deleteChecklistTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
         given(deleted.getType()).willReturn(ListItemType.CHECKLIST_TABLE);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(tableDeletionService).delete(deleted);
+        then(listItemDao).should().delete(deleted);
+        then(tableDeletionService).should().delete(deleted);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
@@ -143,8 +157,9 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(fileDeletionService).deleteFile(LIST_ITEM_ID_1);
+        then(listItemDao).should().delete(deleted);
+        then(fileDeletionService).should().deleteFile(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
@@ -155,18 +170,21 @@ public class ListItemDeletionServiceTest {
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(fileDeletionService).deleteFile(LIST_ITEM_ID_1);
+        then(listItemDao).should().delete(deleted);
+        then(fileDeletionService).should().deleteFile(LIST_ITEM_ID_1);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 
     @Test
     void deleteCustomTable() {
         given(listItemDao.findByIdValidated(LIST_ITEM_ID_1)).willReturn(deleted);
+        given(deleted.getListItemId()).willReturn(LIST_ITEM_ID_1);
         given(deleted.getType()).willReturn(ListItemType.CUSTOM_TABLE);
 
         underTest.deleteListItem(LIST_ITEM_ID_1, USER_ID);
 
-        verify(listItemDao).delete(deleted);
-        verify(tableDeletionService).delete(deleted);
+        then(listItemDao).should().delete(deleted);
+        then(tableDeletionService).should().delete(deleted);
+        then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID_1);
     }
 }

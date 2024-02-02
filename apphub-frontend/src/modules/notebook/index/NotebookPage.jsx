@@ -7,22 +7,22 @@ import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { ToastContainer } from "react-toastify";
 import CategoryTree from "./notebook_modules/CategoryTree";
-import PinnedItems from "./notebook_modules/PinnedItems";
 import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
 import OpenedListItem from "./notebook_modules/OpenedListItem";
-import ListItemType from "../common/ListItemType";
+import OpenedPageType from "../common/OpenedPageType";
 import Utils from "../../../common/js/Utils";
 import UserSettings from "../common/UserSettings";
 import Endpoints from "../../../common/js/dao/dao";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
+import PinnedItems from "./notebook_modules/pin/PinnedItems";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [openedListItem, setOpenedListItemD] = useState(sessionStorage.openedListItem ? JSON.parse(sessionStorage.openedListItem) : { id: null, type: ListItemType.CATEGORY });
+    const [openedListItem, setOpenedListItemD] = useState(sessionStorage.openedListItem ? JSON.parse(sessionStorage.openedListItem) : { id: null, type: OpenedPageType.CATEGORY });
     const [lastEvent, setLastEvent] = useState(null);
     const [userSettings, setUserSettings] = useState({});
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
@@ -91,6 +91,7 @@ const NotebookPage = () => {
 
                     <PinnedItems
                         localizationHandler={localizationHandler}
+                        openedListItem={openedListItem}
                         setOpenedListItem={setOpenedListItem}
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
@@ -122,7 +123,7 @@ const NotebookPage = () => {
                 centerButtons={
                     <Button
                         id="notebook-new-button"
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === ListItemType.SEARCH ? null : openedListItem.id)}
+                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === OpenedPageType.SEARCH ? null : openedListItem.id)}
                         label={localizationHandler.get("new")}
                     />
                 }

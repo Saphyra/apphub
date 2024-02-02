@@ -3,8 +3,8 @@ import Endpoints from "../../../../common/js/dao/dao";
 import "./category_tree/category_tree.css";
 import Leaf from "./category_tree/Leaf";
 import EventName from "../../../../common/js/event/EventName";
-import useHasFocus from "../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import useHasFocus from "../../../../common/hook/UseHasFocus";
 
 const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [tree, setTree] = useState([]);

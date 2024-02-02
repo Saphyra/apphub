@@ -1,4 +1,4 @@
-const ListItemType = {
+const OpenedPageType = {
     CATEGORY: "CATEGORY",
     TEXT: "TEXT",
     LINK: "LINK",
@@ -10,6 +10,7 @@ const ListItemType = {
     FILE: "FILE",
     SEARCH: "SEARCH",
     CUSTOM_TABLE: "CUSTOM_TABLE",
+    MANAGE_PIN_GROUPS: "MANAGE_PIN_GROUPS",
 }
 
-export default ListItemType;
+export default OpenedPageType;

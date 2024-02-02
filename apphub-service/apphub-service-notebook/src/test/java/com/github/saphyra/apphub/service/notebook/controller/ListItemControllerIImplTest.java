@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemEditionService;
-import com.github.saphyra.apphub.service.notebook.service.PinService;
 import com.github.saphyra.apphub.service.notebook.service.SearchService;
 import com.github.saphyra.apphub.service.notebook.service.clone.ListItemCloneService;
 import org.junit.jupiter.api.Test;
@@ -39,9 +38,6 @@ public class ListItemControllerIImplTest {
 
     @Mock
     private ListItemCloneService listItemCloneService;
-
-    @Mock
-    private PinService pinService;
 
     @Mock
     private SearchService searchService;
@@ -82,25 +78,6 @@ public class ListItemControllerIImplTest {
         underTest.cloneListItem(LIST_ITEM_ID);
 
         verify(listItemCloneService).clone(LIST_ITEM_ID);
-    }
-
-    @Test
-    public void pinListItem() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-
-        underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessTokenHeader);
-
-        verify(pinService).pinListItem(LIST_ITEM_ID, true);
-    }
-
-    @Test
-    public void getPinnedItems() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(pinService.getPinnedItems(USER_ID)).willReturn(Arrays.asList(notebookView));
-
-        List<NotebookView> result = underTest.getPinnedItems(accessTokenHeader);
-
-        assertThat(result).containsExactly(notebookView);
     }
 
     @Test

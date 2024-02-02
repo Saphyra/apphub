@@ -3,7 +3,7 @@ import "./category.css"
 import Button from "../../../../../../common/component/input/Button";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
-import ListItemType from "../../../../common/ListItemType";
+import OpenedPageType from "../../../../common/OpenedPageType";
 import ListItem from "../../list_item/ListItem";
 import Settings from "./settings/Settings";
 import EventName from "../../../../../../common/js/event/EventName";
@@ -11,7 +11,7 @@ import ListItemMode from "../../list_item/ListItemMode";
 import moveListItem from "../../../../common/MoveListItemService";
 import UserSettings from "../../../../common/UserSettings";
 import { useUpdateEffect } from "react-use";
-import useHasFocus from "../../../../../../common/js/UseHasFocus";
+import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 
 const Category = ({
     localizationHandler,
@@ -74,11 +74,11 @@ const Category = ({
                 return compareByTitle(a, b);
             }
 
-            if (a.type === ListItemType.CATEGORY) {
+            if (a.type === OpenedPageType.CATEGORY) {
                 return -1;
             }
 
-            if (b.type === ListItemType.CATEGORY) {
+            if (b.type === OpenedPageType.CATEGORY) {
                 return 1;
             }
 
@@ -139,7 +139,7 @@ const Category = ({
                     <Button
                         id="notebook-content-category-content-up-button"
                         label={localizationHandler.get("up")}
-                        onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: ListItemType.CATEGORY })}
+                        onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: OpenedPageType.CATEGORY })}
                         disabled={openedListItem.id === null}
                     />
                 </div>

@@ -299,6 +299,12 @@ const Endpoints = {
     NOTEBOOK_CREATE_CUSTOM_TABLE: new Endpoint(RequestMethod.PUT, "/api/notebook/custom-table"),
     NOTEBOOK_GET_CUSTOM_TABLE: new Endpoint(RequestMethod.GET, "/api/notebook/custom-table/{listItemId}"),
     NOTEBOOK_TABLE_DELETE_CHECKED: new Endpoint(RequestMethod.DELETE, "/api/notebook/table/{listItemId}/checked"),
+    NOTEBOOK_GET_PIN_GROUPS: new Endpoint(RequestMethod.GET, "/api/notebook/pin-group"),
+    NOTEBOOK_CREATE_PIN_GROUP: new Endpoint(RequestMethod.PUT, "/api/notebook/pin-group"),
+    NOTEBOOK_DELETE_PIN_GROUP: new Endpoint(RequestMethod.DELETE, "/api/notebook/pin-group/{pinGroupId}"),
+    NOTEBOOK_RENAME_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}"),
+    NOTEBOOK_ADD_ITEM_TO_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}"),
+    NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP: new Endpoint(RequestMethod.DELETE, "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),

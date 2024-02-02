@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import "./table.css";
-import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import { confirmDeleteChcecked, loadTable, save } from "./service/TableDao";
@@ -14,6 +13,7 @@ import TableHeadIndexRange from "../../../../common/table/table_head/TableHeadIn
 import Stream from "../../../../../../common/js/collection/Stream";
 import { newColumn } from "./service/TableColumnCrudService";
 import { newRow } from "./service/TableRowCrudService";
+import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 
 const Table = ({
     localizationHandler,

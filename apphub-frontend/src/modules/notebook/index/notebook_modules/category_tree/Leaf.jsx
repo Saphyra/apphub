@@ -1,7 +1,7 @@
 import React from "react";
 import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
-import ListItemType from "../../../common/ListItemType";
+import OpenedPageType from "../../../common/OpenedPageType";
 import moveListItem from "../../../common/MoveListItemService";
 import UserSettings from "../../../common/UserSettings";
 
@@ -81,7 +81,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
         >
             <div
                 className={"notebook-tree-leaf button" + (category.archived ? " archived" : "")}
-                onClick={() => setOpenedListItem({ id: category.categoryId, type: ListItemType.CATEGORY })}
+                onClick={() => setOpenedListItem({ id: category.categoryId, type: OpenedPageType.CATEGORY })}
             >
                 {hasLeaves && (isOpened ? closeButton() : expandButton())}
 

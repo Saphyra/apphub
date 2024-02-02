@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import "./checklist.css";
-import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import { addItemToTheEdge, confirmDeleteChcecked, loadChecklist, orderItems, save } from "./service/ChecklistDao";
@@ -12,6 +11,7 @@ import addItemToEdge from "./service/ChecklistAddItemToEdgeService";
 import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Utils from "../../../../../../common/js/Utils";
+import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import Textarea from "../../../../../../common/component/input/Textarea";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
-import ListItemType from "../../../../common/ListItemType";
+import OpenedPageType from "../../../../common/OpenedPageType";
 import "./text.css";
 import validateListItemTitle from "../../../../common/validator/ListItemTitleValidator";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
+import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -111,7 +111,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     }
 
     const doClose = () => {
-        setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+        setOpenedListItem({ id: parent, type: OpenedPageType.CATEGORY })
         setConfirmationDialogData(null);
     }
 

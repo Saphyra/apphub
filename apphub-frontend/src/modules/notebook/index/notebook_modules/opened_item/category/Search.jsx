@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Settings from "./settings/Settings";
 import Button from "../../../../../../common/component/input/Button";
-import ListItemType from "../../../../common/ListItemType";
+import OpenedPageType from "../../../../common/OpenedPageType";
 import "./search.css";
 import EventName from "../../../../../../common/js/event/EventName";
 import Endpoints from "../../../../../../common/js/dao/dao";
@@ -9,8 +9,8 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import ListItem from "../../list_item/ListItem";
 import ListItemMode from "../../list_item/ListItemMode";
 import UserSettings from "../../../../common/UserSettings";
-import useHasFocus from "../../../../../../common/js/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 
 const Search = ({
     localizationHandler,
@@ -73,7 +73,7 @@ const Search = ({
                 return compareByTitle(a, b);
             }
 
-            if (a.type === ListItemType.CATEGORY) {
+            if (a.type === OpenedPageType.CATEGORY) {
                 return -1;
             }
 
@@ -118,7 +118,7 @@ const Search = ({
                     <Button
                         id="notebook-content-search-content-up-button"
                         label={localizationHandler.get("up")}
-                        onclick={() => setOpenedListItem({ id: openedListItem.parent, type: ListItemType.CATEGORY })}
+                        onclick={() => setOpenedListItem({ id: openedListItem.parent, type: OpenedPageType.CATEGORY })}
                     />
                 </div>
 

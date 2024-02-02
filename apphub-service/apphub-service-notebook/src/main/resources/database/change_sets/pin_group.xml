@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-pin_group" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="notebook" tableName="pin_group"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="notebook" tableName="pin_group">
+            <column name="pin_group_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="pin_group_name" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="notebook" tableName="pin_group" columnNames="pin_group_id" constraintName="pin_group-pk"/>
+    </changeSet>
+</databaseChangeLog>

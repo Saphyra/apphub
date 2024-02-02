@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
 import "./settings.css"
-import ListItemType from "../../../../../common/ListItemType";
+import OpenedPageType from "../../../../../common/OpenedPageType";
 import UserSettingsDropdown from "./user/UserSettingsDropdown";
 
 const Settings = ({
@@ -13,7 +13,7 @@ const Settings = ({
     changeUserSettings
 }) => {
     const [settingsDisplayed, setSettingsDispalyed] = useState(false);
-    const [searchText, setSearchText] = useState(openedListItem.type === ListItemType.SEARCH ? openedListItem.id : "");
+    const [searchText, setSearchText] = useState(openedListItem.type === OpenedPageType.SEARCH ? openedListItem.id : "");
 
     useEffect(() => searchTextModified(), [searchText]);
 
@@ -35,8 +35,8 @@ const Settings = ({
 
                 setOpenedListItem({
                     id: searchText,
-                    type: ListItemType.SEARCH,
-                    parent: openedListItem.type === ListItemType.SEARCH ? openedListItem.parent : openedListItem.id
+                    type: OpenedPageType.SEARCH,
+                    parent: openedListItem.type === OpenedPageType.SEARCH ? openedListItem.parent : openedListItem.id
                 })
             },
             1000
@@ -53,7 +53,7 @@ const Settings = ({
                 placeholder={localizationHandler.get("search")}
                 onchangeCallback={setSearchText}
                 value={searchText}
-                autoFocus={openedListItem.type === ListItemType.SEARCH}
+                autoFocus={openedListItem.type === OpenedPageType.SEARCH}
             />
 
             {getToggleSettingsDisplayedButton()}

@@ -1,5 +1,5 @@
 import React from "react";
-import ListItemType from "../../common/ListItemType";
+import OpenedPageType from "../../common/OpenedPageType";
 import Category from "./opened_item/category/Category";
 import Utils from "../../../../common/js/Utils";
 import Text from "./opened_item/text/Text";
@@ -9,6 +9,7 @@ import Table from "./opened_item/table/Table";
 import Image from "./opened_item/image/Image";
 import File from "./opened_item/file/File";
 import Search from "./opened_item/category/Search";
+import PinGroupManager from "./opened_item/manage_pin_groups/PinGroupManager";
 
 const OpenedListItem = ({
     localizationHandler,
@@ -25,7 +26,7 @@ const OpenedListItem = ({
 
     const getContent = () => {
         switch (openedListItem.type) {
-            case ListItemType.SEARCH:
+            case OpenedPageType.SEARCH:
                 return <Search
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -36,7 +37,7 @@ const OpenedListItem = ({
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.CATEGORY:
+            case OpenedPageType.CATEGORY:
                 return <Category
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -47,7 +48,7 @@ const OpenedListItem = ({
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.TEXT:
+            case OpenedPageType.TEXT:
                 return <Text
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -55,7 +56,7 @@ const OpenedListItem = ({
                     setLastEvent={setLastEvent}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.CHECKLIST:
+            case OpenedPageType.CHECKLIST:
                 return <Checklist
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -63,7 +64,7 @@ const OpenedListItem = ({
                     setLastEvent={setLastEvent}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.TABLE:
+            case OpenedPageType.TABLE:
                 return <Table
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -72,7 +73,7 @@ const OpenedListItem = ({
                     checklist={false}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.CHECKLIST_TABLE:
+            case OpenedPageType.CHECKLIST_TABLE:
                 return <Table
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -81,19 +82,19 @@ const OpenedListItem = ({
                     checklist={true}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
-            case ListItemType.IMAGE:
+            case OpenedPageType.IMAGE:
                 return <Image
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                 />
-            case ListItemType.FILE:
+            case OpenedPageType.FILE:
                 return <File
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
                 />
-            case ListItemType.CUSTOM_TABLE:
+            case OpenedPageType.CUSTOM_TABLE:
                 return <Table
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
@@ -103,6 +104,15 @@ const OpenedListItem = ({
                     setConfirmationDialogData={setConfirmationDialogData}
                     custom={true}
                     setDisplaySpinner={setDisplaySpinner}
+                />
+            case OpenedPageType.MANAGE_PIN_GROUPS:
+                return <PinGroupManager
+                    localizationHandler={localizationHandler}
+                    openedListItem={openedListItem}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    lastEvent={lastEvent}
                 />
             default:
                 Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);

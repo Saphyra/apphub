@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
-import ListItemType from "../../../../common/ListItemType";
+import OpenedPageType from "../../../../common/OpenedPageType";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import "./image.css";
 import OpenedListItemHeader from "../OpenedListItemHeader";
@@ -35,7 +35,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
                 title={title}
                 setTitle={setTitle}
                 editingEnabled={false}
-                close={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                close={() => setOpenedListItem({ id: parent, type: OpenedPageType.CATEGORY })}
             />
 
             <div id="notebook-content-image-content" className="notebook-content-view-main">

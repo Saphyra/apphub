@@ -22,5 +22,9 @@
     "link-label-blank": {
         "en":"Link label must not be blank.",
         "hu": "A Link felirata nem lehet üres."
+    },
+    "pin-group-name-blank": {
+        "en": "Pin group name must not be blank.",
+        "hu": "A csoport neve nem lehet üres."
     }
 }

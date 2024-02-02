@@ -4,7 +4,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import ListItemType from "../../../common/ListItemType";
+import OpenedPageType from "../../../common/OpenedPageType";
 import validateColumnData from "../../../common/validator/ColumnDataValidator";
 import validateListItemTitle from "../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../common/validator/TableHeadNameValidator";
@@ -91,10 +91,10 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
 
 const getListItemType = (checklist, custom) => {
     if (custom) {
-        return ListItemType.CUSTOM_TABLE;
+        return OpenedPageType.CUSTOM_TABLE;
     }
 
-    return checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE
+    return checklist ? OpenedPageType.CHECKLIST_TABLE : OpenedPageType.TABLE
 }
 
 export default create;
