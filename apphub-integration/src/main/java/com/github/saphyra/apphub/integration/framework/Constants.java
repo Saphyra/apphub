@@ -60,6 +60,7 @@ public class Constants {
     public static final int MAX_CITIZEN_SATIETY = 10000;
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
+    public static final String DEFAULT_PIN_GROUP_NAME = "All";
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";

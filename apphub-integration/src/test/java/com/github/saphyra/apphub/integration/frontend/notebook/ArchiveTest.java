@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -35,7 +36,7 @@ public class ArchiveTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .archive(driver);
 
-        assertThat(NotebookActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isTrue();
+        assertThat(PinActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isTrue();
 
         CategoryTreeLeaf leaf = NotebookActions.getCategoryTree(driver);
         leaf = leaf.getChildren()
@@ -46,7 +47,7 @@ public class ArchiveTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .unarchive(driver);
 
-        assertThat(NotebookActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isFalse();
+        assertThat(PinActions.findPinnedItemByTitle(driver, CATEGORY_TITLE).isArchived()).isFalse();
 
         leaf = NotebookActions.getCategoryTree(driver);
         leaf = leaf.getChildren()

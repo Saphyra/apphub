@@ -88,6 +88,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
                 />
 
                 <Button
+                    id="notebook-new-pin-group-create-button"
                     label={localizationHandler.get("create")}
                     onclick={createPinGroup}
                 />

@@ -130,7 +130,11 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
                 </div>
             </div>
 
-            {displayItems && getItems()}
+            {displayItems &&
+                <div className="notebook-pin-group-items">
+                    {getItems()}
+                </div>
+            }
 
             <div className="centered">
                 <Button
@@ -164,7 +168,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
                             key="cancel"
                             id="notebook-pin-group-rename-cancel-button"
                             label={localizationHandler.get("cancel")}
-                            onclick={() => setConfirmationDialogData(null)}
+                            onclick={() => setContentEditingEnabled(false)}
                         />
                     ]}
                 />

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistAc
 import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.OnlyTitleActions;
+import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
@@ -241,7 +242,7 @@ public class CloneListItemTest extends BackEndTest {
         );
 
         ListItemActions.archive(accessTokenId, parentId, true);
-        ListItemActions.pin(accessTokenId, parentId, true);
+        PinActions.pin(accessTokenId, parentId, true);
 
         Response cloneResponse = ListItemActions.getCloneListItemResponse(accessTokenId, parentId);
 

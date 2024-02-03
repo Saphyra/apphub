@@ -11,7 +11,6 @@ import io.restassured.response.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,28 +40,6 @@ public class ListItemActions {
     public static Response getCloneListItemResponse(UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
-    }
-
-    public static Response getPinResponse(UUID accessTokenId, UUID listItemId, Boolean pinned) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(pinned))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_PIN_LIST_ITEM, "listItemId", listItemId));
-    }
-
-    public static void pin(UUID accessTokenId, UUID listItemId, Boolean pinned) {
-        Response response = getPinResponse(accessTokenId, listItemId, pinned);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-    }
-
-    public static List<NotebookView> getPinnedItems(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PINNED_ITEMS));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return Arrays.stream(response.getBody().as(NotebookView[].class))
-            .collect(Collectors.toList());
     }
 
     public static Response getSearchResponse(UUID accessTokenId, String searchText) {

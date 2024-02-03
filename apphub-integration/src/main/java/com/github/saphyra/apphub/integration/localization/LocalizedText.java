@@ -23,6 +23,9 @@ public enum LocalizedText {
     NOTEBOOK_TITLE_MUST_NOT_BE_BLANK("Title must not be blank."),
     NOTEBOOK_URL_MUST_NOT_BE_BLANK("URL must not be blank."),
     NOTEBOOK_COLUMN_NAME_MUST_NOT_BE_BLANK("Name of the column must not be blank."),
+    NOTEBOOK_LINK_LABEL_BLANK("Link label must not be blank."),
+    NOTEBOOK_PIN_GROUP_NAME_BLANK("Pin group name must not be blank."),
+    NOTEBOOK_PIN_GROUP_NAME_TOO_LONG("Pin group name too long. (Maximum 30 characters)"),
 
     //SKYXPLORE
     SKYXPLORE_CHARACTER_SAVED("Character saved."),
@@ -38,7 +41,6 @@ public enum LocalizedText {
     SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
     SKYXPLORE_GAME_STORAGE_USED("Storage still in use. Free up some space before you deconstruct it."),
     SKYXPLORE_GAME_STORAGE_SETTING_SAVED("Storage setting saved."),
-    NOTEBOOK_LINK_LABEL_BLANK("Link label must not be blank."),
     ;
 
     private final String text;

@@ -147,4 +147,13 @@ public class WebElementUtils {
     public static <T> T getValueOfInputAs(WebElement webElement, Function<String, T> mapper) {
         return mapper.apply(webElement.getAttribute("value"));
     }
+
+    public static void dragAndDrop(WebDriver driver, WebElement grab, WebElement drop) {
+        new Actions(driver)
+            .moveToElement(grab, 10, 10)
+            .clickAndHold()
+            .moveToElement(drop, 10, 10)
+            .release()
+            .perform();
+    }
 }

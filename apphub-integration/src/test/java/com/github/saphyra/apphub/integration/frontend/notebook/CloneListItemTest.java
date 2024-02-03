@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListIt
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
@@ -137,7 +138,7 @@ public class CloneListItemTest extends SeleniumTest {
 
         verifyContent(driver);
 
-        LIST_ITEMS.forEach(listItemTitle -> assertThat(NotebookActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
+        LIST_ITEMS.forEach(listItemTitle -> assertThat(PinActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
     }
 
     private void verifyContent(WebDriver driver) {

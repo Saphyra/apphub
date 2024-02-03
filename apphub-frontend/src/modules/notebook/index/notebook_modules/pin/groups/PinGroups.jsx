@@ -120,6 +120,7 @@ const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName,
     }
 
     return <span
+        className="notebook-pin-group-wrapper"
         onDrop={handleOnDrop}
         onDragOver={handleOnDragOver}
     >

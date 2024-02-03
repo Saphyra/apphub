@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +19,7 @@ import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
 public class ListItem {
+    @Getter
     private final WebElement webElement;
 
     public String getTitle() {

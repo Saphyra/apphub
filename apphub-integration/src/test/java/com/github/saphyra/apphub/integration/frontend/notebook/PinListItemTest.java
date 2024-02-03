@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -39,7 +40,7 @@ public class PinListItemTest extends SeleniumTest {
             .until(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_1).isPresent())
             .assertTrue("Not moved up");
 
-        NotebookActions.getPinnedItems(driver)
+        PinActions.getPinnedItems(driver)
             .get(0)
             .openParent();
 

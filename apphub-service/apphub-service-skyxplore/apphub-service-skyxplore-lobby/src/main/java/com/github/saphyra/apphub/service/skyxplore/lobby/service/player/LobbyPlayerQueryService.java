@@ -28,7 +28,7 @@ public class LobbyPlayerQueryService {
             .map(converter::convertPlayer)
             .forEach(result::add);
 
-        lobby.getInvitations()
+        new ArrayList<>(lobby.getInvitations())
             .stream()
             .map(converter::convertInvitation)
             .forEach(result::add);

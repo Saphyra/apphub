@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookSettingActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -53,7 +54,7 @@ public class NotebookSettingsTest extends SeleniumTest {
         NotebookSettingActions.hideArchived(driver);
 
         assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
-        assertThat(NotebookActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
+        assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
         assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1);
     }
 
@@ -61,7 +62,7 @@ public class NotebookSettingsTest extends SeleniumTest {
         NotebookSettingActions.showArchived(driver);
 
         assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
-        assertThat(NotebookActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+        assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
         assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
     }
 }

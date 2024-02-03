@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListItemActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
@@ -69,7 +70,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
         SleepUtil.sleep(1000);
         assertThat(NotebookActions.getCategoryTree(driver).getChildren().get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
-        assertThat(NotebookActions.getPinnedItems(driver).get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
+        assertThat(PinActions.getPinnedItems(driver).get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
         assertThat(NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE)).isNotEmpty();
     }
 

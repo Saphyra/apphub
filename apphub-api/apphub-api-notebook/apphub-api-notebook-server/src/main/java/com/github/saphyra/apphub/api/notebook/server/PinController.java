@@ -23,30 +23,23 @@ public interface PinController {
     void pinListItem(@PathVariable("listItemId") UUID listItemId, @RequestBody OneParamRequest<Boolean> pinned, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.NOTEBOOK_GET_PINNED_ITEMS)
-        //TODO api test (new query param: pinGroupId)
     List<NotebookView> getPinnedItems(@RequestParam(value = "pinGroupId", required = false) UUID pinGroupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PutMapping(Endpoints.NOTEBOOK_CREATE_PIN_GROUP)
-        //TODO api test
     List<PinGroupResponse> createPinGroup(@RequestBody OneParamRequest<String> groupName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.NOTEBOOK_RENAME_PIN_GROUP)
-        //TODO api test
     List<PinGroupResponse> renamePinGroup(@RequestBody OneParamRequest<String> groupName, @PathVariable("pinGroupId") UUID pinGroupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.NOTEBOOK_GET_PIN_GROUPS)
-        //TODO api test
     List<PinGroupResponse> getPinGroups(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.NOTEBOOK_DELETE_PIN_GROUP)
-        //TODO api test
     List<PinGroupResponse> deletePinGroup(@PathVariable("pinGroupId") UUID pinGroupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.NOTEBOOK_ADD_ITEM_TO_PIN_GROUP)
-        //TODO api test
     List<NotebookView> addItemToPinGroup(@PathVariable("pinGroupId") UUID pinGroupId, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP)
-        //TODO api test
     List<NotebookView> removeItemFromPinGroup(@PathVariable("pinGroupId") UUID pinGroupId, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
