@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PinGroupNameValidator {
     void validate(String pinGroupName) {
         ValidationUtil.notBlank(pinGroupName, "pinGroupName");

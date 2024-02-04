@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.notebook.dao.pin.mapping;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class PinMappingDao extends AbstractDao<PinMappingEntity, PinMapping, String, PinMappingRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public PinMappingDao(Converter<PinMappingEntity, PinMapping> converter, PinMappingRepository repository, UuidConverter uuidConverter) {
+    public PinMappingDao(PinMappingConverter converter, PinMappingRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

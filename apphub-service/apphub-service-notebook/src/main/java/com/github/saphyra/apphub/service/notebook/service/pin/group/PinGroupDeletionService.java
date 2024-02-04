@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PinGroupDeletionService {
     private final PinGroupDao pinGroupDao;
     private final PinMappingDao pinMappingDao;

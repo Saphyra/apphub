@@ -15,7 +15,6 @@ const BuildingEffectTableHead = ({ buildingType, localizationHandler }) => {
                 localizationHandler={localizationHandler}
             />
         case BuildingType.MISCELLANEOUS:
-            //TODO implement
             break;
         default:
             Utils.throwException("IllegalArgument", "Unhandled buildingType " + buildingType);

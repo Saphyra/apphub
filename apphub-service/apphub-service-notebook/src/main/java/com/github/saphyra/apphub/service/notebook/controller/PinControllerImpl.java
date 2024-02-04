@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.notebook.server.PinController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.notebook.service.ListItemQueryService;
 import com.github.saphyra.apphub.service.notebook.service.pin.PinService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupCreationService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupDeletionService;
@@ -29,7 +28,6 @@ public class PinControllerImpl implements PinController {
     private final PinGroupRenameService pinGroupRenameService;
     private final PinGroupDeletionService pinGroupDeletionService;
     private final PinGroupItemService pinGroupItemService;
-    private final ListItemQueryService listItemQueryService;
 
     @Override
     public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessTokenHeader accessTokenHeader) {
@@ -44,7 +42,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<PinGroupResponse> createPinGroup(OneParamRequest<String> groupName, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a pin group.", accessTokenHeader.getUserId());
 
@@ -54,7 +51,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<PinGroupResponse> renamePinGroup(OneParamRequest<String> groupName, UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to rename pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
 
@@ -64,7 +60,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<PinGroupResponse> getPinGroups(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know his pin groups.", accessTokenHeader.getUserId());
 
@@ -72,7 +67,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<PinGroupResponse> deletePinGroup(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
 
@@ -82,7 +76,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<NotebookView> addItemToPinGroup(UUID pinGroupId, UUID listItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to add listItem {} to pinGroup {}", accessTokenHeader.getUserId(), listItemId, pinGroupId);
 
@@ -92,7 +85,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<NotebookView> removeItemFromPinGroup(UUID pinGroupId, UUID listItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to remove listItem {} from pinGroup {}", accessTokenHeader.getUserId(), listItemId, pinGroupId);
 

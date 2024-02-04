@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PinGroupConverter extends ConverterBase<PinGroupEntity, PinGroup> {
-    private static final String COLUMN_PIN_GROUP_NAME = "pin-group-name";
+    static final String COLUMN_PIN_GROUP_NAME = "pin-group-name";
 
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
