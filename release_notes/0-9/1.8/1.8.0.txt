@@ -8,6 +8,7 @@ Notebook
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+    Able to create specific type of driver allowing all tests to run
 
 ===TECHNICAL DEBTS===
     Configurable amount of user deletion batch size

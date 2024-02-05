@@ -69,12 +69,12 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     private static WebDriverWrapper createNewDriver() {
-        Future<WebDriver> future = EXECUTOR.submit(WebDriverFactory::createDriver);
-        return new WebDriverWrapper(future);
+        Future<WebDriver> future = EXECUTOR.submit(() -> createDriver(WebDriverMode.DEFAULT));
+        return new WebDriverWrapper(future, WebDriverMode.DEFAULT);
     }
 
     static void release(WebDriverWrapper webDriverWrapper) {
-        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED) {
+        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() == WebDriverMode.DEFAULT) {
             returnDriverToCache(webDriverWrapper);
         } else {
             stopDriver(webDriverWrapper);
@@ -109,20 +109,24 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @SneakyThrows
     static void invalidate(WebDriverWrapper webDriverWrapper) {
-        if(TestConfiguration.WEB_DRIVER_CACHE_ENABLED){
+        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() == WebDriverMode.DEFAULT) {
             DRIVER_POOL.invalidateObject(webDriverWrapper, DestroyMode.ABANDONED);
         }
         stopDriver(webDriverWrapper);
     }
 
-    private static WebDriver createDriver() {
+    public static Future<WebDriver> createDriverExternal(WebDriverMode mode){
+        return EXECUTOR.submit(() -> createDriver(mode));
+    }
+
+    private static ChromeDriver createDriver(WebDriverMode mode) {
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
             try {
                 WebDriverManager.chromedriver().setup();
 
                 ChromeOptions options = new ChromeOptions();
-                options.setHeadless(TestConfiguration.WEB_DRIVER_HEADLESS_MODE);
+                options.setHeadless(mode.getMode().get());
                 options.addArguments("window-size=1920,1080");
                 options.setLogLevel(ChromeDriverLogLevel.ALL);
 
