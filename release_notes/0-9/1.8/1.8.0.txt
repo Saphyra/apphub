@@ -17,3 +17,5 @@ Notebook
             Include self
 
 ===ETC===
+    SkyXplore
+        Display citizen stats as percentage instead of actual numbers
