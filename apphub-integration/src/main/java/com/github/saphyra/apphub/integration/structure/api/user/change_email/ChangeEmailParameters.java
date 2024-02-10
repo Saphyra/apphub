@@ -31,4 +31,18 @@ public class ChangeEmailParameters {
             .password("")
             .build();
     }
+
+    public static ChangeEmailParameters blankEmail() {
+        return valid()
+            .toBuilder()
+            .email("")
+            .build();
+    }
+
+    public static ChangeEmailParameters incorrectPassword() {
+        return valid()
+            .toBuilder()
+            .password(DataConstants.INCORRECT_PASSWORD)
+            .build();
+    }
 }

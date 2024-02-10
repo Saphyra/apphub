@@ -4,30 +4,21 @@ import com.github.saphyra.apphub.integration.action.frontend.account.AccountPage
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
-import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ChangeLanguageTest extends SeleniumTest {
-    private static final Map<Language, LocalizedText> NOTIFICATIONS = new HashMap<>() {{
-        put(Language.ENGLISH, LocalizedText.NOTIFICATION_LANGUAGE_CHANGED_EN);
-        put(Language.HUNGARIAN, LocalizedText.NOTIFICATION_LANGUAGE_CHANGED_HU);
-    }};
-
     @DataProvider(name = "languages")
-    public Object[] languages() {
-        return new Object[]{
-            Language.ENGLISH,
-            Language.HUNGARIAN
+    public Object[][] languages() {
+        return new Object[][]{
+            new Object[]{Language.ENGLISH},
+            new Object[]{Language.HUNGARIAN}
         };
     }
 
@@ -42,8 +33,8 @@ public class ChangeLanguageTest extends SeleniumTest {
 
         AccountPageActions.selectLanguage(driver, language);
 
-        NotificationUtil.verifySuccessNotification(driver, NOTIFICATIONS.get(language).getText());
-
-        AccountPageActions.verifyLanguageSelected(driver, language);
+        AwaitilityWrapper.createDefault()
+            .until(() -> AccountPageActions.getActiveLanguage(driver) == language)
+            .assertTrue("Language is not changed.");
     }
 }

@@ -48,7 +48,6 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_USERNAME = "/api/user/account/username";
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
-    public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
 
     //SETTINGS
     public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";

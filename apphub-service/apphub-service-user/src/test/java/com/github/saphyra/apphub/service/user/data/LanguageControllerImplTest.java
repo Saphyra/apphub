@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.user.data;
 
-import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
@@ -10,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,9 +29,6 @@ public class LanguageControllerImplTest {
     @Mock
     private AccessTokenHeader accessTokenHeader;
 
-    @Mock
-    private LanguageResponse languageResponse;
-
     @Test
     public void changeLanguage() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -51,15 +45,5 @@ public class LanguageControllerImplTest {
         String result = underTest.getLanguage(USER_ID);
 
         assertThat(result).isEqualTo(LOCALE);
-    }
-
-    @Test
-    public void getLanguages() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(languageService.getLanguages(USER_ID)).willReturn(Arrays.asList(languageResponse));
-
-        List<LanguageResponse> result = underTest.getLanguages(accessTokenHeader);
-
-        assertThat(result).containsExactly(languageResponse);
     }
 }

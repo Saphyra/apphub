@@ -1,9 +1,19 @@
 import InputField from "./InputField";
 
-const ValidatedInputField = ({ id, className = "", inputId, inputClassName, validationResult, type, placeholder, onchangeCallback, value }) => {
+const ValidatedInputField = ({
+    validationResultId,
+    className = "",
+    inputId,
+    inputClassName,
+    validationResult,
+    type,
+    placeholder,
+    onchangeCallback,
+    value
+}) => {
     const getValidationResultField = () => {
         return <div
-            id={id}
+            id={validationResultId}
             className={"validation-result-field" + " " + className}
             title={validationResult.message}
         >

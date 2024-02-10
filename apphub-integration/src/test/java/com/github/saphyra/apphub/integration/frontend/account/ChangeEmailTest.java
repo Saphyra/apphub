@@ -1,15 +1,12 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -37,31 +34,26 @@ public class ChangeEmailTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        //Invalid email
+        blankEmail(driver);
         invalidEmail(driver);
-
-        //Empty password
         emptyPassword(driver);
-
-        //Email already exists
         emailAlreadyExists(driver, existingUserData);
-
-        //Incorrect password
         incorrectPassword(driver);
-
-        //Change
         change(driver, userData);
+    }
+
+    private void blankEmail(WebDriver driver) {
+        AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.blankEmail());
+        AccountPageActions.verifyChangeEmailForm(driver, blankEmail());
     }
 
     private static void invalidEmail(WebDriver driver) {
         AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.invalidEmail());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeEmailForm(driver, invalidEmail());
     }
 
     private static void emptyPassword(WebDriver driver) {
         AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.emptyPassword());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangeEmailForm(driver, emptyPassword());
     }
 
@@ -70,23 +62,30 @@ public class ChangeEmailTest extends SeleniumTest {
             .toBuilder()
             .email(existingUserData.getEmail())
             .build();
-        AccountPageActions.changeEmail(driver, emailAlreadyExistsParameters);
-        NotificationUtil.verifyErrorNotification(driver, "E-mail address is already in use.");
+
+        AccountPageActions.fillChangeEmailForm(driver, emailAlreadyExistsParameters);
+        AccountPageActions.verifyChangeEmailForm(driver, valid());
+        AccountPageActions.changeEmail(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMAIL_ALREADY_IN_USE);
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        ChangeEmailParameters incorrectPasswordParameters = ChangeEmailParameters.valid()
-            .toBuilder()
-            .password(DataConstants.INCORRECT_PASSWORD)
-            .build();
-        AccountPageActions.changeEmail(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
+        AccountPageActions.fillChangeEmailForm(driver, ChangeEmailParameters.incorrectPassword());
+        AccountPageActions.verifyChangeEmailForm(driver, valid());
+        AccountPageActions.changeEmail(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangeEmailParameters changeParameters = ChangeEmailParameters.valid();
-        AccountPageActions.changeEmail(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Email changed successfully.");
+        AccountPageActions.fillChangeEmailForm(driver, changeParameters);
+        AccountPageActions.verifyChangeEmailForm(driver, valid());
+        AccountPageActions.changeEmail(driver);
+
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_EMAIL_CHANGED);
+
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
@@ -101,6 +100,13 @@ public class ChangeEmailTest extends SeleniumTest {
         return ChangeEmailValidationResult.builder()
             .email(EmailValidationResult.VALID)
             .password(ChEmailPasswordValidationResult.VALID)
+            .build();
+    }
+
+    private ChangeEmailValidationResult blankEmail() {
+        return valid()
+            .toBuilder()
+            .email(EmailValidationResult.BLANK)
             .build();
     }
 

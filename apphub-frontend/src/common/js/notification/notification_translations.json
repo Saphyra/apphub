@@ -106,5 +106,9 @@
                 }
             }
         }
+    },
+    "INCORRECT_PASSWORD": {
+        "en": "Incorrect password.",
+        "hu": "Hibás jelszó."
     }
 }

@@ -134,4 +134,9 @@ public class SeleniumTest extends TestBase {
             .map(WebDriverWrapper::getDriver)
             .collect(Collectors.toList());
     }
+
+    @Override
+    protected String getTestType() {
+        return "fe";
+    }
 }

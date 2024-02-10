@@ -19,4 +19,9 @@ public class BackEndTest extends TestBase {
         }
         assertThat(ApphubWsClient.getClients().isEmpty()).isTrue();
     }
+
+    @Override
+    protected String getTestType() {
+        return "be";
+    }
 }

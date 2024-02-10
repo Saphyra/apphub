@@ -27,6 +27,7 @@ import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMoni
 import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import AccountPage from './modules/account/AccountPage';
 
 const router = createBrowserRouter([
   {
@@ -172,6 +173,10 @@ const router = createBrowserRouter([
   {
     path: "/web/admin-panel/migration-tasks",
     element: <MigrationTasksPage />
+  },
+  {
+    path: "/web/user/account",
+    element: <AccountPage />
   }
 ]);
 

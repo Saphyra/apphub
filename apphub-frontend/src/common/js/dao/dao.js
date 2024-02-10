@@ -172,6 +172,11 @@ const Endpoints = {
 
     //User
     USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
+    ACCOUNT_CHANGE_LANGUAGE: new Endpoint(RequestMethod.POST, "/api/user/account/language"),
+    ACCOUNT_CHANGE_EMAIL: new Endpoint(RequestMethod.POST, "/api/user/account/email"),
+    ACCOUNT_CHANGE_USERNAME: new Endpoint(RequestMethod.POST, "/api/user/account/username"),
+    ACCOUNT_CHANGE_PASSWORD: new Endpoint(RequestMethod.POST, "/api/user/account/password"),
+    ACCOUNT_DELETE_ACCOUNT: new Endpoint(RequestMethod.DELETE, "/api/user/account"),
 
     //Index
     ACCOUNT_REGISTER: new Endpoint(RequestMethod.POST, "/api/user"),

@@ -43,7 +43,7 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
                         label={localizationHandler.get("game-name") + ":"}
                         input={
                             <ValidatedInputField
-                                id="skyxplore-game-name-validation"
+                                validationResultId="skyxplore-game-name-validation"
                                 inputId="skyxplore-game-name"
                                 validationResult={validationResult[ValidatedField.GAME_NAME]}
                                 type="text"

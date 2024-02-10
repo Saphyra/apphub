@@ -1,0 +1,22 @@
+{
+    "tab-title": {
+        "en": "Change email",
+        "hu": "Email módosítása"
+    },
+    "new-email": {
+        "en": "New e-mail",
+        "hu": "Új e-mail"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "email-changed": {
+        "en": "Email changed.",
+        "hu": "Email módosítva."
+    }
+}

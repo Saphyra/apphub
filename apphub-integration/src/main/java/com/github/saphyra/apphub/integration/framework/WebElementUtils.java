@@ -46,6 +46,10 @@ public class WebElementUtils {
         }
     }
 
+    public static void clearAndFillContentEditable(WebDriver driver, By selector, String text) {
+        clearAndFillContentEditable(driver, driver.findElement(selector), text);
+    }
+
     public static void clearAndFillContentEditable(WebDriver driver, WebElement webElement, String text) {
         Actions navigator = new Actions(driver);
         navigator.click(webElement)
@@ -80,6 +84,16 @@ public class WebElementUtils {
         }
     }
 
+    public static void verifyInvalidFieldState(WebDriver driver, By validationSelector, boolean shouldBeVisible, String errorMessage) {
+        if (shouldBeVisible) {
+            WebElement webElement = driver.findElement(validationSelector);
+            assertThat(webElement.getAttribute("title")).isEqualTo(errorMessage);
+        } else {
+            assertThat(WebElementUtils.isPresent(driver, validationSelector)).isFalse();
+        }
+    }
+
+    @Deprecated
     public static void verifyInvalidFieldState(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
         if (shouldBeVisible) {
             assertThat(inputValid).isNotEmpty();

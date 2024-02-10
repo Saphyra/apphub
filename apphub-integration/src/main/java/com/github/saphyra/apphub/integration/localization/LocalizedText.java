@@ -18,6 +18,11 @@ public enum LocalizedText {
     INDEX_EMPTY_CREDENTIALS("Please fill e-mail address and password!"),
     INDEX_USERNAME_ALREADY_IN_USE("Username already in use."),
     INDEX_EMAIL_ALREADY_IN_USE("E-mail address is already in use."),
+    ACCOUNT_INCORRECT_PASSWORD("Incorrect password."),
+    ACCOUNT_EMAIL_CHANGED("Email changed."),
+    ACCOUNT_USERNAME_CHANGED("Username changed."),
+    ACCOUNT_PASSWORD_CHANGED("Password changed."),
+    ACCOUNT_DELETED("Account deleted."),
 
     //NOTEBOOK
     NOTEBOOK_TITLE_MUST_NOT_BE_BLANK("Title must not be blank."),

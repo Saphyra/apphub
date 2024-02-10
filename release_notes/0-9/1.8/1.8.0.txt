@@ -1,14 +1,15 @@
 ===FEATURES===
-Index
-    Log in by pressing enter
-Notebook
-    Separate field for Link label in Custom Table
-    Pinned listItems organized to separate tabs
+    Index
+        Log in by pressing enter
+    Notebook
+        Separate field for Link label in Custom Table
+        Pinned listItems organized to separate tabs
 
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
     Able to create specific type of driver allowing all tests to run
+    Migrate Account page to react
 
 ===TECHNICAL DEBTS===
     Configurable amount of user deletion batch size

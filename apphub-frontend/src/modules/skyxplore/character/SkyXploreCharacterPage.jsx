@@ -106,7 +106,7 @@ const SkyXploreCharacterPage = () => {
                                 label={localizationHandler.get("character-name") + ":"}
                                 input={
                                     <ValidationInputField
-                                        id="skyxplore-character-name-validation"
+                                        validationResultId="skyxplore-character-name-validation"
                                         inputId="skyxplore-character-name"
                                         validationResult={validationResult[ValidatedField.CHARACTER_NAME]}
                                         type="text"

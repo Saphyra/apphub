@@ -1,0 +1,30 @@
+{
+    "must-not-be-blank": {
+        "en": "Must not be blank.",
+        "hu": "Nem lehet üres."
+    },
+    "invalid-email": {
+        "en": "Invalid e-mail.",
+        "hu": "Érvénytelen e-mail."
+    },
+    "username-too-short": {
+        "en": "Username too short. (Minimum 3 characters)",
+        "hu": "Felhasználónév túl rövid. (Minimum 3 karakter)"
+    },
+    "username-too-long": {
+        "en": "Username too long. (Maximum 30 characters)",
+        "hu": "Felhasználónév túl hosszú. (Maximum 30 karakter)"
+    },
+    "password-too-short": {
+        "en": "Password too short. (Minimum 6 characters)",
+        "hu": "Jelszó túl rövid. (Minimum 6 karakter)"
+    },
+    "password-too-long": {
+        "en": "Password too long. (Maximum 30 characters)",
+        "hu": "Jelszó túl hosszú. (Maximum 30 karakter)"
+    },
+    "incorrect-confirm-password": {
+        "en": "Incorrect confirm password.",
+        "hu": "Hibás megerősítő jelszó."
+    }
+}

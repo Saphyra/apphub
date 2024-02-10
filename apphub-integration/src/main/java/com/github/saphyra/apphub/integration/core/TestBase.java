@@ -36,7 +36,7 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 @Listeners(SkipDisabledTestsInterceptor.class)
-public class TestBase {
+public abstract class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
 
@@ -169,8 +169,10 @@ public class TestBase {
         String[] split = className.split("\\.");
         String clazz = split[split.length - 1];
 
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + clazz + "_" + method + "_" + className.hashCode();
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + getTestType() + "/" + clazz + "_" + method + "_" + className.hashCode();
     }
+
+    protected abstract String getTestType();
 
     private synchronized static void deleteTestUsers(String method) {
         log.debug("Deleting testUsers for method {}...", method);

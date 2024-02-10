@@ -1,0 +1,30 @@
+{
+    "tab-title": {
+        "en": "Delete account",
+        "hu": "Fiók törlése"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "delete-account": {
+        "en": "Delete account",
+        "hu": "Fiók törlése"
+    },
+    "confirm-deletion-title": {
+        "en": "Delete account?",
+        "hu": "Fiók törlése?"
+    },
+    "confirm-deletion-content": {
+        "en": "Are you sure you want to delete your account? All data will be permanently lost.",
+        "hu": "Biztosan törölni akarod a fiókot? Az összes adat végérvényesen törlődik."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "account-deleted": {
+        "en": "Account deleted.",
+        "hu": "Fiók törölve."
+    }
+}
