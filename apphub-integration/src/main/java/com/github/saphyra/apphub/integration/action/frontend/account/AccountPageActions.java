@@ -202,4 +202,9 @@ public class AccountPageActions {
     private static List<WebElement> getLanguageSelectorButtons(WebDriver driver) {
         return driver.findElements(By.cssSelector("#language-selector .language"));
     }
+
+    public static void toggleDeactivateAllSessions(WebDriver driver) {
+        driver.findElement(By.id("account-change-password-deactivate-all-sessions"))
+            .click();
+    }
 }

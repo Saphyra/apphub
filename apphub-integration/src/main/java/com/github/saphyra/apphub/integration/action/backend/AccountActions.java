@@ -14,19 +14,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountActions {
-    public static Response changeLanguage(UUID accessTokenId, String locale) {
-        Response response = getChangeLanguageResponse(accessTokenId, locale);
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return  response;
-    }
-
-    public static Response getChangeLanguageResponse(UUID accessTokenId, String newLocale) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(newLocale))
-            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_LANGUAGE));
-    }
-
     public static Response getChangeEmailResponse(UUID accessTokenId, ChangeEmailRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
@@ -55,5 +42,10 @@ public class AccountActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .delete(UrlFactory.create(Endpoints.ACCOUNT_DELETE_ACCOUNT));
+    }
+
+    public static void changePassword(UUID accessTokenId, ChangePasswordRequest request) {
+        Response response = getChangePasswordResponse(accessTokenId, request);
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }

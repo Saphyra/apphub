@@ -21,6 +21,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.change_password.
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 public class ChangePasswordTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changePassword() {
@@ -123,4 +125,34 @@ public class ChangePasswordTest extends SeleniumTest {
             .password(ChPasswordPasswordValidationResult.EMPTY_PASSWORD)
             .build();
     }
+
+    @Test(groups = {"fe", "account"})
+    public void changePassword_deactivateAllSessions() {
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+
+        Navigation.toIndexPage(driver1);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver1, userData);
+        ModulesPageActions.openModule(driver1, ModuleLocation.MANAGE_ACCOUNT);
+
+        Navigation.toIndexPage(driver2);
+        IndexPageActions.submitLogin(driver2, LoginParameters.fromRegistrationParameters(userData));
+
+        ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
+        AccountPageActions.fillChangePasswordForm(driver1, changeParameters);
+        AccountPageActions.toggleDeactivateAllSessions(driver1);
+        AccountPageActions.changePassword(driver1);
+
+        AwaitilityWrapper.create(20, 3)
+            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE))
+            .assertTrue("Secondary session is not invalidated.");
+        ToastMessageUtil.verifySuccessToast(driver1, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
+
+        AwaitilityWrapper.create(20, 3)
+            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE + "?redirect=" + Endpoints.MODULES_PAGE)))
+            .assertTrue("Secondary session is not invalidated. PageUrl: " + driver2.getCurrentUrl());
+    }
+
 }

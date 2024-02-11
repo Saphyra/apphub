@@ -49,6 +49,7 @@ public class Endpoints {
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
     public static final String EVENT_SKYXPLORE_DELETE_GAMES = "/event/skyxplore/data/game/delete";
     public static final String EVENT_CLEAN_UP_STORED_FILES = "/event/storage/cleanup";
+    public static final String EVENT_ACCESS_TOKEN_INVALIDATED = "/event/access-token-invalidated";
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING = "/api/ws/admin-panel/monitoring/memory";

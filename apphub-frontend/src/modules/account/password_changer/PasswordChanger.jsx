@@ -8,6 +8,8 @@ import PreLabeledInputField from "../../../common/component/input/PreLabeledInpu
 import Button from "../../../common/component/input/Button";
 import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
+import InputField from "../../../common/component/input/InputField";
+import Constants from "../../../common/js/Constants";
 
 const PasswordChanger = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -15,6 +17,7 @@ const PasswordChanger = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPasword, setConfirmPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
+    const [deactivateAllSessions, setDeactivateAllSessions] = useState(false);
 
     const [newPasswordValidationResult, setNewPasswordValidationResult] = useState(new ValidationResult(false));
     const [confirmPasswordValidationResult, setConfirmPasswordValidationResult] = useState(new ValidationResult(true));
@@ -25,14 +28,26 @@ const PasswordChanger = () => {
     useEffect(() => setCurrentPasswordValidationResult(validateFilled(currentPassword)), [currentPassword]);
 
     const changePassword = async () => {
-        await Endpoints.ACCOUNT_CHANGE_PASSWORD.createRequest({ newPassword: newPassword, password: currentPassword })
+        const payload = {
+            newPassword: newPassword,
+            password: currentPassword,
+            deactivateAllSessions: deactivateAllSessions
+        }
+
+        await Endpoints.ACCOUNT_CHANGE_PASSWORD.createRequest(payload)
             .send();
 
-        setNewPassword("");
-        setConfirmPassword("");
-        setCurrentPassword("");
+        const successMessage = localizationHandler.get("password-changed");
 
-        NotificationService.showSuccess(localizationHandler.get("password-changed"));
+        if (deactivateAllSessions) {
+            sessionStorage.successText = successMessage;
+            window.location.href = Constants.INDEX_PAGE;
+        } else {
+            setNewPassword("");
+            setConfirmPassword("");
+            setCurrentPassword("");
+            NotificationService.showSuccess(successMessage);
+        }
     }
 
     return (
@@ -77,6 +92,16 @@ const PasswordChanger = () => {
                                 onchangeCallback={setCurrentPassword}
                                 validationResult={currentPasswordValidationResult}
                                 type="password"
+                            />}
+                        />
+
+                        <PreLabeledInputField
+                            label={localizationHandler.get("deactivate-all-sessions")}
+                            input={<InputField
+                                id="account-change-password-deactivate-all-sessions"
+                                type="checkbox"
+                                onchangeCallback={setDeactivateAllSessions}
+                                checked={deactivateAllSessions}
                             />}
                         />
                     </div>
