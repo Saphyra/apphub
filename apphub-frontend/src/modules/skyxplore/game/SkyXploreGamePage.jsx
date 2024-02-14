@@ -17,6 +17,7 @@ import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
 import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
 import PlayerDisconnectedPauseHandler from "./pause_and_resume/player_disconnected/PlayerDisconnectedPauseHandler";
+import Spinner from "../../../common/component/Spinner";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -24,6 +25,7 @@ const SkyXploreGamePage = () => {
     document.title = localizationHandler.get("title");
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
     const [userId, setUserId] = useState("");
     const [isHost, setIsHost] = useState(false);
 
@@ -73,6 +75,7 @@ const SkyXploreGamePage = () => {
                     key="exit"
                     setConfirmationDialogData={setConfirmationDialogData}
                     isHost={isHost}
+                    setDisplaySpinner={setDisplayChat}
                 />,
                 <PauseAndResumeGameButton
                     key="pause-and-resume"
@@ -92,9 +95,12 @@ const SkyXploreGamePage = () => {
     }
 
     const save = async () => {
+        setDisplaySpinner(true);
+
         await Endpoints.SKYXPLORE_GAME_SAVE.createRequest()
             .send();
 
+        setDisplaySpinner(false);
         NotificationService.showSuccess(localizationHandler.get("game-saved"));
     }
 
@@ -132,6 +138,8 @@ const SkyXploreGamePage = () => {
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
             }
+
+            {displaySpinner && <Spinner />}
 
             <ToastContainer />
         </div>

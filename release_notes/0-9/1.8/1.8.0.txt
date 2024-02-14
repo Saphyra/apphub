@@ -6,6 +6,8 @@
         Pinned listItems organized to separate tabs
     Account
         Change password: Deactivate all user sessions
+    SkyXplore
+        Display spinner while saving
 
 ===BUGFIXES===
 

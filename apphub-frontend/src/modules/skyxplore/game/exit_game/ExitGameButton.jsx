@@ -6,7 +6,7 @@ import ConfirmationDialogData from "../../../../common/component/confirmation_di
 import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
 
-const ExitGameButton = ({ setConfirmationDialogData, isHost }) => {
+const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const openConfirmationDialog = () => {
@@ -49,6 +49,8 @@ const ExitGameButton = ({ setConfirmationDialogData, isHost }) => {
     }
 
     const saveAndExit = async () => {
+        setDisplaySpinner(true);
+
         await Endpoints.SKYXPLORE_GAME_SAVE.createRequest()
             .send();
 
