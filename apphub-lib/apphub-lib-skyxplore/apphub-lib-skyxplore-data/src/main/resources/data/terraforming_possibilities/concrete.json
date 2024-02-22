@@ -4,8 +4,7 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "energy": 1,
-        "sand": 1
+        "energy": 1
       }
     }
   },
@@ -14,8 +13,6 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "wood": 1,
-        "water": 1,
         "energy": 1
       }
     }
@@ -25,8 +22,16 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "energy": 1,
-        "water": 1
+        "energy": 1
+      }
+    }
+  },
+  {
+    "surfaceType": "military",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1
       }
     }
   }

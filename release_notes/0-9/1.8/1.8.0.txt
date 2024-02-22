@@ -8,8 +8,10 @@
         Change password: Deactivate all user sessions
     SkyXplore
         Display spinner while saving
+        Add Military to terraforming possibilities
 
 ===BUGFIXES===
+    WebDriver update hell
 
 ===PLATFORM CHANGES===
     Able to create specific type of driver allowing all tests to run

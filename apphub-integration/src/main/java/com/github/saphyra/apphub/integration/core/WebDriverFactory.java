@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.google.common.base.Stopwatch;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.DestroyMode;
@@ -16,7 +15,6 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverLogLevel;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.html5.WebStorage;
 
@@ -115,7 +113,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         stopDriver(webDriverWrapper);
     }
 
-    public static Future<WebDriver> createDriverExternal(WebDriverMode mode){
+    public static Future<WebDriver> createDriverExternal(WebDriverMode mode) {
         return EXECUTOR.submit(() -> createDriver(mode));
     }
 
@@ -123,12 +121,11 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
             try {
-                WebDriverManager.chromedriver().setup();
-
                 ChromeOptions options = new ChromeOptions();
-                options.setHeadless(mode.getMode().get());
+                if (mode.getMode().get()) {
+                    options.addArguments("--headless=new");
+                }
                 options.addArguments("window-size=1920,1080");
-                options.setLogLevel(ChromeDriverLogLevel.ALL);
 
                 driver = new ChromeDriver(options);
                 log.debug("Driver created: {}", driver);

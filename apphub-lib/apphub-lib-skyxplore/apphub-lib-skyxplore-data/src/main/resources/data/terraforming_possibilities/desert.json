@@ -2,7 +2,7 @@
   {
     "surfaceType": "concrete",
     "constructionRequirements": {
-      "requiredWorkPoints": 10000,
+      "requiredWorkPoints": 1,
       "requiredResources": {
         "stone": 200,
         "water": 200,
@@ -15,8 +15,6 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "wood": 1,
-        "water": 1,
         "energy": 1
       }
     }
@@ -26,8 +24,16 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "energy": 1,
-        "water": 1
+        "energy": 1
+      }
+    }
+  },
+  {
+    "surfaceType": "military",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1
       }
     }
   }

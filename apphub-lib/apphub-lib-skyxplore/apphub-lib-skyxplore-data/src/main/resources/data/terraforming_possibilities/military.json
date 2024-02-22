@@ -9,6 +9,15 @@
     }
   },
   {
+    "surfaceType": "forest",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1
+      }
+    }
+  },
+  {
     "surfaceType": "desert",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
@@ -19,15 +28,6 @@
   },
   {
     "surfaceType": "lake",
-    "constructionRequirements": {
-      "requiredWorkPoints": 1,
-      "requiredResources": {
-        "energy": 1
-      }
-    }
-  },
-  {
-    "surfaceType": "military",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
