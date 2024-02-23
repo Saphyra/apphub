@@ -5,10 +5,11 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,7 @@ public class ExecutorServiceBean {
     private final ExecutorService executor;
 
     @NonNull
+    @Getter
     private final ErrorReporterService errorReporterService;
 
     public Future<ExecutionResult<Void>> execute(Runnable command) {

@@ -12,6 +12,8 @@
 
 ===BUGFIXES===
     WebDriver update hell
+    SkyXplore
+        Switching games does not end up gameNotFound errors
 
 ===PLATFORM CHANGES===
     Able to create specific type of driver allowing all tests to run

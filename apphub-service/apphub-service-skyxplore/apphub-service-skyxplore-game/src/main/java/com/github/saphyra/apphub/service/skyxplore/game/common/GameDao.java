@@ -75,34 +75,28 @@ public class GameDao {
     public void delete(Game game) {
         log.info("Deleting game {} from cache", game.getGameId());
 
+        game.setGamePaused(true);
         game.setTerminated(true);
+
         executorServiceBean.execute(() -> {
-            for (int i = 0; i < 60; i++) {
-                int queueSize = game.getEventLoop().getQueueSize();
-                if (queueSize == 0) {
-                    sleepService.sleep(10000);
-                    stopGame(game);
-                    return;
-                }
+            sleepService.sleep(3000);
 
-                log.debug("Queue still has {} items left.", queueSize);
+            game.getEventLoop()
+                .stop();
 
-                sleepService.sleep(1000);
+            sleepService.sleep(1000);
+
+            if (gamePresentAndTerminated(game)) {
+                repository.remove(game.getGameId());
             }
-
-            int queueSize = game.getEventLoop().getQueueSize();
-            stopGame(game);
-
-            throw new IllegalStateException("Queue still has " + queueSize + " number of items");
+            log.info("GameDao still has {} number of games left.", repository.size());
         });
     }
 
-    private void stopGame(Game game) {
-        game.getEventLoop()
-            .stop();
-        log.info("EventLoop is shut down.");
-        repository.remove(game.getGameId());
-        log.info("GameDao still has {} number of games left.", repository.size());
+    private boolean gamePresentAndTerminated(Game game) {
+        return Optional.ofNullable(repository.get(game.getGameId()))
+            .map(Game::isTerminated)
+            .orElse(false);
     }
 
     public List<Game> getAll() {

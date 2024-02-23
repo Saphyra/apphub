@@ -8,7 +8,9 @@ spring:
     url: jdbc:postgresql://postgres:5432/postgres
     driverClassName: org.postgresql.Driver
     hikari:
-      maximumPoolSize: 50
+      maximumPoolSize: 10
+      minimumIdle: 2
+      idleTimeout: 10000
   jpa:
     properties:
       hibernate:

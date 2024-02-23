@@ -26,19 +26,18 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
 
-    @Mock
-    private SleepService sleepService;
-
     @Spy
     private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
+
+    @Spy
+    private final SleepService sleepService = new SleepService();
 
     @InjectMocks
     private GameDao underTest;
@@ -87,16 +86,48 @@ public class GameDaoTest {
 
         underTest.save(game);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.getQueueSize()).willReturn(1)
-            .willReturn(0);
 
         underTest.delete(game);
 
-        verify(sleepService, timeout(2000)).sleep(1000);
-        verify(sleepService, timeout(12000)).sleep(10000);
-        verify(eventLoop, timeout(12000)).stop();
+        then(game).should().setTerminated(true);
+        then(game).should().setGamePaused(true);
+
+        assertThat(underTest.getAll()).hasSize(1);
+
+        given(game.isTerminated()).willReturn(true);
+
+        sleepService.sleep(5000);
+
+        then(eventLoop).should().stop();
+        then(sleepService).should().sleep(3000);
+        then(sleepService).should().sleep(1000);
 
         assertThat(underTest.getAll()).isEmpty();
+    }
+
+    @Test
+    public void delete_notTerminated() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
+        underTest.save(game);
+        given(game.getEventLoop()).willReturn(eventLoop);
+
+        underTest.delete(game);
+
+        then(game).should().setTerminated(true);
+        then(game).should().setGamePaused(true);
+
+        assertThat(underTest.getAll()).hasSize(1);
+
+        given(game.isTerminated()).willReturn(false);
+
+        sleepService.sleep(5000);
+
+        then(eventLoop).should().stop();
+        then(sleepService).should().sleep(3000);
+        then(sleepService).should().sleep(1000);
+
+        assertThat(underTest.getAll()).hasSize(1);
     }
 
     @Test
