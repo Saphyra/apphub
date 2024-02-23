@@ -58,6 +58,10 @@ public class EventLoop {
     }
 
     public void stop() {
-        eventLoopThread.stop();
+        if (!eventLoopThread.stopWithWait(60, TimeUnit.SECONDS)) {
+            log.warn("Event loop stopped before all tasks finished.");
+        }
+
+        log.info("EventLoop is shut down.");
     }
 }

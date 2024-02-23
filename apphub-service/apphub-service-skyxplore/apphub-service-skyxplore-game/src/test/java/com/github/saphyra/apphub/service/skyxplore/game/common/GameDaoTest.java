@@ -1,11 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
@@ -14,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
@@ -26,19 +20,12 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-
-    @Mock
-    private SleepService sleepService;
-
-    @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
 
     @InjectMocks
     private GameDao underTest;
@@ -87,14 +74,11 @@ public class GameDaoTest {
 
         underTest.save(game);
         given(game.getEventLoop()).willReturn(eventLoop);
-        given(eventLoop.getQueueSize()).willReturn(1)
-            .willReturn(0);
 
         underTest.delete(game);
 
-        verify(sleepService, timeout(2000)).sleep(1000);
-        verify(sleepService, timeout(12000)).sleep(10000);
-        verify(eventLoop, timeout(12000)).stop();
+        then(game).should().setTerminated(true);
+        then(eventLoop).should().stop();
 
         assertThat(underTest.getAll()).isEmpty();
     }
