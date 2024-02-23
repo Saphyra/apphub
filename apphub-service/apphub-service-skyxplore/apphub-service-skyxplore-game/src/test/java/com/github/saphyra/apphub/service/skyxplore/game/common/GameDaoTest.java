@@ -1,7 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
@@ -10,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
@@ -26,6 +32,12 @@ import static org.mockito.BDDMockito.then;
 public class GameDaoTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
+
+    @Spy
+    private final SleepService sleepService = new SleepService();
 
     @InjectMocks
     private GameDao underTest;
@@ -78,9 +90,44 @@ public class GameDaoTest {
         underTest.delete(game);
 
         then(game).should().setTerminated(true);
+        then(game).should().setGamePaused(true);
+
+        assertThat(underTest.getAll()).hasSize(1);
+
+        given(game.isTerminated()).willReturn(true);
+
+        sleepService.sleep(5000);
+
         then(eventLoop).should().stop();
+        then(sleepService).should().sleep(3000);
+        then(sleepService).should().sleep(1000);
 
         assertThat(underTest.getAll()).isEmpty();
+    }
+
+    @Test
+    public void delete_notTerminated() {
+        given(game.getGameId()).willReturn(GAME_ID);
+
+        underTest.save(game);
+        given(game.getEventLoop()).willReturn(eventLoop);
+
+        underTest.delete(game);
+
+        then(game).should().setTerminated(true);
+        then(game).should().setGamePaused(true);
+
+        assertThat(underTest.getAll()).hasSize(1);
+
+        given(game.isTerminated()).willReturn(false);
+
+        sleepService.sleep(5000);
+
+        then(eventLoop).should().stop();
+        then(sleepService).should().sleep(3000);
+        then(sleepService).should().sleep(1000);
+
+        assertThat(underTest.getAll()).hasSize(1);
     }
 
     @Test

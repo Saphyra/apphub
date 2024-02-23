@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.google.common.annotations.VisibleForTesting;
@@ -24,6 +26,9 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class GameDao {
+    private final ExecutorServiceBean executorServiceBean;
+    private final SleepService sleepService;
+
     @Getter(value = AccessLevel.PACKAGE)
     private final Map<UUID, Game> repository = new ConcurrentHashMap<>();
 
@@ -70,11 +75,28 @@ public class GameDao {
     public void delete(Game game) {
         log.info("Deleting game {} from cache", game.getGameId());
 
+        game.setGamePaused(true);
         game.setTerminated(true);
-        game.getEventLoop()
-            .stop();
-        repository.remove(game.getGameId());
-        log.info("GameDao still has {} number of games left.", repository.size());
+
+        executorServiceBean.execute(() -> {
+            sleepService.sleep(3000);
+
+            game.getEventLoop()
+                .stop();
+
+            sleepService.sleep(1000);
+
+            if (gamePresentAndTerminated(game)) {
+                repository.remove(game.getGameId());
+            }
+            log.info("GameDao still has {} number of games left.", repository.size());
+        });
+    }
+
+    private boolean gamePresentAndTerminated(Game game) {
+        return Optional.ofNullable(repository.get(game.getGameId()))
+            .map(Game::isTerminated)
+            .orElse(false);
     }
 
     public List<Game> getAll() {
