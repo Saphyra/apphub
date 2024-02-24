@@ -4,7 +4,7 @@
   "gives": {
     "fuel": {
       "placed": [
-        "concrete"
+        "CONCRETE"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -17,7 +17,7 @@
     },
     "plastic": {
       "placed": [
-        "concrete"
+        "CONCRETE"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,

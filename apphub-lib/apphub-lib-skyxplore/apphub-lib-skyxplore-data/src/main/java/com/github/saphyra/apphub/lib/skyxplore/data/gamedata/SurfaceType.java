@@ -20,7 +20,7 @@ public enum SurfaceType {
     @JsonCreator
     public static SurfaceType parse(String value) {
         return Arrays.stream(values())
-            .filter(surfaceType -> surfaceType.name().equalsIgnoreCase(value))
+            .filter(surfaceType -> surfaceType.name().equals(value))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(String.format("Value %s could not be parsed to SurfaceType", value)));
     }

@@ -2,7 +2,7 @@
   "id": "headquarters",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
-    "military"
+    "MILITARY"
   ],
   "defaultBuilding": true,
   "data": {
@@ -16,7 +16,7 @@
     "gives": {
       "ore": {
         "placed": [
-          "military"
+          "MILITARY"
         ],
         "constructionRequirements": {
           "requiredWorkPoints": 25,
@@ -24,22 +24,24 @@
             "energy": 5
           }
         },
-        "requiredSkill": "MINING"
+        "requiredSkill": "MINING",
+        "amount": 1
       },
       "energy": {
         "placed": [
-          "military"
+          "MILITARY"
         ],
         "constructionRequirements": {
           "requiredWorkPoints": 20,
           "requiredResources": {
           }
         },
-        "requiredSkill": "ENGINEERING"
+        "requiredSkill": "ENGINEERING",
+        "amount": 1
       },
       "wood": {
         "placed": [
-          "military"
+          "MILITARY"
         ],
         "constructionRequirements": {
           "requiredWorkPoints": 5,
@@ -47,11 +49,12 @@
             "energy": 5
           }
         },
-        "requiredSkill": "ENGINEERING"
+        "requiredSkill": "ENGINEERING",
+        "amount": 1
       },
       "stone": {
         "placed": [
-          "military"
+          "MILITARY"
         ],
         "constructionRequirements": {
           "requiredWorkPoints": 50,
@@ -59,11 +62,12 @@
             "energy": 1
           }
         },
-        "requiredSkill": "MINING"
+        "requiredSkill": "MINING",
+        "amount": 1
       },
       "water": {
         "placed": [
-          "military"
+          "MILITARY"
         ],
         "constructionRequirements": {
           "requiredWorkPoints": 50,
@@ -71,7 +75,8 @@
             "energy": 1
           }
         },
-        "requiredSkill": "ENGINEERING"
+        "requiredSkill": "ENGINEERING",
+        "amount": 1
       }
     }
   },

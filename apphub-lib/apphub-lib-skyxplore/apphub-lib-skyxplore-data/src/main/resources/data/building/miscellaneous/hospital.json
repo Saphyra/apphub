@@ -2,7 +2,7 @@
   "id": "hospital",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
-    "concrete"
+    "CONCRETE"
   ],
   "data": {
     "beds": 3,

@@ -4,8 +4,8 @@
   "gives": {
     "energy": {
       "placed": [
-        "desert",
-        "concrete"
+        "DESERT",
+        "CONCRETE"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 5,
@@ -17,7 +17,7 @@
   },
   "workers": 1,
   "defaultBuilding": false,
-  "primarySurfaceType": "desert",
+  "primarySurfaceType": "DESERT",
   "constructionRequirements": {
     "1": {
       "requiredWorkPoints": 1,

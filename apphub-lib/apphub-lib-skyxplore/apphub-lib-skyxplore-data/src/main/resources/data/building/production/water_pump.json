@@ -4,7 +4,7 @@
   "gives": {
     "water": {
       "placed": [
-        "lake"
+        "LAKE"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 10,

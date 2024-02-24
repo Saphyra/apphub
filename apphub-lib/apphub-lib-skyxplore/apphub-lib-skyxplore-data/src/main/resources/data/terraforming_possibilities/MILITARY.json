@@ -1,17 +1,6 @@
 [
   {
-    "surfaceType": "concrete",
-    "constructionRequirements": {
-      "requiredWorkPoints": 1,
-      "requiredResources": {
-        "stone": 200,
-        "water": 200,
-        "energy": 200
-      }
-    }
-  },
-  {
-    "surfaceType": "forest",
+    "surfaceType": "CONCRETE",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
@@ -20,7 +9,7 @@
     }
   },
   {
-    "surfaceType": "lake",
+    "surfaceType": "FOREST",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
@@ -29,7 +18,16 @@
     }
   },
   {
-    "surfaceType": "military",
+    "surfaceType": "DESERT",
+    "constructionRequirements": {
+      "requiredWorkPoints": 1,
+      "requiredResources": {
+        "energy": 1
+      }
+    }
+  },
+  {
+    "surfaceType": "LAKE",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {

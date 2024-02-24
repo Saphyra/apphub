@@ -3,10 +3,10 @@ import MapStream from "../../../../../../../common/js/collection/MapStream";
 import resourceLocalizationData from "../../../../common/localization/resource_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 
-const ProductionTableBody = ({ itemData, surfaceType, localizationHandler, currentLevel }) => {
+const ProductionTableBody = ({ gives, workers, surfaceType, localizationHandler, currentLevel }) => {
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
-    const rows = new MapStream(itemData.gives)
+    const rows = new MapStream(gives)
         .filter((dataId, production) => production.placed.indexOf(surfaceType) > -1)
         .map((dataId, production) => {
             const resourceRequirements = new MapStream(production.constructionRequirements.requiredResources)
@@ -46,7 +46,7 @@ const ProductionTableBody = ({ itemData, surfaceType, localizationHandler, curre
                 <td colSpan={2} className="centered">
                     <span>{localizationHandler.get("workplaces")}</span>
                     <span>: </span>
-                    <span>{(currentLevel + 1) * itemData.workers}</span>
+                    <span>{(currentLevel + 1) * workers}</span>
                 </td>
             </tr>
         </tbody>

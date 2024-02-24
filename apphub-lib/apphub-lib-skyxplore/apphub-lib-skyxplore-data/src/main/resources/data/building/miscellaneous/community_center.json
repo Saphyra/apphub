@@ -2,7 +2,7 @@
   "id": "community_center",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
-    "concrete"
+    "CONCRETE"
   ],
   "data": {
     "seats": 5,

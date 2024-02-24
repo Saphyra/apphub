@@ -12,6 +12,7 @@ const BuildingEffectTable = ({ id, className, surfaceType, itemData, currentLeve
             <BuildingEffectTableHead
                 buildingType={itemData.buildingType}
                 localizationHandler={localizationHandler}
+                dataId={itemData.id}
             />
 
             <BuildingEffectTableBody

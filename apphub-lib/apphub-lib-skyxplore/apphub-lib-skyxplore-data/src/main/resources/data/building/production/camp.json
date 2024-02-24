@@ -4,8 +4,8 @@
   "gives": {
     "raw_food": {
       "placed": [
-        "forest",
-        "mountain"
+        "FOREST",
+        "MOUNTAIN"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -16,8 +16,8 @@
     },
     "leather": {
       "placed": [
-        "forest",
-        "mountain"
+        "FOREST",
+        "MOUNTAIN"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,

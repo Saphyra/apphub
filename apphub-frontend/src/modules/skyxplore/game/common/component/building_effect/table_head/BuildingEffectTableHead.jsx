@@ -3,8 +3,9 @@ import BuildingType from "../../../constants/BuildingType";
 import Utils from "../../../../../../../common/js/Utils";
 import ProductionTableHead from "./ProductionTableHead";
 import StorageTableHead from "./StorageTableHead";
+import MiscellaneousBuildingEffectTableHead from "./miscellaneous/MiscellaneousBuildingEffectTableHead";
 
-const BuildingEffectTableHead = ({ buildingType, localizationHandler }) => {
+const BuildingEffectTableHead = ({ dataId, buildingType, localizationHandler }) => {
     switch (buildingType) {
         case BuildingType.PRODUCTION:
             return <ProductionTableHead
@@ -15,6 +16,10 @@ const BuildingEffectTableHead = ({ buildingType, localizationHandler }) => {
                 localizationHandler={localizationHandler}
             />
         case BuildingType.MISCELLANEOUS:
+            return <MiscellaneousBuildingEffectTableHead
+                localizationHandler={localizationHandler}
+                dataId={dataId}
+            />
             break;
         default:
             Utils.throwException("IllegalArgument", "Unhandled buildingType " + buildingType);

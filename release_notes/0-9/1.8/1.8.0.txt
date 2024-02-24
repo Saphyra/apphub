@@ -9,6 +9,7 @@
     SkyXplore
         Display spinner while saving
         Add Military to terraforming possibilities
+        Implement BuildingEffect for Miscellaneous buildings
 
 ===BUGFIXES===
     WebDriver update hell
