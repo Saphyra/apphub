@@ -2,25 +2,25 @@ package com.github.saphyra.apphub.service.user.common;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
-import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
-import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
+import com.github.saphyra.apphub.service.user.config.UserProperties;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,12 +36,6 @@ public class UserEventControllerImplTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
     @Mock
-    private AccessTokenDao accessTokenDao;
-
-    @Mock
-    private RoleDao roleDao;
-
-    @Mock
     private UserDao userDao;
 
     @Mock
@@ -51,15 +45,17 @@ public class UserEventControllerImplTest {
     private LocaleProvider localeProvider;
 
     @Mock
-    private BanDao banDao;
-
-    @Mock
     private RevokeBanService revokeBanService;
 
     @Mock
     private DateTimeUtil dateTimeUtil;
 
-    @InjectMocks
+    @Mock
+    private DeleteByUserIdDao deleteByUserIdDao;
+
+    @Mock
+    private UserProperties userProperties;
+
     private UserEventControllerImpl underTest;
 
     @Mock
@@ -67,6 +63,19 @@ public class UserEventControllerImplTest {
 
     @Captor
     private ArgumentCaptor<SendEventRequest<DeleteAccountEvent>> argumentCaptor;
+
+    @BeforeEach
+    void setUp() {
+        underTest = UserEventControllerImpl.builder()
+            .userDao(userDao)
+            .eventGatewayClient(eventGatewayClient)
+            .localeProvider(localeProvider)
+            .revokeBanService(revokeBanService)
+            .dateTimeUtil(dateTimeUtil)
+            .deleteByUserIdDaos(List.of(deleteByUserIdDao))
+            .userProperties(userProperties)
+            .build();
+    }
 
     @Test
     public void deleteAccountEvent() {
@@ -77,10 +86,7 @@ public class UserEventControllerImplTest {
 
         underTest.deleteAccountEvent(sendEventRequest);
 
-        verify(accessTokenDao).deleteByUserId(USER_ID);
-        verify(userDao).deleteById(USER_ID);
-        verify(roleDao).deleteByUserId(USER_ID);
-        verify(banDao).deleteByUserId(USER_ID);
+        verify(deleteByUserIdDao).deleteByUserId(USER_ID);
     }
 
     @Test
@@ -88,6 +94,7 @@ public class UserEventControllerImplTest {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(userDao.getUsersMarkedToDelete()).willReturn(Arrays.asList(user));
         given(user.getMarkedForDeletionAt()).willReturn(CURRENT_TIME.plusSeconds(1));
+        given(userProperties.getDeleteAccountBatchCount()).willReturn(1);
 
         underTest.triggerAccountDeletion();
 
@@ -100,6 +107,7 @@ public class UserEventControllerImplTest {
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(user.getUserId()).willReturn(USER_ID);
         given(user.getMarkedForDeletionAt()).willReturn(null);
+        given(userProperties.getDeleteAccountBatchCount()).willReturn(1);
 
         underTest.triggerAccountDeletion();
 
@@ -117,6 +125,7 @@ public class UserEventControllerImplTest {
         given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
         given(user.getUserId()).willReturn(USER_ID);
         given(user.getMarkedForDeletionAt()).willReturn(CURRENT_TIME.minusSeconds(1));
+        given(userProperties.getDeleteAccountBatchCount()).willReturn(1);
 
         underTest.triggerAccountDeletion();
 

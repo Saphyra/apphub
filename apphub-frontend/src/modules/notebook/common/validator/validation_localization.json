@@ -18,5 +18,17 @@
     "url-blank": {
         "en": "URL must not be blank.",
         "hu": "URL nem lehet üres."
+    },
+    "link-label-blank": {
+        "en": "Link label must not be blank.",
+        "hu": "A Link felirata nem lehet üres."
+    },
+    "pin-group-name-blank": {
+        "en": "Pin group name must not be blank.",
+        "hu": "A csoport neve nem lehet üres."
+    },
+    "pin-group-name-too-long": {
+        "en": "Pin group name too long. (Maximum 30 characters)",
+        "hu": "Csoport neve túl hosszú. (Maximum 30 karakter.)"
     }
 }

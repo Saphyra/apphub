@@ -95,6 +95,24 @@ public class SeleniumTest extends TestBase {
             .get(0);
     }
 
+    public static WebDriver extractDriver(WebDriverMode mode) {
+        if (mode == WebDriverMode.DEFAULT) {
+            throw new IllegalArgumentException("Use extractDriver() to extract default driver.");
+        }
+        WebDriverWrapper webDriverWrapper = new WebDriverWrapper(WebDriverFactory.createDriverExternal(mode), mode);
+        addToDrivers(webDriverWrapper);
+        return webDriverWrapper.getDriver();
+    }
+
+    private static void addToDrivers(WebDriverWrapper webDriverWrapper) {
+        if (isNull(driverWrappers.get())) {
+            driverWrappers.set(new ArrayList<>());
+        }
+
+        driverWrappers.get()
+            .add(webDriverWrapper);
+    }
+
     protected static List<WebDriver> extractDrivers(int driverCount) {
         StopWatch stopWatch = StopWatch.createStarted();
         List<WebDriverWrapper> webDriverWrappers;
@@ -115,5 +133,10 @@ public class SeleniumTest extends TestBase {
         return webDriverWrappers.stream()
             .map(WebDriverWrapper::getDriver)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    protected String getTestType() {
+        return "fe";
     }
 }

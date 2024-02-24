@@ -2,7 +2,7 @@
   "id": "restaurant",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
-    "concrete"
+    "CONCRETE"
   ],
   "data": {
     "seats": 5,

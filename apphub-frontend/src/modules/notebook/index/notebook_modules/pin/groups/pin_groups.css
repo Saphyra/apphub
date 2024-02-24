@@ -1,0 +1,16 @@
+#notebook-pin-groups {
+    border-bottom: 1px solid white;
+}
+
+#notebook-manage-pin-groups-button {
+    background-image: url("../../../../../../common/style/img/edit.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 27px;
+
+}
+
+.notebook-selected-pin-group {
+    border-color: lime;
+}

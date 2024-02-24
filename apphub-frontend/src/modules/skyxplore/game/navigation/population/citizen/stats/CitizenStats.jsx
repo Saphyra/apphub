@@ -14,19 +14,24 @@ const CitizenStats = ({ stats, hiddenProperties }) => {
             .map((stat, data) => <CitizenStatusBar
                 key={stat}
                 type={stat}
-                label={getLabel(stat, data.value)}
+                label={getLabel(stat, data.value, data.maxValue)}
                 value={data.value}
                 max={data.maxValue}
             />)
             .toList();
     }
 
-    const getLabel = (stat, value) => {
+    const getLabel = (stat, value, maxValue) => {
+        const percentage = Math.round(value / maxValue * 100);
+
         return (
             <span>
                 <span className="skyxplore-game-population-citizen-stat-name">{citizenLocalizationHandler.get(stat)}</span>
                 <span>: </span>
-                <span className="skyxplore-game-population-citizen-stat-value">{value}</span>
+                <span>
+                    <span className="skyxplore-game-population-citizen-stat-value">{percentage}</span>
+                    <span>%</span>
+                </span>
             </span>
         );
     }

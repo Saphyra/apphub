@@ -21,7 +21,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class MoraleRecoveryTest extends SeleniumTest {
-    private static final int REFERENCE_MORALE = 9000;
+    private static final int REFERENCE_MORALE = 90;
 
     @Test(groups = {"fe", "skyxplore"})
     public void checkMoraleRecovery() {

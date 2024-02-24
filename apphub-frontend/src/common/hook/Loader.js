@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-const useLoader = (request, mapper) => {
-    useEffect(() => loader(), []);
+const useLoader = (request, mapper, listener = []) => {
+    useEffect(() => loader(), listener);
 
     const loader = () => {
         const fetch = async () => {

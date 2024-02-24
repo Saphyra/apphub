@@ -4,7 +4,7 @@
   "gives": {
     "wood": {
       "placed": [
-        "forest"
+        "FOREST"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -16,8 +16,8 @@
     },
     "plank": {
       "placed": [
-        "forest",
-        "concrete"
+        "FOREST",
+        "CONCRETE"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,

@@ -2,7 +2,7 @@
   "id": "school",
   "buildingType": "miscellaneous",
   "placeableSurfaceTypes": [
-    "concrete"
+    "CONCRETE"
   ],
   "data": {
     "desks": 3,

@@ -59,5 +59,7 @@ public class EventLoop {
 
     public void stop() {
         eventLoopThread.stop();
+
+        log.info("EventLoop is shut down.");
     }
 }

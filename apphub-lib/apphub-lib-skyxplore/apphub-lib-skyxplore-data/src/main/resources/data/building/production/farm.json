@@ -4,8 +4,8 @@
   "gives": {
     "leather": {
       "placed": [
-        "desert",
-        "forest"
+        "DESERT",
+        "FOREST"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -17,8 +17,8 @@
     },
     "raw_food": {
       "placed": [
-        "desert",
-        "forest"
+        "DESERT",
+        "FOREST"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -31,8 +31,8 @@
     },
     "wheat": {
       "placed": [
-        "desert",
-        "forest"
+        "DESERT",
+        "FOREST"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,

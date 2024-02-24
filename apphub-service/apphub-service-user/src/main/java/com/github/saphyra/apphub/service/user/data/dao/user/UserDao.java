@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class UserDao extends AbstractDao<UserEntity, User, String, UserRepository> {
+public class UserDao extends AbstractDao<UserEntity, User, String, UserRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
     private final int maxNumberOfUsersFound;
 
@@ -31,7 +32,8 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
         this.maxNumberOfUsersFound = maxNumberOfUsersFound;
     }
 
-    public void deleteById(UUID userId) {
+    @Override
+    public void deleteByUserId(UUID userId) {
         deleteById(uuidConverter.convertDomain(userId));
     }
 

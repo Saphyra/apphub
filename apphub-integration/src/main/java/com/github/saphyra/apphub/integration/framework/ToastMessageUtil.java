@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Slf4j
 public class ToastMessageUtil {
     public static void verifyErrorToast(WebDriver driver, LocalizedText localizedText) {
@@ -60,5 +62,9 @@ public class ToastMessageUtil {
 
     private static List<WebElement> getAllToasts(WebDriver driver) {
         return driver.findElements(By.className("Toastify__toast"));
+    }
+
+    public static void verifyNoNotifications(WebDriver driver) {
+        assertThat(getAllToasts(driver)).isEmpty();
     }
 }

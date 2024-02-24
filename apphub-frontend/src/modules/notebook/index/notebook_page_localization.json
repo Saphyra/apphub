@@ -206,5 +206,49 @@
     "add-checklist-item-title": {
         "en": "Add checklist item",
         "hu": "Új lista elem"
+    },
+    "pin-group-manager": {
+        "en": "Pin group manager",
+        "hu": "Csoportok kezelése"
+    },
+    "create-pin-group": {
+        "en": "Create pin group",
+        "hu": "Új csoport"
+    },
+    "new-pin-group-name": {
+        "en": "Pin group name",
+        "hu": "Csoport neve"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "rename": {
+        "en": "Rename",
+        "hu": "Átnevezés"
+    },
+    "confirm-pin-group-deletion-title": {
+        "en": "Delete pin group?",
+        "hu": "Csoport törlése?"
+    },
+    "confirm-pin-group-deletion-content": {
+        "en": "Are you sure you want to delete pin group {pinGroupName}?",
+        "hu": "Biztosan törölni szeretnéd a(z) {pinGroupName} csoportot?"
+    },
+    "delete-pin-group": {
+        "en": "Delete pin group",
+        "hu": "Csoport törlése"
+    },
+    "rename-pin-group-title": {
+        "en": "Rename pin group",
+        "hu": "Csoport átnevezése"
+    },
+    "pin-group-name": {
+        "en": "Pin group name",
+        "hu": "Csoport neve"
+    },
+    "remove-from-pin-group": {
+        "en": "Remove",
+        "hu": "Eltávolítás"
     }
 }

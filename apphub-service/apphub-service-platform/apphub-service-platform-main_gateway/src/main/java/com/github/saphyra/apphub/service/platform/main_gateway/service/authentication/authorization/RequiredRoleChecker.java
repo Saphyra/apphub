@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class RequiredRoleChecker {
     boolean hasRequiredRoles(List<RoleSetting> roleSettings, AccessTokenHeader accessTokenHeader) {
-        log.info("Roles of user {}: {}", accessTokenHeader.getUserId(), accessTokenHeader.getRoles());
+        log.debug("Roles of user {}: {}", accessTokenHeader.getUserId(), accessTokenHeader.getRoles());
 
         List<RoleSetting> failedRoles = roleSettings.stream()
             .filter(roleSetting -> !accessTokenHeader.getRoles().containsAll(roleSetting.getRequiredRoles()))

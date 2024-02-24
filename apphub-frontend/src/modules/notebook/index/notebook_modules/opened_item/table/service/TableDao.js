@@ -7,6 +7,7 @@ import getDefaultErrorHandler from "../../../../../../../common/js/dao/DefaultEr
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import EventName from "../../../../../../../common/js/event/EventName";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
+import validateColumnData from "../../../../../common/validator/ColumnDataValidator";
 import validateListItemTitle from "../../../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../../../common/validator/TableHeadNameValidator";
 
@@ -40,6 +41,12 @@ export const save = async (
     const tableHeadNameValidationResult = validateTableHeadNames(tableHeads);
     if (!tableHeadNameValidationResult.valid) {
         NotificationService.showError(tableHeadNameValidationResult.message);
+        return;
+    }
+
+    const columnValidationResult =  validateColumnData(rows);
+    if (!columnValidationResult.valid) {
+        NotificationService.showError(columnValidationResult.message);
         return;
     }
 
@@ -78,7 +85,6 @@ const uploadFile = async (fileUpload, files, setDisplaySpinner) => {
 
 const doUpload = async (fileUpload, file, setDisplaySpinner) => {
     const formData = new FormData();
-    console.log(file);
     formData.append("file", file.e.target.files[0]);
 
     const options = {

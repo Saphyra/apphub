@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum NewPasswordValidationResult {
     VALID(null),
-    TOO_SHORT("Password too short (6 characters min.)."),
-    TOO_LONG("Password too long (30 characters max.).");
+    TOO_SHORT("Password too short. (Minimum 6 characters)"),
+    TOO_LONG("Password too long. (Maximum 30 characters)");
 
     private final String errorMessage;
 }

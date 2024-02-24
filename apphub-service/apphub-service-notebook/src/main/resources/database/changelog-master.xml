@@ -20,4 +20,6 @@
     <include file="database/change_sets/checked_item.xml"/>
     <include file="database/change_sets/column_type.xml"/>
     <include file="database/change_sets/dimension.xml"/>
+    <include file="database/change_sets/pin_group.xml"/>
+    <include file="database/change_sets/pin_mapping.xml"/>
 </databaseChangeLog>

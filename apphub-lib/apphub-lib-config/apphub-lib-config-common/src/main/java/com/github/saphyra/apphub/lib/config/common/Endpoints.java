@@ -49,6 +49,7 @@ public class Endpoints {
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
     public static final String EVENT_SKYXPLORE_DELETE_GAMES = "/event/skyxplore/data/game/delete";
     public static final String EVENT_CLEAN_UP_STORED_FILES = "/event/storage/cleanup";
+    public static final String EVENT_ACCESS_TOKEN_INVALIDATED = "/event/access-token-invalidated";
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING = "/api/ws/admin-panel/monitoring/memory";
@@ -92,7 +93,6 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_USERNAME = "/api/user/account/username";
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
-    public static final String ACCOUNT_GET_LANGUAGES = "/api/user/data/languages";
     public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
 
     //SETTINGS
@@ -162,6 +162,12 @@ public class Endpoints {
     public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/row/{rowId}/status";
     public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
     public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/column/{columnId}/status";
+    public static final String NOTEBOOK_CREATE_PIN_GROUP = "/api/notebook/pin-group";
+    public static final String NOTEBOOK_GET_PIN_GROUPS = "/api/notebook/pin-group";
+    public static final String NOTEBOOK_DELETE_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}";
+    public static final String NOTEBOOK_RENAME_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}";
+    public static final String NOTEBOOK_ADD_ITEM_TO_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}";
+    public static final String NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

@@ -18,11 +18,19 @@ public enum LocalizedText {
     INDEX_EMPTY_CREDENTIALS("Please fill e-mail address and password!"),
     INDEX_USERNAME_ALREADY_IN_USE("Username already in use."),
     INDEX_EMAIL_ALREADY_IN_USE("E-mail address is already in use."),
+    ACCOUNT_INCORRECT_PASSWORD("Incorrect password."),
+    ACCOUNT_EMAIL_CHANGED("Email changed."),
+    ACCOUNT_USERNAME_CHANGED("Username changed."),
+    ACCOUNT_PASSWORD_CHANGED("Password changed."),
+    ACCOUNT_DELETED("Account deleted."),
 
     //NOTEBOOK
     NOTEBOOK_TITLE_MUST_NOT_BE_BLANK("Title must not be blank."),
     NOTEBOOK_URL_MUST_NOT_BE_BLANK("URL must not be blank."),
     NOTEBOOK_COLUMN_NAME_MUST_NOT_BE_BLANK("Name of the column must not be blank."),
+    NOTEBOOK_LINK_LABEL_BLANK("Link label must not be blank."),
+    NOTEBOOK_PIN_GROUP_NAME_BLANK("Pin group name must not be blank."),
+    NOTEBOOK_PIN_GROUP_NAME_TOO_LONG("Pin group name too long. (Maximum 30 characters)"),
 
     //SKYXPLORE
     SKYXPLORE_CHARACTER_SAVED("Character saved."),

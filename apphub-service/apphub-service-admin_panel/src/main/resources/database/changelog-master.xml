@@ -5,4 +5,5 @@
 
     <include file="database/change_sets/error_report.xml"/>
     <include file="database/change_sets/migration_task.xml"/>
+    <include file="database/change_sets/custom_table_link_migration.xml"/>
 </databaseChangeLog>

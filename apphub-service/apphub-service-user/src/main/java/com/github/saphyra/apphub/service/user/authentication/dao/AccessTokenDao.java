@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.authentication.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, String, AccessTokenRepository> {
+public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, String, AccessTokenRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public AccessTokenDao(AccessTokenConverter converter, AccessTokenRepository repository, UuidConverter uuidConverter) {
@@ -39,6 +40,7 @@ public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, 
     }
 
     @Transactional
+    @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }

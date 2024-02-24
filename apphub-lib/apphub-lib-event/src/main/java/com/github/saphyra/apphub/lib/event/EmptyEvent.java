@@ -11,4 +11,5 @@ public class EmptyEvent {
     public static final String TRIGGER_REVOKE_EXPIRED_BANS = "user-data-trigger-revoke-expired-bans";
     public static final String ADMIN_PANEL_TRIGGER_MEMORY_STATUS_UPDATE = "admin-panel-trigger-memory-status-update";
     public static final String STORAGE_CLEAN_UP_STORED_FILES = "storage-clean-up-stored-files";
+    public static final String ACCESS_TOKENS_INVALIDATED = "access-tokens-invalidated";
 }

@@ -54,6 +54,7 @@
 .notebook-table-column-type-month,
 .notebook-table-column-type-image,
 .notebook-table-column-type-number,
+.notebook-table-column-type-link,
 .notebook-table-column-type-range {
     text-align: center;
 }

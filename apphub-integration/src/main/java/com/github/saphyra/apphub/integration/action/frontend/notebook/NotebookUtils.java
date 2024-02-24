@@ -9,11 +9,13 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ChecklistItem;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.CheckedTableColumn;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.LinkTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
@@ -260,7 +262,7 @@ public class NotebookUtils {
         NewTableActions.setColumnType(driver, rowIndex, columnIndex, column.getEntity1());
 
         switch (column.getEntity1()) {
-            case LINK, TEXT -> NewTableActions.getRows(driver)
+            case TEXT -> NewTableActions.getRows(driver)
                 .get(rowIndex)
                 .getColumns()
                 .get(columnIndex)
@@ -274,6 +276,18 @@ public class NotebookUtils {
                 Number number = OBJECT_MAPPER_WRAPPER.convertValue(column.getEntity2(), Number.class);
                 numberColumn.setStep(number.getStep().intValue());
                 numberColumn.setValue(number.getValue().intValue());
+            }
+            case LINK -> {
+                LinkTableColumn linkColumn = NewTableActions.getRows(driver)
+                    .get(rowIndex)
+                    .getColumns()
+                    .get(columnIndex)
+                    .as(ColumnType.LINK);
+
+                Link link = OBJECT_MAPPER_WRAPPER.convertValue(column.getEntity2(), Link.class);
+
+                linkColumn.setLabel(link.getLabel());
+                linkColumn.setUrl(link.getUrl());
             }
             case CHECKBOX -> {
                 CheckedTableColumn checkedColumn = NewTableActions.getRows(driver)

@@ -1,0 +1,31 @@
+===FEATURES===
+    Index
+        Log in by pressing enter
+    Notebook
+        Separate field for Link label in Custom Table
+        Pinned listItems organized to separate tabs
+    Account
+        Change password: Deactivate all user sessions
+    SkyXplore
+        Display spinner while saving
+        Add Military to terraforming possibilities
+        Implement BuildingEffect for Miscellaneous buildings
+
+===BUGFIXES===
+    WebDriver update hell
+    SkyXplore
+        Switching games does not end up gameNotFound errors
+
+===PLATFORM CHANGES===
+    Able to create specific type of driver allowing all tests to run
+    Migrate Account page to react
+
+===TECHNICAL DEBTS===
+    Configurable amount of user deletion batch size
+    Admin Panel
+        Ban
+            Include self
+
+===ETC===
+    SkyXplore
+        Display citizen stats as percentage instead of actual numbers

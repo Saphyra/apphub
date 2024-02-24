@@ -20,7 +20,6 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
         if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE) {
             const message = lastEvent.payload;
             message.type = message.senderId === ownUserId ? MessageType.OWN_MESSAGE : MessageType.INCOMING_MESSAGE;
-            console.log(message);
 
             const copy = new Stream(messages)
                 .add(message)

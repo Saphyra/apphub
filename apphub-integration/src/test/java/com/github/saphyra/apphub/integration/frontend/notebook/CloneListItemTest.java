@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListIt
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
@@ -15,6 +16,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
@@ -53,7 +55,7 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
     private static final String CUSTOM_TABLE_TITLE = "custom-table-title";
     private static final String CUSTOM_TABLE_COLUMN_NAME = "custom-table-column-name";
-    private static final String CUSTOM_TABLE_LINK = Endpoints.ACCOUNT_PAGE;
+    private static final String CUSTOM_TABLE_LINK_LABEL = "custom-table-link-label";
     private static final Double CUSTOM_TABLE_NUMBER_VALUE = 4d;
     private static final Double CUSTOM_TABLE_NUMBER_STEP = 2d;
     private static final String CUSTOM_TABLE_TEXT = "custom-table-text";
@@ -67,6 +69,7 @@ public class CloneListItemTest extends SeleniumTest {
         ONLY_TITLE_TITLE,
         CUSTOM_TABLE_TITLE
     );
+    private static final String CUSTOM_TABLE_LINK_URL = Endpoints.ACCOUNT_PAGE;
 
     @Test(groups = {"fe", "notebook"})
     public void cloneListItem() {
@@ -97,7 +100,7 @@ public class CloneListItemTest extends SeleniumTest {
             List.of(CUSTOM_TABLE_COLUMN_NAME),
             List.of(
                 List.of(new BiWrapper<>(ColumnType.CHECKBOX, true)),
-                List.of(new BiWrapper<>(ColumnType.LINK, CUSTOM_TABLE_LINK)),
+                List.of(new BiWrapper<>(ColumnType.LINK, new Link(CUSTOM_TABLE_LINK_LABEL, CUSTOM_TABLE_LINK_URL))),
                 List.of(new BiWrapper<>(ColumnType.NUMBER, new Number(CUSTOM_TABLE_NUMBER_STEP, CUSTOM_TABLE_NUMBER_VALUE))),
                 List.of(new BiWrapper<>(ColumnType.TEXT, CUSTOM_TABLE_TEXT))
             )
@@ -135,7 +138,7 @@ public class CloneListItemTest extends SeleniumTest {
 
         verifyContent(driver);
 
-        LIST_ITEMS.forEach(listItemTitle -> assertThat(NotebookActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
+        LIST_ITEMS.forEach(listItemTitle -> assertThat(PinActions.getPinnedItems(driver).stream().filter(listItem -> listItem.getTitle().equals(listItemTitle))).hasSize(2));
     }
 
     private void verifyContent(WebDriver driver) {

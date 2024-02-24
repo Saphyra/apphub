@@ -40,7 +40,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("username") + ":"}
                         input={
                             <ValidatedInputField
-                                id="registration-username-validation"
+                                validationResultId="registration-username-validation"
                                 inputId="registration-username"
                                 validationResult={validationResult[ValidatedField.USERNAME]}
                                 type="text"
@@ -54,7 +54,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("email-address") + ":"}
                         input={
                             <ValidatedInputField
-                                id="registration-email-validation"
+                                validationResultId="registration-email-validation"
                                 inputId="registration-email"
                                 validationResult={validationResult[ValidatedField.EMAIL]}
                                 type="text"
@@ -68,7 +68,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("password") + ":"}
                         input={
                             <ValidatedInputField
-                                id="registration-password-validation"
+                                validationResultId="registration-password-validation"
                                 inputId="registration-password"
                                 validationResult={validationResult[ValidatedField.PASSWORD]}
                                 type="password"
@@ -82,7 +82,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                         label={localizationHandler.get("confirm-password") + ":"}
                         input={
                             <ValidatedInputField
-                                id="registration-confirm-password-validation"
+                                validationResultId="registration-confirm-password-validation"
                                 inputId="registration-confirm-password"
                                 validationResult={validationResult[ValidatedField.CONFIRM_PASSWORD]}
                                 type="password"

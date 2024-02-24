@@ -8,4 +8,5 @@ import lombok.Data;
 public class ChangePasswordRequest {
     private final String newPassword;
     private final String password;
+    private final Boolean deactivateAllSessions;
 }

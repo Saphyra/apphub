@@ -5,10 +5,12 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.notebook.EditListItemActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
+import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.WebDriverMode;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
@@ -40,7 +42,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshCategory() {
-        WebDriver driver = extractDriver();
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -69,13 +71,13 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
         SleepUtil.sleep(1000);
         assertThat(NotebookActions.getCategoryTree(driver).getChildren().get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
-        assertThat(NotebookActions.getPinnedItems(driver).get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
+        assertThat(PinActions.getPinnedItems(driver).get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
         assertThat(NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE)).isNotEmpty();
     }
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshSearchResult() {
-        WebDriver driver = extractDriver();
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -112,7 +114,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
-        WebDriver driver = extractDriver();
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -147,7 +149,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshTable() {
-        WebDriver driver = extractDriver();
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -156,7 +158,8 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
         NotebookUtils.newTable(driver, TABLE_TITLE, List.of(CONTENT), List.of(List.of(CONTENT)));
 
-        NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
+        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Table not found."))
             .open();
 
         driver.switchTo()
@@ -182,7 +185,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshText() {
-        WebDriver driver = extractDriver();
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);

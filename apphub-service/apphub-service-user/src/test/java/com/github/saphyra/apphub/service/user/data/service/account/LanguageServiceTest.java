@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
-import com.github.saphyra.apphub.api.user.model.response.LanguageResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -13,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +23,6 @@ import static org.mockito.Mockito.verify;
 public class LanguageServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LANGUAGE_1 = "language-1";
-    private static final String LANGUAGE_2 = "language-2";
 
     @Mock
     private CommonConfigProperties commonConfigProperties;
@@ -64,20 +61,6 @@ public class LanguageServiceTest {
 
         verify(user).setLanguage(LANGUAGE_1);
         verify(userDao).save(user);
-    }
-
-    @Test
-    public void getLanguages() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
-        given(user.getLanguage()).willReturn(LANGUAGE_1);
-        given(commonConfigProperties.getSupportedLocales()).willReturn(Arrays.asList(LANGUAGE_1, LANGUAGE_2));
-
-        List<LanguageResponse> result = underTest.getLanguages(USER_ID);
-
-        assertThat(result).containsExactlyInAnyOrder(
-            LanguageResponse.builder().language(LANGUAGE_1).actual(true).build(),
-            LanguageResponse.builder().language(LANGUAGE_2).actual(false).build()
-        );
     }
 
     @Test

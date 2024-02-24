@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.core;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
@@ -9,9 +10,11 @@ import java.util.concurrent.Future;
 
 @Data
 @RequiredArgsConstructor
+@Builder
 public class WebDriverWrapper {
     private final UUID id = UUID.randomUUID();
     private final Future<WebDriver> driver;
+    private final WebDriverMode mode;
 
     public WebDriver getDriver() {
         try {

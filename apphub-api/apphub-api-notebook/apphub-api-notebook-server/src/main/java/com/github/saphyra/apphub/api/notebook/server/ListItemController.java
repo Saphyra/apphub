@@ -33,12 +33,6 @@ public interface ListItemController {
     @RequestMapping(method = RequestMethod.POST, path = Endpoints.NOTEBOOK_CLONE_LIST_ITEM)
     void cloneListItem(@PathVariable("listItemId") UUID listItemId);
 
-    @PostMapping(Endpoints.NOTEBOOK_PIN_LIST_ITEM)
-    void pinListItem(@PathVariable("listItemId") UUID listItemId, @RequestBody OneParamRequest<Boolean> pinned, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
-
-    @GetMapping(Endpoints.NOTEBOOK_GET_PINNED_ITEMS)
-    List<NotebookView> getPinnedItems(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
-
     @PostMapping(Endpoints.NOTEBOOK_SEARCH)
     List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

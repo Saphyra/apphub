@@ -1,5 +1,5 @@
 import React from "react";
-import ListItemType from "../../../common/ListItemType";
+import OpenedPageType from "../../../common/OpenedPageType";
 import Utils from "../../../../../common/js/Utils";
 import "./list_item.css";
 import Button from "../../../../../common/component/input/Button";
@@ -20,20 +20,20 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         }
 
         switch (data.type) {
-            case ListItemType.CATEGORY:
-            case ListItemType.TEXT:
-            case ListItemType.CHECKLIST:
-            case ListItemType.TABLE:
-            case ListItemType.CUSTOM_TABLE:
-            case ListItemType.CHECKLIST_TABLE:
-            case ListItemType.IMAGE:
-            case ListItemType.FILE:
+            case OpenedPageType.CATEGORY:
+            case OpenedPageType.TEXT:
+            case OpenedPageType.CHECKLIST:
+            case OpenedPageType.TABLE:
+            case OpenedPageType.CUSTOM_TABLE:
+            case OpenedPageType.CHECKLIST_TABLE:
+            case OpenedPageType.IMAGE:
+            case OpenedPageType.FILE:
                 setOpenedListItem({ id: data.id, type: data.type });
                 break;
-            case ListItemType.LINK:
+            case OpenedPageType.LINK:
                 window.open(data.value);
                 break;
-            case ListItemType.ONLY_TITLE:
+            case OpenedPageType.ONLY_TITLE:
                 break;
             default:
                 Utils.throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
@@ -138,7 +138,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     }
 
     const handleOnDragOver = (e) => {
-        if (data.type === ListItemType.CATEGORY) {
+        if (data.type === OpenedPageType.CATEGORY) {
             e.preventDefault();
         }
     }
@@ -151,7 +151,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     return (
         <div
             id={data.id}
-            className={"button notebook-content-category-content-list-item " + (data.type == ListItemType.ONLY_TITLE || !data.enabled ? " disabled " : "") + data.type.toLowerCase() + (data.pinned ? " pinned" : "") + (data.archived ? " archived" : "")}
+            className={"button notebook-content-category-content-list-item " + (data.type == OpenedPageType.ONLY_TITLE || !data.enabled ? " disabled " : "") + data.type.toLowerCase() + (data.pinned ? " pinned" : "") + (data.archived ? " archived" : "")}
             draggable
             onDragStart={handleOnDragStart}
             onDrop={handleOnDrop}
@@ -176,7 +176,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                 {listItemMode !== ListItemMode.CATEGORY_CONTENT &&
                     <Button
                         className="notebook-content-category-content-list-item-parent-button"
-                        onclick={() => setOpenedListItem({ id: data.parentId, type: ListItemType.CATEGORY })}
+                        onclick={() => setOpenedListItem({ id: data.parentId, type: OpenedPageType.CATEGORY })}
                         title={localizationHandler.get("open-parent")}
                     />
                 }

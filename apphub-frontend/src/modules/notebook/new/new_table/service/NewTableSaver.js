@@ -1,11 +1,11 @@
 import Constants from "../../../../../common/js/Constants";
 import Utils from "../../../../../common/js/Utils";
-import MapStream from "../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import ListItemType from "../../../common/ListItemType";
+import OpenedPageType from "../../../common/OpenedPageType";
+import validateColumnData from "../../../common/validator/ColumnDataValidator";
 import validateListItemTitle from "../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../common/validator/TableHeadNameValidator";
 
@@ -19,6 +19,12 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
     const tableHeadNameValidationResult = validateTableHeadNames(tableHeads);
     if (!tableHeadNameValidationResult.valid) {
         NotificationService.showError(tableHeadNameValidationResult.message);
+        return;
+    }
+
+    const columnValidationResult =  validateColumnData(rows);
+    if (!columnValidationResult.valid) {
+        NotificationService.showError(columnValidationResult.message);
         return;
     }
 
@@ -57,7 +63,6 @@ const uploadFile = async (fileUpload, files, setDisplaySpinner) => {
 
 const doUpload = async (fileUpload, file, setDisplaySpinner) => {
     const formData = new FormData();
-    console.log(file);
     formData.append("file", file.e.target.files[0]);
 
     const options = {
@@ -86,10 +91,10 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
 
 const getListItemType = (checklist, custom) => {
     if (custom) {
-        return ListItemType.CUSTOM_TABLE;
+        return OpenedPageType.CUSTOM_TABLE;
     }
 
-    return checklist ? ListItemType.CHECKLIST_TABLE : ListItemType.TABLE
+    return checklist ? OpenedPageType.CHECKLIST_TABLE : OpenedPageType.TABLE
 }
 
 export default create;

@@ -9,13 +9,13 @@ import lombok.Data;
 public class ChangePasswordParameters {
     private final String newPassword;
     private final String confirmPassword;
-    private final String password;
+    private final String currentPassword;
 
     public static ChangePasswordParameters valid() {
         return builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .confirmPassword(DataConstants.VALID_PASSWORD2)
-            .password(DataConstants.VALID_PASSWORD)
+            .currentPassword(DataConstants.VALID_PASSWORD)
             .build();
     }
 
@@ -45,7 +45,14 @@ public class ChangePasswordParameters {
     public static ChangePasswordParameters emptyPassword() {
         return valid()
             .toBuilder()
-            .password("")
+            .currentPassword("")
+            .build();
+    }
+
+    public static ChangePasswordParameters incorrectCurrentPassword() {
+        return valid()
+            .toBuilder()
+            .currentPassword(DataConstants.INCORRECT_PASSWORD)
             .build();
     }
 }

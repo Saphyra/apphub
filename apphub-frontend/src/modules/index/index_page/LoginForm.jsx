@@ -16,6 +16,12 @@ const LoginForm = ({ localizationHandler }) => {
         checked={rememberMe}
     />
 
+    const loginIfEnter = (e) => {
+        if (e.which === 13) {
+            login(email, password, rememberMe);
+        }
+    }
+
     return (
         <div className="login-form">
             <InputField
@@ -23,6 +29,7 @@ const LoginForm = ({ localizationHandler }) => {
                 type="text"
                 placeholder={localizationHandler.get("email-address")}
                 onchangeCallback={setEmail}
+                onkeyupCallback={loginIfEnter}
             />
 
             <InputField
@@ -30,6 +37,7 @@ const LoginForm = ({ localizationHandler }) => {
                 type="password"
                 placeholder={localizationHandler.get("password")}
                 onchangeCallback={setPassword}
+                onkeyupCallback={loginIfEnter}
             />
 
             <PostLabeledInputField

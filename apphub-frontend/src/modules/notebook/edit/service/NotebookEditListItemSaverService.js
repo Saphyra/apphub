@@ -1,7 +1,7 @@
 import Constants from "../../../../common/js/Constants";
 import Endpoints from "../../../../common/js/dao/dao";
 import NotificationService from "../../../../common/js/notification/NotificationService";
-import ListItemType from "../../common/ListItemType";
+import OpenedPageType from "../../common/OpenedPageType";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateUrl from "../../common/validator/UrlValidator";
 
@@ -12,7 +12,7 @@ const save = async (listItemTitle, listItemType, value, parent, listItemId) => {
         return;
     }
 
-    if (listItemType == ListItemType.LINK) {
+    if (listItemType == OpenedPageType.LINK) {
         const urlResult = validateUrl(value);
         if (!urlResult.valid) {
             NotificationService.showError(urlResult.message);

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ChUsernamePasswordValidationResult {
     VALID(null),
-    EMPTY_PASSWORD("Password is empty.");
+    EMPTY_PASSWORD("Must not be blank.");
 
     private final String errorMessage;
 }

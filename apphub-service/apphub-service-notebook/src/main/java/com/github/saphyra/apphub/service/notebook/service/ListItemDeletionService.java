@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,7 @@ public class ListItemDeletionService {
     private final TableDeletionService tableDeletionService;
     private final FileDeletionService fileDeletionService;
     private final ChecklistDeletionService checklistDeletionService;
+    private final PinMappingDao pinMappingDao;
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
@@ -42,6 +44,7 @@ public class ListItemDeletionService {
         }
 
         listItemDao.delete(listItem);
+        pinMappingDao.deleteByListItemId(listItem.getListItemId());
     }
 
     private void deleteChildren(ListItem category, UUID userId) {

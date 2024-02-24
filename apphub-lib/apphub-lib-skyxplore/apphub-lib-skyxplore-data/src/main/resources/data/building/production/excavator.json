@@ -4,7 +4,7 @@
   "gives": {
     "coal": {
       "placed": [
-        "coal_field"
+        "COAL_FIELD"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -16,7 +16,7 @@
     },
     "sand": {
       "placed": [
-        "desert"
+        "DESERT"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 1,
@@ -28,7 +28,7 @@
     },
     "ore": {
       "placed": [
-        "ore_field"
+        "ORE_FIELD"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 5,
@@ -40,7 +40,7 @@
     },
     "stone": {
       "placed": [
-        "mountain"
+        "MOUNTAIN"
       ],
       "constructionRequirements": {
         "requiredWorkPoints": 10,

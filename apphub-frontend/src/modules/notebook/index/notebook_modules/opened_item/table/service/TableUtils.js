@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
-import ListItemType from "../../../../../common/ListItemType";
+import OpenedPageType from "../../../../../common/OpenedPageType";
 import { loadTable } from "./TableDao";
 
 export const discard = (setConfirmationDialogData, localizationHandler, setEditingEnabled, listItemId, setDataFromResponse) => {
@@ -56,6 +56,6 @@ export const close = (editingEnabled, setConfirmationDialogData, localizationHan
 }
 
 const doClose = (setOpenedListItem, setConfirmationDialogData, parent) => {
-    setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })
+    setOpenedListItem({ id: parent, type: OpenedPageType.CATEGORY })
     setConfirmationDialogData(null);
 }

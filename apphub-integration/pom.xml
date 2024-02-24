@@ -22,13 +22,15 @@
         <versions.jackson-core>2.14.1</versions.jackson-core>
         <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
         <versions.rest-assured>5.3.0</versions.rest-assured>
-        <versions.selenium>4.10.0</versions.selenium>
-        <versions.webDriverManager>5.4.1</versions.webDriverManager>
+        <versions.selenium>4.18.1</versions.selenium>
+        <versions.webDriverManager>5.6.4</versions.webDriverManager>
         <versions.testng>7.7.1</versions.testng>
         <versions.logback>1.2.3</versions.logback>
         <versions.awaitility>4.2.0</versions.awaitility>
         <versions.java-websocket>1.5.3</versions.java-websocket>
         <versions.guava>31.1-jre</versions.guava>
+        <versions.apache-commons-pool>2.9.0</versions.apache-commons-pool>
+        <versions.gson>2.10.1</versions.gson>
 
         <!-- Plugin Versions -->
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
@@ -104,22 +106,32 @@
             <version>${versions.guava}</version>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${versions.webDriverManager}</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-            <version>2.9.0</version>
+            <version>${versions.apache-commons-pool}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${versions.jackson-datatype}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${versions.gson}</version>
         </dependency>
     </dependencies>
 

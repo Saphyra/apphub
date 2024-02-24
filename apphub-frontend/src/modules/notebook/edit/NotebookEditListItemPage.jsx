@@ -12,10 +12,10 @@ import Constants from "../../../common/js/Constants";
 import ParentSelector from "../common/parent_selector/ParentSelector";
 import ListItemTitle from "../common/list_item_title/ListItemTitle";
 import InputField from "../../../common/component/input/InputField";
-import ListItemType from "../common/ListItemType";
 import "./notebook_edit_page.css";
 import save from "./service/NotebookEditListItemSaverService";
 import loadItemData from "./service/NotebookEditListItemDataLoader";
+import OpenedPageType from "../common/OpenedPageType";
 
 const NotebookEditListItemPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -58,7 +58,7 @@ const NotebookEditListItemPage = () => {
                         listItemId={listItemId}
                     />
 
-                    {listItemType !== null && listItemType === ListItemType.LINK &&
+                    {listItemType !== null && listItemType === OpenedPageType.LINK &&
                         <InputField
                             id="notebook-edit-content"
                             type="text"

@@ -1,0 +1,22 @@
+{
+    "tab-title": {
+        "en": "Change username",
+        "hu": "Felhasználónév módosítása"
+    },
+    "new-username": {
+        "en": "New username",
+        "hu": "Új felhasználónév"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "username-changed": {
+        "en": "Username changed.",
+        "hu": "Felhasználónév megváltoztatva."
+    }
+}

@@ -47,6 +47,7 @@ public interface AccountController {
     List<AccountResponse> searchAccount(
         @RequestBody OneParamRequest<String> search,
         @RequestParam(value = "includeMarkedForDeletion", required = false, defaultValue = "false") Boolean includeMarkedForDeletion,
+        @RequestParam(value = "includeSelf", required = false, defaultValue = "false") Boolean includeSelf,
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
     );
 

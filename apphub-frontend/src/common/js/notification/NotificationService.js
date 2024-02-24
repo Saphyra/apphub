@@ -27,11 +27,6 @@ const showSuccess = (message, timeout = 0) => {
 }
 
 const displayStoredMessages = () => {
-    console.log("errorCode", sessionStorage.errorCode);
-    console.log("successCode", sessionStorage.successCode);
-    console.log("errorText", sessionStorage.errorText);
-    console.log("successText", sessionStorage.successText);
-
     if (sessionStorage.errorCode) {
         showError(localizationHandler.get(sessionStorage.errorCode), 500);
         delete sessionStorage.errorCode;

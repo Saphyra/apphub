@@ -112,7 +112,7 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
                             label={localizationHandler.get("ai-name") + ":"}
                             input={
                                 <ValidatedInputField
-                                    id="skyxplore-lobby-create-ai-name-validation"
+                                    validationResultId="skyxplore-lobby-create-ai-name-validation"
                                     inputId="skyxplore-lobby-create-ai-name"
                                     validationResult={validationResult[ValidatedField.CHARACTER_NAME]}
                                     type="text"

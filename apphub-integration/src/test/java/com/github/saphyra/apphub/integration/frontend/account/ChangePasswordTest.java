@@ -1,15 +1,12 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -23,6 +20,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.change_password.
 import com.github.saphyra.apphub.integration.structure.api.user.change_password.NewPasswordValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class ChangePasswordTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
@@ -44,45 +43,47 @@ public class ChangePasswordTest extends SeleniumTest {
 
     private static void tooShortPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, tooShortPassword());
     }
 
     private static void tooLongPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, tooLongPassword());
     }
 
     private static void incorrectConfirmPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
     }
 
     private static void emptyPassword(WebDriver driver) {
         AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
-        SleepUtil.sleep(2000);
         AccountPageActions.verifyChangePasswordForm(driver, emptyPassword());
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        ChangePasswordParameters incorrectPasswordParameters = ChangePasswordParameters.valid()
-            .toBuilder()
-            .password(DataConstants.INCORRECT_PASSWORD)
-            .build();
-        AccountPageActions.changePassword(driver, incorrectPasswordParameters);
-        NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
+        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectCurrentPassword());
+        AccountPageActions.verifyChangePasswordForm(driver, valid());
+        AccountPageActions.changePassword(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
-        AccountPageActions.changePassword(driver, changeParameters);
-        NotificationUtil.verifySuccessNotification(driver, "Password Changed.");
+
+        AccountPageActions.fillChangePasswordForm(driver, changeParameters);
+        AccountPageActions.verifyChangePasswordForm(driver, valid());
+        AccountPageActions.changePassword(driver);
+
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
+
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);
+
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
+
         IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
@@ -124,4 +125,34 @@ public class ChangePasswordTest extends SeleniumTest {
             .password(ChPasswordPasswordValidationResult.EMPTY_PASSWORD)
             .build();
     }
+
+    @Test(groups = {"fe", "account"})
+    public void changePassword_deactivateAllSessions() {
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver driver1 = drivers.get(0);
+        WebDriver driver2 = drivers.get(1);
+
+        Navigation.toIndexPage(driver1);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver1, userData);
+        ModulesPageActions.openModule(driver1, ModuleLocation.MANAGE_ACCOUNT);
+
+        Navigation.toIndexPage(driver2);
+        IndexPageActions.submitLogin(driver2, LoginParameters.fromRegistrationParameters(userData));
+
+        ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
+        AccountPageActions.fillChangePasswordForm(driver1, changeParameters);
+        AccountPageActions.toggleDeactivateAllSessions(driver1);
+        AccountPageActions.changePassword(driver1);
+
+        AwaitilityWrapper.create(20, 3)
+            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE))
+            .assertTrue("Secondary session is not invalidated.");
+        ToastMessageUtil.verifySuccessToast(driver1, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
+
+        AwaitilityWrapper.create(20, 3)
+            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE + "?redirect=" + Endpoints.MODULES_PAGE)))
+            .assertTrue("Secondary session is not invalidated. PageUrl: " + driver2.getCurrentUrl());
+    }
+
 }

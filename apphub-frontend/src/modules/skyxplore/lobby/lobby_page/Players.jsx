@@ -18,7 +18,6 @@ const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
         }
 
         if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED) {
-            console.log("Lobby Player modified", lastEvent.payload);
             const newPlayer = lastEvent.payload;
 
             const copy = new MapStream(players)

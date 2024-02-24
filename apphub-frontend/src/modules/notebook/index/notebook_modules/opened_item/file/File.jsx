@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
-import ListItemType from "../../../../common/ListItemType";
+import OpenedPageType from "../../../../common/OpenedPageType";
 import "./file.css";
 import Utils from "../../../../../../common/js/Utils";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
@@ -52,7 +52,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
                 title={title}
                 setTitle={setTitle}
                 editingEnabled={false}
-                close={() => setOpenedListItem({ id: parent, type: ListItemType.CATEGORY })}
+                close={() => setOpenedListItem({ id: parent, type: OpenedPageType.CATEGORY })}
             />
 
             <div id="notebook-content-file-content" className="notebook-content-view-main">
