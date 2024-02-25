@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -13,4 +14,5 @@ public class PinGroup {
     private final UUID pinGroupId;
     private final UUID userId;
     private String pinGroupName;
+    private LocalDateTime lastOpened;
 }

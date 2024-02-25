@@ -14,4 +14,5 @@ import java.util.UUID;
 public class PinGroupResponse {
     private UUID pinGroupId;
     private String pinGroupName;
+    private String lastOpened;
 }

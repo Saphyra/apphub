@@ -310,6 +310,7 @@ const Endpoints = {
     NOTEBOOK_RENAME_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}"),
     NOTEBOOK_ADD_ITEM_TO_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}"),
     NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP: new Endpoint(RequestMethod.DELETE, "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}"),
+    NOTEBOOK_PIN_GROUP_OPENED: new Endpoint(RequestMethod.PUT, "/api/notebook/pin-group/{pinGroupId}"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),

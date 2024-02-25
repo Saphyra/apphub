@@ -19,4 +19,5 @@ class PinGroupEntity {
     private String pinGroupId;
     private String userId;
     private String pinGroupName;
+    private String lastOpened;
 }

@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupDele
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupItemService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupQueryService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupRenameService;
+import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupUpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ public class PinControllerImpl implements PinController {
     private final PinGroupRenameService pinGroupRenameService;
     private final PinGroupDeletionService pinGroupDeletionService;
     private final PinGroupItemService pinGroupItemService;
+    private final PinGroupUpdateService pinGroupUpdateService;
 
     @Override
     public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessTokenHeader accessTokenHeader) {
@@ -91,5 +93,15 @@ public class PinControllerImpl implements PinController {
         pinGroupItemService.removeItem(accessTokenHeader.getUserId(), pinGroupId, listItemId);
 
         return getPinnedItems(pinGroupId, accessTokenHeader);
+    }
+
+    @Override
+    //TODO unit test
+    public List<PinGroupResponse> pinGroupOpened(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} opened pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
+
+        pinGroupUpdateService.setLastOpened(pinGroupId);
+
+        return getPinGroups(accessTokenHeader);
     }
 }

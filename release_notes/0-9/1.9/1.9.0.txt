@@ -1,4 +1,6 @@
 ===FEATURES===
+    Notebook
+        Order pin groups from most recently used to last used
 
 ===BUGFIXES===
 

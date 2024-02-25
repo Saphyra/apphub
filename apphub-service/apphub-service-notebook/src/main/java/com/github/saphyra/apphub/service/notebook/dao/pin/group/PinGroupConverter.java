@@ -8,11 +8,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class PinGroupConverter extends ConverterBase<PinGroupEntity, PinGroup> {
     static final String COLUMN_PIN_GROUP_NAME = "pin-group-name";
+    static final String COLUMN_LAST_OPENED = "last-opened";
 
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
@@ -26,6 +30,14 @@ class PinGroupConverter extends ConverterBase<PinGroupEntity, PinGroup> {
             .pinGroupId(pinGroupId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .pinGroupName(stringEncryptor.encrypt(domain.getPinGroupName(), accessTokenProvider.getUserIdAsString(), pinGroupId, COLUMN_PIN_GROUP_NAME))
+            .lastOpened(Optional.ofNullable(domain.getLastOpened())
+                .map(lastUpdated -> stringEncryptor.encrypt(
+                    lastUpdated.toString(),
+                    accessTokenProvider.getUserIdAsString(),
+                    pinGroupId,
+                    COLUMN_LAST_OPENED
+                ))
+                .orElse(null))
             .build();
     }
 
@@ -35,6 +47,15 @@ class PinGroupConverter extends ConverterBase<PinGroupEntity, PinGroup> {
             .pinGroupId(uuidConverter.convertEntity(entity.getPinGroupId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .pinGroupName(stringEncryptor.decrypt(entity.getPinGroupName(), accessTokenProvider.getUserIdAsString(), entity.getPinGroupId(), COLUMN_PIN_GROUP_NAME))
+            .lastOpened(Optional.ofNullable(entity.getLastOpened())
+                .map(lastUpdated -> stringEncryptor.decrypt(
+                    lastUpdated,
+                    accessTokenProvider.getUserIdAsString(),
+                    entity.getPinGroupId(),
+                    COLUMN_LAST_OPENED)
+                )
+                .map(LocalDateTime::parse)
+                .orElse(LocalDateTime.MIN))
             .build();
     }
 }
