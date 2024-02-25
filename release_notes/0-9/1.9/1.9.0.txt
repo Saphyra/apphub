@@ -7,5 +7,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    Notebook
+        Process ForRemoval("custom-table-link-migration")
 
 ===ETC===
