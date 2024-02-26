@@ -7,6 +7,7 @@
 ===BUGFIXES===
     Notebook
         When the window gets focus and switching opened module at the same time (clicking on the pins) the automatic reload switches back to old item
+        Moving ListItem by dropping it to one of the leaves in the category tree does not drop it all the parent categories ending up unwanted calls
 
 ===PLATFORM CHANGES===
 
