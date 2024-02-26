@@ -1,6 +1,8 @@
 ===FEATURES===
     Notebook
         Order pin groups from most recently used to last used
+    Account
+        Display current username and email
 
 ===BUGFIXES===
     Notebook

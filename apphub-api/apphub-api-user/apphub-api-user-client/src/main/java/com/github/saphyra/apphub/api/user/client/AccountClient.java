@@ -22,7 +22,7 @@ public interface AccountClient {
     String getLanguage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @GetMapping(Endpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
-    AccountResponse getAccount(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    AccountResponse getAccountInternal(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @PostMapping(Endpoints.USER_DATA_SEARCH_ACCOUNT)
     List<AccountResponse> searchAccount(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -207,4 +207,14 @@ public class AccountPageActions {
         driver.findElement(By.id("account-change-password-deactivate-all-sessions"))
             .click();
     }
+
+    public static String getCurrentEmail(WebDriver driver) {
+        return driver.findElement(By.id("account-current-email"))
+            .getText();
+    }
+
+    public static String getCurrentUsername(WebDriver driver) {
+        return driver.findElement(By.id("account-current-username"))
+            .getText();
+    }
 }

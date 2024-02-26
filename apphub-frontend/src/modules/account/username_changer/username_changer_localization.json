@@ -18,5 +18,10 @@
     "username-changed": {
         "en": "Username changed.",
         "hu": "Felhasználónév megváltoztatva."
+    },
+    "current": {
+        "en": "Current",
+        "hu": "Jelenlegi"
     }
+
 }

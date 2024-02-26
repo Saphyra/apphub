@@ -20,6 +20,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.change_email.Ema
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ChangeEmailTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changeEmail() {
@@ -85,6 +87,7 @@ public class ChangeEmailTest extends SeleniumTest {
         AccountPageActions.changeEmail(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_EMAIL_CHANGED);
+        assertThat(AccountPageActions.getCurrentEmail(driver)).isEqualTo(changeParameters.getEmail());
 
         AccountPageActions.back(driver);
         ModulesPageActions.logout(driver);

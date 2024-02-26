@@ -86,7 +86,16 @@ public class AccountControllerImplTest {
     public void changeEmail() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
 
-        underTest.changeEmail(accessTokenHeader, changeEmailRequest);
+        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(user.getUserId()).willReturn(USER_ID_1);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        assertThat(underTest.changeEmail(accessTokenHeader, changeEmailRequest))
+            .returns(USER_ID_1, AccountResponse::getUserId)
+            .returns(EMAIL, AccountResponse::getEmail)
+            .returns(USERNAME, AccountResponse::getUsername);
+
 
         verify(changeEmailService).changeEmail(USER_ID_1, changeEmailRequest);
     }
@@ -95,7 +104,15 @@ public class AccountControllerImplTest {
     public void changeUsername() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
 
-        underTest.changeUsername(accessTokenHeader, changeUsernameRequest);
+        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(user.getUserId()).willReturn(USER_ID_1);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        assertThat(underTest.changeUsername(accessTokenHeader, changeUsernameRequest))
+            .returns(USER_ID_1, AccountResponse::getUserId)
+            .returns(EMAIL, AccountResponse::getEmail)
+            .returns(USERNAME, AccountResponse::getUsername);
 
         verify(changeUsernameService).changeUsername(USER_ID_1, changeUsernameRequest);
     }
@@ -209,13 +226,13 @@ public class AccountControllerImplTest {
     }
 
     @Test
-    public void getAccount() {
+    public void getAccountInternal() {
         given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        AccountResponse result = underTest.getAccount(USER_ID_1);
+        AccountResponse result = underTest.getAccountInternal(USER_ID_1);
 
         assertThat(result.getUserId()).isEqualTo(USER_ID_1);
         assertThat(result.getEmail()).isEqualTo(EMAIL);
@@ -223,12 +240,26 @@ public class AccountControllerImplTest {
     }
 
     @Test
-    public void getAccount_notFound() {
+    public void getAccountInternal_notFound() {
         given(userDao.findById(USER_ID_1)).willReturn(Optional.empty());
 
-        Throwable ex = catchThrowable(() -> underTest.getAccount(USER_ID_1));
+        Throwable ex = catchThrowable(() -> underTest.getAccountInternal(USER_ID_1));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
+    }
+
+    @Test
+    void getAccount() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(user.getUserId()).willReturn(USER_ID_1);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+
+        assertThat(underTest.getAccount(accessTokenHeader))
+            .returns(USER_ID_1, AccountResponse::getUserId)
+            .returns(EMAIL, AccountResponse::getEmail)
+            .returns(USERNAME, AccountResponse::getUsername);
     }
 
     @Test

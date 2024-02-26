@@ -25,7 +25,7 @@ public class AccountClientProxy {
     }
 
     public AccountResponse getAccount(UUID userId) {
-        return accountClient.getAccount(userId, localeProvider.getLocaleValidated());
+        return accountClient.getAccountInternal(userId, localeProvider.getLocaleValidated());
     }
 
     public boolean userExists(UUID userId) {

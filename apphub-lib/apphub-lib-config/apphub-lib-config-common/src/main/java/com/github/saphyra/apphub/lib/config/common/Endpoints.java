@@ -94,6 +94,7 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
+    public static final String USER_DATA_GET_ACCOUNT = "/api/user/account";
 
     //SETTINGS
     public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";

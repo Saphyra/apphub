@@ -17,6 +17,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.change_username.
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ChangeUsernameTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changeUsername() {
@@ -81,11 +83,13 @@ public class ChangeUsernameTest extends SeleniumTest {
     }
 
     private static void change(WebDriver driver) {
-        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.valid());
+        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid();
+        AccountPageActions.fillChangeUsernameForm(driver, parameters);
         AccountPageActions.verifyChangeUsernameForm(driver, valid());
         AccountPageActions.changeUsername(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_USERNAME_CHANGED);
+        assertThat(AccountPageActions.getCurrentUsername(driver)).isEqualTo(parameters.getUsername());
     }
 
     private static ChangeUsernameValidationResult valid() {

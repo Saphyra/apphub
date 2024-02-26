@@ -40,15 +40,19 @@ class AccountControllerImpl implements AccountController {
     private final UserDao userDao;
 
     @Override
-    public void changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
+    public AccountResponse changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
         log.info("{} wants to change his email", accessTokenHeader.getUserId());
         changeEmailService.changeEmail(accessTokenHeader.getUserId(), request);
+
+        return getAccount(accessTokenHeader);
     }
 
     @Override
-    public void changeUsername(AccessTokenHeader accessTokenHeader, ChangeUsernameRequest request) {
+    public AccountResponse changeUsername(AccessTokenHeader accessTokenHeader, ChangeUsernameRequest request) {
         log.info("{} wants to change his username", accessTokenHeader.getUserId());
         changeUsernameService.changeUsername(accessTokenHeader.getUserId(), request);
+
+        return getAccount(accessTokenHeader);
     }
 
     @Override
@@ -100,10 +104,15 @@ class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    public AccountResponse getAccount(UUID userId) {
+    public AccountResponse getAccountInternal(UUID userId) {
         return userDao.findById(userId)
             .map(this::convert)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND, "User not found with id " + userId));
+    }
+
+    @Override
+    public AccountResponse getAccount(AccessTokenHeader accessTokenHeader) {
+        return convert(userDao.findByIdValidated(accessTokenHeader.getUserId()));
     }
 
     @Override

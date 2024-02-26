@@ -18,5 +18,9 @@
     "email-changed": {
         "en": "Email changed.",
         "hu": "Email módosítva."
+    },
+    "current": {
+        "en": "Current",
+        "hu": "Jelenlegi"
     }
 }

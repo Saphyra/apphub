@@ -9,7 +9,7 @@ import Button from "../../../common/component/input/Button";
 import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
 
-const EmailChanger = () => {
+const EmailChanger = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [newEmail, setNewEmail] = useState("");
@@ -22,18 +22,27 @@ const EmailChanger = () => {
     useEffect(() => setPassswordValidationResult(validateFilled(password)), [password]);
 
     const changeEmail = async () => {
-        await Endpoints.ACCOUNT_CHANGE_EMAIL.createRequest({ email: newEmail, password: password })
+        const response = await Endpoints.ACCOUNT_CHANGE_EMAIL.createRequest({ email: newEmail, password: password })
             .send();
 
         setNewEmail("");
         setPassword("");
+        setUserData(response);
         NotificationService.showSuccess(localizationHandler.get("email-changed"));
     }
 
     return (
         <div className="account-tab-wrapper">
             <div className="account-tab">
-                <div className="account-tab-title">{localizationHandler.get("tab-title")}</div>
+                <div className="account-tab-title">
+                    <span>{localizationHandler.get("tab-title")}</span>
+                    <span> </span>
+                    <span>{"("}</span>
+                    <span>{localizationHandler.get("current")}</span>
+                    <span>: </span>
+                    <span id="account-current-email">{userData.email}</span>
+                    <span>{")"}</span>
+                </div>
                 <div className="account-tab-content">
                     <div>
                         <PreLabeledInputField
