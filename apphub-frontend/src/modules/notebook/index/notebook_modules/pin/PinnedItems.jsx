@@ -61,6 +61,8 @@ const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, l
     const updatePinGroupId = (newId) => {
         if (Utils.hasValue(newId)) {
             sessionStorage.pinGroupId = newId;
+        } else {
+            delete sessionStorage.pinGroupId;
         }
 
         setPinGroupId(newId);
