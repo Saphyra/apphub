@@ -3,6 +3,8 @@
         Order pin groups from most recently used to last used
 
 ===BUGFIXES===
+    Notebook
+        When the window gets focus and switching opened module at the same time (clicking on the pins) the automatic reload switches back to old item
 
 ===PLATFORM CHANGES===
 

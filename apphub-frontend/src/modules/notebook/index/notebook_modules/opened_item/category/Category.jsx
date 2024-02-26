@@ -55,8 +55,12 @@ const Category = ({
             const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
             const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
-            setOpenedCategoryContent(response);
+            const listItemId = openedListItem.id;
+            if (openedListItem.id === listItemId) {
+                setOpenedCategoryContent(response);
+            }
         }
+
         fetch();
     }
 
