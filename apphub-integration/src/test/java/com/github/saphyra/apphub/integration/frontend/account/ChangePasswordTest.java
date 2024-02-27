@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
 import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.account.ChangePasswordActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -42,29 +43,29 @@ public class ChangePasswordTest extends SeleniumTest {
     }
 
     private static void tooShortPassword(WebDriver driver) {
-        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
-        AccountPageActions.verifyChangePasswordForm(driver, tooShortPassword());
+        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
+        ChangePasswordActions.verifyChangePasswordForm(driver, tooShortPassword());
     }
 
     private static void tooLongPassword(WebDriver driver) {
-        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
-        AccountPageActions.verifyChangePasswordForm(driver, tooLongPassword());
+        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
+        ChangePasswordActions.verifyChangePasswordForm(driver, tooLongPassword());
     }
 
     private static void incorrectConfirmPassword(WebDriver driver) {
-        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
-        AccountPageActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
+        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
+        ChangePasswordActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
     }
 
     private static void emptyPassword(WebDriver driver) {
-        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
-        AccountPageActions.verifyChangePasswordForm(driver, emptyPassword());
+        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
+        ChangePasswordActions.verifyChangePasswordForm(driver, emptyPassword());
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        AccountPageActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectCurrentPassword());
-        AccountPageActions.verifyChangePasswordForm(driver, valid());
-        AccountPageActions.changePassword(driver);
+        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectCurrentPassword());
+        ChangePasswordActions.verifyChangePasswordForm(driver, valid());
+        ChangePasswordActions.changePassword(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
     }
@@ -72,9 +73,9 @@ public class ChangePasswordTest extends SeleniumTest {
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
 
-        AccountPageActions.fillChangePasswordForm(driver, changeParameters);
-        AccountPageActions.verifyChangePasswordForm(driver, valid());
-        AccountPageActions.changePassword(driver);
+        ChangePasswordActions.fillChangePasswordForm(driver, changeParameters);
+        ChangePasswordActions.verifyChangePasswordForm(driver, valid());
+        ChangePasswordActions.changePassword(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
 
@@ -141,9 +142,9 @@ public class ChangePasswordTest extends SeleniumTest {
         IndexPageActions.submitLogin(driver2, LoginParameters.fromRegistrationParameters(userData));
 
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
-        AccountPageActions.fillChangePasswordForm(driver1, changeParameters);
-        AccountPageActions.toggleDeactivateAllSessions(driver1);
-        AccountPageActions.changePassword(driver1);
+        ChangePasswordActions.fillChangePasswordForm(driver1, changeParameters);
+        ChangePasswordActions.toggleDeactivateAllSessions(driver1);
+        ChangePasswordActions.changePassword(driver1);
 
         AwaitilityWrapper.create(20, 3)
             .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE))

@@ -16,5 +16,7 @@
         Process ForRemoval("custom-table-link-migration")
     Integration server
         Delete old records on startup
+    Integration
+        Split AccountPageActions
 
 ===ETC===
