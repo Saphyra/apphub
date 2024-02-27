@@ -5,10 +5,12 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class CheckPasswordService {
     private final LogoutService logoutService;
     private final AccessTokenProvider accessTokenProvider;
 
+    @Transactional(value = Transactional.TxType.REQUIRES_NEW, dontRollbackOn = NotLoggedException.class)
     public User checkPassword(UUID userId, String password) {
         User user = userDao.findByIdValidated(userId);
         String hash = user.getPassword();

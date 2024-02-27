@@ -8,6 +8,7 @@ public class Endpoints {
     public static final String CALENDAR_PAGE = "/web/calendar";
     public static final String ADMIN_PANEL_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/role-management";
     public static final String ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE = "/web/admin-panel/disabled-role-management";
+    public static final String ADMIN_PANEL_ROLES_FOR_ALL_PAGE  = "/web/admin-panel/roles-for-all";
     public static final String ADMIN_PANEL_MEMORY_MONITORING_PAGE = "/web/admin-panel/memory-monitoring";
     public static final String ADMIN_PANEL_MIGRATION_TASKS_PAGE = "/web/admin-panel/migration-tasks";
     public static final String ADMIN_PANEL_BAN_PAGE = "/web/admin-panel/ban";
@@ -222,4 +223,7 @@ public class Endpoints {
     public static final String INTEGRATION_SERVER_REPORT_TEST_CASE = "/test-case/{testRunId}";
     public static final String INTEGRATION_SERVER_GET_AVERAGE_RUN_TIME = "/test-case/run-time/average";
     public static final String INTEGRATION_SERVER_FINISH_TEST_RUN = "/test-run/{testRunId}";
+
+    //ETC
+    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
 }

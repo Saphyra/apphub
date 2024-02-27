@@ -10,6 +10,9 @@
         Moving ListItem by dropping it to one of the leaves in the category tree does not drop it all the parent categories ending up unwanted calls
 
 ===PLATFORM CHANGES===
+    Admin Panel
+        Roles for all
+            React migration
 
 ===TECHNICAL DEBTS===
     Notebook

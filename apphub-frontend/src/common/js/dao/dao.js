@@ -327,6 +327,12 @@ const Endpoints = {
     ADMIN_PANEL_MIGRATION_GET_TASKS: new Endpoint(RequestMethod.GET, "/api/admin-panel/migration"),
     ADMIN_PANEL_MIGRATION_DELETE_TASK: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/migration/{event}"),
     ADMIN_PANEL_MIGRATION_TRIGGER_TASK: new Endpoint(RequestMethod.POST, "/api/admin-panel/migration/{event}"),
+
+    //Roles for all
+    USER_DATA_ROLES_FOR_ALL_RESTRICTED: new Endpoint(RequestMethod.GET, "/api/user/data/roles/restricted"),
+    ADMIN_PANEL_AVAILABLE_ROLES: new Endpoint(RequestMethod.GET, "/api/user/data/roles/restricted"),
+    USER_DATA_ADD_ROLE_TO_ALL: new Endpoint(RequestMethod.POST, "/api/user/data/roles/all/{role}"),
+    USER_DATA_REMOVE_ROLE_FROM_ALL: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/all/{role}"),
 }
 
 export default Endpoints;

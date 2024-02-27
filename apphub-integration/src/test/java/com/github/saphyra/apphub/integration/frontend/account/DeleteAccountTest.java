@@ -50,12 +50,12 @@ public class DeleteAccountTest extends SeleniumTest {
             .forEach(s -> {
                 DeleteAccountActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
                 DeleteAccountActions.deleteAccount(driver);
-                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
             });
 
         DeleteAccountActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
         DeleteAccountActions.deleteAccount(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(20, 3)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))

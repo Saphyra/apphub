@@ -28,6 +28,7 @@ import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationT
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AccountPage from './modules/account/AccountPage';
+import RolesForAllPage from './modules/admin_panel/roles_for_all/RolesForAllPage';
 
 const router = createBrowserRouter([
   {
@@ -177,6 +178,10 @@ const router = createBrowserRouter([
   {
     path: "/web/user/account",
     element: <AccountPage />
+  },
+  {
+    path: "/web/admin-panel/roles-for-all",
+    element: <RolesForAllPage />
   }
 ]);
 

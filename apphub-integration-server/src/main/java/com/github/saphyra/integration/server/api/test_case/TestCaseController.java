@@ -68,7 +68,6 @@ public class TestCaseController {
 
     @PostMapping(Endpoints.GET_AVERAGE_RUN_TIME)
     Long getAverageRunTime(@RequestBody OneParam<String> testCaseId) {
-        log.info("Querying average run time of testCase {}", testCaseId);
         Long averageRunTime = testCaseRunTimeQueryService.getAverageRunTime(testCaseId.getValue());
         log.info("Average run time of testCase {} is: {}", testCaseId.getValue(), averageRunTime);
         return averageRunTime;

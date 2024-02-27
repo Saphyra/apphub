@@ -79,7 +79,7 @@ public class ChangeUsernameTest extends SeleniumTest {
         ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
         ChangeUsernameActions.changeUsername(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver) {

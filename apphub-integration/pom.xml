@@ -106,12 +106,6 @@
             <version>${versions.guava}</version>
         </dependency>
 
-        <!--dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>${versions.webDriverManager}</version>
-        </dependency-->
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>

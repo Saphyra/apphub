@@ -111,7 +111,7 @@ const MigrationTasksPage = () => {
     }
 
     return (
-        <div id="mmigration-tasks" className="main-page">
+        <div id="migration-tasks" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>

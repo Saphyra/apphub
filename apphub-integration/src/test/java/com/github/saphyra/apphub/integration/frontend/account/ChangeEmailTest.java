@@ -78,7 +78,7 @@ public class ChangeEmailTest extends SeleniumTest {
         ChangeEmailActions.verifyChangeEmailForm(driver, valid());
         ChangeEmailActions.changeEmail(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver, RegistrationParameters userData) {

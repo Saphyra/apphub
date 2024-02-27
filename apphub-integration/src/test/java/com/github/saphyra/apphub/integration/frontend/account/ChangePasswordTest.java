@@ -67,7 +67,7 @@ public class ChangePasswordTest extends SeleniumTest {
         ChangePasswordActions.verifyChangePasswordForm(driver, valid());
         ChangePasswordActions.changePassword(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver, RegistrationParameters userData) {
