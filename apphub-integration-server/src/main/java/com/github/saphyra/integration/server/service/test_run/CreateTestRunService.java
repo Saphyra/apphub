@@ -1,8 +1,8 @@
 package com.github.saphyra.integration.server.service.test_run;
 
+import com.github.saphyra.integration.server.api.test_run.TestRunStatus;
 import com.github.saphyra.integration.server.domain.test_run.TestRun;
 import com.github.saphyra.integration.server.domain.test_run.TestRunRepository;
-import com.github.saphyra.integration.server.api.test_run.TestRunStatus;
 import com.github.saphyra.integration.server.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -14,5 +14,7 @@
 ===TECHNICAL DEBTS===
     Notebook
         Process ForRemoval("custom-table-link-migration")
+    Integration server
+        Delete old records on startup
 
 ===ETC===
