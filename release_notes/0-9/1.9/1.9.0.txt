@@ -13,6 +13,8 @@
     Admin Panel
         Roles for all
             React migration
+    Integration
+        Different parallelization for local and remote integration tests
 
 ===TECHNICAL DEBTS===
     Notebook
