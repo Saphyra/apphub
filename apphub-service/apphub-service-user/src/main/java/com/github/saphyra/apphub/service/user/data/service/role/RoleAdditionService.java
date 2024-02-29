@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.data.service.role;
 import com.github.saphyra.apphub.api.user.model.request.RoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,12 @@ public class RoleAdditionService {
     private final RoleDao roleDao;
     private final RoleFactory roleFactory;
     private final RoleRequestValidator roleRequestValidator;
+    private final CheckPasswordService checkPasswordService;
 
-    public void addRole(RoleRequest roleRequest) {
+    public void addRole(UUID userId, RoleRequest roleRequest) {
         roleRequestValidator.validate(roleRequest);
+
+        checkPasswordService.checkPassword(userId, roleRequest.getPassword());
 
         addRole(roleRequest.getUserId(), roleRequest.getRole());
     }

@@ -104,7 +104,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         RolesForAllActions.fillPassword(driver, "");
         RolesForAllActions.confirmAddToAll(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ROLES_FOR_ALL_EMPTY_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.EMPTY_PASSWORD);
     }
 
     private void revokeFromAll(WebDriver driver, RegistrationParameters userData) {
@@ -124,7 +124,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         RolesForAllActions.fillPassword(driver, "");
         RolesForAllActions.confirmRevokeFromAll(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ROLES_FOR_ALL_EMPTY_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.EMPTY_PASSWORD);
     }
 
     private void revokeFromAll_incorrectPassword(WebDriver driver, RegistrationParameters userData) {

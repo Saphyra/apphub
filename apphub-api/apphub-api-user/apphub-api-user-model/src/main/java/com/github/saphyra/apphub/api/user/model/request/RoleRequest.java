@@ -14,4 +14,5 @@ import java.util.UUID;
 public class RoleRequest {
     private UUID userId;
     private String role;
+    private String password;
 }

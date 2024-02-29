@@ -30,12 +30,12 @@ public class GetUserRolesTest extends BackEndTest {
 
     private static void nullQueryString(UUID accessTokenId) {
         Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(accessTokenId, null);
-        verifyInvalidParam(nullQueryStringResponse, "searchText", "must not be null");
+        verifyInvalidParam(nullQueryStringResponse, "query", "must not be null");
     }
 
     private static void tooShortQueryString(UUID accessTokenId) {
         Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(accessTokenId, "as");
-        verifyInvalidParam(tooShortQueryStringResponse, "searchText", "too short");
+        verifyInvalidParam(tooShortQueryStringResponse, "query", "too short");
     }
 
     private static void getUserRoles(RegistrationParameters userData, UUID accessTokenId) {

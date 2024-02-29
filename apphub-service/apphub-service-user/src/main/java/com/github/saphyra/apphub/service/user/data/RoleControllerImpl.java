@@ -33,15 +33,19 @@ class RoleControllerImpl implements RoleController {
     }
 
     @Override
-    public void addRole(RoleRequest roleRequest) {
+    public UserRoleResponse addRole(RoleRequest roleRequest, AccessTokenHeader accessTokenHeader) {
         log.info("AddRoleRequest: {}", roleRequest);
-        roleAdditionService.addRole(roleRequest);
+        roleAdditionService.addRole(accessTokenHeader.getUserId(), roleRequest);
+
+        return roleQueryService.getRoles(roleRequest.getUserId());
     }
 
     @Override
-    public void removeRole(RoleRequest roleRequest) {
+    public UserRoleResponse removeRole(RoleRequest roleRequest, AccessTokenHeader accessTokenHeader) {
         log.info("RemoveRoleRequest: {}", roleRequest);
-        roleRemovalService.removeRole(roleRequest);
+        roleRemovalService.removeRole(accessTokenHeader.getUserId(), roleRequest);
+
+        return roleQueryService.getRoles(roleRequest.getUserId());
     }
 
     @Override

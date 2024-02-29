@@ -27,6 +27,7 @@ spring:
             /web/admin-panel/memory-monitoring,\
             /web/admin-panel/migration-tasks,\
             /web/admin-panel/roles-for-all,\
+            /web/admin-panel/role-management,\
             /web/user/account"
         filters:
         - StripPrefix=10

@@ -30,13 +30,13 @@ public interface RoleController {
      * Adding a specific role to the given user
      */
     @PutMapping(Endpoints.USER_DATA_ADD_ROLE)
-    void addRole(@RequestBody RoleRequest roleRequest);
+    UserRoleResponse addRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Removing a specific role to the given user
      */
     @DeleteMapping(Endpoints.USER_DATA_REMOVE_ROLE)
-    void removeRole(@RequestBody RoleRequest roleRequest);
+    UserRoleResponse removeRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Adding a specific role to all the existing users, after checking the password of the admin

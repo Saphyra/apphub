@@ -68,16 +68,20 @@ public class RoleControllerImplTest {
 
     @Test
     public void addRole() {
-        underTest.addRole(roleRequest);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
-        verify(roleAdditionService).addRole(roleRequest);
+        underTest.addRole(roleRequest, accessTokenHeader);
+
+        verify(roleAdditionService).addRole(USER_ID, roleRequest);
     }
 
     @Test
     public void removeRole() {
-        underTest.removeRole(roleRequest);
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
-        verify(roleRemovalService).removeRole(roleRequest);
+        underTest.removeRole(roleRequest, accessTokenHeader);
+
+        verify(roleRemovalService).removeRole(USER_ID, roleRequest);
     }
 
     @Test

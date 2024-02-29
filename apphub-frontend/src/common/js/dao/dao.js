@@ -169,6 +169,7 @@ const Endpoints = {
     //Platform
     CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
     GET_OWN_USER_ID: new Endpoint(RequestMethod.GET, "/user/id"),
+    USER_DATA_SEARCH_ACCOUNT: new Endpoint(RequestMethod.POST, "/api/user/accounts"),
 
     //User
     USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
@@ -333,6 +334,11 @@ const Endpoints = {
     ADMIN_PANEL_AVAILABLE_ROLES: new Endpoint(RequestMethod.GET, "/api/user/data/roles/restricted"),
     USER_DATA_ADD_ROLE_TO_ALL: new Endpoint(RequestMethod.POST, "/api/user/data/roles/all/{role}"),
     USER_DATA_REMOVE_ROLE_FROM_ALL: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/all/{role}"),
+
+    //Role Management
+    USER_DATA_GET_USER_ROLES: new Endpoint(RequestMethod.POST, "/api/user/data/roles"),
+    USER_DATA_ADD_ROLE: new Endpoint(RequestMethod.PUT, "/api/user/data/roles"),
+    USER_DATA_REMOVE_ROLE: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles"),
 }
 
 export default Endpoints;

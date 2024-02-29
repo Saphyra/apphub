@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
-import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import localizationData from "./roles_for_all_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Constants from "../../../common/js/Constants";

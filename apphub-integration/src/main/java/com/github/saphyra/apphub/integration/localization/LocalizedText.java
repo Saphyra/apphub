@@ -12,6 +12,7 @@ public enum LocalizedText {
     NOTIFICATION_LANGUAGE_CHANGED_HU("Nyelv megváltoztatva."),
     INCORRECT_PASSWORD("Incorrect password."),
     ACCOUNT_LOCKED("Account locked. Try again later."),
+    EMPTY_PASSWORD("Password must not be empty."),
 
     //INDEX/ACCOUNT
     INDEX_SUCCESSFULLY_LOGGED_OUT("Successfully logged out."),
@@ -49,9 +50,10 @@ public enum LocalizedText {
 
     //ADMIN PANEL
     //ROLES_FOR_ALL
-    ROLES_FOR_ALL_EMPTY_PASSWORD("Password must not be empty."),
     ROLES_FOR_ALL_ROLE_REVOKED("Role successfully revoked from all users."),
     ROLES_FOR_ALL_ROLE_ADDED("Role successfully granted to all users."),
+    ROLE_MANAGEMENT_ROLE_GRANTED("Role granted."),
+    ROLE_MANAGEMENT_ROLE_REVOKED("Role revoked."),
     ;
 
     private final String text;

@@ -29,6 +29,7 @@ import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AccountPage from './modules/account/AccountPage';
 import RolesForAllPage from './modules/admin_panel/roles_for_all/RolesForAllPage';
+import RoleManagementPage from './modules/admin_panel/role_management/RoleManagementPage';
 
 const router = createBrowserRouter([
   {
@@ -182,6 +183,10 @@ const router = createBrowserRouter([
   {
     path: "/web/admin-panel/roles-for-all",
     element: <RolesForAllPage />
+  },
+  {
+    path: "/web/admin-panel/role-management",
+    element: <RoleManagementPage />
   }
 ]);
 
