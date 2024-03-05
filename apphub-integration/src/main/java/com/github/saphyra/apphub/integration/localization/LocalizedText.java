@@ -54,6 +54,10 @@ public enum LocalizedText {
     ROLES_FOR_ALL_ROLE_ADDED("Role successfully granted to all users."),
     ROLE_MANAGEMENT_ROLE_GRANTED("Role granted."),
     ROLE_MANAGEMENT_ROLE_REVOKED("Role revoked."),
+
+    //DISABLED_ROLE_MANAGEMENT
+    DISABLED_ROLE_MANAGEMENT_ROLE_DISABLED("Role disabled."),
+    DISABLED_ROLE_MANAGEMENT_ROLE_ENABLED("Role enabled."),
     ;
 
     private final String text;

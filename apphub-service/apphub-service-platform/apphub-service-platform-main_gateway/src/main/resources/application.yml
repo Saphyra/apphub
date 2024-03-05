@@ -28,6 +28,7 @@ spring:
             /web/admin-panel/migration-tasks,\
             /web/admin-panel/roles-for-all,\
             /web/admin-panel/role-management,\
+            /web/admin-panel/disabled-role-management,\
             /web/user/account"
         filters:
         - StripPrefix=10
