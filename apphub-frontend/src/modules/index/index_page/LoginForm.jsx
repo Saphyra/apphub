@@ -26,7 +26,7 @@ const LoginForm = ({ localizationHandler }) => {
         <div className="login-form">
             <InputField
                 id="login-email"
-                type="text"
+                type="email"
                 placeholder={localizationHandler.get("email-address")}
                 onchangeCallback={setEmail}
                 onkeyupCallback={loginIfEnter}

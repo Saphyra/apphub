@@ -9,6 +9,7 @@ import Button from "../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../common/js/dao/dao";
 import Constants from "../../../common/js/Constants";
+import InputField from "../../../common/component/input/InputField";
 
 const AccountDeleter = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -66,12 +67,14 @@ const AccountDeleter = ({ setConfirmationDialogData }) => {
                             label={localizationHandler.get("password")}
                             input={<ValidatedInputField
                                 validationResultId="account-delete-account-password-input-validation"
-                                inputId="account-delete-account-password-input"
-                                placeholder={localizationHandler.get("password")}
-                                value={password}
-                                onchangeCallback={setPassword}
                                 validationResult={passwordValidationResult}
-                                type="password"
+                                inputField={<InputField
+                                    id="account-delete-account-password-input"
+                                    placeholder={localizationHandler.get("password")}
+                                    value={password}
+                                    onchangeCallback={setPassword}
+                                    type="password"
+                                />}
                             />}
                         />
                     </div>

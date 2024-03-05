@@ -7,6 +7,7 @@ import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
+import InputField from "../../../../common/component/input/InputField";
 
 
 const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
@@ -21,12 +22,12 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
         setValidationResult(validate(fields, localizationHandler));
     }
 
-        const isFormValid = () => {
+    const isFormValid = () => {
         return Object.values(validationResult)
             .every((validation) => validation.valid);
     }
 
-        const createLobby = async () => {
+    const createLobby = async () => {
         await Endpoints.SKYXPLORE_CREATE_LOBBY.createRequest({ value: gameName })
             .send();
 
@@ -44,12 +45,14 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
                         input={
                             <ValidatedInputField
                                 validationResultId="skyxplore-game-name-validation"
-                                inputId="skyxplore-game-name"
                                 validationResult={validationResult[ValidatedField.GAME_NAME]}
-                                type="text"
-                                placeholder={localizationHandler.get("game-name")}
-                                onchangeCallback={setGameName}
-                                value={gameName}
+                                inputField={<InputField
+                                    id="skyxplore-game-name"
+                                    type="text"
+                                    placeholder={localizationHandler.get("game-name")}
+                                    onchangeCallback={setGameName}
+                                    value={gameName}
+                                />}
                             />
                         }
                     />

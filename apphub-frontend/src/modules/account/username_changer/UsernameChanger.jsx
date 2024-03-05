@@ -8,6 +8,7 @@ import ValidatedInputField from "../../../common/component/input/ValidatedInputF
 import Button from "../../../common/component/input/Button";
 import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
+import InputField from "../../../common/component/input/InputField";
 
 const UsernameChanger = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -49,11 +50,13 @@ const UsernameChanger = ({ userData, setUserData }) => {
                             label={localizationHandler.get("new-username")}
                             input={<ValidatedInputField
                                 validationResultId="account-change-username-username-input-validation"
-                                inputId="account-change-username-username-input"
-                                placeholder={localizationHandler.get("new-username")}
-                                value={newUsername}
-                                onchangeCallback={setNewUsername}
                                 validationResult={usernaemValidationResult}
+                                inputField={<InputField
+                                    id="account-change-username-username-input"
+                                    placeholder={localizationHandler.get("new-username")}
+                                    value={newUsername}
+                                    onchangeCallback={setNewUsername}
+                                />}
                             />}
                         />
 
@@ -61,12 +64,14 @@ const UsernameChanger = ({ userData, setUserData }) => {
                             label={localizationHandler.get("password")}
                             input={<ValidatedInputField
                                 validationResultId="account-change-username-password-input-validation"
-                                inputId="account-change-username-password-input"
-                                placeholder={localizationHandler.get("password")}
-                                value={password}
-                                onchangeCallback={setPassword}
                                 validationResult={passwordValidationResult}
-                                type="password"
+                                inputField={<InputField
+                                    id="account-change-username-password-input"
+                                    placeholder={localizationHandler.get("password")}
+                                    value={password}
+                                    onchangeCallback={setPassword}
+                                    type="password"
+                                />}
                             />}
                         />
 

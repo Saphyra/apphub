@@ -60,12 +60,14 @@ const PasswordChanger = () => {
                             label={localizationHandler.get("new-password")}
                             input={<ValidatedInputField
                                 validationResultId="account-change-password-new-password-input-validation"
-                                inputId="account-change-password-new-password-input"
-                                placeholder={localizationHandler.get("new-password")}
-                                value={newPassword}
-                                onchangeCallback={setNewPassword}
                                 validationResult={newPasswordValidationResult}
-                                type="password"
+                                inputField={<InputField
+                                    id="account-change-password-new-password-input"
+                                    placeholder={localizationHandler.get("new-password")}
+                                    value={newPassword}
+                                    onchangeCallback={setNewPassword}
+                                    type="password"
+                                />}
                             />}
                         />
 
@@ -73,12 +75,14 @@ const PasswordChanger = () => {
                             label={localizationHandler.get("confirm-password")}
                             input={<ValidatedInputField
                                 validationResultId="account-change-password-confirm-password-input-validation"
-                                inputId="account-change-password-confirm-password-input"
-                                placeholder={localizationHandler.get("confirm-password")}
-                                value={confirmPasword}
-                                onchangeCallback={setConfirmPassword}
                                 validationResult={confirmPasswordValidationResult}
-                                type="password"
+                                inputField={<InputField
+                                    id="account-change-password-confirm-password-input"
+                                    placeholder={localizationHandler.get("confirm-password")}
+                                    value={confirmPasword}
+                                    onchangeCallback={setConfirmPassword}
+                                    type="password"
+                                />}
                             />}
                         />
 
@@ -86,12 +90,15 @@ const PasswordChanger = () => {
                             label={localizationHandler.get("current-password")}
                             input={<ValidatedInputField
                                 validationResultId="account-change-password-current-password-input-validation"
-                                inputId="account-change-password-current-password-input"
-                                placeholder={localizationHandler.get("current-password")}
-                                value={currentPassword}
-                                onchangeCallback={setCurrentPassword}
                                 validationResult={currentPasswordValidationResult}
-                                type="password"
+                                inputField={<InputField
+                                    id="account-change-password-current-password-input"
+                                    placeholder={localizationHandler.get("current-password")}
+                                    value={currentPassword}
+                                    onchangeCallback={setCurrentPassword}
+                                    type="password"
+                                />}
+
                             />}
                         />
 

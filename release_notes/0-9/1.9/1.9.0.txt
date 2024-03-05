@@ -27,3 +27,4 @@
         Split AccountPageActions
 
 ===ETC===
+    ValidatedInputField accepts the InputField instead proxying the params
