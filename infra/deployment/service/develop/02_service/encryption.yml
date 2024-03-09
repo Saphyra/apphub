@@ -19,6 +19,9 @@ spec:
       containers:
       - name: encryption
         image: saphyra/apphub-service-platform-encryption:latest
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

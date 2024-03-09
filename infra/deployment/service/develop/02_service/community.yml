@@ -19,6 +19,9 @@ spec:
       containers:
       - name: community
         image: saphyra/apphub-service-community:latest
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

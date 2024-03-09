@@ -62,6 +62,8 @@ public abstract class TestBase {
         log.info("IntegrationServerEnabled: {}", TestConfiguration.INTEGRATION_SERVER_ENABLED);
         log.info("IntegrationServerPort: {}", TestConfiguration.INTEGRATION_SERVER_PORT);
 
+        TestConfiguration.CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
+
         StatusLogger.setTotalTestCount(context);
 
         for (ITestNGMethod method : context.getAllTestMethods()) {

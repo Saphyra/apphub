@@ -30,7 +30,7 @@ public class TestConfiguration {
     public static final int SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
     public static final int DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "databasePort is null"));
     public static final String DATABASE_NAME = System.getProperty("databaseName", "postgres");
-    public static final Connection CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
+    public static Connection CONNECTION;
 
     //Defaults
     public static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
