@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://${databaseHost}:5432/${databaseName}
+
+databaseHost: host.docker.internal
+databaseName: apphub_production

@@ -19,6 +19,9 @@ spec:
       containers:
       - name: scheduler
         image: saphyra/apphub-service-platform-scheduler:release
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server,production
         ports:
         - containerPort: 8080
         imagePullPolicy: Always

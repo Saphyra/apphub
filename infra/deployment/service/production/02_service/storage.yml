@@ -22,6 +22,8 @@ spec:
         env:
         - name: FTP_CLIENT_USERNAME
           value: ftp_prod
+        - name: SPRING_ACTIVE_PROFILE
+          value: server,production
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
