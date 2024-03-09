@@ -19,6 +19,9 @@ spec:
       containers:
       - name: skyxplore-data
         image: saphyra/apphub-service-skyxplore-data:latest
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

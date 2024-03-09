@@ -3,7 +3,9 @@ set -e
 ./infra/deployment/script/build.sh "$1"
 
 if [ "$1" != "skipDeploy" ]; then
-  ./infra/deployment/script/build_frontend.sh
+  if [ "$1" != "skipBuild" ]; then
+    ./infra/deployment/script/build_frontend.sh
+  fi
 
   NAMESPACE_NAME=${2:-$(git rev-parse --abbrev-ref HEAD)}
   echo "Namespace: $NAMESPACE_NAME"

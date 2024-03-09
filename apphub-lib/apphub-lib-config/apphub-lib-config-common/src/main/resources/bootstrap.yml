@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: ${SPRING_ACTIVE_PROFILE:server}
   cloud:
     kubernetes:
       enabled: false

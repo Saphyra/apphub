@@ -1,0 +1,10 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+    Use host's postgres
+
+===TECHNICAL DEBTS===
+
+===ETC===

@@ -1,1 +1,1 @@
-./run_tests.sh production true skyxplore,community
+./run_tests.sh production true skyxplore,community 8070 5432 apphub_production
