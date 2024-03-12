@@ -24,6 +24,7 @@ const Constants = {
 
     //PAGES
     MODULES_PAGE: "/web/modules",
+    ERROR_REPORT_PAGE: "/web/admin-panel/error-report",
     INDEX_PAGE: "/web",
     SKYXPLORE_MAIN_MENU_PAGE: "/web/skyxplore",
     SKYXPLORE_CHARACTER_PAGE: "/web/skyxplore/character",

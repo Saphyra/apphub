@@ -12,17 +12,18 @@ const InputField = ({
     disabled = false,
     checked = false,
     autoFocus = false,
-    onfocusOutCallback = () => {}
+    onfocusOutCallback = () => {},
+    onclickCallback = () => {}
 }) => {
     const onchange = (e) => {
         if (onchangeCallback) {
             switch (type.toLowerCase()) {
                 case "checkbox":
                 case "radio":
-                    onchangeCallback(e.target.checked);
+                    onchangeCallback(e.target.checked, e);
                     break;
                 default:
-                    onchangeCallback(e.target.value);
+                    onchangeCallback(e.target.value, e);
             }
         }
     }
@@ -41,6 +42,7 @@ const InputField = ({
             autoFocus={autoFocus}
             step={step}
             onBlur={onfocusOutCallback}
+            onClick={onclickCallback}
         />
     )
 }

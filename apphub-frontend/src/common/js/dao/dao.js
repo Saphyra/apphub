@@ -344,6 +344,15 @@ const Endpoints = {
     USER_DATA_GET_DISABLED_ROLES: new Endpoint(RequestMethod.GET, "/api/user/data/roles/disabled"),
     USER_DATA_ENABLE_ROLE: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/{role}"),
     USER_DATA_DISABLE_ROLE: new Endpoint(RequestMethod.PUT, "/api/user/data/roles/{role}"),
+
+    //Error report
+    ADMIN_PANEL_GET_ERROR_REPORTS: new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report"),
+    ADMIN_PANEL_ERROR_REPORT_DELETE_ALL: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report/all"),
+    ADMIN_PANEL_ERROR_REPORT_DELETE_READ: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report/read"),
+    ADMIN_PANEL_DELETE_ERROR_REPORTS: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report"),
+    ADMIN_PANEL_MARK_ERROR_REPORTS: new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report/mark/{status}"),
+    ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE: new Endpoint(RequestMethod.GET, "/web/admin-panel/error-report/{id}"),
+    ADMIN_PANEL_GET_ERROR_REPORT: new Endpoint(RequestMethod.GET, "/api/admin-panel/error-report/{id}"),
 }
 
 export default Endpoints;

@@ -1,0 +1,54 @@
+{
+    "title": {
+        "en": "Error reports - Apphub",
+        "hu": "Hibajelentések - Apphub"
+    },
+    "page-title": {
+        "en": "Error reports",
+        "hu": "Hibajelentések"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "delete-all": {
+        "en": "Delete all",
+        "hu": "Összes törlése"
+    },
+    "delete-all-confirmation-content": {
+        "en": "Are you sure you want to delete all the error reports?",
+        "hu": "Biztosan törölni szeretnéd az összes hibajelentést?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "delete-read": {
+        "en": "Delete read",
+        "hu": "Olvasottak törlése"
+    },
+    "delete-checked": {
+        "en": "Delete checked",
+        "hu": "Kijelöltek törlése"
+    },
+    "mark-checked-as-read": {
+        "en": "Mark checked as read",
+        "hu": "Kijelöltek olvasottnak jelölése"
+    },
+    "mark-checked-as-unread": {
+        "en": "Mark checked as unread",
+        "hu": "Kijelöltek olvasatlannak jelölése"
+    },
+    "mark-checked": {
+        "en": "Mark checked",
+        "hu": "Kijelöltek Megjelölése"
+    },
+    "delete-read-confirmation-content": {
+        "en": "Are you sure you want to delete all the read error reports?",
+        "hu": "Biztosan törölni szeretnéd az összes olvasott hibajelentést?"
+    },
+    "delete-checked-confirmation-content": {
+        "en": "Are you sure you want to delete all the checked error reports?",
+        "hu": "Biztosan törölni szeretnéd az összes kijelült hibajelentést?"
+    }
+}

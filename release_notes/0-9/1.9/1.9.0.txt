@@ -3,6 +3,9 @@
         Order pin groups from most recently used to last used
     Account
         Display current username and email
+    Admin Panel
+        Error Report
+            Instead of live-updating the new error reports via WebSocket, the client can poll for the latest reports periodically, defined by user.
 
 ===BUGFIXES===
     Notebook
@@ -16,6 +19,8 @@
         Role management
             React migration
         Disabled role management
+            React migration
+        Error report
             React migration
     Integration
         Different parallelization for local and remote integration tests

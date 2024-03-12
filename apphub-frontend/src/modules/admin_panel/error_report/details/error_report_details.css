@@ -1,0 +1,20 @@
+#error-report-details main {
+    padding: 0;
+}
+
+#error-report-details fieldset {
+    margin: 20px;
+}
+
+#error-report-details fieldset legend {
+    color: orange;
+    font-size: 20px;
+}
+
+.error-report-details-value {
+    padding-left: 10px;
+}
+
+.stack-trace-row{
+    margin-left: 20px;
+}

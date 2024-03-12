@@ -22,6 +22,8 @@ spring:
             /web/admin-panel/roles-for-all,\
             /web/admin-panel/role-management,\
             /web/admin-panel/disabled-role-management,\
+            /web/admin-panel/error-report,\
+            /web/admin-panel/error-report/*,\
             /web/user/account"
       - id: frontend-resources
         uri: http://localhost:3000

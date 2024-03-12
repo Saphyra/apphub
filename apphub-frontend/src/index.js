@@ -31,6 +31,8 @@ import AccountPage from './modules/account/AccountPage';
 import RolesForAllPage from './modules/admin_panel/roles_for_all/RolesForAllPage';
 import RoleManagementPage from './modules/admin_panel/role_management/RoleManagementPage';
 import DisabledRoleManagement from './modules/admin_panel/disabled_role_management/DisabledRoleManagementPage';
+import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview/ErrorReportOverviewPage';
+import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
 
 const router = createBrowserRouter([
   {
@@ -192,6 +194,19 @@ const router = createBrowserRouter([
   {
     path: "/web/admin-panel/disabled-role-management",
     element: <DisabledRoleManagement />
+  },
+  {
+    path: "/web/admin-panel/error-report",
+    element: <ErrorReportOverviewPage />
+  },
+  {
+    path: "/web/admin-panel/error-report/:errorReportId",
+    element: <ErrorReportDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        errorReportId: params.errorReportId
+      }
+    }
   }
 ]);
 

@@ -96,7 +96,6 @@ public class PinControllerImpl implements PinController {
     }
 
     @Override
-    //TODO unit test
     public List<PinGroupResponse> pinGroupOpened(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
         log.info("{} opened pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
 

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
-import com.github.saphyra.apphub.service.admin_panel.ws.ErrorReportWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class ReportErrorService {
     private final ErrorReportDtoFactory errorReportDtoFactory;
     private final ErrorReportDao errorReportDao;
-    private final ErrorReportWebSocketHandler errorReportWebSocketHandler;
     private final ErrorReportToOverviewConverter converter;
 
     public void saveReport(ErrorReport model) {
@@ -46,7 +44,5 @@ public class ReportErrorService {
             .eventName(WebSocketEventName.ADMIN_PANEL_ERROR_REPORT)
             .payload(converter.convert(errorReport))
             .build();
-
-        errorReportWebSocketHandler.sendToAllConnectedClient(event);
     }
 }
