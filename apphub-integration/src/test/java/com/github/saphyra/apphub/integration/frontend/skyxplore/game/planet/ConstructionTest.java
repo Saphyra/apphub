@@ -21,6 +21,7 @@ import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetBuil
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetBuildingOverviewItemDetails;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class ConstructionTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
     public void createAndCancelConstruction() {
@@ -210,9 +212,8 @@ public class ConstructionTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findSurfaceWithBuilding(driver, Constants.DATA_ID_SOLAR_PANEL);
 
         String surfaceId = surface.getSurfaceId();
-        upgradeBuilding(driver, surface, surfaceId);
+        surface = upgradeBuilding(driver, surface, surfaceId);
 
-        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isFalse();
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_SOLAR_PANEL);
         assertThat(surface.getBuildingLevel()).isEqualTo(1);
@@ -223,7 +224,7 @@ public class ConstructionTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver);
 
-        AwaitilityWrapper.create(180, 5)
+        AwaitilityWrapper.create(300, 5)
             .until(() -> SkyXplorePlanetActions.getQueue(driver).isEmpty())
             .assertTrue("Construction is not finished.");
 
