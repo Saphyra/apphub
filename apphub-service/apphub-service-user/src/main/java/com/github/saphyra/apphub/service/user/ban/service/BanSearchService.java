@@ -22,7 +22,7 @@ public class BanSearchService {
     private final BanDao banDao;
 
     public List<BanSearchResponse> search(String query) {
-        ValidationUtil.minLength(query, 3, "value");
+        ValidationUtil.minLength(query, 3, "query");
 
         return userDao.getByUsernameOrEmailContainingIgnoreCase(query)
             .stream()

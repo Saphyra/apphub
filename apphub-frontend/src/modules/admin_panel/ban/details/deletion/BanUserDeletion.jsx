@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import localizationData from "./ban_user_deletion_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./ban_user_deletion.css";
@@ -14,7 +14,7 @@ const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) =
 
     const [markForDeletionAt, setMarkForDeletionAt] = useState("");
     const [password, setPassword] = useState("");
-    const [displayConfirmDeletionDialog, setDisplayConfirmDeletionDialog] = useState(false)
+    const [displayConfirmDeletionDialog, setDisplayConfirmDeletionDialog] = useState(false);
 
     const openScheduleDeletionConfirmation = () => {
         if (markForDeletionAt.length == 0) {

@@ -135,6 +135,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 if (mode.getMode().get()) {
                     options.addArguments("--headless=new");
                 }
+                options.addArguments("--lang=hu");
                 options.addArguments("window-size=1920,1080");
 
                 driver = new ChromeDriver(options);

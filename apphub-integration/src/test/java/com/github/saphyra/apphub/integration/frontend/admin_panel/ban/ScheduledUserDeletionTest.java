@@ -29,7 +29,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
     private static final Integer HOURS = 18;
     private static final Integer MINUTES = 45;
 
-    @Test(groups = {"fe", "admin-panel"})
+    @Test(groups = {"fe", "admin-panel", "ban"})
     public void scheduleUserDeletionCd() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);

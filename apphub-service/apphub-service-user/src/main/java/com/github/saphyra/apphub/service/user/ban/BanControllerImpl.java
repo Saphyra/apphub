@@ -51,7 +51,7 @@ public class BanControllerImpl implements BanController {
 
     @Override
     public BanResponse markUserForDeletion(MarkUserForDeletionRequest request, UUID deletedUserId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to mark {} for deletion at {}", accessTokenHeader.getUserId(), deletedUserId, request);
+        log.info("{} wants to mark {} for deletion at {}", accessTokenHeader.getUserId(), deletedUserId, request.getMarkForDeletionAt());
         return markUserForDeletionService.markUserForDeletion(deletedUserId, request, accessTokenHeader.getUserId());
     }
 
