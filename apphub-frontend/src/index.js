@@ -33,6 +33,8 @@ import RoleManagementPage from './modules/admin_panel/role_management/RoleManage
 import DisabledRoleManagement from './modules/admin_panel/disabled_role_management/DisabledRoleManagementPage';
 import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview/ErrorReportOverviewPage';
 import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
+import BanPage from './modules/admin_panel/ban//index/BanPage';
+import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
 
 const router = createBrowserRouter([
   {
@@ -205,6 +207,19 @@ const router = createBrowserRouter([
     loader: ({ params }) => {
       return {
         errorReportId: params.errorReportId
+      }
+    }
+  },
+  {
+    path: "/web/admin-panel/ban",
+    element: <BanPage />
+  },
+  {
+    path: "/web/admin-panel/ban/:userId",
+    element: <BanDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        userId: params.userId
       }
     }
   }

@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -20,6 +19,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,13 +48,20 @@ public class BanExpirationTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("TestUser not found."));
         searchResult.click();
+
+        adminDriver.switchTo()
+            .window(new ArrayList<>(adminDriver.getWindowHandles()).get(1));
+
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("UserDetails not opened");
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
-        NotificationUtil.verifySuccessNotification(adminDriver, "User banned.");
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !BanActions.getCurrentBans(adminDriver).isEmpty())
+            .assertTrue("Ban is not created.");
 
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();

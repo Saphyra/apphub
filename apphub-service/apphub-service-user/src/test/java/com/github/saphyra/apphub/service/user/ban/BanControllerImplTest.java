@@ -3,9 +3,11 @@ package com.github.saphyra.apphub.service.user.ban;
 import com.github.saphyra.apphub.api.user.model.request.BanRequest;
 import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.api.user.model.response.BanSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.ban.service.BanResponseQueryService;
+import com.github.saphyra.apphub.service.user.ban.service.BanSearchService;
 import com.github.saphyra.apphub.service.user.ban.service.BanService;
 import com.github.saphyra.apphub.service.user.ban.service.MarkUserForDeletionService;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
@@ -17,11 +19,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BanControllerImplTest {
@@ -30,6 +32,7 @@ public class BanControllerImplTest {
     private static final UUID BAN_ID = UUID.randomUUID();
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
     private static final UUID DELETED_USER_ID = UUID.randomUUID();
+    private static final String QUERY = "query";
 
     @Mock
     private BanService banService;
@@ -45,6 +48,9 @@ public class BanControllerImplTest {
 
     @Mock
     private UnmarkUserForDeletionService unmarkUserForDeletionService;
+
+    @Mock
+    private BanSearchService banSearchService;
 
     @InjectMocks
     private BanControllerImpl underTest;
@@ -64,6 +70,9 @@ public class BanControllerImplTest {
     @Mock
     private MarkUserForDeletionRequest markUserForDeletionRequest;
 
+    @Mock
+    private BanSearchResponse banSearchResponse;
+
     @BeforeEach
     public void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -71,16 +80,16 @@ public class BanControllerImplTest {
 
     @Test
     public void banUser() {
-        underTest.banUser(request, accessTokenHeader);
+        given(banService.ban(USER_ID, request)).willReturn(banResponse);
 
-        verify(banService).ban(USER_ID, request);
+        assertThat(underTest.banUser(request, accessTokenHeader)).isEqualTo(banResponse);
     }
 
     @Test
     public void revokeBan() {
-        underTest.revokeBan(new OneParamRequest<>(PASSWORD), BAN_ID, accessTokenHeader);
+        given(revokeBanService.revokeBan(USER_ID, PASSWORD, BAN_ID)).willReturn(banResponse);
 
-        verify(revokeBanService).revokeBan(USER_ID, PASSWORD, BAN_ID);
+        assertThat(underTest.revokeBan(new OneParamRequest<>(PASSWORD), BAN_ID, accessTokenHeader)).isEqualTo(banResponse);
     }
 
     @Test
@@ -108,5 +117,12 @@ public class BanControllerImplTest {
         BanResponse result = underTest.unmarkUserForDeletion(DELETED_USER_ID, accessTokenHeader);
 
         assertThat(result).isEqualTo(banResponse);
+    }
+
+    @Test
+    void search() {
+        given(banSearchService.search(QUERY)).willReturn(List.of(banSearchResponse));
+
+        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessTokenHeader)).containsExactly(banSearchResponse);
     }
 }

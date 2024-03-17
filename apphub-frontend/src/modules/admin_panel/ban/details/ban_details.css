@@ -1,0 +1,7 @@
+#ban-details main {
+    padding: 0;
+}
+
+.ban-user-row :not(:last-child){
+    color:orchid
+}

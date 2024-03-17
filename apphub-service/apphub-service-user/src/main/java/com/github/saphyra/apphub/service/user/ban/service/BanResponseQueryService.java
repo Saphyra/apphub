@@ -38,7 +38,7 @@ public class BanResponseQueryService {
             .email(bannedUser.getEmail())
             .bans(bans)
             .markedForDeletion(bannedUser.isMarkedForDeletion())
-            .markedForDeletionAt(Optional.ofNullable(bannedUser.getMarkedForDeletionAt()).map(dateTimeUtil::format).orElse(null))
+            .markedForDeletionAt(Optional.ofNullable(bannedUser.getMarkedForDeletionAt()).map(dateTime -> dateTimeUtil.format(dateTime, false)).orElse(null))
             .build();
     }
 

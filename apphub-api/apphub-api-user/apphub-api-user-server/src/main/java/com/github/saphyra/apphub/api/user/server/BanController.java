@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.api.user.server;
 import com.github.saphyra.apphub.api.user.model.request.BanRequest;
 import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.api.user.model.response.BanSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface BanController {
@@ -23,14 +25,14 @@ public interface BanController {
      * Checking the admin's password before any modification is saved
      */
     @PutMapping(Endpoints.ACCOUNT_BAN_USER)
-    void banUser(@RequestBody BanRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    BanResponse banUser(@RequestBody BanRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Allowing the user to access a feature again
      * Checking the admin's password before any modification is saved
      */
-    @DeleteMapping(Endpoints.ACCOUNT_REMOVE_BAN)
-    void revokeBan(@RequestBody OneParamRequest<String> password, @PathVariable("banId") UUID banId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @DeleteMapping(Endpoints.ACCOUNT_REVOKE_BAN)
+    BanResponse revokeBan(@RequestBody OneParamRequest<String> password, @PathVariable("banId") UUID banId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Actual bans of a specific user, including if the user account is marked for deletion
@@ -51,4 +53,7 @@ public interface BanController {
      */
     @PostMapping(Endpoints.ACCOUNT_UNMARK_FOR_DELETION)
     BanResponse unmarkUserForDeletion(@PathVariable("userId") UUID deletedUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.ACCOUNT_BAN_SEARCH)
+    List<BanSearchResponse> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

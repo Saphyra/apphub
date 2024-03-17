@@ -1,0 +1,13 @@
+#ban-user-deletion{
+    border-bottom: 3px ridge white;
+    padding: 5px;
+}
+
+#ban-user-schedule-deletion-wrapper{
+    white-space: nowrap;
+}
+
+#ban-user-deletion-is-marked-for-deletion-wrapper{
+    font-size: 20px;
+    margin: 3px;
+}

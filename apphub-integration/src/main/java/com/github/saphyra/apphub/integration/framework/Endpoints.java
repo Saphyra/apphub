@@ -58,8 +58,8 @@ public class Endpoints {
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";
     public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
     public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
-    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
-    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
 
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";

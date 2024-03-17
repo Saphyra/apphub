@@ -18,6 +18,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.html5.WebStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -83,6 +84,15 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         log.debug("Releasing webDriver with id {}", webDriverWrapper.getId());
         try {
             WebDriver driver = webDriverWrapper.getDriver();
+
+            List<String> handles = new ArrayList<>(driver.getWindowHandles());
+            for (int i = handles.size() - 1; i > 0; i--) {
+                driver.switchTo()
+                    .window(handles.get(i));
+                driver.close();
+            }
+
+            driver.switchTo().window(handles.get(0));
             driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
 
             AwaitilityWrapper.createDefault()

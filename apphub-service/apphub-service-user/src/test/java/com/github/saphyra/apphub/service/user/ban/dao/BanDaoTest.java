@@ -1,17 +1,22 @@
 package com.github.saphyra.apphub.service.user.ban.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -51,16 +56,6 @@ public class BanDaoTest {
     }
 
     @Test
-    public void deleteById() {
-        given(uuidConverter.convertDomain(BAN_ID)).willReturn(BAN_ID_STRING);
-        given(repository.existsById(BAN_ID_STRING)).willReturn(true);
-
-        underTest.deleteById(BAN_ID);
-
-        verify(repository).deleteById(BAN_ID_STRING);
-    }
-
-    @Test
     public void getByUserId() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
@@ -76,5 +71,24 @@ public class BanDaoTest {
         underTest.deleteExpired(EXPIRATION);
 
         verify(repository).deleteExpired(EXPIRATION);
+    }
+
+    @Test
+    void findByIdValidated_notFound() {
+        given(uuidConverter.convertDomain(BAN_ID)).willReturn(BAN_ID_STRING);
+        given(repository.findById(BAN_ID_STRING)).willReturn(Optional.empty());
+
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(BAN_ID));
+
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void findByIdValidated() {
+        given(uuidConverter.convertDomain(BAN_ID)).willReturn(BAN_ID_STRING);
+        given(repository.findById(BAN_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findByIdValidated(BAN_ID)).isEqualTo(domain);
     }
 }

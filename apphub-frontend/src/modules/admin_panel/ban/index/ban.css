@@ -1,0 +1,5 @@
+#ban main{
+    padding: 0;
+    display: grid;
+    grid-template-rows: 38px auto;
+}

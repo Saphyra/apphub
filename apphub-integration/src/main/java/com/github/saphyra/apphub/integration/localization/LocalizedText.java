@@ -58,6 +58,13 @@ public enum LocalizedText {
     //DISABLED_ROLE_MANAGEMENT
     DISABLED_ROLE_MANAGEMENT_ROLE_DISABLED("Role disabled."),
     DISABLED_ROLE_MANAGEMENT_ROLE_ENABLED("Role enabled."),
+
+    //BAN
+    BAN_SELECT_ROLE("Select role."),
+    BAN_DURATION_TOO_SHORT("Duration too short."),
+    BAN_SELECT_TIME_UNIT("Select time unit."),
+    BAN_BLANK_REASON("Please provide why the user is banned."),
+    BAN_EMPTY_DATE("Please select when the user should be deleted."),
     ;
 
     private final String text;

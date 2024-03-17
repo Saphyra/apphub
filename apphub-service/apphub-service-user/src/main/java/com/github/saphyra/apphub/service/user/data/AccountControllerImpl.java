@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-class AccountControllerImpl implements AccountController {
+public class AccountControllerImpl implements AccountController {
     private final ChangeEmailService changeEmailService;
     private final ChangePasswordService changePasswordService;
     private final ChangeUsernameService changeUsernameService;

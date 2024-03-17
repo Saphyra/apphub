@@ -1,0 +1,7 @@
+.ban-user-marked-for-deletion-cell{
+    text-align: center;
+}
+
+.ban-user-marked-for-deletion{
+    transform: scale(1.5);
+}

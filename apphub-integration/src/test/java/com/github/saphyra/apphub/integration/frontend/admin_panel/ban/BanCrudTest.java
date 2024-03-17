@@ -10,11 +10,11 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
-import com.github.saphyra.apphub.integration.structure.api.admin_panel.CurrentBan;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.By;
@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BanCrudTest extends SeleniumTest {
@@ -49,25 +50,27 @@ public class BanCrudTest extends SeleniumTest {
 
         openUser(adminDriver, testUserData);
 
-        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Select role to ban!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), "Duration too low (min. 1)");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), "Select time unit!");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), "Reason must not be blank.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", "Password must not be empty");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Incorrect password.");
-        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", "Account locked. Try again later.");
+        ban_runValidation(adminDriver, "", false, 1, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), LocalizedText.BAN_SELECT_ROLE);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 0, ChronoUnit.MINUTES.name(), REASON, adminUserData.getPassword(), LocalizedText.BAN_DURATION_TOO_SHORT);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, false, 1, "", REASON, adminUserData.getPassword(), LocalizedText.BAN_SELECT_TIME_UNIT);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", " ", adminUserData.getPassword(), LocalizedText.BAN_BLANK_REASON);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "", LocalizedText.EMPTY_PASSWORD);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.INCORRECT_PASSWORD);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.INCORRECT_PASSWORD);
+        ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.ACCOUNT_LOCKED);
+
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(adminDriver))
+            .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
-            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
-            .assertTrue("Ban page is not opened.");
-        openUser(adminDriver, testUserData);
+            .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
+            .assertTrue("Ban Details page is not opened.");
 
         BanActions.setUpAdminForm(adminDriver, Constants.ROLE_ACCESS, true, 0, "", REASON, adminUserData.getPassword());
         BanActions.submitBanForm(adminDriver);
-        NotificationUtil.verifySuccessNotification(adminDriver, "User banned.");
 
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
@@ -78,24 +81,28 @@ public class BanCrudTest extends SeleniumTest {
         new WebDriverWait(testDriver, Duration.ofSeconds(5))
             .until(ExpectedConditions.presenceOfElementLocated(By.id("message-content")));
 
-        revokeBan_runValidation(adminDriver, "", "Password must not be empty");
-        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
-        revokeBan_runValidation(adminDriver, "asd", "Incorrect password.");
-        revokeBan_runValidation(adminDriver, "asd", "Account locked. Try again later.");
+        BanActions.getCurrentBans(adminDriver)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No ban found"))
+            .revoke();
+
+        revokeBan_runValidation(adminDriver, "", LocalizedText.EMPTY_PASSWORD);
+        revokeBan_runValidation(adminDriver, "asd", LocalizedText.INCORRECT_PASSWORD);
+        revokeBan_runValidation(adminDriver, "asd", LocalizedText.INCORRECT_PASSWORD);
+        revokeBan_runValidation(adminDriver, "asd", LocalizedText.ACCOUNT_LOCKED);
+
+        AwaitilityWrapper.create(15, 1)
+            .until(() -> IndexPageActions.isLoginPageLoaded(adminDriver))
+            .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
-            .until(() -> adminDriver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_BAN_PAGE))
-            .assertTrue("Ban page is not opened.");
-        openUser(adminDriver, testUserData);
+            .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
+            .assertTrue("Ban Details page is not opened.");
 
-        revokeBan(adminDriver, adminUserData.getPassword());
-        NotificationUtil.verifySuccessNotification(adminDriver, "Ban revoked.");
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> BanActions.getCurrentBans(adminDriver).isEmpty())
-            .assertTrue("Ban does not disappear from the list");
+        revokeBan(adminDriver, adminUserData);
 
         testDriver.navigate()
             .to(UrlFactory.create(Endpoints.MODULES_PAGE));
@@ -111,30 +118,39 @@ public class BanCrudTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("TestUser not found."));
         searchResult.click();
+
+        adminDriver.switchTo().window(new ArrayList<>(adminDriver.getWindowHandles()).get(1));
+
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("UserDetails not opened");
     }
 
-    private void ban_runValidation(WebDriver driver, String bannedRole, boolean permanent, int duration, String chronoUnit, String reason, String password, String errorMessage) {
+    private void ban_runValidation(WebDriver driver, String bannedRole, boolean permanent, int duration, String chronoUnit, String reason, String password, LocalizedText errorMessage) {
         BanActions.setUpAdminForm(driver, bannedRole, permanent, duration, chronoUnit, reason, password);
         BanActions.submitBanForm(driver);
-        NotificationUtil.verifyErrorNotification(driver, errorMessage);
-        NotificationUtil.clearNotifications(driver);
+        ToastMessageUtil.verifyErrorToast(driver, errorMessage);
     }
 
-    private void revokeBan_runValidation(WebDriver driver, String password, String errorMessage) {
-        revokeBan(driver, password);
-        NotificationUtil.verifyErrorNotification(driver, errorMessage);
-        NotificationUtil.clearNotifications(driver);
+    private void revokeBan_runValidation(WebDriver driver, String password, LocalizedText errorMessage) {
+        BanActions.fillRevokeBanPassword(driver, password);
+        BanActions.confirmRevoke(driver);
+
+        ToastMessageUtil.verifyErrorToast(driver, errorMessage);
     }
 
-    private void revokeBan(WebDriver driver, String password) {
-        CurrentBan currentBan = BanActions.getCurrentBans(driver)
+    private static void revokeBan(WebDriver driver, RegistrationParameters userData) {
+        BanActions.getCurrentBans(driver)
             .stream()
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException("No ban found"));
+            .orElseThrow(() -> new RuntimeException("No ban found"))
+            .revoke();
 
-        currentBan.revoke(driver, password);
+        BanActions.fillRevokeBanPassword(driver, userData.getPassword());
+        BanActions.confirmRevoke(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> BanActions.getCurrentBans(driver).isEmpty())
+            .assertTrue("Ban does not disappear from the list");
     }
 }

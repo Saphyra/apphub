@@ -353,6 +353,15 @@ const Endpoints = {
     ADMIN_PANEL_MARK_ERROR_REPORTS: new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report/mark/{status}"),
     ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE: new Endpoint(RequestMethod.GET, "/web/admin-panel/error-report/{id}"),
     ADMIN_PANEL_GET_ERROR_REPORT: new Endpoint(RequestMethod.GET, "/api/admin-panel/error-report/{id}"),
+
+    //Ban
+    ACCOUNT_BAN_SEARCH: new Endpoint(RequestMethod.POST, "/api/user/ban/search"),
+    ADMIN_PANEL_BAN_DETAILS_PAGE: new Endpoint(RequestMethod.GET, "/web/admin-panel/ban/{userId}"),
+    ACCOUNT_GET_BANS: new Endpoint(RequestMethod.GET, "/api/user/ban/{userId}"),
+    ACCOUNT_MARK_FOR_DELETION: new Endpoint(RequestMethod.DELETE, "/api/user/ban/{userId}/mark-for-deletion"),
+    ACCOUNT_UNMARK_FOR_DELETION: new Endpoint(RequestMethod.POST, "/api/user/ban/{userId}/mark-for-deletion"),
+    ACCOUNT_BAN_USER: new Endpoint(RequestMethod.PUT, "/api/user/ban"),
+    ACCOUNT_REVOKE_BAN: new Endpoint(RequestMethod.DELETE, "/api/user/ban/{banId}"),
 }
 
 export default Endpoints;

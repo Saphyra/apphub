@@ -2,15 +2,15 @@ package com.github.saphyra.apphub.integration.frontend.admin_panel.ban;
 
 import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
-import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +28,6 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         .plusDays(1);
     private static final Integer HOURS = 18;
     private static final Integer MINUTES = 45;
-    public static final String USER_DELETION_CONFIRMATION_DIALOG_ID = "user-deletion-confirmation-dialog";
 
     @Test(groups = {"fe", "admin-panel"})
     public void scheduleUserDeletionCd() {
@@ -48,7 +48,6 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         openUser(adminDriver, testUserData);
 
         emptyDate(adminDriver);
-        emptyTime(adminDriver);
         emptyPassword(adminDriver);
         incorrectPassword(adminDriver);
         scheduleDeletion(adminDriver, adminUserData);
@@ -56,53 +55,41 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
     }
 
     private static void emptyDate(WebDriver adminDriver) {
-        BanActions.submitDeleteAccountForm(adminDriver);
+        BanActions.scheduleForDeletion(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Date must not be empty.");
-    }
-
-    private static void emptyTime(WebDriver adminDriver) {
-        BanActions.fillDeleteUserDate(adminDriver, DATE);
-
-        BanActions.submitDeleteAccountForm(adminDriver);
-
-        NotificationUtil.verifyErrorNotification(adminDriver, "Time must not be empty.");
+        ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.BAN_EMPTY_DATE);
     }
 
     private static void emptyPassword(WebDriver adminDriver) {
-        BanActions.fillDeleteUserTime(adminDriver, HOURS, MINUTES);
-        BanActions.submitDeleteAccountForm(adminDriver);
+        BanActions.fillDeleteUserTime(adminDriver, DATE, HOURS, MINUTES);
+        BanActions.scheduleForDeletion(adminDriver);
 
-        CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
+        BanActions.confirmScheduleDeletion(adminDriver);
 
-        NotificationUtil.verifyErrorNotification(adminDriver, "Please enter your password.");
-        assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+        ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.EMPTY_PASSWORD);
     }
 
     private static void incorrectPassword(WebDriver adminDriver) {
         BanActions.fillDeleteUserPassword(adminDriver, "asd");
+        BanActions.confirmAccountDeletion(adminDriver);
 
-        CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
-
-        NotificationUtil.verifyErrorNotification(adminDriver, "Incorrect password.");
-        assertThat(CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID)).isTrue();
+        ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.INCORRECT_PASSWORD);
     }
 
     private static void scheduleDeletion(WebDriver adminDriver, RegistrationParameters adminUserData) {
         BanActions.fillDeleteUserPassword(adminDriver, adminUserData.getPassword());
-
-        CommonPageActions.confirmConfirmationDialog(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID);
+        BanActions.confirmAccountDeletion(adminDriver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> !CommonPageActions.isConfirmationDialogOpened(adminDriver, USER_DELETION_CONFIRMATION_DIALOG_ID))
-            .assertTrue("User deletion is not scheduled.");
+            .until(() -> BanActions.isUserMarkedForDeletion(adminDriver))
+            .assertTrue("User is not marked for deletion.");
 
-        assertThat(BanActions.isUserMarkedForDeletion(adminDriver)).isTrue();
-        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE + " " + HOURS + ":" + MINUTES + ":00");
+        assertThat(BanActions.getUserMarkedForDeletionAt(adminDriver)).isEqualTo(DATE + " " + HOURS + ":" + MINUTES);
     }
 
     private static void deleteSchedule(WebDriver adminDriver) {
         BanActions.unmarkForDeletion(adminDriver);
+        BanActions.confirmUnmarkForDeletion(adminDriver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> !BanActions.isUserMarkedForDeletion(adminDriver))
@@ -116,6 +103,10 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new RuntimeException("TestUser not found."));
         searchResult.click();
+
+        adminDriver.switchTo()
+            .window(new ArrayList<>(adminDriver.getWindowHandles()).get(1));
+
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("UserDetails not opened");

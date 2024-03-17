@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
+import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,17 @@ public class RevokeBanService {
     private final CheckPasswordService checkPasswordService;
     private final BanDao banDao;
     private final DateTimeUtil dateTimeUtil;
+    private final BanResponseQueryService banResponseQueryService;
 
-    public void revokeBan(UUID userId, String password, UUID banId) {
+    public BanResponse revokeBan(UUID userId, String password, UUID banId) {
         ValidationUtil.notBlank(password, "password");
         checkPasswordService.checkPassword(userId, password);
 
-        banDao.deleteById(banId);
+        Ban ban = banDao.findByIdValidated(banId);
+
+        banDao.delete(ban);
+
+        return banResponseQueryService.getBans(ban.getUserId());
     }
 
     @Transactional

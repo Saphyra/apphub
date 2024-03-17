@@ -31,6 +31,8 @@ spring:
             /web/admin-panel/disabled-role-management,\
             /web/admin-panel/error-report,\
             /web/admin-panel/error-report/*,\
+            /web/admin-panel/ban,\
+            /web/admin-panel/ban/*,\
             /web/user/account"
         filters:
         - StripPrefix=10
@@ -211,9 +213,17 @@ role:
     - DELETE
     requiredRoles:
     - ADMIN
-  - pattern: /api/user/data/ban/*
+  - pattern: /api/user/ban
+    methods:
+    - PUT
+    requiredRoles:
+    - ADMIN
+  - pattern: /api/user/ban/*
     methods:
     - POST
+    - GET
+    - PUT
+    - DELETE
     requiredRoles:
     - ADMIN
   #Admin-panel
