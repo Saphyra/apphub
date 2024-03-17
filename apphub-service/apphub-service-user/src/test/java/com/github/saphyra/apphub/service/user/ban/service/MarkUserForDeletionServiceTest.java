@@ -24,14 +24,10 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class MarkUserForDeletionServiceTest {
-    private static final LocalDate DATE = LocalDate.now();
-    private static final Integer HOURS = 23;
-    private static final Integer MINUTES = 25;
-    private static final String TIME = HOURS + ":" + MINUTES;
     private static final UUID DELETED_USER_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String PASSWORD_TOKEN = "password-token";
     private static final String PASSWORD = "password";
+    private static final String MARKED_FOR_DELETION_AT = "2024-05-06T11:39";
 
     @Mock
     private BanResponseQueryService banResponseQueryService;
@@ -57,8 +53,7 @@ public class MarkUserForDeletionServiceTest {
     @Test
     public void nullPassword() {
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
+            .markForDeletionAt(MARKED_FOR_DELETION_AT)
             .password(null)
             .build();
 
@@ -68,53 +63,36 @@ public class MarkUserForDeletionServiceTest {
     }
 
     @Test
-    public void nullDate() {
+    public void nullMarkedForDeletionAt() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(null)
-            .time(TIME)
+            .markForDeletionAt(null)
             .password(PASSWORD)
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "date", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", "must not be null");
     }
 
     @Test
-    public void nullTime() {
+    public void invalidMarkedForDeletionAt() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(null)
+            .markForDeletionAt("adf")
             .password(PASSWORD)
             .build();
 
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "time", "must not be null");
-    }
-
-    @Test
-    public void incorrectTime() {
-        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
-        MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time("adf")
-            .password(PASSWORD)
-            .build();
-
-        Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
-
-        ExceptionValidator.validateInvalidParam(ex, "time", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", "failed to parse");
     }
 
     @Test
     public void markUserForDeletion() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
+            .markForDeletionAt(MARKED_FOR_DELETION_AT)
             .password(PASSWORD)
             .build();
 
@@ -122,9 +100,8 @@ public class MarkUserForDeletionServiceTest {
         given(userDao.findByIdValidated(DELETED_USER_ID)).willReturn(deletedUser);
 
         BanResponse result = underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID);
-
         verify(deletedUser).setMarkedForDeletion(true);
-        verify(deletedUser).setMarkedForDeletionAt(LocalDateTime.of(DATE, LocalTime.of(HOURS, MINUTES, 0)));
+        verify(deletedUser).setMarkedForDeletionAt(LocalDateTime.of(LocalDate.of(2024, 5, 6), LocalTime.of(11, 39, 0)));
         verify(userDao).save(deletedUser);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
 

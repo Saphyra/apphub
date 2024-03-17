@@ -1,0 +1,18 @@
+{
+    "time-of-occurrence": {
+        "en": "Time of occurrence",
+        "hu": "Esemény időpontja"
+    },
+    "status-code": {
+        "en": "Status code",
+        "hu": "Válaszkód"
+    },
+    "service": {
+        "en": "Service",
+        "hu": "Kiszolgáló"
+    },
+    "message": {
+        "en": "Message",
+        "hu": "Üzenet"
+    }
+}

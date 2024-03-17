@@ -28,6 +28,13 @@ import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationT
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AccountPage from './modules/account/AccountPage';
+import RolesForAllPage from './modules/admin_panel/roles_for_all/RolesForAllPage';
+import RoleManagementPage from './modules/admin_panel/role_management/RoleManagementPage';
+import DisabledRoleManagement from './modules/admin_panel/disabled_role_management/DisabledRoleManagementPage';
+import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview/ErrorReportOverviewPage';
+import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
+import BanPage from './modules/admin_panel/ban//index/BanPage';
+import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
 
 const router = createBrowserRouter([
   {
@@ -177,6 +184,44 @@ const router = createBrowserRouter([
   {
     path: "/web/user/account",
     element: <AccountPage />
+  },
+  {
+    path: "/web/admin-panel/roles-for-all",
+    element: <RolesForAllPage />
+  },
+  {
+    path: "/web/admin-panel/role-management",
+    element: <RoleManagementPage />
+  },
+  {
+    path: "/web/admin-panel/disabled-role-management",
+    element: <DisabledRoleManagement />
+  },
+  {
+    path: "/web/admin-panel/error-report",
+    element: <ErrorReportOverviewPage />
+  },
+  {
+    path: "/web/admin-panel/error-report/:errorReportId",
+    element: <ErrorReportDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        errorReportId: params.errorReportId
+      }
+    }
+  },
+  {
+    path: "/web/admin-panel/ban",
+    element: <BanPage />
+  },
+  {
+    path: "/web/admin-panel/ban/:userId",
+    element: <BanDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        userId: params.userId
+      }
+    }
   }
 ]);
 

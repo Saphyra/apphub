@@ -170,4 +170,13 @@ public class WebElementUtils {
             .release()
             .perform();
     }
+
+    public static void clearAndFillDateTime(WebElement webElement, LocalDate date, Integer hours, Integer minutes) {
+        webElement.sendKeys(String.valueOf(date.getYear()));
+        webElement.sendKeys(Keys.TAB);
+        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getMonthValue(), 2));
+        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getDayOfMonth(), 2));
+        webElement.sendKeys(CommonUtils.withLeadingZeros(hours, 2));
+        webElement.sendKeys(CommonUtils.withLeadingZeros(minutes, 2));
+    }
 }

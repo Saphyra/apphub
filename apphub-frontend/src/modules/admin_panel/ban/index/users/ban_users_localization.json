@@ -1,0 +1,22 @@
+{
+    "user-id": {
+        "en": "User ID",
+        "hu": "Azonosító"
+    },
+    "username": {
+        "en": "Username",
+        "hu": "Felhasználónév"
+    },
+    "email": {
+        "en": "E-mail",
+        "hu": "E-mail"
+    },
+    "banned-roles": {
+        "en": "Banned roles",
+        "hu": "Tiltott jogosultságok"
+    },
+    "marked-for-deletion": {
+        "en": "Marked for deletion",
+        "hu": "Törlésre jelölve"
+    }
+}

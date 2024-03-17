@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.user.model.request.BanRequest;
+import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -18,12 +19,15 @@ public class BanService {
     private final CheckPasswordService checkPasswordService;
     private final BanFactory banFactory;
     private final BanDao banDao;
+    private final BanResponseQueryService banResponseQueryService;
 
-    public void ban(UUID userId, BanRequest request) {
+    public BanResponse ban(UUID userId, BanRequest request) {
         banRequestValidator.validate(request);
         checkPasswordService.checkPassword(userId, request.getPassword());
 
         Ban ban = banFactory.create(userId, request);
         banDao.save(ban);
+
+        return banResponseQueryService.getBans(request.getBannedUserId());
     }
 }

@@ -1,0 +1,23 @@
+.error-report-list-item-checked-cell {
+    text-align: center;
+}
+
+.error-report-list-item-checked-cell input {
+    transform: scale(1.5);
+}
+
+.error-report-list-item-service, .error-report-list-item-created-at {
+    white-space: nowrap;
+}
+
+.error-report-list-item.unread td {
+    color: yellow;
+}
+
+.error-report-list-item.marked td {
+    color: red;
+}
+
+.error-report-list-item-operations {
+    text-align: center;
+}

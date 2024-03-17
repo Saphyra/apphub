@@ -106,12 +106,6 @@
             <version>${versions.guava}</version>
         </dependency>
 
-        <!--dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>${versions.webDriverManager}</version>
-        </dependency-->
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -143,7 +137,7 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>10</threadCount>
+                    <threadCount>${threadCount}</threadCount>
                 </configuration>
             </plugin>
         </plugins>

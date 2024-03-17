@@ -1,11 +1,11 @@
 import React from "react";
 
-const PostLabeledInputField = ({ label, input, className }) => {
+const PostLabeledInputField = ({ id, labelId, label, input, className }) => {
     return (
-        <label className={className}>
+        <label id={id} className={className}>
             {input}
             <span> </span>
-            <span>{label}</span>
+            <span id={labelId}>{label}</span>
         </label>
     );
 }

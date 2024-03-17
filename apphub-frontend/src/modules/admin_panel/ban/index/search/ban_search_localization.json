@@ -1,0 +1,14 @@
+{
+    "search-input": {
+        "en": "At least 3 characters of a user's name or e-mail",
+        "hu": "A felhasználó nevének vagy e-mail címének legalább 3 karaktere"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "query-too-short": {
+        "en": "Please type at least 3 characters.",
+        "hu": "Legalább 3 karaktert írj be!"
+    }
+}

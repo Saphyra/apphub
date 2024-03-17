@@ -1,0 +1,18 @@
+{
+    "user": {
+        "en": "User",
+        "hu": "Felhasználó"
+    },
+    "user-id": {
+        "en": "User ID",
+        "hu": "Felhasználó azonosító"
+    },
+    "username": {
+        "en": "Username",
+        "hu": "Felhasználónév"
+    },
+    "email": {
+        "en": "E-mail",
+        "hu": "E-mail"
+    }
+}

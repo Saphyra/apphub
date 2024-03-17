@@ -1,0 +1,15 @@
+#error-report-list-wrapper {
+    padding: 0 10px
+}
+
+#error-report-list {
+    margin: auto;
+}
+
+#error-report-list th {
+    font-size: 20px;
+}
+
+.error-report-list-checkbox-head {
+    white-space: nowrap;
+}

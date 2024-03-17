@@ -5,6 +5,7 @@ import ValidatedField from "../../../common/js/validation/ValidatedField";
 import ValidatedInputField from "../../../common/component/input/ValidatedInputField";
 import Button from "../../../common/component/input/Button";
 import register from "../controller/RegistrationController";
+import InputField from "../../../common/component/input/InputField";
 
 const RegistrationForm = ({ localizationHandler }) => {
     const [username, setUsername] = useState("");
@@ -41,11 +42,13 @@ const RegistrationForm = ({ localizationHandler }) => {
                         input={
                             <ValidatedInputField
                                 validationResultId="registration-username-validation"
-                                inputId="registration-username"
                                 validationResult={validationResult[ValidatedField.USERNAME]}
-                                type="text"
-                                placeholder={localizationHandler.get("username")}
-                                onchangeCallback={setUsername}
+                                inputField={<InputField
+                                    id="registration-username"
+                                    placeholder={localizationHandler.get("username")}
+                                    onchangeCallback={setUsername}
+                                    value={username}
+                                />}
                             />
                         }
                     />
@@ -55,11 +58,14 @@ const RegistrationForm = ({ localizationHandler }) => {
                         input={
                             <ValidatedInputField
                                 validationResultId="registration-email-validation"
-                                inputId="registration-email"
                                 validationResult={validationResult[ValidatedField.EMAIL]}
-                                type="text"
-                                placeholder={localizationHandler.get("email-address")}
-                                onchangeCallback={setEmail}
+                                inputField={<InputField
+                                    id="registration-email"
+                                    type="email"
+                                    placeholder={localizationHandler.get("email-address")}
+                                    onchangeCallback={setEmail}
+                                    value={email}
+                                />}
                             />
                         }
                     />
@@ -69,11 +75,14 @@ const RegistrationForm = ({ localizationHandler }) => {
                         input={
                             <ValidatedInputField
                                 validationResultId="registration-password-validation"
-                                inputId="registration-password"
                                 validationResult={validationResult[ValidatedField.PASSWORD]}
-                                type="password"
-                                placeholder={localizationHandler.get("password")}
-                                onchangeCallback={setPassword}
+                                inputField={<InputField
+                                    id="registration-password"
+                                    type="password"
+                                    placeholder={localizationHandler.get("password")}
+                                    onchangeCallback={setPassword}
+                                    value={password}
+                                />}
                             />
                         }
                     />
@@ -83,11 +92,14 @@ const RegistrationForm = ({ localizationHandler }) => {
                         input={
                             <ValidatedInputField
                                 validationResultId="registration-confirm-password-validation"
-                                inputId="registration-confirm-password"
                                 validationResult={validationResult[ValidatedField.CONFIRM_PASSWORD]}
-                                type="password"
-                                placeholder={localizationHandler.get("confirm-password")}
-                                onchangeCallback={setConfirmPassword}
+                                inputField={<InputField
+                                    id="registration-confirm-password"
+                                    type="password"
+                                    placeholder={localizationHandler.get("confirm-password")}
+                                    onchangeCallback={setConfirmPassword}
+                                    value={confirmPassword}
+                                />}
                             />
                         }
                     />

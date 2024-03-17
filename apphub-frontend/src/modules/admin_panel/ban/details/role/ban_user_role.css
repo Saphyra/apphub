@@ -1,0 +1,34 @@
+#ban-user-role {
+    text-align: center;
+    padding: 10px;
+}
+
+#ban-user-role-to-ban-label,
+#ban-user-is-permanent-label,
+#ban-user-banned-until {
+    font-size: 20px;
+}
+
+#ban-user-is-permanent-input {
+    transform: scale(1.5);
+}
+
+#ban-user-duration {
+    width: 60px;
+}
+
+#ban-user-role-to-ban,
+#ban-user-is-permanent,
+#ban-user-banned-until {
+    margin: 10px;
+}
+
+#ban-user-banned-until {
+    white-space: nowrap;
+}
+
+#ban-user-reason{
+    width: 75%;
+    min-width: 500px;
+    height: 100px;
+}

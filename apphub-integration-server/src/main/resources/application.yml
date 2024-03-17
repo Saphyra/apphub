@@ -25,3 +25,6 @@ liquibase:
   schema: public
   changelog:
     location: classpath:changelog.xml
+
+cleanup:
+  expirationDays: 90

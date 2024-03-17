@@ -17,6 +17,7 @@ import ValidatedField from "../../../common/js/validation/ValidatedField";
 import validate from "../../../common/js/validation/Validator";
 import "../skyxplore.css";
 import NotificationKey from "../../../common/js/notification/NotificationKey";
+import InputField from "../../../common/component/input/InputField";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -107,12 +108,14 @@ const SkyXploreCharacterPage = () => {
                                 input={
                                     <ValidationInputField
                                         validationResultId="skyxplore-character-name-validation"
-                                        inputId="skyxplore-character-name"
                                         validationResult={validationResult[ValidatedField.CHARACTER_NAME]}
-                                        type="text"
-                                        placeholder={localizationHandler.get("character-name")}
-                                        onchangeCallback={setCharacterName}
-                                        value={characterName}
+                                        inputField={<InputField
+                                            id="skyxplore-character-name"
+                                            type="text"
+                                            placeholder={localizationHandler.get("character-name")}
+                                            onchangeCallback={setCharacterName}
+                                            value={characterName}
+                                        />}
                                     />
                                 }
                             />

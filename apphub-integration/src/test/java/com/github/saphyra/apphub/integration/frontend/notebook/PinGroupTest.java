@@ -10,11 +10,13 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.notebook.pin.PinGroup;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -144,5 +146,34 @@ public class PinGroupTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> PinActions.getPinnedItems(driver).size() == 2)
             .assertTrue("PinGroup items are not updated.");
+    }
+
+    @Test(groups = {"fe", "notebook"})
+    public void orderPinGroups() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+
+        PinActions.openPinGroupManager(driver);
+
+        PinGroupManagerActions.createPinGroupWithName(driver, PIN_GROUP_NAME);
+        SleepUtil.sleep(2000);
+        PinGroupManagerActions.createPinGroupWithName(driver, NEW_PIN_GROUP_NAME);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> PinActions.getPinGroups(driver).size() == 3)
+            .assertTrue("PinGroups are not created.");
+
+        assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, NEW_PIN_GROUP_NAME, PIN_GROUP_NAME);
+
+        SleepUtil.sleep(1000);
+        PinActions.findPinGroupByNameValidated(driver, PIN_GROUP_NAME)
+            .open(driver);
+        SleepUtil.sleep(2000);
+
+        assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, PIN_GROUP_NAME, NEW_PIN_GROUP_NAME);
     }
 }

@@ -58,11 +58,13 @@ public class DisabledRoleControllerImplTest {
     public void disableRole() {
         given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
 
-        underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        List<DisabledRoleResponse> result = underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(repository).save(new DisabledRoleEntity(ROLE));
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
+        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(ROLE, true), new DisabledRoleResponse(ANOTHER_ROLE, false));
     }
 
     @Test
@@ -76,11 +78,15 @@ public class DisabledRoleControllerImplTest {
     public void enableRole() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(repository.existsById(ROLE)).willReturn(true);
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
+        given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
 
-        underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        List<DisabledRoleResponse> result = underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
 
         verify(repository).deleteById(ROLE);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
+
+        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(ROLE, true), new DisabledRoleResponse(ANOTHER_ROLE, false));
     }
 
     @Test

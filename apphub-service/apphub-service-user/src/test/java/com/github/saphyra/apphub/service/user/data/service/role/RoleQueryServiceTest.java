@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,8 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class RoleQueryServiceTest {
@@ -34,6 +33,9 @@ public class RoleQueryServiceTest {
     @Mock
     private UserDao userDao;
 
+    @Mock
+    private RoleRequestValidator roleRequestValidator;
+
     @InjectMocks
     private RoleQueryService underTest;
 
@@ -42,20 +44,6 @@ public class RoleQueryServiceTest {
 
     @Mock
     private Role role;
-
-    @Test
-    public void nullQueryString() {
-        Throwable ex = catchThrowable(() -> underTest.getRoles(null));
-
-        ExceptionValidator.validateInvalidParam(ex, "searchText", "must not be null");
-    }
-
-    @Test
-    public void tooShortQueryString() {
-        Throwable ex = catchThrowable(() -> underTest.getRoles("as"));
-
-        ExceptionValidator.validateInvalidParam(ex, "searchText", "too short");
-    }
 
     @Test
     public void getRoles() {
@@ -68,10 +56,29 @@ public class RoleQueryServiceTest {
 
         List<UserRoleResponse> result = underTest.getRoles(QUERY_STRING);
 
+        then(roleRequestValidator).should().validateQuery(QUERY_STRING);
+
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getUserId()).isEqualTo(USER_ID);
         assertThat(result.get(0).getEmail()).isEqualTo(EMAIL);
         assertThat(result.get(0).getUsername()).isEqualTo(USERNAME);
         assertThat(result.get(0).getRoles()).containsExactly(ROLE);
+    }
+
+    @Test
+    void getRolesForUser(){
+        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+
+        given(user.getUserId()).willReturn(USER_ID);
+        given(user.getEmail()).willReturn(EMAIL);
+        given(user.getUsername()).willReturn(USERNAME);
+        given(roleDao.getByUserId(USER_ID)).willReturn(Arrays.asList(role));
+        given(role.getRole()).willReturn(ROLE);
+
+        assertThat(underTest.getRoles(USER_ID))
+            .returns(USER_ID, UserRoleResponse::getUserId)
+            .returns(EMAIL, UserRoleResponse::getEmail)
+            .returns(USERNAME, UserRoleResponse::getUsername)
+            .returns(List.of(ROLE), UserRoleResponse::getRoles);
     }
 }

@@ -75,7 +75,7 @@ public class BanResponseQueryServiceTest {
         given(bannedUser.isMarkedForDeletion()).willReturn(true);
         given(bannedUser.getMarkedForDeletionAt()).willReturn(MARKED_FOR_DELETION_AT);
         given(dateTimeUtil.format(EXPIRATION)).willReturn(FORMATTED_EXPIRATION);
-        given(dateTimeUtil.format(MARKED_FOR_DELETION_AT)).willReturn(FORMATTED_MARKED_FOR_DELETION_AT);
+        given(dateTimeUtil.format(MARKED_FOR_DELETION_AT, false)).willReturn(FORMATTED_MARKED_FOR_DELETION_AT);
 
         BanResponse result = underTest.getBans(BANNED_USER_ID);
 

@@ -40,7 +40,7 @@ public abstract class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
 
-    private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS);
+    private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS, true);
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
     private static final ThreadLocal<Stopwatch> DURATION_STOPWATCH = new ThreadLocal<>();
@@ -52,6 +52,7 @@ public abstract class TestBase {
 
     @BeforeSuite(alwaysRun = true)
     public void setUpSuite(ITestContext context) {
+        log.info("Thread count: {}", TestConfiguration.AVAILABLE_PERMITS);
         log.info("Disabled test groups: {}", TestConfiguration.DISABLED_TEST_GROUPS);
         log.info("Enabled test groups: {}", TestConfiguration.ENABLED_TEST_GROUPS);
         log.info("ServerPort: {}", TestConfiguration.SERVER_PORT);

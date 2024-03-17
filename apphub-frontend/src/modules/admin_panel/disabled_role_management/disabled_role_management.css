@@ -1,0 +1,16 @@
+#disabled-role-management-table{
+    margin: auto;
+}
+
+.disabled-role-management-role-name{
+    text-align: right;
+    font-size: 20px;
+}
+
+.disabled-role-management-role-enabled-cell{
+    text-align: center;
+}
+
+.disabled-role-management-role-enabled{
+    transform: scale(1.5);
+}

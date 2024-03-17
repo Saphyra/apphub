@@ -1,0 +1,26 @@
+{
+    "first-page": {
+        "en": "First page",
+        "hu": "Legelső oldal"
+    },
+    "previous-page": {
+        "en": "Previous page",
+        "hu": "Előző oldal"
+    },
+    "next-page": {
+        "en": "Next page",
+        "hu": "Következő oldal"
+    },
+    "auto-refresh": {
+        "en": "Refresh automatically",
+        "hu": "Magától frissüljön"
+    },
+    "dont-refresh": {
+        "en": "Don't refresh",
+        "hu": "Ne frissüljön"
+    },
+    "x-seconds": {
+        "en": "Every {seconds} seconds",
+        "hu": "Minden {seconds} másodpercben"
+    }
+}

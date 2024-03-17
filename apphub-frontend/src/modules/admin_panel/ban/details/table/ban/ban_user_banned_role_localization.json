@@ -1,0 +1,38 @@
+{
+    "permanent": {
+        "en": "Permanent",
+        "hu": "Végleges"
+    },
+    "username": {
+        "en": "Username",
+        "hu": "Felhasználónév"
+    },
+    "email": {
+        "en": "E-mail",
+        "hu": "E-mail"
+    },
+    "revoke-ban": {
+        "en": "Revoke ban",
+        "hu": "Tiltás visszavonása"
+    },
+    "confirm-cancel-ban-content": {
+        "en": "Are you sure you want to revoke ban of role {role} from user",
+        "hu": "Biztosan vissza akarod vonni {role} jogosultság tiltását ettől a felhasználótól?"
+    },
+    "user-id": {
+        "en": "User ID",
+        "hu": "Felhasználó azonosító"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "empty-password": {
+        "en": "Password must not be empty.",
+        "hu": "A jelszó nem lehet üres."
+    }
+}

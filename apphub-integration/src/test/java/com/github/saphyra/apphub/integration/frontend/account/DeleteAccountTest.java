@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
-import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.account.DeleteAccountActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -39,23 +39,23 @@ public class DeleteAccountTest extends SeleniumTest {
     }
 
     private static void emptyPassword(WebDriver driver) {
-        AccountPageActions.fillDeleteAccountForm(driver, "asd");
-        AccountPageActions.fillDeleteAccountForm(driver, "");
-        AccountPageActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
+        DeleteAccountActions.fillDeleteAccountForm(driver, "asd");
+        DeleteAccountActions.fillDeleteAccountForm(driver, "");
+        DeleteAccountActions.verifyDeleteAccountForm(driver, DeleteAccountPasswordValidationResult.EMPTY_PASSWORD);
     }
 
     private static void incorrectPassword(WebDriver driver) {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                AccountPageActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
-                AccountPageActions.deleteAccount(driver);
-                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+                DeleteAccountActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
+                DeleteAccountActions.deleteAccount(driver);
+                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
             });
 
-        AccountPageActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
-        AccountPageActions.deleteAccount(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
+        DeleteAccountActions.fillDeleteAccountForm(driver, DataConstants.INCORRECT_PASSWORD);
+        DeleteAccountActions.deleteAccount(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(20, 3)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
@@ -70,8 +70,8 @@ public class DeleteAccountTest extends SeleniumTest {
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ACCOUNT_PAGE))
             .assertTrue("Account page is not opened");
 
-        AccountPageActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
-        AccountPageActions.deleteAccount(driver);
+        DeleteAccountActions.fillDeleteAccountForm(driver, DataConstants.VALID_PASSWORD);
+        DeleteAccountActions.deleteAccount(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)));

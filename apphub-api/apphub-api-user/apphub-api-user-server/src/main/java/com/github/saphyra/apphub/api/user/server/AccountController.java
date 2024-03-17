@@ -23,10 +23,10 @@ import java.util.UUID;
 
 public interface AccountController {
     @PostMapping(Endpoints.ACCOUNT_CHANGE_EMAIL)
-    void changeEmail(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeEmailRequest request);
+    AccountResponse changeEmail(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeEmailRequest request);
 
     @PostMapping(Endpoints.ACCOUNT_CHANGE_USERNAME)
-    void changeUsername(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeUsernameRequest request);
+    AccountResponse changeUsername(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangeUsernameRequest request);
 
     @PostMapping(Endpoints.ACCOUNT_CHANGE_PASSWORD)
     void changePassword(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader, @RequestBody ChangePasswordRequest request);
@@ -52,7 +52,10 @@ public interface AccountController {
     );
 
     @GetMapping(Endpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
-    AccountResponse getAccount(@PathVariable("userId") UUID userId);
+    AccountResponse getAccountInternal(@PathVariable("userId") UUID userId);
+
+    @GetMapping(Endpoints.USER_DATA_GET_ACCOUNT)
+    AccountResponse getAccount(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.USER_DATA_INTERNAL_USER_EXISTS)
     boolean userExists(@PathVariable("userId") UUID userId);

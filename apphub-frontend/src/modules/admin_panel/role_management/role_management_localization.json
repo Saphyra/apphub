@@ -1,0 +1,74 @@
+{
+    "title": {
+        "en": "Role management - Apphub",
+        "hu": "Jogosultságok kezelése - Apphub"
+    },
+    "page-title": {
+        "en": "Role management",
+        "hu": "Jogosultságok kezelése"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "no-search-result": {
+        "en": "No user found. Please enter at  least 3 characters of a user's e-mail or username.",
+        "hu": "Felhasználó nem található. A kereséshez írd be a felhasználó nevének vagy e-mail címének legalább 3 karakterét."
+    },
+    "username": {
+        "en": "Username",
+        "hu": "Felhasználónév"
+    },
+    "email": {
+        "en": "E-mail",
+        "hu": "E-mail"
+    },
+    "granted-roles": {
+        "en": "Granted roles",
+        "hu": "Felhasználó jogosultságai"
+    },
+    "available-roles": {
+        "en": "Available roles",
+        "hu": "Elérhető jogosultságok"
+    },
+    "grant-role": {
+        "en": "Grant role",
+        "hu": "Jogosultság biztosítása"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "grant-role-content": {
+        "en": "Are you sure you want to grant role <{role}> to user <Username: {username} / E-mail: {email}>?",
+        "hu": "Biztosan fel szeretnéd ruházni <Felhasználónév: {username} / E-mail: {email}> felhasználót <{role}> jogosultsággal?"
+    },
+    "revoke-role": {
+        "en": "Revoke role",
+        "hu": "Jogosultság visszavonása"
+    },
+    "revoke-role-content": {
+        "en": "Are you sure you want to revoke role <{role}> to user <Username: {username} / E-mail: {email}>?",
+        "hu": "Biztosan vissza szeretnéd vonni <{role}> jogosultságot <Felhasználónév: {username} / E-mail: {email}> felhasználótól?"
+    },
+    "empty-password": {
+        "en": "Password must not be empty.",
+        "hu": "A jelszó nem lehet üres."
+    },
+    "role-granted": {
+        "en": "Role granted.",
+        "hu": "Jogosultság biztosítva."
+    },
+    "role-revoked": {
+        "en": "Role revoked.",
+        "hu": "Jogosultság visszavonva."
+    }
+}

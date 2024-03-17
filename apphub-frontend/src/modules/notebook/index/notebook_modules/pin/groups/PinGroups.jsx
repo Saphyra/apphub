@@ -63,15 +63,26 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
 
     const getCustomGroups = () => {
         return new Stream(pinGroups)
+            .sorted((a, b) => b.lastOpened.localeCompare(a.lastOpened))
             .map(pinGroup => <PinGroup
                 key={pinGroup.pinGroupId}
                 selectedPinGroupId={pinGroupId}
-                setPinGroupId={setPinGroupId}
+                setPinGroupId={setOpened}
                 pinGroupId={pinGroup.pinGroupId}
                 pinGroupName={pinGroup.pinGroupName}
                 setLastEvent={setLastEvent}
             />)
             .toList();
+    }
+
+    const setOpened = async (pinGroupId) => {
+        if (Utils.hasValue(pinGroupId)) {
+            const response = await Endpoints.NOTEBOOK_PIN_GROUP_OPENED.createRequest(null, { pinGroupId: pinGroupId })
+                .send();
+            setPinGroups(response);
+        }
+
+        setPinGroupId(pinGroupId);
     }
 
     return (

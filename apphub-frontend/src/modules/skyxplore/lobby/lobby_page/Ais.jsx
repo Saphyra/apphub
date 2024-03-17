@@ -10,6 +10,7 @@ import validate from "../../../../common/js/validation/Validator";
 import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import InputField from "../../../../common/component/input/InputField";
 
 const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
     const [ais, setAis] = useState([]);
@@ -113,12 +114,14 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
                             input={
                                 <ValidatedInputField
                                     validationResultId="skyxplore-lobby-create-ai-name-validation"
-                                    inputId="skyxplore-lobby-create-ai-name"
                                     validationResult={validationResult[ValidatedField.CHARACTER_NAME]}
-                                    type="text"
-                                    placeholder={localizationHandler.get("ai-name")}
-                                    onchangeCallback={setAiName}
-                                    value={aiName}
+                                    inputField={<InputField
+                                        id="skyxplore-lobby-create-ai-name"
+                                        type="text"
+                                        placeholder={localizationHandler.get("ai-name")}
+                                        onchangeCallback={setAiName}
+                                        value={aiName}
+                                    />}
                                 />
                             }
                         />

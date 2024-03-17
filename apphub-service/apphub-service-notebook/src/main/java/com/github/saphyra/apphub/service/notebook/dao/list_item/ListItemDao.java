@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.ForRemoval;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, ListItemRepository> implements DeleteByUserIdDao {
@@ -55,16 +52,5 @@ public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, L
 
     public List<ListItem> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
-    }
-
-    @ForRemoval("custom-table-link-migration")
-    public List<BiWrapper<UUID, UUID>> getByListItemTypeUnencrypted(ListItemType type) {
-        return repository.getByType(type)
-            .stream()
-            .map(entity -> new BiWrapper<>(
-                uuidConverter.convertEntity(entity.getUserId()),
-                uuidConverter.convertEntity(entity.getListItemId())
-            ))
-            .collect(Collectors.toList());
     }
 }

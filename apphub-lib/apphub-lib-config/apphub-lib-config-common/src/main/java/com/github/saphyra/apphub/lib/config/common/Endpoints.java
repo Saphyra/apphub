@@ -53,7 +53,6 @@ public class Endpoints {
 
     //CONNECTION SUBSCRIPTIONS
     public static final String WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING = "/api/ws/admin-panel/monitoring/memory";
-    public static final String WS_CONNECTION_ADMIN_PANEL_ERROR_REPORT = "/api/ws/admin-panel/error-report";
     public static final String WS_CONNECTION_SKYXPLORE_MAIN_MENU = "/api/ws/skyxplore-data/main-menu";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY = "/api/ws/skyxplore-lobby/lobby";
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
@@ -94,6 +93,7 @@ public class Endpoints {
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
     public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
     public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
+    public static final String USER_DATA_GET_ACCOUNT = "/api/user/account";
 
     //SETTINGS
     public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";
@@ -101,10 +101,11 @@ public class Endpoints {
 
     //BAN USER
     public static final String ACCOUNT_BAN_USER = "/api/user/ban";
-    public static final String ACCOUNT_REMOVE_BAN = "/api/user/ban/{banId}";
+    public static final String ACCOUNT_REVOKE_BAN = "/api/user/ban/{banId}";
     public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
-    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
-    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_BAN_SEARCH = "/api/user/ban/search";
 
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
@@ -168,6 +169,7 @@ public class Endpoints {
     public static final String NOTEBOOK_RENAME_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}";
     public static final String NOTEBOOK_ADD_ITEM_TO_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}";
     public static final String NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}";
+    public static final String NOTEBOOK_PIN_GROUP_OPENED = "/api/notebook/pin-group/{pinGroupId}";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";

@@ -1,0 +1,29 @@
+#role-management main {
+    padding-top: 0;
+    display: grid;
+    grid-template-rows: 45px auto;
+}
+
+#role-management-search {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    padding: 3px;
+}
+
+#role-management-search-input {
+    width: calc(100% - 150px);
+}
+
+#role-management-no-search-result {
+    text-align: center;
+    font-size: 30px;
+    margin: 50px
+}
+
+#role-management-search-result {
+    padding: 10px;
+}
+
+#role-management-search-result-table {
+    margin: auto;
+}

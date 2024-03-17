@@ -1,9 +1,10 @@
 ENABLED_GROUPS=$1
-DISABLED_GROUPS=${2:-headed-only}
+DISABLED_GROUPS=${2}
 HEADLESS=${3:-true}
 SERVER_PORT=${4:-8080}
 DATABASE_PORT=${5:-5432}
 INTEGRATION_SERVER_PORT=${6:-8072}
+THREAD_COUNT=${7:-20}
 
 ./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
 
@@ -24,7 +25,7 @@ do
 done < ./infra/deployment/service/service_list
 
 cd apphub-integration || exit
-mvn -DargLine="-DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DenabledGroups=$ENABLED_GROUPS -DdatabaseName=apphub -DintegrationServerEnabled=true" clean test
+mvn -DthreadCount="$THREAD_COUNT" -DargLine="-DthreadCount=$THREAD_COUNT -DserverPort=$SERVER_PORT -DdatabasePort=$DATABASE_PORT -Dheadless=$HEADLESS -DretryEnabled=true -DrestLoggingEnabled=false -DdisabledGroups=$DISABLED_GROUPS -DenabledGroups=$ENABLED_GROUPS -DdatabaseName=apphub -DintegrationServerEnabled=true" clean test
 cd .. || exit
 
 taskkill //F //IM chromedriver.exe //T

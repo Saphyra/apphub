@@ -92,6 +92,7 @@ const addAndSet = (items, item, set) => {
     set(copy);
 }
 
+//Remove item if remove() == true
 const removeAndSet = (items, remove, set) => {
     const copy = new Stream(items)
         .remove(remove)
@@ -115,6 +116,14 @@ const isTrue = (b) => {
     return false;
 }
 
+const nullIfEmpty = (input) => {
+    if (!hasValue(input) || input.length === 0) {
+        return null;
+    }
+
+    return input;
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -130,6 +139,7 @@ const Utils = {
     addAndSet: addAndSet,
     removeAndSet: removeAndSet,
     isTrue: isTrue,
+    nullIfEmpty: nullIfEmpty
 }
 
 export default Utils;

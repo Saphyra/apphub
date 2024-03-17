@@ -10,15 +10,16 @@ public enum LocalizedText {
     ERROR_MISSING_ROLE("You are not allowed to perform this operation."),
     NOTIFICATION_LANGUAGE_CHANGED_EN("Language changed."),
     NOTIFICATION_LANGUAGE_CHANGED_HU("Nyelv megváltoztatva."),
+    INCORRECT_PASSWORD("Incorrect password."),
+    ACCOUNT_LOCKED("Account locked. Try again later."),
+    EMPTY_PASSWORD("Password must not be empty."),
 
     //INDEX/ACCOUNT
     INDEX_SUCCESSFULLY_LOGGED_OUT("Successfully logged out."),
     INDEX_BAD_CREDENTIALS("Unknown combination of e-mail address and password."),
-    INDEX_ACCOUNT_LOCKED("Account locked. Try again later."),
     INDEX_EMPTY_CREDENTIALS("Please fill e-mail address and password!"),
     INDEX_USERNAME_ALREADY_IN_USE("Username already in use."),
     INDEX_EMAIL_ALREADY_IN_USE("E-mail address is already in use."),
-    ACCOUNT_INCORRECT_PASSWORD("Incorrect password."),
     ACCOUNT_EMAIL_CHANGED("Email changed."),
     ACCOUNT_USERNAME_CHANGED("Username changed."),
     ACCOUNT_PASSWORD_CHANGED("Password changed."),
@@ -46,6 +47,24 @@ public enum LocalizedText {
     SKYXPLORE_GAME_PLANET_NAME_TOO_LONG("Planet name too long. (Maximum 30 characters.)"),
     SKYXPLORE_GAME_STORAGE_USED("Storage still in use. Free up some space before you deconstruct it."),
     SKYXPLORE_GAME_STORAGE_SETTING_SAVED("Storage setting saved."),
+
+    //ADMIN PANEL
+    //ROLES_FOR_ALL
+    ROLES_FOR_ALL_ROLE_REVOKED("Role successfully revoked from all users."),
+    ROLES_FOR_ALL_ROLE_ADDED("Role successfully granted to all users."),
+    ROLE_MANAGEMENT_ROLE_GRANTED("Role granted."),
+    ROLE_MANAGEMENT_ROLE_REVOKED("Role revoked."),
+
+    //DISABLED_ROLE_MANAGEMENT
+    DISABLED_ROLE_MANAGEMENT_ROLE_DISABLED("Role disabled."),
+    DISABLED_ROLE_MANAGEMENT_ROLE_ENABLED("Role enabled."),
+
+    //BAN
+    BAN_SELECT_ROLE("Select role."),
+    BAN_DURATION_TOO_SHORT("Duration too short."),
+    BAN_SELECT_TIME_UNIT("Select time unit."),
+    BAN_BLANK_REASON("Please provide why the user is banned."),
+    BAN_EMPTY_DATE("Please select when the user should be deleted."),
     ;
 
     private final String text;

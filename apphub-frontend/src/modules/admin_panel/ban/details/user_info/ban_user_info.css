@@ -1,0 +1,22 @@
+#ban-user-info {
+    padding: 10px;
+    padding-top: 5px;
+    border-bottom: 3px ridge white;
+    overflow: auto;
+}
+
+#ban-user-info fieldset legend {
+    color: orange;
+    font-size: 20px;
+}
+
+.ban-user-info-row {
+    margin: 5px;
+    padding-left: 10px;
+    white-space: nowrap;
+}
+
+.ban-user-info-row :not(:last-child){
+    font-weight: bold;
+    color: orchid
+}

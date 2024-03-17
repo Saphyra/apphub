@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
-import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.account.ChangeUsernameActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -16,6 +16,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.change_username.
 import com.github.saphyra.apphub.integration.structure.api.user.change_username.UsernameValidationResult;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeUsernameTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
@@ -40,18 +42,18 @@ public class ChangeUsernameTest extends SeleniumTest {
     }
 
     private void tooShortUsername(WebDriver driver) {
-        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooShortUsername());
-        AccountPageActions.verifyChangeUsernameForm(driver, tooShortUsername());
+        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooShortUsername());
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, tooShortUsername());
     }
 
     private void tooLongUsername(WebDriver driver) {
-        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooLongUsername());
-        AccountPageActions.verifyChangeUsernameForm(driver, tooLongUsername());
+        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooLongUsername());
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, tooLongUsername());
     }
 
     private void emptyPassword(WebDriver driver) {
-        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.emptyPassword());
-        AccountPageActions.verifyChangeUsernameForm(driver, emptyPassword());
+        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.emptyPassword());
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, emptyPassword());
     }
 
     private static void usernameAlreadyExists(WebDriver driver, RegistrationParameters existingUserData) {
@@ -60,9 +62,9 @@ public class ChangeUsernameTest extends SeleniumTest {
             .username(existingUserData.getUsername())
             .build();
 
-        AccountPageActions.fillChangeUsernameForm(driver, usernameAlreadyExistsParameters);
-        AccountPageActions.verifyChangeUsernameForm(driver, valid());
-        AccountPageActions.changeUsername(driver);
+        ChangeUsernameActions.fillChangeUsernameForm(driver, usernameAlreadyExistsParameters);
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
+        ChangeUsernameActions.changeUsername(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_USERNAME_ALREADY_IN_USE);
     }
@@ -73,19 +75,21 @@ public class ChangeUsernameTest extends SeleniumTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
 
-        AccountPageActions.fillChangeUsernameForm(driver, incorrectPasswordParameters);
-        AccountPageActions.verifyChangeUsernameForm(driver, valid());
-        AccountPageActions.changeUsername(driver);
+        ChangeUsernameActions.fillChangeUsernameForm(driver, incorrectPasswordParameters);
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
+        ChangeUsernameActions.changeUsername(driver);
 
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_INCORRECT_PASSWORD);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
     }
 
     private static void change(WebDriver driver) {
-        AccountPageActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.valid());
-        AccountPageActions.verifyChangeUsernameForm(driver, valid());
-        AccountPageActions.changeUsername(driver);
+        ChangeUsernameParameters parameters = ChangeUsernameParameters.valid();
+        ChangeUsernameActions.fillChangeUsernameForm(driver, parameters);
+        ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
+        ChangeUsernameActions.changeUsername(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_USERNAME_CHANGED);
+        assertThat(ChangeUsernameActions.getCurrentUsername(driver)).isEqualTo(parameters.getUsername());
     }
 
     private static ChangeUsernameValidationResult valid() {

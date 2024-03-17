@@ -1,0 +1,8 @@
+#ban-search {
+    text-align: center;
+    border-bottom: 3px ridge white;
+}
+
+#ban-search-input {
+    width: calc(100% - 300px);
+}

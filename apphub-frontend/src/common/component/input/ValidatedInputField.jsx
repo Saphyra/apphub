@@ -1,20 +1,13 @@
-import InputField from "./InputField";
-
 const ValidatedInputField = ({
     validationResultId,
-    className = "",
-    inputId,
-    inputClassName,
-    validationResult,
-    type,
-    placeholder,
-    onchangeCallback,
-    value
+    validationResultClassName = "",
+    inputField,
+    validationResult
 }) => {
     const getValidationResultField = () => {
         return <div
             id={validationResultId}
-            className={"validation-result-field" + " " + className}
+            className={"validation-result-field" + " " + validationResultClassName}
             title={validationResult.message}
         >
             X
@@ -23,14 +16,7 @@ const ValidatedInputField = ({
 
     return (
         <div className="validated-input-field-wrapper">
-            <InputField
-                className={inputClassName}
-                id={inputId}
-                type={type}
-                placeholder={placeholder}
-                onchangeCallback={onchangeCallback}
-                value={value}
-            />
+            {inputField}
 
             {validationResult && !validationResult.valid && getValidationResultField()}
         </div>

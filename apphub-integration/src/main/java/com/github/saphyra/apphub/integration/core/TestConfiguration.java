@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class TestConfiguration {
     //Platform
-    public static final int AVAILABLE_PERMITS = 10;
+    public static final int AVAILABLE_PERMITS = Integer.parseInt(System.getProperty("threadCount", "10"));
     public static final boolean REST_LOGGING_ENABLED = Boolean.parseBoolean(System.getProperty("restLoggingEnabled", "true"));
     public static final boolean WEB_DRIVER_CACHE_ENABLED = Boolean.parseBoolean(System.getProperty("webDriverCacheEnabled", "true"));
     public static final boolean WEB_DRIVER_HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless", "false"));

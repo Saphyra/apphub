@@ -1,0 +1,8 @@
+#error-report-filter {
+    text-align: center;
+    border-bottom: 3px ridge white;
+}
+
+#error-report-filter-status-code{
+    width: 75px;
+}

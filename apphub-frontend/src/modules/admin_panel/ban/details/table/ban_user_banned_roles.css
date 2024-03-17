@@ -1,0 +1,9 @@
+#ban-user-banned-roles {
+    margin: auto;
+    width: 90%;
+}
+
+#ban-user-no-banned-roles {
+    text-align: center;
+    font-size: 30px;
+}

@@ -1,0 +1,11 @@
+#ban-users-wrapper {
+    padding: 10px;
+}
+
+#ban-users {
+    margin: auto;
+}
+
+#ban-users tr * {
+    cursor: pointer;
+}

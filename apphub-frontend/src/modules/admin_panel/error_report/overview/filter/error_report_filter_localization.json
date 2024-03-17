@@ -1,0 +1,54 @@
+{
+    "service": {
+        "en": "Service",
+        "hu": "Kiszolgáló"
+    },
+    "message": {
+        "en": "Message",
+        "hu": "Üzenet"
+    },
+    "status-code": {
+        "en": "Status code",
+        "hu": "Válaszkód"
+    },
+    "from": {
+        "en": "From",
+        "hu": "Ettől"
+    },
+    "datetime-format": {
+        "en": "YYYY-MM-DD hh:mm:ss",
+        "hu": "YYYY-MM-DD hh:mm:ss"
+    },
+    "until": {
+        "en": "Until",
+        "hu": "Eddig"
+    },
+    "items-per-page": {
+        "en": "Items per page",
+        "hu": "Bejegyzés / odlal"
+    },
+    "status": {
+        "en": "Status",
+        "hu": "Állapot"
+    },
+    "status-all": {
+        "en": "All",
+        "hu": "Összes"
+    },
+    "status-unread": {
+        "en": "Unread",
+        "hu": "Olvasatlan"
+    },
+    "status-read": {
+        "en": "Read",
+        "hu": "Olvasott"
+    },
+    "status-marked": {
+        "en": "Marked",
+        "hu": "Megjelölt"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    }
+}

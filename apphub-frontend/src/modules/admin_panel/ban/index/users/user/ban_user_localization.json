@@ -1,0 +1,10 @@
+{
+    "false": {
+        "en": "No",
+        "hu": "Nem"
+    },
+    "true": {
+        "en": "Yes",
+        "hu": "Igen"
+    }
+}

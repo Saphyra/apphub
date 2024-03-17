@@ -42,4 +42,7 @@ public interface PinController {
 
     @DeleteMapping(Endpoints.NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP)
     List<NotebookView> removeItemFromPinGroup(@PathVariable("pinGroupId") UUID pinGroupId, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PutMapping(Endpoints.NOTEBOOK_PIN_GROUP_OPENED)
+    List<PinGroupResponse> pinGroupOpened(@PathVariable("pinGroupId") UUID pinGroupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

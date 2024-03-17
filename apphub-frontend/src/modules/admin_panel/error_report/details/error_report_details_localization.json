@@ -1,0 +1,70 @@
+{
+    "title": {
+        "en": "Error report details - Apphub",
+        "hu": "Részletes hibajelentés - Apphub"
+    },
+    "created-at": {
+        "en": "Created at",
+        "hu": "Létrehozva"
+    },
+    "service": {
+        "en": "Service",
+        "hu": "Kiszolgáló"
+    },
+    "message": {
+        "en": "Message",
+        "hu": "Üzenet"
+    },
+    "response": {
+        "en": "Response",
+        "hu": "Válasz"
+    },
+    "stack-trace": {
+        "en": "Stack trace",
+        "hu": "Hiba"
+    },
+    "thread": {
+        "en": "Thread",
+        "hu": "Szál"
+    },
+    "close": {
+        "en": "Close",
+        "hu": "Bezárás"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "delete-confirmation-content": {
+        "en": "Are you sure you want to delete this error report?",
+        "hu": "Biztosan törölni szeretnéd ezt a hibajelentést?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "mark-as-unread": {
+        "en": "Mark as unread",
+        "hu": "Olvasatlannak jelölés"
+    },
+    "mark": {
+        "en": "Mark",
+        "hu": "Megjelölés"
+    },
+    "unmark": {
+        "en": "Unmark",
+        "hu": "Megjelölés visszavonása"
+    },
+    "error-report-updated": {
+        "en": "Error report successfully updated.",
+        "hu": "Hibajelentés sikeresen frissítve."
+    }
+}

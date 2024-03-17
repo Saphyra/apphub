@@ -1,0 +1,66 @@
+{
+    "marked-for-deletion": {
+        "en": "Marked for deletion",
+        "hu": "Törlésre jelölve"
+    },
+    "true": {
+        "en": "Yes",
+        "hu": "Igen"
+    },
+    "false": {
+        "en": "No",
+        "hu": "Nem"
+    },
+    "schedule-deletion": {
+        "en": "Schedule deletion",
+        "hu": "Törlés ütemezése"
+    },
+    "time-not-selected": {
+        "en": "Please select when the user should be deleted.",
+        "hu": "Válaszd ki, mikor törlődjön a felhasználó!"
+    },
+    "confirm-schedule-deletion-content": {
+        "en": "Are you sure you want to delete the following user? Once the given time passes, the user will be permanently deleted.",
+        "hu": "Biztosan törölni szeretnéd ezt a felhasználót? A megadott idő lejárta után a törlés végleges,"
+    },
+    "user-id": {
+        "en": "User ID",
+        "hu": "Felhasználó azonosító"
+    },
+    "username": {
+        "en": "Username",
+        "hu": "Felhasználónév"
+    },
+    "email": {
+        "en": "E-mail",
+        "hu": "E-mail"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "empty-password": {
+        "en": "Password must not be empty.",
+        "hu": "A jelszó nem lehet üres."
+    },
+    "marked-for-deletion-at": {
+        "en": "at",
+        "hu": "Ekkor"
+    },
+    "cancel-deletion": {
+        "en": "Cancel scheduled deletion",
+        "hu": "Nem szeretném törölni"
+    },
+    "cancel-deletion-confirmation-title":{
+        "en": "Cancel deletion?",
+        "hu": "Törlés visszavonása?"
+    },
+    "cancel-deletion-confirmation-content":{
+        "en": "Are you sure you want to cancel the scheduled deletion of this user?",
+        "hu": "Biztosan vissza szeretnéd vonni ennek a felhasználónak a törlését?"
+    }
+}

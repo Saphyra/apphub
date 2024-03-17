@@ -77,10 +77,10 @@ public class LoginTest extends SeleniumTest {
             });
 
         IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         IndexPageActions.submitLogin(driver, loginParameters);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_ACCOUNT_LOCKED);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 

@@ -23,6 +23,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         .plusDays(1);
     private static final Integer HOURS = 23;
     private static final Integer MINUTES = 54;
+    private static final String MARKED_FOR_DELETION_AT = String.format("%sT%s:%s", DATE, HOURS, MINUTES);
     private static final String TIME = HOURS + ":" + MINUTES;
 
     @Test(groups = {"be", "admin-panel"})
@@ -37,8 +38,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
         nullPassword(accessTokenId, testUserId);
         incorrectPassword(accessTokenId, testUserId);
-        nullDate(userData, accessTokenId, testUserId);
-        nullTime(userData, accessTokenId, testUserId);
+        nullMarkedForDeletionAt(userData, accessTokenId, testUserId);
         incorrectTime(userData, accessTokenId, testUserId);
         markUserForDeletion(userData, accessTokenId, testUserId);
         unmarkUserForDeletion(accessTokenId, testUserId);
@@ -46,8 +46,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
     private static void nullPassword(UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest nullPasswordRequest = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
+            .markForDeletionAt(MARKED_FOR_DELETION_AT)
             .password(null)
             .build();
 
@@ -58,8 +57,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
     private static void incorrectPassword(UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest incorrectPasswordRequest = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
+            .markForDeletionAt(MARKED_FOR_DELETION_AT)
             .password("asf")
             .build();
 
@@ -68,53 +66,38 @@ public class ScheduleUserDeletionTest extends BackEndTest {
         ResponseValidator.verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
 
-    private static void nullDate(RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
-        MarkUserForDeletionRequest nullDateRequest = MarkUserForDeletionRequest.builder()
-            .date(null)
-            .time(TIME)
-            .password(userData.getPassword())
-            .build();
-
-        Response nullDateResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, nullDateRequest);
-
-        ResponseValidator.verifyInvalidParam(nullDateResponse, "date", "must not be null");
-    }
-
-    private static void nullTime(RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
+    private static void nullMarkedForDeletionAt(RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest nullTimeRequest = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(null)
+            .markForDeletionAt(null)
             .password(userData.getPassword())
             .build();
 
         Response nullTimeResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, nullTimeRequest);
 
-        ResponseValidator.verifyInvalidParam(nullTimeResponse, "time", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullTimeResponse, "markForDeletionAt", "must not be null");
     }
 
     private static void incorrectTime(RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest incorrectTimeRequest = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time("asd")
+            .markForDeletionAt("asd")
             .password(userData.getPassword())
             .build();
 
         Response incorrectTimeResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, incorrectTimeRequest);
 
-        ResponseValidator.verifyInvalidParam(incorrectTimeResponse, "time", "invalid value");
+        ResponseValidator.verifyInvalidParam(incorrectTimeResponse, "markForDeletionAt", "failed to parse");
     }
 
     private static void markUserForDeletion(RegistrationParameters userData, UUID accessTokenId, UUID testUserId) {
         MarkUserForDeletionRequest markUserForDeletionRequest = MarkUserForDeletionRequest.builder()
-            .date(DATE)
-            .time(TIME)
+            .markForDeletionAt(MARKED_FOR_DELETION_AT)
             .password(userData.getPassword())
             .build();
 
         BanResponse markUserForDeletionResponse = BanActions.markUserForDeletion(accessTokenId, testUserId, markUserForDeletionRequest);
 
         assertThat(markUserForDeletionResponse.getMarkedForDeletion()).isTrue();
-        assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(DATE + String.format(" %s:%s:00", HOURS, MINUTES));
+        assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(DATE + String.format(" %s:%s", HOURS, MINUTES));
     }
 
     private static void unmarkUserForDeletion(UUID accessTokenId, UUID testUserId) {

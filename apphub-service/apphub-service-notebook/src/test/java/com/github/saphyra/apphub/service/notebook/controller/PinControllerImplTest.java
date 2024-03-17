@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupDele
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupItemService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupQueryService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupRenameService;
+import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupUpdateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +51,9 @@ class PinControllerImplTest {
 
     @Mock
     private PinGroupItemService pinGroupItemService;
+
+    @Mock
+    private PinGroupUpdateService pinGroupUpdateService;
 
     @InjectMocks
     private PinControllerImpl underTest;
@@ -134,5 +138,14 @@ class PinControllerImplTest {
         assertThat(underTest.removeItemFromPinGroup(PIN_GROUP_ID, LIST_ITEM_ID, accessTokenHeader)).containsExactly(notebookView);
 
         then(pinGroupItemService).should().removeItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
+    }
+
+    @Test
+    void pinGroupOpened(){
+        given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
+
+        assertThat(underTest.pinGroupOpened(PIN_GROUP_ID,  accessTokenHeader)).containsExactly(pinGroupResponse);
+
+        then(pinGroupUpdateService).should().setLastOpened(PIN_GROUP_ID);
     }
 }

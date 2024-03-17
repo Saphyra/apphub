@@ -1,0 +1,50 @@
+{
+    "title": {
+        "en": "Roles for all - Apphub",
+        "hu": "Jogosultságok mindenkinek - Apphub"
+    },
+    "page-title": {
+        "en": "Roles for all",
+        "hu": "Jogosultságok mindenkinek"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "add-to-all": {
+        "en": "Add to all",
+        "hu": "Hozzáadás mindenkinek"
+    },
+    "remove-from-all": {
+        "en": "Revoke from all",
+        "hu": "Visszavonás mindenkitől"
+    },
+    "add-to-all-content": {
+        "en": "Are you sure you want to grant role {role} to all users?",
+        "hu": "Biztosan biztosítani szeretnéd {role} jogosultságot az összes felhasználónak?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "empty-password": {
+        "en": "Password must not be empty.",
+        "hu": "Jelszó nem lehet üres."
+    },
+    "role-added-to-all": {
+        "en": "Role successfully granted to all users.",
+        "hu": "Jogosultság sikeresen engedéyezve az összes felhasználónak."
+    },
+    "remove-from-all-content": {
+        "en": "Are you sure you want to revoke role {role} role from all users?",
+        "hu": "Biztosan vissza szeretnéd vonni {role} jogosultságot az összes felhasználótól?"
+    },
+    "role-revoked-from-all": {
+        "en": "Role successfully revoked from all users.",
+        "hu": "Jogosultság sikeresen visszavonva az összes felhasználótól."
+    }
+}

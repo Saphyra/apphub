@@ -1,0 +1,38 @@
+{
+    "ACCESS": {
+        "en": "Access",
+        "hu": "Hozzáférés"
+    },
+    "ADMIN": {
+        "en": "Admin",
+        "hu": "Admin"
+    },
+    "COMMUNITY": {
+        "en": "Community",
+        "hu": "Közösség"
+    },
+    "NOTEBOOK": {
+        "en": "Notebook",
+        "hu": "Jegyzetfüzet"
+    },
+    "SKYXPLORE": {
+        "en": "SkyXplore",
+        "hu": "SkyXplore"
+    },
+    "TRAINING": {
+        "en": "Training",
+        "hu": "Oktatás"
+    },
+    "TEST": {
+        "en": "Test",
+        "hu": "Teszt"
+    },
+    "UTILS": {
+        "en": "Utilities",
+        "hu": "Eszközök"
+    },
+    "CALENDAR": {
+        "en": "Calendar",
+        "hu": "Naptár"
+    }
+}

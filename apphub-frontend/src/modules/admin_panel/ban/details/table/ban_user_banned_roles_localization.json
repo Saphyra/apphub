@@ -1,0 +1,22 @@
+{
+    "role": {
+        "en": "Role",
+        "hu": "Jogosultság"
+    },
+    "expiration": {
+        "en": "Expiration",
+        "hu": "Lejárat"
+    },
+    "reason": {
+        "en": "Reason",
+        "hu": "Kitiltás oka"
+    },
+    "banned-by": {
+        "en": "Banned by",
+        "hu": "Kitiltotta"
+    },
+    "no-bans": {
+        "en": "User is not banned.",
+        "hu": "A felhasználó nincs kitiltva."
+    }
+}

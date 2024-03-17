@@ -31,9 +31,11 @@ public class RoleManagementActions {
             .post(UrlFactory.create(Endpoints.USER_DATA_GET_USER_ROLES));
     }
 
-    public static void addRole(UUID accessTokenId, RoleRequest roleRequest) {
+    public static UserRoleResponse addRole(UUID accessTokenId, RoleRequest roleRequest) {
         Response response = getAddRoleResponse(accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(UserRoleResponse.class);
     }
 
     public static Response getAddRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {
@@ -42,9 +44,10 @@ public class RoleManagementActions {
             .put(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE));
     }
 
-    public static void removeRole(UUID accessTokenId, RoleRequest roleRequest) {
+    public static UserRoleResponse removeRole(UUID accessTokenId, RoleRequest roleRequest) {
         Response response = getRemoveRoleResponse(accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
+        return response.getBody().as(UserRoleResponse.class);
     }
 
     public static Response getRemoveRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.account;
 
-import com.github.saphyra.apphub.integration.action.frontend.account.AccountPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.account.ChangeLanguageActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -14,7 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ChangeLanguageTest extends SeleniumTest {
-    @DataProvider(name = "languages")
+    @DataProvider(name = "languages", parallel = true)
     public Object[][] languages() {
         return new Object[][]{
             new Object[]{Language.ENGLISH},
@@ -31,10 +31,10 @@ public class ChangeLanguageTest extends SeleniumTest {
 
         ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        AccountPageActions.selectLanguage(driver, language);
+        ChangeLanguageActions.selectLanguage(driver, language);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> AccountPageActions.getActiveLanguage(driver) == language)
+            .until(() -> ChangeLanguageActions.getActiveLanguage(driver) == language)
             .assertTrue("Language is not changed.");
     }
 }

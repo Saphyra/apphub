@@ -14,6 +14,7 @@ public enum ModuleLocation {
     CALENDAR("office", "calendar", Endpoints.CALENDAR_PAGE, "Határidőnapló"),
     BAN("admin-panel", "ban", Endpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
+    ROLES_FOR_ALL("admin-panel", "roles-for-all", Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE, "Jogosultság mindenkinek"),
     ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
     MEMORY_MONITORING("admin-panel", "memory-monitoring", Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
     MIGRATION_TASKS("admin-panel", "migration-tasks", Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),

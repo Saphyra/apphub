@@ -27,7 +27,8 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     private final CheckPasswordService checkPasswordService;
 
     @Override
-    public void disableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
+    public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to disable role {}", accessTokenHeader.getUserId(), role);
         if (!properties.getRolesCanBeDisabled().contains(role)) {
             throw ExceptionFactory.invalidParam("role", "unknown or cannot be disabled");
         }
@@ -35,10 +36,13 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
         checkPasswordService.checkPassword(accessTokenHeader.getUserId(), password.getValue());
 
         repository.save(new DisabledRoleEntity(role));
+
+        return getDisabledRoles();
     }
 
     @Override
-    public void enableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
+    public List<DisabledRoleResponse> enableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to enable role {}", accessTokenHeader.getUserId(), role);
         if (isBlank(role)) {
             throw ExceptionFactory.invalidParam("role", "must not be null or blank");
         }
@@ -48,13 +52,15 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
         if (repository.existsById(role)) {
             repository.deleteById(role);
         }
+
+        return getDisabledRoles();
     }
 
     @Override
     public List<DisabledRoleResponse> getDisabledRoles() {
         List<String> disabledRoles = StreamSupport.stream(repository.findAll().spliterator(), false)
             .map(DisabledRoleEntity::getRole)
-            .collect(Collectors.toList());
+            .toList();
 
         return properties.getRolesCanBeDisabled()
             .stream()

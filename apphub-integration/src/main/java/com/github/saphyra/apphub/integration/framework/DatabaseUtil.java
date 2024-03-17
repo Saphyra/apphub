@@ -32,6 +32,7 @@ public class DatabaseUtil {
     private static final String UNLOCK_USER_BY_EMAIL = "UPDATE apphub_user.apphub_user SET locked_until = null WHERE email='%s'";
     private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed) VALUES ('%s', '%s', '%s');";
     private static final String DELETE_MIGRATION_TASK_BY_EVENT = "DELETE FROM admin_panel.migration_task WHERE event='%s'";
+    private static final String GET_ROLE_COUNT = "SELECT count(*) from apphub_user.apphub_role WHERE apphub_role='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
@@ -61,6 +62,15 @@ public class DatabaseUtil {
         return DriverManager.getConnection(String.format(DB_URL, TestConfiguration.DATABASE_PORT, TestConfiguration.DATABASE_NAME), "postgres", "postgres");
     }
 
+    @SneakyThrows
+    public static int getRoleCount(String role) {
+        String sql = GET_ROLE_COUNT.formatted(role);
+        return query(sql, rs -> {
+            rs.next();
+            return rs.getInt(1);
+        });
+    }
+
     public static void addRoleByEmail(String email, String... roles) {
         try {
             for (String role : roles) {
@@ -85,10 +95,10 @@ public class DatabaseUtil {
     }
 
     public static void deleteMigrationTaskByEvent(String event) {
-        try{
+        try {
             String sql = DELETE_MIGRATION_TASK_BY_EVENT.formatted(event);
             execute(sql);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Failed deleting MigrationTask by event " + event, e);
         }
     }

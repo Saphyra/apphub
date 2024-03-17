@@ -16,4 +16,16 @@
 
         <addPrimaryKey schemaName="notebook" tableName="pin_group" columnNames="pin_group_id" constraintName="pin_group-pk"/>
     </changeSet>
+
+    <changeSet id="add-column-last_opened-to-pin_group" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="notebook" tableName="pin_group" columnName="last_opened"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="notebook" tableName="pin_group">
+            <column name="last_opened" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

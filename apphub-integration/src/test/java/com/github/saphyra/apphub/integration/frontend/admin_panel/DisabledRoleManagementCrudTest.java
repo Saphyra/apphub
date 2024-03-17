@@ -9,8 +9,9 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.NotificationUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.DisabledRole;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -36,37 +37,34 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
         DisabledRole initialRole = initialCheck(driver);
+
         disableRole_incorrectPassword(driver, userData, initialRole);
-        DisabledRole disabledRole = getDisabledRole(driver, userData);
-        enableRole_incorrectPassword(driver, disabledRole);
+        disableRole(driver, userData);
+
+        enableRole_incorrectPassword(driver, userData);
         enableRole(driver, userData);
     }
 
     private static DisabledRole initialCheck(WebDriver driver) {
-        DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
-            .stream()
-            .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        DisabledRole initialRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(initialRole.isEnabled()).isTrue();
         return initialRole;
     }
 
     private static void disableRole_incorrectPassword(WebDriver driver, RegistrationParameters userData, DisabledRole initialRole) {
-        initialRole.toggle(driver);
+        initialRole.disable(driver);
 
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-                DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
-                assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+                DisabledRolesActions.fillPassword(driver, "asd");
+                DisabledRolesActions.confirmDisableRole(driver);
+                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
             });
 
-        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
+        DisabledRolesActions.fillPassword(driver, "asd");
+        DisabledRolesActions.confirmDisableRole(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> IndexPageActions.isLoginPageLoaded(driver))
@@ -80,78 +78,60 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .assertTrue("Disabled role management page is not opened.");
     }
 
-    private static DisabledRole getDisabledRole(WebDriver driver, RegistrationParameters userData) {
-        DisabledRole initialRole = DisabledRolesActions.getDisabledRoles(driver)
-            .stream()
-            .filter(disabledRole -> disabledRole.getRole().equals(Constants.TEST_ROLE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Test role not found"));
+    private static void disableRole(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole initialRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(initialRole.isEnabled()).isTrue();
-        initialRole.toggle(driver);
 
-        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
-        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Role disabled.");
+        initialRole.disable(driver);
 
-        DisabledRole disabledRole = DisabledRolesActions.getDisabledRoles(driver)
-            .stream()
-            .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        DisabledRolesActions.fillPassword(driver, userData.getPassword());
+        DisabledRolesActions.confirmDisableRole(driver);
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.DISABLED_ROLE_MANAGEMENT_ROLE_DISABLED);
+
+        DisabledRole disabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(disabledRole.isEnabled()).isFalse();
-
-        NotificationUtil.clearNotifications(driver);
-        return disabledRole;
     }
 
-    private static void enableRole_incorrectPassword(WebDriver driver, DisabledRole disabledRole) {
-        disabledRole.toggle(driver);
+    private static void enableRole_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
+        DisabledRole disabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
+
+        disabledRole.enable(driver);
 
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-                DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-                NotificationUtil.verifyErrorNotification(driver, "Incorrect password.");
-                assertThat(DisabledRolesActions.isToggleDisabledRoleConfirmationDialogOpened(driver)).isTrue();
+                DisabledRolesActions.fillPassword(driver, "asd");
+                DisabledRolesActions.confirmEnableRole(driver);
+                ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
             });
 
-        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, "asd");
-        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifyErrorNotification(driver, "Account locked. Try again later.");
+        DisabledRolesActions.fillPassword(driver, "asd");
+        DisabledRolesActions.confirmEnableRole(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> IndexPageActions.isLoginPageLoaded(driver))
             .assertTrue("User is not logged out.");
+
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
+            .assertTrue("Disabled role management page is not opened.");
     }
 
     private static void enableRole(WebDriver driver, RegistrationParameters userData) {
-        DisabledRole disabledRole;
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
-            .assertTrue("Disabled role management page is not opened.");
-
-        disabledRole = DisabledRolesActions.getDisabledRoles(driver)
-            .stream()
-            .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        DisabledRole disabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(disabledRole.isEnabled()).isFalse();
 
-        NotificationUtil.clearNotifications(driver);
-        disabledRole.toggle(driver);
+        disabledRole.enable(driver);
 
-        DisabledRolesActions.enterPasswordToDisabledRoleToggleConfirmationDialog(driver, userData.getPassword());
-        DisabledRolesActions.confirmDisabledRoleToggleConfirmationDialog(driver);
-        NotificationUtil.verifySuccessNotification(driver, "Role enabled.");
+        DisabledRolesActions.fillPassword(driver, userData.getPassword());
+        DisabledRolesActions.confirmEnableRole(driver);
 
-        DisabledRole enabledRole = DisabledRolesActions.getDisabledRoles(driver)
-            .stream()
-            .filter(role -> role.getRole().equals(Constants.TEST_ROLE_NAME))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Test role not found"));
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.DISABLED_ROLE_MANAGEMENT_ROLE_ENABLED);
+
+        DisabledRole enabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(enabledRole.isEnabled()).isTrue();
     }
 }

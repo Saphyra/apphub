@@ -16,7 +16,7 @@ const SelectInput = ({ id, className, value, options = [], onchangeCallback, dis
     }
 
     const onchange = (e) => {
-        onchangeCallback(e.target.value);
+        onchangeCallback(e.target.value, e);
     }
 
     return (

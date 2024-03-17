@@ -1,0 +1,30 @@
+{
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "mark-as-unread": {
+        "en": "Mark as unread",
+        "hu": "Olvasatlannak jelölés"
+    },
+    "mark-as-read": {
+        "en": "Mark as read",
+        "hu": "Olvasottnak jelölés"
+    },
+    "mark": {
+        "en": "Mark",
+        "hu": "Megjelölés"
+    },
+    "delete-confirmation-content": {
+        "en": "Are you sure you want to delete this error report?",
+        "hu": "Biztosan törölni szeretnéd ezt a hibajelentést?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "open": {
+        "en": "Open",
+        "hu": "Megnyitás"
+    }
+}

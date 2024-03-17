@@ -69,6 +69,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
     }
 
     const handleOnDrop = (e) => {
+        e.stopPropagation();
         const movedItemId = e.dataTransfer.getData("id");
         moveListItem(movedItemId, category.categoryId, setLastEvent);
     }

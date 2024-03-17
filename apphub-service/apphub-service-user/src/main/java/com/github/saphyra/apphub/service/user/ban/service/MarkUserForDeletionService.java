@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.user.ban.service;
 import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.user.model.response.BanResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -39,25 +37,6 @@ public class MarkUserForDeletionService {
     }
 
     private LocalDateTime convertTime(MarkUserForDeletionRequest request) {
-        ValidationUtil.notNull(request.getDate(), "date");
-        ValidationUtil.notNull(request.getTime(), "time");
-
-        LocalTime time;
-
-        try {
-            String[] split = request.getTime()
-                .split(":");
-
-            time = LocalTime.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), 0);
-        } catch (RuntimeException e) {
-            throw ExceptionFactory.invalidParam("time", "invalid value");
-        }
-
-        log.info("Incoming date: {}", request.getDate());
-        log.info("Incoming time: {}", request.getTime());
-        log.info("Parsed time: {}", time);
-        LocalDateTime result = LocalDateTime.of(request.getDate(), time);
-        log.info("Assembled date-time: {}", result);
-        return result;
+        return  ValidationUtil.parse(request.getMarkForDeletionAt(), o -> LocalDateTime.parse(o.toString() + ":00"), "markForDeletionAt");
     }
 }

@@ -57,7 +57,7 @@ public class AccountClientProxyTest {
 
     @Test
     public void getAccount() {
-        given(accountClient.getAccount(USER_ID, LOCALE)).willReturn(accountResponse);
+        given(accountClient.getAccountInternal(USER_ID, LOCALE)).willReturn(accountResponse);
 
         AccountResponse result = underTest.getAccount(USER_ID);
 

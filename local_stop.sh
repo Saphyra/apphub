@@ -5,7 +5,6 @@ do
   TRIMMED="$(sed -e 's/[[:space:]]*$//' <<<"${port}")"
 
   if [[ $port != "null" ]]; then
-    echo "Releasing port $TRIMMED"
     ./infra/deployment/script/release_port.sh "$TRIMMED"
   fi
 done < ./infra/deployment/service/service_list

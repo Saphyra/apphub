@@ -1,0 +1,58 @@
+{
+    "title": {
+        "en": "Disabled role management - Apphub",
+        "hu": "Jogosultságok letiltása és engedélyezése - Apphub"
+    },
+    "page-title": {
+        "en": "Disabled role management",
+        "hu": "Jogosultságok letiltása és engedélyezése"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "role": {
+        "en": "Role",
+        "hu": "Jogosultság"
+    },
+    "enabled": {
+        "en": "Enabled",
+        "hu": "Engedélyezve"
+    },
+    "enable-role": {
+        "en": "Enable role",
+        "hu": "Jogosultság engedélyezése"
+    },
+    "enable-role-content": {
+        "en": "Are you sure you want to enable role {role}?",
+        "hu": "Biztosan enegélyezni akarod {role} jogosultságot?"
+    },
+    "disable-role": {
+        "en": "Disable role",
+        "hu": "Jogosultság letiltása"
+    },
+    "disable-role-content": {
+        "en": "Are you sure you want to disable role {role}?",
+        "hu": "Biztosan le akarod tiltani {role} jogosultságot?"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "empty-password": {
+        "en": "Password must not be empty.",
+        "hu": "A jelszó nem lehet üres."
+    },
+    "role-enabled": {
+        "en": "Role enabled.",
+        "hu": "Jogosultság engedélyezve."
+    },
+    "role-disabled": {
+        "en": "Role disabled.",
+        "hu": "Jogosultság letiltva."
+    }
+}

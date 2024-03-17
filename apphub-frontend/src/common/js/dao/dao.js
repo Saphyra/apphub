@@ -169,6 +169,7 @@ const Endpoints = {
     //Platform
     CHECK_SESSION: new Endpoint(RequestMethod.GET, "/api/user/authentication/session"),
     GET_OWN_USER_ID: new Endpoint(RequestMethod.GET, "/user/id"),
+    USER_DATA_SEARCH_ACCOUNT: new Endpoint(RequestMethod.POST, "/api/user/accounts"),
 
     //User
     USER_DATA_GET_USERNAME: new Endpoint(RequestMethod.GET, "/api/user/data/name"),
@@ -177,6 +178,7 @@ const Endpoints = {
     ACCOUNT_CHANGE_USERNAME: new Endpoint(RequestMethod.POST, "/api/user/account/username"),
     ACCOUNT_CHANGE_PASSWORD: new Endpoint(RequestMethod.POST, "/api/user/account/password"),
     ACCOUNT_DELETE_ACCOUNT: new Endpoint(RequestMethod.DELETE, "/api/user/account"),
+    ACCOUNT_GET_USER: new Endpoint(RequestMethod.GET, "/api/user/account"),
 
     //Index
     ACCOUNT_REGISTER: new Endpoint(RequestMethod.POST, "/api/user"),
@@ -310,6 +312,7 @@ const Endpoints = {
     NOTEBOOK_RENAME_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}"),
     NOTEBOOK_ADD_ITEM_TO_PIN_GROUP: new Endpoint(RequestMethod.POST, "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}"),
     NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP: new Endpoint(RequestMethod.DELETE, "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}"),
+    NOTEBOOK_PIN_GROUP_OPENED: new Endpoint(RequestMethod.PUT, "/api/notebook/pin-group/{pinGroupId}"),
 
     //Storage
     STORAGE_UPLOAD_FILE: new Endpoint(RequestMethod.PUT, "/api/storage/{storedFileId}"),
@@ -325,6 +328,40 @@ const Endpoints = {
     ADMIN_PANEL_MIGRATION_GET_TASKS: new Endpoint(RequestMethod.GET, "/api/admin-panel/migration"),
     ADMIN_PANEL_MIGRATION_DELETE_TASK: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/migration/{event}"),
     ADMIN_PANEL_MIGRATION_TRIGGER_TASK: new Endpoint(RequestMethod.POST, "/api/admin-panel/migration/{event}"),
+
+    //Roles for all
+    USER_DATA_ROLES_FOR_ALL_RESTRICTED: new Endpoint(RequestMethod.GET, "/api/user/data/roles/restricted"),
+    ADMIN_PANEL_AVAILABLE_ROLES: new Endpoint(RequestMethod.GET, "/api/user/data/roles/restricted"),
+    USER_DATA_ADD_ROLE_TO_ALL: new Endpoint(RequestMethod.POST, "/api/user/data/roles/all/{role}"),
+    USER_DATA_REMOVE_ROLE_FROM_ALL: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/all/{role}"),
+
+    //Role Management
+    USER_DATA_GET_USER_ROLES: new Endpoint(RequestMethod.POST, "/api/user/data/roles"),
+    USER_DATA_ADD_ROLE: new Endpoint(RequestMethod.PUT, "/api/user/data/roles"),
+    USER_DATA_REMOVE_ROLE: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles"),
+
+    //Disabled role management
+    USER_DATA_GET_DISABLED_ROLES: new Endpoint(RequestMethod.GET, "/api/user/data/roles/disabled"),
+    USER_DATA_ENABLE_ROLE: new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/{role}"),
+    USER_DATA_DISABLE_ROLE: new Endpoint(RequestMethod.PUT, "/api/user/data/roles/{role}"),
+
+    //Error report
+    ADMIN_PANEL_GET_ERROR_REPORTS: new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report"),
+    ADMIN_PANEL_ERROR_REPORT_DELETE_ALL: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report/all"),
+    ADMIN_PANEL_ERROR_REPORT_DELETE_READ: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report/read"),
+    ADMIN_PANEL_DELETE_ERROR_REPORTS: new Endpoint(RequestMethod.DELETE, "/api/admin-panel/error-report"),
+    ADMIN_PANEL_MARK_ERROR_REPORTS: new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report/mark/{status}"),
+    ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE: new Endpoint(RequestMethod.GET, "/web/admin-panel/error-report/{id}"),
+    ADMIN_PANEL_GET_ERROR_REPORT: new Endpoint(RequestMethod.GET, "/api/admin-panel/error-report/{id}"),
+
+    //Ban
+    ACCOUNT_BAN_SEARCH: new Endpoint(RequestMethod.POST, "/api/user/ban/search"),
+    ADMIN_PANEL_BAN_DETAILS_PAGE: new Endpoint(RequestMethod.GET, "/web/admin-panel/ban/{userId}"),
+    ACCOUNT_GET_BANS: new Endpoint(RequestMethod.GET, "/api/user/ban/{userId}"),
+    ACCOUNT_MARK_FOR_DELETION: new Endpoint(RequestMethod.DELETE, "/api/user/ban/{userId}/mark-for-deletion"),
+    ACCOUNT_UNMARK_FOR_DELETION: new Endpoint(RequestMethod.POST, "/api/user/ban/{userId}/mark-for-deletion"),
+    ACCOUNT_BAN_USER: new Endpoint(RequestMethod.PUT, "/api/user/ban"),
+    ACCOUNT_REVOKE_BAN: new Endpoint(RequestMethod.DELETE, "/api/user/ban/{banId}"),
 }
 
 export default Endpoints;

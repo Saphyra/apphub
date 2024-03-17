@@ -1,0 +1,70 @@
+{
+    "role-to-ban": {
+        "en": "Role to ban",
+        "hu": "Kitiltandó jogosultság"
+    },
+    "select-role": {
+        "en": "Select role.",
+        "hu": "Válassz jogosultságot!"
+    },
+    "permanent": {
+        "en": "Permanent",
+        "hu": "Végleges"
+    },
+    "banned-until": {
+        "en": "Banned for",
+        "hu": "Kitiltva eddig"
+    },
+    "select": {
+        "en": "Select",
+        "hu": "Kiválaszt"
+    },
+    "minutes": {
+        "en": "Minutes",
+        "hu": "Perc"
+    },
+    "hours": {
+        "en": "Hours",
+        "hu": "Óra"
+    },
+    "days": {
+        "en": "Days",
+        "hu": "Nap"
+    },
+    "weeks": {
+        "en": "Weeks",
+        "hu": "Hét"
+    },
+    "months": {
+        "en": "Months",
+        "hu": "Hónap"
+    },
+    "reason": {
+        "en": "Reason",
+        "hu": "Kitiltás oka"
+    },
+    "password": {
+        "en": "Password",
+        "hu": "Jelszó"
+    },
+    "ban": {
+        "en": "Ban",
+        "hu": "Kitiltás"
+    },
+    "duration-too-short": {
+        "en": "Duration too short.",
+        "hu": "A kitiltás időtartama túl rövid."
+    },
+    "select-chrono-unit": {
+        "en": "Select time unit.",
+        "hu": "Válassz mértékegységet."
+    },
+    "reason-empty": {
+        "en": "Please provide why the user is banned.",
+        "hu": "Írd le, miért lett kitiltva a felhasználó."
+    },
+    "password-empty": {
+        "en": "Password must not be empty.",
+        "hu": "A jelszó nem lehet üres."
+    }
+}
