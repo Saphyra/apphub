@@ -28,10 +28,14 @@ public class SkyXploreSurfaceActions {
     }
 
     public static void cancelTerraformation(UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
+        Response response = getCancelTerraformationResponse(accessTokenId, planetId, surfaceId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCancelTerraformationResponse(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
     }
 
     public static UUID findEmptySurfaceId(UUID accessTokenId, UUID planetId, String surfaceType) {

@@ -14,12 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendshipActions {
     public static List<FriendshipResponse> getFriendships(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_FRIENDS));
+        Response response = getFriendshipsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendshipResponse[].class));
+    }
+
+    public static Response getFriendshipsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_FRIENDS));
     }
 
     public static void deleteFriendship(UUID accessTokenId, UUID friendshipId) {

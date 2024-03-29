@@ -16,11 +16,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarActions {
     public static List<CalendarResponse> getCalendar(UUID accessTokenId, LocalDate date) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.CALENDAR_GET_CALENDAR, Collections.emptyMap(), CollectionUtils.singleValueMap("date", date)));
+        Response response = getCalendarResponse(accessTokenId, date);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
+    }
+
+    public static Response getCalendarResponse(UUID accessTokenId, LocalDate date) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.CALENDAR_GET_CALENDAR, Collections.emptyMap(), CollectionUtils.singleValueMap("date", date)));
     }
 }

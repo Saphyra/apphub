@@ -27,12 +27,16 @@ public class BanActions {
     }
 
     public static BanResponse getBans(UUID accessTokenId, UUID testUserId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.ACCOUNT_GET_BANS, "userId", testUserId));
+        Response response = getGetBansResponse(accessTokenId, testUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BanResponse.class);
+    }
+
+    public static Response getGetBansResponse(UUID accessTokenId, UUID testUserId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.ACCOUNT_GET_BANS, "userId", testUserId));
     }
 
     public static Response getRevokeBanResponse(UUID accessTokenId, UUID banId, String password) {
@@ -62,11 +66,21 @@ public class BanActions {
     }
 
     public static BanResponse unmarkUserForDeletion(UUID accessTokenId, UUID deletedUserId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.ACCOUNT_UNMARK_FOR_DELETION, "userId", deletedUserId));
+        Response response = getUnmarkUserForDeletionResponse(accessTokenId, deletedUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BanResponse.class);
+    }
+
+    public static Response getUnmarkUserForDeletionResponse(UUID accessTokenId, UUID deletedUserId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(Endpoints.ACCOUNT_UNMARK_FOR_DELETION, "userId", deletedUserId));
+    }
+
+    public static Response getSearchResponse(UUID accessTokenId, String query) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(query))
+            .post(UrlFactory.create(Endpoints.ACCOUNT_BAN_SEARCH));
     }
 }

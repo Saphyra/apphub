@@ -27,12 +27,16 @@ public class SkyXploreSolarSystemActions {
     }
 
     public static SolarSystemResponse getSolarSystem(UUID accessTokenId, UUID solarSystemId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_SOLAR_SYSTEM, "solarSystemId", solarSystemId));
+        Response response = getSolarSystemResponse(accessTokenId, solarSystemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(SolarSystemResponse.class);
+    }
+
+    public static Response getSolarSystemResponse(UUID accessTokenId, UUID solarSystemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_SOLAR_SYSTEM, "solarSystemId", solarSystemId));
     }
 
     public static Response getRenameSolarSystemResponse(UUID accessTokenId, UUID solarSystemId, String solarSystemName) {

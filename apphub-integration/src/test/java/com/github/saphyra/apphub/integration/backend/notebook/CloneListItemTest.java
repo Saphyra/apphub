@@ -19,7 +19,7 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCa
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -100,7 +100,7 @@ public class CloneListItemTest extends BackEndTest {
 
         LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(childCategoryId).url(LINK_URL).build());
         TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).parent(parentId).build());
-        OnlyTitleActions.createOnlyTitle(accessTokenId, CreateOnlyTitleyRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
+        OnlyTitleActions.createOnlyTitle(accessTokenId, CreateOnlyTitleRequest.builder().title(ONLY_TITLE_TITLE).parent(parentId).build());
         ChecklistActions.createChecklist(
             accessTokenId,
             CreateChecklistRequest.builder()

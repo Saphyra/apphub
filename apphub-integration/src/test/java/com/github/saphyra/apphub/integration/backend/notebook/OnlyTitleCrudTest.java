@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.OnlyTitleAc
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleyRequest;
+import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
@@ -38,7 +38,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
     }
 
     private static void create_emptyTitle(UUID accessTokenId) {
-        CreateOnlyTitleyRequest create_emptyTitleRequest = CreateOnlyTitleyRequest.builder()
+        CreateOnlyTitleRequest create_emptyTitleRequest = CreateOnlyTitleRequest.builder()
             .title(" ")
             .build();
         Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(accessTokenId, create_emptyTitleRequest);
@@ -46,7 +46,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
     }
 
     private static void create_parentNotFound(UUID accessTokenId) {
-        CreateOnlyTitleyRequest create_parentNotFoundRequest = CreateOnlyTitleyRequest.builder()
+        CreateOnlyTitleRequest create_parentNotFoundRequest = CreateOnlyTitleRequest.builder()
             .title(TITLE)
             .parent(UUID.randomUUID())
             .build();
@@ -55,7 +55,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
     }
 
     private static UUID create(UUID accessTokenId) {
-        CreateOnlyTitleyRequest createRequest = CreateOnlyTitleyRequest.builder()
+        CreateOnlyTitleRequest createRequest = CreateOnlyTitleRequest.builder()
             .title(TITLE)
             .build();
         UUID listItemId = OnlyTitleActions.createOnlyTitle(accessTokenId, createRequest);
@@ -71,7 +71,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
 
     private static void create_parentNotCategory(UUID accessTokenId) {
         UUID noCategoryParentId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
-        CreateOnlyTitleyRequest create_parentNotCategoryRequest = CreateOnlyTitleyRequest.builder()
+        CreateOnlyTitleRequest create_parentNotCategoryRequest = CreateOnlyTitleRequest.builder()
             .title(TITLE)
             .parent(noCategoryParentId)
             .build();

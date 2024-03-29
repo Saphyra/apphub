@@ -60,12 +60,15 @@ public class Endpoints {
     public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
     public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
     public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_BAN_SEARCH = "/api/user/ban/search";
 
     public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
     public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
     public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
     public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
 
     //MIGRATION
     public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
@@ -102,6 +105,8 @@ public class Endpoints {
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";
     public static final String NOTEBOOK_ARCHIVE_LIST_ITEM = "/api/notebook/item/{listItemId}/archive";
+    public static final String NOTEBOOK_GET_LIST_ITEM = "/api/notebook/list-item/{listItemId}";
+    public static final String NOTEBOOK_MOVE_LIST_ITEM = "/api/notebook/{listItemId}/move";
     public static final String NOTEBOOK_CREATE_ONLY_TITLE = "/api/notebook/only-title";
     public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
     public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/row/{rowId}/status";
@@ -112,6 +117,10 @@ public class Endpoints {
     public static final String NOTEBOOK_RENAME_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}";
     public static final String NOTEBOOK_ADD_ITEM_TO_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/add/{listItemId}";
     public static final String NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}";
+    public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
+    public static final String NOTEBOOK_PIN_GROUP_OPENED = "/api/notebook/pin-group/{pinGroupId}";
+    public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
+    public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
 
     //UTILS
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
@@ -119,6 +128,8 @@ public class Endpoints {
 
     //SKYXPLORE-DATA
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";
+    public static final String SKYXPLORE_GET_CHARACTER_NAME = "/api/skyxplore/data/character/name";
+    public static final String SKYXPLORE_CHARACTER_EXISTS = "/api/skyxplore/data/character/exists";
     public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/data/saved-game";
     public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/data/saved-game/{gameId}";
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/data/friend/candidate";
@@ -141,6 +152,7 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_GET_GAME_SETTINGS = "/api/skyxplore/lobby/settings";
     public static final String SKYXPLORE_START_GAME = "/api/skyxplore/lobby/start";
     public static final String SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = "/api/skyxplore/lobby/friends/active";
+    public static final String SKYXPLORE_LOBBY_GET_ALLIANCES = "/api/skyxplore/lobby/alliances";
     public static final String SKYXPLORE_LOBBY_LOAD_GAME = "/api/skyxplore/lobby/load-game/{gameId}";
     public static final String SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI = "/api/skyxplore/lobby/ai";
     public static final String SKYXPLORE_LOBBY_GET_AIS = "/api/skyxplore/lobby/ai";
@@ -148,8 +160,10 @@ public class Endpoints {
     public static final String SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER = "/api/skyxplore/lobby/alliance/player/{userId}";
     public static final String SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI = "/api/skyxplore/lobby/alliance/ai/{userId}";
     public static final String SKYXPLORE_LOBBY_EDIT_SETTINGS = "/api/skyxplore/lobby/settings";
+    public static final String SKYXPLORE_LOBBY_VIEW_FOR_PAGE = "/api/skyxplore/lobby/page";
 
     //SKYXPLORE-GAME
+    public static final String SKYXPLORE_IS_USER_IN_GAME = "/api/skyxplore/game";
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";

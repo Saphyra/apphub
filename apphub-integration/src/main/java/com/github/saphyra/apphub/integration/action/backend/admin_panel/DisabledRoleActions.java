@@ -16,13 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleActions {
     public static List<DisabledRoleResponse> getDisabledRoles(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.USER_DATA_GET_DISABLED_ROLES));
+        Response response = getGetDisabledRoles(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.stream(response.getBody().as(DisabledRoleResponse[].class))
             .collect(Collectors.toList());
+    }
+
+    public static Response getGetDisabledRoles(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.USER_DATA_GET_DISABLED_ROLES));
     }
 
     public static Response getDisableRoleResponse(UUID accessTokenId, String password, String role) {

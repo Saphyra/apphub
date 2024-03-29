@@ -72,7 +72,7 @@ public class Endpoints {
     public static final String ADMIN_PANEL_ERROR_REPORT_DELETE_ALL = "/api/admin-panel/error-report/all";
 
     //MONITORING
-    public static final String ADMIN_PANEL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
+    public static final String ADMIN_PANEL_INTERNAL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
 
     //MIGRATION
     public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
@@ -175,18 +175,22 @@ public class Endpoints {
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
-    //SKYXPLORE-PLATFORM
-    public static final String SKYXPLORE_CHARACTER_EXISTS = "/api/skyxplore/data/character/exists";
-
     //SKYXPLORE-DATA
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/data/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
     public static final String SKYXPLORE_INTERNAL_DELETE_GAME_ITEM = "/internal/skyxplore/data/game-item";
     public static final String SKYXPLORE_INTERNAL_GET_GAME_MODEL = "/internal/skyxplore/game/{gameId}";
 
+    //SKYXPLORE-DATA CHARACTER
+    public static final String SKYXPLORE_CHARACTER_EXISTS = "/api/skyxplore/data/character/exists";
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";
+    public static final String SKYXPLORE_GET_CHARACTER_NAME = "/api/skyxplore/data/character/name";
+
+    //SKYXPLORE-DATA GAMES
     public static final String SKYXPLORE_GET_GAMES = "/api/skyxplore/data/saved-game";
     public static final String SKYXPLORE_DELETE_GAME = "/api/skyxplore/data/saved-game/{gameId}";
+
+    //SKYXPLORE-DATA-FRIENDS
     public static final String SKYXPLORE_SEARCH_FOR_FRIENDS = "/api/skyxplore/data/friend/candidate";
     public static final String SKYXPLORE_ADD_FRIEND = "/api/skyxplore/data/friend/request";
     public static final String SKYXPLORE_GET_SENT_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/sent";
@@ -195,7 +199,8 @@ public class Endpoints {
     public static final String SKYXPLORE_ACCEPT_FRIEND_REQUEST = "/api/skyxplore/data/friend/request/{friendRequestId}";
     public static final String SKYXPLORE_GET_FRIENDS = "/api/skyxplore/data/friend";
     public static final String SKYXPLORE_REMOVE_FRIEND = "/api/skyxplore/data/friend/{friendshipId}";
-    public static final String SKYXPLORE_GET_CHARACTER_NAME = "/api/skyxplore/data/character/name";
+
+    //SKYXPLORE-DATA RESOURCES
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
     public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
     public static final String SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS = "/api/skyxplore/data/citizen/stats-and-skills";

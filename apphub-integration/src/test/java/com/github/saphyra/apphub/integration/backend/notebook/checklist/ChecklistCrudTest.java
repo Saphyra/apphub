@@ -384,7 +384,7 @@ public class ChecklistCrudTest extends BackEndTest {
     }
 
     private ChecklistResponse order(UUID accessTokenId, UUID listItemId) {
-        Response orderResponse = ChecklistActions.orderChecklistItems(accessTokenId, listItemId);
+        Response orderResponse = ChecklistActions.getOrderItemsResponse(accessTokenId, listItemId);
         assertThat(orderResponse.getStatusCode()).isEqualTo(200);
         ChecklistResponse checklistResponse = ChecklistActions.getChecklist(accessTokenId, listItemId);
         assertThat(checklistResponse.getItems()).hasSize(2);

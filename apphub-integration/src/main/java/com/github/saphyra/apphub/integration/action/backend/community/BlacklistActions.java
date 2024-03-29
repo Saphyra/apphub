@@ -16,13 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistActions {
     public static List<SearchResultItem> search(UUID accessTokenId, String query) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(Endpoints.COMMUNITY_BLACKLIST_SEARCH));
+        Response response = getSearchResponse(accessTokenId, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
+    }
+
+    public static Response getSearchResponse(UUID accessTokenId, String query) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(query))
+            .post(UrlFactory.create(Endpoints.COMMUNITY_BLACKLIST_SEARCH));
     }
 
     public static BlacklistResponse createBlacklist(UUID accessTokenId, UUID blockedUserId) {
@@ -40,12 +44,16 @@ public class BlacklistActions {
     }
 
     public static List<BlacklistResponse> getBlacklists(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_BLACKLIST));
+        Response response = getBlacklistsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BlacklistResponse[].class));
+    }
+
+    public static Response getBlacklistsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_BLACKLIST));
     }
 
     public static void deleteBlacklist(UUID accessTokenId, UUID blacklistId) {

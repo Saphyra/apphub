@@ -37,10 +37,14 @@ public class SkyXploreBuildingActions {
     }
 
     public static void cancelConstruction(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+        Response response = getCancelConstructionResponse(accessTokenId, planetId, buildingId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCancelConstructionResponse(UUID accessTokenId, UUID planetId, UUID buildingId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 
     public static void deconstructBuilding(UUID accessTokenId, UUID planetId, UUID buildingId) {
@@ -55,9 +59,13 @@ public class SkyXploreBuildingActions {
     }
 
     public static void cancelDeconstruction(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+        Response response = getCancelDeconstructionResponse(accessTokenId, planetId, buildingId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCancelDeconstructionResponse(UUID accessTokenId, UUID planetId, UUID buildingId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 }

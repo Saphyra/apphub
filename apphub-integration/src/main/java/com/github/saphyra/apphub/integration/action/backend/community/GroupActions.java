@@ -89,21 +89,29 @@ public class GroupActions {
     }
 
     public static List<GroupMemberResponse> getMembers(UUID accessTokenId, UUID groupId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GROUP_GET_MEMBERS, "groupId", groupId));
+        Response response = getMembersResponse(accessTokenId, groupId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(GroupMemberResponse[].class));
     }
 
+    public static Response getMembersResponse(UUID accessTokenId, UUID groupId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GROUP_GET_MEMBERS, "groupId", groupId));
+    }
+
     public static List<GroupListResponse> getGroups(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_GROUPS));
+        Response response = getGroupsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(GroupListResponse[].class));
+    }
+
+    public static Response getGroupsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_GROUPS));
     }
 
     public static void deleteGroup(UUID accessTokenId, UUID groupId) {
@@ -118,13 +126,17 @@ public class GroupActions {
     }
 
     public static List<SearchResultItem> search(UUID accessTokenId, UUID groupId, String query) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(Endpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES, "groupId", groupId));
+        Response response = getSearchResponse(accessTokenId, groupId, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
+    }
+
+    public static Response getSearchResponse(UUID accessTokenId, UUID groupId, String query) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(query))
+            .post(UrlFactory.create(Endpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES, "groupId", groupId));
     }
 
     public static GroupMemberResponse modifyRoles(UUID accessTokenId, UUID groupId, UUID groupMemberId, GroupMemberRoleRequest request) {

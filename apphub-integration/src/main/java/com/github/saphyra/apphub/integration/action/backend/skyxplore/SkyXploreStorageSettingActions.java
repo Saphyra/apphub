@@ -28,19 +28,27 @@ public class SkyXploreStorageSettingActions {
     }
 
     public static List<StorageSettingModel> getStorageSettings(UUID accessTokenId, UUID planetId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS, "planetId", planetId));
+        Response response = getStorageSettingsResponse(accessTokenId, planetId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
+    public static Response getStorageSettingsResponse(UUID accessTokenId, UUID planetId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS, "planetId", planetId));
+    }
+
     public static void deleteStorageSetting(UUID accessTokenId, UUID storageSettingId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, "storageSettingId", storageSettingId));
+        Response response = getDeleteStorageSettingResponse(accessTokenId, storageSettingId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getDeleteStorageSettingResponse(UUID accessTokenId, UUID storageSettingId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, "storageSettingId", storageSettingId));
     }
 
     public static List<StorageSettingModel> editStorageSetting(UUID accessTokenId, StorageSettingModel model) {

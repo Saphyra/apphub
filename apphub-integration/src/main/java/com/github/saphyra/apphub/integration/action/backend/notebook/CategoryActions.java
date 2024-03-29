@@ -34,12 +34,16 @@ public class CategoryActions {
 
     public static List<CategoryTreeView> getCategoryTree(UUID accessTokenId) {
         return Arrays.stream(
-                RequestFactory.createAuthorizedRequest(accessTokenId)
-                    .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE))
+                getCategoryTreeResponse(accessTokenId)
                     .getBody()
                     .as(CategoryTreeView[].class)
             )
             .collect(Collectors.toList());
+    }
+
+    public static Response getCategoryTreeResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE));
     }
 
     public static ChildrenOfCategoryResponse getChildrenOfCategory(UUID accessTokenId, UUID categoryId) {

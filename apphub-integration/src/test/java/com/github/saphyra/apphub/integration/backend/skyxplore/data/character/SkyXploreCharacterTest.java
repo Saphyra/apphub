@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.skyxplore.character;
+package com.github.saphyra.apphub.integration.backend.skyxplore.data.character;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;

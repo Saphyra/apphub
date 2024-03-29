@@ -196,10 +196,11 @@ role:
     - DELETE
     requiredRoles:
     - ADMIN
-  - pattern: /api/user/data/roles/*
+  - pattern: /api/user/data/roles/**
     methods:
     - PUT
     - DELETE
+    - POST
     requiredRoles:
     - ADMIN
   - pattern: /api/user/data/roles/disabled
@@ -215,10 +216,13 @@ role:
     - ADMIN
   - pattern: /api/user/ban
     methods:
+    - POST
+    - GET
     - PUT
+    - DELETE
     requiredRoles:
     - ADMIN
-  - pattern: /api/user/ban/*
+  - pattern: /api/user/ban/**
     methods:
     - POST
     - GET

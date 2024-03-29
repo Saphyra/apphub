@@ -79,4 +79,9 @@ public class TableActions {
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS, "columnId", columnId));
     }
+
+    public static Response getDeleteCheckedResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED, "listItemId", listItemId));
+    }
 }

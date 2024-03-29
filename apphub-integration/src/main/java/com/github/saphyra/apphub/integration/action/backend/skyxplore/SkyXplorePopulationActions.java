@@ -16,13 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePopulationActions {
     public static List<CitizenResponse> getPopulation(UUID accessTokenId, UUID planetId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_POPULATION, "planetId", planetId));
+        Response response = getPopulationResponse(accessTokenId, planetId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.stream(response.getBody().as(CitizenResponse[].class))
             .collect(Collectors.toList());
+    }
+
+    public static Response getPopulationResponse(UUID accessTokenId, UUID planetId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_POPULATION, "planetId", planetId));
     }
 
     public static void renameCitizen(UUID accessTokenId, UUID citizenId, String newName) {

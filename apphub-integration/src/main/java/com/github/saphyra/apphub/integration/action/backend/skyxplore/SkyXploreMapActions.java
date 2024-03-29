@@ -13,12 +13,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreMapActions {
     public static MapResponse getMap(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_MAP));
+        Response response = getMapResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(MapResponse.class);
+    }
+
+    public static Response getMapResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_MAP));
     }
 
     public static MapSolarSystemResponse getSolarSystem(UUID accessTokenId) {
