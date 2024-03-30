@@ -180,6 +180,11 @@ role:
     - GET
     requiredRoles:
     - NOTEBOOK
+  - pattern: /web/notebook/**
+    methods:
+    - GET
+    requiredRoles:
+    - NOTEBOOK
   - pattern: /api/notebook/**
     methods:
     - GET

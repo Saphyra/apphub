@@ -8,3 +8,4 @@
 
 ===ETC===
 API tests for RoleProtection
+UI tests for RoleProtection
