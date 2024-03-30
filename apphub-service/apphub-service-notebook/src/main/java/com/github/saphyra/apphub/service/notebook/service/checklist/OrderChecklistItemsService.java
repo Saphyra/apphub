@@ -26,7 +26,7 @@ public class OrderChecklistItemsService {
         List<Dimension> ordered = dimensionDao.getByExternalReference(listItemId)
             .stream()
             .map(dimension -> new BiWrapper<>(dimension, contentDao.findByParentValidated(dimension.getDimensionId()).getContent()))
-            .sorted(Comparator.comparing(BiWrapper::getEntity2))
+            .sorted(Comparator.comparing(o -> o.getEntity2().toLowerCase()))
             .map(BiWrapper::getEntity1)
             .toList();
 

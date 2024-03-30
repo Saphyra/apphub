@@ -12,8 +12,8 @@
         "hu": "Nincs fájl kiválasztva."
     },
     "file-too-large": {
-        "en": "File too large. (Max. 2GB)",
-        "hu": "Fájl túl nagy. (Max. 2GB)"
+        "en": "File too large. (Max. 100MB)",
+        "hu": "Fájl túl nagy. (Max. 100MB)"
     },
     "url-blank": {
         "en": "URL must not be blank.",

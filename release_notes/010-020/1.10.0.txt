@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+Notebook
+    Order checklist item case insensitive
 
 ===PLATFORM CHANGES===
 
@@ -9,3 +11,4 @@
 ===ETC===
 API tests for RoleProtection
 UI tests for RoleProtection
+Decrease max stored file size to 100MB
