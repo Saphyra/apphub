@@ -18,7 +18,8 @@ public class TestUtils {
     @RequiredArgsConstructor
     private enum TestType {
         BE(BackEndTest.class, "[BE]"),
-        FE(SeleniumTest.class, "[FE]");
+        FE(SeleniumTest.class, "[FE]"),
+        HEADED_FE(HeadedSeleniumTest.class, "[FE]");
 
         private final Class<? extends TestBase> clazz;
         private final String label;
