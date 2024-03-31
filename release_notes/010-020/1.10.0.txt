@@ -3,6 +3,7 @@
 ===BUGFIXES===
 Notebook
     Order checklist item case insensitive
+    Adding column to a newly created custom table creates Text columns instead of empty ones
 
 ===PLATFORM CHANGES===
 

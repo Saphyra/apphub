@@ -13,7 +13,7 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
     return (
         <table id="notebook-new-table-content" className="formatted-table">
             <thead>
-                {getTableHeads(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows)}
+                {getTableHeads(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom)}
             </thead>
 
             <tbody>
@@ -39,7 +39,7 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
     )
 }
 
-const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows) => {
+const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom) => {
     const updateTableHeads = () => {
         Utils.copyAndSet(tableHeads, setTableHeads);
     }
@@ -54,13 +54,13 @@ const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads
                 <AddColumnButton
                     id="notebook-new-table-add-column-to-start"
                     label="|<+"
-                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN)}
+                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MIN, custom)}
                 />
 
                 <AddColumnButton
                     id="notebook-new-table-add-column-to-end"
                     label="+>|"
-                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX)}
+                    callback={() => newColumn(tableHeads, setTableHeads, rows, setRows, TableHeadIndexRange.MAX, custom)}
                 />
             </th>
             {checklist && <th>{localizationHandler.get("checked")}</th>}
