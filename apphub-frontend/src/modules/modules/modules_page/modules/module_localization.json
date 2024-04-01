@@ -74,5 +74,9 @@
     "migration-tasks": {
         "en": "Migration Tasks",
         "hu": "Migrációs feladatok"
+    },
+    "sql-generator": {
+        "en": "SQL generator",
+        "hu": "SQL generátor"
     }
 }

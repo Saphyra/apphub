@@ -170,7 +170,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -198,7 +198,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -272,7 +272,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -314,7 +314,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -349,7 +349,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)

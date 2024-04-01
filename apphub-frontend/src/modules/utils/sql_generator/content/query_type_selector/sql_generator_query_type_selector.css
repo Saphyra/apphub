@@ -1,0 +1,8 @@
+#sql-generator-query-type-selector {
+    text-align: center;
+    border-bottom: 1px solid white;
+}
+
+#sql-generator-query-type-selector .selected {
+    border-color: lime;
+}

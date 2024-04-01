@@ -1,0 +1,12 @@
+#sql-generator-history {
+    border-right: 3px ridge white;
+    min-width: 150px;
+    overflow: auto;
+}
+
+#sql-generator-history-title {
+    border-bottom: 1px solid white;
+    text-align: center;
+    padding: 3px;
+    font-size: 28px;
+}

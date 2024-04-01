@@ -16,6 +16,6 @@ import java.util.UUID;
 public class EncryptionKey {
     private UUID externalId;
     private DataType dataType;
-    private UUID userId;
+    private UUID userId; //Owner of the record. Always the one who created the originally shared data, regardless the depth of the hierarchy.
     private String encryptionKey;
 }

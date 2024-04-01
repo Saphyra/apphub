@@ -30,4 +30,9 @@ public class EncryptionKeyDao extends AbstractDao<EncryptionKeyEntity, Encryptio
     public List<EncryptionKey> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    //TODO unit test
+    public void delete(UUID externalId, DataType dataType) {
+        repository.deleteById(new EncryptionKeyPk(uuidConverter.convertDomain(externalId), dataType.name()));
+    }
 }

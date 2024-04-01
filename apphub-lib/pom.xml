@@ -73,5 +73,6 @@
         <module>apphub-lib-concurrency</module>
         <module>apphub-lib-monitoring</module>
         <module>apphub-lib-web_socket</module>
+        <module>apphub-lib-encryption_dao</module>
     </modules>
 </project>

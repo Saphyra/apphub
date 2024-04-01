@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.cache.Cache;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +23,11 @@ public abstract class AbstractCache<K, T> {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public T getValidated(K key) {
+        return get(key)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Item not found in cache."));
     }
 
     public void invalidate(K key) {

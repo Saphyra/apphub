@@ -35,6 +35,7 @@ import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview
 import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
 import BanPage from './modules/admin_panel/ban//index/BanPage';
 import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
+import SqlGeneratorPage from './modules/utils/sql_generator/SqlGeneratorPage';
 
 const router = createBrowserRouter([
   {
@@ -222,6 +223,10 @@ const router = createBrowserRouter([
         userId: params.userId
       }
     }
+  },
+  {
+    path: "/web/utils/sql-generator",
+    element: <SqlGeneratorPage />
   }
 ]);
 

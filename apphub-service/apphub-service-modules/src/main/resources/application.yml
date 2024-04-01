@@ -66,6 +66,9 @@ modules:
       - name: base64
         url: /web/utils/base64
         mobileAllowed: true
+      - name: sql-generator
+        url: /web/utils/sql-generator
+        mobileAllowed: true
     game:
       - name: skyxplore
         url: /web/skyxplore

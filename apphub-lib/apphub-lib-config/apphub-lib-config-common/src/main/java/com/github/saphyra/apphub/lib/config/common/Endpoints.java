@@ -306,9 +306,8 @@ public class Endpoints {
     public static final String CALENDAR_SEARCH = "/api/calendar/search";
 
     //Encryption
-    public static final String ENCRYPTION_INTERNAL_CREATE_KEY = "/internal/encryption/key/{accessMode}";
-    public static final String ENCRYPTION_INTERNAL_DELETE_KEY = "/internal/encryption/key/{dataType}/{externalId}/{accessMode}";
-    public static final String ENCRYPTION_INTERNAL_GET_KEY = "/internal/encryption/key/{dataType}/{externalId}/{accessMode}";
+    public static final String ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY = "/internal/encryption/key";
+    public static final String ENCRYPTION_INTERNAL_DELETE_KEY = "/internal/encryption/key/{dataType}/{externalId}";
     public static final String ENCRYPTION_INTERNAL_GET_SHARED_DATA = "/internal/encryption/shared-data/{dataType}/{externalId}";
     public static final String ENCRYPTION_INTERNAL_CREATE_SHARED_DATA = "/internal/encryption/shared-data";
     public static final String ENCRYPTION_INTERNAL_CLONE_SHARED_DATA = "/internal/encryption/shared-data/{dataType}/{externalId}";

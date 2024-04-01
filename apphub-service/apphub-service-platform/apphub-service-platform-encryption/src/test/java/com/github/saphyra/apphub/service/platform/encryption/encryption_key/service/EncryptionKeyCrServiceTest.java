@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.encryption.encryption_key.service;
 
-import com.github.saphyra.apphub.api.platform.encryption.model.AccessMode;
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -20,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class EncryptionKeyCreationServiceTest {
+public class EncryptionKeyCrServiceTest {
     private static final String ENCRYPTION_KEY = "encryption-key";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_ID = UUID.randomUUID();
@@ -29,19 +28,19 @@ public class EncryptionKeyCreationServiceTest {
     private EncryptionKeyRequestValidator encryptionKeyRequestValidator;
 
     @Mock
-    private EncryptionKeyQueryService encryptionKeyQueryService;
-
-    @Mock
     private IdGenerator idGenerator;
 
     @Mock
     private EncryptionKeyDao encryptionKeyDao;
 
     @InjectMocks
-    private EncryptionKeyCreationService underTest;
+    private EncryptionKeyCrService underTest;
 
     @Mock
     private EncryptionKey request;
+
+    @Mock
+    private EncryptionKey encryptionKey;
 
     @AfterEach
     public void validate() {
@@ -52,23 +51,23 @@ public class EncryptionKeyCreationServiceTest {
     public void encryptionKeyAlreadyExists() {
         given(request.getExternalId()).willReturn(EXTERNAL_ID);
         given(request.getDataType()).willReturn(DataType.TEST);
-        given(encryptionKeyQueryService.getEncryptionKey(USER_ID, DataType.TEST, EXTERNAL_ID, AccessMode.EDIT)).willReturn(Optional.of(ENCRYPTION_KEY));
+        given(encryptionKeyDao.findById(EXTERNAL_ID, DataType.TEST)).willReturn(Optional.of(encryptionKey));
 
-        String result = underTest.createEncryptionKey(USER_ID, request, AccessMode.EDIT);
+        EncryptionKey result = underTest.createEncryptionKey(request);
 
-        assertThat(result).isEqualTo(ENCRYPTION_KEY);
+        assertThat(result).isEqualTo(encryptionKey);
     }
 
     @Test
     public void createEncryptionKey() {
         given(request.getExternalId()).willReturn(EXTERNAL_ID);
         given(request.getDataType()).willReturn(DataType.TEST);
-        given(encryptionKeyQueryService.getEncryptionKey(USER_ID, DataType.TEST, EXTERNAL_ID, AccessMode.EDIT)).willReturn(Optional.empty());
+        given(encryptionKeyDao.findById(EXTERNAL_ID, DataType.TEST)).willReturn(Optional.empty());
         given(idGenerator.generateRandomId()).willReturn(ENCRYPTION_KEY);
 
-        String result = underTest.createEncryptionKey(USER_ID, request, AccessMode.EDIT);
+        EncryptionKey result = underTest.createEncryptionKey(request);
 
-        assertThat(result).isEqualTo(ENCRYPTION_KEY);
+        assertThat(result).isEqualTo(request);
 
         verify(request).setEncryptionKey(ENCRYPTION_KEY);
         verify(encryptionKeyDao).save(request);

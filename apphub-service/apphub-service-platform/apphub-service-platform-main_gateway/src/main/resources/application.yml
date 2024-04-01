@@ -33,7 +33,8 @@ spring:
             /web/admin-panel/error-report/*,\
             /web/admin-panel/ban,\
             /web/admin-panel/ban/*,\
-            /web/user/account"
+            /web/user/account,\
+            /web/utils/sql-generator"
         filters:
         - StripPrefix=10
       - id: frontend-resources
@@ -56,7 +57,22 @@ spring:
       - id: common-pages
         uri: http://web-content:8080
         predicates:
-        - Path=/web/admin-panel/**, /web/utils/**, /web/community, /web/calendar
+        - Path=/web/admin-panel/**, /web/community, /web/calendar
+
+      #Deprecated Utils
+      - id: common-pages
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web/utils/base64
+      - id: common-pages
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web/utils/json-formatter
+      - id: common-pages
+        uri: http://web-content:8080
+        predicates:
+        - Path=/web/utils/log-formatter
+
       - id: error-page
         uri: http://web-content:8080
         predicates:

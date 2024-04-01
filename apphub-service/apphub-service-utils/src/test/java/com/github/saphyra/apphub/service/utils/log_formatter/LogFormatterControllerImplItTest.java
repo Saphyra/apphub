@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.utils.log_formatter;
 
-import com.github.saphyra.apphub.api.utils.model.request.SetLogParameterVisibilityRequest;
-import com.github.saphyra.apphub.api.utils.model.response.LogParameterVisibilityResponse;
+import com.github.saphyra.apphub.api.utils.model.log_formatter.SetLogParameterVisibilityRequest;
+import com.github.saphyra.apphub.api.utils.model.log_formatter.LogParameterVisibilityResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;

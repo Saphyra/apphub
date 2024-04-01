@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
@@ -28,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -93,7 +91,7 @@ public class EncryptionKeyControllerImplItTest {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         ErrorResponseValidator.verifyInvalidParam(response, "externalId", "must not be null");
     }
@@ -108,7 +106,7 @@ public class EncryptionKeyControllerImplItTest {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         ErrorResponseValidator.verifyInvalidParam(response, "dataType", "must not be null");
     }
@@ -123,7 +121,7 @@ public class EncryptionKeyControllerImplItTest {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         ErrorResponseValidator.verifyInvalidParam(response, "userId", "must not be null");
     }
@@ -138,7 +136,7 @@ public class EncryptionKeyControllerImplItTest {
 
         Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -147,39 +145,11 @@ public class EncryptionKeyControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         assertThat(response.getBody().asString()).isEqualTo(encryptionKey);
-    }
-
-    @Test
-    public void delete_unsupportedAccessMode() {
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.READ)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_DELETE_KEY, pathVariables));
-
-        ErrorResponseValidator.verifyInvalidParam(response, "accessMode", "must be one of [EDIT, DELETE]");
-    }
-
-    @Test
-    public void delete_notFound() {
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_DELETE_KEY, pathVariables));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     @Test
@@ -192,7 +162,7 @@ public class EncryptionKeyControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID)
@@ -217,43 +187,6 @@ public class EncryptionKeyControllerImplItTest {
 
         assertThat(sharedDataDao.findAll()).isEmpty();
         assertThat(encryptionKeyDao.findAll()).isEmpty();
-    }
-
-    @Test
-    public void delete_hasNoAccess() {
-        EncryptionKey encryptionKey = EncryptionKey.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .userId(UUID.randomUUID())
-            .build();
-
-        RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
-
-        SharedData sharedData = SharedData.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .publicData(true)
-            .accessMode(AccessMode.READ)
-            .build();
-        RequestFactory.createRequest()
-            .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
-
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .delete(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_DELETE_KEY, pathVariables));
-
-        ErrorResponseValidator.verifyErrorResponse(response, HttpStatus.FORBIDDEN.value(), ErrorCode.FORBIDDEN_OPERATION);
-
-        assertThat(sharedDataDao.findAll()).hasSize(1);
-        assertThat(encryptionKeyDao.findAll()).hasSize(1);
     }
 
     @Test
@@ -266,7 +199,7 @@ public class EncryptionKeyControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .post(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_OR_CREATE_KEY));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID)
@@ -292,132 +225,5 @@ public class EncryptionKeyControllerImplItTest {
 
         assertThat(sharedDataDao.findAll()).isEmpty();
         assertThat(encryptionKeyDao.findAll()).isEmpty();
-    }
-
-    @Test
-    public void get_notFound() {
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_KEY, pathVariables));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(response.getBody().asString()).isEmpty();
-    }
-
-    @Test
-    public void queryOwn() {
-        EncryptionKey encryptionKey = EncryptionKey.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .userId(USER_ID)
-            .build();
-
-        String encryptionKeyString = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT))
-            .getBody()
-            .asString();
-
-        SharedData sharedData = SharedData.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .publicData(true)
-            .accessMode(AccessMode.EDIT)
-            .build();
-        RequestFactory.createRequest()
-            .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
-
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_KEY, pathVariables));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        assertThat(response.getBody().asString()).isEqualTo(encryptionKeyString);
-    }
-
-    @Test
-    public void query_hasNoAccess() {
-        EncryptionKey encryptionKey = EncryptionKey.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .userId(UUID.randomUUID())
-            .build();
-
-        RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT))
-            .getBody()
-            .asString();
-
-        SharedData sharedData = SharedData.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .publicData(true)
-            .accessMode(AccessMode.READ)
-            .build();
-        RequestFactory.createRequest()
-            .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
-
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_KEY, pathVariables));
-
-        ErrorResponseValidator.verifyErrorResponse(response, HttpStatus.FORBIDDEN.value(), ErrorCode.FORBIDDEN_OPERATION);
-    }
-
-    @Test
-    public void query_hasAccess() {
-        EncryptionKey encryptionKey = EncryptionKey.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .userId(UUID.randomUUID())
-            .build();
-
-        String encryptionKeyString = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT))
-            .getBody()
-            .asString();
-
-        SharedData sharedData = SharedData.builder()
-            .externalId(EXTERNAL_ID)
-            .dataType(DataType.TEST)
-            .publicData(true)
-            .accessMode(AccessMode.EDIT)
-            .build();
-        RequestFactory.createRequest()
-            .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
-
-        Map<String, Object> pathVariables = CollectionUtils.toMap(
-            new BiWrapper<>("dataType", DataType.TEST),
-            new BiWrapper<>("externalId", EXTERNAL_ID),
-            new BiWrapper<>("accessMode", AccessMode.EDIT)
-        );
-
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
-            .get(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_KEY, pathVariables));
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        assertThat(response.getBody().asString()).isEqualTo(encryptionKeyString);
     }
 }

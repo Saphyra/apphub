@@ -4,7 +4,7 @@ HEADLESS=${3:-true}
 SERVER_PORT=${4:-8080}
 DATABASE_PORT=${5:-5432}
 INTEGRATION_SERVER_PORT=${6:-8072}
-THREAD_COUNT=${7:-20}
+THREAD_COUNT=${7:-15}
 
 ./infra/deployment/script/start_integration_server.sh $INTEGRATION_SERVER_PORT
 

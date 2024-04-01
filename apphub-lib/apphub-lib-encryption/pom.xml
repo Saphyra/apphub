@@ -22,9 +22,11 @@
             <artifactId>apphub-lib-common_util</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -33,7 +35,6 @@
             <version>${versions.tomcat-util}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

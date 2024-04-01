@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
-import com.github.saphyra.apphub.lib.encryption.EnableEncryption;
+import com.github.saphyra.apphub.lib.encryption_dao.EncryptionDaoConfiguration;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
@@ -21,7 +21,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @Import({
     AccessTokenFilterConfiguration.class,
-    CommonConfigProperties.class
+    CommonConfigProperties.class,
+    EncryptionDaoConfiguration.class
 })
 @EnableErrorHandler
 @EnableLocaleMandatoryRequestValidation
@@ -29,7 +30,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableLiquibase
 @EnableJpaRepositories(basePackageClasses = UtilsApplication.class)
 @EntityScan(basePackageClasses = UtilsApplication.class)
-@EnableEncryption
 @EnableMemoryMonitoring
 @EnableEventProcessor
 public class UtilsBeanConfiguration {

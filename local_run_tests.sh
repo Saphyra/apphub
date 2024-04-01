@@ -3,7 +3,7 @@ DISABLED_GROUPS=${2}
 SERVER_PORT=${3:-8080}
 DATABASE_PORT=${4:-5432}
 INTEGRATION_SERVER_PORT=${5:-8072}
-THREAD_COUNT=${6:-20}
+THREAD_COUNT=${6:-15}
 
 function waitStartup(){
   echo "Pinging $1"

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.utils.model.response;
+package com.github.saphyra.apphub.api.utils.model.log_formatter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
