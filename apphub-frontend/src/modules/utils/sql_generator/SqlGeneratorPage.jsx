@@ -11,8 +11,8 @@ import Constants from "../../../common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import SqlGeneratorHistory from "./history/SqlGeneratorHistory";
 import SqlGeneratorContent from "./content/SqlGeneratorContent";
-import QueryType from "./QueryType";
-import QueryData from "./QueryData";
+import QueryType from "./model/QueryType";
+import getDefaultSegmentsFor from "./DefaultSegmentProvider";
 
 const SqlGeneratorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,7 +21,11 @@ const SqlGeneratorPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    const [queryData, setQueryData] = useState(new QueryData(QueryType.INSERT));
+    const [queryType, setQueryType] = useState(QueryType.INSERT);
+    const [label, setLabel] = useState("");
+    const [segments, setSegments] = useState(getDefaultSegmentsFor(queryType));
+
+    useEffect(() => setSegments(getDefaultSegmentsFor(queryType)), [queryType]);
 
     return (
         <div className="main-page">
@@ -33,8 +37,12 @@ const SqlGeneratorPage = () => {
                 />
 
                 <SqlGeneratorContent
-                    queryData={queryData}
-                    setQueryData={setQueryData}
+                    queryType={queryType}
+                    setQueryType={setQueryType}
+                    label={label}
+                    setLabel={setLabel}
+                    segments={segments}
+                    setSegments={setSegments}
                 />
             </main>
 

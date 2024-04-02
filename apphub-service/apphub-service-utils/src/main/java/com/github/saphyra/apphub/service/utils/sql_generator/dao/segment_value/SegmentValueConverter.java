@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.utils.sql_generator.dao.schema_name;
+package com.github.saphyra.apphub.service.utils.sql_generator.dao.segment_value;
 
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -15,42 +15,42 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class SchemaNameConverter extends EncryptionConverter<SchemaNameEntity, SchemaName> {
-    private static final String COLUMN_SCHEMA_NAME = "schema_name";
+class SegmentValueConverter extends EncryptionConverter<SegmentValueEntity, SegmentValue> {
+    private static final String COLUMN_SEG_VALUE = "segment_value";
 
     private final EncryptionService encryptionService;
     private final UuidConverter uuidConverter;
     private final AccessTokenProvider accessTokenProvider;
 
     @Override
-    protected SchemaNameEntity processDomainConversion(SchemaName domain) {
-        return SchemaNameEntity.builder()
-            .schemaNameId(uuidConverter.convertDomain(domain.getSchemaNameId()))
+    protected SegmentValueEntity processDomainConversion(SegmentValue domain) {
+        return SegmentValueEntity.builder()
+            .segmentValueId(uuidConverter.convertDomain(domain.getSegmentValueId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-            .schemaName(encryptionService.encrypt(
-                domain.getSchemaName(),
-                COLUMN_SCHEMA_NAME,
-                domain.getSchemaNameId(),
-                DataType.UTILS_SQL_GENERATOR_SCHEMA_NAME,
+            .segmentValue(encryptionService.encrypt(
+                domain.getSegmentValue(),
+                COLUMN_SEG_VALUE,
+                domain.getSegmentValueId(),
+                DataType.UTILS_SQL_GENERATOR_SEGMENT_VALUE,
                 encryptionKey -> accessTokenProvider.get().getUserId().equals(domain.getUserId())
             ))
             .build();
     }
 
     @Override
-    protected SchemaName processEntityConversion(SchemaNameEntity entity) {
-        UUID schemaNameId = uuidConverter.convertEntity(entity.getSchemaNameId());
+    protected SegmentValue processEntityConversion(SegmentValueEntity entity) {
+        UUID schemaNameId = uuidConverter.convertEntity(entity.getSegmentValueId());
         UUID userId = uuidConverter.convertEntity(entity.getUserId());
-        return SchemaName.builder()
-            .schemaNameId(schemaNameId)
+        return SegmentValue.builder()
+            .segmentValueId(schemaNameId)
             .userId(userId)
             .externalReference(uuidConverter.convertEntity(entity.getExternalReference()))
-            .schemaName(encryptionService.decryptString(
-                entity.getSchemaName(),
-                COLUMN_SCHEMA_NAME,
+            .segmentValue(encryptionService.decryptString(
+                entity.getSegmentValue(),
+                COLUMN_SEG_VALUE,
                 schemaNameId,
-                DataType.UTILS_SQL_GENERATOR_SCHEMA_NAME,
+                DataType.UTILS_SQL_GENERATOR_SEGMENT_VALUE,
                 encryptionKey -> accessTokenProvider.get().getUserId().equals(userId)
             ))
             .build();

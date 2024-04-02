@@ -45,6 +45,14 @@ public class EncryptionService {
         return decrypt(value, column, externalId, dataType, accessChecker, booleanEncryptor);
     }
 
+    public String encrypt(Integer value, String column, UUID externalId, DataType dataType, Predicate<EncryptionKey> accessChecker) {
+        return encrypt(value, column, externalId, dataType, accessChecker, integerEncryptor);
+    }
+
+    public Integer decryptInteger(String value, String column, UUID externalId, DataType dataType, Predicate<EncryptionKey> accessChecker) {
+        return decrypt(value, column, externalId, dataType, accessChecker, integerEncryptor);
+    }
+
     private <T> String encrypt(T value, String column, UUID externalId, DataType dataType, Predicate<EncryptionKey> accessChecker, AbstractEncryptor<T> encryptor) {
         EncryptionKey encryptionKey = encryptionKeyCache.getValidated(new BiWrapper<>(externalId, dataType));
 

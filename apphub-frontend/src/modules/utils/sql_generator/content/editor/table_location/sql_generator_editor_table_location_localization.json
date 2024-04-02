@@ -1,0 +1,10 @@
+{
+    "schema-name": {
+        "en": "Schema name",
+        "hu": "Séma név"
+    },
+    "table-name": {
+        "en": "Table name",
+        "hu": "Tábla neve"
+    }
+}

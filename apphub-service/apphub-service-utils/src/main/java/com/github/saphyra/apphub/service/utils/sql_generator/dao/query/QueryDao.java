@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.encryption_dao.EncryptionDao;
 import com.github.saphyra.apphub.lib.encryption_dao.EncryptionProxy;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,5 +20,9 @@ public class QueryDao extends EncryptionDao<QueryEntity, Query, QueryRepository>
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public List<Query> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

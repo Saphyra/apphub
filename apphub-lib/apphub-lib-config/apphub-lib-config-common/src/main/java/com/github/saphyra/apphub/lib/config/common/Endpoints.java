@@ -171,7 +171,7 @@ public class Endpoints {
     public static final String NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}";
     public static final String NOTEBOOK_PIN_GROUP_OPENED = "/api/notebook/pin-group/{pinGroupId}";
 
-    //UTILS
+    //Utils - Log formatter
     public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
     public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
@@ -320,4 +320,11 @@ public class Endpoints {
     public static final String STORAGE_DOWNLOAD_FILE = "/api/storage/{storedFileId}";
     public static final String STORAGE_INTERNAL_CREATE_FILE = "/internal/storage";
     public static final String STORAGE_GET_METADATA = "/api/storage/{storedFileId}/metadata";
+
+    //Utils - SQL generator
+    public static final String UTILS_SQL_GENERATOR_GET_HISTORY = "/api/utils/sql-generator/history";
+    public static final String UTILS_SQL_GENERATOR_MARK_QUERY_FAVORITE = "/api/utils/sql-generator/history/{queryId}";
+    public static final String UTILS_SQL_GENERATOR_CREATE_QUERY = "/api/utils/sql-generator/query";
+    public static final String UTILS_SQL_GENERATOR_DELETE_QUERY = "/api/utils/sql-generator/query/{queryId}";
+    public static final String UTILS_SQL_GENERATOR_GET_QUERY = "/api/utils/sql-generator/query/{queryId}";
 }

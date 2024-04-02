@@ -1,0 +1,15 @@
+#sql-generator-label-editor {
+    text-align: center;
+}
+
+#sql-generator-label-editor-input {
+    width: 90%;
+}
+
+.sql-generator-editor-key-value-pairs{
+    padding-left: 20px;
+}
+
+.sql-generator-editor-column-value-pair-value{
+    width: calc(100% - 210px);
+}
