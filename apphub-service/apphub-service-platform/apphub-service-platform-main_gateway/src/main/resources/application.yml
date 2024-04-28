@@ -23,7 +23,8 @@ spring:
             /web/skyxplore/character,\
             /web/skyxplore/lobby,\
             /web/skyxplore/game,\
-            /web/notebook, /web/notebook/**,\
+            /web/notebook,\
+            /web/notebook/**,\
             /web/admin-panel/memory-monitoring,\
             /web/admin-panel/migration-tasks,\
             /web/admin-panel/roles-for-all,\
@@ -33,6 +34,8 @@ spring:
             /web/admin-panel/error-report/*,\
             /web/admin-panel/ban,\
             /web/admin-panel/ban/*,\
+            /web/custom/villany-atesz,\
+            /web/custom/villany-atesz/**,\
             /web/user/account"
         filters:
         - StripPrefix=10

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: villany-atesz
+  labels:
+    app: villany-atesz
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: villany-atesz
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: villany-atesz
+    spec:
+      containers:
+      - name: villany-atesz
+        image: saphyra/apphub-service-custom-villany_atesz:release
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server,production
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+        resources:
+          limits:
+            memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: villany-atesz
+  labels:
+    app: villany-atesz
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    name: villany-atesz

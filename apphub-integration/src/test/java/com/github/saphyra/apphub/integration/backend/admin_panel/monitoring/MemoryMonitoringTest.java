@@ -55,7 +55,8 @@ public class MemoryMonitoringTest extends BackEndTest {
             "community",
             "calendar",
             "encryption",
-            "storage"
+            "storage",
+            "villany-atesz"
         );
     }
 }

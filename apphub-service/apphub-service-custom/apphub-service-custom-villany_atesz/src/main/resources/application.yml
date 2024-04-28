@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: villany-atesz
+
+liquibase:
+  schema: villany_atesz
