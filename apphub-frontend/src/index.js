@@ -35,6 +35,8 @@ import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview
 import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
 import BanPage from './modules/admin_panel/ban//index/BanPage';
 import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
+import VillanyAteszIndexPage from './modules/custom/villany_atesz/VillanyAteszIndexPage';
+import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/VillanyAteszContactsPage';
 
 const router = createBrowserRouter([
   {
@@ -222,7 +224,15 @@ const router = createBrowserRouter([
         userId: params.userId
       }
     }
-  }
+  },
+  {
+    path: "/web/villany-atesz",
+    element: <VillanyAteszIndexPage />
+  },
+  {
+    path: "/web/villany-atesz/contacts",
+    element: <VillanyAteszContactsPage />
+  },
 ]);
 
 const queryClient = new QueryClient();

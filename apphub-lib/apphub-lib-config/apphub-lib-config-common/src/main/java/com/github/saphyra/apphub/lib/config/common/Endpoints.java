@@ -321,4 +321,10 @@ public class Endpoints {
     public static final String STORAGE_DOWNLOAD_FILE = "/api/storage/{storedFileId}";
     public static final String STORAGE_INTERNAL_CREATE_FILE = "/internal/storage";
     public static final String STORAGE_GET_METADATA = "/api/storage/{storedFileId}/metadata";
+
+    //VillanyAtesz
+    public static final String VILLANY_ATESZ_CREATE_CONTACT = "/api/villany-atesz/contact";
+    public static final String VILLANY_ATESZ_EDIT_CONTACT = "/api/villany-atesz/contact/{contactId}";
+    public static final String VILLANY_ATESZ_DELETE_CONTACT = "/api/villany-atesz/contact/{contactId}";
+    public static final String VILLANY_ATESZ_GET_CONTACTS = "/api/villany-atesz/contact";
 }

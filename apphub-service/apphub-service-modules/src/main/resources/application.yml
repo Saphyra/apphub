@@ -95,7 +95,7 @@ modules:
       - TRAINING
     custom:
     - name: villanyatesz
-      url: /web/custom/villany-atesz
+      url: /web/villany-atesz
       mobileAllowed: false
       roles:
       - VILLANY_ATESZ

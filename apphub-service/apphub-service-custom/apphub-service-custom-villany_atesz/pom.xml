@@ -21,6 +21,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-custom-villany_atesz-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-encryption</artifactId>
             <version>${project.version}</version>
         </dependency>

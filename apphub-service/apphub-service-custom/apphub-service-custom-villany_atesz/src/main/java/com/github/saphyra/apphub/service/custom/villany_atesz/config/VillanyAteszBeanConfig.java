@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.config;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -39,5 +40,10 @@ public class VillanyAteszBeanConfig {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    IdGenerator idGenerator() {
+        return new IdGenerator();
     }
 }
