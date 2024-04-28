@@ -1,2 +1,6 @@
 TODO elimination
 TODO Add to release notes
+TODO UI tests
+TODO INSERT on conflict
+TODO remove column
+TODO value type: subquery

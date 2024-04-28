@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
+//TODO api test
 public interface SqlGeneratorController {
     @GetMapping(Endpoints.UTILS_SQL_GENERATOR_GET_HISTORY)
     List<HistoryResponse> getHistory(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
