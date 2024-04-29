@@ -1,0 +1,34 @@
+{
+    "title": {
+        "en": "Stock - VillanyAtesz - Apphub",
+        "hu": "Raktárkészlet - VillanyAtesz - Apphub"
+    },
+    "page-title": {
+        "en": "Stock",
+        "hu": "Raktárkészlet"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "overview": {
+        "en": "Overview",
+        "hu": "Áttekintés"
+    },
+    "categories": {
+        "en": "Categories",
+        "hu": "Kategóriák"
+    },
+    "new-item": {
+        "en": "New item",
+        "hu": "Új tétel"
+    },
+    "acquisition": {
+        "en": "Acquisition",
+        "hu": "Beszerzés"
+    },
+    "inventory": {
+        "en": "Inventory",
+        "hu": "Leltár"
+    }
+}

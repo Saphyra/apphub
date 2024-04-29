@@ -37,6 +37,7 @@ import BanPage from './modules/admin_panel/ban//index/BanPage';
 import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
 import VillanyAteszIndexPage from './modules/custom/villany_atesz/VillanyAteszIndexPage';
 import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/VillanyAteszContactsPage';
+import VillanyAteszStockPage from './modules/custom/villany_atesz/stock/VillanyAteszStockPage';
 
 const router = createBrowserRouter([
   {
@@ -232,6 +233,10 @@ const router = createBrowserRouter([
   {
     path: "/web/villany-atesz/contacts",
     element: <VillanyAteszContactsPage />
+  },
+  {
+    path: "/web/villany-atesz/stock",
+    element: <VillanyAteszStockPage />
   },
 ]);
 

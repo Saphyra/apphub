@@ -2,7 +2,11 @@
     --villany-atesz-contacts-inputs-width: 350px;
 }
 
-#villany-atesz-contacts-navigation {
+#villany-atesz-contacts main {
+    padding: 0;
+}
+
+#villany-atesz-contacts #villany-atesz-navigation {
     position: absolute;
     top: 0;
     left: 0;
@@ -11,7 +15,7 @@
 
 #villany-atesz-contacts-content {
     position: absolute;
-    top: 40px;
+    top: 38px;
     left: 0;
     bottom: 0;
     width: calc(100% - var(--villany-atesz-contacts-inputs-width));
@@ -30,8 +34,11 @@
 }
 
 #villany-atesz-contacts-content-table {
-    width: 100%;
     margin: auto;
+}
+
+#villany-atesz-contacts-content-table th {
+    cursor: pointer;
 }
 
 #villany-atesz-contacts-content-table tbody tr td {

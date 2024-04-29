@@ -124,20 +124,18 @@ const VillanyAteszContactsPage = () => {
 
     const updateOrder = (newOrder) => {
         if (order.toString() == newOrder().toString()) {
-            setReversed(!reversed);
+            setReversed(r => !r);
         } else {
             setOrder(newOrder);
         }
     }
 
     return (
-        <div id="villany-atesz" className="main-page">
+        <div id="villany-atesz-contacts" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>
-                <div id="villany-atesz-contacts-navigation">
-                    <VillanyAteszNavigation page={VillanyAteszPage.CONTACTS} />
-                </div>
+                <VillanyAteszNavigation page={VillanyAteszPage.CONTACTS} />
 
                 <div id="villany-atesz-contacts-content">
                     <InputField

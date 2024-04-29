@@ -13,7 +13,7 @@
     },
     "code": {
         "en": "Code",
-        "hu": "Kód"
+        "hu": "Sorszám"
     },
     "name": {
         "en": "Name",
@@ -53,7 +53,7 @@
     },
     "delete-contact-confirmation-content": {
         "en": "Are you sure you want to delete the following contact? Code: {code}, name: {name}, phone: {phone}, address: {address}, note: {note}",
-        "hu": "Biztosan törölni szeretnéd a kapcsolatot? Kód: {code}, név: {name}, telefonszám: {phone}, cím: {address}, megjegyzés: {note}"
+        "hu": "Biztosan törölni szeretnéd a kapcsolatot? Sorszám: {code}, név: {name}, telefonszám: {phone}, cím: {address}, megjegyzés: {note}"
     },
     "cancel": {
         "en": "Cancel",

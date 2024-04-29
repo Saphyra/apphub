@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.contacts;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.contact.ContactModel;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ContactModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.ContactController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.custom.villany_atesz.contacts.service.ContactQueryService;

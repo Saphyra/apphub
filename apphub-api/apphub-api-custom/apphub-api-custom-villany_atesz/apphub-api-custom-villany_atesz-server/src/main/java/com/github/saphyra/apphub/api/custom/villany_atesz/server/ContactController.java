@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.contact.ContactModel;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ContactModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;

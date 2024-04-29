@@ -368,6 +368,10 @@ const Endpoints = {
     VILLANY_ATESZ_EDIT_CONTACT: new Endpoint(RequestMethod.POST, "/api/villany-atesz/contact/{contactId}"),
     VILLANY_ATESZ_DELETE_CONTACT: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/contact/{contactId}"),
     VILLANY_ATESZ_GET_CONTACTS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/contact"),
+    VILLANY_ATESZ_CREATE_STOCK_CATEGORY: new Endpoint(RequestMethod.PUT, "/api/villany-atesz/stock/category"),
+    VILLANY_ATESZ_GET_STOCK_CATEGORIES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/category"),
+    VILLANY_ATESZ_DELETE_STOCK_CATEGORY: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/stock/category/{stockCategoryId}"),
+    VILLANY_ATESZ_EDIT_STOCK_CATEGORY: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/category/{stockCategoryId}"),
 }
 
 export default Endpoints;
