@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public interface StockItemController {
     @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM)
-    List<StockItemResponse> createStockItem(@RequestBody StockItemRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER)AccessTokenHeader accessTokenHeader);
+    void createStockItem(@RequestBody StockItemRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER)AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_STOCK_ITEM)
     List<StockItemResponse> editStockItem(@RequestBody StockItemRequest request, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER)AccessTokenHeader accessTokenHeader);

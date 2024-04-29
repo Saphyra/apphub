@@ -26,12 +26,10 @@ class StockItemControllerImpl implements StockItemController {
     private final StockItemQueryService stockItemQueryService;
 
     @Override
-    public List<StockItemResponse> createStockItem(StockItemRequest request, AccessTokenHeader accessTokenHeader) {
+    public void createStockItem(StockItemRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a stockItem.", accessTokenHeader.getUserId());
 
         createStockItemService.create(accessTokenHeader.getUserId(), request);
-
-        return getStockItems(accessTokenHeader);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class EditStockItemService {
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
-        stockItem.setStockCategoryId(request.getCategoryId());
+        stockItem.setStockCategoryId(request.getStockCategoryId());
         stockItem.setName(request.getName());
         stockItem.setSerialNumber(request.getSerialNumber());
         stockItem.setInCar(request.getInCar());

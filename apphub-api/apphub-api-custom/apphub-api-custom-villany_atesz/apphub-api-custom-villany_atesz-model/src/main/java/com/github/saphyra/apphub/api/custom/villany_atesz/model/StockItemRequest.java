@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @Data
 public class StockItemRequest {
-    private UUID categoryId;
+    private UUID stockCategoryId;
     private String name;
     private String serialNumber;
     private int inCar;

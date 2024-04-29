@@ -20,7 +20,7 @@ class StockItemFactory {
         return StockItem.builder()
             .stockItemId(idGenerator.randomUuid())
             .userId(userId)
-            .stockCategoryId(request.getCategoryId())
+            .stockCategoryId(request.getStockCategoryId())
             .name(request.getName())
             .serialNumber(request.getSerialNumber())
             .inCar(request.getInCar())
