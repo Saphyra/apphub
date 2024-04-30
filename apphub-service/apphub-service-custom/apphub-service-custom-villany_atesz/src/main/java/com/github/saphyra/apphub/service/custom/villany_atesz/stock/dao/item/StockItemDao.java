@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
@@ -42,6 +41,6 @@ public class StockItemDao extends AbstractDao<StockItemEntity, StockItem, String
     }
 
     public List<StockItem> getByUserId(UUID userId) {
-        return repository.getByUserId(uuidConverter.convertDomain(userId));
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

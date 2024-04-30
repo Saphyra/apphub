@@ -9,13 +9,15 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class StockItemRequest {
-    private UUID stockCategoryId;
+@Builder
+public class StockItemOverviewResponse {
+    private UUID stockItemId;
+    private StockCategoryModel category;
     private String name;
     private String serialNumber;
     private Integer inCar;
+    private Integer inCart;
     private Integer inStorage;
     private Integer price;
 }

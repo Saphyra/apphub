@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-cart" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="villany_atesz" tableName="cart"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="villany_atesz" tableName="cart">
+            <column name="cart_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="contact_id" type="varchar(37)"/>
+            <column name="created_at" type="text"/>
+            <column name="finalized" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="villany_atesz" tableName="cart" columnNames="cart_id"/>
+    </changeSet>
+</databaseChangeLog>

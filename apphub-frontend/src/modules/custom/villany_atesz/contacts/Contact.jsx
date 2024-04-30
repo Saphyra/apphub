@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import Endpoints from "../../../../common/js/dao/dao";
+import Constants from "../../../../common/js/Constants";
 
 const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteContact, localizationHandler }) => {
     const openConfirmDeletionDialog = () => {
@@ -25,6 +27,13 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
         ));
     }
 
+    const createCart = async () => {
+        await Endpoints.VILLANY_ATESZ_CREATE_CART.createRequest({ value: contact.contactId })
+            .send();
+
+        window.location.href = Constants.VILLANY_ATESZ_STOCK_PAGE;
+    }
+
     return (
         <tr onClick={() => setEditedContact(contact)}>
             <td className="villany-atesz-contacts-contact-code">{contact.code}</td>
@@ -33,6 +42,12 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
             <td className="villany-atesz-contacts-contact-address">{contact.address}</td>
             <td className="villany-atesz-contacts-contact-note">{contact.note}</td>
             <td>
+                <Button
+                    className="villany-atesz-contacts-contact-create-cart-button"
+                    onclick={() => createCart()}
+                    label={localizationHandler.get("create-cart")}
+                />
+
                 <Button
                     className="villany-atesz-contacts-contact-delete-button"
                     onclick={() => openConfirmDeletionDialog()}

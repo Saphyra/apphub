@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.price.StockItemPriceDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import java.util.UUID;
 //TODO unit test
 public class DeleteStockItemService {
     private final StockItemDao stockItemDao;
+    private final StockItemPriceDao stockItemPriceDao;
 
     public void deleteByStockCategoryId(UUID stockCategoryId) {
         stockItemDao.getByStockCategoryId(stockCategoryId)
@@ -23,6 +25,7 @@ public class DeleteStockItemService {
     @Transactional
     public void delete(UUID userId, UUID stockItemId) {
         stockItemDao.deleteByUserIdAndStockItemId(userId, stockItemId);
+        stockItemPriceDao.deleteByStockItemId(stockItemId);
 
         //TODO Remove item for related carts
     }

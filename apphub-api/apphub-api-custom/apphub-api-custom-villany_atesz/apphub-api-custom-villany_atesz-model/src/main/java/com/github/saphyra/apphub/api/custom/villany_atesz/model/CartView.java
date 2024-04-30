@@ -5,17 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class StockItemRequest {
-    private UUID stockCategoryId;
-    private String name;
-    private String serialNumber;
-    private Integer inCar;
-    private Integer inStorage;
-    private Integer price;
+@Builder
+public class CartView {
+    private UUID cartId;
+    private ContactModel contact;
+    private Integer totalPrice;
+    private List<CartItemView> items;
 }

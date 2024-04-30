@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.EditStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import java.util.UUID;
 //TODO unit test
 class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
-    private final EditStockItemService editStockItemService;
     private final DeleteStockItemService deleteStockItemService;
     private final StockItemQueryService stockItemQueryService;
 
@@ -33,16 +31,7 @@ class StockItemControllerImpl implements StockItemController {
     }
 
     @Override
-    public List<StockItemResponse> editStockItem(StockItemRequest request, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to edit stockItem {}", accessTokenHeader.getUserId(), stockItemId);
-
-        editStockItemService.edit(stockItemId, request);
-
-        return getStockItems(accessTokenHeader);
-    }
-
-    @Override
-    public List<StockItemResponse> deleteStockItem(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+    public List<StockItemOverviewResponse> deleteStockItem(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
         deleteStockItemService.delete(accessTokenHeader.getUserId(), stockItemId);
@@ -51,7 +40,7 @@ class StockItemControllerImpl implements StockItemController {
     }
 
     @Override
-    public List<StockItemResponse> getStockItems(AccessTokenHeader accessTokenHeader) {
+    public List<StockItemOverviewResponse> getStockItems(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know their stockItems", accessTokenHeader.getUserId());
 
         return stockItemQueryService.getStockItems(accessTokenHeader.getUserId());

@@ -11,13 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class StockItemResponse {
+public class CartItemView {
     private UUID stockItemId;
-    private StockCategoryModel category;
     private String name;
-    private String serialNumber;
-    private Integer inCar;
-    private Integer inStorage;
-    //TODO add price
-    //TODO add in cart
+    private Integer amount;
 }

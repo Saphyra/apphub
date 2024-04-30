@@ -25,7 +25,7 @@ const VillanyAteszStockNewItem = ({ }) => {
     const [inCar, setInCar] = useState(0);
     const [inStorage, setInStorage] = useState(0);
 
-    //TODO add price
+    const [price, setPrice] = useState(0);
 
     useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
 
@@ -50,7 +50,8 @@ const VillanyAteszStockNewItem = ({ }) => {
             name: name,
             serialNumber: serialNumber,
             inCar: inCar,
-            inStorage: inStorage
+            inStorage: inStorage,
+            price: price
         }
 
         await Endpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM.createRequest(payload)
@@ -61,6 +62,7 @@ const VillanyAteszStockNewItem = ({ }) => {
         setSerialNumber("");
         setInCar(0);
         setInStorage(0);
+        setPrice(0);
 
         NotificationService.showSuccess(localizationHandler.get("item-created"));
     }
@@ -132,6 +134,16 @@ const VillanyAteszStockNewItem = ({ }) => {
             <div className="villany-atesz-stock-new-item-fieldset-wrapper">
                 <fieldset>
                     <legend>{localizationHandler.get("price")}</legend>
+
+                    <PreLabeledInputField
+                        label={localizationHandler.get("price")}
+                        input={<NumberInput
+                            id="villany-atesz-new-item-price"
+                            placeholder={localizationHandler.get("price")}
+                            value={price}
+                            onchangeCallback={setPrice}
+                        />}
+                    />
                 </fieldset>
             </div>
 

@@ -71,7 +71,8 @@ const VillanyAteszContactsPage = () => {
                 return Utils.isBlank(search) ||
                     new Stream([contact.code, contact.name, contact.phone, contact.address, contact.note])
                         .join("")
-                        .indexOf(search) > -1;
+                        .toLowerCase()
+                        .indexOf(search.toLocaleLowerCase()) > -1;
             })
             .sorted((a, b) => (reversed ? -1 : 1) * order(a, b))
             .map(contact => <Contact
@@ -136,96 +137,96 @@ const VillanyAteszContactsPage = () => {
 
             <main>
                 <VillanyAteszNavigation page={VillanyAteszPage.CONTACTS} />
+                <div id="villany-atesz-contacts-content-wrapper">
+                    <div id="villany-atesz-contacts-content">
+                        <InputField
+                            id="villany-atesz-contacts-search"
+                            placeholder={localizationHandler.get("search")}
+                            value={search}
+                            onchangeCallback={setSearch}
+                        />
 
-                <div id="villany-atesz-contacts-content">
-                    <InputField
-                        id="villany-atesz-contacts-search"
-                        placeholder={localizationHandler.get("search")}
-                        value={search}
-                        onchangeCallback={setSearch}
-                    />
-
-                    <table id="villany-atesz-contacts-content-table" className="formatted-table">
-                        <thead>
-                            <tr>
-                                <th onClick={() => updateOrder(ContactOrder.CODE)}>{localizationHandler.get("code")}</th>
-                                <th onClick={() => updateOrder(ContactOrder.NAME)}>{localizationHandler.get("name")}</th>
-                                <th onClick={() => updateOrder(ContactOrder.PHONE)}>{localizationHandler.get("phone")}</th>
-                                <th onClick={() => updateOrder(ContactOrder.ADDRESS)}>{localizationHandler.get("address")}</th>
-                                <th onClick={() => updateOrder(ContactOrder.NOTE)}>{localizationHandler.get("note")}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tableContent()}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="villany-atesz-contacts-inputs-wrapper">
-                    <div id="villany-atesz-contacts-inputs-title">
-                        {localizationHandler.get(Utils.hasValue(editedContact) ? "edit-contact" : "new-contact")}
+                        <table id="villany-atesz-contacts-content-table" className="formatted-table">
+                            <thead>
+                                <tr>
+                                    <th onClick={() => updateOrder(ContactOrder.CODE)}>{localizationHandler.get("code")}</th>
+                                    <th onClick={() => updateOrder(ContactOrder.NAME)}>{localizationHandler.get("name")}</th>
+                                    <th onClick={() => updateOrder(ContactOrder.PHONE)}>{localizationHandler.get("phone")}</th>
+                                    <th onClick={() => updateOrder(ContactOrder.ADDRESS)}>{localizationHandler.get("address")}</th>
+                                    <th onClick={() => updateOrder(ContactOrder.NOTE)}>{localizationHandler.get("note")}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tableContent()}
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div id="villany-atesz-contacts-inputs">
-                        <PreLabeledInputField
-                            label={localizationHandler.get("code")}
-                            input={<InputField
-                                id="villany-atesz-contacts-code-input"
-                                placeholder={localizationHandler.get("code")}
-                                value={code}
-                                onchangeCallback={setCode}
-                            />}
-                        />
+                    <div id="villany-atesz-contacts-inputs-wrapper">
+                        <div id="villany-atesz-contacts-inputs-title">
+                            {localizationHandler.get(Utils.hasValue(editedContact) ? "edit-contact" : "new-contact")}
+                        </div>
 
-                        <PreLabeledInputField
-                            label={localizationHandler.get("name")}
-                            input={<InputField
-                                id="villany-atesz-contacts-name-input"
-                                placeholder={localizationHandler.get("name")}
-                                value={name}
-                                onchangeCallback={setName}
-                            />}
-                        />
+                        <div id="villany-atesz-contacts-inputs">
+                            <PreLabeledInputField
+                                label={localizationHandler.get("code")}
+                                input={<InputField
+                                    id="villany-atesz-contacts-code-input"
+                                    placeholder={localizationHandler.get("code")}
+                                    value={code}
+                                    onchangeCallback={setCode}
+                                />}
+                            />
 
-                        <PreLabeledInputField
-                            label={localizationHandler.get("phone")}
-                            input={<InputField
-                                id="villany-atesz-contacts-phone-input"
-                                placeholder={localizationHandler.get("phone")}
-                                value={phone}
-                                onchangeCallback={setPhone}
-                            />}
-                        />
+                            <PreLabeledInputField
+                                label={localizationHandler.get("name")}
+                                input={<InputField
+                                    id="villany-atesz-contacts-name-input"
+                                    placeholder={localizationHandler.get("name")}
+                                    value={name}
+                                    onchangeCallback={setName}
+                                />}
+                            />
 
-                        <PreLabeledInputField
-                            label={localizationHandler.get("address")}
-                            input={<InputField
-                                id="villany-atesz-contacts-address-input"
-                                placeholder={localizationHandler.get("address")}
-                                value={address}
-                                onchangeCallback={setAddress}
-                            />}
-                        />
+                            <PreLabeledInputField
+                                label={localizationHandler.get("phone")}
+                                input={<InputField
+                                    id="villany-atesz-contacts-phone-input"
+                                    placeholder={localizationHandler.get("phone")}
+                                    value={phone}
+                                    onchangeCallback={setPhone}
+                                />}
+                            />
 
-                        <PreLabeledInputField
-                            label={localizationHandler.get("note")}
-                            input={<InputField
-                                id="villany-atesz-contacts-note-input"
-                                placeholder={localizationHandler.get("note")}
-                                value={note}
-                                onchangeCallback={setNote}
-                            />}
+                            <PreLabeledInputField
+                                label={localizationHandler.get("address")}
+                                input={<InputField
+                                    id="villany-atesz-contacts-address-input"
+                                    placeholder={localizationHandler.get("address")}
+                                    value={address}
+                                    onchangeCallback={setAddress}
+                                />}
+                            />
+
+                            <PreLabeledInputField
+                                label={localizationHandler.get("note")}
+                                input={<InputField
+                                    id="villany-atesz-contacts-note-input"
+                                    placeholder={localizationHandler.get("note")}
+                                    value={note}
+                                    onchangeCallback={setNote}
+                                />}
+                            />
+                        </div>
+
+                        <Button
+                            id="villany-atesz-contacts-save-button"
+                            onclick={save}
+                            label={localizationHandler.get("save")}
                         />
                     </div>
-
-                    <Button
-                        id="villany-atesz-contacts-save-button"
-                        onclick={save}
-                        label={localizationHandler.get("save")}
-                    />
                 </div>
-
             </main>
 
             <Footer

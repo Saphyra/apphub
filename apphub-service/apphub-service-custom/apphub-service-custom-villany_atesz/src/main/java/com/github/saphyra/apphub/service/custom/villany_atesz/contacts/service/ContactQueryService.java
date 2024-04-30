@@ -25,6 +25,10 @@ public class ContactQueryService {
             .collect(Collectors.toList());
     }
 
+    public ContactModel getContact(UUID contactId) {
+        return convert(contactDao.findByIdValidated(contactId));
+    }
+
     private ContactModel convert(Contact contact) {
         return ContactModel.builder()
             .contactId(contact.getContactId())

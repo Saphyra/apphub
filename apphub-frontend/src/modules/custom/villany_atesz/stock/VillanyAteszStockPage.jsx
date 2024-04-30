@@ -15,12 +15,13 @@ import StockTab from "./VillanyAteszStockTab";
 import VillanyAteszStockCategories from "./categories/VillanyAteszStockCategories";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import VillanyAteszStockNewItem from "./new_item/VillanyAteszStockNewItem";
+import VillanyAteszStockOverview from "./overview/VillanyAteszStockOverview";
 
 const VillanyAteszStockPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [openedTab, setOpenedTab] = useState(StockTab.NEW_ITEM);
+    const [openedTab, setOpenedTab] = useState(StockTab.OVERVIEW);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
     useEffect(sessionChecker, []);
@@ -68,6 +69,8 @@ const VillanyAteszStockPage = () => {
 
     const getContent = () => {
         switch (openedTab) {
+            case StockTab.OVERVIEW:
+                return <VillanyAteszStockOverview />
             case StockTab.CATEGORIES:
                 return <VillanyAteszStockCategories
                     setConfirmationDialogData={setConfirmationDialogData}

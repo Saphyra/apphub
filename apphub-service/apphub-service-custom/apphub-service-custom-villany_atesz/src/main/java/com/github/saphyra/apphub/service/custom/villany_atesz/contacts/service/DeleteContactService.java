@@ -18,5 +18,7 @@ public class DeleteContactService {
     @Transactional
     public void delete(UUID userId, UUID contactId) {
         contactDao.deleteByUserIdAndContactId(userId, contactId);
+
+        //TODO delete cart
     }
 }

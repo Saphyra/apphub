@@ -1,0 +1,38 @@
+{
+    "active-cart": {
+        "en": "Active cart",
+        "hu": "Aktív kosár"
+    },
+    "choose-cart": {
+        "en": "Choose",
+        "hu": "Válassz"
+    },
+    "contact-info": {
+        "en": "Contact info",
+        "hu": "Kapcsolat adatai"
+    },
+    "code": {
+        "en": "Code",
+        "hu": "Sorszám"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Név"
+    },
+    "address": {
+        "en": "Address",
+        "hu": "Cím"
+    },
+    "phone": {
+        "en": "Phone",
+        "hu": "Telefonszám"
+    },
+    "total-price": {
+        "en": "Total value",
+        "hu": "Kosár értéke"
+    },
+    "items": {
+        "en": "Items",
+        "hu": "Tételek"
+    }
+}
