@@ -34,5 +34,13 @@
     "serial-number": {
         "en": "Serial No.",
         "hu": "Cikkszám"
+    },
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "add-to-cart": {
+        "en": "Add to cart",
+        "hu": "Kosárba"
     }
 }

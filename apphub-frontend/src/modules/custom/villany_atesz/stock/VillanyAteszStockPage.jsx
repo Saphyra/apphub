@@ -70,7 +70,9 @@ const VillanyAteszStockPage = () => {
     const getContent = () => {
         switch (openedTab) {
             case StockTab.OVERVIEW:
-                return <VillanyAteszStockOverview />
+                return <VillanyAteszStockOverview
+                    setConfirmationDialogData={setConfirmationDialogData}
+                />
             case StockTab.CATEGORIES:
                 return <VillanyAteszStockCategories
                     setConfirmationDialogData={setConfirmationDialogData}

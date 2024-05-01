@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItem;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItemDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
@@ -24,6 +25,7 @@ public class StockItemQueryService {
     private final StockCategoryQueryService stockCategoryQueryService;
     private final StockItemPriceDao stockItemPriceDao;
     private final CartItemDao cartItemDao;
+    private final CartDao cartDao;
 
     public List<StockItemOverviewResponse> getStockItems(UUID userId) {
         return stockItemDao.getByUserId(userId)
@@ -39,15 +41,17 @@ public class StockItemQueryService {
             .name(stockItem.getName())
             .serialNumber(stockItem.getSerialNumber())
             .inCar(stockItem.getInCar())
-            .inCart(countInCart(stockItem.getStockItemId()))
+            .inCart(countInCart(stockItem.getUserId(), stockItem.getStockItemId()))
             .inStorage(stockItem.getInStorage())
             .price(getPrice(stockItem.getStockItemId()))
             .build();
     }
 
-    private Integer countInCart(UUID stockItemId) {
-        return cartItemDao.getByStockItemId(stockItemId)
+    private Integer countInCart(UUID userId, UUID stockItemId) {
+        return cartDao.getByUserId(userId)
             .stream()
+            .filter(cart -> !cart.isFinalized())
+            .flatMap(cart -> cartItemDao.getByStockItemId(stockItemId).stream().filter(cartItem -> cartItem.getCartId().equals(cart.getCartId())))
             .mapToInt(CartItem::getAmount)
             .sum();
     }

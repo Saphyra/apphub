@@ -11,4 +11,6 @@ interface CartItemRepository extends CrudRepository<CartItemEntity, String> {
     List<CartItemEntity> getByCartId(String cartId);
 
     List<CartItemEntity> getByStockItemId(String stockItemId);
+
+    void deleteByCartId(String cartId);
 }

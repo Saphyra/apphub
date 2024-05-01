@@ -3,20 +3,16 @@ import localizationData from "./villany_atesz_stock_overview_cart_localization.j
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_overview_cart.css";
 import Utils from "../../../../../../common/js/Utils";
-import useLoader from "../../../../../../common/hook/Loader";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../../common/js/collection/Stream";
+import Button from "../../../../../../common/component/input/Button";
+import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import Endpoints from "../../../../../../common/js/dao/dao";
 
-const VillanyAteszStockOverviewCart = ({activeCart, setActiveCart }) => {
+const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    const [carts, setCarts] = useState([]);
-    const [cart, setCart] = useState(null);
-
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart))
 
     const getAvailableCartOptions = () => {
         return new Stream(carts)
@@ -31,8 +27,76 @@ const VillanyAteszStockOverviewCart = ({activeCart, setActiveCart }) => {
     const getItems = () => {
         return new Stream(cart.items)
             .sorted((a, b) => a.name.localeCompare(b.name))
-            .map(item => <div>{item.amount + " x " + item.name}</div>)
+            .map(item => <div key={item.stockItemId}>{item.amount + " x " + item.name}</div>)
             .toList();
+    }
+
+    const openFinalizeCartConfirmation = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "villany-atesz-stock-finalize-cart-confirmation",
+            localizationHandler.get("confirm-finalize-cart-title"),
+            localizationHandler.get("confirm-finalize-cart-content", { code: cart.contact.code, name: cart.contact.name, totalPrice: cart.totalPrice }),
+            [
+                <Button
+                    key="finalize"
+                    id="villany-atesz-stock-finalize-confirm-button"
+                    label={localizationHandler.get("finalize")}
+                    onclick={finalizeCart}
+                />,
+                <Button
+                    key="cancel"
+                    id="villany-atesz-stock-finalize-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    const openDeleteCartConfirmation = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "villany-atesz-stock-delete-cart-confirmation",
+            localizationHandler.get("confirm-delete-cart-title"),
+            localizationHandler.get("confirm-delete-cart-content", { code: cart.contact.code, name: cart.contact.name, totalPrice: cart.totalPrice }),
+            [
+                <Button
+                    key="delete"
+                    id="villany-atesz-stock-delete-confirm-button"
+                    label={localizationHandler.get("delete")}
+                    onclick={deleteCart}
+                />,
+                <Button
+                    key="cancel"
+                    id="villany-atesz-stock-delete-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    const finalizeCart = async () => {
+        const response = await Endpoints.VILLANY_ATESZ_FINALIZE_CART.createRequest(null, { cartId: cart.cartId })
+            .send();
+
+        setCarts(response.carts);
+        setItems(response.items);
+        setCart(null);
+        setActiveCart("");
+
+        setConfirmationDialogData(null);
+    }
+
+    const deleteCart = async () => {
+        const response = await Endpoints.VILLANY_ATESZ_DELETE_CART.createRequest(null, { cartId: cart.cartId })
+            .send();
+
+        setCarts(response.carts);
+        setItems(response.items);
+        setCart(null);
+        setActiveCart("");
+
+        setConfirmationDialogData(null);
     }
 
     return (
@@ -50,6 +114,22 @@ const VillanyAteszStockOverviewCart = ({activeCart, setActiveCart }) => {
 
             {Utils.hasValue(cart) &&
                 <div id="villany-atesz-stock-overview-cart-details">
+                    <fieldset>
+                        <legend>{localizationHandler.get("operations")}</legend>
+
+                        <Button
+                            id="villany-atesz-stock-overview-finalize-cart"
+                            label={localizationHandler.get("finalize")}
+                            onclick={openFinalizeCartConfirmation}
+                        />
+
+                        <Button
+                            id="villany-atesz-stock-overview-finalize-cart"
+                            label={localizationHandler.get("delete")}
+                            onclick={openDeleteCartConfirmation}
+                        />
+                    </fieldset>
+
                     <fieldset>
                         <legend>{localizationHandler.get("contact-info")}</legend>
 

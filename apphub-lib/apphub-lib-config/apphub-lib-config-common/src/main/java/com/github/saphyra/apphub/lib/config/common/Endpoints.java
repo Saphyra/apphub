@@ -337,4 +337,7 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_CREATE_CART = "/api/villany-atesz/cart";
     public static final String VILLANY_ATESZ_GET_CARTS = "/api/villany-atesz/cart";
     public static final String VILLANY_ATESZ_GET_CART = "/api/villany-atesz/cart/{cartId}";
+    public static final String VILLANY_ATESZ_ADD_TO_CART = "/api/villany-atesz/cart";
+    public static final String VILLANY_ATESZ_FINALIZE_CART = "/api/villany-atesz/cart/{cartId}";
+    public static final String VILLANY_ATESZ_DELETE_CART = "/api/villany-atesz/cart/{cartId}";
 }

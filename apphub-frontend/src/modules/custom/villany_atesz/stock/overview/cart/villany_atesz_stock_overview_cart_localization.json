@@ -34,5 +34,37 @@
     "items": {
         "en": "Items",
         "hu": "Tételek"
+    },
+    "operations": {
+        "en": "Operations",
+        "hu": "Műveletek"
+    },
+    "finalize": {
+        "en": "Finalize",
+        "hu": "Véglegesítés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "confirm-finalize-cart-title": {
+        "en": "Finalize cart?",
+        "hu": "Kosár véglegesítése?"
+    },
+    "confirm-finalize-cart-content": {
+        "en": "Are you sure you want to finalize cart for customer Code: {code}, Name: {name} with a total value of {totalPrice} Ft?",
+        "hu": "Biztosan véglegesíteni szeretnéd a Sorszám: {code}, Név: {name} ügyfélhez tartozo kosarat {totalPrice} Ft értékben?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "confirm-delete-cart-title": {
+        "en": "Delete cart?",
+        "hu": "Kosár törlése?"
+    },
+    "confirm-delete-cart-content": {
+        "en": "Are you sure you want to delete cart for customer Code: {code}, Name: {name}?",
+        "hu": "Biztosan törölni szeretnéd a Sorszám: {code}, Név: {name} ügyfélhez tartozo kosarat?"
     }
 }

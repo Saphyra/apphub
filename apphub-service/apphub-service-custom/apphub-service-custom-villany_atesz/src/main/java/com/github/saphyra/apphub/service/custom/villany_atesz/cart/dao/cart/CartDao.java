@@ -34,4 +34,8 @@ public class CartDao extends AbstractDao<CartEntity, Cart, String, CartRepositor
         return findById(uuidConverter.convertDomain(cartId))
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Cart not found by id " + cartId));
     }
+
+    public void deleteByUserIdAndCartId(UUID userId, UUID cartId) {
+        repository.deleteByUserIdAndCartId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(cartId));
+    }
 }

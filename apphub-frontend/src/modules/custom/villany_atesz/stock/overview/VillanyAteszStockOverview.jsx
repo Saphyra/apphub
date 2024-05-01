@@ -10,12 +10,14 @@ import Utils from "../../../../../common/js/Utils";
 import OverviewItem from "./OverviewItem";
 import VillanyAteszStockOverviewCart from "./cart/VillanyAteszStockOverviewCart";
 
-const VillanyAteszStockOverview = ({ }) => {
+const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [search, setSearch] = useState("");
     const [items, setItems] = useState([]);
     const [activeCart, setActiveCart] = useState(Utils.hasValue(sessionStorage.activeCart) ? sessionStorage.activeCart : "");
+    const [cart, setCart] = useState(null);
+    const [carts, setCarts] = useState([]);
 
     const updateActiveCart = (cartId) => {
         sessionStorage.activeCart = cartId;
@@ -23,6 +25,8 @@ const VillanyAteszStockOverview = ({ }) => {
     }
 
     useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
+    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart))
+    useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
 
     const getItems = () => {
         return new Stream(items)
@@ -46,6 +50,9 @@ const VillanyAteszStockOverview = ({ }) => {
                 key={item.stockItemId}
                 item={item}
                 activeCart={activeCart}
+                localizationHandler={localizationHandler}
+                setItems={setItems}
+                setCart={setCart}
             />)
             .toList();
     }
@@ -85,6 +92,12 @@ const VillanyAteszStockOverview = ({ }) => {
             <VillanyAteszStockOverviewCart
                 activeCart={activeCart}
                 setActiveCart={updateActiveCart}
+                cart={cart}
+                carts={carts}
+                setCart={setCart}
+                setCarts={setCarts}
+                setConfirmationDialogData={setConfirmationDialogData}
+                setItems={setItems}
             />
         </div>
     );
