@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItem;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -62,5 +64,15 @@ public class StockItemQueryService {
             .map(StockItemPrice::getPrice)
             .max(Integer::compareTo)
             .orElse(0);
+    }
+
+    public List<StockItemForCategoryResponse> getForCategory(UUID stockCategoryId) {
+        return stockItemDao.getByStockCategoryId(stockCategoryId)
+            .stream()
+            .map(stockItem -> StockItemForCategoryResponse.builder()
+                .stockItemId(stockItem.getStockItemId())
+                .name(stockItem.getName())
+                .build())
+            .collect(Collectors.toList());
     }
 }

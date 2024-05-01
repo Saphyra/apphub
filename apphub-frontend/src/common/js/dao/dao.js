@@ -380,6 +380,8 @@ const Endpoints = {
     VILLANY_ATESZ_GET_CART: new Endpoint(RequestMethod.GET, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_DELETE_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_FINALIZE_CART: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}"),
+    VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockCategoryId}"),
+    VILLANY_ATESZ_STOCK_ACQUIRE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/acquire"),
 }
 
 export default Endpoints;

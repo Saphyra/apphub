@@ -1,0 +1,24 @@
+#villany-atesz-stock-acquisition-buttons {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-bottom: 1px solid white;
+}
+
+.villany-atesz-stock-acquisition-item {
+    margin: 10px;
+    padding: 5px;
+    border: 3px ridge lightblue;
+}
+
+.villany-atesz-stock-acquisition-item label {
+    font-size: 20px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.villany-atesz-stock-acquisition-item input[type=number] {
+    width: 100px;
+}

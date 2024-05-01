@@ -1,0 +1,58 @@
+{
+    "new-item": {
+        "en": "New item",
+        "hu": "Új tétel"
+    },
+    "add-to-stock": {
+        "en": "Add to stock",
+        "hu": "Raktárba tesz"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "choose": {
+        "en": "Choose",
+        "hu": "Válassz"
+    },
+    "item": {
+        "en": "Item",
+        "hu": "Tétel"
+    },
+    "to-car": {
+        "en": "To car",
+        "hu": "Autóba"
+    },
+    "to-storage": {
+        "en": "To storage",
+        "hu": "Raktárba"
+    },
+    "price": {
+        "en": "Price",
+        "hu": "Ár"
+    },
+    "add-to-stock-confirmation-title": {
+        "en": "Add to stock?",
+        "hu": "Raktárba tétel?"
+    },
+    "add-to-stock-confirmation-content": {
+        "en": "Are you sure you want to add theese items to the stock?",
+        "hu": "Biztos, hogy a raktárba szeretnéd tenni ezeket a tételeket?"
+    },
+    "confirm": {
+        "en": "Confirm",
+        "hu": "Megerősítés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Cancel"
+    },
+    "remove": {
+        "en": "Remove",
+        "hu": "Eltávolít"
+    },
+    "stored": {
+        "en": "Items stored.",
+        "hu": "Tételek a raktárba helyezve."
+    }
+}

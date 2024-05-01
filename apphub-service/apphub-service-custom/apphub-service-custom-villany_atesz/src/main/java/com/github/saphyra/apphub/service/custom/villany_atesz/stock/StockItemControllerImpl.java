@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
@@ -22,6 +25,7 @@ class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
     private final DeleteStockItemService deleteStockItemService;
     private final StockItemQueryService stockItemQueryService;
+    private final AcquisitionService acquisitionService;
 
     @Override
     public void createStockItem(StockItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -44,5 +48,19 @@ class StockItemControllerImpl implements StockItemController {
         log.info("{} wants to know their stockItems", accessTokenHeader.getUserId());
 
         return stockItemQueryService.getStockItems(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public List<StockItemForCategoryResponse> getStockItemsForCategory(UUID stockCategoryId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know their items belong to category {}", accessTokenHeader.getUserId(), stockCategoryId);
+
+        return stockItemQueryService.getForCategory(stockCategoryId);
+    }
+
+    @Override
+    public void acquire(List<AddToStockRequest> request, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to add {} items to the stock.", accessTokenHeader.getUserId(), request.size());
+
+        acquisitionService.acquire(request);
     }
 }
