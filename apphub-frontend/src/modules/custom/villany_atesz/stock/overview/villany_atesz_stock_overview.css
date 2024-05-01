@@ -13,7 +13,7 @@
     flex-grow: 2;
 }
 
-#villany-atesz-overview-items-search {
+#villany-atesz-stock-overview-items-search {
     display: block;
     width: 90%;
     margin: auto;
@@ -22,7 +22,7 @@
     top: 5px;
 }
 
-#villany-atesz-overview-items-table {
+#villany-atesz-stock-overview-items-table {
     margin: auto;
 }
 

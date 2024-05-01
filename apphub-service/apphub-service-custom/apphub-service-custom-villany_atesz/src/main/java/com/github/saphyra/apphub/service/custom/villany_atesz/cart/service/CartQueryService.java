@@ -32,6 +32,7 @@ public class CartQueryService {
     public List<CartResponse> getCarts(UUID userId) {
         return cartDao.getByUserId(userId)
             .stream()
+            .filter(cart -> !cart.isFinalized())
             .map(cart -> CartResponse.builder()
                 .cartId(cart.getCartId())
                 .contact(contactQueryService.getContact(cart.getContactId()))

@@ -41,7 +41,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
                 const r = a.category.name.localeCompare(b.category.name);
 
                 if (r === 0) {
-                    return a.name.localeCompare.b.name();
+                    return a.name.localeCompare(b.name);
                 }
 
                 return r;
@@ -61,13 +61,13 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
         <div id="villany-atesz-stock-overview">
             <div id="villany-atesz-stock-overview-items">
                 <InputField
-                    id="villany-atesz-overview-items-search"
+                    id="villany-atesz-stock-overview-items-search"
                     placeholder={localizationHandler.get("search")}
                     value={search}
                     onchangeCallback={setSearch}
                 />
 
-                <table id="villany-atesz-overview-items-table" className="formatted-table">
+                <table id="villany-atesz-stock-overview-items-table" className="formatted-table">
                     <thead>
                         <tr>
                             <th>{localizationHandler.get("category")}</th>

@@ -382,6 +382,12 @@ const Endpoints = {
     VILLANY_ATESZ_FINALIZE_CART: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockCategoryId}"),
     VILLANY_ATESZ_STOCK_ACQUIRE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/acquire"),
+    VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/inventory"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/name"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/serial-number"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/in-car"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/category"),
 }
 
 export default Endpoints;

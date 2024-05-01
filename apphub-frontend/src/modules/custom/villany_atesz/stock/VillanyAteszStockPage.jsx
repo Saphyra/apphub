@@ -17,12 +17,13 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 import VillanyAteszStockNewItem from "./new_item/VillanyAteszStockNewItem";
 import VillanyAteszStockOverview from "./overview/VillanyAteszStockOverview";
 import VillanyAteszStockAcquisition from "./acquisition/VillanyAteszStockAcquisition";
+import VillanyAteszStockInventory from "./inventory/VillanyAteszStockInventory";
 
 const VillanyAteszStockPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [openedTab, setOpenedTab] = useState(StockTab.ACQUISITION);
+    const [openedTab, setOpenedTab] = useState(StockTab.OVERVIEW);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
     useEffect(sessionChecker, []);
@@ -83,6 +84,10 @@ const VillanyAteszStockPage = () => {
             case StockTab.ACQUISITION:
                 return <VillanyAteszStockAcquisition
                     setConfirmationDialogData={setConfirmationDialogData}
+                />
+            case StockTab.INVENTORY:
+                return <VillanyAteszStockInventory
+
                 />
             default:
                 return "Unhandled StockTab: " + openedTab;

@@ -1,0 +1,26 @@
+{
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "serial-number": {
+        "en": "Serial No.",
+        "hu": "Cikkszám"
+    },
+    "in-car": {
+        "en": "In car",
+        "hu": "Autóban"
+    },
+    "in-storage": {
+        "en": "In storage",
+        "hu": "Raktárban"
+    }
+}
