@@ -66,5 +66,17 @@
     "confirm-delete-cart-content": {
         "en": "Are you sure you want to delete cart for customer Code: {code}, Name: {name}?",
         "hu": "Biztosan törölni szeretnéd a Sorszám: {code}, Név: {name} ügyfélhez tartozo kosarat?"
+    },
+    "cart-item-removal-title": {
+        "en": "Remove from cart?",
+        "hu": "Kiveszed a kosárból?"
+    },
+    "cart-item-removal-content": {
+        "en": "Are you sure you want to remove {amount} {name} from the cart?",
+        "hu": "Biztosan ki szeretnél venni {amount} {name}-t a kosárból?"
+    },
+    "remove": {
+        "en": "Remove",
+        "hu": "Eltávolítás"
     }
 }

@@ -20,17 +20,20 @@ public interface StockInventoryController {
     List<StockItemInventoryResponse> getItemsForInventory(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY)
-    void editCategory(@RequestBody OneParamRequest<UUID> category,@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editCategory(@RequestBody OneParamRequest<UUID> category, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED)
+    void editInventoried(@RequestBody OneParamRequest<Boolean> inventoried, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME)
-    void editName(@RequestBody OneParamRequest<String> name,@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editName(@RequestBody OneParamRequest<String> name, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER)
-    void editSerialNumber(@RequestBody OneParamRequest<String> serialNumber,@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editSerialNumber(@RequestBody OneParamRequest<String> serialNumber, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR)
-    void editInCar(@RequestBody OneParamRequest<Integer> inCar,@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editInCar(@RequestBody OneParamRequest<Integer> inCar, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE)
-    void editInStorage(@RequestBody OneParamRequest<Integer> inStorage,@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editInStorage(@RequestBody OneParamRequest<Integer> inStorage, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

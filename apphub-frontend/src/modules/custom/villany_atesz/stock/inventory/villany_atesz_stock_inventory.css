@@ -14,3 +14,7 @@
 .villany-atesz-stock-inventory-item input.scheduled {
     border-color: orange;
 }
+
+.villany-atesz-stock-inventory-item-inventoried{
+    transform: scale(1.5);
+}

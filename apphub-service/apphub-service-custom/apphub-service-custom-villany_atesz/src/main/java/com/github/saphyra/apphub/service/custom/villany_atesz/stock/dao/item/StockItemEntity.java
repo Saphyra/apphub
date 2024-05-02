@@ -23,4 +23,5 @@ class StockItemEntity {
     private String serialNumber;
     private String inCar;
     private String inStorage;
+    private String inventoried;
 }

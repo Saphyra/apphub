@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,5 +36,14 @@ public class CartItemDao extends AbstractDao<CartItemEntity, CartItem, String, C
 
     public void deleteByCartId(UUID cartId) {
         repository.deleteByCartId(uuidConverter.convertDomain(cartId));
+    }
+
+    public CartItem findByIdValidated(UUID cartItemId) {
+        return findById(uuidConverter.convertDomain(cartItemId))
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "CartItem not found by id " + cartItemId));
+    }
+
+    public void deleteByCartIdAndStockItemId(UUID cartId, UUID stockItemId) {
+        repository.deleteByCartIdAndStockItemId(uuidConverter.convertDomain(cartId), uuidConverter.convertDomain(stockItemId));
     }
 }

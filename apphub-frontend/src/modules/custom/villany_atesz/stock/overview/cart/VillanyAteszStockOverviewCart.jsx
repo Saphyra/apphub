@@ -9,6 +9,7 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../../../../common/js/dao/dao";
+import CartItem from "./CartItem";
 
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -27,7 +28,15 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
     const getItems = () => {
         return new Stream(cart.items)
             .sorted((a, b) => a.name.localeCompare(b.name))
-            .map(item => <div key={item.stockItemId}>{item.amount + " x " + item.name}</div>)
+            .map(item => <CartItem
+                key={item.stockItemId}
+                cartId={cart.cartId}
+                item={item}
+                setConfirmationDialogData={setConfirmationDialogData}
+                localizationHandler={localizationHandler}
+                setItems={setItems}
+                setCart={setCart}
+            />)
             .toList();
     }
 

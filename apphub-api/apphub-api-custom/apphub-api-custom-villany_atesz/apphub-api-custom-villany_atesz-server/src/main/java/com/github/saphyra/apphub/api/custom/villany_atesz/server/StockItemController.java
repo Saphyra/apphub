@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOvervie
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,4 +34,10 @@ public interface StockItemController {
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE)
     void acquire(@RequestBody List<AddToStockRequest> request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR)
+    List<StockItemOverviewResponse> moveStockToCar(@RequestBody OneParamRequest<Integer> amount, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE)
+    List<StockItemOverviewResponse> moveStockToStorage(@RequestBody OneParamRequest<Integer> amount, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

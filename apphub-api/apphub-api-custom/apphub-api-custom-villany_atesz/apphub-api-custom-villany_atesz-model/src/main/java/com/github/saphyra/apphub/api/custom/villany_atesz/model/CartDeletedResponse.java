@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class FinalizeCartResponse {
+public class CartDeletedResponse {
     private List<CartResponse> carts;
     private List<StockItemOverviewResponse> items;
 }

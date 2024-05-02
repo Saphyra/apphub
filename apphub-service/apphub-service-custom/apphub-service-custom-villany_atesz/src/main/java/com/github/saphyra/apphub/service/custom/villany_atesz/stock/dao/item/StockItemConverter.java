@@ -2,11 +2,14 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -16,11 +19,13 @@ class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
     private static final String COLUMN_SERIAL_NUMBER = "serial_number";
     private static final String COLUMN_IN_CAR = "in_car";
     private static final String COLUMN_IN_STORAGE = "in_storage";
+    private static final String COLUMN_INVENTORIED = "inventoried";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;
     private final StringEncryptor stringEncryptor;
     private final AccessTokenProvider accessTokenProvider;
+    private final BooleanEncryptor booleanEncryptor;
 
     @Override
     protected StockItemEntity processDomainConversion(StockItem domain) {
@@ -35,6 +40,7 @@ class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
             .serialNumber(stringEncryptor.encrypt(domain.getSerialNumber(), userId, stockId, COLUMN_SERIAL_NUMBER))
             .inCar(integerEncryptor.encrypt(domain.getInCar(), userId, stockId, COLUMN_IN_CAR))
             .inStorage(integerEncryptor.encrypt(domain.getInStorage(), userId, stockId, COLUMN_IN_STORAGE))
+            .inventoried(booleanEncryptor.encrypt(domain.isInventoried(), userId, stockId, COLUMN_INVENTORIED))
             .build();
     }
 
@@ -50,6 +56,7 @@ class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
             .serialNumber(stringEncryptor.decrypt(entity.getSerialNumber(), userId, entity.getStockItemId(), COLUMN_SERIAL_NUMBER))
             .inCar(integerEncryptor.decrypt(entity.getInCar(), userId, entity.getStockItemId(), COLUMN_IN_CAR))
             .inStorage(integerEncryptor.decrypt(entity.getInStorage(), userId, entity.getStockItemId(), COLUMN_IN_STORAGE))
+            .inventoried(Optional.ofNullable(entity.getInventoried()).map(inventoried -> booleanEncryptor.decrypt(inventoried, userId, entity.getStockItemId(), COLUMN_INVENTORIED)).orElse(false))
             .build();
     }
 }

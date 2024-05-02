@@ -62,4 +62,14 @@ public class EditItemService {
 
         stockItemDao.save(stockItem);
     }
+
+    public void editInventoried(UUID stockItemId, Boolean inventoried) {
+        //TODO validate
+
+        StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
+
+        stockItem.setInventoried(inventoried);
+
+        stockItemDao.save(stockItem);
+    }
 }

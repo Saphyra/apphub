@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToCartRequest;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToCartResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartModifiedResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartView;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.FinalizeCartResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartDeletedResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -32,11 +32,14 @@ public interface CartController {
     CartView getCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_ADD_TO_CART)
-    AddToCartResponse addToCart(@RequestBody AddToCartRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CartModifiedResponse addToCart(@RequestBody AddToCartRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART)
+    CartModifiedResponse removeFromCart(@PathVariable("cartId") UUID cartId, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_FINALIZE_CART)
-    FinalizeCartResponse finalizeCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CartDeletedResponse finalizeCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_CART)
-    FinalizeCartResponse deleteCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CartDeletedResponse deleteCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

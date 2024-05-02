@@ -17,4 +17,5 @@ public class StockItem {
     private String serialNumber;
     private int inCar;
     private int inStorage;
+    private boolean inventoried;
 }

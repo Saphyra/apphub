@@ -30,6 +30,10 @@
     background-color: red;
 }
 
-.villany-atesz-stock-overview-item-add-to-cart-amount{
+.villany-atesz-stock-overview-item-add-to-cart-amount {
     width: 75px;
+}
+
+.villany-atesz-stock-overview-item-stock-operations {
+    white-space: nowrap;
 }

@@ -68,6 +68,7 @@ const VillanyAteszStockInventory = ({ }) => {
             <table id="villany-atesz-stock-inventory-items-table" className="formatted-table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>{localizationHandler.get("category")}</th>
                         <th>{localizationHandler.get("name")}</th>
                         <th>{localizationHandler.get("serial-number")}</th>

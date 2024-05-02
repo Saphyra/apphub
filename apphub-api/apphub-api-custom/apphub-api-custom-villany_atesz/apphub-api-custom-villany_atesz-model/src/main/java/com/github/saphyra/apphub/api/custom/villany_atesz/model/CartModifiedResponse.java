@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class AddToCartResponse {
+public class CartModifiedResponse {
     private CartView cart;
     private List<StockItemOverviewResponse> items;
 }

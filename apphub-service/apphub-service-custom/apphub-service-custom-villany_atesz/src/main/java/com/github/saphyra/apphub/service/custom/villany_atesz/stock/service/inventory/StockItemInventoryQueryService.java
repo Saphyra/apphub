@@ -37,6 +37,7 @@ public class StockItemInventoryQueryService {
             .inCar(stockItem.getInCar())
             .inStorage(stockItem.getInStorage())
             .inCart(isInCart(stockItem.getUserId(), stockItem.getStockItemId()))
+            .inventoried(stockItem.isInventoried())
             .build();
     }
 

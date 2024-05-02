@@ -36,6 +36,13 @@ class StockInventoryControllerImpl implements StockInventoryController {
     }
 
     @Override
+    public void editInventoried(OneParamRequest<Boolean> inventoried, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit the inventoried of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        editItemService.editInventoried(stockItemId, inventoried.getValue());
+    }
+
+    @Override
     public void editName(OneParamRequest<String> name, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit the name of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 

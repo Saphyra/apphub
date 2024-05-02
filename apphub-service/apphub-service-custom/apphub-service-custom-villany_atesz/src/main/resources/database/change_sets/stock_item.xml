@@ -20,4 +20,16 @@
 
         <addPrimaryKey schemaName="villany_atesz" tableName="stock_item" columnNames="stock_item_id"/>
     </changeSet>
+
+    <changeSet id="add-column-inventoried-to-stock_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="stock_item" columnName="inventoried"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="stock_item">
+            <column name="inventoried" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

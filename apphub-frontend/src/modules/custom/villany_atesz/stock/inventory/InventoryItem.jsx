@@ -4,6 +4,7 @@ import Utils from "../../../../../common/js/Utils";
 import Endpoints from "../../../../../common/js/dao/dao";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
 import MapStream from "../../../../../common/js/collection/MapStream";
+import InputField from "../../../../../common/component/input/InputField";
 
 const InventoryItem = ({ localizationHandler, item, items, categories, setItems }) => {
     const updateProperty = (property, newValue) => {
@@ -23,6 +24,12 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems 
         sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY, newCategory);
     }
 
+    const updateInventoried = async (inventoried) => {
+        updateProperty("inventoried", inventoried);
+
+        sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED, inventoried);
+    }
+
     const getCategoryOptions = () => {
         return new MapStream(categories)
             .sorted((a, b) => a.value.localeCompare(b.value))
@@ -32,6 +39,14 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems 
 
     return (
         <tr className="villany-atesz-stock-inventory-item">
+            <td>
+                <InputField
+                    type="checkbox"
+                    className="villany-atesz-stock-inventory-item-inventoried"
+                    checked={item.inventoried}
+                    onchangeCallback={updateInventoried}
+                />
+            </td>
             <td>
                 <SelectInput
                     className="villany-atesz-stock-inventory-item-category"

@@ -42,5 +42,13 @@
     "add-to-cart": {
         "en": "Add to cart",
         "hu": "Kosárba"
+    },
+    "move-to-car": {
+        "en": "To car",
+        "hu": "Autóba"
+    },
+    "move-to-storage": {
+        "en": "To storage",
+        "hu": "Raktárba"
     }
 }
