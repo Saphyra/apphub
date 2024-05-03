@@ -78,9 +78,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
                             <th>{localizationHandler.get("in-storage")}</th>
                             <th>{localizationHandler.get("price")}</th>
                             <th>{localizationHandler.get("stock-value")}</th>
-                            {!Utils.isBlank(activeCart) &&
-                                <th></th>
-                            }
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
