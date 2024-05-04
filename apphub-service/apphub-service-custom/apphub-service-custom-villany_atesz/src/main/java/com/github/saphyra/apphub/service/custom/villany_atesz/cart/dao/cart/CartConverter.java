@@ -12,10 +12,9 @@ import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class CartConverter extends ConverterBase<CartEntity, Cart> {
-    private static final String COLUMN_CREATED_AT = "created_at";
-    private static final String COLUMN_FINALIZED = "finalized";
+    static final String COLUMN_CREATED_AT = "created_at";
+    static final String COLUMN_FINALIZED = "finalized";
 
     private final UuidConverter uuidConverter;
     private final BooleanEncryptor booleanEncryptor;

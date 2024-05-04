@@ -53,7 +53,7 @@ public class StockItemQueryService {
         return cartDao.getByUserId(userId)
             .stream()
             .filter(cart -> !cart.isFinalized())
-            .flatMap(cart -> cartItemDao.getByStockItemId(stockItemId).stream().filter(cartItem -> cartItem.getCartId().equals(cart.getCartId())))
+            .flatMap(cart -> cartItemDao.getByCartIdAndStockItemId(cart.getCartId(), stockItemId).stream())
             .mapToInt(CartItem::getAmount)
             .sum();
     }

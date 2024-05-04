@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class CartDao extends AbstractDao<CartEntity, Cart, String, CartRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class CartItemDao extends AbstractDao<CartItemEntity, CartItem, String, CartItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -30,8 +29,8 @@ public class CartItemDao extends AbstractDao<CartItemEntity, CartItem, String, C
         return converter.convertEntity(repository.getByCartId(uuidConverter.convertDomain(cartId)));
     }
 
-    public List<CartItem> getByStockItemId(UUID stockItemId) {
-        return converter.convertEntity(repository.getByStockItemId(uuidConverter.convertDomain(stockItemId)));
+    public List<CartItem> getByCartIdAndStockItemId(UUID cartId, UUID stockItemId) {
+        return converter.convertEntity(repository.getByCartIdAndStockItemId(uuidConverter.convertDomain(cartId), uuidConverter.convertDomain(stockItemId)));
     }
 
     public void deleteByCartId(UUID cartId) {

@@ -4,13 +4,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface CartItemRepository extends CrudRepository<CartItemEntity, String> {
     void deleteByUserId(String userId);
 
     List<CartItemEntity> getByCartId(String cartId);
 
-    List<CartItemEntity> getByStockItemId(String stockItemId);
+    List<CartItemEntity> getByCartIdAndStockItemId(String cartId, String stockItemId);
 
     void deleteByCartId(String cartId);
 

@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface CartRepository extends CrudRepository<CartEntity, String> {
     void deleteByUserId(String userId);
 

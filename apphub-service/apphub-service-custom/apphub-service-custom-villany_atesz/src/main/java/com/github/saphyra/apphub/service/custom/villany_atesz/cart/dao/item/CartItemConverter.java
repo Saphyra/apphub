@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class CartItemConverter extends ConverterBase<CartItemEntity, CartItem> {
-    private static final String COLUMN_AMOUNT = "amount";
+    static final String COLUMN_AMOUNT = "amount";
 
     private final UuidConverter uuidConverter;
     private final AccessTokenProvider accessTokenProvider;
@@ -24,7 +23,7 @@ class CartItemConverter extends ConverterBase<CartItemEntity, CartItem> {
 
         return CartItemEntity.builder()
             .cartItemId(cartItemId)
-            .userId(userId)
+            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .cartId(uuidConverter.convertDomain(domain.getCartId()))
             .stockItemId(uuidConverter.convertDomain(domain.getStockItemId()))
             .amount(integerEncryptor.encrypt(domain.getAmount(), userId, cartItemId, COLUMN_AMOUNT))
