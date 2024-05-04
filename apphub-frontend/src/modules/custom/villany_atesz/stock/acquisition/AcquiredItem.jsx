@@ -101,7 +101,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                     input={<NumberInput
                         className={"villany-atesz-stock-acquisition-item-to-storage"}
                         placeholder={localizationHandler.get("to-storage")}
-                        value={item.inCar}
+                        value={item.inStorage}
                         onchangeCallback={(value) => set("inStorage", value)}
                     />}
                 />

@@ -20,6 +20,8 @@ import Contact from "./Contact";
 import useLoader from "../../../../common/hook/Loader";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import ContactOrder from "./ContactOrder";
+import { validateContact } from "../validation/VillanyAteszValidation";
+import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 const VillanyAteszContactsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -88,13 +90,18 @@ const VillanyAteszContactsPage = () => {
     }
 
     const save = async () => {
-        //TODO validation
         const payload = {
             code: code,
             name: name,
             phone: phone,
             address: address,
             note: note
+        }
+
+        const validationResult = validateContact(payload);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
         }
 
         if (Utils.hasValue(editedContact)) {

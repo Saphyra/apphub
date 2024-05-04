@@ -3,12 +3,19 @@ import Utils from "../../../../../common/js/Utils";
 import NumberInput from "../../../../../common/component/input/NumberInput";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
+import { validateOverviewAmount } from "../../validation/VillanyAteszValidation";
+import NotificationService from "../../../../../common/js/notification/NotificationService";
 
 const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart }) => {
     const [amount, setAmount] = useState(0);
 
     const addToCart = async () => {
-        //TODO validation
+        const validationResult = validateOverviewAmount(amount);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
         const response = await Endpoints.VILLANY_ATESZ_ADD_TO_CART.createRequest({ cartId: activeCart, stockItemId: item.stockItemId, amount: amount })
             .send();
 
@@ -18,7 +25,12 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
     }
 
     const moveToCar = async () => {
-        //TODO validation
+        const validationResult = validateOverviewAmount(amount);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
         const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR.createRequest({ value: amount }, { stockItemId: item.stockItemId })
             .send();
 
@@ -27,7 +39,12 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
     }
 
     const moveToStorage = async () => {
-        //TODO validation
+        const validationResult = validateOverviewAmount(amount);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
         const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE.createRequest({ value: amount }, { stockItemId: item.stockItemId })
             .send();
 

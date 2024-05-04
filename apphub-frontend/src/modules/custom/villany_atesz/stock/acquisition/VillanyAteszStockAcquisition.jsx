@@ -10,6 +10,7 @@ import AcquiredItem from "./AcquiredItem";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { validateAcquiredItems } from "../../validation/VillanyAteszValidation";
 
 const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(loclaizationData);
@@ -23,7 +24,12 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     }
 
     const openAddToStockConfirmation = () => {
-        //TODO validation
+        const validationResult = validateAcquiredItems(items);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
         setConfirmationDialogData(new ConfirmationDialogData(
             "villany-atesz-stock-acquisition-confirmation",
             localizationHandler.get("add-to-stock-confirmation-title"),
@@ -47,7 +53,7 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
 
     const addToStock = async () => {
         await Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE.createRequest(items)
-        .send();
+            .send();
 
         updateItems([]);
         setConfirmationDialogData(null);
