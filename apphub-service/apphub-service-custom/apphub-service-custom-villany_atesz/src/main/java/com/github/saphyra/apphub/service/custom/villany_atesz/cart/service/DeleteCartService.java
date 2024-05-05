@@ -19,4 +19,9 @@ public class DeleteCartService {
         cartDao.deleteByUserIdAndCartId(userId, cartId);
         cartItemDao.deleteByUserIdAndCartId(userId, cartId);
     }
+
+    public void deleteForContact(UUID userId, UUID contactId) {
+        cartDao.getByUserIdAndContactId(userId, contactId)
+            .forEach(cart -> delete(userId, cart.getCartId()));
+    }
 }

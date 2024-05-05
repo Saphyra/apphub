@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ContactDao extends AbstractDao<ContactEntity, Contact, String, ContactRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

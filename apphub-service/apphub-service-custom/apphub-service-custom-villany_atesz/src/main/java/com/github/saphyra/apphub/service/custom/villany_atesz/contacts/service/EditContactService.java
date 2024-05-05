@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditContactService {
     private final ContactValidator contactValidator;
     private final ContactDao contactDao;
@@ -26,7 +25,7 @@ public class EditContactService {
         contact.setCode(request.getCode());
         contact.setPhone(request.getPhone());
         contact.setAddress(request.getAddress());
-        contact.setName(request.getName());
+        contact.setNote(request.getNote());
 
         contactDao.save(contact);
     }

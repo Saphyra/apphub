@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.contacts.service;
 
+import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.DeleteCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.contacts.dao.ContactDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +12,13 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeleteContactService {
     private final ContactDao contactDao;
+    private final DeleteCartService deleteCartService;
 
     @Transactional
     public void delete(UUID userId, UUID contactId) {
         contactDao.deleteByUserIdAndContactId(userId, contactId);
-
-        //TODO delete cart
+        deleteCartService.deleteForContact(userId, contactId);
     }
 }

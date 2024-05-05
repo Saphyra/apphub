@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CreateContactService {
     private final ContactValidator contactValidator;
     private final ContactFactory contactFactory;

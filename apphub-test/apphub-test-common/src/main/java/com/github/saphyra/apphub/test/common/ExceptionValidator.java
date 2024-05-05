@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class ExceptionValidator {
     public static void validateLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
@@ -63,6 +64,16 @@ public class ExceptionValidator {
     private static void validateRestException(RestException ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex.getResponseStatus()).isEqualTo(status);
         assertThat(ex.getErrorMessage().getErrorCode()).isEqualTo(errorCode);
+    }
+
+    public static void validateInvalidParam(Runnable methodCall, String field, String value) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateInvalidParam(e, field, value);
+        }
     }
 
     public static void validateInvalidParam(Throwable ex, String field, String value) {

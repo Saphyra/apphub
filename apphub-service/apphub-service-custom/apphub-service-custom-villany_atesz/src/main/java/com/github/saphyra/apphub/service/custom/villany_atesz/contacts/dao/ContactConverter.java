@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class ContactConverter extends ConverterBase<ContactEntity, Contact> {
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_CODE = "code";
-    private static final String COLUMN_PHONE = "phone";
-    private static final String COLUMN_ADDRESS = "address";
-    private static final String COLUMN_NOTE = "note";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_CODE = "code";
+    static final String COLUMN_PHONE = "phone";
+    static final String COLUMN_ADDRESS = "address";
+    static final String COLUMN_NOTE = "note";
 
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

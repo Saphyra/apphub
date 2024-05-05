@@ -10,4 +10,6 @@ interface CartRepository extends CrudRepository<CartEntity, String> {
     List<CartEntity> getByUserId(String userId);
 
     void deleteByUserIdAndCartId(String userId, String cartId);
+
+    List<CartEntity> getByUserIdAndContactId(String userId, String contactId);
 }

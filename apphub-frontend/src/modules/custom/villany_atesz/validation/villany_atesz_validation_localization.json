@@ -1,8 +1,4 @@
 {
-    "blank-code": {
-        "en": "Code must not be blank.",
-        "hu": "A sorszám nem lehet üres."
-    },
     "blank-name": {
         "en": "Name must not be blank.",
         "hu": "A név nem lehet üres."

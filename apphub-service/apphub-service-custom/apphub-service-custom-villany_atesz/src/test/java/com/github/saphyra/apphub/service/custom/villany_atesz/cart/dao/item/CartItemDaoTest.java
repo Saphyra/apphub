@@ -29,6 +29,8 @@ class CartItemDaoTest {
     private static final String STOCK_ITEM_ID_STRING = "stock-item-id";
     private static final UUID CART_ITEM_ID = UUID.randomUUID();
     private static final String CART_ITEM_ID_STRING = "cart-item-id";
+    private static final UUID CONTACT_ID = UUID.randomUUID();
+    private static final String CONTACT_ID_STRING = "contact-id";
 
     @Mock
     private CartItemConverter converter;

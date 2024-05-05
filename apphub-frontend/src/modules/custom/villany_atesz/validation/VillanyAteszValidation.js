@@ -7,10 +7,6 @@ import localizationData from "./villany_atesz_validation_localization.json";
 const localizationHandler = new LocalizationHandler(localizationData);
 
 export const validateContact = (contact) => {
-    if (Utils.isBlank(contact.code)) {
-        return new ValidationResult(false, localizationHandler.get("blank-code"))
-    }
-
     if (Utils.isBlank(contact.name)) {
         return new ValidationResult(false, localizationHandler.get("blank-name"))
     }
@@ -30,8 +26,8 @@ export const validateAcquiredItems = (items) => {
     return new ValidationResult();
 }
 
-export const validateOverviewAmount = (amount)=>{
-    if(amount === 0){
+export const validateOverviewAmount = (amount) => {
+    if (amount === 0) {
         return new ValidationResult(false, localizationHandler.get("amount-zero"));
     }
 
