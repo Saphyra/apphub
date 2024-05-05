@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class DeleteCartService {
     private final CartDao cartDao;
     private final CartItemDao cartItemDao;
@@ -18,6 +17,6 @@ public class DeleteCartService {
     @Transactional
     public void delete(UUID userId, UUID cartId) {
         cartDao.deleteByUserIdAndCartId(userId, cartId);
-        cartItemDao.deleteByCartId(cartId);
+        cartItemDao.deleteByUserIdAndCartId(userId, cartId);
     }
 }

@@ -97,22 +97,31 @@ class CartItemRepositoryTest {
 
     @Test
     @Transactional
-    void deleteByCartId() {
+    void deleteByUserIdAndCartId() {
         CartItemEntity entity1 = CartItemEntity.builder()
             .cartItemId(CART_ITEM_ID_1)
             .cartId(CART_ID_1)
+            .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
 
         CartItemEntity entity2 = CartItemEntity.builder()
             .cartItemId(CART_ITEM_ID_2)
             .cartId(CART_ID_2)
+            .userId(USER_ID_1)
             .build();
         underTest.save(entity2);
 
-        underTest.deleteByCartId(CART_ID_1);
+        CartItemEntity entity3 = CartItemEntity.builder()
+            .cartItemId(CART_ITEM_ID_3)
+            .cartId(CART_ID_1)
+            .userId(USER_ID_2)
+            .build();
+        underTest.save(entity3);
 
-        assertThat(underTest.findAll()).containsExactly(entity2);
+        underTest.deleteByUserIdAndCartId(USER_ID_1, CART_ID_1);
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2, entity3);
     }
 
     @Test

@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AddToCartService {
     private final AddToCartRequestValidator addToCartRequestValidator;
     private final CartItemFactory cartItemFactory;

@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class FinalizeCartService {
     private final CartDao cartDao;
     private final CartItemDao cartItemDao;

@@ -33,8 +33,8 @@ public class CartItemDao extends AbstractDao<CartItemEntity, CartItem, String, C
         return converter.convertEntity(repository.getByCartIdAndStockItemId(uuidConverter.convertDomain(cartId), uuidConverter.convertDomain(stockItemId)));
     }
 
-    public void deleteByCartId(UUID cartId) {
-        repository.deleteByCartId(uuidConverter.convertDomain(cartId));
+    public void deleteByUserIdAndCartId(UUID userId, UUID cartId) {
+        repository.deleteByUserIdAndCartId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(cartId));
     }
 
     public CartItem findByIdValidated(UUID cartItemId) {

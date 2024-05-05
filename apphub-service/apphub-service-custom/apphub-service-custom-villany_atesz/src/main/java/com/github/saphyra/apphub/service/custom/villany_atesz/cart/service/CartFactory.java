@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class CartFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;

@@ -77,12 +77,13 @@ class CartItemDaoTest {
     }
 
     @Test
-    void deleteByCartId() {
+    void deleteByUserIdAndCartId() {
         given(uuidConverter.convertDomain(CART_ID)).willReturn(CART_ID_STRING);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
-        underTest.deleteByCartId(CART_ID);
+        underTest.deleteByUserIdAndCartId(USER_ID, CART_ID);
 
-        then(repository).should().deleteByCartId(CART_ID_STRING);
+        then(repository).should().deleteByUserIdAndCartId(USER_ID_STRING, CART_ID_STRING);
     }
 
     @Test
