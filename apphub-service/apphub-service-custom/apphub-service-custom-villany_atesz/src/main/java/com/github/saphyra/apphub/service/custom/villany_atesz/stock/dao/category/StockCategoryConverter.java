@@ -11,10 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StockCategoryConverter extends ConverterBase<StockCategoryEntity, StockCategory> {
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_MEASUREMENT = "measurement";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_MEASUREMENT = "measurement";
 
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

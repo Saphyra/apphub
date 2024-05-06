@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StockItemPriceDao extends AbstractDao<StockItemPriceEntity, StockItemPrice, String, StockItemPriceRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

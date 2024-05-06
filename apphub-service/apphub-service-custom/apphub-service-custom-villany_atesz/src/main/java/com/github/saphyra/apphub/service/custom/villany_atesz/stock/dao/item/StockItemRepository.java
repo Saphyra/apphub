@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface StockItemRepository extends CrudRepository<StockItemEntity, String> {
     void deleteByUserId(String userId);
 

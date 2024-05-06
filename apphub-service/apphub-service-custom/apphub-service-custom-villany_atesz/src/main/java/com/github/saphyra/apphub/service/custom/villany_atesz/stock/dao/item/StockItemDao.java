@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
@@ -13,11 +12,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StockItemDao extends AbstractDao<StockItemEntity, StockItem, String, StockItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public StockItemDao(Converter<StockItemEntity, StockItem> converter, StockItemRepository repository, UuidConverter uuidConverter) {
+    StockItemDao(StockItemConverter converter, StockItemRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

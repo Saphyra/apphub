@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class CartQueryService {
     private final CartDao cartDao;
     private final ContactQueryService contactQueryService;

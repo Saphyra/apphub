@@ -13,13 +13,12 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_SERIAL_NUMBER = "serial_number";
-    private static final String COLUMN_IN_CAR = "in_car";
-    private static final String COLUMN_IN_STORAGE = "in_storage";
-    private static final String COLUMN_INVENTORIED = "inventoried";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_SERIAL_NUMBER = "serial_number";
+    static final String COLUMN_IN_CAR = "in_car";
+    static final String COLUMN_IN_STORAGE = "in_storage";
+    static final String COLUMN_INVENTORIED = "inventoried";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;

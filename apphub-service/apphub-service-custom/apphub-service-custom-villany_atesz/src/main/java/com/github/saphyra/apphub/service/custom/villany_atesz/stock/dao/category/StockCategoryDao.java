@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StockCategoryDao extends AbstractDao<StockCategoryEntity, StockCategory, String, StockCategoryRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

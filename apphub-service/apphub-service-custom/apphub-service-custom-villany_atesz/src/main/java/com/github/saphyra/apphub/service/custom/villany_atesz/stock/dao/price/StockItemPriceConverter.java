@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class StockItemPriceConverter extends ConverterBase<StockItemPriceEntity, StockItemPrice> {
-    private static final String COLUMN_PRICE = "price";
+    static final String COLUMN_PRICE = "price";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;

@@ -33,6 +33,16 @@ public class ExceptionValidator {
         validateRestException((RestException) ex, status, errorCode, field, value);
     }
 
+    public static void validateNotLoggedException(Runnable methodCall, HttpStatus status, ErrorCode errorCode) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateNotLoggedException(e, status, errorCode);
+        }
+    }
+
     public static void validateNotLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex).isInstanceOf(NotLoggedException.class);
         validateRestException((RestException) ex, status, errorCode);
