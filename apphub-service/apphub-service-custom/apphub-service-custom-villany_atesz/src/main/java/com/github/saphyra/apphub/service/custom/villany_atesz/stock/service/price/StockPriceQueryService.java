@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+//TODO unit test
 public class StockPriceQueryService {
     private final StockItemPriceDao stockItemPriceDao;
 

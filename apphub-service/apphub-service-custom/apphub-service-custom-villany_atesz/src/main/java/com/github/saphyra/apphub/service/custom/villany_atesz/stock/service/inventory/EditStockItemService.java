@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.category.StockCategoryDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +11,13 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
-public class EditItemService {
+public class EditStockItemService {
     private final StockItemDao stockItemDao;
+    private final StockCategoryDao stockCategoryDao;
 
     public void editCategory(UUID stockItemId, UUID stockCategoryId) {
-        //TODO validate
+        ValidationUtil.notNull(stockCategoryId, "stockCategoryId");
+        stockCategoryDao.findByIdValidated(stockCategoryId);
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
@@ -24,7 +27,7 @@ public class EditItemService {
     }
 
     public void editName(UUID stockItemId, String name) {
-        //TODO validate
+        ValidationUtil.notBlank(name, "name");
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
@@ -34,7 +37,7 @@ public class EditItemService {
     }
 
     public void editSerialNumber(UUID stockItemId, String serialNumber) {
-        //TODO validate
+        ValidationUtil.notNull(serialNumber, "serialNumber");
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
@@ -44,7 +47,7 @@ public class EditItemService {
     }
 
     public void editInCar(UUID stockItemId, Integer inCar) {
-        //TODO validate
+        ValidationUtil.notNull(inCar, "inCar");
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
@@ -54,7 +57,7 @@ public class EditItemService {
     }
 
     public void editInStorage(UUID stockItemId, Integer inStorage) {
-        //TODO validate
+        ValidationUtil.notNull(inStorage, "inStorage");
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
@@ -64,7 +67,7 @@ public class EditItemService {
     }
 
     public void editInventoried(UUID stockItemId, Boolean inventoried) {
-        //TODO validate
+        ValidationUtil.notNull(inventoried, "inventoried");
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 

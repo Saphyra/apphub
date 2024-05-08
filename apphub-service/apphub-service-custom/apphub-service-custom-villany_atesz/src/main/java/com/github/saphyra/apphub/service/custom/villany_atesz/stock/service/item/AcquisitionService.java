@@ -14,17 +14,17 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AcquisitionService {
+    private final AddToStockRequestValidator addToStockRequestValidator;
     private final StockItemDao stockItemDao;
     private final StockItemPriceDao stockItemPriceDao;
     private final StockItemPriceFactory stockItemPriceFactory;
 
     @Transactional
-    public void acquire(List<AddToStockRequest> request) {
-        //TODO validate
+    public void acquire(List<AddToStockRequest> requests) {
+        addToStockRequestValidator.validate(requests);
 
-        request.forEach(this::acquire);
+        requests.forEach(this::acquire);
     }
 
     private void acquire(AddToStockRequest request) {
@@ -32,6 +32,7 @@ public class AcquisitionService {
 
         stockItem.setInCar(stockItem.getInCar() + request.getInCar());
         stockItem.setInStorage(stockItem.getInStorage() + request.getInStorage());
+        stockItemDao.save(stockItem);
 
         StockItemPrice price = stockItemPriceFactory.create(stockItem.getUserId(), request.getStockItemId(), request.getPrice());
         stockItemPriceDao.save(price);

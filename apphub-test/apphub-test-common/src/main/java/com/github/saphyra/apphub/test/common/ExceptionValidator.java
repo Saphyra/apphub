@@ -14,6 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 public class ExceptionValidator {
+    public static void validateLoggedException(Runnable methodCall, HttpStatus status, ErrorCode errorCode) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateLoggedException(e, status, errorCode);
+        }
+    }
+
     public static void validateLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex).isInstanceOf(LoggedException.class);
         validateRestException((RestException) ex, status, errorCode);

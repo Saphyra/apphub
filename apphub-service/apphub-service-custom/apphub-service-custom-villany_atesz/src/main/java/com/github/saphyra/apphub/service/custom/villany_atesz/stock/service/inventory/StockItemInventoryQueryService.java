@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class StockItemInventoryQueryService {
     private final StockItemDao stockItemDao;
     private final CartDao cartDao;
@@ -36,17 +35,16 @@ public class StockItemInventoryQueryService {
             .serialNumber(stockItem.getSerialNumber())
             .inCar(stockItem.getInCar())
             .inStorage(stockItem.getInStorage())
-            .inCart(isInCart(stockItem.getUserId(), stockItem.getStockItemId()))
+            .inCart(isInCart(stockItem.getStockItemId()))
             .inventoried(stockItem.isInventoried())
             .build();
     }
 
-    private Boolean isInCart(UUID userId, UUID stockItemId) {
-        return cartDao.getByUserId(userId)
+    private Boolean isInCart(UUID stockItemId) {
+        return cartItemDao.getByStockItemId(stockItemId)
             .stream()
-            .filter(cart -> !cart.isFinalized())
-            .flatMap(cart -> cartItemDao.getByCartId(cart.getCartId()).stream().filter(cartItem -> cartItem.getStockItemId().equals(stockItemId)))
-            .mapToInt(CartItem::getAmount)
-            .sum() > 0;
+            .map(CartItem::getCartId)
+            .distinct()
+            .anyMatch(cartId -> !cartDao.findByIdValidated(cartId).isFinalized());
     }
 }

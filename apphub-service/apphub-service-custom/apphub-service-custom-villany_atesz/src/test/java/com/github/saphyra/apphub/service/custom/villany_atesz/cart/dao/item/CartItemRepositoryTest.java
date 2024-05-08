@@ -152,4 +152,41 @@ class CartItemRepositoryTest {
 
         assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2, entity3);
     }
+
+    @Test
+    void getByStockItemId() {
+        CartItemEntity entity1 = CartItemEntity.builder()
+            .cartItemId(CART_ITEM_ID_1)
+            .stockItemId(STOCK_ITEM_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        CartItemEntity entity2 = CartItemEntity.builder()
+            .cartItemId(CART_ITEM_ID_2)
+            .stockItemId(STOCK_ITEM_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        assertThat(underTest.getByStockItemId(STOCK_ITEM_ID_1)).containsExactly(entity1);
+    }
+
+    @Test
+    @Transactional
+    void deleteByStockItemId() {
+        CartItemEntity entity1 = CartItemEntity.builder()
+            .cartItemId(CART_ITEM_ID_1)
+            .stockItemId(STOCK_ITEM_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        CartItemEntity entity2 = CartItemEntity.builder()
+            .cartItemId(CART_ITEM_ID_2)
+            .stockItemId(STOCK_ITEM_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        underTest.deleteByStockItemId(STOCK_ITEM_ID_1);
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2);
+    }
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO clear when StockItem modified
 class StockCategoryModelCache extends AbstractCache<UUID, StockCategoryModel> {
     private final StockCategoryModelConverter stockCategoryModelConverter;
     private final StockCategoryDao stockCategoryDao;

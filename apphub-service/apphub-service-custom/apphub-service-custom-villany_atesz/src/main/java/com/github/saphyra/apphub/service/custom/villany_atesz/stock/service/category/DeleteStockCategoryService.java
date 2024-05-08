@@ -12,15 +12,17 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeleteStockCategoryService {
     private final StockCategoryDao stockCategoryDao;
     private final DeleteStockItemService deleteStockItemService;
+    private final StockCategoryModelCache stockCategoryModelCache;
 
     @Transactional
     public void delete(UUID userId, UUID stockCategoryId) {
         stockCategoryDao.deleteByUserIdAndStockCategoryId(userId, stockCategoryId);
 
         deleteStockItemService.deleteByStockCategoryId(stockCategoryId);
+
+        stockCategoryModelCache.invalidate(stockCategoryId);
     }
 }

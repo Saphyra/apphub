@@ -12,10 +12,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditStockCategoryService {
     private final StockCategoryValidator stockCategoryValidator;
     private final StockCategoryDao stockCategoryDao;
+    private final StockCategoryModelCache stockCategoryModelCache;
 
     public void edit(UUID stockCategoryId, StockCategoryModel request) {
         stockCategoryValidator.validate(request);
@@ -26,5 +26,7 @@ public class EditStockCategoryService {
         stockCategory.setMeasurement(request.getMeasurement());
 
         stockCategoryDao.save(stockCategory);
+
+        stockCategoryModelCache.invalidate(stockCategoryId);
     }
 }
