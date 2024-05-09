@@ -24,7 +24,7 @@ class CreateStockItemServiceTest {
     private static final Integer PRICE = 35;
 
     @Mock
-    private StockItemValidator stockItemValidator;
+    private StockItemRequestValidator stockItemRequestValidator;
 
     @Mock
     private StockItemFactory stockItemFactory;
@@ -59,7 +59,7 @@ class CreateStockItemServiceTest {
 
         underTest.create(USER_ID, request);
 
-        then(stockItemValidator).should().validate(request);
+        then(stockItemRequestValidator).should().validate(request);
         then(stockItemDao).should().save(stockItem);
         then(stockItemPriceDao).should().save(stockItemPrice);
     }

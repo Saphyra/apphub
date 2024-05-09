@@ -21,13 +21,22 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StockItemQueryService {
     private final StockItemDao stockItemDao;
     private final StockCategoryQueryService stockCategoryQueryService;
     private final StockItemPriceDao stockItemPriceDao;
     private final CartItemDao cartItemDao;
     private final CartDao cartDao;
+
+    public List<StockItemForCategoryResponse> getForCategory(UUID stockCategoryId) {
+        return stockItemDao.getByStockCategoryId(stockCategoryId)
+            .stream()
+            .map(stockItem -> StockItemForCategoryResponse.builder()
+                .stockItemId(stockItem.getStockItemId())
+                .name(stockItem.getName())
+                .build())
+            .collect(Collectors.toList());
+    }
 
     public List<StockItemOverviewResponse> getStockItems(UUID userId) {
         return stockItemDao.getByUserId(userId)
@@ -43,17 +52,16 @@ public class StockItemQueryService {
             .name(stockItem.getName())
             .serialNumber(stockItem.getSerialNumber())
             .inCar(stockItem.getInCar())
-            .inCart(countInCart(stockItem.getUserId(), stockItem.getStockItemId()))
+            .inCart(countInCart(stockItem.getStockItemId()))
             .inStorage(stockItem.getInStorage())
             .price(getPrice(stockItem.getStockItemId()))
             .build();
     }
 
-    private Integer countInCart(UUID userId, UUID stockItemId) {
-        return cartDao.getByUserId(userId)
+    private Integer countInCart(UUID stockItemId) {
+        return cartItemDao.getByStockItemId(stockItemId)
             .stream()
-            .filter(cart -> !cart.isFinalized())
-            .flatMap(cart -> cartItemDao.getByCartIdAndStockItemId(cart.getCartId(), stockItemId).stream())
+            .filter(cartItem -> !cartDao.findByIdValidated(cartItem.getCartId()).isFinalized())
             .mapToInt(CartItem::getAmount)
             .sum();
     }
@@ -64,15 +72,5 @@ public class StockItemQueryService {
             .map(StockItemPrice::getPrice)
             .max(Integer::compareTo)
             .orElse(0);
-    }
-
-    public List<StockItemForCategoryResponse> getForCategory(UUID stockCategoryId) {
-        return stockItemDao.getByStockCategoryId(stockCategoryId)
-            .stream()
-            .map(stockItem -> StockItemForCategoryResponse.builder()
-                .stockItemId(stockItem.getStockItemId())
-                .name(stockItem.getName())
-                .build())
-            .collect(Collectors.toList());
     }
 }

@@ -16,7 +16,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StockInventoryControllerImpl implements StockInventoryController {
     private final StockItemInventoryQueryService stockItemInventoryQueryService;
     private final EditStockItemService editStockItemService;
@@ -29,10 +28,10 @@ class StockInventoryControllerImpl implements StockInventoryController {
     }
 
     @Override
-    public void editCategory(OneParamRequest<UUID> category, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+    public void editCategory(OneParamRequest<UUID> stockCategoryId, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit the category of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
-        editStockItemService.editCategory(stockItemId, category.getValue());
+        editStockItemService.editCategory(stockItemId, stockCategoryId.getValue());
     }
 
     @Override

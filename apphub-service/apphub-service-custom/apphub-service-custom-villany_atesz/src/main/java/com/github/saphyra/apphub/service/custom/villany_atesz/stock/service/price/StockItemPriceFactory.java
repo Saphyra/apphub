@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class StockItemPriceFactory {
     private final IdGenerator idGenerator;
 

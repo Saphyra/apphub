@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class VillanyAteszEventControllerImpl implements VillanyAteszEventController {
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
 

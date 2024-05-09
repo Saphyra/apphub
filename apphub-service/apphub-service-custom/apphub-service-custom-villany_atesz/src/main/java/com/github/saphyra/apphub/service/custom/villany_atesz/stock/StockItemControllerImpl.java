@@ -22,7 +22,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
     private final DeleteStockItemService deleteStockItemService;

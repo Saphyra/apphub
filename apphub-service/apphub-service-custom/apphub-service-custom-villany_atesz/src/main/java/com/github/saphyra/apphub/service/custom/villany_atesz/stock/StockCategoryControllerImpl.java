@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StockCategoryControllerImpl implements StockCategoryController {
     private final CreateStockCategoryService createStockCategoryService;
     private final EditStockCategoryService editStockCategoryService;

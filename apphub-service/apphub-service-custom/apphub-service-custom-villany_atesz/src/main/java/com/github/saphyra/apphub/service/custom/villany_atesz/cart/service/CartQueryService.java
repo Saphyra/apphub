@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.Cart
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItemDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.contacts.service.ContactQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.price.StockPriceQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.price.StockItemPriceQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class CartQueryService {
     private final CartDao cartDao;
     private final ContactQueryService contactQueryService;
     private final CartItemDao cartItemDao;
-    private final StockPriceQueryService stockPriceQueryService;
+    private final StockItemPriceQueryService stockItemPriceQueryService;
     private final StockItemDao stockItemDao;
 
     public List<CartResponse> getCarts(UUID userId) {
@@ -54,7 +54,7 @@ public class CartQueryService {
 
     private Integer getTotalPrice(List<CartItem> items) {
         return summarizeByStockItemId(items)
-            .mapToInt(entry -> stockPriceQueryService.getPriceOf(entry.getKey()) * entry.getValue())
+            .mapToInt(entry -> stockItemPriceQueryService.getPriceOf(entry.getKey()) * entry.getValue())
             .sum();
     }
 

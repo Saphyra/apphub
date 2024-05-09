@@ -16,14 +16,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class CreateStockItemService {
-    private final StockItemValidator stockItemValidator;
+    private final StockItemRequestValidator stockItemRequestValidator;
     private final StockItemFactory stockItemFactory;
     private final StockItemDao stockItemDao;
     private final StockItemPriceFactory stockItemPriceFactory;
     private final StockItemPriceDao stockItemPriceDao;
 
     public void create(UUID userId, StockItemRequest request) {
-        stockItemValidator.validate(request);
+        stockItemRequestValidator.validate(request);
 
         StockItem stockItem = stockItemFactory.create(userId, request);
         stockItemDao.save(stockItem);

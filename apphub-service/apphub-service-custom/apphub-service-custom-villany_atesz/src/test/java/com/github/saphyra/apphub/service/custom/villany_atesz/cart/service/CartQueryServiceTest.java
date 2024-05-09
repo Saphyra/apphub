@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.Cart
 import com.github.saphyra.apphub.service.custom.villany_atesz.contacts.service.ContactQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.price.StockPriceQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.price.StockItemPriceQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,7 +45,7 @@ class CartQueryServiceTest {
     private CartItemDao cartItemDao;
 
     @Mock
-    private StockPriceQueryService stockPriceQueryService;
+    private StockItemPriceQueryService stockItemPriceQueryService;
 
     @Mock
     private StockItemDao stockItemDao;
@@ -94,7 +94,7 @@ class CartQueryServiceTest {
         given(cart.getContactId()).willReturn(CONTACT_ID);
         given(cartItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
         given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
-        given(stockPriceQueryService.getPriceOf(STOCK_ITEM_ID)).willReturn(PRICE_PER_ITEM);
+        given(stockItemPriceQueryService.getPriceOf(STOCK_ITEM_ID)).willReturn(PRICE_PER_ITEM);
         given(cartItem.getAmount()).willReturn(AMOUNT);
         given(stockItem.getName()).willReturn(STOCK_ITEM_NAME);
 
