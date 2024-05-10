@@ -61,7 +61,7 @@ public class EditStockItemService {
 
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
 
-        stockItem.setInCar(inStorage);
+        stockItem.setInStorage(inStorage);
 
         stockItemDao.save(stockItem);
     }

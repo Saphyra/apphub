@@ -21,6 +21,7 @@ public class Constants {
     public final String ROLE_UTILS = "UTILS";
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
+    public static final String ROLE_VILLANY_ATESZ = "VILLANY_ATESZ";
 
     //Alliances
     public final String GENERAL_CHAT_ROOM_NAME = "general";

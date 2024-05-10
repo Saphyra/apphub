@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.price.StockItemPrice;
@@ -24,7 +24,7 @@ class CreateStockItemServiceTest {
     private static final Integer PRICE = 35;
 
     @Mock
-    private StockItemRequestValidator stockItemRequestValidator;
+    private CreateStockItemRequestValidator createStockItemRequestValidator;
 
     @Mock
     private StockItemFactory stockItemFactory;
@@ -42,7 +42,7 @@ class CreateStockItemServiceTest {
     private CreateStockItemService underTest;
 
     @Mock
-    private StockItemRequest request;
+    private CreateStockItemRequest request;
 
     @Mock
     private StockItem stockItem;
@@ -59,7 +59,7 @@ class CreateStockItemServiceTest {
 
         underTest.create(USER_ID, request);
 
-        then(stockItemRequestValidator).should().validate(request);
+        then(createStockItemRequestValidator).should().validate(request);
         then(stockItemDao).should().save(stockItem);
         then(stockItemPriceDao).should().save(stockItemPrice);
     }

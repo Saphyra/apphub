@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class StockItemFactoryTest {
 
     @Test
     void create() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)

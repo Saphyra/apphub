@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 public interface StockInventoryController {
     @GetMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS)
     List<StockItemInventoryResponse> getItemsForInventory(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

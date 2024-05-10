@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.category.StockCategoryDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class StockItemRequestValidatorTest {
+public class CreateCreateStockItemRequestValidatorTest {
     private static final String NAME = "name";
     private static final String SERIAL_NUMBER = "serial-number";
     private static final Integer IN_CAR = 35;
@@ -26,11 +26,11 @@ public class StockItemRequestValidatorTest {
     private StockCategoryDao stockCategoryDao;
 
     @InjectMocks
-    private StockItemRequestValidator underTest;
+    private CreateStockItemRequestValidator underTest;
 
     @Test
     void nullStockCategoryId() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(null)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
@@ -44,7 +44,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void blankName() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(" ")
             .serialNumber(SERIAL_NUMBER)
@@ -58,7 +58,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void nullSerialNumber() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(null)
@@ -72,7 +72,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void nullInCar() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
@@ -86,7 +86,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void nullInStorage() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
@@ -100,7 +100,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void nullPrice() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
@@ -114,7 +114,7 @@ public class StockItemRequestValidatorTest {
 
     @Test
     void valid() {
-        StockItemRequest request = StockItemRequest.builder()
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)

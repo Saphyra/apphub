@@ -108,7 +108,7 @@ class EditStockItemServiceTest {
 
         underTest.editInStorage(STOCK_ITEM_ID, IN_STORAGE);
 
-        then(stockItem).should().setInCar(IN_STORAGE);
+        then(stockItem).should().setInStorage(IN_STORAGE);
         then(stockItemDao).should().save(stockItem);
     }
 

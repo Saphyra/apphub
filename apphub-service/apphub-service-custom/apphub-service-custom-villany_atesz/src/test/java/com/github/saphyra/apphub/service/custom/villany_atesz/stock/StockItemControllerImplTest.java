@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.*;
@@ -50,7 +50,7 @@ public class StockItemControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private StockItemRequest stockItemRequest;
+    private CreateStockItemRequest createStockItemRequest;
 
     @Mock
     private StockItemOverviewResponse stockItemOverviewResponse;
@@ -68,9 +68,9 @@ public class StockItemControllerImplTest {
 
     @Test
     void createStockItem() {
-        underTest.createStockItem(stockItemRequest, accessTokenHeader);
+        underTest.createStockItem(createStockItemRequest, accessTokenHeader);
 
-        then(createStockItemService).should().create(USER_ID, stockItemRequest);
+        then(createStockItemService).should().create(USER_ID, createStockItemRequest);
     }
 
     @Test

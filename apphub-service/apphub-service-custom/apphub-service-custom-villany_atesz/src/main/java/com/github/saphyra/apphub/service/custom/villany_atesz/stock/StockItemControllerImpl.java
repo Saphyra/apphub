@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -30,7 +30,7 @@ class StockItemControllerImpl implements StockItemController {
     private final MoveStockService moveStockService;
 
     @Override
-    public void createStockItem(StockItemRequest request, AccessTokenHeader accessTokenHeader) {
+    public void createStockItem(CreateStockItemRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a stockItem.", accessTokenHeader.getUserId());
 
         createStockItemService.create(accessTokenHeader.getUserId(), request);

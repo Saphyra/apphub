@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO api test
 public interface CartController {
     @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_CART)
     void createCart(@RequestBody OneParamRequest<UUID> contactId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

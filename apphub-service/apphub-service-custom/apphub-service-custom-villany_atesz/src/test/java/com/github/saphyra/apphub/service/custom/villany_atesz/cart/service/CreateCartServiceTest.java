@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.cart.service;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.contacts.dao.ContactDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +34,11 @@ class CreateCartServiceTest {
 
     @Mock
     private Cart cart;
+
+    @Test
+    void nullContactId() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.create(USER_ID, null), "contactId", "must not be null");
+    }
 
     @Test
     void create() {

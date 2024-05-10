@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.UUID;
 class StockItemFactory {
     private final IdGenerator idGenerator;
 
-    StockItem create(UUID userId, StockItemRequest request) {
+    StockItem create(UUID userId, CreateStockItemRequest request) {
         return StockItem.builder()
             .stockItemId(idGenerator.randomUuid())
             .userId(userId)

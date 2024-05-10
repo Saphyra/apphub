@@ -44,7 +44,6 @@ public class Endpoints {
 
     //ACCOUNT
     public static final String ACCOUNT_REGISTER = "/api/user";
-    public static final String ACCOUNT_CHANGE_LANGUAGE = "/api/user/account/language";
     public static final String ACCOUNT_CHANGE_EMAIL = "/api/user/account/email";
     public static final String ACCOUNT_CHANGE_USERNAME = "/api/user/account/username";
     public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
@@ -240,4 +239,33 @@ public class Endpoints {
 
     //ETC
     public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
+
+    //VillanyAtesz
+    public static final String VILLANY_ATESZ_CREATE_CONTACT = "/api/villany-atesz/contact";
+    public static final String VILLANY_ATESZ_EDIT_CONTACT = "/api/villany-atesz/contact/{contactId}";
+    public static final String VILLANY_ATESZ_DELETE_CONTACT = "/api/villany-atesz/contact/{contactId}";
+    public static final String VILLANY_ATESZ_GET_CONTACTS = "/api/villany-atesz/contact";
+    public static final String VILLANY_ATESZ_CREATE_STOCK_CATEGORY = "/api/villany-atesz/stock/category";
+    public static final String VILLANY_ATESZ_EDIT_STOCK_CATEGORY = "/api/villany-atesz/stock/category/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_CATEGORIES = "/api/villany-atesz/stock/category";
+    public static final String VILLANY_ATESZ_CREATE_STOCK_ITEM = "/api/villany-atesz/stock/item";
+    public static final String VILLANY_ATESZ_DELETE_STOCK_ITEM = "/api/villany-atesz/stock/item/{stockItemId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS = "/api/villany-atesz/stock/item";
+    public static final String VILLANY_ATESZ_CREATE_CART = "/api/villany-atesz/cart";
+    public static final String VILLANY_ATESZ_GET_CARTS = "/api/villany-atesz/cart";
+    public static final String VILLANY_ATESZ_GET_CART = "/api/villany-atesz/cart/{cartId}";
+    public static final String VILLANY_ATESZ_ADD_TO_CART = "/api/villany-atesz/cart";
+    public static final String VILLANY_ATESZ_FINALIZE_CART = "/api/villany-atesz/cart/{cartId}";
+    public static final String VILLANY_ATESZ_DELETE_CART = "/api/villany-atesz/cart/{cartId}";
+    public static final String VILLANY_ATESZ_STOCK_ACQUIRE = "/api/villany-atesz/stock/acquire";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS = "/api/villany-atesz/stock/inventory";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME = "/api/villany-atesz/stock/inventory/{stockItemId}/name";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY = "/api/villany-atesz/stock/inventory/{stockItemId}/category";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER = "/api/villany-atesz/stock/inventory/{stockItemId}/serial-number";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR = "/api/villany-atesz/stock/inventory/{stockItemId}/in-car";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE = "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED ="/api/villany-atesz/stock/inventory/{stockItemId}/inventoried" ;
+    public static final String VILLANY_ATESZ_MOVE_STOCK_TO_CAR = "/api/villany-atesz/stock/item/{stockItemId}/to-car";
+    public static final String VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE = "/api/villany-atesz/stock/item/{stockItemId}/to-storage";
+    public static final String VILLANY_ATESZ_REMOVE_FROM_CART = "/api/villany-atesz/cart/{cartId}/item/{stockItemId}";
 }

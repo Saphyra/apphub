@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 public interface StockCategoryController {
     @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY)
     List<StockCategoryModel> createStockCategory(@RequestBody StockCategoryModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

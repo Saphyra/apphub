@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.custom.villany_atesz.model;
+package com.github.saphyra.apphub.integration.structure.api.villany_atesz;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class DeleteCartResponse {
-    private List<CartResponse> carts;
+public class CartModifiedResponse {
+    private CartView cart;
     private List<StockItemOverviewResponse> items;
 }

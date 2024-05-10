@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 public interface ContactController {
     @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_CONTACT)
     List<ContactModel> createContact(@RequestBody ContactModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
