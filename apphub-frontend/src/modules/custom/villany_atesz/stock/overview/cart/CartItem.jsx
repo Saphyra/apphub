@@ -37,9 +37,9 @@ const CartItem = ({ cartId, item, setConfirmationDialogData, localizationHandler
 
     return (
         <div className="villany-atesz-stock-overview-cart-item">
-            <span>{item.amount}</span>
+            <span className="villany-atesz-stock-overview-cart-item-amount">{item.amount}</span>
             <span> x </span>
-            <span>{item.name}</span>
+            <span className="villany-atesz-stock-overview-cart-item-name">{item.name}</span>
             <Button
                 className="villany-atesz-stock-overview-cart-item-remove-button"
                 label="X"

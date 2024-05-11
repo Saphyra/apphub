@@ -45,9 +45,7 @@ public class CartCrudTest extends BackEndTest {
 
         create_nullContactId(accessTokenId);
         create_contactNotFound(accessTokenId);
-        create(accessTokenId, contactId);
-
-        UUID cartId = getCartId(accessTokenId);
+        UUID cartId = create(accessTokenId, contactId);
 
         addToCart_nullCartId(accessTokenId, stockItemId);
         addToCart_nullStockItemId(accessTokenId, cartId);
@@ -70,12 +68,14 @@ public class CartCrudTest extends BackEndTest {
         ResponseValidator.verifyErrorResponse(VillanyAteszCartActions.getCreateResponse(accessTokenId, UUID.randomUUID()), 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private void create(UUID accessTokenId, UUID contactId) {
-        VillanyAteszCartActions.create(accessTokenId, contactId);
+    private UUID create(UUID accessTokenId, UUID contactId) {
+        UUID cartId = VillanyAteszCartActions.create(accessTokenId, contactId);
 
         CustomAssertions.singleListAssertThat(VillanyAteszCartActions.getCarts(accessTokenId))
             .extracting(CartResponse::getContact)
             .returns(contactId, ContactModel::getContactId);
+
+        return cartId;
     }
 
     private void addToCart_nullCartId(UUID accessTokenId, UUID stockItemId) {
@@ -146,9 +146,8 @@ public class CartCrudTest extends BackEndTest {
     }
 
     private void delete(UUID accessTokenId, UUID contactId, UUID stockItemId) {
-        create(accessTokenId, contactId);
+        UUID cartId = create(accessTokenId, contactId);
 
-        UUID cartId = getCartId(accessTokenId);
         addToCart(accessTokenId, cartId, stockItemId);
 
         assertThat(VillanyAteszCartActions.delete(accessTokenId, cartId))
@@ -158,14 +157,6 @@ public class CartCrudTest extends BackEndTest {
     }
 
     //Utils
-    private UUID getCartId(UUID accessTokenId) {
-        return VillanyAteszCartActions.getCarts(accessTokenId)
-            .stream()
-            .findFirst()
-            .orElseThrow()
-            .getCartId();
-    }
-
     private UUID createContact(UUID accessTokenId) {
         ContactModel request = ContactModel.builder()
             .name(CONTACT_NAME)

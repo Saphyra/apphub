@@ -61,6 +61,8 @@ public class Constants {
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
+    public static final String SELECT_OPTION_CHOOSE = "Choose";
+    public static final String FT_SUFFIX = " Ft";
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";

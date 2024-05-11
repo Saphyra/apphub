@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public interface CartController {
     @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_CART)
-    void createCart(@RequestBody OneParamRequest<UUID> contactId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    UUID createCart(@RequestBody OneParamRequest<UUID> contactId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.VILLANY_ATESZ_GET_CARTS)
     List<CartResponse> getCarts(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

@@ -28,14 +28,19 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
     }
 
     const createCart = async () => {
-        await Endpoints.VILLANY_ATESZ_CREATE_CART.createRequest({ value: contact.contactId })
+        const cartId = await Endpoints.VILLANY_ATESZ_CREATE_CART.createRequest({ value: contact.contactId })
             .send();
+
+        sessionStorage.activeCart = cartId;
 
         window.location.href = Constants.VILLANY_ATESZ_STOCK_PAGE;
     }
 
     return (
-        <tr onClick={() => setEditedContact(contact)}>
+        <tr
+            className="villany-atesz-contacts-contact"
+            onClick={() => setEditedContact(contact)}
+        >
             <td className="villany-atesz-contacts-contact-code">{contact.code}</td>
             <td className="villany-atesz-contacts-contact-name">{contact.name}</td>
             <td className="villany-atesz-contacts-contact-phone">{contact.phone}</td>

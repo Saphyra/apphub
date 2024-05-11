@@ -78,6 +78,16 @@ public class WebElementUtils {
             .click();
     }
 
+    public static void selectOptionByLabel(WebElement selectMenu, String optionLabel) {
+        selectMenu.click();
+        selectMenu.findElements(By.tagName("option"))
+            .stream()
+            .filter(option -> option.getText().equals(optionLabel))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Option not found with label " + optionLabel))
+            .click();
+    }
+
     public static void setCheckboxState(WebElement webElement, boolean shouldBeChecked) {
         if (!webElement.isSelected() == shouldBeChecked) {
             webElement.click();

@@ -25,7 +25,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     }
 
     useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart))
+    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart));
     useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
 
     const getItems = () => {

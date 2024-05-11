@@ -32,9 +32,6 @@ public class StockItemControllerImplTest {
     private CreateStockItemService createStockItemService;
 
     @Mock
-    private DeleteStockItemService deleteStockItemService;
-
-    @Mock
     private StockItemQueryService stockItemQueryService;
 
     @Mock
@@ -78,15 +75,6 @@ public class StockItemControllerImplTest {
         given(stockItemQueryService.getStockItems(USER_ID)).willReturn(List.of(stockItemOverviewResponse));
 
         assertThat(underTest.getStockItems(accessTokenHeader)).containsExactly(stockItemOverviewResponse);
-    }
-
-    @Test
-    void deleteStockItem() {
-        given(stockItemQueryService.getStockItems(USER_ID)).willReturn(List.of(stockItemOverviewResponse));
-
-        assertThat(underTest.deleteStockItem(STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemOverviewResponse);
-
-        then(deleteStockItemService).should().delete(USER_ID, STOCK_ITEM_ID);
     }
 
     @Test

@@ -127,6 +127,8 @@ const VillanyAteszContactsPage = () => {
             setEditedContact(null);
         }
 
+        sessionStorage.activeCart = "";
+
         setConfirmationDialogData(null);
     }
 

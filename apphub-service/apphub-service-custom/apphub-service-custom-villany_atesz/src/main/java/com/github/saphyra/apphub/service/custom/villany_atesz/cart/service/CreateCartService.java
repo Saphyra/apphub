@@ -16,7 +16,7 @@ public class CreateCartService {
     private final CartDao cartDao;
     private final CartFactory cartFactory;
 
-    public void create(UUID userId, UUID contactId) {
+    public UUID create(UUID userId, UUID contactId) {
         ValidationUtil.notNull(contactId, "contactId");
 
         contactDao.findByIdValidated(contactId);
@@ -24,5 +24,7 @@ public class CreateCartService {
         Cart cart = cartFactory.create(userId, contactId);
 
         cartDao.save(cart);
+
+        return cart.getCartId();
     }
 }

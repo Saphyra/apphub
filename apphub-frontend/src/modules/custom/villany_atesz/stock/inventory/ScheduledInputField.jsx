@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import InputField from "../../../../../common/component/input/InputField";
 import Utils from "../../../../../common/js/Utils";
 
-const ScheduledInputField = ({ 
-    className, 
+const ScheduledInputField = ({
+    className,
     type, value,
-     onchangeCallback,
-      scheduledCallback,
-       timeout = 1000,
-        placeholder ,
-        disabled = false
-    }) => {
+    onchangeCallback,
+    scheduledCallback,
+    timeout = 1000,
+    placeholder,
+    disabled = false
+}) => {
     const [schedule, setSchedule] = useState(null);
 
     const scheduleCallback = (newValue) => {
@@ -21,9 +21,9 @@ const ScheduledInputField = ({
         onchangeCallback(newValue);
 
         setSchedule(setTimeout(() => {
-            scheduledCallback(newValue);
-
-            setSchedule(null);
+            if (scheduledCallback(newValue)) {
+                setSchedule(null);
+            }
         },
             timeout
         ));

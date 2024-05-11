@@ -35,10 +35,10 @@ class CartControllerImpl implements CartController {
     private final RemoveFromCartService removeFromCartService;
 
     @Override
-    public void createCart(OneParamRequest<UUID> contactId, AccessTokenHeader accessTokenHeader) {
+    public UUID createCart(OneParamRequest<UUID> contactId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a cart for contact {}", accessTokenHeader.getUserId(), contactId.getValue());
 
-        createCartService.create(accessTokenHeader.getUserId(), contactId.getValue());
+        return createCartService.create(accessTokenHeader.getUserId(), contactId.getValue());
     }
 
     @Override

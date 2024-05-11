@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.UUID;
 @Slf4j
 class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
-    private final DeleteStockItemService deleteStockItemService;
     private final StockItemQueryService stockItemQueryService;
     private final AcquisitionService acquisitionService;
     private final MoveStockService moveStockService;
@@ -34,15 +32,6 @@ class StockItemControllerImpl implements StockItemController {
         log.info("{} wants to create a stockItem.", accessTokenHeader.getUserId());
 
         createStockItemService.create(accessTokenHeader.getUserId(), request);
-    }
-
-    @Override
-    public List<StockItemOverviewResponse> deleteStockItem(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete stockItem {}", accessTokenHeader.getUserId(), stockItemId);
-
-        deleteStockItemService.delete(accessTokenHeader.getUserId(), stockItemId);
-
-        return getStockItems(accessTokenHeader);
     }
 
     @Override

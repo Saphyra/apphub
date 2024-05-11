@@ -25,10 +25,12 @@ public class VillanyAteszCartActions {
             .put(UrlFactory.create(Endpoints.VILLANY_ATESZ_CREATE_CART));
     }
 
-    public static void create(UUID accessTokenId, UUID contactId) {
+    public static UUID create(UUID accessTokenId, UUID contactId) {
         Response response = getCreateResponse(accessTokenId, contactId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(UUID.class);
     }
 
     public static List<CartResponse> getCarts(UUID accessTokenId) {

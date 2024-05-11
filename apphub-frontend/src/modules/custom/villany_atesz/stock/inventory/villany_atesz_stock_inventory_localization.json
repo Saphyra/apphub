@@ -22,5 +22,21 @@
     "in-storage": {
         "en": "In storage",
         "hu": "Raktárban"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "confirm-deletion-title": {
+        "en": "Delete item?",
+        "hu": "Tétel törlése?"
+    },
+    "confirm-deletion-content": {
+        "en": "Are you sure you want to delete {name} item?",
+        "hu": "Biztosan ki szeretnéd törölni {name} tételt?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
     }
 }

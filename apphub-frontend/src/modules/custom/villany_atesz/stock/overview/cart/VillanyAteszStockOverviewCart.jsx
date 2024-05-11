@@ -14,7 +14,6 @@ import CartItem from "./CartItem";
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-
     const getAvailableCartOptions = () => {
         return new Stream(carts)
             .map(cart => new SelectOption(cart.contact.code + " - " + cart.contact.name, cart.cartId))
@@ -48,13 +47,13 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
             [
                 <Button
                     key="finalize"
-                    id="villany-atesz-stock-finalize-confirm-button"
+                    id="villany-atesz-stock-finalize-cart-confirm-button"
                     label={localizationHandler.get("finalize")}
                     onclick={finalizeCart}
                 />,
                 <Button
                     key="cancel"
-                    id="villany-atesz-stock-finalize-cancel-button"
+                    id="villany-atesz-stock-finalize-cart-cancel-button"
                     label={localizationHandler.get("cancel")}
                     onclick={() => setConfirmationDialogData(null)}
                 />
@@ -70,13 +69,13 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
             [
                 <Button
                     key="delete"
-                    id="villany-atesz-stock-delete-confirm-button"
+                    id="villany-atesz-stock-delete-cart-confirm-button"
                     label={localizationHandler.get("delete")}
                     onclick={deleteCart}
                 />,
                 <Button
                     key="cancel"
-                    id="villany-atesz-stock-delete-cancel-button"
+                    id="villany-atesz-stock-delete-cart-cancel-button"
                     label={localizationHandler.get("cancel")}
                     onclick={() => setConfirmationDialogData(null)}
                 />
@@ -133,7 +132,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                         />
 
                         <Button
-                            id="villany-atesz-stock-overview-finalize-cart"
+                            id="villany-atesz-stock-overview-delete-cart"
                             label={localizationHandler.get("delete")}
                             onclick={openDeleteCartConfirmation}
                         />

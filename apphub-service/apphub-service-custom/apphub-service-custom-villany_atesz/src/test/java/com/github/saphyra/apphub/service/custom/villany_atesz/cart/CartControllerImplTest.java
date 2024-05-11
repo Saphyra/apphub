@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartModifiedResp
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartView;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.server.CartController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.AddToCartService;
@@ -82,9 +83,10 @@ class CartControllerImplTest {
 
     @Test
     void createCart() {
-        underTest.createCart(new OneParamRequest<>(CONTACT_ID), accessTokenHeader);
+        given(createCartService.create(USER_ID, CONTACT_ID)).willReturn(CART_ID);
 
-        then(createCartService).should().create(USER_ID, CONTACT_ID);
+        assertThat(underTest.createCart(new OneParamRequest<>(CONTACT_ID), accessTokenHeader))
+            .isEqualTo(CART_ID);
     }
 
     @Test

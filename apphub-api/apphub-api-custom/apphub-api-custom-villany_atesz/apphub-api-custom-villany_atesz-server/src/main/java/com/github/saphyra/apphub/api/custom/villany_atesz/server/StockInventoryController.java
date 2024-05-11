@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,9 @@ import java.util.UUID;
 public interface StockInventoryController {
     @GetMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS)
     List<StockItemInventoryResponse> getItemsForInventory(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_STOCK_ITEM)
+    List<StockItemInventoryResponse> deleteStockItem(@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY)
     void editCategory(@RequestBody OneParamRequest<UUID> category, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

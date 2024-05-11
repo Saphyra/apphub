@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.EditStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,22 @@ import java.util.UUID;
 class StockInventoryControllerImpl implements StockInventoryController {
     private final StockItemInventoryQueryService stockItemInventoryQueryService;
     private final EditStockItemService editStockItemService;
+    private final DeleteStockItemService deleteStockItemService;
 
     @Override
     public List<StockItemInventoryResponse> getItemsForInventory(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know their items for inventory.", accessTokenHeader.getUserId());
 
         return stockItemInventoryQueryService.getItems(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public List<StockItemInventoryResponse> deleteStockItem(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        deleteStockItemService.delete(accessTokenHeader.getUserId(), stockItemId);
+
+        return getItemsForInventory(accessTokenHeader);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.EditStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,9 @@ public class StockInventoryControllerImplTest {
     @Mock
     private EditStockItemService editStockItemService;
 
+    @Mock
+    private DeleteStockItemService deleteStockItemService;
+
     @InjectMocks
     private StockInventoryControllerImpl underTest;
 
@@ -54,6 +58,15 @@ public class StockInventoryControllerImplTest {
         given(stockItemInventoryQueryService.getItems(USER_ID)).willReturn(List.of(stockItemInventoryResponse));
 
         assertThat(underTest.getItemsForInventory(accessTokenHeader)).containsExactly(stockItemInventoryResponse);
+    }
+
+    @Test
+    void deleteStockItem() {
+        given(stockItemInventoryQueryService.getItems(USER_ID)).willReturn(List.of(stockItemInventoryResponse));
+
+        assertThat(underTest.deleteStockItem(STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemInventoryResponse);
+
+        then(deleteStockItemService).should().delete(USER_ID, STOCK_ITEM_ID);
     }
 
     @Test

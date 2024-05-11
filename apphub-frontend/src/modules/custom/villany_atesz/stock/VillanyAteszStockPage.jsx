@@ -87,7 +87,7 @@ const VillanyAteszStockPage = () => {
                 />
             case StockTab.INVENTORY:
                 return <VillanyAteszStockInventory
-
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             default:
                 return "Unhandled StockTab: " + openedTab;

@@ -9,7 +9,7 @@ import Utils from "../../../../../common/js/Utils";
 import InventoryItem from "./InventoryItem";
 import Stream from "../../../../../common/js/collection/Stream";
 
-const VillanyAteszStockInventory = ({ }) => {
+const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [search, setSearch] = useState("");
@@ -52,6 +52,7 @@ const VillanyAteszStockInventory = ({ }) => {
                 categories={categories}
                 setItems={setItems}
                 items={items}
+                setConfirmationDialogData={setConfirmationDialogData}
             />)
             .toList();
     }
@@ -74,6 +75,7 @@ const VillanyAteszStockInventory = ({ }) => {
                         <th>{localizationHandler.get("serial-number")}</th>
                         <th>{localizationHandler.get("in-car")}</th>
                         <th>{localizationHandler.get("in-storage")}</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

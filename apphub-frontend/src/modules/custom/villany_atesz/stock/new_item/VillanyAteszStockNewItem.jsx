@@ -45,6 +45,11 @@ const VillanyAteszStockNewItem = ({ }) => {
             return;
         }
 
+        if(Utils.isBlank(name)){
+            NotificationService.showError(localizationHandler.get("blank-name"));
+            return;
+        }
+
         const payload = {
             stockCategoryId: stockCategoryId,
             name: name,

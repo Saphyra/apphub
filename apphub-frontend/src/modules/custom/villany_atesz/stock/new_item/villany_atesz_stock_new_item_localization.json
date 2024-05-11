@@ -46,5 +46,9 @@
     "item-created": {
         "en": "Item created.",
         "hu": "Tétel elmentve."
+    },
+    "blank-name": {
+        "en": "Name must not be blank.",
+        "hu": "Megnevezés nem lehet üres."
     }
 }
