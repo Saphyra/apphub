@@ -55,4 +55,16 @@ public class RoleManagementActions {
             .body(roleRequest)
             .delete(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE));
     }
+
+    public static Response getAddToAllResponse(UUID accessTokenId, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(password))
+            .post(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE_TO_ALL, "role", role));
+    }
+
+    public static Response getRemoveFromAllResponse(UUID accessTokenId, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(password))
+            .post(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE_FROM_ALL, "role", role));
+    }
 }

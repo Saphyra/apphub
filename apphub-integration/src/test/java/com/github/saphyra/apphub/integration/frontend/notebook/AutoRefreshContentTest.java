@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
-import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.HeadedSeleniumTest;
 import com.github.saphyra.apphub.integration.core.WebDriverMode;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AutoRefreshContentTest extends SeleniumTest {
+public class AutoRefreshContentTest extends HeadedSeleniumTest {
     private static final String CATEGORY_TITLE = "category-title";
     private static final String NEW_CATEGORY_TITLE = "new-category-title";
     private static final String CHECKLIST_TITLE = "checklist-title";
@@ -180,7 +180,7 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> ViewTableActions.getTitle(driver).equals(NEW_TABLE_TITLE))
-            .assertTrue("Checklist is not refreshed.");
+            .assertTrue("Table is not refreshed.");
     }
 
     @Test(groups = {"fe", "notebook", "headed-only"})
@@ -215,6 +215,6 @@ public class AutoRefreshContentTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> ViewTextActions.getTitle(driver).equals(NEW_TEXT_TITLE))
-            .assertTrue("Checklist is not refreshed.");
+            .assertTrue("Text is not refreshed.");
     }
 }

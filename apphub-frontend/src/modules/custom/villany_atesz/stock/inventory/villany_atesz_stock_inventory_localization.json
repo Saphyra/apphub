@@ -1,0 +1,42 @@
+{
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "serial-number": {
+        "en": "Serial No.",
+        "hu": "Cikkszám"
+    },
+    "in-car": {
+        "en": "In car",
+        "hu": "Autóban"
+    },
+    "in-storage": {
+        "en": "In storage",
+        "hu": "Raktárban"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "confirm-deletion-title": {
+        "en": "Delete item?",
+        "hu": "Tétel törlése?"
+    },
+    "confirm-deletion-content": {
+        "en": "Are you sure you want to delete {name} item?",
+        "hu": "Biztosan ki szeretnéd törölni {name} tételt?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

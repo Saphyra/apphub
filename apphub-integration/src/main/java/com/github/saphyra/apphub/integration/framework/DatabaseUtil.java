@@ -22,6 +22,7 @@ public class DatabaseUtil {
     private static final String DB_URL = "jdbc:postgresql://localhost:%s/%s";
 
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
+    private static final String REMOVE_ROLE_BY_EMAIL_QUERY = "DELETE FROM apphub_user.apphub_role WHERE user_id=(SELECT user_id FROM apphub_user.apphub_user WHERE email='%s') AND apphub_role='%s'";
     private static final String GET_USER_ID_BY_EMAIL_QUERY = "SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'";
     private static final String GET_ROLES_BY_USER_ID = "SELECT apphub_role FROM apphub_user.apphub_role WHERE user_id='%s'";
     private static final String UPDATE_ACCESS_TOKEN_LAST_ACCESS = "UPDATE apphub_user.access_token SET last_access='%s' WHERE access_token_id='%s'";
@@ -69,6 +70,16 @@ public class DatabaseUtil {
             rs.next();
             return rs.getInt(1);
         });
+    }
+
+    @SneakyThrows
+    public static void removeRoleByEmail(String email, String... roles) {
+        for (String role : roles) {
+            log.debug("Removing role {} from email {}", role, email);
+            String sql = String.format(REMOVE_ROLE_BY_EMAIL_QUERY, email, role);
+            log.debug("RemoveRole SQL: {}", sql);
+            execute(sql);
+        }
     }
 
     public static void addRoleByEmail(String email, String... roles) {

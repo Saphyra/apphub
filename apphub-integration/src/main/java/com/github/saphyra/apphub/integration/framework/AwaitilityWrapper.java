@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.framework.concurrent.ObjectWrapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.ObjectAssert;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionFactory;
 import org.awaitility.core.ConditionTimeoutException;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -101,18 +104,38 @@ public class AwaitilityWrapper {
         return helper.getResult(Optional::ofNullable);
     }
 
+    public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier, Predicate<List<T>> predicate, Function<List<T>, T> selector) {
+        List<T> list = getListWithWait(supplier, predicate);
+
+        T item = selector.apply(list);
+
+        return assertThat(item);
+    }
+
+    public static <T> void awaitAssert(Supplier<T> supplier, Consumer<T> assertions) {
+        createDefault()
+            .until(() -> {
+                assertions.accept(supplier.get());
+                return true;
+            })
+            .assertTrue("Assertions failed.");
+    }
+
     public AwaitResult until(Callable<Boolean> callable) {
+        ObjectWrapper<Exception> exception = new ObjectWrapper<>();
+
         try {
             conditionFactory.until(() -> {
                 try {
                     return callable.call();
                 } catch (Exception e) {
+                    exception.setValue(e);
                     return false;
                 }
             });
             return new AwaitResult(true, null);
         } catch (ConditionTimeoutException e) {
-            return new AwaitResult(false, e);
+            return new AwaitResult(false, exception.getValue());
         }
     }
 

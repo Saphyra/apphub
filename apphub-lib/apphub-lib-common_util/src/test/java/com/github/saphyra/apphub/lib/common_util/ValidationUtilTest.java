@@ -284,15 +284,35 @@ public class ValidationUtilTest {
     }
 
     @Test
-    void equals(){
+    void equals() {
         ValidationUtil.equals("a", "a", FIELD);
     }
 
     @Test
-    void equals_doesNotEqual(){
+    void equals_doesNotEqual() {
         Throwable ex = catchThrowable(() -> ValidationUtil.equals("b", "a", FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must be a");
+    }
+
+    @Test
+    void notZero_positive() {
+        ValidationUtil.notZero(1, FIELD);
+    }
+
+    @Test
+    void notZero_negative() {
+        ValidationUtil.notZero(-1, FIELD);
+    }
+
+    @Test
+    void notZero_null() {
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(null, FIELD)), FIELD, "must not be null");
+    }
+
+    @Test
+    void notZero_zero() {
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(0, FIELD)), FIELD, "must not be zero");
     }
 
     enum TestEnum {

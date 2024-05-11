@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -46,7 +47,7 @@ public class GameCreationControllerImplTest {
     public void createGame() throws InterruptedException {
         given(idGenerator.randomUuid()).willReturn(GAME_ID);
 
-        underTest.createGame(request);
+        assertThat(underTest.createGame(request)).isEqualTo(GAME_ID);
 
         verify(validator).validate(request);
         verify(requests).put(new BiWrapper<>(request, GAME_ID));

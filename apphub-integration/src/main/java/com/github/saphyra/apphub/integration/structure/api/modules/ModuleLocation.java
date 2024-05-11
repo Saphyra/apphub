@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
+    VILLANY_ATESZ("custom", "villanyatesz", Endpoints.VILLANY_ATESZ_PAGE, "VillanyAtesz"),
     COMMUNITY("community", "community", Endpoints.COMMUNITY_PAGE, "Közösség"),
     CALENDAR("office", "calendar", Endpoints.CALENDAR_PAGE, "Határidőnapló"),
     BAN("admin-panel", "ban", Endpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),

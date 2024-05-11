@@ -10,7 +10,7 @@ public interface MonitoringController {
     /**
      * Sending the memory report to the connected clients
      */
-    @PutMapping(Endpoints.ADMIN_PANEL_REPORT_MEMORY_STATUS)
+    @PutMapping(Endpoints.ADMIN_PANEL_INTERNAL_REPORT_MEMORY_STATUS)
     void reportMemoryStatus(@RequestBody MemoryStatusModel memoryStatus);
 
     /**

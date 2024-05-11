@@ -8,43 +8,43 @@ liquibase:
 modules:
   modules:
     community:
-      - name: community
-        url: /web/community
-        roles:
-          - COMMUNITY
+    - name: community
+      url: /web/community
+      roles:
+      - COMMUNITY
     admin-panel:
-      - name: error-report
-        url: /web/admin-panel/error-report
-        roles:
-          - ADMIN
-      - name: role-management
-        url: /web/admin-panel/role-management
-        roles:
-          - ADMIN
-      - name: disabled-role-management
-        url: /web/admin-panel/disabled-role-management
-        roles:
-          - ADMIN
-      - name: ban
-        url: /web/admin-panel/ban
-        roles:
-          - ADMIN
-      - name: roles-for-all
-        url: /web/admin-panel/roles-for-all
-        roles:
-          - ADMIN
-      - name: memory-monitoring
-        url: /web/admin-panel/memory-monitoring
-        roles:
-          - ADMIN
-      - name: migration-tasks
-        url: /web/admin-panel/migration-tasks
-        roles:
-        - ADMIN
+    - name: error-report
+      url: /web/admin-panel/error-report
+      roles:
+      - ADMIN
+    - name: role-management
+      url: /web/admin-panel/role-management
+      roles:
+      - ADMIN
+    - name: disabled-role-management
+      url: /web/admin-panel/disabled-role-management
+      roles:
+      - ADMIN
+    - name: ban
+      url: /web/admin-panel/ban
+      roles:
+      - ADMIN
+    - name: roles-for-all
+      url: /web/admin-panel/roles-for-all
+      roles:
+      - ADMIN
+    - name: memory-monitoring
+      url: /web/admin-panel/memory-monitoring
+      roles:
+      - ADMIN
+    - name: migration-tasks
+      url: /web/admin-panel/migration-tasks
+      roles:
+      - ADMIN
     accounts:
-      - name: account
-        url: /web/user/account
-        mobileAllowed: true
+    - name: account
+      url: /web/user/account
+      mobileAllowed: true
     office:
     - name: notebook
       url: /web/notebook
@@ -57,39 +57,45 @@ modules:
       roles:
       - CALENDAR
     development-utils:
-      - name: json-formatter
-        url: /web/utils/json-formatter
-        mobileAllowed: true
-      - name: log-formatter
-        url: /web/utils/log-formatter
-        mobileAllowed: true
-      - name: base64
-        url: /web/utils/base64
-        mobileAllowed: true
+    - name: json-formatter
+      url: /web/utils/json-formatter
+      mobileAllowed: true
+    - name: log-formatter
+      url: /web/utils/log-formatter
+      mobileAllowed: true
+    - name: base64
+      url: /web/utils/base64
+      mobileAllowed: true
     game:
-      - name: skyxplore
-        url: /web/skyxplore
-        mobileAllowed: false
-        roles:
-          - SKYXPLORE
+    - name: skyxplore
+      url: /web/skyxplore
+      mobileAllowed: false
+      roles:
+      - SKYXPLORE
     training:
-      - name: html
-        url: /web/training/html/001_introduction
-        mobileAllowed: true
-        roles:
-          - TRAINING
-      - name: css
-        url: /web/training/css/001_introduction
-        mobileAllowed: true
-        roles:
-          - TRAINING
-      - name: basics-of-programming
-        url: /web/training/basics_of_programming/001_introduction
-        mobileAllowed: true
-        roles:
-          - TRAINING
-      - name: javascript
-        url: /web/training/javascript/001_introduction
-        mobileAllowed: true
-        roles:
-          - TRAINING
+    - name: html
+      url: /web/training/html/001_introduction
+      mobileAllowed: true
+      roles:
+      - TRAINING
+    - name: css
+      url: /web/training/css/001_introduction
+      mobileAllowed: true
+      roles:
+      - TRAINING
+    - name: basics-of-programming
+      url: /web/training/basics_of_programming/001_introduction
+      mobileAllowed: true
+      roles:
+      - TRAINING
+    - name: javascript
+      url: /web/training/javascript/001_introduction
+      mobileAllowed: true
+      roles:
+      - TRAINING
+    custom:
+    - name: villanyatesz
+      url: /web/villany-atesz
+      mobileAllowed: false
+      roles:
+      - VILLANY_ATESZ

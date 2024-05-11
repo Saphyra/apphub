@@ -32,11 +32,13 @@ rolesCanBeDisabled:
 - UTILS
 - COMMUNITY
 - CALENDAR
+- VILLANY_ATESZ
 
 add-role-to-all:
   restrictedRoles:
   - ACCESS
   - ADMIN
+  - VILLANY_ATESZ
 
 settings:
   notebook:

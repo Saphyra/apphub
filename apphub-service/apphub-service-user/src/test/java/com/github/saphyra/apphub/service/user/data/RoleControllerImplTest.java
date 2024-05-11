@@ -29,6 +29,7 @@ public class RoleControllerImplTest {
     private static final String ROLE = "role";
     private static final String PASSWORD = "password";
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID TARGET_USER_ID = UUID.randomUUID();
 
     @Mock
     private RoleAdditionService roleAdditionService;
@@ -69,8 +70,10 @@ public class RoleControllerImplTest {
     @Test
     public void addRole() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
+        given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
 
-        underTest.addRole(roleRequest, accessTokenHeader);
+        assertThat(underTest.addRole(roleRequest, accessTokenHeader)).isEqualTo(userRoleResponse);
 
         verify(roleAdditionService).addRole(USER_ID, roleRequest);
     }
@@ -78,8 +81,10 @@ public class RoleControllerImplTest {
     @Test
     public void removeRole() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
+        given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
 
-        underTest.removeRole(roleRequest, accessTokenHeader);
+        assertThat(underTest.removeRole(roleRequest, accessTokenHeader)).isEqualTo(userRoleResponse);
 
         verify(roleRemovalService).removeRole(USER_ID, roleRequest);
     }

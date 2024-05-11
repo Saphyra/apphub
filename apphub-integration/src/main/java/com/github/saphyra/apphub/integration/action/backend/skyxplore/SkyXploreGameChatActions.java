@@ -19,13 +19,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameChatActions {
     public static List<SkyXploreCharacterModel> getPlayers(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_PLAYERS, Collections.emptyMap(), Map.of("excludeSelf", true)));
+        Response response = getPlayersResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.stream(response.getBody().as(SkyXploreCharacterModel[].class))
             .collect(Collectors.toList());
+    }
+
+    public static Response getPlayersResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_PLAYERS, Collections.emptyMap(), Map.of("excludeSelf", true)));
     }
 
     public static void createChatRoom(UUID accessTokenId, CreateChatRoomRequest request) {
@@ -46,11 +50,15 @@ public class SkyXploreGameChatActions {
     }
 
     public static List<ChatRoomResponse> getChatRooms(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS));
+        Response response = getChatRoomsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(ChatRoomResponse[].class));
+    }
+
+    public static Response getChatRoomsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS));
     }
 }

@@ -2,9 +2,10 @@ import Utils from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import TableColumnData from "../../../common/table/row/column/TableColumnData";
+import ColumnType from "../../../common/table/row/column/type/ColumnType";
 import TableHeadData from "../../../common/table/table_head/TableHeadData";
 
-export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange) => {
+export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange, custom) => {
     const columnIndex = indexRange(tableHeads);
 
     const newTableHead = new TableHeadData(columnIndex, "", Utils.generateRandomId());
@@ -15,7 +16,7 @@ export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange) 
 
     new Stream(rows)
         .forEach(row => {
-            const newColumn = new TableColumnData(newTableHead.columnIndex);
+            const newColumn = new TableColumnData(newTableHead.columnIndex, custom ? ColumnType.EMPTY : ColumnType.TEXT);
             row.columns.push(newColumn);
         });
 

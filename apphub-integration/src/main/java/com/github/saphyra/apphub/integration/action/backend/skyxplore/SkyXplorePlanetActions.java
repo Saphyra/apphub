@@ -25,7 +25,7 @@ public class SkyXplorePlanetActions {
         return response.getBody().as(PlanetOverviewResponse.class);
     }
 
-    private static Response getPlanetOverviewResponse(UUID accessTokenId, UUID planetId) {
+    public static Response getPlanetOverviewResponse(UUID accessTokenId, UUID planetId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW, "planetId", planetId));
     }

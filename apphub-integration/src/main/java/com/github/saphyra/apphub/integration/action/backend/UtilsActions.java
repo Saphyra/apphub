@@ -16,9 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UtilsActions {
     public static List<LogParameterVisibilityResponse> getVisibilities(UUID accessTokenId, List<String> parameters) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(parameters)
-            .put(UrlFactory.create(Endpoints.UTILS_LOG_FORMATTER_GET_VISIBILITY));
+        Response response = getVisibilitiesResponse(accessTokenId, parameters);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -26,11 +24,21 @@ public class UtilsActions {
             .collect(Collectors.toList());
     }
 
+    public static Response getVisibilitiesResponse(UUID accessTokenId, List<String> parameters) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(parameters)
+            .put(UrlFactory.create(Endpoints.UTILS_LOG_FORMATTER_GET_VISIBILITY));
+    }
+
     public static void setVisibility(UUID accessTokenId, SetLogParameterVisibilityRequest request) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(request)
-            .post(UrlFactory.create(Endpoints.UTILS_LOG_FORMATTER_SET_VISIBILITY));
+        Response response = getSetVisibilityResponse(accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getSetVisibilityResponse(UUID accessTokenId, SetLogParameterVisibilityRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(request)
+            .post(UrlFactory.create(Endpoints.UTILS_LOG_FORMATTER_SET_VISIBILITY));
     }
 }

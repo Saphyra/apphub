@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "admin-panel-monitoring", url = "${serviceUrls.adminPanel}")
 public interface MonitoringClient {
-    @PutMapping(Endpoints.ADMIN_PANEL_REPORT_MEMORY_STATUS)
+    @PutMapping(Endpoints.ADMIN_PANEL_INTERNAL_REPORT_MEMORY_STATUS)
     void reportMemoryStatus(@RequestBody MemoryStatusModel memoryStatus, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @PostMapping(Endpoints.EVENT_TRIGGER_MEMORY_STATUS_UPDATE)

@@ -65,10 +65,14 @@ public class NotificationUtil {
     }
 
     public static void clearNotifications(WebDriver driver) {
-        getNotifications(driver)
-            .stream()
-            .filter(WebElement::isDisplayed)
-            .forEach(NotificationUtil::click);
+        try {
+            getNotifications(driver)
+                .stream()
+                .filter(WebElement::isDisplayed)
+                .forEach(NotificationUtil::click);
+        } catch (Exception e) {
+            log.error("Failed clearing notifications", e);
+        }
     }
 
     private static void click(WebElement webElement) {

@@ -67,4 +67,15 @@ public class ListItemActions {
             .body(new OneParamRequest<>(archived))
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
     }
+
+    public static Response getFindListItemResponse(UUID accessTokenId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_LIST_ITEM, "listItemId", listItemId));
+    }
+
+    public static Response getMoveListItemResponse(UUID accessTokenId, UUID listItemId, UUID parent) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(parent))
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_MOVE_LIST_ITEM, "listItemId", listItemId));
+    }
 }

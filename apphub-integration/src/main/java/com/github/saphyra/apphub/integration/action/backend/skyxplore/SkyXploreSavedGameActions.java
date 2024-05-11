@@ -14,12 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSavedGameActions {
     public static List<SavedGameResponse> getSavedGames(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_GAMES));
+        Response response = getSavedGamesResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SavedGameResponse[].class));
+    }
+
+    public static Response getSavedGamesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_GAMES));
     }
 
     public static void deleteGame(UUID accessTokenId, UUID gameId) {

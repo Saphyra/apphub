@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 @Slf4j
-public class SeleniumTest extends TestBase {
+public abstract class SeleniumTest extends TestBase {
     private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
 
     @AfterMethod(alwaysRun = true)

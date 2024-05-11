@@ -27,12 +27,16 @@ public class MigrationTasksActions {
     }
 
     private static List<MigrationTasksResponse> getMigrationTasks(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.ADMIN_PANEL_MIGRATION_GET_TASKS));
+        Response response = getGetMigrationTasksResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(MigrationTasksResponse[].class));
+    }
+
+    public static Response getGetMigrationTasksResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.ADMIN_PANEL_MIGRATION_GET_TASKS));
     }
 
     public static void triggerTask(UUID accessTokenId, String event) {
@@ -47,9 +51,13 @@ public class MigrationTasksActions {
     }
 
     public static void deleteTask(UUID accessTokenId, String event) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK, "event", event));
+        Response response = getDeleteTaskResponse(accessTokenId, event);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getDeleteTaskResponse(UUID accessTokenId, String event) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK, "event", event));
     }
 }

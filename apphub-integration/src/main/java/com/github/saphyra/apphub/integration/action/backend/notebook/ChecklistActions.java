@@ -69,7 +69,7 @@ public class ChecklistActions {
             .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST, "listItemId", listItemId));
     }
 
-    public static Response orderChecklistItems(UUID accessTokenId, UUID listItemId) {
+    public static Response getOrderItemsResponse(UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }

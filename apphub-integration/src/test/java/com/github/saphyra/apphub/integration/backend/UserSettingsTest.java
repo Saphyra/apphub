@@ -3,9 +3,12 @@ package com.github.saphyra.apphub.integration.backend;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import io.restassured.response.Response;
@@ -17,6 +20,18 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserSettingsTest extends BackEndTest {
+    @Test(groups = {"be", "misc"})
+    public void userSettingsRoleProtection() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+
+        DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
+        SleepUtil.sleep(3000);
+
+        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getQueryUserSettingsResponse(accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getUpdateUserSettingsResponse(accessTokenId, new SetUserSettingsRequest()));
+    }
+
 
     @Test(groups = {"be", "misc"})
     public void userSettingsTest() {

@@ -1,0 +1,39 @@
+#villany-atesz-stock-overview {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#villany-atesz-stock-overview-items {
+    position: relative;
+    flex-grow: 2;
+}
+
+#villany-atesz-stock-overview-items-search {
+    display: block;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 5px;
+}
+
+#villany-atesz-stock-overview-items-table {
+    margin: auto;
+}
+
+.in-cart {
+    background-color: red;
+}
+
+.villany-atesz-stock-overview-item-add-to-cart-amount {
+    width: 75px;
+}
+
+.villany-atesz-stock-overview-item-stock-operations {
+    white-space: nowrap;
+}

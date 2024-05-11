@@ -31,21 +31,29 @@ public class FriendRequestActions {
     }
 
     public static List<FriendRequestResponse> getSentFriendRequests(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
+        Response response = getSentFriendRequestsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendRequestResponse[].class));
     }
 
+    public static Response getSentFriendRequestsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
+    }
+
     public static List<FriendRequestResponse> getReceivedFriendRequests(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
+        Response response = getReceivedFriendRequeestsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendRequestResponse[].class));
+    }
+
+    public static Response getReceivedFriendRequeestsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
     }
 
     public static FriendshipResponse acceptFriendRequest(UUID accessToken, UUID friendRequestId) {
@@ -58,13 +66,17 @@ public class FriendRequestActions {
     }
 
     public static List<SearchResultItem> search(UUID accessTokenId, String query) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
+        Response response = getSearchResponse(accessTokenId, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
+    }
+
+    public static Response getSearchResponse(UUID accessTokenId, String query) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(query))
+            .post(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
     }
 
     public static void deleteFriendRequest(UUID accessTokenId, UUID friendRequestId) {

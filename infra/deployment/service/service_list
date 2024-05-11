@@ -15,4 +15,5 @@ skyxplore-game apphub-service-skyxplore-game 02_service 8095
 skyxplore-lobby apphub-service-skyxplore-lobby 02_service 8093
 encryption apphub-service-platform-encryption 02_service 8098
 storage apphub-service-platform-storage 02_service 8099
+villany-atesz apphub-service-custom-villany_atesz 02_service 8084
 frontend apphub-frontend 01_platform null

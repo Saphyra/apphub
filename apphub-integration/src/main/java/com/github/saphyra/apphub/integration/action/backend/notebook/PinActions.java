@@ -31,13 +31,17 @@ public class PinActions {
     }
 
     public static List<NotebookView> getPinnedItems(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PINNED_ITEMS));
+        Response response = getPinnedItemsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.stream(response.getBody().as(NotebookView[].class))
             .collect(Collectors.toList());
+    }
+
+    public static Response getPinnedItemsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PINNED_ITEMS));
     }
 
     public static List<NotebookView> getPinnedItems(UUID accessTokenId, UUID pinGroupId) {
@@ -78,29 +82,53 @@ public class PinActions {
     }
 
     public static List<NotebookView> addItemToPinGroup(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, Map.of("pinGroupId", pinGroupId, "listItemId", listItemId)));
+        Response response = getAddItemToPinGroupResponse(accessTokenId, pinGroupId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(NotebookView[].class));
+    }
+
+    public static Response getAddItemToPinGroupResponse(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(Endpoints.NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, Map.of("pinGroupId", pinGroupId, "listItemId", listItemId)));
     }
 
     public static List<NotebookView> removeItemFromPinGroup(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP, Map.of("pinGroupId", pinGroupId, "listItemId", listItemId)));
+        Response response = getReniveItemFromPinGroupResponse(accessTokenId, pinGroupId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(NotebookView[].class));
     }
 
+    public static Response getReniveItemFromPinGroupResponse(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP, Map.of("pinGroupId", pinGroupId, "listItemId", listItemId)));
+    }
+
     public static List<PinGroupResponse> deletePinGroup(UUID accessTokenId, UUID pinGroupId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_PIN_GROUP, "pinGroupId", pinGroupId));
+        Response response = getDeletePinGroupResponse(accessTokenId, pinGroupId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(PinGroupResponse[].class));
+    }
+
+    public static Response getDeletePinGroupResponse(UUID accessTokenId, UUID pinGroupId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_PIN_GROUP, "pinGroupId", pinGroupId));
+    }
+
+    public static Response getPinGroupsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_PIN_GROUPS));
+    }
+
+    public static Response getPinGroupOpenedResponse(UUID accessTokenId, UUID pinGroupId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .put(UrlFactory.create(Endpoints.NOTEBOOK_PIN_GROUP_OPENED, "pinGroupId", pinGroupId));
+
+
     }
 }

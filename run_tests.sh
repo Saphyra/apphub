@@ -1,6 +1,6 @@
 NAMESPACE_NAME=${1:-$(git rev-parse --abbrev-ref HEAD)}
 HEADLESS=${2:-true}
-DISABLED_GROUPS=${3:-headed-only}
+DISABLED_GROUPS=${3:-}
 SERVER_PORT=${4:-8070}
 DATABASE_PORT=${5:-8071}
 DATABASE_NAME=${6:-postgres}

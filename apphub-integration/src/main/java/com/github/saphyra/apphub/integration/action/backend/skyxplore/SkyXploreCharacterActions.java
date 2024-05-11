@@ -12,7 +12,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreCharacterActions {
-    public static void createOrUpdateCharacter( UUID accessTokenId, SkyXploreCharacterModel model) {
+    public static void createOrUpdateCharacter(UUID accessTokenId, SkyXploreCharacterModel model) {
         assertThat(getCreateCharacterResponse(accessTokenId, model).getStatusCode()).isEqualTo(200);
     }
 
@@ -25,5 +25,15 @@ public class SkyXploreCharacterActions {
     public static String getCharacterName(String email) {
         return DatabaseUtil.findSkyXploreCharacterByEmail(email)
             .orElseThrow(() -> new RuntimeException("SkyXploreCharacter not found for email " + email));
+    }
+
+    public static Response getCharacterNameResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_CHARACTER_NAME));
+    }
+
+    public static Response getExistsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_CHARACTER_EXISTS));
     }
 }

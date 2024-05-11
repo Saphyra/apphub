@@ -50,5 +50,6 @@
         <module>apphub-api-admin_panel</module>
         <module>apphub-api-community</module>
         <module>apphub-api-calendar</module>
+        <module>apphub-api-custom</module>
     </modules>
 </project>

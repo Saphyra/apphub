@@ -1,0 +1,16 @@
+===FEATURES===
+VillanyAtesz
+
+===BUGFIXES===
+Notebook
+    Order checklist item case insensitive
+    Adding column to a newly created custom table creates Text columns instead of empty ones
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+API tests for RoleProtection
+UI tests for RoleProtection
+Decrease max stored file size to 100MB

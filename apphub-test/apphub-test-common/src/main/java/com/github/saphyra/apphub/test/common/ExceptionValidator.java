@@ -11,8 +11,19 @@ import org.springframework.http.HttpStatus;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class ExceptionValidator {
+    public static void validateLoggedException(Runnable methodCall, HttpStatus status, ErrorCode errorCode) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateLoggedException(e, status, errorCode);
+        }
+    }
+
     public static void validateLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex).isInstanceOf(LoggedException.class);
         validateRestException((RestException) ex, status, errorCode);
@@ -30,6 +41,16 @@ public class ExceptionValidator {
     public static void validateReportedException(Throwable ex, HttpStatus status, ErrorCode errorCode, String field, String value) {
         assertThat(ex).isInstanceOf(ReportedException.class);
         validateRestException((RestException) ex, status, errorCode, field, value);
+    }
+
+    public static void validateNotLoggedException(Runnable methodCall, HttpStatus status, ErrorCode errorCode) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateNotLoggedException(e, status, errorCode);
+        }
     }
 
     public static void validateNotLoggedException(Throwable ex, HttpStatus status, ErrorCode errorCode) {
@@ -63,6 +84,16 @@ public class ExceptionValidator {
     private static void validateRestException(RestException ex, HttpStatus status, ErrorCode errorCode) {
         assertThat(ex.getResponseStatus()).isEqualTo(status);
         assertThat(ex.getErrorMessage().getErrorCode()).isEqualTo(errorCode);
+    }
+
+    public static void validateInvalidParam(Runnable methodCall, String field, String value) {
+        try {
+            methodCall.run();
+
+            fail("Exception was not thrown");
+        } catch (Exception e) {
+            validateInvalidParam(e, field, value);
+        }
     }
 
     public static void validateInvalidParam(Throwable ex, String field, String value) {

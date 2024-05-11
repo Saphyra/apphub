@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-public class BackEndTest extends TestBase {
+public abstract class BackEndTest extends TestBase {
     @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
         boolean wsConnectionsCleaned = ApphubWsClient.getClients().isEmpty();

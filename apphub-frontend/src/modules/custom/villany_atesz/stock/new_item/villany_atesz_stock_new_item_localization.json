@@ -1,0 +1,54 @@
+{
+    "basics": {
+        "en": "Basics",
+        "hu": "Általános"
+    },
+    "stock": {
+        "en": "Stock",
+        "hu": "Készlet"
+    },
+    "price": {
+        "en": "Price",
+        "hu": "Ár"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "choose": {
+        "en": "Choose",
+        "hu": "Válassz"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "serial-number": {
+        "en": "Serial No.",
+        "hu": "Cikkszám"
+    },
+    "in-car": {
+        "en": "In car",
+        "hu": "Autóban"
+    },
+    "in-storage": {
+        "en": "In storage",
+        "hu": "Raktárban"
+    },
+    "choose-category": {
+        "en": "Choose category!",
+        "hu": "Válassz kategóriát!"
+    },
+    "item-created": {
+        "en": "Item created.",
+        "hu": "Tétel elmentve."
+    },
+    "blank-name": {
+        "en": "Name must not be blank.",
+        "hu": "Megnevezés nem lehet üres."
+    }
+}

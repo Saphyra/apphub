@@ -77,18 +77,26 @@ public class SkyXploreLobbyActions {
     }
 
     public static void exitFromLobby(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY));
+        Response response = getExitFromLobbyResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
+    public static Response getExitFromLobbyResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_EXIT_FROM_LOBBY));
+    }
+
     public static SkyXploreGameSettings getGameSettings(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS));
+        Response response = getGameSettingsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(SkyXploreGameSettings.class);
+    }
+
+    public static Response getGameSettingsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_GAME_SETTINGS));
     }
 
     public static Response getLoadGameResponse(UUID accessTokenId, UUID gameId) {
@@ -103,8 +111,7 @@ public class SkyXploreLobbyActions {
     }
 
     public static boolean isUserInLobby(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY));
+        Response response = getIsUserInLobbyResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -113,6 +120,11 @@ public class SkyXploreLobbyActions {
 
         return response.getBody().as(typeRef)
             .getValue();
+    }
+
+    public static Response getIsUserInLobbyResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY));
     }
 
     public static void createOrModifyAi(UUID accessTokenId, AiPlayer aiPlayer) {
@@ -128,19 +140,27 @@ public class SkyXploreLobbyActions {
     }
 
     public static List<AiPlayer> getAis(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_AIS));
+        Response response = getAisResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(AiPlayer[].class));
     }
 
+    public static Response getAisResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_AIS));
+    }
+
     public static void removeAi(UUID accessTokenId1, UUID aiId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId1)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_REMOVE_AI, "userId", aiId));
+        Response response = getRemoveAiResponse(accessTokenId1, aiId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getRemoveAiResponse(UUID accessTokenId1, UUID aiId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId1)
+            .delete(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_REMOVE_AI, "userId", aiId));
     }
 
     public static void changeAllianceOfPlayer(UUID accessTokenId, UUID userId, Object alliance) {
@@ -171,5 +191,20 @@ public class SkyXploreLobbyActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(settings)
             .post(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_EDIT_SETTINGS));
+    }
+
+    public static Response getLobbyViewForPageResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE));
+    }
+
+    public static Response getActiveFriendsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS));
+    }
+
+    public static Response getAlliancesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.SKYXPLORE_LOBBY_GET_ALLIANCES));
     }
 }

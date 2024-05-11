@@ -26,11 +26,15 @@ public class TextActions {
     }
 
     public static TextResponse getText(UUID accessTokenId, UUID textId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
+        Response response = getTextResponse(accessTokenId, textId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TextResponse.class);
+    }
+
+    public static Response getTextResponse(UUID accessTokenId, UUID textId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
     }
 
     public static void editText(UUID accessTokenId, UUID textId, EditTextRequest request) {

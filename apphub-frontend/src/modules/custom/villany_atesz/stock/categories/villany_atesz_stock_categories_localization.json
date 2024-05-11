@@ -1,0 +1,46 @@
+{
+    "category-name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "measurement": {
+        "en": "Measurement",
+        "hu": "Mértékegység"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Mentés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Módosítás"
+    },
+    "discard": {
+        "en": "Discard",
+        "hu": "Elvetés"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "confirm-category-deletion-title": {
+        "en": "Confirm category-deletion",
+        "hu": "Törlés megerősítése"
+    },
+    "confirm-category-deletion-content": {
+        "en": "Are you sure you want to delete category <Name: {name}, Measurement: {measurement}>? It will delete all its content, including the assigned items.",
+        "hu": "Biztosan törölni szeretnéd a <Megnevezés: {name}, Mértékegység: {measurement}> kategóriát? A kategória tartalma is törlődik, beleértve a hozzárendelt tételeket."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "blank-name": {
+        "en": "Name must not be blank.",
+        "hu": "A megnevezés nem lehet üres."
+    }
+}

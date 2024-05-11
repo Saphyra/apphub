@@ -67,4 +67,9 @@ public class ToastMessageUtil {
     public static void verifyNoNotifications(WebDriver driver) {
         assertThat(getAllToasts(driver)).isEmpty();
     }
+
+    public static void clearToasts(WebDriver driver) {
+        getAllToasts(driver)
+            .forEach(webElement -> webElement.findElement(By.tagName("button")).click());
+    }
 }

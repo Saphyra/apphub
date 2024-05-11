@@ -3,6 +3,19 @@ event:
   processor:
     enabled: true
 
+serviceUrls:
+  adminPanel: localhost:8089
+  eventGateway: localhost:8081
+  messageSender: localhost:8094
+  skyxploreData: localhost:8091
+  skyxploreGame: localhost:8095
+  skyxploreLobby: localhost:8093
+  storage: localhost:8099
+  user: localhost:8085
+  web-content: localhost:8083
+  web-content-localization: localhost:8083
+  villany-atesz: localhost:8084
+
 spring:
   cloud:
     kubernetes:
@@ -56,21 +69,11 @@ spring:
               uri: http://user:8085
             utils[0]:
               uri: http://utils:8100
+            villany-atesz[0]:
+              uri: http://villany-atesz:8084
 
 eureka:
   client:
     enabled: false
-
-serviceUrls:
-  adminPanel: localhost:8089
-  eventGateway: localhost:8081
-  messageSender: localhost:8094
-  skyxploreData: localhost:8091
-  skyxploreGame: localhost:8095
-  skyxploreLobby: localhost:8093
-  storage: localhost:8099
-  user: localhost:8085
-  web-content: localhost:8083
-  web-content-localization: localhost:8083
 
 encryptionStrategy: revealing
