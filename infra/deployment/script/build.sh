@@ -4,9 +4,9 @@ if [ "$1" != "skipBuild" ]; then
   eval "$(minikube docker-env)"
 
   if [ "$1" == "skipTests" ]; then
-    mvn -T 24 clean install -DskipTests -fae
+    mvn -T 24 clean install -DskipTests
   else
-    mvn -T 6 clean install -fae
+    mvn -T 6 clean install
   fi
   BUILD_RESULT=$?
   if [[ "$BUILD_RESULT" -ne 0 ]]; then

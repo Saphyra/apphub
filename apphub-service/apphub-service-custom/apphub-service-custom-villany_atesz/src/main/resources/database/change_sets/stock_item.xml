@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-stock_item" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="villany_atesz" tableName="stock_item"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="villany_atesz" tableName="stock_item">
+            <column name="stock_item_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="stock_category_id" type="varchar(37)"/>
+            <column name="name" type="text"/>
+            <column name="serial_number" type="text"/>
+            <column name="in_car" type="text"/>
+            <column name="in_storage" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="villany_atesz" tableName="stock_item" columnNames="stock_item_id"/>
+    </changeSet>
+
+    <changeSet id="add-column-inventoried-to-stock_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="stock_item" columnName="inventoried"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="stock_item">
+            <column name="inventoried" type="text"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

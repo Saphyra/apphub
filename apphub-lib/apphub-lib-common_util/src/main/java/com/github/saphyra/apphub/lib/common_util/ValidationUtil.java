@@ -150,4 +150,12 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(field, "must be " + expected);
         }
     }
+
+    public static void notZero(Integer value, String field) {
+        notNull(value, field);
+
+        if(value == 0){
+            throw ExceptionFactory.invalidParam(field, "must not be zero");
+        }
+    }
 }

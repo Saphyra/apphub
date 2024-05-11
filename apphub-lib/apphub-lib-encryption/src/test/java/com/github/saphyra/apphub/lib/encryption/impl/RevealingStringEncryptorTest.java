@@ -58,4 +58,9 @@ class RevealingStringEncryptorTest {
 
         assertThat(underTest.decrypt(SERIALIZED, KEY, ENTITY_ID, COLUMN)).isEqualTo(ENTITY);
     }
+
+    @Test
+    void decrypt_null() {
+        assertThat(underTest.decrypt(null, KEY, ENTITY_ID, COLUMN)).isNull();
+    }
 }

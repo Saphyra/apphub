@@ -2,9 +2,9 @@
 
 if [ "$1" != "skipBuild" ]; then
   if [ "$1" == "skipTests" ]; then
-    mvn -T 24 clean package -DskipTests -fae
+    mvn -T 24 clean package -DskipTests
   else
-    mvn -T 6 clean package -fae
+    mvn -T 6 clean package
   fi
   BUILD_RESULT=$?
   if [[ "$BUILD_RESULT" -ne 0 ]]; then
@@ -26,6 +26,8 @@ waitStartup 8081
 ./infra/deployment/script/local_start_app.sh 8099 "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8082 "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8098 "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar" &
+
+./infra/deployment/script/local_start_app.sh 8084 "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar" &
 
 ./infra/deployment/script/local_start_app.sh 8091 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8095 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar" &

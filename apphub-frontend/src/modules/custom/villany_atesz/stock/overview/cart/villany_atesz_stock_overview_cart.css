@@ -1,0 +1,15 @@
+#villany-atesz-stock-overview-cart {
+    border-left: 3px ridge white;
+    overflow: auto;
+}
+
+#villany-atesz-stock-overview-cart-selector-label {
+    border-bottom: 1px solid white;
+    font-size: 20px;
+    display: block;
+    padding: 5px;
+}
+
+#villany-atesz-stock-overview-cart-details fieldset {
+    margin: 10px;
+}

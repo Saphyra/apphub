@@ -74,5 +74,9 @@
     "migration-tasks": {
         "en": "Migration Tasks",
         "hu": "Migrációs feladatok"
+    },
+    "villanyatesz": {
+        "en": "VillanyAtesz",
+        "hu": "VillanyAtesz"
     }
 }

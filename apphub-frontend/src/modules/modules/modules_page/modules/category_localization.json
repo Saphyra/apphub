@@ -26,5 +26,9 @@
     "community": {
         "en": "Community",
         "hu": "Közösség"
+    },
+    "custom": {
+        "en": "Custom",
+        "hu": "Egyéni"
     }
 }

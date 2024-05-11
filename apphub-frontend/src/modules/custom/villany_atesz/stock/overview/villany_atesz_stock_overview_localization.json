@@ -1,0 +1,54 @@
+{
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "category": {
+        "en": "Category",
+        "hu": "Kategória"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "in-car": {
+        "en": "In car",
+        "hu": "Autóban"
+    },
+    "in-cart": {
+        "en": "In cart",
+        "hu": "Kosárban"
+    },
+    "in-storage": {
+        "en": "In storage",
+        "hu": "Raktárban"
+    },
+    "price": {
+        "en": "Price",
+        "hu": "Ár"
+    },
+    "stock-value": {
+        "en": "Stock price",
+        "hu": "Készlet érték"
+    },
+    "serial-number": {
+        "en": "Serial No.",
+        "hu": "Cikkszám"
+    },
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "add-to-cart": {
+        "en": "Add to cart",
+        "hu": "Kosárba"
+    },
+    "move-to-car": {
+        "en": "To car",
+        "hu": "Autóba"
+    },
+    "move-to-storage": {
+        "en": "To storage",
+        "hu": "Raktárba"
+    }
+}

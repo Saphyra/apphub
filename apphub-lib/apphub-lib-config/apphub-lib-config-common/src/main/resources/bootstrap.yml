@@ -47,16 +47,6 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
 
-serviceUrls:
-  adminPanel: admin-panel:8080
-  eventGateway: event-gateway:8080
-  web-content-localization: web-content:8080
-  skyxploreData: skyxplore-data:8080
-  skyxploreGame: skyxplore-game:8080
-  skyxploreLobby: skyxplore-lobby:8080
-  storage: storage:8080
-  user: user:8080
-
 event:
   processor:
     heartbeat:

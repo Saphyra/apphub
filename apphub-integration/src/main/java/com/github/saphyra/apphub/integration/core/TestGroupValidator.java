@@ -22,7 +22,8 @@ public class TestGroupValidator {
         "skyxplore",
         "utils",
         "misc",
-        "training"
+        "training",
+        "villany-atesz"
     );
 
     public static void validateTestGroups(Method method) {

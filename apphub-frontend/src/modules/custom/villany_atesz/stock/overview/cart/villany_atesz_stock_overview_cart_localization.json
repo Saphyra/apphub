@@ -1,0 +1,82 @@
+{
+    "active-cart": {
+        "en": "Active cart",
+        "hu": "Aktív kosár"
+    },
+    "choose-cart": {
+        "en": "Choose",
+        "hu": "Válassz"
+    },
+    "contact-info": {
+        "en": "Contact info",
+        "hu": "Kapcsolat adatai"
+    },
+    "code": {
+        "en": "Code",
+        "hu": "Sorszám"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Név"
+    },
+    "address": {
+        "en": "Address",
+        "hu": "Cím"
+    },
+    "phone": {
+        "en": "Phone",
+        "hu": "Telefonszám"
+    },
+    "total-price": {
+        "en": "Total value",
+        "hu": "Kosár értéke"
+    },
+    "items": {
+        "en": "Items",
+        "hu": "Tételek"
+    },
+    "operations": {
+        "en": "Operations",
+        "hu": "Műveletek"
+    },
+    "finalize": {
+        "en": "Finalize",
+        "hu": "Véglegesítés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "confirm-finalize-cart-title": {
+        "en": "Finalize cart?",
+        "hu": "Kosár véglegesítése?"
+    },
+    "confirm-finalize-cart-content": {
+        "en": "Are you sure you want to finalize cart for customer Code: {code}, Name: {name} with a total value of {totalPrice} Ft?",
+        "hu": "Biztosan véglegesíteni szeretnéd a Sorszám: {code}, Név: {name} ügyfélhez tartozo kosarat {totalPrice} Ft értékben?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "confirm-delete-cart-title": {
+        "en": "Delete cart?",
+        "hu": "Kosár törlése?"
+    },
+    "confirm-delete-cart-content": {
+        "en": "Are you sure you want to delete cart for customer Code: {code}, Name: {name}?",
+        "hu": "Biztosan törölni szeretnéd a Sorszám: {code}, Név: {name} ügyfélhez tartozo kosarat?"
+    },
+    "cart-item-removal-title": {
+        "en": "Remove from cart?",
+        "hu": "Kiveszed a kosárból?"
+    },
+    "cart-item-removal-content": {
+        "en": "Are you sure you want to remove {amount} {name} from the cart?",
+        "hu": "Biztosan ki szeretnél venni {amount} {name}-t a kosárból?"
+    },
+    "remove": {
+        "en": "Remove",
+        "hu": "Eltávolítás"
+    }
+}

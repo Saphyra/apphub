@@ -118,6 +118,7 @@
     </dependencies>
 
     <modules>
+        <module>apphub-service-custom</module>
         <module>apphub-service-community</module>
         <module>apphub-service-notebook</module>
         <module>apphub-service-skyxplore</module>

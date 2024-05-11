@@ -1,14 +1,18 @@
 import { useEffect } from "react";
 
-const useLoader = (request, mapper, listener = []) => {
+const useLoader = (request, mapper, listener = [], condition = () => true, alternateiveResult = null) => {
     useEffect(() => loader(), listener);
 
     const loader = () => {
-        const fetch = async () => {
-            const response = await request.send();
-            mapper(response);
+        if (condition()) {
+            const fetch = async () => {
+                const response = await request.send();
+                mapper(response);
+            }
+            fetch();
+        } else {
+            mapper(alternateiveResult);
         }
-        fetch();
     }
 }
 

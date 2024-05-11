@@ -65,6 +65,17 @@ public enum LocalizedText {
     BAN_SELECT_TIME_UNIT("Select time unit."),
     BAN_BLANK_REASON("Please provide why the user is banned."),
     BAN_EMPTY_DATE("Please select when the user should be deleted."),
+
+    //VILLANY ATESZ
+    VILLANY_ATESZ_CONTACTS_BLANK_NAME("Name must not be blank."),
+    VILLANY_ATESZ_STOCK_CATEGORIES_BLANK_NAME("Name must not be blank."),
+    VILLANY_ATESZ_STOCK_NEW_ITEM_CHOOSE_CATEGORY("Choose category!"),
+    VILLANY_ATESZ_STOCK_NEW_ITEM_BLANK_NAME("Name must not be blank."),
+    VILLANY_ATESZ_STOCK_NEW_ITEM_CREATED("Item created."),
+    VILLANY_ATESZ_STOCK_ACQUISITION_CHOOSE_CATEGORY("Select category for all of the entries!"),
+    VILLANY_ATESZ_STOCK_ACQUISITION_CHOOSE_STOCK_ITEM("Specify the item for all of the entries!"),
+    VILLANY_ATESZ_STOCK_ACQUISITION_ITEMS_STORED("Items stored."),
+    VILLANY_ATESZ_STOCK_OVERVIEW_ZERO_AMOUNT("Amount must not be zero."),
     ;
 
     private final String text;

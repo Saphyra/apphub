@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 @Slf4j
 public class RevealingStringEncryptor implements StringEncryptor {
@@ -27,6 +29,9 @@ public class RevealingStringEncryptor implements StringEncryptor {
 
     @Override
     public String decrypt(String entity, String key, String entityId, String column) {
+        if (isNull(entity)) {
+            return null;
+        }
         StringStringMap map = objectMapperWrapper.readValue(entity, StringStringMap.class);
         return defaultStringEncryptor.decrypt(map.get(ENCRYPTED), key, entityId, column);
     }

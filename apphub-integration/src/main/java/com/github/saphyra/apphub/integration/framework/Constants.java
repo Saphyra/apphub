@@ -21,6 +21,7 @@ public class Constants {
     public final String ROLE_UTILS = "UTILS";
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
+    public static final String ROLE_VILLANY_ATESZ = "VILLANY_ATESZ";
 
     //Alliances
     public final String GENERAL_CHAT_ROOM_NAME = "general";
@@ -60,6 +61,8 @@ public class Constants {
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
+    public static final String SELECT_OPTION_CHOOSE = "Choose";
+    public static final String FT_SUFFIX = " Ft";
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";
@@ -97,7 +100,8 @@ public class Constants {
         "community",
         "calendar",
         "encryption",
-        "storage"
+        "storage",
+        "villany-atesz"
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";

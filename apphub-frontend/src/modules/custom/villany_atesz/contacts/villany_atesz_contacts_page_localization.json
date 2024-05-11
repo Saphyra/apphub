@@ -1,0 +1,70 @@
+{
+    "title": {
+        "en": "Contacts - VillanyAtesz - Apphub",
+        "hu": "Kapcsolatok - VillanyAtesz - Apphub"
+    },
+    "page-title": {
+        "en": "Contacts",
+        "hu": "Kapcsolatok"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "code": {
+        "en": "Code",
+        "hu": "Sorszám"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Név"
+    },
+    "phone": {
+        "en": "Phone",
+        "hu": "Telefonszám"
+    },
+    "address": {
+        "en": "Address",
+        "hu": "Cím"
+    },
+    "note": {
+        "en": "Note",
+        "hu": "Megjegyzés"
+    },
+    "new-contact": {
+        "en": "New contact",
+        "hu": "Új kapcsolat"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "edit-contact": {
+        "en": "Edit contact",
+        "hu": "Kapcsolat módosítása"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "delete-contact-confirmation-title": {
+        "en": "Delete contact?",
+        "hu": "Kapcsolat törlése?"
+    },
+    "delete-contact-confirmation-content": {
+        "en": "Are you sure you want to delete the following contact? Code: {code}, name: {name}, phone: {phone}, address: {address}, note: {note}",
+        "hu": "Biztosan törölni szeretnéd a kapcsolatot? Sorszám: {code}, név: {name}, telefonszám: {phone}, cím: {address}, megjegyzés: {note}"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "create-cart": {
+        "en": "Create cart",
+        "hu": "Új kosár"
+    }
+}
