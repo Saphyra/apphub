@@ -5,6 +5,7 @@
         Move the "To Car" and "To Storage" functionality to "Inventory"
 
 ===PLATFORM CHANGES===
+    Use version 1.0-SNAPSHOT
 
 ===TECHNICAL DEBTS===
     Update Selenium lib

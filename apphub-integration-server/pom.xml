@@ -4,7 +4,7 @@
 
     <groupId>com.github.saphyra</groupId>
     <artifactId>apphub-integration-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
