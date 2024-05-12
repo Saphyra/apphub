@@ -38,5 +38,17 @@
     "cancel": {
         "en": "Cancel",
         "hu": "Mégse"
+    },
+    "amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "move-to-car": {
+        "en": "To car",
+        "hu": "Autóba"
+    },
+    "move-to-storage": {
+        "en": "To storage",
+        "hu": "Raktárba"
     }
 }

@@ -11,10 +11,18 @@
     margin: auto;
 }
 
+.villany-atesz-stock-inventory-item td {
+    text-align: center;
+}
+
 .villany-atesz-stock-inventory-item input.scheduled {
     border-color: orange;
 }
 
-.villany-atesz-stock-inventory-item-inventoried{
+.villany-atesz-stock-inventory-item-inventoried {
     transform: scale(1.5);
+}
+
+.villany-atesz-stock-inventory-item input[type=number] {
+    width: 75px;
 }

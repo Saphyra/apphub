@@ -6,10 +6,8 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCate
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,6 @@ class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
     private final StockItemQueryService stockItemQueryService;
     private final AcquisitionService acquisitionService;
-    private final MoveStockService moveStockService;
 
     @Override
     public void createStockItem(CreateStockItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -53,24 +50,5 @@ class StockItemControllerImpl implements StockItemController {
         log.info("{} wants to add {} items to the stock.", accessTokenHeader.getUserId(), request.size());
 
         acquisitionService.acquire(request);
-    }
-
-    @Override
-    public List<StockItemOverviewResponse> moveStockToCar(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to move stock from storage to car for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
-
-        moveStockService.moveToCar(stockItemId, amount.getValue());
-
-        return getStockItems(accessTokenHeader);
-
-    }
-
-    @Override
-    public List<StockItemOverviewResponse> moveStockToStorage(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to move stock from storage to storage for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
-
-        moveStockService.moveToStorage(stockItemId, amount.getValue());
-
-        return getStockItems(accessTokenHeader);
     }
 }

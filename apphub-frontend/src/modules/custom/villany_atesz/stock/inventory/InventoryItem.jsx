@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ScheduledInputField from "./ScheduledInputField";
 import Utils from "../../../../../common/js/Utils";
 import Endpoints from "../../../../../common/js/dao/dao";
@@ -7,8 +7,13 @@ import MapStream from "../../../../../common/js/collection/MapStream";
 import InputField from "../../../../../common/component/input/InputField";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { validateOverviewAmount } from "../../validation/VillanyAteszValidation";
+import NotificationService from "../../../../../common/js/notification/NotificationService";
+import NumberInput from "../../../../../common/component/input/NumberInput";
 
 const InventoryItem = ({ localizationHandler, item, items, categories, setItems, setConfirmationDialogData }) => {
+    const [amount, setAmount] = useState(0);
+
     const updateProperty = (property, newValue) => {
         item[property] = newValue;
 
@@ -80,6 +85,34 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
         setConfirmationDialogData(null);
     }
 
+    const moveToCar = async () => {
+        const validationResult = validateOverviewAmount(amount);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
+        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR.createRequest({ value: amount }, { stockItemId: item.stockItemId })
+            .send();
+
+        setItems(response);
+        setAmount(0)
+    }
+
+    const moveToStorage = async () => {
+        const validationResult = validateOverviewAmount(amount);
+        if (!validationResult.valid) {
+            NotificationService.showError(validationResult.message);
+            return;
+        }
+
+        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE.createRequest({ value: amount }, { stockItemId: item.stockItemId })
+            .send();
+
+        setItems(response);
+        setAmount(0)
+    }
+
     return (
         <tr className="villany-atesz-stock-inventory-item">
             <td>
@@ -137,6 +170,26 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                     value={item.inStorage}
                     onchangeCallback={(newValue) => updateProperty("inStorage", newValue)}
                     scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE, newValue)}
+                />
+            </td>
+            <td>
+                <NumberInput
+                    className="villany-atesz-stock-inventory-item-amount"
+                    placeholder={localizationHandler.get("amount")}
+                    value={amount}
+                    onchangeCallback={setAmount}
+                />
+
+                <Button
+                    className="villany-atesz-stock-inventory-item-move-to-car-button"
+                    label={localizationHandler.get("move-to-car")}
+                    onclick={moveToCar}
+                />
+
+                <Button
+                    className="villany-atesz-stock-inventory-item-move-to-storage-button"
+                    label={localizationHandler.get("move-to-storage")}
+                    onclick={moveToStorage}
                 />
             </td>
             <td>

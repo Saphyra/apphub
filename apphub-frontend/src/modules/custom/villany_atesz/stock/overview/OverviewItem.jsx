@@ -24,34 +24,6 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
         setAmount(0)
     }
 
-    const moveToCar = async () => {
-        const validationResult = validateOverviewAmount(amount);
-        if (!validationResult.valid) {
-            NotificationService.showError(validationResult.message);
-            return;
-        }
-
-        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR.createRequest({ value: amount }, { stockItemId: item.stockItemId })
-            .send();
-
-        setItems(response);
-        setAmount(0)
-    }
-
-    const moveToStorage = async () => {
-        const validationResult = validateOverviewAmount(amount);
-        if (!validationResult.valid) {
-            NotificationService.showError(validationResult.message);
-            return;
-        }
-
-        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE.createRequest({ value: amount }, { stockItemId: item.stockItemId })
-            .send();
-
-        setItems(response);
-        setAmount(0)
-    }
-
     return (
         <tr className="villany-atesz-stock-overview-item">
             <td className="villany-atesz-stock-overview-item-category">{item.category.name}</td>
@@ -62,34 +34,23 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
             <td className="villany-atesz-stock-overview-item-in-storage">{item.inStorage} {item.category.measurement}</td>
             <td className="villany-atesz-stock-overview-item-price">{item.price} Ft</td>
             <td className="villany-atesz-stock-overview-item-stock-value">{item.price * (item.inCar + item.inStorage)} Ft</td>
-            <td className="villany-atesz-stock-overview-item-stock-operations">
-                <NumberInput
-                    className="villany-atesz-stock-overview-item-add-to-cart-amount"
-                    placeholder={localizationHandler.get("amount")}
-                    value={amount}
-                    onchangeCallback={setAmount}
-                />
+            {!Utils.isBlank(activeCart) &&
+                <td className="villany-atesz-stock-overview-item-stock-operations">
+                    <NumberInput
+                        className="villany-atesz-stock-overview-item-add-to-cart-amount"
+                        placeholder={localizationHandler.get("amount")}
+                        value={amount}
+                        onchangeCallback={setAmount}
+                    />
 
-                {!Utils.isBlank(activeCart) &&
+
                     <Button
                         className="villany-atesz-stock-overview-item-add-to-cart-button"
                         label={localizationHandler.get("add-to-cart")}
                         onclick={addToCart}
                     />
-                }
-
-                <Button
-                    className="villany-atesz-stock-overview-item-move-to-car-button"
-                    label={localizationHandler.get("move-to-car")}
-                    onclick={moveToCar}
-                />
-
-                <Button
-                    className="villany-atesz-stock-overview-item-move-to-storage-button"
-                    label={localizationHandler.get("move-to-storage")}
-                    onclick={moveToStorage}
-                />
-            </td>
+                </td>
+            }
 
         </tr>
     );

@@ -64,12 +64,6 @@ public class StockItemCrudTest extends BackEndTest {
         acquire_nullPrice(accessTokenId, stockItemId);
         acquire(accessTokenId, stockItemId);
 
-        moveStockToCar_zeroAmount(accessTokenId, stockItemId);
-        moveStockToCar(accessTokenId, stockItemId);
-
-        moveStockToStorage_zeroAmount(accessTokenId, stockItemId);
-        moveStockToStorage(accessTokenId, stockItemId);
-
         addToCart(accessTokenId, stockItemId);
 
         delete(accessTokenId, stockItemId);
@@ -245,26 +239,6 @@ public class StockItemCrudTest extends BackEndTest {
             .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(ACQUIRE_PRICE, StockItemOverviewResponse::getPrice);
-    }
-
-    private void moveStockToCar_zeroAmount(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getMoveStockToCarResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
-    }
-
-    private void moveStockToCar(UUID accessTokenId, UUID stockItemId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemActions.moveStockToCar(accessTokenId, stockItemId, ACQUIRE_IN_STORAGE))
-            .returns(IN_CAR + ACQUIRE_IN_CAR + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInCar)
-            .returns(IN_STORAGE, StockItemOverviewResponse::getInStorage);
-    }
-
-    private void moveStockToStorage_zeroAmount(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getMoveStockToStorageResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
-    }
-
-    private void moveStockToStorage(UUID accessTokenId, UUID stockItemId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemActions.moveStockToStorage(accessTokenId, stockItemId, ACQUIRE_IN_STORAGE))
-            .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
-            .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage);
     }
 
     private void addToCart(UUID accessTokenId, UUID stockItemId) {

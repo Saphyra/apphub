@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    VillanyAtesz
+        Move the "To Car" and "To Storage" functionality to "Inventory"
 
 ===PLATFORM CHANGES===
 

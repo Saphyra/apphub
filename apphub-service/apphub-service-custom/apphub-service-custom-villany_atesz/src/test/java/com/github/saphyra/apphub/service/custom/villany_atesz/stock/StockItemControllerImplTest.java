@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.*;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +25,7 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 public class StockItemControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID STOCK_ITEM_ID = UUID.randomUUID();
     private static final UUID STOCK_CATEGORY_ID = UUID.randomUUID();
-    private static final Integer AMOUNT = 35;
 
     @Mock
     private CreateStockItemService createStockItemService;
@@ -36,9 +35,6 @@ public class StockItemControllerImplTest {
 
     @Mock
     private AcquisitionService acquisitionService;
-
-    @Mock
-    private MoveStockService moveStockService;
 
     @InjectMocks
     private StockItemControllerImpl underTest;
@@ -89,23 +85,5 @@ public class StockItemControllerImplTest {
         underTest.acquire(List.of(addToStockRequest), accessTokenHeader);
 
         then(acquisitionService).should().acquire(List.of(addToStockRequest));
-    }
-
-    @Test
-    void moveStockToCar() {
-        given(stockItemQueryService.getStockItems(USER_ID)).willReturn(List.of(stockItemOverviewResponse));
-
-        assertThat(underTest.moveStockToCar(new OneParamRequest<>(AMOUNT), STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemOverviewResponse);
-
-        then(moveStockService).should().moveToCar(STOCK_ITEM_ID, AMOUNT);
-    }
-
-    @Test
-    void moveStockToStorage() {
-        given(stockItemQueryService.getStockItems(USER_ID)).willReturn(List.of(stockItemOverviewResponse));
-
-        assertThat(underTest.moveStockToStorage(new OneParamRequest<>(AMOUNT), STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemOverviewResponse);
-
-        then(moveStockService).should().moveToStorage(STOCK_ITEM_ID, AMOUNT);
     }
 }

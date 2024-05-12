@@ -95,4 +95,32 @@ public class VillanyAteszStockItemInventoryActions {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
+
+    public static Response getMoveStockToCarResponse(UUID accessTokenId, UUID stockItemId, Integer amount) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(amount))
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR, "stockItemId", stockItemId));
+    }
+
+    public static List<StockItemInventoryResponse> moveStockToCar(UUID accessTokenId, UUID stockItemId, Integer amount) {
+        Response response = getMoveStockToCarResponse(accessTokenId, stockItemId, amount);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
+    }
+
+    public static Response getMoveStockToStorageResponse(UUID accessTokenId, UUID stockItemId, int amount) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(amount))
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE, "stockItemId", stockItemId));
+    }
+
+    public static List<StockItemInventoryResponse> moveStockToStorage(UUID accessTokenId, UUID stockItemId, Integer amount) {
+        Response response = getMoveStockToStorageResponse(accessTokenId, stockItemId, amount);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
+    }
 }

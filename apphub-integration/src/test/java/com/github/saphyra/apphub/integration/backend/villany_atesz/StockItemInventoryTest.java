@@ -31,6 +31,7 @@ public class StockItemInventoryTest extends BackEndTest {
     private static final String NEW_SERIAL_NUMBER = "new-serial-number";
     private static final Integer NEW_IN_CAR = 3568;
     private static final Integer NEW_IN_STORAGE = 7458;
+    private static final Integer AMOUNT = 32;
 
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemInventory() {
@@ -64,6 +65,12 @@ public class StockItemInventoryTest extends BackEndTest {
 
         editInStorage_null(accessTokenId, stockItemId);
         editInStorage(accessTokenId, stockItemId);
+
+        moveStockToCar_zeroAmount(accessTokenId, stockItemId);
+        moveStockToCar(accessTokenId, stockItemId);
+
+        moveStockToStorage_zeroAmount(accessTokenId, stockItemId);
+        moveStockToStorage(accessTokenId, stockItemId);
     }
 
     private void editCategory_nullStockCategoryId(UUID accessTokenId, UUID stockItemId) {
@@ -136,6 +143,27 @@ public class StockItemInventoryTest extends BackEndTest {
             .returns(NEW_IN_STORAGE, StockItemInventoryResponse::getInStorage);
     }
 
+    private void moveStockToCar_zeroAmount(UUID accessTokenId, UUID stockItemId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToCarResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
+    }
+
+    private void moveStockToCar(UUID accessTokenId, UUID stockItemId) {
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToCar(accessTokenId, stockItemId, AMOUNT))
+            .returns(NEW_IN_CAR + AMOUNT, StockItemInventoryResponse::getInCar)
+            .returns(NEW_IN_STORAGE - AMOUNT, StockItemInventoryResponse::getInStorage);
+    }
+
+    private void moveStockToStorage_zeroAmount(UUID accessTokenId, UUID stockItemId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToStorageResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
+    }
+
+    private void moveStockToStorage(UUID accessTokenId, UUID stockItemId) {
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToStorage(accessTokenId, stockItemId, AMOUNT))
+            .returns(NEW_IN_CAR, StockItemInventoryResponse::getInCar)
+            .returns(NEW_IN_STORAGE, StockItemInventoryResponse::getInStorage);
+    }
+
+    //Utils
     private UUID createStockItem(UUID accessTokenId, UUID stockCategoryId) {
         CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(stockCategoryId)

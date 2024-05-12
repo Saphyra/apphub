@@ -76,6 +76,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
                         <th>{localizationHandler.get("in-car")}</th>
                         <th>{localizationHandler.get("in-storage")}</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

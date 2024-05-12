@@ -13,6 +13,8 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.StockItemInventory;
@@ -59,6 +61,7 @@ public class StockInventoryTest extends SeleniumTest {
             .findFirst()
             .orElseThrow();
 
+        //Modify values
         item.setInventoried(true);
         item.setCategory(CATEGORY_NAME_2);
         item.setName(" ");
@@ -66,17 +69,19 @@ public class StockInventoryTest extends SeleniumTest {
         item.setInCar(IN_CAR);
         item.setInStorage(IN_STORAGE);
 
+        //Blank name is not saved
         SleepUtil.sleep(2000);
         assertThat(item.isNamePending()).isTrue();
 
+        //Set proper name
         item.setName(NEW_STOCK_ITEM_NAME);
 
         AwaitilityWrapper.createDefault()
             .until(() -> !item.isNamePending())
             .assertTrue("Item name is still pending");
 
+        //Modifications displayed in overview
         VillanyAteszNavigation.openStockOverview(driver);
-
         AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockOverviewPageActions.getItems(driver), items -> !items.isEmpty(), items -> items.get(0))
             .returns(CATEGORY_NAME_2, StockItemOverview::getCategoryName)
             .returns(NEW_STOCK_ITEM_NAME, StockItemOverview::getName)
@@ -84,10 +89,47 @@ public class StockInventoryTest extends SeleniumTest {
             .returns(IN_CAR + " " + MEASUREMENT, StockItemOverview::getInCar)
             .returns(IN_STORAGE + " " + MEASUREMENT, StockItemOverview::getInStorage);
 
+        //Inventoried status saved
         VillanyAteszNavigation.openStockInventory(driver);
-
         AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockInventoryPageActions.getItems(driver), items -> !items.isEmpty(), items -> items.get(0))
             .returns(true, StockItemInventory::isInventoried);
+
+        move(driver);
+
+    }
+
+    private static void move(WebDriver driver) {
+        StockItemInventory item = VillanyAteszStockInventoryPageActions.getItems(driver)
+            .stream()
+            .findFirst()
+            .orElseThrow();
+
+        item.moveToCar();
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_ZERO_AMOUNT);
+        ToastMessageUtil.clearToasts(driver);
+
+        item.setAmount(AMOUNT);
+        item.moveToCar();
+
+        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockInventoryPageActions.getItems(driver), items -> !items.isEmpty(), items -> items.get(0))
+            .returns(IN_CAR + AMOUNT, StockItemInventory::getInCar)
+            .returns(IN_STORAGE - AMOUNT, StockItemInventory::getInStorage);
+
+        item = VillanyAteszStockInventoryPageActions.getItems(driver)
+            .stream()
+            .findFirst()
+            .orElseThrow();
+
+        item.moveToStorage();
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_ZERO_AMOUNT);
+        ToastMessageUtil.clearToasts(driver);
+
+        item.setAmount(AMOUNT);
+        item.moveToStorage();
+
+        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockInventoryPageActions.getItems(driver), items -> !items.isEmpty(), items -> items.get(0))
+            .returns(IN_CAR, StockItemInventory::getInCar)
+            .returns(IN_STORAGE, StockItemInventory::getInStorage);
     }
 
     @Test(groups = {"fe", "villany-atesz"})

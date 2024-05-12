@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.EditStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ class StockInventoryControllerImpl implements StockInventoryController {
     private final StockItemInventoryQueryService stockItemInventoryQueryService;
     private final EditStockItemService editStockItemService;
     private final DeleteStockItemService deleteStockItemService;
+    private final MoveStockService moveStockService;
 
     @Override
     public List<StockItemInventoryResponse> getItemsForInventory(AccessTokenHeader accessTokenHeader) {
@@ -78,5 +80,24 @@ class StockInventoryControllerImpl implements StockInventoryController {
         log.info("{} wants to edit the inStorage of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
         editStockItemService.editInStorage(stockItemId, inStorage.getValue());
+    }
+
+    @Override
+    public List<StockItemInventoryResponse> moveStockToCar(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to move stock from storage to car for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        moveStockService.moveToCar(stockItemId, amount.getValue());
+
+        return getItemsForInventory(accessTokenHeader);
+
+    }
+
+    @Override
+    public List<StockItemInventoryResponse> moveStockToStorage(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to move stock from storage to storage for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        moveStockService.moveToStorage(stockItemId, amount.getValue());
+
+        return getItemsForInventory(accessTokenHeader);
     }
 }

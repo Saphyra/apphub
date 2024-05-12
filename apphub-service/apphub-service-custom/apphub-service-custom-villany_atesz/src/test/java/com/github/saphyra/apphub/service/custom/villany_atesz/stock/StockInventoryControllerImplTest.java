@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.EditStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,7 @@ public class StockInventoryControllerImplTest {
     private static final String SERIAL_NUMBER = "serial-number";
     private static final Integer IN_CAR = 4;
     private static final Integer IN_STORAGE = 35;
+    private static final Integer AMOUNT = 35;
 
     @Mock
     private StockItemInventoryQueryService stockItemInventoryQueryService;
@@ -38,6 +40,9 @@ public class StockInventoryControllerImplTest {
 
     @Mock
     private DeleteStockItemService deleteStockItemService;
+
+    @Mock
+    private MoveStockService moveStockService;
 
     @InjectMocks
     private StockInventoryControllerImpl underTest;
@@ -109,5 +114,23 @@ public class StockInventoryControllerImplTest {
         underTest.editInStorage(new OneParamRequest<>(IN_STORAGE), STOCK_ITEM_ID, accessTokenHeader);
 
         then(editStockItemService).should().editInStorage(STOCK_ITEM_ID, IN_STORAGE);
+    }
+
+    @Test
+    void moveStockToCar() {
+        given(stockItemInventoryQueryService.getItems(USER_ID)).willReturn(List.of(stockItemInventoryResponse));
+
+        assertThat(underTest.moveStockToCar(new OneParamRequest<>(AMOUNT), STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemInventoryResponse);
+
+        then(moveStockService).should().moveToCar(STOCK_ITEM_ID, AMOUNT);
+    }
+
+    @Test
+    void moveStockToStorage() {
+        given(stockItemInventoryQueryService.getItems(USER_ID)).willReturn(List.of(stockItemInventoryResponse));
+
+        assertThat(underTest.moveStockToStorage(new OneParamRequest<>(AMOUNT), STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemInventoryResponse);
+
+        then(moveStockService).should().moveToStorage(STOCK_ITEM_ID, AMOUNT);
     }
 }

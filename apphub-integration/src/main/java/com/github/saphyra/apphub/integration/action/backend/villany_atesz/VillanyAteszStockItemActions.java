@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
-import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToStockRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemOverviewResponse;
@@ -47,34 +46,6 @@ public class VillanyAteszStockItemActions {
         Response response = getAcquireResponse(accessTokenId, requests);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-    }
-
-    public static Response getMoveStockToCarResponse(UUID accessTokenId, UUID stockItemId, Integer amount) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(amount))
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR, "stockItemId", stockItemId));
-    }
-
-    public static List<StockItemOverviewResponse> moveStockToCar(UUID accessTokenId, UUID stockItemId, Integer amount) {
-        Response response = getMoveStockToCarResponse(accessTokenId, stockItemId, amount);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return Arrays.asList(response.getBody().as(StockItemOverviewResponse[].class));
-    }
-
-    public static Response getMoveStockToStorageResponse(UUID accessTokenId, UUID stockItemId, int amount) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(new OneParamRequest<>(amount))
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE, "stockItemId", stockItemId));
-    }
-
-    public static List<StockItemOverviewResponse> moveStockToStorage(UUID accessTokenId, UUID stockItemId, Integer amount) {
-        Response response = getMoveStockToStorageResponse(accessTokenId, stockItemId, amount);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return Arrays.asList(response.getBody().as(StockItemOverviewResponse[].class));
     }
 
     public static List<StockItemOverviewResponse> delete(UUID accessTokenId, UUID stockItemId) {
