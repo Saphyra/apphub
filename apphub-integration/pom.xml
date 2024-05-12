@@ -22,8 +22,7 @@
         <versions.jackson-core>2.14.1</versions.jackson-core>
         <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
         <versions.rest-assured>5.3.0</versions.rest-assured>
-        <versions.selenium>4.18.1</versions.selenium>
-        <versions.webDriverManager>5.6.4</versions.webDriverManager>
+        <versions.selenium>4.20.0</versions.selenium>
         <versions.testng>7.7.1</versions.testng>
         <versions.logback>1.2.3</versions.logback>
         <versions.awaitility>4.2.0</versions.awaitility>
