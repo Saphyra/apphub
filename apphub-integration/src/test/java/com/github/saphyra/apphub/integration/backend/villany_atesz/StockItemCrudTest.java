@@ -38,6 +38,7 @@ public class StockItemCrudTest extends BackEndTest {
     private static final Integer ACQUIRE_PRICE = PRICE + 1;
     private static final String CONTACT_NAME = "contact-name";
     private static final Integer IN_CART = 3;
+    private static final String BAR_CODE = "bar-code";
 
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemCrud() {
@@ -51,6 +52,7 @@ public class StockItemCrudTest extends BackEndTest {
         create_stockCategoryNotFound(accessTokenId);
         create_blankName(accessTokenId, stockCategoryId);
         create_nullSerialNumber(accessTokenId, stockCategoryId);
+        create_nullBarCde(accessTokenId, stockCategoryId);
         create_nullInCar(accessTokenId, stockCategoryId);
         create_nullInStorage(accessTokenId, stockCategoryId);
         create_nullPrice(accessTokenId, stockCategoryId);
@@ -87,6 +89,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(UUID.randomUUID())
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -100,6 +103,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(" ")
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -113,6 +117,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(null)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -121,11 +126,26 @@ public class StockItemCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getCreateResponse(accessTokenId, request), "serialNumber", "must not be null");
     }
 
+    private void create_nullBarCde(UUID accessTokenId, UUID stockCategoryId) {
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
+            .stockCategoryId(stockCategoryId)
+            .name(NAME)
+            .serialNumber(SERIAL_NUMBER)
+            .barCode(null)
+            .inCar(IN_CAR)
+            .inStorage(IN_STORAGE)
+            .price(PRICE)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getCreateResponse(accessTokenId, request), "barCode", "must not be null");
+    }
+
     private void create_nullInCar(UUID accessTokenId, UUID stockCategoryId) {
         CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(null)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -139,6 +159,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(null)
             .price(PRICE)
@@ -152,6 +173,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(null)
@@ -165,6 +187,7 @@ public class StockItemCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -176,6 +199,7 @@ public class StockItemCrudTest extends BackEndTest {
             .returns(stockCategoryId, stockItemOverviewResponse -> stockItemOverviewResponse.getCategory().getStockCategoryId())
             .returns(NAME, StockItemOverviewResponse::getName)
             .returns(SERIAL_NUMBER, StockItemOverviewResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemOverviewResponse::getBarCode)
             .returns(IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(PRICE, StockItemOverviewResponse::getPrice);

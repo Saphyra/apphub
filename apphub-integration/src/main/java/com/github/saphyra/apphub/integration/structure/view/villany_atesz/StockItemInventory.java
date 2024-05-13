@@ -78,4 +78,13 @@ public class StockItemInventory {
     public Integer getInStorage() {
         return Integer.parseInt(webElement.findElement(By.className("villany-atesz-stock-inventory-item-in-storage")).getAttribute("value"));
     }
+
+    public void setBarCode(String barCode) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code")), barCode);
+    }
+
+    public String getBarCode() {
+        return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
+            .getAttribute("value");
+    }
 }

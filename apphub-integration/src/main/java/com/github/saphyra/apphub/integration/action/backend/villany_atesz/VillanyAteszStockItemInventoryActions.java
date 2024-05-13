@@ -123,4 +123,16 @@ public class VillanyAteszStockItemInventoryActions {
 
         return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
     }
+
+    public static Response getEditBarCodeResponse(UUID accessTokenId, UUID stockItemId, String barCode) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(barCode))
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE, "stockItemId", stockItemId));
+    }
+
+    public static void editBarCode(UUID accessTokenId, UUID stockItemId, String barCode) {
+        Response response = getEditBarCodeResponse(accessTokenId, stockItemId, barCode);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

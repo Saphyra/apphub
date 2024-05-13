@@ -21,6 +21,7 @@ public class CreateCreateStockItemRequestValidatorTest {
     private static final Integer IN_STORAGE = 654;
     private static final Integer PRICE = 465;
     private static final UUID STOCK_CATEGORY_ID = UUID.randomUUID();
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private StockCategoryDao stockCategoryDao;
@@ -34,6 +35,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(null)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -48,6 +50,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(" ")
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -62,6 +65,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(null)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -71,11 +75,27 @@ public class CreateCreateStockItemRequestValidatorTest {
     }
 
     @Test
+    void nullBarCode() {
+        CreateStockItemRequest request = CreateStockItemRequest.builder()
+            .stockCategoryId(STOCK_CATEGORY_ID)
+            .name(NAME)
+            .serialNumber(SERIAL_NUMBER)
+            .barCode(null)
+            .inCar(IN_CAR)
+            .inStorage(IN_STORAGE)
+            .price(PRICE)
+            .build();
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "barCode", "must not be null");
+    }
+
+    @Test
     void nullInCar() {
         CreateStockItemRequest request = CreateStockItemRequest.builder()
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(null)
             .inStorage(IN_STORAGE)
             .price(PRICE)
@@ -90,6 +110,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(null)
             .price(PRICE)
@@ -104,6 +125,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(null)
@@ -118,6 +140,7 @@ public class CreateCreateStockItemRequestValidatorTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)

@@ -31,6 +31,7 @@ public class StockInventoryControllerImplTest {
     private static final Integer IN_CAR = 4;
     private static final Integer IN_STORAGE = 35;
     private static final Integer AMOUNT = 35;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private StockItemInventoryQueryService stockItemInventoryQueryService;
@@ -100,6 +101,13 @@ public class StockInventoryControllerImplTest {
         underTest.editSerialNumber(new OneParamRequest<>(SERIAL_NUMBER), STOCK_ITEM_ID, accessTokenHeader);
 
         then(editStockItemService).should().editSerialNumber(STOCK_ITEM_ID, SERIAL_NUMBER);
+    }
+
+    @Test
+    void editBarCode() {
+        underTest.editBarCode(new OneParamRequest<>(BAR_CODE), STOCK_ITEM_ID, accessTokenHeader);
+
+        then(editStockItemService).should().editBarCode(STOCK_ITEM_ID, BAR_CODE);
     }
 
     @Test

@@ -51,6 +51,7 @@ public class StockItemQueryService {
             .category(stockCategoryQueryService.findByStockCategoryId(stockItem.getStockCategoryId()))
             .name(stockItem.getName())
             .serialNumber(stockItem.getSerialNumber())
+            .barCode(stockItem.getBarCode())
             .inCar(stockItem.getInCar())
             .inCart(countInCart(stockItem.getStockItemId()))
             .inStorage(stockItem.getInStorage())

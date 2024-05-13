@@ -50,5 +50,9 @@
     "move-to-storage": {
         "en": "To storage",
         "hu": "Raktárba"
+    },
+    "bar-code": {
+        "en": "Bar code",
+        "hu": "Vonalkód"
     }
 }

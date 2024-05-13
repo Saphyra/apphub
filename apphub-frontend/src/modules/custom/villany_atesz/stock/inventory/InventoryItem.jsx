@@ -153,6 +153,16 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
             </td>
             <td>
                 <ScheduledInputField
+                    type="text"
+                    className="villany-atesz-stock-inventory-item-bar-code"
+                    placeholder={localizationHandler.get("bar-code")}
+                    value={item.barCode}
+                    onchangeCallback={(newValue) => updateProperty("barCode", newValue)}
+                    scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE, newValue)}
+                />
+            </td>
+            <td>
+                <ScheduledInputField
                     type="number"
                     className="villany-atesz-stock-inventory-item-in-car"
                     placeholder={localizationHandler.get("in-car")}

@@ -50,5 +50,9 @@
     "blank-name": {
         "en": "Name must not be blank.",
         "hu": "Megnevezés nem lehet üres."
+    },
+    "bar-code": {
+        "en": "Bar code",
+        "hu": "Vonalkód"
     }
 }

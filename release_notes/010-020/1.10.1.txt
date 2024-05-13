@@ -1,4 +1,6 @@
 ===FEATURES===
+    VillanyAtesz
+        BarCode scanner compatibility
 
 ===BUGFIXES===
     VillanyAtesz

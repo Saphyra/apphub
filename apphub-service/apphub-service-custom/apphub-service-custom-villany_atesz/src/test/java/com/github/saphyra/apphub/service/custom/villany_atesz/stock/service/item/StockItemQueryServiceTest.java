@@ -37,6 +37,7 @@ public class StockItemQueryServiceTest {
     private static final Integer CART_ITEM_AMOUNT = 5647;
     private static final Integer IN_STORAGE = 35;
     private static final Integer PRICE = 475;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private StockItemDao stockItemDao;
@@ -108,12 +109,14 @@ public class StockItemQueryServiceTest {
         given(stockItemPrice.getPrice())
             .willReturn(PRICE - 10)
             .willReturn(PRICE);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
 
         CustomAssertions.singleListAssertThat(underTest.getStockItems(USER_ID))
             .returns(STOCK_ITEM_ID, StockItemOverviewResponse::getStockItemId)
             .returns(stockCategoryModel, StockItemOverviewResponse::getCategory)
             .returns(NAME, StockItemOverviewResponse::getName)
             .returns(SERIAL_NUMBER, StockItemOverviewResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemOverviewResponse::getBarCode)
             .returns(IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(CART_ITEM_AMOUNT, StockItemOverviewResponse::getInCart)
             .returns(IN_STORAGE, StockItemOverviewResponse::getInStorage)

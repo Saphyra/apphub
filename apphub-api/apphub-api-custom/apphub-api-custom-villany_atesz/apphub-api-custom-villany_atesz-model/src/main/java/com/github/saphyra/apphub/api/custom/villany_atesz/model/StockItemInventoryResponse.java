@@ -16,6 +16,7 @@ public class StockItemInventoryResponse {
     private UUID stockCategoryId;
     private String name;
     private String serialNumber;
+    private String barCode;
     private Integer inCar;
     private Integer inStorage;
     private Boolean inCart;

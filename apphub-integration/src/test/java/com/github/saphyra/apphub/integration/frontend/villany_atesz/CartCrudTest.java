@@ -67,6 +67,7 @@ public class CartCrudTest extends SeleniumTest {
             .orElseThrow();
 
         //Zero amount
+        item.setAmount(0);
         item.addToCart();
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_ZERO_AMOUNT);
 

@@ -23,6 +23,7 @@ class StockItemFactoryTest {
     private static final String SERIAL_NUMBER = "serial-number";
     private static final Integer IN_CAR = 35;
     private static final Integer IN_STORAGE = 54;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private IdGenerator idGenerator;
@@ -36,6 +37,7 @@ class StockItemFactoryTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .build();
@@ -46,6 +48,7 @@ class StockItemFactoryTest {
             .returns(STOCK_ITEM_ID, StockItem::getStockItemId)
             .returns(USER_ID, StockItem::getUserId)
             .returns(STOCK_CATEGORY_ID, StockItem::getStockCategoryId)
+            .returns(BAR_CODE, StockItem::getBarCode)
             .returns(NAME, StockItem::getName)
             .returns(SERIAL_NUMBER, StockItem::getSerialNumber)
             .returns(IN_CAR, StockItem::getInCar)

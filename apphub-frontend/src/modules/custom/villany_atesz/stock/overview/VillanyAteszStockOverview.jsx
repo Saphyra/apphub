@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import localizationData from "./villany_atesz_stock_overview_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_overview.css";
@@ -9,6 +9,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Utils from "../../../../../common/js/Utils";
 import OverviewItem from "./OverviewItem";
 import VillanyAteszStockOverviewCart from "./cart/VillanyAteszStockOverviewCart";
+import useFocus from "../../../../../common/hook/UseFocus";
 
 const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -18,21 +19,32 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const [activeCart, setActiveCart] = useState(Utils.hasValue(sessionStorage.activeCart) ? sessionStorage.activeCart : "");
     const [cart, setCart] = useState(null);
     const [carts, setCarts] = useState([]);
+    const [inputRef, setInputFocus] = useFocus();
+
+    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
+    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart));
+    useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
+
+    useEffect(() => focus(), [search]);
+
+    const focus = () => {
+        if (search.length > 0) {
+            return;
+        }
+
+        setInputFocus();
+    }
 
     const updateActiveCart = (cartId) => {
         sessionStorage.activeCart = cartId;
         setActiveCart(cartId);
     }
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !Utils.isBlank(activeCart));
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
-
     const getItems = () => {
         return new Stream(items)
             .filter(item => {
                 return Utils.isBlank(search) ||
-                    new Stream([item.category.name, item.name, item.serialNumber, item.inCar, item.inCart, item.inStorage, item.price])
+                    new Stream([item.category.name, item.name, item.serialNumber, item.inCar, item.inCart, item.inStorage, item.price, item.barCode])
                         .join("")
                         .toLowerCase()
                         .indexOf(search.toLocaleLowerCase()) > -1;
@@ -53,6 +65,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
                 localizationHandler={localizationHandler}
                 setItems={setItems}
                 setCart={setCart}
+                setSearch={setSearch}
             />)
             .toList();
     }
@@ -65,6 +78,8 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
                     placeholder={localizationHandler.get("search")}
                     value={search}
                     onchangeCallback={setSearch}
+                    autoFocus={true}
+                    inputRef={inputRef}
                 />
 
                 <table id="villany-atesz-stock-overview-items-table" className="formatted-table">

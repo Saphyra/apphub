@@ -69,6 +69,13 @@ class StockInventoryControllerImpl implements StockInventoryController {
     }
 
     @Override
+    public void editBarCode(OneParamRequest<String> barCode, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit the barCode of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        editStockItemService.editBarCode(stockItemId, barCode.getValue());
+    }
+
+    @Override
     public void editInCar(OneParamRequest<Integer> inCar, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit the inCar of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 

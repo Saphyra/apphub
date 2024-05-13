@@ -6,8 +6,8 @@ import Endpoints from "../../../../../common/js/dao/dao";
 import { validateOverviewAmount } from "../../validation/VillanyAteszValidation";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 
-const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart }) => {
-    const [amount, setAmount] = useState(0);
+const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart, setSearch }) => {
+    const [amount, setAmount] = useState(1);
 
     const addToCart = async () => {
         const validationResult = validateOverviewAmount(amount);
@@ -21,7 +21,8 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
 
         setItems(response.items);
         setCart(response.cart);
-        setAmount(0)
+        setAmount(1);
+        setSearch("");
     }
 
     return (

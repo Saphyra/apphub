@@ -32,6 +32,8 @@ public class StockItemInventoryTest extends BackEndTest {
     private static final Integer NEW_IN_CAR = 3568;
     private static final Integer NEW_IN_STORAGE = 7458;
     private static final Integer AMOUNT = 32;
+    private static final String BAR_CODE = "bar-code";
+    private static final String NEW_BAR_CODE = "new-bar-code";
 
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemInventory() {
@@ -59,6 +61,9 @@ public class StockItemInventoryTest extends BackEndTest {
 
         editSerialNumber_null(accessTokenId, stockItemId);
         editSerialNumber(accessTokenId, stockItemId);
+
+        editBarCode_null(accessTokenId, stockItemId);
+        editBarCode(accessTokenId, stockItemId);
 
         editInCar_null(accessTokenId, stockItemId);
         editInCar(accessTokenId, stockItemId);
@@ -121,6 +126,17 @@ public class StockItemInventoryTest extends BackEndTest {
             .returns(NEW_SERIAL_NUMBER, StockItemInventoryResponse::getSerialNumber);
     }
 
+    private void editBarCode_null(UUID accessTokenId, UUID stockItemId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditBarCodeResponse(accessTokenId, stockItemId, null), "barCode", "must not be null");
+    }
+
+    private void editBarCode(UUID accessTokenId, UUID stockItemId) {
+        VillanyAteszStockItemInventoryActions.editBarCode(accessTokenId, stockItemId, NEW_BAR_CODE);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+            .returns(NEW_BAR_CODE, StockItemInventoryResponse::getBarCode);
+    }
+
     private void editInCar_null(UUID accessTokenId, UUID stockItemId) {
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInCarResponse(accessTokenId, stockItemId, null), "inCar", "must not be null");
     }
@@ -169,6 +185,7 @@ public class StockItemInventoryTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)

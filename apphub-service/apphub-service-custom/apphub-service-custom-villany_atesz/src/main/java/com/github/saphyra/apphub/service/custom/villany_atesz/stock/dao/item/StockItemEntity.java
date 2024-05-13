@@ -21,6 +21,7 @@ class StockItemEntity {
     private String stockCategoryId;
     private String name;
     private String serialNumber;
+    private String barCode;
     private String inCar;
     private String inStorage;
     private String inventoried;

@@ -46,6 +46,16 @@ public class EditStockItemService {
         stockItemDao.save(stockItem);
     }
 
+    public void editBarCode(UUID stockItemId, String barCode) {
+        ValidationUtil.notNull(barCode, "barCode");
+
+        StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
+
+        stockItem.setBarCode(barCode);
+
+        stockItemDao.save(stockItem);
+    }
+
     public void editInCar(UUID stockItemId, Integer inCar) {
         ValidationUtil.notNull(inCar, "inCar");
 

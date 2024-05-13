@@ -36,6 +36,7 @@ public class StockInventoryTest extends SeleniumTest {
     private static final String CONTACT_NAME = "contact-name";
     private static final String CONTACT_CODE = "contact-code";
     private static final Integer AMOUNT = 20;
+    private static final String BAR_CODE = "bar-code";
 
     @Test(groups = {"fe", "villany-atesz"})
     public void inventory() {
@@ -66,6 +67,7 @@ public class StockInventoryTest extends SeleniumTest {
         item.setCategory(CATEGORY_NAME_2);
         item.setName(" ");
         item.setSerialNumber(SERIAL_NUMBER);
+        item.setBarCode(BAR_CODE);
         item.setInCar(IN_CAR);
         item.setInStorage(IN_STORAGE);
 
@@ -92,10 +94,10 @@ public class StockInventoryTest extends SeleniumTest {
         //Inventoried status saved
         VillanyAteszNavigation.openStockInventory(driver);
         AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockInventoryPageActions.getItems(driver), items -> !items.isEmpty(), items -> items.get(0))
-            .returns(true, StockItemInventory::isInventoried);
+            .returns(true, StockItemInventory::isInventoried)
+            .returns(BAR_CODE, StockItemInventory::getBarCode);
 
         move(driver);
-
     }
 
     private static void move(WebDriver driver) {

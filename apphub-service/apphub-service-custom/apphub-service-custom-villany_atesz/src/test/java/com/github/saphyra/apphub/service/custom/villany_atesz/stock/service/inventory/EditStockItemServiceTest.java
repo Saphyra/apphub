@@ -23,6 +23,7 @@ class EditStockItemServiceTest {
     private static final String SERIAL_NUMBER = "serial-number";
     private static final Integer IN_CAR = 43;
     private static final Integer IN_STORAGE = 64;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private StockItemDao stockItemDao;
@@ -79,6 +80,21 @@ class EditStockItemServiceTest {
         underTest.editSerialNumber(STOCK_ITEM_ID, SERIAL_NUMBER);
 
         then(stockItem).should().setSerialNumber(SERIAL_NUMBER);
+        then(stockItemDao).should().save(stockItem);
+    }
+
+    @Test
+    void editBarCode_null() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.editBarCode(STOCK_ITEM_ID, null), "barCode", "must not be null");
+    }
+
+    @Test
+    void editBarCode() {
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+
+        underTest.editBarCode(STOCK_ITEM_ID, BAR_CODE);
+
+        then(stockItem).should().setBarCode(BAR_CODE);
         then(stockItemDao).should().save(stockItem);
     }
 
