@@ -8,6 +8,7 @@
 
 ===PLATFORM CHANGES===
     Use version 1.0-SNAPSHOT
+    Local start script starts services in batches to decrease load
 
 ===TECHNICAL DEBTS===
     Update Selenium lib
