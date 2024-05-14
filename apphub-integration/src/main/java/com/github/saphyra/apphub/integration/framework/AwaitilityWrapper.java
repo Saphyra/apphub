@@ -32,8 +32,8 @@ public class AwaitilityWrapper {
         return create(5, TimeUnit.SECONDS, 250, TimeUnit.MILLISECONDS);
     }
 
-    public static AwaitilityWrapper create(int timeout, int pollInterval) {
-        return create(timeout, TimeUnit.SECONDS, pollInterval, TimeUnit.SECONDS);
+    public static AwaitilityWrapper create(int timeoutSeconds, int pollIntervalSeconds) {
+        return create(timeoutSeconds, TimeUnit.SECONDS, pollIntervalSeconds, TimeUnit.SECONDS);
     }
 
     private static AwaitilityWrapper create(int timeout, TimeUnit timeoutUnit, int pollInterval, TimeUnit pollUnit) {

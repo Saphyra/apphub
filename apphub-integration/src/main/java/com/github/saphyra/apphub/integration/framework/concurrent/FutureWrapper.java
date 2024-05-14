@@ -19,4 +19,8 @@ public class FutureWrapper<T> {
     public ExecutionResult<T> get(long timeout, TimeUnit timeUnit) {
         return future.get(timeout, timeUnit);
     }
+
+    public boolean isDone() {
+        return future.isDone();
+    }
 }

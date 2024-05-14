@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.core;
 
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 
 import java.sql.Connection;

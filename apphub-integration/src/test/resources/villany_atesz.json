@@ -1,0 +1,68 @@
+[
+  {
+    "type": "table",
+    "name": "kapcsolatok",
+    "database": "vallalkozas",
+    "data": [
+      {
+        "id": "1",
+        "sorszam": "sorszam",
+        "nev": "nev",
+        "telefonszam": "telefonszam",
+        "cim": "",
+        "megjegyzes": ""
+      }
+    ]
+  },
+  {
+    "type": "table",
+    "name": "rk_alkatresz",
+    "database": "vallalkozas",
+    "data": [
+      {
+        "id": "1",
+        "alkatresz_fajta_id": "1",
+        "megnevezes": "megnevezes",
+        "cikkszam": ""
+      }
+    ]
+  },
+  {
+    "type": "table",
+    "name": "rk_alkatresz_fajta",
+    "database": "vallalkozas",
+    "data": [
+      {
+        "id": "1",
+        "megnevezes": "megnevezes",
+        "mertekegyseg": "mertekegyseg"
+      }
+    ]
+  },
+  {
+    "type": "table",
+    "name": "rk_ar",
+    "database": "vallalkozas",
+    "data": [
+      {
+        "id": "1",
+        "alkatresz_id": "1",
+        "beszerzesi_datum": "2024-04-24",
+        "egysegar": "0"
+      }
+    ]
+  },
+  {
+    "type": "table",
+    "name": "rk_keszlet",
+    "database": "vallalkozas",
+    "data": [
+      {
+        "alkatresz_id": "1",
+        "autoban": "0",
+        "raktaron": "0",
+        "leltarazva": "0"
+      }
+    ]
+  }
+]
