@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+VillanyAtesz
+    Overflow error on StockOverview page
 
 ===PLATFORM CHANGES===
 
