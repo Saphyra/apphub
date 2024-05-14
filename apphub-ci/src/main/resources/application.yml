@@ -1,0 +1,92 @@
+spring:
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/apphub-ci
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 3
+      minimumIdle: 1
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+liquibase:
+  schema: public
+  changelog:
+    location: classpath:changelog.xml
+
+defaults:
+  localRunMode: DEFAULT
+  localRunThreadCountDefault: 6
+  localRunThreadCountSkipTests: 24
+
+services:
+#Crutial platform
+- name: event-gateway
+  port: 8081
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-event_gateway/target/application.jar"
+
+#Platform
+- name: main-gateway
+  port: 8080
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
+- name: web-content
+  port: 8083
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
+- name: scheduler
+  port: 8082
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
+- name: admin-panel
+  port: 8089
+  location: "./apphub-service/apphub-service-admin_panel/target/application.jar"
+- name: user
+  port: 8085
+  location: "./apphub-service/apphub-service-user/target/application.jar"
+
+#Optional platform
+- name: storage
+  port: 8099
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar"
+- name: encryption
+  port: 8098
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
+- name: modules
+  port: 8088
+  location: "./apphub-service/apphub-service-modules/target/application.jar"
+
+#SkyXplore
+- name: skyxplore-data
+  port: 8091
+  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar"
+- name: skyxplore-game
+  port: 8095
+  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar"
+- name: skyxplore-lobby
+  port: 8093
+  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-lobby/target/application.jar"
+
+#Feature
+- name: villany-atesz
+  port: 8084
+  location: "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar"
+- name: utils
+  port: 8100
+  location: "./apphub-service/apphub-service-utils/target/application.jar"
+- name: training
+  port:  8086
+  location: "./apphub-service/apphub-service-training/target/application.jar"
+- name: notebook
+  port: 8090
+  location: "./apphub-service/apphub-service-notebook/target/application.jar"
+- name: community
+  port: 8096
+  location: "./apphub-service/apphub-service-community/target/application.jar"
+- name: calendar
+  port: 8097
+  location: "./apphub-service/apphub-service-calendar/target/application.jar"
