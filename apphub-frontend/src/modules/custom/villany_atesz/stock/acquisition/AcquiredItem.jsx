@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Endpoints from "../../../../../common/js/dao/dao";
+import React, { useEffect, useState } from "react";
+import Endpoints, { ResponseStatus } from "../../../../../common/js/dao/dao";
 import useCache from "../../../../../common/hook/Cache";
 import Utils from "../../../../../common/js/Utils";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
@@ -7,10 +7,16 @@ import SelectInput, { SelectOption } from "../../../../../common/component/input
 import Stream from "../../../../../common/js/collection/Stream";
 import NumberInput from "../../../../../common/component/input/NumberInput";
 import Button from "../../../../../common/component/input/Button";
+import InputField from "../../../../../common/component/input/InputField";
+import useFocus from "../../../../../common/hook/UseFocus";
+import ErrorHandler from "../../../../../common/js/dao/ErrorHandler";
 
 const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
+    const [barCode, setBarCode] = useState("");
     const [categories, setCategories] = useState([]);
     const [stockItems, setStockItems] = useState([]);
+    const [inputRef, setFocus] = useFocus();
+    const [timeout, sTimeout] = useState(null);
 
     useCache(
         "stock-categories",
@@ -24,6 +30,50 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
         setStockItems,
         !Utils.isBlank(item.stockCategoryId)
     );
+
+    useEffect(() => setFocus(), []);
+    useEffect(() => scheduleSearch(), [barCode]);
+    useEffect(() => loadBarCode(), [item.stockItemId]);
+    useEffect(() => setBarCode(""), [item.stockCategoryId]);
+
+    const scheduleSearch = () => {
+        if (Utils.isBlank(barCode)) {
+            return;
+        }
+
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        sTimeout(setTimeout(searchByBarCode, 500));
+    }
+
+    const searchByBarCode = async () => {
+        const response = await Endpoints.VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE.createRequest({ value: barCode })
+            .addErrorHandler(new ErrorHandler(
+                response => response.status == ResponseStatus.NOT_FOUND,
+                () => { }
+            ))
+            .send();
+
+        set("stockCategoryId", response.stockCategoryId);
+        set("stockItemId", response.stockItemId);
+        set("barCode", response.barCode);
+    }
+
+    const loadBarCode = () => {
+        if (Utils.isBlank(item.stockItemId)) {
+            return;
+        }
+
+        const fetch = async () => {
+            const response = await Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID.createRequest(null, { stockItemId: item.stockItemId })
+                .send();
+
+            set("barCode", response.value);
+        }
+        fetch();
+    }
 
     const set = (property, value) => {
         item[property] = value;
@@ -61,6 +111,19 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
 
     return (
         <div className="villany-atesz-stock-acquisition-item">
+            {Utils.isBlank(item.stockCategoryId) &&
+                <PreLabeledInputField
+                    label={localizationHandler.get("bar-code")}
+                    input={<InputField
+                        className="villany-atesz-stock-acquisition-item-bar-code-search"
+                        placeholder={localizationHandler.get("bar-code")}
+                        inputRef={inputRef}
+                        value={barCode}
+                        onchangeCallback={setBarCode}
+                    />}
+                />
+            }
+
             <PreLabeledInputField
                 label={localizationHandler.get("category")}
                 input={<SelectInput
@@ -115,6 +178,18 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                         placeholder={localizationHandler.get("price")}
                         value={item.price}
                         onchangeCallback={(value) => set("price", value)}
+                    />}
+                />
+            }
+
+            {!Utils.isBlank(item.stockItemId) &&
+                <PreLabeledInputField
+                    label={localizationHandler.get("bar-code")}
+                    input={<InputField
+                        className={"villany-atesz-stock-acquisition-item-bar-code"}
+                        placeholder={localizationHandler.get("bar-code")}
+                        value={item.barCode}
+                        onchangeCallback={(value) => set("barCode", value)}
                     />}
                 />
             }

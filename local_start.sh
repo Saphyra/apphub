@@ -23,12 +23,11 @@ waitStartup 8081
 ./infra/deployment/script/local_start_app.sh 8098 "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar" &
 wait
 
-./infra/deployment/script/local_start_app.sh 8084 "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar" &
-wait
-
 ./infra/deployment/script/local_start_app.sh 8091 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8095 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar" &
 ./infra/deployment/script/local_start_app.sh 8093 "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-lobby/target/application.jar" &
+
+./infra/deployment/script/local_start_app.sh 8084 "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar" &
 wait
 
 ./infra/deployment/script/local_start_app.sh 8089 "./apphub-service/apphub-service-admin_panel/target/application.jar" &

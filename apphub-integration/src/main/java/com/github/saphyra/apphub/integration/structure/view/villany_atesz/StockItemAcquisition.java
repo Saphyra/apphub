@@ -33,4 +33,25 @@ public class StockItemAcquisition {
     public void setPrice(Integer price) {
         WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-price")), price);
     }
+
+    public void setBarCodeSearch(String barCode) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-bar-code-search")), barCode);
+    }
+
+    public String getCategory() {
+        return WebElementUtils.getSelectedOptionLabel(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-category")));
+    }
+
+    public String getItemName() {
+        return WebElementUtils.getSelectedOptionLabel(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-item")));
+    }
+
+    public String getBarCode() {
+        return webElement.findElement(By.className("villany-atesz-stock-acquisition-item-bar-code"))
+            .getAttribute("value");
+    }
+
+    public void setBarCode(String newBarCode) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-bar-code")), newBarCode);
+    }
 }

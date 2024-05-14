@@ -140,7 +140,7 @@ public class StockCategoryCrudTest extends SeleniumTest {
             .orElseThrow()
             .createCart(driver);
         VillanyAteszUtils.createCategory(driver, NAME, MEASUREMENT);
-        VillanyAteszUtils.createStockItem(driver, NAME, STOCK_ITEM_NAME, "", IN_CAR, 0, 0);
+        VillanyAteszUtils.createStockItem(driver, NAME, STOCK_ITEM_NAME, "", "", IN_CAR, 0, 0);
         VillanyAteszNavigation.openStockOverview(driver);
         StockItemOverview item = VillanyAteszStockOverviewPageActions.getItems(driver)
             .stream()

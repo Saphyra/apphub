@@ -394,6 +394,8 @@ const Endpoints = {
     VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/{stockItemId}/to-storage"),
     VILLANY_ATESZ_REMOVE_FROM_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}/item/{stockItemId}"),
     VILLANY_ATESZ_DELETE_STOCK_ITEM: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/stock/item/{stockItemId}"),
+    VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/bar-code"),
+    VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}/bar-code"),
 }
 
 export default Endpoints;

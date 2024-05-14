@@ -28,6 +28,7 @@ public class StockNewItemTest extends SeleniumTest {
     private static final Integer IN_CAR = 342;
     private static final Integer IN_STORAGE = 536;
     private static final Integer PRICE = 5;
+    private static final String BAR_CODE = "bar-code";
 
     @Test(groups = {"fe", "villany-atesz"})
     public void creteStockItem() {
@@ -50,7 +51,7 @@ public class StockNewItemTest extends SeleniumTest {
     }
 
     private void noCategorySelected(WebDriver driver) {
-        VillanyAteszStockNewItemPageActions.fillForm(driver, Constants.SELECT_OPTION_CHOOSE, STOCK_ITEM_NAME, SERIAL_NUMBER, IN_CAR, IN_STORAGE, PRICE);
+        VillanyAteszStockNewItemPageActions.fillForm(driver, Constants.SELECT_OPTION_CHOOSE, STOCK_ITEM_NAME, SERIAL_NUMBER, BAR_CODE, IN_CAR, IN_STORAGE, PRICE);
 
         VillanyAteszStockNewItemPageActions.submit(driver);
 
@@ -58,7 +59,7 @@ public class StockNewItemTest extends SeleniumTest {
     }
 
     private void blankName(WebDriver driver) {
-        VillanyAteszStockNewItemPageActions.fillForm(driver, CATEGORY_NAME, " ", SERIAL_NUMBER, IN_CAR, IN_STORAGE, PRICE);
+        VillanyAteszStockNewItemPageActions.fillForm(driver, CATEGORY_NAME, " ", SERIAL_NUMBER, BAR_CODE, IN_CAR, IN_STORAGE, PRICE);
 
         VillanyAteszStockNewItemPageActions.submit(driver);
 
@@ -66,7 +67,7 @@ public class StockNewItemTest extends SeleniumTest {
     }
 
     private void create(WebDriver driver) {
-        VillanyAteszStockNewItemPageActions.fillForm(driver, CATEGORY_NAME, STOCK_ITEM_NAME, SERIAL_NUMBER, IN_CAR, IN_STORAGE, PRICE);
+        VillanyAteszStockNewItemPageActions.fillForm(driver, CATEGORY_NAME, STOCK_ITEM_NAME, SERIAL_NUMBER, BAR_CODE, IN_CAR, IN_STORAGE, PRICE);
 
         VillanyAteszStockNewItemPageActions.submit(driver);
 

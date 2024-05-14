@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.api.villany_atesz;
+package com.github.saphyra.apphub.api.custom.villany_atesz.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class AddToStockRequest {
+public class StockItemAcquisitionResponse {
+    private UUID stockCategoryId;
     private UUID stockItemId;
-    private Integer inCar;
-    private Integer inStorage;
-    private Integer price;
     private String barCode;
 }

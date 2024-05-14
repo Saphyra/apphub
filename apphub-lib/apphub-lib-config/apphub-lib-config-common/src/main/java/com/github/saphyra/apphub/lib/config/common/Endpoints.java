@@ -353,4 +353,6 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_CAR = "/api/villany-atesz/stock/item/{stockItemId}/to-car";
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE = "/api/villany-atesz/stock/item/{stockItemId}/to-storage";
     public static final String VILLANY_ATESZ_REMOVE_FROM_CART = "/api/villany-atesz/cart/{cartId}/item/{stockItemId}";
+    public static final String VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE = "/api/villany-atesz/stock/item/bar-code";
+    public static final String VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID = "/api/villany-atesz/stock/item/{stockItemId}/bar-code";
 }

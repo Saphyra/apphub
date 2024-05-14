@@ -15,6 +15,7 @@ class AddToStockRequestValidatorTest {
     private static final Integer IN_STORAGE = 6;
     private static final Integer PRICE = 648;
     private static final UUID STOCK_ITEM_ID = UUID.randomUUID();
+    private static final String BAR_CODE = "bar-code";
 
     private final AddToStockRequestValidator underTest = new AddToStockRequestValidator();
 
@@ -25,6 +26,7 @@ class AddToStockRequestValidatorTest {
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
+            .barCode(BAR_CODE)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "stockItemId", "must not be null");
@@ -37,6 +39,7 @@ class AddToStockRequestValidatorTest {
             .inCar(null)
             .inStorage(IN_STORAGE)
             .price(PRICE)
+            .barCode(BAR_CODE)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "inCar", "must not be null");
@@ -49,6 +52,7 @@ class AddToStockRequestValidatorTest {
             .inCar(IN_CAR)
             .inStorage(null)
             .price(PRICE)
+            .barCode(BAR_CODE)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "inStorage", "must not be null");
@@ -61,9 +65,23 @@ class AddToStockRequestValidatorTest {
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(null)
+            .barCode(BAR_CODE)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "price", "must not be null");
+    }
+
+    @Test
+    void nullBarCode() {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(STOCK_ITEM_ID)
+            .inCar(IN_CAR)
+            .inStorage(IN_STORAGE)
+            .price(PRICE)
+            .barCode(null)
+            .build();
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "barCode", "must not be null");
     }
 
     @Test
@@ -73,6 +91,7 @@ class AddToStockRequestValidatorTest {
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .price(PRICE)
+            .barCode(BAR_CODE)
             .build();
 
         underTest.validate(List.of(request));

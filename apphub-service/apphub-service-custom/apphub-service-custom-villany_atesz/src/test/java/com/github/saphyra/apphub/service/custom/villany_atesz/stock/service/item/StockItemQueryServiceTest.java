@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockCategoryModel;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -121,5 +123,28 @@ public class StockItemQueryServiceTest {
             .returns(CART_ITEM_AMOUNT, StockItemOverviewResponse::getInCart)
             .returns(IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(PRICE, StockItemOverviewResponse::getPrice);
+    }
+
+    @Test
+    void findByBarCode() {
+        given(stockItemDao.getByUserId(USER_ID)).willReturn(List.of(stockItem));
+        given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
+        given(stockItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+
+        CustomAssertions.optionalAssertThat(underTest.findByBarCode(USER_ID, BAR_CODE))
+            .returns(STOCK_CATEGORY_ID, StockItemAcquisitionResponse::getStockCategoryId)
+            .returns(STOCK_ITEM_ID, StockItemAcquisitionResponse::getStockItemId)
+            .returns(BAR_CODE, StockItemAcquisitionResponse::getBarCode);
+    }
+
+    @Test
+    void findBarCodeByStockItemId() {
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+
+        assertThat(underTest.findBarCodeByStockItemId(STOCK_ITEM_ID))
+            .isEqualTo(BAR_CODE);
+
     }
 }

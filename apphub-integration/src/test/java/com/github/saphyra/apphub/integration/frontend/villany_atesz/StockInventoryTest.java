@@ -53,7 +53,7 @@ public class StockInventoryTest extends SeleniumTest {
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_1, MEASUREMENT);
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_2, MEASUREMENT);
-        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME_1, STOCK_ITEM_NAME, "", 0, 0, 0);
+        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME_1, STOCK_ITEM_NAME, "", "", 0, 0, 0);
 
         VillanyAteszNavigation.openStockInventory(driver);
 
@@ -148,7 +148,7 @@ public class StockInventoryTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_1, MEASUREMENT);
-        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME_1, STOCK_ITEM_NAME, "", 100, 0, 0);
+        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME_1, STOCK_ITEM_NAME, "", "", 100, 0, 0);
         VillanyAteszUtils.createContact(driver, CONTACT_NAME, CONTACT_CODE);
 
         VillanyAteszContactsPageActions.getContacts(driver)
