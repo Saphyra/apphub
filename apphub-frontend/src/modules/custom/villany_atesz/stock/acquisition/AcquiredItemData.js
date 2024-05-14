@@ -8,6 +8,7 @@ const AcquiredItemData = class {
         this.inCar = 0;
         this.inStorage = 0;
         this.price = 0;
+        this.barCode = "";
     }
 }
 

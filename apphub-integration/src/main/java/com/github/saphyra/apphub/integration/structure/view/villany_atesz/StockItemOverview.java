@@ -45,16 +45,6 @@ public class StockItemOverview {
             .getText();
     }
 
-    public void toCar() {
-        webElement.findElement(By.className("villany-atesz-stock-overview-item-move-to-car-button"))
-            .click();
-    }
-
-    public void toStorage() {
-        webElement.findElement(By.className("villany-atesz-stock-overview-item-move-to-storage-button"))
-            .click();
-    }
-
     public void setAmount(Integer amount) {
         WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-overview-item-add-to-cart-amount")), amount);
     }

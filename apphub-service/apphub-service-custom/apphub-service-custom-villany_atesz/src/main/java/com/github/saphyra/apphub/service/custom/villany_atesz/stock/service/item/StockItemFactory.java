@@ -22,6 +22,7 @@ class StockItemFactory {
             .stockCategoryId(request.getStockCategoryId())
             .name(request.getName())
             .serialNumber(request.getSerialNumber())
+            .barCode(request.getBarCode())
             .inCar(request.getInCar())
             .inStorage(request.getInStorage())
             .build();

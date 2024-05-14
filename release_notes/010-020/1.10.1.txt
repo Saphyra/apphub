@@ -1,0 +1,17 @@
+===FEATURES===
+    VillanyAtesz
+        BarCode scanner compatibility
+
+===BUGFIXES===
+    VillanyAtesz
+        Move the "To Car" and "To Storage" functionality to "Inventory"
+
+===PLATFORM CHANGES===
+    Use version 1.0-SNAPSHOT
+    Local start script starts services in batches to decrease load
+    Local test script parameter order
+
+===TECHNICAL DEBTS===
+    Update Selenium lib
+
+===ETC===

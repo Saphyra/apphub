@@ -11,14 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class StockItemInventoryResponse {
-    private UUID stockItemId;
+public class StockItemAcquisitionResponse {
     private UUID stockCategoryId;
-    private String name;
-    private String serialNumber;
+    private UUID stockItemId;
     private String barCode;
-    private Integer inCar;
-    private Integer inStorage;
-    private Boolean inCart;
-    private Boolean inventoried;
 }

@@ -27,6 +27,7 @@ class AcquisitionServiceTest {
     private static final Integer REQUEST_IN_STORAGE = 64;
     private static final UUID USER_ID = UUID.randomUUID();
     private static final Integer PRICE = 678;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private AddToStockRequestValidator addToStockRequestValidator;
@@ -56,6 +57,7 @@ class AcquisitionServiceTest {
             .inCar(REQUEST_IN_CAR)
             .inStorage(REQUEST_IN_STORAGE)
             .price(PRICE)
+            .barCode(BAR_CODE)
             .build();
 
         given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
@@ -70,6 +72,7 @@ class AcquisitionServiceTest {
         then(addToStockRequestValidator).should().validate(List.of(request));
         then(stockItem).should().setInCar(ORIGINAL_IN_CAR + REQUEST_IN_CAR);
         then(stockItem).should().setInStorage(ORIGINAL_IN_STORAGE + REQUEST_IN_STORAGE);
+        then(stockItem).should().setBarCode(BAR_CODE);
         then(stockItemDao).should().save(stockItem);
         then(stockItemPriceDao).should().save(stockItemPrice);
     }

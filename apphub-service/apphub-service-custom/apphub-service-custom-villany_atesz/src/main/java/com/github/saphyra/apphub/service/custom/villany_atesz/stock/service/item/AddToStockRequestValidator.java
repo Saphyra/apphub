@@ -17,5 +17,6 @@ class AddToStockRequestValidator {
         ValidationUtil.notNull(request.getInCar(), "inCar");
         ValidationUtil.notNull(request.getInStorage(), "inStorage");
         ValidationUtil.notNull(request.getPrice(), "price");
+        ValidationUtil.notNull(request.getBarCode(), "barCode");
     }
 }

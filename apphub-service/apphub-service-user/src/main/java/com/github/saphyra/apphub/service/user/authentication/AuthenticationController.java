@@ -52,7 +52,7 @@ class AuthenticationController implements UserAuthenticationController {
 
     @Override
     public void refreshAccessTokenExpiration(SendEventRequest<RefreshAccessTokenExpirationEvent> request) {
-        log.info("Updating expiration of accessToken with id {}", request.getPayload().getAccessTokenId());
+        log.debug("Updating expiration of accessToken with id {}", request.getPayload().getAccessTokenId());
         accessTokenUpdateService.updateLastAccess(request.getPayload().getAccessTokenId());
     }
 

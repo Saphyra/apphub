@@ -5,11 +5,11 @@
     <parent>
         <artifactId>apphub-api</artifactId>
         <groupId>com.github.saphyra</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>apphub-api-calendar</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>apphub-api-calendar</name>

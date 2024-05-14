@@ -56,4 +56,35 @@ public class StockItemInventory {
         driver.findElement(By.id("villany-atesz-stock-inventory-item-confirm-delete-button"))
             .click();
     }
+
+    public void setAmount(Integer amount) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-inventory-item-amount")), amount);
+    }
+
+    public void moveToCar() {
+        webElement.findElement(By.className("villany-atesz-stock-inventory-item-move-to-car-button"))
+            .click();
+    }
+
+    public void moveToStorage() {
+        webElement.findElement(By.className("villany-atesz-stock-inventory-item-move-to-storage-button"))
+            .click();
+    }
+
+    public Integer getInCar() {
+        return Integer.parseInt(webElement.findElement(By.className("villany-atesz-stock-inventory-item-in-car")).getAttribute("value"));
+    }
+
+    public Integer getInStorage() {
+        return Integer.parseInt(webElement.findElement(By.className("villany-atesz-stock-inventory-item-in-storage")).getAttribute("value"));
+    }
+
+    public void setBarCode(String barCode) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code")), barCode);
+    }
+
+    public String getBarCode() {
+        return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
+            .getAttribute("value");
+    }
 }

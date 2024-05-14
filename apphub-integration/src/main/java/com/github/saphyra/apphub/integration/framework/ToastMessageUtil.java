@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.framework;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -69,7 +70,11 @@ public class ToastMessageUtil {
     }
 
     public static void clearToasts(WebDriver driver) {
-        getAllToasts(driver)
-            .forEach(webElement -> webElement.findElement(By.tagName("button")).click());
+        try {
+            getAllToasts(driver)
+                .forEach(webElement -> webElement.findElement(By.tagName("button")).click());
+        } catch (StaleElementReferenceException e) {
+            log.debug("Failed clearing toasts.", e);
+        }
     }
 }

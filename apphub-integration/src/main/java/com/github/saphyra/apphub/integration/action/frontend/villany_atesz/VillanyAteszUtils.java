@@ -18,10 +18,10 @@ public class VillanyAteszUtils {
             .assertTrue("StockCategory not created");
     }
 
-    public static void createStockItem(WebDriver driver, String categoryName, String stockItemName, String serialNumber, int inCar, int inStorage, int price) {
+    public static void createStockItem(WebDriver driver, String categoryName, String stockItemName, String serialNumber, String barCode, int inCar, int inStorage, int price) {
         VillanyAteszNavigation.openStockNewItem(driver);
 
-        VillanyAteszStockNewItemPageActions.fillForm(driver, categoryName, stockItemName, serialNumber, inCar, inStorage, price);
+        VillanyAteszStockNewItemPageActions.fillForm(driver, categoryName, stockItemName, serialNumber, barCode, inCar, inStorage, price);
         VillanyAteszStockNewItemPageActions.submit(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_NEW_ITEM_CREATED);
