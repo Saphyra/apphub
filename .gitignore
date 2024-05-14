@@ -15,3 +15,5 @@ apphub-integration/error_report/**
 
 # production
 **/build
+
+ci.jar
