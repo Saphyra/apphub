@@ -16,6 +16,7 @@ public class StockItemOverviewResponse {
     private StockCategoryModel category;
     private String name;
     private String serialNumber;
+    private String barCode;
     private Integer inCar;
     private Integer inCart;
     private Integer inStorage;

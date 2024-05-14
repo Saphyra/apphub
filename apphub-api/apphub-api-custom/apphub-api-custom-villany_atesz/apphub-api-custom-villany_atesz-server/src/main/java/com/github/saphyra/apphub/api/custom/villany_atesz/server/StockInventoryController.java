@@ -34,9 +34,18 @@ public interface StockInventoryController {
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER)
     void editSerialNumber(@RequestBody OneParamRequest<String> serialNumber, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE)
+    void editBarCode(@RequestBody OneParamRequest<String> barCode, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR)
     void editInCar(@RequestBody OneParamRequest<Integer> inCar, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE)
     void editInStorage(@RequestBody OneParamRequest<Integer> inStorage, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR)
+    List<StockItemInventoryResponse> moveStockToCar(@RequestBody OneParamRequest<Integer> amount, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE)
+    List<StockItemInventoryResponse> moveStockToStorage(@RequestBody OneParamRequest<Integer> amount, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -16,4 +16,5 @@ public class AddToStockRequest {
     private Integer inCar;
     private Integer inStorage;
     private Integer price;
+    private String barCode;
 }

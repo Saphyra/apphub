@@ -54,5 +54,13 @@
     "stored": {
         "en": "Items stored.",
         "hu": "Tételek a raktárba helyezve."
+    },
+    "bar-code": {
+        "en": "Bar code",
+        "hu": "Vonalkód"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Alaphelyzet"
     }
 }

@@ -5,8 +5,10 @@ do
   TRIMMED="$(sed -e 's/[[:space:]]*$//' <<<"${port}")"
 
   if [[ $port != "null" ]]; then
-    ./infra/deployment/script/release_port.sh "$TRIMMED"
+    ./infra/deployment/script/release_port.sh "$TRIMMED" &
   fi
 done < ./infra/deployment/service/service_list
+
+wait
 
 ./infra/deployment/script/release_port.sh 8072 #Shutting down the integration server

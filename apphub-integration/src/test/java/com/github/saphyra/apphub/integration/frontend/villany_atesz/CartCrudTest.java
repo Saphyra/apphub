@@ -50,7 +50,7 @@ public class CartCrudTest extends SeleniumTest {
 
         VillanyAteszUtils.createContact(driver, CONTACT_NAME, CONTACT_CODE);
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);
-        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", IN_CAR, 0, PRICE);
+        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", "", IN_CAR, 0, PRICE);
 
         //Create cart
         VillanyAteszNavigation.openContacts(driver);
@@ -67,8 +67,9 @@ public class CartCrudTest extends SeleniumTest {
             .orElseThrow();
 
         //Zero amount
+        item.setAmount(0);
         item.addToCart();
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_OVERVIEW_ZERO_AMOUNT);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_STOCK_ZERO_AMOUNT);
 
         //Add
         item.setAmount(AMOUNT);

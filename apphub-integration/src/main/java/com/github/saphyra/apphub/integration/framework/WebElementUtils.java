@@ -7,6 +7,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -188,5 +189,11 @@ public class WebElementUtils {
         webElement.sendKeys(CommonUtils.withLeadingZeros(date.getDayOfMonth(), 2));
         webElement.sendKeys(CommonUtils.withLeadingZeros(hours, 2));
         webElement.sendKeys(CommonUtils.withLeadingZeros(minutes, 2));
+    }
+
+    public static String getSelectedOptionLabel(WebElement element) {
+        return new Select(element)
+            .getFirstSelectedOption()
+            .getText();
     }
 }

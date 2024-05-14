@@ -17,6 +17,7 @@ class CreateStockItemRequestValidator {
         ValidationUtil.notNull(request.getStockCategoryId(), "stockCategoryId");
         ValidationUtil.notBlank(request.getName(), "name");
         ValidationUtil.notNull(request.getSerialNumber(), "serialNumber");
+        ValidationUtil.notNull(request.getBarCode(), "barCode");
         ValidationUtil.notNull(request.getInCar(), "inCar");
         ValidationUtil.notNull(request.getInStorage(), "inStorage");
         ValidationUtil.notNull(request.getPrice(), "price");

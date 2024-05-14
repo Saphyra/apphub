@@ -121,6 +121,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .stockCategoryId(stockCategoryId)
             .name(NAME)
             .serialNumber("")
+            .barCode("")
             .inCar(0)
             .inStorage(0)
             .price(PRICE)

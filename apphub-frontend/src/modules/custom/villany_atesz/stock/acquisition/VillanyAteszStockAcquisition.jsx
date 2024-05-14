@@ -87,6 +87,12 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
                     label={localizationHandler.get("add-to-stock")}
                     onclick={openAddToStockConfirmation}
                 />
+
+                <Button
+                    id="villany-atesz-stock-acquisition-reset-button"
+                    label={localizationHandler.get("reset")}
+                    onclick={() => updateItems([])}
+                />
             </div>
 
             <div id="villany-atesz-stock-acquisition-items">

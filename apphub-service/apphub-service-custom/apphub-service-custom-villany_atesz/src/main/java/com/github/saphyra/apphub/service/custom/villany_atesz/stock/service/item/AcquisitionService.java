@@ -32,6 +32,7 @@ public class AcquisitionService {
 
         stockItem.setInCar(stockItem.getInCar() + request.getInCar());
         stockItem.setInStorage(stockItem.getInStorage() + request.getInStorage());
+        stockItem.setBarCode(request.getBarCode());
         stockItemDao.save(stockItem);
 
         StockItemPrice price = stockItemPriceFactory.create(stockItem.getUserId(), request.getStockItemId(), request.getPrice());

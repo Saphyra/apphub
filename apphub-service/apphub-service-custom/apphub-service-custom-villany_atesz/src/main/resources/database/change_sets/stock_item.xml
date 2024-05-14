@@ -32,4 +32,16 @@
             <column name="inventoried" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-bar_code-to-stock_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="stock_item" columnName="bar_code"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="stock_item">
+            <column name="bar_code" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -385,6 +385,7 @@ const Endpoints = {
     VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/inventory"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/name"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/serial-number"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/bar-code"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/in-car"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/category"),
@@ -393,6 +394,8 @@ const Endpoints = {
     VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/{stockItemId}/to-storage"),
     VILLANY_ATESZ_REMOVE_FROM_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}/item/{stockItemId}"),
     VILLANY_ATESZ_DELETE_STOCK_ITEM: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/stock/item/{stockItemId}"),
+    VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/bar-code"),
+    VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}/bar-code"),
 }
 
 export default Endpoints;

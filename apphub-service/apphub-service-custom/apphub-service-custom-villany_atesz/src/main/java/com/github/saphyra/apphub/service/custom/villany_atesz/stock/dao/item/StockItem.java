@@ -15,6 +15,7 @@ public class StockItem {
     private UUID stockCategoryId;
     private String name;
     private String serialNumber;
+    private String barCode;
     private int inCar;
     private int inStorage;
     private boolean inventoried;
