@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockCategoryModel;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +39,7 @@ public class StockItemQueryServiceTest {
     private static final Integer CART_ITEM_AMOUNT = 5647;
     private static final Integer IN_STORAGE = 35;
     private static final Integer PRICE = 475;
+    private static final String BAR_CODE = "bar-code";
 
     @Mock
     private StockItemDao stockItemDao;
@@ -108,15 +111,40 @@ public class StockItemQueryServiceTest {
         given(stockItemPrice.getPrice())
             .willReturn(PRICE - 10)
             .willReturn(PRICE);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
 
         CustomAssertions.singleListAssertThat(underTest.getStockItems(USER_ID))
             .returns(STOCK_ITEM_ID, StockItemOverviewResponse::getStockItemId)
             .returns(stockCategoryModel, StockItemOverviewResponse::getCategory)
             .returns(NAME, StockItemOverviewResponse::getName)
             .returns(SERIAL_NUMBER, StockItemOverviewResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemOverviewResponse::getBarCode)
             .returns(IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(CART_ITEM_AMOUNT, StockItemOverviewResponse::getInCart)
             .returns(IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(PRICE, StockItemOverviewResponse::getPrice);
+    }
+
+    @Test
+    void findByBarCode() {
+        given(stockItemDao.getByUserId(USER_ID)).willReturn(List.of(stockItem));
+        given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
+        given(stockItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+
+        CustomAssertions.optionalAssertThat(underTest.findByBarCode(USER_ID, BAR_CODE))
+            .returns(STOCK_CATEGORY_ID, StockItemAcquisitionResponse::getStockCategoryId)
+            .returns(STOCK_ITEM_ID, StockItemAcquisitionResponse::getStockItemId)
+            .returns(BAR_CODE, StockItemAcquisitionResponse::getBarCode);
+    }
+
+    @Test
+    void findBarCodeByStockItemId() {
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+
+        assertThat(underTest.findBarCodeByStockItemId(STOCK_ITEM_ID))
+            .isEqualTo(BAR_CODE);
+
     }
 }

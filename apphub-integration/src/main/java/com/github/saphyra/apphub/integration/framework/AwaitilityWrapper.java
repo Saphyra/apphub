@@ -104,6 +104,10 @@ public class AwaitilityWrapper {
         return helper.getResult(Optional::ofNullable);
     }
 
+    public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier) {
+        return assertWithWaitList(supplier, list -> !list.isEmpty(), list -> list.get(0));
+    }
+
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier, Predicate<List<T>> predicate, Function<List<T>, T> selector) {
         List<T> list = getListWithWait(supplier, predicate);
 
@@ -122,13 +126,13 @@ public class AwaitilityWrapper {
     }
 
     public AwaitResult until(Callable<Boolean> callable) {
-        ObjectWrapper<Exception> exception = new ObjectWrapper<>();
+        ObjectWrapper<Throwable> exception = new ObjectWrapper<>();
 
         try {
             conditionFactory.until(() -> {
                 try {
                     return callable.call();
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     exception.setValue(e);
                     return false;
                 }

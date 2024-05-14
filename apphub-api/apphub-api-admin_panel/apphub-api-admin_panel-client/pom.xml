@@ -4,11 +4,11 @@
     <parent>
         <artifactId>apphub-api-admin_panel</artifactId>
         <groupId>com.github.saphyra</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>apphub-api-admin_panel-client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>apphub-api-admin_panel-client</name>
 

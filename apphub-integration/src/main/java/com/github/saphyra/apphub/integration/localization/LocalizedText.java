@@ -75,7 +75,7 @@ public enum LocalizedText {
     VILLANY_ATESZ_STOCK_ACQUISITION_CHOOSE_CATEGORY("Select category for all of the entries!"),
     VILLANY_ATESZ_STOCK_ACQUISITION_CHOOSE_STOCK_ITEM("Specify the item for all of the entries!"),
     VILLANY_ATESZ_STOCK_ACQUISITION_ITEMS_STORED("Items stored."),
-    VILLANY_ATESZ_STOCK_OVERVIEW_ZERO_AMOUNT("Amount must not be zero."),
+    VILLANY_ATESZ_STOCK_ZERO_AMOUNT("Amount must not be zero."),
     ;
 
     private final String text;

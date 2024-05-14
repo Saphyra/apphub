@@ -2,17 +2,19 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,7 +27,6 @@ class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
     private final StockItemQueryService stockItemQueryService;
     private final AcquisitionService acquisitionService;
-    private final MoveStockService moveStockService;
 
     @Override
     public void createStockItem(CreateStockItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -56,21 +57,14 @@ class StockItemControllerImpl implements StockItemController {
     }
 
     @Override
-    public List<StockItemOverviewResponse> moveStockToCar(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to move stock from storage to car for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
-
-        moveStockService.moveToCar(stockItemId, amount.getValue());
-
-        return getStockItems(accessTokenHeader);
-
+    public ResponseEntity<StockItemAcquisitionResponse> findByBarCode(OneParamRequest<String> barCode, AccessTokenHeader accessTokenHeader) {
+        return ResponseEntity.of(stockItemQueryService.findByBarCode(accessTokenHeader.getUserId(), barCode.getValue()));
     }
 
     @Override
-    public List<StockItemOverviewResponse> moveStockToStorage(OneParamRequest<Integer> amount, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to move stock from storage to storage for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+    public OneParamResponse<String> findBarCodeByStockItemId(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know the barCode of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
-        moveStockService.moveToStorage(stockItemId, amount.getValue());
-
-        return getStockItems(accessTokenHeader);
+        return new OneParamResponse<>(stockItemQueryService.findBarCodeByStockItemId(stockItemId));
     }
 }

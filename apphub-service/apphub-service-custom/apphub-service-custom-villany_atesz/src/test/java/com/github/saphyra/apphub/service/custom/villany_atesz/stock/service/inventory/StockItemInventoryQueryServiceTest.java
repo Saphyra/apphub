@@ -29,6 +29,7 @@ class StockItemInventoryQueryServiceTest {
     private static final String SERIAL_NUMBER = "serial-number";
     private static final Integer IN_CAR = 64;
     private static final Integer IN_STORAGE = 643;
+    private static final String BAR_CODE = "bar_code";
 
     @Mock
     private StockItemDao stockItemDao;
@@ -62,6 +63,7 @@ class StockItemInventoryQueryServiceTest {
 
         given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
         given(stockItem.getName()).willReturn(NAME);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
         given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
@@ -72,6 +74,7 @@ class StockItemInventoryQueryServiceTest {
             .returns(STOCK_CATEGORY_ID, StockItemInventoryResponse::getStockCategoryId)
             .returns(NAME, StockItemInventoryResponse::getName)
             .returns(SERIAL_NUMBER, StockItemInventoryResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemInventoryResponse::getBarCode)
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)
@@ -90,6 +93,7 @@ class StockItemInventoryQueryServiceTest {
         given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
         given(stockItem.getName()).willReturn(NAME);
         given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
@@ -99,6 +103,7 @@ class StockItemInventoryQueryServiceTest {
             .returns(STOCK_CATEGORY_ID, StockItemInventoryResponse::getStockCategoryId)
             .returns(NAME, StockItemInventoryResponse::getName)
             .returns(SERIAL_NUMBER, StockItemInventoryResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemInventoryResponse::getBarCode)
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)
@@ -114,6 +119,7 @@ class StockItemInventoryQueryServiceTest {
         given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
         given(stockItem.getName()).willReturn(NAME);
         given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
@@ -123,6 +129,7 @@ class StockItemInventoryQueryServiceTest {
             .returns(STOCK_CATEGORY_ID, StockItemInventoryResponse::getStockCategoryId)
             .returns(NAME, StockItemInventoryResponse::getName)
             .returns(SERIAL_NUMBER, StockItemInventoryResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemInventoryResponse::getBarCode)
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)

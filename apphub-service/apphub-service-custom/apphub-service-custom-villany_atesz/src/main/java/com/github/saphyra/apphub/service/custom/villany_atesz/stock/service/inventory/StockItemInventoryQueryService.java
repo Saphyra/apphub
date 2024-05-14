@@ -33,6 +33,7 @@ public class StockItemInventoryQueryService {
             .stockCategoryId(stockItem.getStockCategoryId())
             .name(stockItem.getName())
             .serialNumber(stockItem.getSerialNumber())
+            .barCode(stockItem.getBarCode())
             .inCar(stockItem.getInCar())
             .inStorage(stockItem.getInStorage())
             .inCart(isInCart(stockItem.getStockItemId()))

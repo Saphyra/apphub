@@ -21,6 +21,7 @@ const VillanyAteszStockNewItem = ({ }) => {
     const [stockCategoryId, setStockCategoryId] = useState("");
     const [name, setName] = useState("");
     const [serialNumber, setSerialNumber] = useState("");
+    const [barCode, setBarCode] = useState("");
 
     const [inCar, setInCar] = useState(0);
     const [inStorage, setInStorage] = useState(0);
@@ -45,7 +46,7 @@ const VillanyAteszStockNewItem = ({ }) => {
             return;
         }
 
-        if(Utils.isBlank(name)){
+        if (Utils.isBlank(name)) {
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }
@@ -54,6 +55,7 @@ const VillanyAteszStockNewItem = ({ }) => {
             stockCategoryId: stockCategoryId,
             name: name,
             serialNumber: serialNumber,
+            barCode: barCode,
             inCar: inCar,
             inStorage: inStorage,
             price: price
@@ -65,6 +67,7 @@ const VillanyAteszStockNewItem = ({ }) => {
         setStockCategoryId("");
         setName("");
         setSerialNumber("");
+        setBarCode("");
         setInCar(0);
         setInStorage(0);
         setPrice(0);
@@ -105,6 +108,16 @@ const VillanyAteszStockNewItem = ({ }) => {
                             placeholder={localizationHandler.get("serial-number")}
                             value={serialNumber}
                             onchangeCallback={setSerialNumber}
+                        />}
+                    />
+
+                    <PreLabeledInputField
+                        label={localizationHandler.get("bar-code")}
+                        input={<InputField
+                            id="villany-atesz-new-item-bar-code"
+                            placeholder={localizationHandler.get("bar-code")}
+                            value={barCode}
+                            onchangeCallback={setBarCode}
                         />}
                     />
                 </fieldset>

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemConverter.COLUMN_BAR_CODE;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemConverter.COLUMN_INVENTORIED;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemConverter.COLUMN_IN_CAR;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemConverter.COLUMN_IN_STORAGE;
@@ -39,6 +40,8 @@ class StockItemConverterTest {
     private static final String ENCRYPTED_IN_CAR = "encrypted-in-car";
     private static final String ENCRYPTED_IN_STORAGE = "encrypted-in-storage";
     private static final String ENCRYPTED_INVENTORIED = "encrypted-inventoried";
+    private static final String BAR_CODE = "bar-code";
+    private static final String ENCRYPTED_BAR_CODE = "encrypted-bar-code";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -66,6 +69,7 @@ class StockItemConverterTest {
             .stockCategoryId(STOCK_CATEGORY_ID)
             .name(NAME)
             .serialNumber(SERIAL_NUMBER)
+            .barCode(BAR_CODE)
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .inventoried(true)
@@ -77,6 +81,7 @@ class StockItemConverterTest {
         given(uuidConverter.convertDomain(STOCK_CATEGORY_ID)).willReturn(STOCK_CATEGORY_ID_STRING);
         given(stringEncryptor.encrypt(NAME, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_NAME)).willReturn(ENCRYPTED_NAME);
         given(stringEncryptor.encrypt(SERIAL_NUMBER, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_SERIAL_NUMBER)).willReturn(ENCRYPTED_SERIAL_NUMBER);
+        given(stringEncryptor.encrypt(BAR_CODE, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_BAR_CODE)).willReturn(ENCRYPTED_BAR_CODE);
         given(integerEncryptor.encrypt(IN_CAR, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_IN_CAR)).willReturn(ENCRYPTED_IN_CAR);
         given(integerEncryptor.encrypt(IN_STORAGE, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_IN_STORAGE)).willReturn(ENCRYPTED_IN_STORAGE);
         given(booleanEncryptor.encrypt(true, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_INVENTORIED)).willReturn(ENCRYPTED_INVENTORIED);
@@ -87,6 +92,7 @@ class StockItemConverterTest {
             .returns(STOCK_CATEGORY_ID_STRING, StockItemEntity::getStockCategoryId)
             .returns(ENCRYPTED_NAME, StockItemEntity::getName)
             .returns(ENCRYPTED_SERIAL_NUMBER, StockItemEntity::getSerialNumber)
+            .returns(ENCRYPTED_BAR_CODE, StockItemEntity::getBarCode)
             .returns(ENCRYPTED_IN_CAR, StockItemEntity::getInCar)
             .returns(ENCRYPTED_IN_STORAGE, StockItemEntity::getInStorage)
             .returns(ENCRYPTED_INVENTORIED, StockItemEntity::getInventoried);
@@ -100,6 +106,7 @@ class StockItemConverterTest {
             .stockCategoryId(STOCK_CATEGORY_ID_STRING)
             .name(ENCRYPTED_NAME)
             .serialNumber(ENCRYPTED_SERIAL_NUMBER)
+            .barCode(ENCRYPTED_BAR_CODE)
             .inCar(ENCRYPTED_IN_CAR)
             .inStorage(ENCRYPTED_IN_STORAGE)
             .inventoried(ENCRYPTED_INVENTORIED)
@@ -114,6 +121,7 @@ class StockItemConverterTest {
         given(integerEncryptor.decrypt(ENCRYPTED_IN_CAR, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_IN_CAR)).willReturn(IN_CAR);
         given(integerEncryptor.decrypt(ENCRYPTED_IN_STORAGE, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_IN_STORAGE)).willReturn(IN_STORAGE);
         given(booleanEncryptor.decrypt(ENCRYPTED_INVENTORIED, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_INVENTORIED)).willReturn(true);
+        given(stringEncryptor.decrypt(ENCRYPTED_BAR_CODE, USER_ID_IN_ACCESS_TOKEN, STOCK_ITEM_ID_STRING, COLUMN_BAR_CODE)).willReturn(BAR_CODE);
 
         assertThat(underTest.convertEntity(domain))
             .returns(STOCK_ITEM_ID, StockItem::getStockItemId)
@@ -121,6 +129,7 @@ class StockItemConverterTest {
             .returns(STOCK_CATEGORY_ID, StockItem::getStockCategoryId)
             .returns(NAME, StockItem::getName)
             .returns(SERIAL_NUMBER, StockItem::getSerialNumber)
+            .returns(BAR_CODE, StockItem::getBarCode)
             .returns(IN_CAR, StockItem::getInCar)
             .returns(IN_STORAGE, StockItem::getInStorage)
             .returns(true, StockItem::isInventoried);
