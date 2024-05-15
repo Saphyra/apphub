@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu;
 
-import com.github.saphyra.apphub.ci.value.DefaultProperties;
-import com.github.saphyra.apphub.ci.value.LocalRunMode;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.dao.PropertyRepository;
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.local_run_mode_selector.LocalRunModeSelectorMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,8 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class LocalRunEditModeMenuOption implements LocalRunEditPropertiesMenuOption {
     private final LocalRunModeSelectorMenu localRunModeSelectorMenu;
-    private final PropertyRepository propertyRepository;
-    private final DefaultProperties defaultProperties;
+    private final PropertyDao propertyDao;
 
     @Override
     public String getCommand() {
@@ -22,7 +18,7 @@ class LocalRunEditModeMenuOption implements LocalRunEditPropertiesMenuOption {
 
     @Override
     public String getName() {
-        return String.format("Mode (%s)", propertyRepository.findById(PropertyName.LOCAL_RUN_MODE).map(property -> LocalRunMode.valueOf(property.getValue())).orElse(defaultProperties.getLocalRunMode())); //TODO translate
+        return String.format("Mode (%s)", propertyDao.getLocalRunMode()); //TODO translate
     }
 
     @Override

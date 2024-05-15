@@ -9,4 +9,5 @@ public class Service {
     private String name;
     private Integer port;
     private String location;
+    private Integer group;
 }

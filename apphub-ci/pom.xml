@@ -27,6 +27,8 @@
         <versions.apache-commons.commons-lang3>3.9</versions.apache-commons.commons-lang3>
         <versions.liquibase-core>4.18.0</versions.liquibase-core>
         <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
+        <versions.guava>31.1-jre</versions.guava>
+        <versions.spring-web>6.1.6</versions.spring-web>
     </properties>
 
     <dependencies>
@@ -89,6 +91,18 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${versions.apache-commons.commons-lang3}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${versions.guava}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${versions.spring-web}</version>
         </dependency>
     </dependencies>
 

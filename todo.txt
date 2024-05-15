@@ -1,3 +1,5 @@
 TODO add to release notes
 TODO elimination
 TODO optional - Create local namespace what starts / stops only specific services
+TODO disable startup of optional services
+TODO set max number of services starting up at the same time

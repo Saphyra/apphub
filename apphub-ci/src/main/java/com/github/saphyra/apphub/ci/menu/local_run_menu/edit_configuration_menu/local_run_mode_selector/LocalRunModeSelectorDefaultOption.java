@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.local_run_mode_selector;
 
-import com.github.saphyra.apphub.ci.value.LocalRunMode;
-import com.github.saphyra.apphub.ci.dao.Property;
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.dao.PropertyRepository;
+import com.github.saphyra.apphub.ci.value.LocalRunMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class LocalRunModeSelectorDefaultOption implements LocalRunModeSelectorOption {
-    private final PropertyRepository propertyRepository;
+    private final PropertyDao propertyDao;
 
     @Override
     public String getCommand() {
@@ -26,7 +25,7 @@ class LocalRunModeSelectorDefaultOption implements LocalRunModeSelectorOption {
 
     @Override
     public boolean process() {
-        propertyRepository.save(new Property(PropertyName.LOCAL_RUN_MODE, LocalRunMode.DEFAULT.name()));
+        propertyDao.save(PropertyName.LOCAL_RUN_MODE, LocalRunMode.DEFAULT.name());
 
         log.info("Local Run Mode updated."); //TODO translate
 

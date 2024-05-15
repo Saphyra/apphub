@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.process.local.start.LocalStartProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 class LocalRunMenuStartMenuOption implements LocalRunMenuOption {
+    private final LocalStartProcess localStartProcess;
+
     @Override
     public String getCommand() {
         return "2";
@@ -13,12 +16,12 @@ class LocalRunMenuStartMenuOption implements LocalRunMenuOption {
 
     @Override
     public String getName() {
-        return "Run"; //TODO translate
+        return "Start"; //TODO translate
     }
 
     @Override
     public boolean process() {
-        //TODO implement
+        localStartProcess.run();
 
         return false;
     }

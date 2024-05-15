@@ -11,10 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 @Slf4j
 @RequiredArgsConstructor
 @ComponentScan
@@ -32,22 +28,7 @@ public class ApphubCiApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         mainMenu.enter();
-    }
 
-    private static void process() throws IOException, InterruptedException {
-        Process process = Runtime.getRuntime().exec("cmd /c mvn -T 12 clean package -DskipTests");
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        int exitCode = process.waitFor();
-        if (exitCode == 0) {
-            System.out.println("Maven build successful!");
-        } else {
-            System.out.println("Maven build failed!");
-        }
+        System.exit(0);
     }
 }

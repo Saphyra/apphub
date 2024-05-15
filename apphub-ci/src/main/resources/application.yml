@@ -31,62 +31,80 @@ services:
 - name: event-gateway
   port: 8081
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-event_gateway/target/application.jar"
+  group: 0
 
 #Platform
 - name: main-gateway
   port: 8080
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
+  group: 1
 - name: web-content
   port: 8083
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
+  group: 1
 - name: scheduler
   port: 8082
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
+  group: 1
 - name: admin-panel
   port: 8089
   location: "./apphub-service/apphub-service-admin_panel/target/application.jar"
+  group: 1
 - name: user
   port: 8085
   location: "./apphub-service/apphub-service-user/target/application.jar"
+  group: 1
 
 #Optional platform
 - name: storage
   port: 8099
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar"
+  group: 2
 - name: encryption
   port: 8098
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
+  group: 2
 - name: modules
   port: 8088
   location: "./apphub-service/apphub-service-modules/target/application.jar"
+  group: 2
 
 #SkyXplore
 - name: skyxplore-data
   port: 8091
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar"
+  group: 3
 - name: skyxplore-game
   port: 8095
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar"
+  group: 3
 - name: skyxplore-lobby
   port: 8093
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-lobby/target/application.jar"
+  group: 3
 
 #Feature
 - name: villany-atesz
   port: 8084
   location: "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar"
+  group: 4
 - name: utils
   port: 8100
   location: "./apphub-service/apphub-service-utils/target/application.jar"
+  group: 4
 - name: training
   port:  8086
   location: "./apphub-service/apphub-service-training/target/application.jar"
+  group: 4
 - name: notebook
   port: 8090
   location: "./apphub-service/apphub-service-notebook/target/application.jar"
+  group: 4
 - name: community
   port: 8096
   location: "./apphub-service/apphub-service-community/target/application.jar"
+  group: 4
 - name: calendar
   port: 8097
   location: "./apphub-service/apphub-service-calendar/target/application.jar"
+  group: 4
