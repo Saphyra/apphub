@@ -25,14 +25,18 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
         setSearch("");
     }
 
+    const inCar = item.inCar - item.inCart > 0 ? (item.inCar - item.inCart + " " + item.category.measurement) : "";
+    const inCart = item.inCart > 0 ? (item.inCart + " " + item.category.measurement) : "";
+    const inStorage = item.inStorage > 0 ? (item.inStorage + " " + item.category.measurement) : "";
+
     return (
         <tr className="villany-atesz-stock-overview-item">
             <td className="villany-atesz-stock-overview-item-category">{item.category.name}</td>
             <td className="villany-atesz-stock-overview-item-name">{item.name}</td>
             <td className="villany-atesz-stock-overview-item-serial-number">{item.serialNumber}</td>
-            <td className="villany-atesz-stock-overview-item-in-car">{item.inCar - item.inCart} {item.category.measurement}</td>
-            <td className={"villany-atesz-stock-overview-item-in-cart" + (item.inCart > 0 ? " in-cart" : "")}>{item.inCart} {item.category.measurement}</td>
-            <td className="villany-atesz-stock-overview-item-in-storage">{item.inStorage} {item.category.measurement}</td>
+            <td className="villany-atesz-stock-overview-item-in-car">{inCar}</td>
+            <td className={"villany-atesz-stock-overview-item-in-cart" + (item.inCart > 0 ? " in-cart" : "")}>{inCart}</td>
+            <td className="villany-atesz-stock-overview-item-in-storage">{inStorage}</td>
             <td className="villany-atesz-stock-overview-item-price">{item.price} Ft</td>
             <td className="villany-atesz-stock-overview-item-stock-value">{item.price * (item.inCar + item.inStorage)} Ft</td>
             {!Utils.isBlank(activeCart) &&
