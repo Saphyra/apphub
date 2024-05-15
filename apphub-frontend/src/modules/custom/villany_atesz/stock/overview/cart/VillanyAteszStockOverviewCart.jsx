@@ -109,16 +109,18 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
 
     return (
         <div id="villany-atesz-stock-overview-cart">
-            <PreLabeledInputField
-                id="villany-atesz-stock-overview-cart-selector-label"
-                label={localizationHandler.get("active-cart")}
-                input={<SelectInput
-                    id="villany-atesz-stock-overview-cart-selector"
-                    value={activeCart}
-                    onchangeCallback={setActiveCart}
-                    options={getAvailableCartOptions()}
-                />}
-            />
+            <div style={{ overflow: "auto" }}>
+                <PreLabeledInputField
+                    id="villany-atesz-stock-overview-cart-selector-label"
+                    label={localizationHandler.get("active-cart")}
+                    input={<SelectInput
+                        id="villany-atesz-stock-overview-cart-selector"
+                        value={activeCart}
+                        onchangeCallback={setActiveCart}
+                        options={getAvailableCartOptions()}
+                    />}
+                />
+            </div>
 
             {Utils.hasValue(cart) &&
                 <div id="villany-atesz-stock-overview-cart-details">

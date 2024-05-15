@@ -7,6 +7,7 @@
 VillanyAtesz
     Overflow error on StockOverview page
     Inventoried checkbox covers search field in inventory
+    Reset should refresh category list on acquisition page
 
 ===PLATFORM CHANGES===
 
