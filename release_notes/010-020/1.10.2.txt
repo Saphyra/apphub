@@ -1,9 +1,11 @@
 ===FEATURES===
+    VillanyAtesz
+        Hide the value of the stockOverviewItem if the amount is 0
+        Hide items not in car or storage on overview page
 
 ===BUGFIXES===
 VillanyAtesz
     Overflow error on StockOverview page
-    Hide the value of the stockOverviewItem if the amount is 0
     Inventoried checkbox covers search field in inventory
 
 ===PLATFORM CHANGES===
