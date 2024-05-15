@@ -13,6 +13,6 @@ public class LocalRunMenu extends MenuBase<LocalRunMenuOption> {
 
     @Override
     protected String getName() {
-        return "Local Start"; //TODO unit test
+        return "Local Run"; //TODO unit test
     }
 }

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.process.local;
+package com.github.saphyra.apphub.ci.process.local.start;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.value.LocalRunMode;
@@ -12,13 +12,13 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LocalBuildProcess {
+public class LocalBuildTask {
     private final PropertyDao propertyDao;
 
     /**
      * @return true, if maven build is successful, false otherwise.
      */
-    public boolean run() {
+    public boolean buildServices() {
         LocalRunMode localRunMode = propertyDao.getLocalRunMode();
         if (localRunMode == LocalRunMode.SKIP_BUILD) {
             return true;

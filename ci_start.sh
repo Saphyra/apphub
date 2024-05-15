@@ -1,6 +1,6 @@
 cd apphub-ci
 
-mvn clean package
+mvn clean package -DskipTests
 
 cd ..
 

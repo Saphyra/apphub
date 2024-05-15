@@ -17,12 +17,11 @@ public class ServicePinger {
     public Optional<Exception> pingService(int port) {
         Exception cause = null;
         for (int i = 0; i < 60; i++) {
-            try {
-                if (REST_TEMPLATE.getForEntity("http://localhost:%s/platform/health".formatted(port), Void.class).getStatusCode() == HttpStatus.OK) {
-                    return Optional.empty();
-                }
-            } catch (Exception e) {
-                cause = e;
+            Optional<Exception> maybeException = singlePing(port);
+            if (maybeException.isPresent()) {
+                cause = maybeException.get();
+            } else {
+                return Optional.empty();
             }
 
             try {
@@ -38,5 +37,17 @@ public class ServicePinger {
         }
 
         return Optional.of(cause);
+    }
+
+    public Optional<Exception> singlePing(int port) {
+        try {
+            if (REST_TEMPLATE.getForEntity("http://localhost:%s/platform/health".formatted(port), Void.class).getStatusCode() == HttpStatus.OK) {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            return Optional.of(e);
+        }
+
+        return Optional.of(new IllegalStateException("Ping failed without exception."));
     }
 }

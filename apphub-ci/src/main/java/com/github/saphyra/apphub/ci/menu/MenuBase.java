@@ -21,14 +21,18 @@ public abstract class MenuBase<OPTION extends MenuOption> {
 
     public void enter() {
         while (true) {
-            MenuOption option = getOption();
+            try {
+                MenuOption option = getOption();
 
-            if (option == exitOption) {
-                return;
-            }
+                if (option == exitOption) {
+                    return;
+                }
 
-            if (option.process()) {
-                return;
+                if (option.process()) {
+                    return;
+                }
+            } catch (Exception e) {
+                log.error("Exception occurred in the menu.", e);
             }
         }
     }

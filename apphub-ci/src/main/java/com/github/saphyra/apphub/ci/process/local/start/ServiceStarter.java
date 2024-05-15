@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.process.local.start;
 
+import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;

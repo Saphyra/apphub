@@ -107,5 +107,6 @@
         <module>apphub-api</module>
         <module>apphub-lib</module>
         <module>apphub-test</module>
+        <module>apphub-integration-server</module>
     </modules>
 </project>

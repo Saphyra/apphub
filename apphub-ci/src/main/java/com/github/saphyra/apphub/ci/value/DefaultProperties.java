@@ -11,4 +11,5 @@ public class DefaultProperties {
     private LocalRunMode localRunMode;
     private Integer localRunThreadCountDefault;
     private Integer localRunThreadCountSkipTests;
+    private Integer localRunTestsThreadCount;
 }

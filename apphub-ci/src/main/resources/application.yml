@@ -25,6 +25,16 @@ defaults:
   localRunMode: DEFAULT
   localRunThreadCountDefault: 6
   localRunThreadCountSkipTests: 24
+  localRunTestsThreadCount: 20
+
+test:
+  integrationServer:
+    name: integration-server
+    port: 8072
+    location: "./apphub-integration-server/target/application.jar"
+  localServerPort: 8080
+  localDatabasePort: 5432
+  localDatabaseName: apphub
 
 services:
 #Crutial platform

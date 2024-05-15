@@ -42,4 +42,11 @@ public class PropertyDao {
             default -> throw new IllegalStateException("getThreadCount should not be called with localRunMode " + localRunMode);
         };
     }
+
+    public Integer getLocalRunTestsThreadCount() {
+        return propertyRepository.findById(PropertyName.LOCAL_RUN_INTEGRATION_TESTS_THREAD_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getLocalRunTestsThreadCount);
+    }
 }

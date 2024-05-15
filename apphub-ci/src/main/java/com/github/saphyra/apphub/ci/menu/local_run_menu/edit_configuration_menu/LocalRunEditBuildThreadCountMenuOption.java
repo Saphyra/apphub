@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunEditThreadCountMenuOption implements LocalRunEditPropertiesMenuOption {
+class LocalRunEditBuildThreadCountMenuOption implements LocalRunEditPropertiesMenuOption {
     private final LocalRunThreadCountEditerMenu localRunThreadCountEditerMenu;
 
     @Override
@@ -16,7 +16,7 @@ class LocalRunEditThreadCountMenuOption implements LocalRunEditPropertiesMenuOpt
 
     @Override
     public String getName() {
-        return "Thread Count"; //TODO translate
+        return "Build Thread Count"; //TODO translate
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.process.local.start;
+package com.github.saphyra.apphub.ci.process.local;
 
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Service;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-class LocalStartTask implements Runnable {
+public class LocalStartTask implements Runnable {
     private final ServicePinger servicePinger;
     private final Service service;
 
