@@ -6,13 +6,13 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartModifiedResp
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CartView;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
-import com.github.saphyra.apphub.api.custom.villany_atesz.server.CartController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.AddToCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.CartQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.CreateCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.DeleteCartService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.EditMarginService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.FinalizeCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.RemoveFromCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
@@ -36,6 +36,7 @@ class CartControllerImplTest {
     private static final UUID CONTACT_ID = UUID.randomUUID();
     private static final UUID CART_ID = UUID.randomUUID();
     private static final UUID STOCK_ITEM_ID = UUID.randomUUID();
+    private static final Double MARGIN = 3.5;
 
     @Mock
     private CreateCartService createCartService;
@@ -57,6 +58,9 @@ class CartControllerImplTest {
 
     @Mock
     private RemoveFromCartService removeFromCartService;
+
+    @Mock
+    private EditMarginService editMarginService;
 
     @InjectMocks
     private CartControllerImpl underTest;
@@ -150,5 +154,12 @@ class CartControllerImplTest {
             .returns(List.of(stockItemOverviewResponse), CartDeletedResponse::getItems);
 
         then(deleteCartService).should().delete(USER_ID, CART_ID);
+    }
+
+    @Test
+    void editMargin() {
+        underTest.editMargin(new OneParamRequest<>(MARGIN), CART_ID, accessTokenHeader);
+
+        then(editMarginService).should().editMargin(CART_ID, MARGIN);
     }
 }

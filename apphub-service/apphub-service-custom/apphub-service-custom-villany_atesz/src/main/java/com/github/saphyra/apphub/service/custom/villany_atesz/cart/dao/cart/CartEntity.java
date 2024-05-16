@@ -21,4 +21,5 @@ class CartEntity {
     private String contactId;
     private String createdAt;
     private String finalized;
+    private String margin;
 }

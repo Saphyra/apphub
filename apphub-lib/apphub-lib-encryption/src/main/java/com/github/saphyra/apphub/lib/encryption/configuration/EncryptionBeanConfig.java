@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DefaultStringEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.DoubleEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
@@ -36,6 +37,11 @@ public class EncryptionBeanConfig {
     @Bean
     public IntegerEncryptor integerEncryptor(StringEncryptor stringEncryptor) {
         return new IntegerEncryptor(stringEncryptor);
+    }
+
+    @Bean
+    public DoubleEncryptor doubleEncryptor(StringEncryptor stringEncryptor) {
+        return new DoubleEncryptor(stringEncryptor);
     }
 
     @Bean
