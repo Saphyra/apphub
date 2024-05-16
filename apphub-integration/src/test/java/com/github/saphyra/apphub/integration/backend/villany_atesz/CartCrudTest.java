@@ -33,6 +33,7 @@ public class CartCrudTest extends BackEndTest {
     private static final Integer PRICE = 435;
     private static final String CONTACT_NAME = "contact-name";
     private static final Integer AMOUNT = 37;
+    private static final Double MARGIN = 3.5d;
 
     @Test(groups = {"be", "villany-atesz"})
     public void cartCrud() {
@@ -47,6 +48,10 @@ public class CartCrudTest extends BackEndTest {
         create_contactNotFound(accessTokenId);
         UUID cartId = create(accessTokenId, contactId);
 
+        editMargin_null(accessTokenId, cartId);
+        editMargin_negative(accessTokenId, cartId);
+        editMargin(accessTokenId, cartId);
+
         addToCart_nullCartId(accessTokenId, stockItemId);
         addToCart_nullStockItemId(accessTokenId, cartId);
         addToCart_zeroAmount(accessTokenId, cartId, stockItemId);
@@ -58,6 +63,18 @@ public class CartCrudTest extends BackEndTest {
         finalizeCart_alreadyFinalized(accessTokenId, cartId);
 
         delete(accessTokenId, contactId, stockItemId);
+    }
+
+    private void editMargin(UUID accessTokenId, UUID cartId) {
+        VillanyAteszCartActions.editMargin(accessTokenId, cartId, MARGIN);
+    }
+
+    private void editMargin_negative(UUID accessTokenId, UUID cartId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(accessTokenId, cartId, -1.0), "margin", "too low");
+    }
+
+    private void editMargin_null(UUID accessTokenId, UUID cartId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(accessTokenId, cartId, null), "margin", "must not be null");
     }
 
     private void create_nullContactId(UUID accessTokenId) {

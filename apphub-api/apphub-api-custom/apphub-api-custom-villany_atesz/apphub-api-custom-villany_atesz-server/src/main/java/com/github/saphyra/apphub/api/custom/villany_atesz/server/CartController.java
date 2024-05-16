@@ -41,4 +41,7 @@ public interface CartController {
 
     @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_CART)
     CartDeletedResponse deleteCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN)
+    void editMargin(@RequestBody OneParamRequest<Double> margin, @PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

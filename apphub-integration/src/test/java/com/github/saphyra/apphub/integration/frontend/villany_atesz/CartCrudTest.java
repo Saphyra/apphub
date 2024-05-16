@@ -34,6 +34,7 @@ public class CartCrudTest extends SeleniumTest {
     private static final int PRICE = 50;
     private static final String CONTACT_CODE = "contact-code";
     private static final Integer AMOUNT = 20;
+    private static final int MARGIN = 2;
 
     @Test(groups = {"fe", "villany-atesz"})
     public void cartCrud() {
@@ -78,7 +79,7 @@ public class CartCrudTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(
             () -> VillanyAteszStockOverviewPageActions.getCartDetails(driver),
             cart -> assertThat(cart.orElseThrow())
-                .returns(AMOUNT * PRICE, Cart::getTotalValue)
+                .returns((int) ((double) AMOUNT * PRICE * Constants.CART_DEFAULT_MARGIN), Cart::getTotalValue)
                 .extracting(Cart::getItems)
                 .extracting(cartItems -> cartItems.get(0))
                 .returns(AMOUNT, CartItem::getAmount)
@@ -90,9 +91,16 @@ public class CartCrudTest extends SeleniumTest {
             .returns(true, StockItemOverview::isInCart)
             .returns(AMOUNT + " " + MEASUREMENT, StockItemOverview::getInCart);
 
-        //Remove
+        //Margin
         Cart cart = VillanyAteszStockOverviewPageActions.getCartDetails(driver)
             .orElseThrow();
+
+        cart.setMargin(MARGIN);
+
+        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getCartDetails(driver).orElseThrow(), c -> assertThat(c.getTotalValue()).isEqualTo(AMOUNT * PRICE * MARGIN));
+
+        //Remove
+
         cart.getItems()
             .stream()
             .findFirst()
@@ -104,7 +112,7 @@ public class CartCrudTest extends SeleniumTest {
             items -> CustomAssertions.singleListAssertThat(items)
                 .returns(IN_CAR + " " + MEASUREMENT, StockItemOverview::getInCar)
                 .returns(false, StockItemOverview::isInCart)
-                .returns("0 " + MEASUREMENT, StockItemOverview::getInCart)
+                .returns("", StockItemOverview::getInCart)
         );
 
         //Delete cart
@@ -124,7 +132,7 @@ public class CartCrudTest extends SeleniumTest {
         CustomAssertions.singleListAssertThat(VillanyAteszStockOverviewPageActions.getItems(driver))
             .returns(IN_CAR + " " + MEASUREMENT, StockItemOverview::getInCar)
             .returns(false, StockItemOverview::isInCart)
-            .returns("0 " + MEASUREMENT, StockItemOverview::getInCart);
+            .returns("", StockItemOverview::getInCart);
 
         //Finalize cart
         VillanyAteszNavigation.openContacts(driver);
@@ -155,6 +163,6 @@ public class CartCrudTest extends SeleniumTest {
         CustomAssertions.singleListAssertThat(VillanyAteszStockOverviewPageActions.getItems(driver))
             .returns(IN_CAR - AMOUNT + " " + MEASUREMENT, StockItemOverview::getInCar)
             .returns(false, StockItemOverview::isInCart)
-            .returns("0 " + MEASUREMENT, StockItemOverview::getInCart);
+            .returns("", StockItemOverview::getInCart);
     }
 }

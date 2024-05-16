@@ -42,6 +42,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
 
     const getItems = () => {
         return new Stream(items)
+            .filter(item => item.inCar > 0 || item.inStorage > 0)
             .filter(item => {
                 return Utils.isBlank(search) ||
                     new Stream([item.category.name, item.name, item.serialNumber, item.inCar, item.inCart, item.inStorage, item.price, item.barCode])

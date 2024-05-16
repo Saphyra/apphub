@@ -95,4 +95,16 @@ public class VillanyAteszCartActions {
 
         return response.getBody().as(CartView.class);
     }
+
+    public static Response getEditMarginResponse(UUID accessTokenId, UUID cartId, Double margin) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(margin))
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN, "cartId", cartId));
+    }
+
+    public static void editMargin(UUID accessTokenId, UUID cartId, Double margin) {
+        Response response = getEditMarginResponse(accessTokenId, cartId, margin);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

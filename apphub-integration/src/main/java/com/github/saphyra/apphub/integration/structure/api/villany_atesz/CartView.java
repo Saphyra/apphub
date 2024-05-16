@@ -16,5 +16,6 @@ public class CartView {
     private UUID cartId;
     private ContactModel contact;
     private Integer totalPrice;
+    private Double margin;
     private List<CartItemView> items;
 }

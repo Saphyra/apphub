@@ -78,5 +78,9 @@
     "remove": {
         "en": "Remove",
         "hu": "Eltávolítás"
+    },
+    "margin": {
+        "en": "Margin",
+        "hu": "Árrés"
     }
 }

@@ -10,6 +10,8 @@ import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import CartItem from "./CartItem";
+import NumberInput from "../../../../../../common/component/input/NumberInput";
+import MapStream from "../../../../../../common/js/collection/MapStream";
 
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -107,18 +109,31 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
         setConfirmationDialogData(null);
     }
 
+    const updateMargin = async (margin) => {
+        if (margin < 0) {
+            return;
+        }
+
+        await Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN.createRequest({ value: margin }, { cartId: cart.cartId })
+            .send();
+
+        setCart(new MapStream(cart).add("margin", margin).toObject())
+    }
+
     return (
         <div id="villany-atesz-stock-overview-cart">
-            <PreLabeledInputField
-                id="villany-atesz-stock-overview-cart-selector-label"
-                label={localizationHandler.get("active-cart")}
-                input={<SelectInput
-                    id="villany-atesz-stock-overview-cart-selector"
-                    value={activeCart}
-                    onchangeCallback={setActiveCart}
-                    options={getAvailableCartOptions()}
-                />}
-            />
+            <div style={{ overflow: "auto" }}>
+                <PreLabeledInputField
+                    id="villany-atesz-stock-overview-cart-selector-label"
+                    label={localizationHandler.get("active-cart")}
+                    input={<SelectInput
+                        id="villany-atesz-stock-overview-cart-selector"
+                        value={activeCart}
+                        onchangeCallback={setActiveCart}
+                        options={getAvailableCartOptions()}
+                    />}
+                />
+            </div>
 
             {Utils.hasValue(cart) &&
                 <div id="villany-atesz-stock-overview-cart-details">
@@ -170,7 +185,18 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                         <legend>{localizationHandler.get("total-price")}</legend>
 
                         <div>
-                            <span id="villany-atesz-stock-overview-cart-details-total-price">{cart.totalPrice}</span>
+                            <PreLabeledInputField
+                                label={localizationHandler.get("margin")}
+                                input={<NumberInput
+                                    id="villany-atesz-stock-overview-cart-details-margin"
+                                    placeholder={localizationHandler.get("margin")}
+                                    onchangeCallback={updateMargin}
+                                    value={cart.margin}
+                                    min="0"
+                                    step=".01"
+                                />}
+                            />
+                            <span id="villany-atesz-stock-overview-cart-details-total-price">{Math.round(cart.totalPrice * cart.margin)}</span>
                             <span> Ft</span>
                         </div>
                     </fieldset>

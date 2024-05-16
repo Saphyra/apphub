@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.view.villany_atesz;
 
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -37,5 +38,9 @@ public class Cart {
 
         driver.findElement(By.id("villany-atesz-stock-finalize-cart-confirm-button"))
             .click();
+    }
+
+    public void setMargin(int margin) {
+        WebElementUtils.clearAndFill(webElement.findElement(By.id("villany-atesz-stock-overview-cart-details-margin")), margin);
     }
 }
