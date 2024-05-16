@@ -18,4 +18,16 @@
 
         <addPrimaryKey schemaName="villany_atesz" tableName="cart" columnNames="cart_id"/>
     </changeSet>
+
+    <changeSet id="add-column-margin-to-cart" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="cart" columnName="margin"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="cart">
+            <column name="margin" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -34,6 +34,7 @@ class CartQueryServiceTest {
     private static final Integer PRICE_PER_ITEM = 32;
     private static final Integer AMOUNT = 53;
     private static final String STOCK_ITEM_NAME = "stock-item-name";
+    private static final Double MARGIN = 3.5;
 
     @Mock
     private CartDao cartDao;
@@ -97,11 +98,13 @@ class CartQueryServiceTest {
         given(stockItemPriceQueryService.getPriceOf(STOCK_ITEM_ID)).willReturn(PRICE_PER_ITEM);
         given(cartItem.getAmount()).willReturn(AMOUNT);
         given(stockItem.getName()).willReturn(STOCK_ITEM_NAME);
+        given(cart.getMargin()).willReturn(MARGIN);
 
         assertThat(underTest.getCart(CART_ID))
             .returns(CART_ID, CartView::getCartId)
             .returns(contactModel, CartView::getContact)
             .returns(PRICE_PER_ITEM * AMOUNT, CartView::getTotalPrice)
+            .returns(MARGIN, CartView::getMargin)
             .extracting(cartView -> cartView.getItems().get(0))
             .returns(STOCK_ITEM_ID, CartItemView::getStockItemId)
             .returns(STOCK_ITEM_NAME, CartItemView::getName)

@@ -41,6 +41,7 @@ class CartFactoryTest {
             .returns(USER_ID, Cart::getUserId)
             .returns(CONTACT_ID, Cart::getContactId)
             .returns(CURRENT_DATE, Cart::getCreatedAt)
+            .returns(1.0, Cart::getMargin)
             .returns(false, Cart::isFinalized);
     }
 }

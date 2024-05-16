@@ -2,6 +2,7 @@
     VillanyAtesz
         Hide the value of the stockOverviewItem if the amount is 0
         Hide items not in car or storage on overview page
+        Margin for cart price
 
 ===BUGFIXES===
 VillanyAtesz

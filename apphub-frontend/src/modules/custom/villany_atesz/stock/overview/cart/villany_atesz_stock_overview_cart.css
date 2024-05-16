@@ -13,3 +13,23 @@
 #villany-atesz-stock-overview-cart-details fieldset {
     margin: 10px;
 }
+
+#villany-atesz-stock-overview-cart-details-margin {
+    width: 60px;
+}
+
+#villany-atesz-stock-overview-cart-items{
+    line-height: 1.75;
+}
+
+.villany-atesz-stock-overview-cart-item:hover {
+    color: orange;
+}
+
+.villany-atesz-stock-overview-cart-item-remove-button {
+    border-radius: 0;
+    border-width: 1px;
+    margin: 0;
+    margin-left: 10px;
+    font-size: 12px;
+}

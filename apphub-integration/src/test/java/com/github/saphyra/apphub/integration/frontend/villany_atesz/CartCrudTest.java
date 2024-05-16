@@ -34,6 +34,7 @@ public class CartCrudTest extends SeleniumTest {
     private static final int PRICE = 50;
     private static final String CONTACT_CODE = "contact-code";
     private static final Integer AMOUNT = 20;
+    private static final int MARGIN = 2;
 
     @Test(groups = {"fe", "villany-atesz"})
     public void cartCrud() {
@@ -90,9 +91,16 @@ public class CartCrudTest extends SeleniumTest {
             .returns(true, StockItemOverview::isInCart)
             .returns(AMOUNT + " " + MEASUREMENT, StockItemOverview::getInCart);
 
-        //Remove
+        //Margin
         Cart cart = VillanyAteszStockOverviewPageActions.getCartDetails(driver)
             .orElseThrow();
+
+        cart.setMargin(MARGIN);
+
+        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getCartDetails(driver).orElseThrow(), c -> assertThat(c.getTotalValue()).isEqualTo(AMOUNT * PRICE * MARGIN));
+
+        //Remove
+
         cart.getItems()
             .stream()
             .findFirst()

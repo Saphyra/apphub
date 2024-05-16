@@ -21,6 +21,7 @@ class CartFactory {
             .contactId(contactId)
             .createdAt(dateTimeUtil.getCurrentDate())
             .finalized(false)
+            .margin(1)
             .build();
     }
 }
