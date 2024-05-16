@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.cart.service;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.custom.villany_atesz.VillanyAteszConstants;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ class CartFactory {
             .contactId(contactId)
             .createdAt(dateTimeUtil.getCurrentDate())
             .finalized(false)
-            .margin(1)
+            .margin(VillanyAteszConstants.DEFAULT_CART_MARGIN)
             .build();
     }
 }

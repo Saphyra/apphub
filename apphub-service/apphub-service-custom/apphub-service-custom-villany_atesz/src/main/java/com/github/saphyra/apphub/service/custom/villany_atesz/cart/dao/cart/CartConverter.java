@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DoubleEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.custom.villany_atesz.VillanyAteszConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +51,7 @@ class CartConverter extends ConverterBase<CartEntity, Cart> {
             .contactId(uuidConverter.convertEntity(entity.getContactId()))
             .createdAt(LocalDate.parse(stringEncryptor.decrypt(entity.getCreatedAt(), userId, entity.getCartId(), COLUMN_CREATED_AT)))
             .finalized(booleanEncryptor.decrypt(entity.getFinalized(), userId, entity.getCartId(), COLUMN_FINALIZED))
-            .margin(Optional.ofNullable(entity.getMargin()).map(s -> doubleEncryptor.decrypt(s, userId, entity.getCartId(), COLUMN_MARGIN)).orElse(1d))
+            .margin(Optional.ofNullable(entity.getMargin()).map(s -> doubleEncryptor.decrypt(s, userId, entity.getCartId(), COLUMN_MARGIN)).orElse(VillanyAteszConstants.DEFAULT_CART_MARGIN))
             .build();
     }
 }

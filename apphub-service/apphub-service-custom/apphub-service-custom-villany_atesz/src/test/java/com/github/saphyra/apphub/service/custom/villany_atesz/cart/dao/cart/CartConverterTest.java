@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DoubleEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.custom.villany_atesz.VillanyAteszConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -138,7 +139,7 @@ class CartConverterTest {
             .returns(USER_ID, Cart::getUserId)
             .returns(CONTACT_ID, Cart::getContactId)
             .returns(CREATED_AT, Cart::getCreatedAt)
-            .returns(1.0, Cart::getMargin)
+            .returns(VillanyAteszConstants.DEFAULT_CART_MARGIN, Cart::getMargin)
             .returns(true, Cart::isFinalized);
     }
 }

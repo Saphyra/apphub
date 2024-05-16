@@ -79,7 +79,7 @@ public class CartCrudTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(
             () -> VillanyAteszStockOverviewPageActions.getCartDetails(driver),
             cart -> assertThat(cart.orElseThrow())
-                .returns(AMOUNT * PRICE, Cart::getTotalValue)
+                .returns((int) ((double) AMOUNT * PRICE * Constants.CART_DEFAULT_MARGIN), Cart::getTotalValue)
                 .extracting(Cart::getItems)
                 .extracting(cartItems -> cartItems.get(0))
                 .returns(AMOUNT, CartItem::getAmount)

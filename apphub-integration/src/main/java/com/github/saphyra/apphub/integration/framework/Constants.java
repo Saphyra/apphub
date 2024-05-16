@@ -62,7 +62,10 @@ public class Constants {
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
     public static final String SELECT_OPTION_CHOOSE = "Choose";
+
+    //VillanyAtesz
     public static final String FT_SUFFIX = " Ft";
+    public static final Double CART_DEFAULT_MARGIN = 1.2;
 
     //OpenedPageType
     public final String PAGE_TYPE_PLANET = "PLANET";
