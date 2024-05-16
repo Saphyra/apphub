@@ -16,4 +16,5 @@ public class Cart {
     private final UUID contactId;
     private final LocalDate createdAt;
     private boolean finalized;
+    private double margin;
 }

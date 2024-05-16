@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.AddTo
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.CartQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.CreateCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.DeleteCartService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.EditMarginService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.FinalizeCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.service.RemoveFromCartService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
@@ -33,6 +34,7 @@ class CartControllerImpl implements CartController {
     private final FinalizeCartService finalizeCartService;
     private final DeleteCartService deleteCartService;
     private final RemoveFromCartService removeFromCartService;
+    private final EditMarginService editMarginService;
 
     @Override
     public UUID createCart(OneParamRequest<UUID> contactId, AccessTokenHeader accessTokenHeader) {
@@ -100,5 +102,12 @@ class CartControllerImpl implements CartController {
             .carts(getCarts(accessTokenHeader))
             .items(stockItemQueryService.getStockItems(accessTokenHeader.getUserId()))
             .build();
+    }
+
+    @Override
+    public void editMargin(OneParamRequest<Double> margin, UUID cartId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit margin of cart {}", accessTokenHeader.getUserId(), cartId);
+
+        editMarginService.editMargin(cartId, margin.getValue());
     }
 }

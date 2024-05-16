@@ -11,16 +11,29 @@ import ConfirmationDialogData from "../../../../../common/component/confirmation
 import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import { validateAcquiredItems } from "../../validation/VillanyAteszValidation";
+import useCache from "../../../../../common/hook/Cache";
 
 const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(loclaizationData);
 
     const [items, setItems] = useState(Utils.hasValue(sessionStorage.stockItems) ? JSON.parse(sessionStorage.stockItems) : []);
 
+    const refetchCategories = useCache(
+        "stock-categories",
+        Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(),
+        (categories) => { }
+    );
+
     const updateItems = (newItems) => {
         sessionStorage.stockItems = JSON.stringify(newItems);
 
         setItems(newItems);
+    }
+
+    const reset = () => {
+        updateItems([]);
+
+        refetchCategories();
     }
 
     const openAddToStockConfirmation = () => {
@@ -91,7 +104,7 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
                 <Button
                     id="villany-atesz-stock-acquisition-reset-button"
                     label={localizationHandler.get("reset")}
-                    onclick={() => updateItems([])}
+                    onclick={reset}
                 />
             </div>
 

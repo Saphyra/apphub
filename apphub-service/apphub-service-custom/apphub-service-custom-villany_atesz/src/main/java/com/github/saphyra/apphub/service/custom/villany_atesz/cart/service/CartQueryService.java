@@ -49,6 +49,7 @@ public class CartQueryService {
             .contact(contactQueryService.getContact(cart.getContactId()))
             .totalPrice(getTotalPrice(items))
             .items(convert(items))
+            .margin(cart.getMargin())
             .build();
     }
 

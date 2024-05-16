@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.cart.service;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.custom.villany_atesz.VillanyAteszConstants;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +42,7 @@ class CartFactoryTest {
             .returns(USER_ID, Cart::getUserId)
             .returns(CONTACT_ID, Cart::getContactId)
             .returns(CURRENT_DATE, Cart::getCreatedAt)
+            .returns(VillanyAteszConstants.DEFAULT_CART_MARGIN, Cart::getMargin)
             .returns(false, Cart::isFinalized);
     }
 }
