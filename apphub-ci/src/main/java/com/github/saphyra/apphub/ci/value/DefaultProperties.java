@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "defaults")
 @Data
 public class DefaultProperties {
+    private String defaultLocale;
     private LocalRunMode localRunMode;
     private Integer localRunThreadCountDefault;
     private Integer localRunThreadCountSkipTests;

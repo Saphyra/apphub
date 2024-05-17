@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.LocalRunEditPropertiesMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ class LocalRunMenuEditPropertiesMenuOption implements LocalRunMenuOption {
     }
 
     @Override
-    public String getName() {
-        return "Edit configuration"; //TODO translate
+    public LocalizedText getName() {
+        return LocalizedText.EDIT_CONFIGURATION;
     }
 
     @Override

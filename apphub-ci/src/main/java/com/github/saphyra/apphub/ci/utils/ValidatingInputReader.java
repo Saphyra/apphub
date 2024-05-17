@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.ci.utils;
 
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
+import com.github.saphyra.apphub.ci.localization.LocalizationService;
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,37 +15,39 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Slf4j
 public class ValidatingInputReader {
-    public String getInput(String label, Function<String, Optional<String>> validation) {
-        return getInput(label, Function.identity(), validation);
+    private final LocalizationService localizationService;
+
+    public String getInput(LocalizationProvider localizationProvider, Function<String, Optional<LocalizationProvider>> validation) {
+        return getInput(localizationProvider, Function.identity(), validation);
     }
 
     /**
      * Returns a validated input of a given type.
      *
-     * @param label      The text to display before asking for user input.
-     * @param mapper     Conversion between the text entered by the user, and the desired type
-     * @param validation Should return empty, if the input is valid. Should return error message if input is invalid.
-     * @return  the validated, mapped input
-     * @param <T> Return type
+     * @param localizationProvider The text to display before asking for user input.
+     * @param mapper               Conversion between the text entered by the user, and the desired type
+     * @param validation           Should return empty, if the input is valid. Should return error message if input is invalid.
+     * @param <T>                  Return type
+     * @return the validated, mapped input
      */
-    public <T> T getInput(String label, Function<String, T> mapper, Function<T, Optional<String>> validation) {
+    public <T> T getInput(LocalizationProvider localizationProvider, Function<String, T> mapper, Function<T, Optional<LocalizationProvider>> validation) {
         while (true) {
             log.info("");
-            log.info(label);
+            localizationService.writeMessage(localizationProvider);
 
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
 
             try {
                 T result = mapper.apply(input);
-                Optional<String> validationResult = validation.apply(result);
+                Optional<LocalizationProvider> validationResult = validation.apply(result);
                 if (validationResult.isPresent()) {
-                    log.info("Invalid parameter: {}", validationResult.get()); //TODO translate
+                    localizationService.writeMessage(language -> LocalizedText.INVALID_PARAMETER.getLocalizedText(language).formatted(validationResult.get().getLocalizedText(language)));
                 } else {
                     return result;
                 }
             } catch (Exception e) {
-                log.info("Invalid parameter."); //TODO translate
+                localizationService.writeMessage(LocalizedText.INVALID_PARAMETER);
             }
         }
     }

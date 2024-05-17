@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.menu.main_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.local_run_menu.LocalRunMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ class MainMenuLocalRunOption implements MainMenuOption {
     }
 
     @Override
-    public String getName() {
-        return "Local run"; //TODO unit test
+    public LocalizedText getName() {
+        return LocalizedText.LOCAL_RUN;
     }
 
     @Override

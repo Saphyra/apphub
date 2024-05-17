@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.menu.local_run_menu;
+package com.github.saphyra.apphub.ci.menu.settings;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class LocalRunMenu extends MenuBase<LocalRunMenuOption> {
-    LocalRunMenu(List<LocalRunMenuOption> localRunMenuOptions, LocalizationService localizationService) {
-        super(localRunMenuOptions, localizationService);
+public class SettingsMenu extends MenuBase<SettingsMenuOption> {
+    SettingsMenu(List<SettingsMenuOption> settingsMenuOptions, LocalizationService localizationService) {
+        super(settingsMenuOptions, localizationService);
     }
 
     @Override
     protected LocalizedText getName() {
-        return LocalizedText.LOCAL_RUN;
+        return LocalizedText.SETTINGS;
     }
 }

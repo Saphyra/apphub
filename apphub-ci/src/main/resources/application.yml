@@ -22,6 +22,7 @@ liquibase:
     location: classpath:changelog.xml
 
 defaults:
+  defaultLocale: en
   localRunMode: DEFAULT
   localRunThreadCountDefault: 6
   localRunThreadCountSkipTests: 24

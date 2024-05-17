@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunTestsMenuOption implements LocalRunMenuOption{
+class LocalRunTestsMenuOption implements LocalRunMenuOption {
     private final LocalRunTestsProcess localRunTestsProcess;
 
     @Override
@@ -15,8 +16,8 @@ class LocalRunTestsMenuOption implements LocalRunMenuOption{
     }
 
     @Override
-    public String getName() {
-        return "Run tests"; //TODO translate
+    public LocalizedText getName() {
+        return LocalizedText.LOCAL_RUN_TESTS;
     }
 
     @Override

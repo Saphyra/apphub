@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.localization.LocalizationService;
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.value.LocalRunMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class LocalRunModeSelectorSkipTestsOptionOption implements LocalRunModeSelectorOption {
     private final PropertyDao propertyDao;
+    private final LocalizationService localizationService;
 
     @Override
     public String getCommand() {
@@ -19,15 +22,15 @@ class LocalRunModeSelectorSkipTestsOptionOption implements LocalRunModeSelectorO
     }
 
     @Override
-    public String getName() {
-        return LocalRunMode.SKIP_TESTS.name(); //TODO translate
+    public LocalizedText getName() {
+        return LocalizedText.LOCAL_RUN_MODE_SKIP_TESTS;
     }
 
     @Override
     public boolean process() {
         propertyDao.save(PropertyName.LOCAL_RUN_MODE, LocalRunMode.SKIP_TESTS.name());
 
-        log.info("Local Run Mode updated."); //TODO translate
+        localizationService.writeMessage(LocalizedText.LOCAL_RUN_MODE_UPDATED);
 
         return true;
     }

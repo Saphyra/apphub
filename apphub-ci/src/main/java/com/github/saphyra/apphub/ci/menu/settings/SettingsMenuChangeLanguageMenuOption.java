@@ -1,28 +1,28 @@
-package com.github.saphyra.apphub.ci.menu.local_run_menu;
+package com.github.saphyra.apphub.ci.menu.settings;
 
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
-import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
+import com.github.saphyra.apphub.ci.menu.settings.change_language.ChangeLanguageMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunMenuStopMenuOption implements LocalRunMenuOption {
-    private final LocalStopProcess localStopProcess;
+class SettingsMenuChangeLanguageMenuOption implements SettingsMenuOption {
+    private final ChangeLanguageMenu changeLanguageMenu;
 
     @Override
     public String getCommand() {
-        return "3";
+        return "1";
     }
 
     @Override
     public LocalizedText getName() {
-        return LocalizedText.STOP;
+        return LocalizedText.CHANGE_LANGUAGE;
     }
 
     @Override
     public boolean process() {
-        localStopProcess.run();
+        changeLanguageMenu.enter();
 
         return false;
     }

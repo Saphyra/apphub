@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.local_run_mode_selector.LocalRunModeSelectorMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,8 +19,8 @@ class LocalRunEditModeMenuOption implements LocalRunEditPropertiesMenuOption {
     }
 
     @Override
-    public String getName() {
-        return String.format("Mode (%s)", propertyDao.getLocalRunMode()); //TODO translate
+    public LocalizationProvider getName() {
+        return language -> LocalizedText.LOCAL_RUN_MODE.getLocalizedText(language).formatted(propertyDao.getLocalRunMode().getLocalization().getLocalizedText(language));
     }
 
     @Override

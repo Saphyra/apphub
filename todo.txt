@@ -4,3 +4,4 @@ TODO optional - Create local namespace what starts / stops only specific service
 TODO disable startup of optional services
 TODO set max number of services starting up at the same time
 TODO if services are not running when triggering local run tests, start them automatically. Make it configurable.
+TODO reorder menu options

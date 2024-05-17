@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.process.local.start.LocalStartProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ class LocalRunMenuStartMenuOption implements LocalRunMenuOption {
     }
 
     @Override
-    public String getName() {
-        return "Start"; //TODO translate
+    public LocalizedText getName() {
+        return LocalizedText.START;
     }
 
     @Override

@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
+import com.github.saphyra.apphub.ci.localization.LocalizationService;
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
-import com.github.saphyra.apphub.ci.value.LocalRunMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import java.util.Optional;
 class LocalRunSkipTestsThreadCountEditerOption implements LocalRunThreadCountEditerMenuOption {
     private final PropertyDao propertyDao;
     private final ValidatingInputReader validatingInputReader;
+    private final LocalizationService localizationService;
 
     @Override
     public String getCommand() {
@@ -23,18 +26,18 @@ class LocalRunSkipTestsThreadCountEditerOption implements LocalRunThreadCountEdi
     }
 
     @Override
-    public String getName() {
-        return String.format("%s (%s)", LocalRunMode.SKIP_TESTS, propertyDao.getLocalRunThreadCountSkipTests()); //TODO translate
+    public LocalizationProvider getName() {
+        return language -> LocalizedText.LOCAL_RUN_MODE_SKIP_TESTS.getLocalizedText(language).formatted(propertyDao.getLocalRunThreadCountSkipTests());
     }
 
     @Override
     public boolean process() {
         Integer threadCount = validatingInputReader.getInput(
-            "Thread Count for running without tests:", //TODO translate
+            LocalizedText.THREAD_COUNT_FOR_RUNNING_WITHOUT_TESTS,
             Integer::parseInt,
             tc -> {
                 if (tc < 1) {
-                    return Optional.of("Must not be lower than 1"); //TODO translate
+                    return Optional.of(LocalizedText.MUST_NOT_BE_LOWER_THAN_1);
                 }
 
                 return Optional.empty();
@@ -43,7 +46,7 @@ class LocalRunSkipTestsThreadCountEditerOption implements LocalRunThreadCountEdi
 
         propertyDao.save(PropertyName.LOCAL_RUN_THREAD_COUNT_SKIP_TESTS, String.valueOf(threadCount));
 
-        log.info("Thread Count updated."); //TODO translate
+        localizationService.writeMessage(LocalizedText.THREAD_COUNT_UPDATED);
 
         return false;
     }

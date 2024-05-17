@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.dao;
 
+import com.github.saphyra.apphub.ci.localization.Language;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.LocalRunMode;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,11 @@ public class PropertyDao {
             .map(Property::getValue)
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getLocalRunTestsThreadCount);
+    }
+
+    public Language getLanguage() {
+        return propertyRepository.findById(PropertyName.LANGUAGE)
+            .map(property -> Language.valueOf(property.getValue()))
+            .orElseGet(() -> Language.valueOf(defaultProperties.getDefaultLocale()));
     }
 }

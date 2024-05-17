@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.ci.menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
+import com.github.saphyra.apphub.ci.localization.LocalizationService;
+import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -12,8 +15,10 @@ import java.util.stream.Stream;
 public abstract class MenuBase<OPTION extends MenuOption> {
     protected final List<MenuOption> options;
     private final MenuOption exitOption;
+    private final LocalizationService localizationService;
 
-    public MenuBase(List<OPTION> options) {
+    public MenuBase(List<OPTION> options, LocalizationService localizationService) {
+        this.localizationService = localizationService;
         this.exitOption = new ExitOption();
         this.options = Stream.concat(options.stream(), Stream.of(exitOption))
             .collect(Collectors.toList());
@@ -50,15 +55,15 @@ public abstract class MenuBase<OPTION extends MenuOption> {
             if (maybeResult.isPresent()) {
                 return maybeResult.get();
             } else {
-                log.info("Invalid command."); //TODO translate
+                localizationService.writeMessage(LocalizedText.INVALID_COMMAND);
             }
         }
     }
 
-    protected abstract String getName();
+    protected abstract LocalizationProvider getName();
 
     private String getInput() {
-        log.info("What would you like to do?"); //TODO translate
+        localizationService.writeMessage(LocalizedText.WHAT_WOULD_YOU_LIKE_TO_DO);
 
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -67,10 +72,11 @@ public abstract class MenuBase<OPTION extends MenuOption> {
     private void printOptions() {
         log.info("");
         log.info("");
-        log.info(getName());
+        localizationService.writeMessage(getName());
 
         options.stream()
             .map(option -> option.getLabel(options))
+            .map(localizationService::getMessage)
             .sorted(String::compareTo)
             .forEach(log::info);
     }
@@ -82,8 +88,8 @@ public abstract class MenuBase<OPTION extends MenuOption> {
         }
 
         @Override
-        public String getName() {
-            return "Exit";//TODO translate
+        public LocalizedText getName() {
+            return LocalizedText.EXIT;
         }
 
         @Override
