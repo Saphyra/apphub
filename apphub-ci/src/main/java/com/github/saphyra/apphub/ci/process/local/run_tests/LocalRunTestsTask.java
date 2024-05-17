@@ -15,7 +15,7 @@ class LocalRunTestsTask {
     private final PropertyDao propertyDao;
     private final TestProperties testProperties;
 
-    public void runTests() {
+    public void runTests(String testGroups) {
         Integer threadCount = propertyDao.getLocalRunTestsThreadCount();
 
         List<String> command = List.of(
@@ -35,6 +35,7 @@ class LocalRunTestsTask {
             "-DrestLoggingEnabled=false",
             "-DdatabaseName=%s".formatted(testProperties.getLocalDatabaseName()),
             "-DintegrationServerEnabled=true",
+            "-DenabledGroups=%s".formatted(testGroups),
             "\"",
             "clean",
             "test"

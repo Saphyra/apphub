@@ -18,7 +18,11 @@ public class LocalRunTestsProcess {
     private final LocalRunTestsTask localRunTestsTask;
     private final KillChromeDriverTask killChromeDriverTask;
 
-    public void run() {
+    public void run(){
+        run("");
+    }
+
+    public void run(String testGroups) {
         log.info("");
         log.info("Running tests again local environment...");
 
@@ -28,7 +32,7 @@ public class LocalRunTestsProcess {
         }
 
         integrationServerStarter.start();
-        localRunTestsTask.runTests();
+        localRunTestsTask.runTests(testGroups);
 
         killChromeDriverTask.run();
     }

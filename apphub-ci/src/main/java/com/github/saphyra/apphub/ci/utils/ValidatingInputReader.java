@@ -16,6 +16,15 @@ public class ValidatingInputReader {
         return getInput(label, Function.identity(), validation);
     }
 
+    /**
+     * Returns a validated input of a given type.
+     *
+     * @param label      The text to display before asking for user input.
+     * @param mapper     Conversion between the text entered by the user, and the desired type
+     * @param validation Should return empty, if the input is valid. Should return error message if input is invalid.
+     * @return  the validated, mapped input
+     * @param <T> Return type
+     */
     public <T> T getInput(String label, Function<String, T> mapper, Function<T, Optional<String>> validation) {
         while (true) {
             log.info("");
