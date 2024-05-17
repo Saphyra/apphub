@@ -10,5 +10,9 @@
     "home": {
         "en": "Home",
         "hu": "Kezdőlap"
+    },
+    "total-value": {
+        "en": "Total value of stock",
+        "hu": "A készlet összértéke"
     }
 }

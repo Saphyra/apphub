@@ -81,4 +81,13 @@ public class VillanyAteszNavigation {
             .until(() -> WebElementUtils.isPresent(() -> driver.findElement(By.id("villany-atesz-stock-inventory-items-search"))))
             .assertTrue("Inventory page is not loaded.");
     }
+
+    public static void openIndex(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-index"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("villany-atesz-total-stock-value"))).isPresent())
+            .assertTrue("Index page is not loaded.");
+    }
 }

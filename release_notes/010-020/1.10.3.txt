@@ -1,4 +1,6 @@
 ===FEATURES===
+    VillanyAtesz
+        Display total stock value
 
 ===BUGFIXES===
 

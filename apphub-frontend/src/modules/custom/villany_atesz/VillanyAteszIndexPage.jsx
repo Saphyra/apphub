@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
 import Header from "../../../common/component/Header";
@@ -11,10 +11,16 @@ import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import VillanyAteszNavigation from "./navigation/VillanyAteszNavigation";
 import VillanyAteszPage from "./navigation/VillanyAteszPage";
+import useLoader from "../../../common/hook/Loader";
+import Endpoints from "../../../common/js/dao/dao";
 
 const VillanyAteszIndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [totalValue, setTotalValue] = useState(0);
+
+    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_VALUE.createRequest(), (response) => setTotalValue(response.value));
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
@@ -25,6 +31,13 @@ const VillanyAteszIndexPage = () => {
 
             <main>
                 <VillanyAteszNavigation page={VillanyAteszPage.INDEX} />
+
+                <div id="villany-atesz-total-stock-value">
+                    <span>{localizationHandler.get("total-value")}</span>
+                    <span>: </span>
+                    <span id="villany-atesz-total-stock-value-value">{totalValue}</span>
+                    <span> Ft</span>
+                </div>
             </main>
 
             <Footer

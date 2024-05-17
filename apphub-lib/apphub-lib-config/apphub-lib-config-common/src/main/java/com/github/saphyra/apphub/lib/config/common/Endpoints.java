@@ -356,4 +356,5 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE = "/api/villany-atesz/stock/item/bar-code";
     public static final String VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID = "/api/villany-atesz/stock/item/{stockItemId}/bar-code";
     public static final String VILLANY_ATESZ_CART_EDIT_MARGIN = "/api/villany-atesz/cart/{cartId}/margin";
+    public static final String VILLANY_ATESZ_INDEX_TOTAL_VALUE = "/api/villany-atesz/index/total-value";
 }
