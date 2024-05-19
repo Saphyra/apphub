@@ -2,23 +2,41 @@ package com.github.saphyra.apphub.ci.process.local.start;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.value.LocalRunMode;
+import com.github.saphyra.apphub.ci.value.Service;
+import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class LocalBuildTask {
     private final PropertyDao propertyDao;
+    private final Services services;
+
+    public boolean buildServices() {
+        return buildServices(new String[0]);
+    }
+
+    public boolean buildServices(String[] serviceNames) {
+        List<String> moduleNames = Arrays.stream(serviceNames)
+            .map(services::findByNameValidated)
+            .map(Service::getModuleName)
+            .toList();
+
+        return buildServices(moduleNames);
+    }
 
     /**
      * @return true, if maven build is successful, false otherwise.
      */
-    public boolean buildServices() {
+    public boolean buildServices(List<String> moduleNames) {
         LocalRunMode localRunMode = propertyDao.getLocalRunMode();
         if (localRunMode == LocalRunMode.SKIP_BUILD) {
             return true;
@@ -32,9 +50,16 @@ public class LocalBuildTask {
         command.add(String.valueOf(propertyDao.getThreadCount(localRunMode)));
         command.add("clean");
         command.add("package");
-        if(localRunMode == LocalRunMode.SKIP_TESTS){
+        if (!moduleNames.isEmpty()) {
+            command.add("-pl");
+            command.add(moduleNames.stream().map(service -> ":" + service).collect(Collectors.joining(",")));
+            command.add("-am");
+        }
+        if (localRunMode == LocalRunMode.SKIP_TESTS) {
             command.add("-DskipTests");
         }
+
+        log.info("Command line: {}", String.join(" ", command));
 
         String[] array = new String[command.size()];
 

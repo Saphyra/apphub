@@ -38,6 +38,9 @@ public enum LocalizedText implements LocalizationProvider {
     LANGUAGE_CHANGED("Nyelv modositva.", "Language changed."),
     INVALID_COMMAND("Ervenytelen parancs.", "Invalid command."),
     WHAT_WOULD_YOU_LIKE_TO_DO("Mit szeretnel csinalni?", "What would you like to do?"),
+    LOCAL_START_SERVICE("Komponensek indítása", "Start services"),
+    SERVICES_TO_START("Indítandó komponensek:", "Services to start:"),
+    SERVICE_NOT_FOUND("%s nevű komponens nem található.", "Service with name %s not found."),
     ;
 
     private final String hu;
