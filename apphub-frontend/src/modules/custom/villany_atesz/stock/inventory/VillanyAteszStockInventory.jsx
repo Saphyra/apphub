@@ -37,7 +37,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
                         .indexOf(search.toLocaleLowerCase()) > -1;
             })
             .sorted((a, b) => {
-                const r = (categories[a] || "").localeCompare(categories[b]);
+                const r = (categories[a.stockCategoryId]).localeCompare(categories[b.stockCategoryId]);
 
                 if (r === 0) {
                     return a.name.localeCompare(b.name);
