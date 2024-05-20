@@ -17,7 +17,7 @@ class LocalRunTestsMenuOption implements LocalRunMenuOption {
 
     @Override
     public LocalizedText getName() {
-        return LocalizedText.LOCAL_RUN_TESTS;
+        return LocalizedText.RUN_TESTS;
     }
 
     @Override

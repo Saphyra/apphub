@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.ci.process.local.stop;
 
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
-import com.github.saphyra.apphub.ci.value.TestProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 public class LocalStopProcess {
     private final Services services;
     private final ProcessKiller processKiller;
-    private final TestProperties testProperties;
+    private final PlatformProperties testProperties;
 
-    public void run() {
+    public void stopServices() {
         log.info("Stopping local server...");
 
         stop(testProperties.getIntegrationServer());

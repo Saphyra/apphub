@@ -22,7 +22,7 @@ class LocalRunMenuStopMenuOption implements LocalRunMenuOption {
 
     @Override
     public boolean process() {
-        localStopProcess.run();
+        localStopProcess.stopServices();
 
         return false;
     }

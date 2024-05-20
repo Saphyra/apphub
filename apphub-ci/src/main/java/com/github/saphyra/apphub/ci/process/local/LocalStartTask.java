@@ -20,7 +20,7 @@ public class LocalStartTask implements Runnable {
         new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx512m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=local", "-jar", service.getLocation())
             .start();
 
-        servicePinger.pingService(service.getPort())
+        servicePinger.pingLocal(service.getPort())
             .ifPresent(cause -> {
                 throw new IllegalStateException(service.getName() + " failed to start.", cause);
             });

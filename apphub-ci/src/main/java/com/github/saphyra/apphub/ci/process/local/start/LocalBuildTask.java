@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.process.local.start;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.value.LocalRunMode;
+import com.github.saphyra.apphub.ci.value.DeployMode;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +37,8 @@ public class LocalBuildTask {
      * @return true, if maven build is successful, false otherwise.
      */
     public boolean buildServices(List<String> moduleNames) {
-        LocalRunMode localRunMode = propertyDao.getLocalRunMode();
-        if (localRunMode == LocalRunMode.SKIP_BUILD) {
+        DeployMode deployMode = propertyDao.getLocalDeployMode();
+        if (deployMode == DeployMode.SKIP_BUILD) {
             return true;
         }
 
@@ -47,7 +47,7 @@ public class LocalBuildTask {
         command.add("/c");
         command.add("mvn");
         command.add("-T");
-        command.add(String.valueOf(propertyDao.getThreadCount(localRunMode)));
+        command.add(String.valueOf(propertyDao.getThreadCount(deployMode)));
         command.add("clean");
         command.add("package");
         if (!moduleNames.isEmpty()) {
@@ -55,7 +55,7 @@ public class LocalBuildTask {
             command.add(moduleNames.stream().map(service -> ":" + service).collect(Collectors.joining(",")));
             command.add("-am");
         }
-        if (localRunMode == LocalRunMode.SKIP_TESTS) {
+        if (deployMode == DeployMode.SKIP_TESTS) {
             command.add("-DskipTests");
         }
 

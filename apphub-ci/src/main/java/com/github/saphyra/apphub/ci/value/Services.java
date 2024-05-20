@@ -11,6 +11,11 @@ import java.util.Optional;
 @Data
 @Configuration
 public class Services {
+    public static final Service FRONTEND = Service.builder()
+        .name("frontend")
+        .group(0)
+        .build();
+
     private List<Service> services;
 
     public Optional<Service> findByName(String serviceName) {

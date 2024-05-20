@@ -15,7 +15,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class LocalRunEditIntegrationTestThreadCountMenuOption implements LocalRunEditPropertiesMenuOption {
+class LocalRunEditIntegrationTestThreadCountMenuOption implements LocalRunEditConfigurationMenuOption {
     private final PropertyDao propertyDao;
     private final ValidatingInputReader validatingInputReader;
     private final LocalizationService localizationService;

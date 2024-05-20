@@ -14,7 +14,7 @@ public class LocalStartProcess {
     private final ServiceStarter serviceStarter;
 
     public void run() {
-        localStopProcess.run();
+        localStopProcess.stopServices();
         if(!localBuildTask.buildServices()){
             log.error("Build failed. Startup sequence stopped.");
             return;

@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class DefaultProperties {
     private String defaultLocale;
-    private LocalRunMode localRunMode;
-    private Integer localRunThreadCountDefault;
-    private Integer localRunThreadCountSkipTests;
+    private DeployMode localDeployMode;
+    private DeployMode remoteDeployMode;
+    private Integer buildThreadCountDefault;
+    private Integer buildThreadCountSkipTests;
     private Integer localRunTestsThreadCount;
+    private Integer remoteTestsThreadCount;
 }

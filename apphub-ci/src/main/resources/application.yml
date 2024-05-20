@@ -21,21 +21,33 @@ liquibase:
   changelog:
     location: classpath:changelog.xml
 
-defaults:
-  defaultLocale: en
-  localRunMode: DEFAULT
-  localRunThreadCountDefault: 6
-  localRunThreadCountSkipTests: 24
-  localRunTestsThreadCount: 20
+platform:
+  minikubeProdServerPort: 9000
+  minikubeDevServerPort: 9001
+  minikubeTestServerPort: 8070
+  localServerPort: 8080
 
-test:
+  minikubeDatabasePort: 9002
+  minikubeTestDatabasePort: 8071
+  localDatabasePort: 5432
+
+  minikubeDatabaseName: postgres
+  localDatabaseName: apphub
+  prodDatabaseName: apphub_production
+
   integrationServer:
     name: integration-server
     port: 8072
     location: "./apphub-integration-server/target/application.jar"
-  localServerPort: 8080
-  localDatabasePort: 5432
-  localDatabaseName: apphub
+
+defaults:
+  defaultLocale: en
+  localDeployMode: DEFAULT
+  remoteDeployMode: DEFAULT
+  buildThreadCountDefault: 6
+  buildThreadCountSkipTests: 24
+  localRunTestsThreadCount: 20
+  remoteTestsThreadCount: 6
 
 services:
 #Crutial platform
@@ -118,7 +130,7 @@ services:
   moduleName: apphub-service-utils
   group: 4
 - name: training
-  port:  8086
+  port: 8086
   location: "./apphub-service/apphub-service-training/target/application.jar"
   moduleName: apphub-service-training
   group: 4

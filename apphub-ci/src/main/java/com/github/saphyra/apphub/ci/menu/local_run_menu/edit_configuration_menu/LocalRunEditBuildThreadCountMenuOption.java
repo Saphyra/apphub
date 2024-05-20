@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu;
 
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
-import com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.local_run_thread_count_editer.LocalRunThreadCountEditerMenu;
+import com.github.saphyra.apphub.ci.menu.thread_count_editer.ThreadCountEditerMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunEditBuildThreadCountMenuOption implements LocalRunEditPropertiesMenuOption {
-    private final LocalRunThreadCountEditerMenu localRunThreadCountEditerMenu;
+class LocalRunEditBuildThreadCountMenuOption implements LocalRunEditConfigurationMenuOption {
+    private final ThreadCountEditerMenu threadCountEditerMenu;
 
     @Override
     public String getCommand() {
@@ -22,7 +22,7 @@ class LocalRunEditBuildThreadCountMenuOption implements LocalRunEditPropertiesMe
 
     @Override
     public boolean process() {
-        localRunThreadCountEditerMenu.enter();
+        threadCountEditerMenu.enter();
 
         return false;
     }

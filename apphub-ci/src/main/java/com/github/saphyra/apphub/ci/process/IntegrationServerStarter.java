@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
+import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
-import com.github.saphyra.apphub.ci.value.TestProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,12 +12,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class IntegrationServerStarter {
-    private final TestProperties testProperties;
+    private final PlatformProperties testProperties;
     private final ServicePinger servicePinger;
 
     public void start() {
+        log.info("Starting integration server...");
         Service integrationServer = testProperties.getIntegrationServer();
-        if (servicePinger.singlePing(integrationServer.getPort()).isPresent()) {
+        if (servicePinger.singlePingLocal(integrationServer.getPort()).isPresent()) {
             new LocalStartTask(servicePinger, integrationServer)
                 .run();
         }else{
