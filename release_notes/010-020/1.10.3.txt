@@ -1,0 +1,11 @@
+===FEATURES===
+    VillanyAtesz
+        Display total stock value
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
