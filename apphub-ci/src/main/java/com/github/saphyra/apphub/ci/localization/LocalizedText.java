@@ -16,7 +16,7 @@ public enum LocalizedText implements LocalizationProvider {
     EDIT_CONFIGURATION("Konfiguracio szerkesztese", "Edit configuration"),
     START("Inditas", "Start"),
     STOP("Leallitas", "Stop"),
-    LOCAL_RUN_TEST_GROUPS("Teszt csoportok futtatasa", "Run Test Groups"),
+    RUN_TEST_GROUPS("Teszt csoportok futtatasa", "Run Test Groups"),
     RUN_TESTS("Tesztek futtatasa", "Run Tests"),
     LOCAL_RUN("Helyi futtatas", "Local run"),
     SETTINGS("Beallitasok", "Settings"),

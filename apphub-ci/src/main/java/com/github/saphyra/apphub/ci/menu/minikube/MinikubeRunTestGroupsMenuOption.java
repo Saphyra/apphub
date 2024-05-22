@@ -1,7 +1,8 @@
-package com.github.saphyra.apphub.ci.menu.local_run_menu;
+package com.github.saphyra.apphub.ci.menu.minikube;
 
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
-import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
+import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,17 +11,17 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunTestGroupsMenuOption implements LocalRunMenuOption {
+class MinikubeRunTestGroupsMenuOption implements MinikubeMenuOption {
+    private final MinikubeLocalRunTestsProcess minikubeLocalRunTestsProcess;
     private final ValidatingInputReader validatingInputReader;
-    private final LocalRunTestsProcess localRunTestsProcess;
 
     @Override
     public String getCommand() {
-        return "5";
+        return "7";
     }
 
     @Override
-    public LocalizedText getName() {
+    public LocalizationProvider getName() {
         return LocalizedText.RUN_TEST_GROUPS;
     }
 
@@ -37,7 +38,7 @@ class LocalRunTestGroupsMenuOption implements LocalRunMenuOption {
             }
         );
 
-        localRunTestsProcess.run(testGroups);
+        minikubeLocalRunTestsProcess.runTests(testGroups);
 
         return false;
     }

@@ -27,6 +27,10 @@ public class MinikubeLocalRunTestsProcess {
     private final RunTestsTask runTestsTask;
 
     public void runTests() {
+        runTests("");
+    }
+
+    public void runTests(String testGroups) {
         try {
             log.info("");
             String namespaceName = namespaceNameProvider.getBranchName();
@@ -42,7 +46,7 @@ public class MinikubeLocalRunTestsProcess {
 
             integrationServerStarter.start();
 
-            runTestsTask.remoteRunTests("");
+            runTestsTask.remoteRunTests(testGroups);
 
         } catch (Exception e) {
             log.error("Test run failed.", e);
