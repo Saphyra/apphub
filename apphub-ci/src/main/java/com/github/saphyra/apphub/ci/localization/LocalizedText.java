@@ -19,7 +19,7 @@ public enum LocalizedText implements LocalizationProvider {
     LOCAL_RUN_TEST_GROUPS("Teszt csoportok futtatasa", "Run Test Groups"),
     RUN_TESTS("Tesztek futtatasa", "Run Tests"),
     LOCAL_RUN("Helyi futtatas", "Local run"),
-    SETTINGS("Beallitasok", "Local Settings"),
+    SETTINGS("Beallitasok", "Settings"),
     ENGLISH("Angol", "English"),
     HUNGARIAN("Magyar", "Hungarian"),
     CHANGE_LANGUAGE("Nyelv modositasa", "Change language"),
@@ -39,13 +39,14 @@ public enum LocalizedText implements LocalizationProvider {
     LANGUAGE_CHANGED("Nyelv modositva.", "Language changed."),
     INVALID_COMMAND("Ervenytelen parancs.", "Invalid command."),
     WHAT_WOULD_YOU_LIKE_TO_DO("Mit szeretnel csinalni?", "What would you like to do?"),
-    LOCAL_START_SERVICE("Komponensek indítása", "Start services"),
+    LOCAL_START_SERVICES("Komponensek indítása", "Start services"),
     SERVICES_TO_START("Indítandó komponensek:", "Services to start:"),
     SERVICE_NOT_FOUND("%s nevű komponens nem található.", "Service with name %s not found."),
     MINIKUBE("Minikube", "Minikube"),
     MINIKUBE_START("Virtuális gép indítása", "Start VM"),
     MINIKUBE_STOP("Virtuális gép leállítása", "Stop VM"),
     MINIKUBE_DEPLOY("Virtuális gépre telepít", "Deploy to VM"),
+    MINIKUBE_DEPLOY_SERVICES("Komponensek virtuális gépre telepítése", "Deploy services to VM"),
     ;
 
     private final String hu;

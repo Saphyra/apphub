@@ -18,7 +18,7 @@ class LocalRunMenuStartServiceMenuOption implements LocalRunMenuOption {
 
     @Override
     public LocalizationProvider getName() {
-        return LocalizedText.LOCAL_START_SERVICE;
+        return LocalizedText.LOCAL_START_SERVICES;
     }
 
     @Override

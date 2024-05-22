@@ -5,8 +5,6 @@ TODO disable startup of optional services
 TODO set max number of services starting up at the same time
 TODO if services are not running when triggering local run tests, start them automatically. Make it configurable.
 TODO reorder menu options
-TODO edit remote deploy mode
 TODO minikube delete current namespace option
-TODO minikube deploy service
 TODO minikube run test groups
 TODO minikube production release options

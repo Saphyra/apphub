@@ -19,6 +19,17 @@ public class MinikubeServiceDeployer {
     private final Services services;
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
 
+    public void deploy(String namespaceName, String serviceDir, List<String> servicesToStart) {
+        services.getServices()
+            .stream()
+            .filter(service -> servicesToStart.contains(service.getName()))
+            .collect(Collectors.groupingBy(Service::getGroup))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue()));
+    }
+
     public void deploy(String namespaceName, String serviceDir) {
         Stream.concat(services.getServices().stream(), Stream.of(Services.FRONTEND))
             .collect(Collectors.groupingBy(Service::getGroup))

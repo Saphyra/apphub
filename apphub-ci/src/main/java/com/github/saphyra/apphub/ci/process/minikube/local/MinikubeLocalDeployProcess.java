@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +27,24 @@ public class MinikubeLocalDeployProcess {
     private final PortForwardTask portForwardTask;
     private final NamespaceNameProvider namespaceNameProvider;
     private final PlatformProperties platformProperties;
+
+    public void deploy(List<String> servicesToStart){
+        localStopProcess.stopServices();
+
+        if (!minikubeBuildTask.buildServices(servicesToStart)) {
+            log.error("Build failed. Startup sequence stopped.");
+            return;
+        }
+
+        String namespaceName = namespaceNameProvider.getBranchName();
+
+        minikubeServiceDeployer.deploy(namespaceName, "develop", servicesToStart);
+
+        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+
+        log.info("Deployment finished.");
+    }
 
     public void deploy() {
         localStopProcess.stopServices();
