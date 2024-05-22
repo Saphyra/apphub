@@ -47,6 +47,8 @@ public enum LocalizedText implements LocalizationProvider {
     MINIKUBE_STOP("Virtuális gép leállítása", "Stop VM"),
     MINIKUBE_DEPLOY("Virtuális gépre telepít", "Deploy to VM"),
     MINIKUBE_DEPLOY_SERVICES("Komponensek virtuális gépre telepítése", "Deploy services to VM"),
+    DELETE_NAMESPACE("Környezet törlése", "Delete namespace"),
+    CONFIRM_DELETE_NAMESPACE("Biztosan törlöd %s környezetet?", "Are you sure you want to delete namespace %s?"),
     ;
 
     private final String hu;
