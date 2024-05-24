@@ -13,31 +13,58 @@ import java.util.List;
 @Slf4j
 public class RunTestsTask {
     private final PropertyDao propertyDao;
-    private final PlatformProperties testProperties;
+    private final PlatformProperties platformProperties;
+    private final KillChromeDriverTask killChromeDriverTask;
 
     public void localRunTests(String testGroups) {
-        runTests(
-            testGroups,
-            propertyDao.getLocalRunTestsThreadCount(),
-            testProperties.getLocalServerPort(),
-            testProperties.getLocalDatabasePort(),
-            testProperties.getLocalDatabaseName()
-        );
+        try {
+            runTests(
+                testGroups,
+                propertyDao.getLocalRunTestsThreadCount(),
+                platformProperties.getLocalServerPort(),
+                platformProperties.getLocalDatabasePort(),
+                platformProperties.getLocalDatabaseName(),
+                ""
+            );
+        } finally {
+            killChromeDriverTask.run();
+        }
+
     }
 
     public void remoteRunTests(String testGroups) {
         log.info("Running remote tests. Enabled test groups: {}", testGroups.isEmpty() ? "All" : testGroups);
-
-        runTests(
-            testGroups,
-            propertyDao.getRemoteRunTestsThreadCount(),
-            testProperties.getMinikubeTestServerPort(),
-            testProperties.getMinikubeTestDatabasePort(),
-            testProperties.getMinikubeDatabaseName()
-        );
+        try {
+            runTests(
+                testGroups,
+                propertyDao.getRemoteRunTestsThreadCount(),
+                platformProperties.getMinikubeTestServerPort(),
+                platformProperties.getMinikubeTestDatabasePort(),
+                platformProperties.getMinikubeDatabaseName(),
+                ""
+            );
+        } finally {
+            killChromeDriverTask.run();
+        }
     }
 
-    private void runTests(String testGroups, Integer threadCount, Integer serverPort, Integer databasePort, String databaseName) {
+    public void productionRunTests() {
+        log.info("Running production tests. Disabled test groups: {}", platformProperties.getProdDisabledTestGroups().isEmpty() ? "None" : platformProperties.getProdDisabledTestGroups());
+        try {
+            runTests(
+                "",
+                propertyDao.getRemoteRunTestsThreadCount(),
+                platformProperties.getMinikubeTestServerPort(),
+                platformProperties.getLocalDatabasePort(),
+                platformProperties.getProdDatabaseName(),
+                String.join(",", platformProperties.getProdDisabledTestGroups())
+            );
+        } finally {
+            killChromeDriverTask.run();
+        }
+    }
+
+    private void runTests(String enabledGroups, Integer threadCount, Integer serverPort, Integer databasePort, String databaseName, String disabledGroups) {
         List<String> command = List.of(
             "cmd",
             "/c",
@@ -55,7 +82,8 @@ public class RunTestsTask {
             "-DrestLoggingEnabled=false",
             "-DdatabaseName=%s".formatted(databaseName),
             "-DintegrationServerEnabled=true",
-            "-DenabledGroups=%s".formatted(testGroups),
+            "-DenabledGroups=%s".formatted(enabledGroups),
+            "-DdisabledGroups=%s".formatted(disabledGroups),
             "\"",
             "clean",
             "test"

@@ -31,14 +31,14 @@ public class MinikubeLocalDeployProcess {
     public void deploy(List<String> servicesToStart){
         localStopProcess.stopServices();
 
-        if (!minikubeBuildTask.buildServices(servicesToStart)) {
+        if (!minikubeBuildTask.installServices(servicesToStart)) {
             log.error("Build failed. Startup sequence stopped.");
             return;
         }
 
         String namespaceName = namespaceNameProvider.getBranchName();
 
-        minikubeServiceDeployer.deploy(namespaceName, "develop", servicesToStart);
+        minikubeServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, servicesToStart);
 
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
@@ -49,7 +49,7 @@ public class MinikubeLocalDeployProcess {
     public void deploy() {
         localStopProcess.stopServices();
 
-        if (!minikubeBuildTask.buildServices()) {
+        if (!minikubeBuildTask.installServices()) {
             log.error("Build failed. Startup sequence stopped.");
             return;
         }

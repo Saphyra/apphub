@@ -23,6 +23,7 @@ liquibase:
 
 platform:
   minikubeProdServerPort: 9000
+  minikubeProdMainGatewayPort: 8060
   minikubeDevServerPort: 9001
   minikubeTestServerPort: 8070
   localServerPort: 8080
@@ -39,6 +40,15 @@ platform:
     name: integration-server
     port: 8072
     location: "./apphub-integration-server/target/application.jar"
+
+  productionProxy:
+    name: production-proxy
+    port: 9000
+    location: "./apphub-proxy/target/proxy.jar"
+
+  prodDisabledTestGroups:
+    - skyxplore
+    - community
 
 defaults:
   defaultLocale: en

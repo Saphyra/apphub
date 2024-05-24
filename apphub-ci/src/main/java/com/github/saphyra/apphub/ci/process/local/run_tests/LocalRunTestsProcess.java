@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.ci.process.local.run_tests;
 
 import com.github.saphyra.apphub.ci.process.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.process.KillChromeDriverTask;
 import com.github.saphyra.apphub.ci.process.RunTestsTask;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -17,7 +16,6 @@ public class LocalRunTestsProcess {
     private final Services services;
     private final IntegrationServerStarter integrationServerStarter;
     private final RunTestsTask runTestsTask;
-    private final KillChromeDriverTask killChromeDriverTask;
 
     public void run(){
         run("");
@@ -34,7 +32,5 @@ public class LocalRunTestsProcess {
 
         integrationServerStarter.start();
         runTestsTask.localRunTests(testGroups);
-
-        killChromeDriverTask.run();
     }
 }

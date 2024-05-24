@@ -49,6 +49,12 @@ public enum LocalizedText implements LocalizationProvider {
     MINIKUBE_DEPLOY_SERVICES("Komponensek virtuális gépre telepítése", "Deploy services to VM"),
     DELETE_NAMESPACE("Környezet törlése", "Delete namespace"),
     CONFIRM_DELETE_NAMESPACE("Biztosan törlöd %s környezetet?", "Are you sure you want to delete namespace %s?"),
+    PRODUCTION("Prod szerver", "Production server"),
+    PRODUCTION_RELEASE("Telepítés prod szerverre", "Production release"),
+    DOCKER_HUB_USERNAME("DockerHub felhasználónév:", "DockerHub username:"),
+    DOCKER_HUB_PASSWORD("DockerHub jelszó:", "DockerHub password:"),
+    MUST_NOT_BE_BLANK("Nem lehet üres!", "Must not be blank."),
+    PRODUCTION_PROXY("ProdProxy indítása", "Start Production Proxy"),
     ;
 
     private final String hu;

@@ -45,7 +45,7 @@ public class MinikubeServiceDeployer {
 
         serviceList.forEach(service -> deploy(namespaceName, serviceDir, service));
 
-        minikubePodStartupWaiter.waitForPods();
+        minikubePodStartupWaiter.waitForPods(namespaceName);
     }
 
     @SneakyThrows
