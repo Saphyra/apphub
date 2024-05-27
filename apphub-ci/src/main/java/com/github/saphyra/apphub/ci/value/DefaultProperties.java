@@ -15,4 +15,5 @@ public class DefaultProperties {
     private Integer buildThreadCountSkipTests;
     private Integer localRunTestsThreadCount;
     private Integer remoteTestsThreadCount;
+    private Integer localServiceStartupCountLimit;
 }

@@ -55,6 +55,8 @@ public enum LocalizedText implements LocalizationProvider {
     DOCKER_HUB_PASSWORD("DockerHub jelszó:", "DockerHub password:"),
     MUST_NOT_BE_BLANK("Nem lehet üres!", "Must not be blank."),
     PRODUCTION_PROXY("ProdProxy indítása", "Start Production Proxy"),
+    SERVICE_STARTUP_COUNT_LIMIT("Szerver indítás limit (%s)", "Service startup count limit (%s)"),
+    STARTUP_LIMIT_SAVED("Limit elmentve.", "Limit saved."),
     ;
 
     private final String hu;

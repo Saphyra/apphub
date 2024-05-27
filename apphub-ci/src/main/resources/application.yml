@@ -58,6 +58,7 @@ defaults:
   buildThreadCountSkipTests: 24
   localRunTestsThreadCount: 20
   remoteTestsThreadCount: 6
+  localServiceStartupCountLimit: 5
 
 services:
 #Crutial platform
@@ -99,63 +100,63 @@ services:
   port: 8099
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar"
   moduleName: apphub-service-platform-storage
-  group: 2
+  group: 1
 - name: encryption
   port: 8098
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
   moduleName: apphub-service-platform-encryption
-  group: 2
+  group: 1
 - name: modules
   port: 8088
   location: "./apphub-service/apphub-service-modules/target/application.jar"
   moduleName: apphub-service-modules
-  group: 2
+  group: 1
 
 #SkyXplore
 - name: skyxplore-data
   port: 8091
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar"
   moduleName: apphub-service-skyxplore-data
-  group: 3
+  group: 1
 - name: skyxplore-game
   port: 8095
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar"
   moduleName: apphub-service-skyxplore-game
-  group: 3
+  group: 1
 - name: skyxplore-lobby
   port: 8093
   location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-lobby/target/application.jar"
   moduleName: apphub-service-skyxplore-lobby
-  group: 3
+  group: 1
 
 #Feature
 - name: villany-atesz
   port: 8084
   location: "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar"
   moduleName: apphub-service-custom-villany_atesz
-  group: 4
+  group: 1
 - name: utils
   port: 8100
   location: "./apphub-service/apphub-service-utils/target/application.jar"
   moduleName: apphub-service-utils
-  group: 4
+  group: 1
 - name: training
   port: 8086
   location: "./apphub-service/apphub-service-training/target/application.jar"
   moduleName: apphub-service-training
-  group: 4
+  group: 1
 - name: notebook
   port: 8090
   location: "./apphub-service/apphub-service-notebook/target/application.jar"
   moduleName: apphub-service-notebook
-  group: 4
+  group: 1
 - name: community
   port: 8096
   location: "./apphub-service/apphub-service-community/target/application.jar"
   moduleName: apphub-service-community
-  group: 4
+  group: 1
 - name: calendar
   port: 8097
   location: "./apphub-service/apphub-service-calendar/target/application.jar"
   moduleName: apphub-service-calendar
-  group: 4
+  group: 1

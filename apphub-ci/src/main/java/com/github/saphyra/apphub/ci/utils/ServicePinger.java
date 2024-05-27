@@ -31,7 +31,7 @@ public class ServicePinger {
 
     public Optional<Exception> pingService(int timeoutSeconds, Supplier<Optional<Exception>> apiCall) {
         Exception cause = null;
-        for (int i = 0; i < timeoutSeconds; i++) {
+        for (int i = 0; i < timeoutSeconds * 10; i++) {
             Optional<Exception> maybeException = apiCall.get();
             if (maybeException.isPresent()) {
                 cause = maybeException.get();
@@ -40,7 +40,7 @@ public class ServicePinger {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 cause = e;
                 break;

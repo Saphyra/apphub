@@ -69,4 +69,11 @@ public class PropertyDao {
             .map(property -> Language.valueOf(property.getValue()))
             .orElseGet(() -> Language.valueOf(defaultProperties.getDefaultLocale()));
     }
+
+    public Integer getStartupCountLimit() {
+        return propertyRepository.findById(PropertyName.LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getLocalServiceStartupCountLimit);
+    }
 }
