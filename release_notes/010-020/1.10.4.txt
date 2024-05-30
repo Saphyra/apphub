@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    VillanyAtesz
+        Stock Inventory order is now working
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
