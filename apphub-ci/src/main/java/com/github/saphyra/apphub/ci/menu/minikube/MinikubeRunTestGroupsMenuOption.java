@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +13,14 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class MinikubeRunTestGroupsMenuOption implements MinikubeMenuOption {
+class MinikubeRunTestGroupsMenuOption implements MenuOption {
     private final MinikubeLocalRunTestsProcess minikubeLocalRunTestsProcess;
     private final ValidatingInputReader validatingInputReader;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.MINIKUBE_MENU;
+    }
 
     @Override
     public String getCommand() {

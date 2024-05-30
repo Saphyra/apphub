@@ -2,15 +2,17 @@ package com.github.saphyra.apphub.ci.menu.minikube.edit_configuration_menu.mode_
 
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuBase;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class MinikubeModeSelectorMenu extends MenuBase<MinikubeModeSelectorOption> {
-    MinikubeModeSelectorMenu(List<MinikubeModeSelectorOption> minikubeModeSelectorOptions, LocalizationService localizationService) {
-        super(minikubeModeSelectorOptions, localizationService);
+public class MinikubeModeSelectorMenu extends MenuBase {
+    MinikubeModeSelectorMenu(List<MenuOption> menuOptions, LocalizationService localizationService) {
+        super(menuOptions, localizationService, Menu.MINIKUBE_MODE_SELECTOR_MENU);
     }
 
     @Override

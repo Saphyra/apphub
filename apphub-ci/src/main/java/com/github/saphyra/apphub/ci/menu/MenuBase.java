@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.ci.menu;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -12,16 +14,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-public abstract class MenuBase<OPTION extends MenuOption> {
+public abstract class MenuBase {
     protected final List<MenuOption> options;
+    private final Menu menu;
     private final MenuOption exitOption;
     private final LocalizationService localizationService;
 
-    public MenuBase(List<OPTION> options, LocalizationService localizationService) {
+    public MenuBase(List<MenuOption> options, LocalizationService localizationService, Menu menu) {
         this.localizationService = localizationService;
-        this.exitOption = new ExitOption();
-        this.options = Stream.concat(options.stream(), Stream.of(exitOption))
-            .collect(Collectors.toList());
+        this.exitOption = new ExitOption(menu);
+        this.options = options;
+        this.menu = menu;
+    }
+
+    public MenuBase(LocalizationService localizationService, Menu menu) {
+        this(Collections.emptyList(), localizationService, menu);
     }
 
     public void enter() {
@@ -48,7 +55,7 @@ public abstract class MenuBase<OPTION extends MenuOption> {
 
             String input = getInput();
 
-            Optional<MenuOption> maybeResult = options.stream()
+            Optional<MenuOption> maybeResult = getOptionsWithExitOption()
                 .filter(option -> option.getCommand().equals(input))
                 .findFirst();
 
@@ -58,6 +65,16 @@ public abstract class MenuBase<OPTION extends MenuOption> {
                 localizationService.writeMessage(LocalizedText.INVALID_COMMAND);
             }
         }
+    }
+
+    private Stream<MenuOption> getOptionsWithExitOption() {
+        return Stream.concat(getOptions().stream(), Stream.of(exitOption));
+    }
+
+    protected List<MenuOption> getOptions() {
+        return options.stream()
+            .filter(menuOption -> menuOption.getMenu() == menu)
+            .collect(Collectors.toList());
     }
 
     protected abstract LocalizationProvider getName();
@@ -74,14 +91,22 @@ public abstract class MenuBase<OPTION extends MenuOption> {
         log.info("");
         localizationService.writeMessage(getName());
 
-        options.stream()
-            .map(option -> option.getLabel(options))
+        getOptionsWithExitOption()
+            .map(option -> option.getLabel(getOptionsWithExitOption()))
             .map(localizationService::getMessage)
             .sorted(String::compareTo)
             .forEach(log::info);
     }
 
+    @RequiredArgsConstructor
     private static class ExitOption implements MenuOption {
+        private final Menu menu;
+
+        @Override
+        public Menu getMenu() {
+            return menu;
+        }
+
         @Override
         public String getCommand() {
             return "0";

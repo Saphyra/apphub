@@ -3,15 +3,23 @@ package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu.mode_selector.LocalRunModeSelectorMenu;
+import com.github.saphyra.apphub.ci.utils.ApplicationContextProxy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunEditModeMenuOption implements LocalRunEditConfigurationMenuOption {
-    private final LocalRunModeSelectorMenu localRunModeSelectorMenu;
+class LocalRunEditModeMenuOption implements MenuOption {
+    private final ApplicationContextProxy applicationContextProxy;
     private final PropertyDao propertyDao;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.LOCAL_RUN_EDIT_CONFIGURATION_MENU;
+    }
 
     @Override
     public String getCommand() {
@@ -25,7 +33,7 @@ class LocalRunEditModeMenuOption implements LocalRunEditConfigurationMenuOption 
 
     @Override
     public boolean process() {
-        localRunModeSelectorMenu.enter();
+        applicationContextProxy.getBean(LocalRunModeSelectorMenu.class).enter();
 
         return false;
     }

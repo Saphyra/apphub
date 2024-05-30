@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalDeployProcess;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -12,10 +14,15 @@ import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
-class MinikubeDeployServiceMenuOption implements MinikubeMenuOption {
+class MinikubeDeployServiceMenuOption implements MenuOption {
     private final ValidatingInputReader validatingInputReader;
     private final MinikubeLocalDeployProcess minikubeLocalDeployProcess;
     private final Services services;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.MINIKUBE_MENU;
+    }
 
     @Override
     public String getCommand() {

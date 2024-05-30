@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,14 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunTestGroupsMenuOption implements LocalRunMenuOption {
+class LocalRunTestGroupsMenuOption implements MenuOption {
     private final ValidatingInputReader validatingInputReader;
     private final LocalRunTestsProcess localRunTestsProcess;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.LOCAL_RUN_MENU;
+    }
 
     @Override
     public String getCommand() {

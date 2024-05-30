@@ -19,7 +19,6 @@
 
         <!-- Lib Versions -->
         <versions.assertj-core>3.24.1</versions.assertj-core>
-        <versions.jackson-core>2.14.1</versions.jackson-core>
         <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
         <versions.rest-assured>5.3.0</versions.rest-assured>
         <versions.selenium>4.20.0</versions.selenium>
@@ -116,11 +115,13 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${versions.jackson-datatype}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.15.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

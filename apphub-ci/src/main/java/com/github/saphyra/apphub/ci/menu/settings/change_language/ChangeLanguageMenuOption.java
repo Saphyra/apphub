@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.ci.localization.Language;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,11 @@ class ChangeLanguageMenuOption implements MenuOption {
     private final Language language;
     private final PropertyDao propertyDao;
     private final LocalizationService localizationService;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.CHANGE_LANGUAGE_MENU;
+    }
 
     @Override
     public String getCommand() {

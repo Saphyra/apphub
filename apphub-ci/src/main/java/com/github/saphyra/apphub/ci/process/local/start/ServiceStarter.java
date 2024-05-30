@@ -35,8 +35,13 @@ class ServiceStarter {
     }
 
     void startServices() {
+        List<String> disabledServices = propertyDao.getDisabledServices();
+
+        log.info("The following services are disabled, they won't start: {}", disabledServices);
+
         services.getServices()
             .stream()
+            .filter(service -> !disabledServices.contains(service.getName()))
             .collect(Collectors.groupingBy(Service::getGroup))
             .entrySet()
             .stream()

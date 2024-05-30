@@ -29,9 +29,16 @@
         <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
         <versions.guava>31.1-jre</versions.guava>
         <versions.spring-web>6.1.6</versions.spring-web>
+        <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${versions.jackson-datatype}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>

@@ -1,6 +1,4 @@
 TODO add to release notes
 TODO elimination
-TODO optional - Create local namespace what starts / stops only specific services
-TODO disable startup of optional services
-TODO if services are not running when triggering local run tests, start them automatically. Make it configurable.
 TODO reorder menu options
+TODO delete deprecated files

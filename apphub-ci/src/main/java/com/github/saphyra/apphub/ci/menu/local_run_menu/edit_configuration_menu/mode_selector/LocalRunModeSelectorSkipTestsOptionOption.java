@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.value.DeployMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +15,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class LocalRunModeSelectorSkipTestsOptionOption implements LocalRunModeSelectorOption {
+class LocalRunModeSelectorSkipTestsOptionOption implements MenuOption {
     private final PropertyDao propertyDao;
     private final LocalizationService localizationService;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.LOCAL_RUN_MODE_SELECTOR_MENU;
+    }
 
     @Override
     public String getCommand() {

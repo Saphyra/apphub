@@ -1,16 +1,22 @@
 package com.github.saphyra.apphub.ci.dao;
 
 import com.github.saphyra.apphub.ci.localization.Language;
+import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.DeployMode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class PropertyDao {
     private final PropertyRepository propertyRepository;
     private final DefaultProperties defaultProperties;
+    private final ObjectMapperWrapper objectMapperWrapper;
 
     public Integer getBuildThreadCountSkipTests() {
         return propertyRepository.findById(PropertyName.BUILD_THREAD_COUNT_SKIP_TESTS)
@@ -33,6 +39,10 @@ public class PropertyDao {
 
     public void save(PropertyName propertyName, String value) {
         propertyRepository.save(new Property(propertyName, value));
+    }
+
+    public void save(PropertyName propertyName, Object value) {
+        propertyRepository.save(new Property(propertyName, objectMapperWrapper.writeValueAsString(value)));
     }
 
     public Integer getBuildThreadCountDefault() {
@@ -75,5 +85,13 @@ public class PropertyDao {
             .map(Property::getValue)
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getLocalServiceStartupCountLimit);
+    }
+
+    public List<String> getDisabledServices() {
+        List<String> disabledServices = propertyRepository.findById(PropertyName.DISABLED_SERVICES)
+            .map(Property::getValue)
+            .map(value -> objectMapperWrapper.readArrayValue(value, String[].class))
+            .orElse(Collections.emptyList());
+        return new ArrayList<>(disabledServices);
     }
 }

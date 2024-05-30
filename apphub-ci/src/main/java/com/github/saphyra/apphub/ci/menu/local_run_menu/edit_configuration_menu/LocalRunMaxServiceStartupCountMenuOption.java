@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,10 +15,15 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunMaxServiceStartupCountMenuOption implements LocalRunEditConfigurationMenuOption {
+class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
     private final PropertyDao propertyDao;
     private final ValidatingInputReader validatingInputReader;
     private final LocalizationService localizationService;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.LOCAL_RUN_EDIT_CONFIGURATION_MENU;
+    }
 
     @Override
     public String getCommand() {

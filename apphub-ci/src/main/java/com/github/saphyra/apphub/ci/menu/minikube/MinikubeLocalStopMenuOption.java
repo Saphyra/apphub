@@ -2,15 +2,21 @@ package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalStopProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class MinikubeLocalStopMenuOption implements MinikubeMenuOption {
+class MinikubeLocalStopMenuOption implements MenuOption {
     private final MinikubeLocalStopProcess minikubeLocalStopProcess;
 
+    @Override
+    public Menu getMenu() {
+        return Menu.MINIKUBE_MENU;
+    }
 
     @Override
     public String getCommand() {

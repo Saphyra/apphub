@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.Menu;
+import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeNamespaceDeletionProcess;
 import com.github.saphyra.apphub.ci.utils.BooleanParser;
@@ -13,11 +15,16 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class MinikubeDeleteNamespaceMenuOption implements MinikubeMenuOption {
+class MinikubeDeleteNamespaceMenuOption implements MenuOption {
     private final NamespaceNameProvider namespaceNameProvider;
     private final ValidatingInputReader validatingInputReader;
     private final BooleanParser booleanParser;
     private final MinikubeNamespaceDeletionProcess namespaceDeletionProcess;
+
+    @Override
+    public Menu getMenu() {
+        return Menu.MINIKUBE_MENU;
+    }
 
     @Override
     public String getCommand() {

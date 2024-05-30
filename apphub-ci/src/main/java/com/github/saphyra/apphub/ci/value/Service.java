@@ -15,4 +15,6 @@ public class Service {
     private String location;
     private String moduleName;
     private Integer group;
+    @Builder.Default
+    private Boolean optional = false;
 }
