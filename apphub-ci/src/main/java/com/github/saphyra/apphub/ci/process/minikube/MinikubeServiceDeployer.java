@@ -61,7 +61,7 @@ public class MinikubeServiceDeployer {
             .start()
             .waitFor();
 
-        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deployment/service/%s/%s.yml".formatted(serviceDir, service.getName()))
+        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/service/%s/%s.yml".formatted(serviceDir, service.getName()))
             .inheritIO()
             .start()
             .waitFor();

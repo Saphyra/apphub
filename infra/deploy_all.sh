@@ -2,9 +2,8 @@ THREAD_COUNT=$1
 USERNAME=$2
 PASSWORD=$3
 
-#TODO restore
-#git checkout master
-#git pull
+git checkout master
+git pull
 
 eval "$(minikube docker-env)"
 docker rmi -f $(docker images -a -q)

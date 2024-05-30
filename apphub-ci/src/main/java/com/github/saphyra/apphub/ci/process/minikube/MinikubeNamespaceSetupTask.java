@@ -27,12 +27,12 @@ public class MinikubeNamespaceSetupTask {
     }
 
     private static void deployPostgres(String namespaceName) throws InterruptedException, IOException {
-        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deployment/persistent-volume.yaml")
+        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/persistent-volume.yaml")
             .inheritIO()
             .start()
             .waitFor();
 
-        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deployment/deploy-postgres.yaml")
+        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-postgres.yaml")
             .inheritIO()
             .start()
             .waitFor();
