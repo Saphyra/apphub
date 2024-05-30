@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.core;
 
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.localization.Language;
 
 import java.sql.Connection;
@@ -8,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class TestConfiguration {
     //Platform
@@ -19,6 +20,7 @@ public class TestConfiguration {
         .orElse("")
         .split(","));
     public static final List<String> ENABLED_TEST_GROUPS = Arrays.asList(Optional.ofNullable(System.getProperty("enabledGroups"))
+        .filter(s -> !isBlank(s))
         .orElse("be,fe")
         .split(","));
 
