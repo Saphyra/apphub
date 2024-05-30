@@ -2,6 +2,8 @@
     ApphubCI
     VillanyAtesz
         Reset inventoried
+        Select Options should be aligned left
+        Dynamic length for item name in inventory
 
 ===BUGFIXES===
 

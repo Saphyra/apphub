@@ -14,7 +14,8 @@ const InputField = ({
     autoFocus = false,
     onfocusOutCallback = () => { },
     onclickCallback = () => { },
-    inputRef
+    inputRef,
+    style
 }) => {
     const onchange = (e) => {
         if (onchangeCallback) {
@@ -45,6 +46,7 @@ const InputField = ({
             onBlur={onfocusOutCallback}
             onClick={onclickCallback}
             ref={inputRef}
+            style={style}
         />
     )
 }

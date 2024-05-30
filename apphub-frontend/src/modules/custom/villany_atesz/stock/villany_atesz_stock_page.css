@@ -2,6 +2,10 @@
     padding: 0;
 }
 
+#villany-atesz-stock select{
+    text-align: left;
+}
+
 #villany-atesz-stock #villany-atesz-navigation {
     text-align: center;
     position: absolute;

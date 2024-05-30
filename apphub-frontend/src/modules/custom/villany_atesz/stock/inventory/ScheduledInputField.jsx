@@ -9,7 +9,8 @@ const ScheduledInputField = ({
     scheduledCallback,
     timeout = 1000,
     placeholder,
-    disabled = false
+    disabled = false,
+    style
 }) => {
     const [schedule, setSchedule] = useState(null);
 
@@ -36,6 +37,7 @@ const ScheduledInputField = ({
         value={value}
         placeholder={placeholder}
         disabled={disabled}
+        style={style}
     />
 }
 
