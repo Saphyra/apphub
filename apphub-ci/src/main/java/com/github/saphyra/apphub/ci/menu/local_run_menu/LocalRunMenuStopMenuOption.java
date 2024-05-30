@@ -19,7 +19,7 @@ class LocalRunMenuStopMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "3";
+        return "5";
     }
 
     @Override

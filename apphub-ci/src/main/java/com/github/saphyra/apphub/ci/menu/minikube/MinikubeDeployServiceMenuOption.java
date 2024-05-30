@@ -26,7 +26,7 @@ class MinikubeDeployServiceMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "6";
+        return "3";
     }
 
     @Override

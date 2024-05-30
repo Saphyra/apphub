@@ -1,3 +1,1 @@
 TODO add to release notes
-TODO reorder menu options
-TODO delete deprecated files

@@ -28,7 +28,7 @@ class MinikubeDeleteNamespaceMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "8";
+        return "6";
     }
 
     @Override

@@ -19,7 +19,7 @@ class LocalRunTestsMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "4";
+        return "3";
     }
 
     @Override

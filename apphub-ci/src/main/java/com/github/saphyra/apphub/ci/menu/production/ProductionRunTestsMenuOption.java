@@ -20,7 +20,7 @@ class ProductionRunTestsMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "5";
+        return "3";
     }
 
     @Override

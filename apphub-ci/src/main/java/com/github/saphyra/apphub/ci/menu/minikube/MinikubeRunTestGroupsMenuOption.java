@@ -24,7 +24,7 @@ class MinikubeRunTestGroupsMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "7";
+        return "5";
     }
 
     @Override

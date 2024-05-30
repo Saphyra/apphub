@@ -20,7 +20,7 @@ class ProductionStartMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "4";
+        return "1";
     }
 
     @Override

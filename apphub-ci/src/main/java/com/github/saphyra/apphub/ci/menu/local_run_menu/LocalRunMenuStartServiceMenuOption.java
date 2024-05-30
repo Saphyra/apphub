@@ -20,7 +20,7 @@ class LocalRunMenuStartServiceMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "6";
+        return "2";
     }
 
     @Override

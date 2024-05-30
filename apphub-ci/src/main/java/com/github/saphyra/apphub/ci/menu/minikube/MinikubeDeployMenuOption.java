@@ -20,7 +20,7 @@ class MinikubeDeployMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "3";
+        return "2";
     }
 
     @Override

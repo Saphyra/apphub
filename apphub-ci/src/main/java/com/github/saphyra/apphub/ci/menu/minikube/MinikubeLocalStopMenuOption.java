@@ -20,7 +20,7 @@ class MinikubeLocalStopMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "2";
+        return "7";
     }
 
     @Override
