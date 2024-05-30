@@ -48,4 +48,7 @@ public interface StockInventoryController {
 
     @PostMapping(Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE)
     List<StockItemInventoryResponse> moveStockToStorage(@RequestBody OneParamRequest<Integer> amount, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_RESET_INVENTORIED)
+    List<StockItemInventoryResponse> resetInventoried(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

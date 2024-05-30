@@ -135,4 +135,13 @@ public class VillanyAteszStockItemInventoryActions {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
+
+    public static List<StockItemInventoryResponse> resetInventoried(UUID accessTokenId) {
+        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
+                .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_RESET_INVENTORIED));
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
+    }
 }

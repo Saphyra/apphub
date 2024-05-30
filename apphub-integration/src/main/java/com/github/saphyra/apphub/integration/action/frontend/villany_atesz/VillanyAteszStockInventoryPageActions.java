@@ -14,4 +14,12 @@ public class VillanyAteszStockInventoryPageActions {
             .map(StockItemInventory::new)
             .collect(Collectors.toList());
     }
+
+    public static void resetInventoried(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-stock-inventory-reset-inventoried"))
+            .click();
+
+        driver.findElement(By.id("villany-atesz-stock-inventory-reset-inventoried-confirm-button"))
+            .click();
+    }
 }

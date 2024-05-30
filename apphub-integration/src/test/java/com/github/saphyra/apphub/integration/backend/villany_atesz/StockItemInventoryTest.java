@@ -56,6 +56,8 @@ public class StockItemInventoryTest extends BackEndTest {
         editInventoried_null(accessTokenId, stockItemId);
         editInventoried(accessTokenId, stockItemId);
 
+        resetInventoried(accessTokenId, stockItemId);
+
         editName_blank(accessTokenId, stockItemId);
         editName(accessTokenId, stockItemId);
 
@@ -76,6 +78,11 @@ public class StockItemInventoryTest extends BackEndTest {
 
         moveStockToStorage_zeroAmount(accessTokenId, stockItemId);
         moveStockToStorage(accessTokenId, stockItemId);
+    }
+
+    private void resetInventoried(UUID accessTokenId, UUID stockItemId) {
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.resetInventoried(accessTokenId))
+            .returns(false, StockItemInventoryResponse::getInventoried);
     }
 
     private void editCategory_nullStockCategoryId(UUID accessTokenId, UUID stockItemId) {

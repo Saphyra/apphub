@@ -398,6 +398,7 @@ const Endpoints = {
     VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}/bar-code"),
     VILLANY_ATESZ_CART_EDIT_MARGIN: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}/margin"),
     VILLANY_ATESZ_INDEX_TOTAL_VALUE: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/total-value"),
+    VILLANY_ATESZ_RESET_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/reset-inventoried"),
 }
 
 export default Endpoints;

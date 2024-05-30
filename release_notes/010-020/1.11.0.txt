@@ -1,5 +1,7 @@
 ===FEATURES===
     ApphubCI
+    VillanyAtesz
+        Reset inventoried
 
 ===BUGFIXES===
 
