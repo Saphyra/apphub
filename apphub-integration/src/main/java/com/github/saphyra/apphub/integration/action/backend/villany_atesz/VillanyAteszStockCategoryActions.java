@@ -28,12 +28,16 @@ public class VillanyAteszStockCategoryActions {
     }
 
     public static List<StockCategoryModel> getStockCategories(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES));
+        Response response = getStockCategoriesResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockCategoryModel[].class));
+    }
+
+    public static Response getStockCategoriesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES));
     }
 
     public static Response getEditResponse(UUID accessTokenId, UUID stockCategoryId, StockCategoryModel request) {
@@ -51,11 +55,15 @@ public class VillanyAteszStockCategoryActions {
     }
 
     public static List<StockCategoryModel> delete(UUID accessTokenId, UUID stockCategoryId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
+        Response response = getDeleteResponse(accessTokenId, stockCategoryId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockCategoryModel[].class));
+    }
+
+    public static Response getDeleteResponse(UUID accessTokenId, UUID stockCategoryId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 }

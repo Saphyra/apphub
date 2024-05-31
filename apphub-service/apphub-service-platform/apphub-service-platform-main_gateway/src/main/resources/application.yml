@@ -315,3 +315,17 @@ role:
     - PUT
     requiredRoles:
     - CALENDAR
+  #VillanyAtesz
+  - pattern: /web/villany-atesz/**
+    methods:
+    - GET
+    requiredRoles:
+    - VILLANY_ATESZ
+  - pattern: /api/villany-atesz/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - VILLANY_ATESZ

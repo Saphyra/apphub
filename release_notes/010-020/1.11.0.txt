@@ -11,5 +11,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    VillanyAtesz
+        RoleProtection tests
 
 ===ETC===

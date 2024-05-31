@@ -27,12 +27,16 @@ public class VillanyAteszStockItemInventoryActions {
     }
 
     public static List<StockItemInventoryResponse> getItems(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS));
+        Response response = getItemsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
+    }
+
+    public static Response getItemsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS));
     }
 
     public static Response getEditInventoriedResponse(UUID accessTokenId, UUID stockItemId, Boolean inventoried) {
@@ -137,11 +141,15 @@ public class VillanyAteszStockItemInventoryActions {
     }
 
     public static List<StockItemInventoryResponse> resetInventoried(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-                .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_RESET_INVENTORIED));
+        Response response = getResetInventoriedResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockItemInventoryResponse[].class));
+    }
+
+    public static Response getResetInventoriedResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_RESET_INVENTORIED));
     }
 }
