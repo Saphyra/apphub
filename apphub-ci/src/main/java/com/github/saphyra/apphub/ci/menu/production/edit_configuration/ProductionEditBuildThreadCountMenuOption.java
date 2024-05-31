@@ -32,7 +32,7 @@ class ProductionEditBuildThreadCountMenuOption implements MenuOption {
 
     @Override
     public LocalizationProvider getName() {
-        return language -> LocalizedText.DEPLOY_MODE_DEFAULT.getLocalizedText(language).formatted(propertyDao.getBuildThreadCountDefault());
+        return language -> LocalizedText.BUILD_THREAD_COUNT_DEFAULT.getLocalizedText(language).formatted(propertyDao.getBuildThreadCountDefault());
     }
 
     @Override

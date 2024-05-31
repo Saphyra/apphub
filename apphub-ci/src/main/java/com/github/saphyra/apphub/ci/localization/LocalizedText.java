@@ -57,10 +57,11 @@ public enum LocalizedText implements LocalizationProvider {
     PRODUCTION_PROXY("ProdProxy indítása", "Start Production Proxy"),
     SERVICE_STARTUP_COUNT_LIMIT("Szerver indítás limit (%s)", "Service startup count limit (%s)"),
     STARTUP_LIMIT_SAVED("Limit elmentve.", "Limit saved."),
-    ENABLE_SERVICES("Servicek ki/bekapcsolása ", "Enable/Disable services"),
+    ENABLE_SERVICES("Servicek ki / bekapcsolása ", "Enable / Disable services"),
     ENABLED("Engedélyezve ", "Enabled"),
     DISABLED("Letiltva ", "Disabled"),
-    TOGGLE_SERVICES("Válaszd ki, melyik servicet szeretnéd letiltani/engedélyezni: ", "Select service to toggle status:"),
+    TOGGLE_SERVICES("Válaszd ki, melyik servicet szeretnéd letiltani / engedélyezni: ", "Select service to toggle status:"),
+    BUILD_THREAD_COUNT_DEFAULT("Szalak szama build soran (%s)", "Built Thread Count (%s)"),
     ;
 
     private final String hu;

@@ -15,7 +15,7 @@ class LocalRunEditBuildThreadCountMenuOption implements MenuOption {
 
     @Override
     public Menu getMenu() {
-        return Menu.LOCAL_RUN_MODE_SELECTOR_MENU;
+        return Menu.LOCAL_RUN_EDIT_CONFIGURATION_MENU;
     }
 
     @Override
