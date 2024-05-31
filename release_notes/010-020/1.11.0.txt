@@ -4,6 +4,7 @@
         Reset inventoried
         Select Options should be aligned left
         Dynamic length for item name in inventory
+        Order contacts by desc code as default
 
 ===BUGFIXES===
 
