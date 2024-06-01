@@ -38,7 +38,7 @@ class ProductionEditBuildThreadCountMenuOption implements MenuOption {
     @Override
     public boolean process() {
         Integer threadCount = validatingInputReader.getInput(
-            LocalizedText.THREAD_COUNT_FOR_RUNNING_WITH_TESTS,
+            LocalizedText.THREAD_COUNT_FOR_PRODUCTION_RELEASE,
             Integer::parseInt,
             tc -> {
                 if (tc < 1) {

@@ -61,7 +61,8 @@ public enum LocalizedText implements LocalizationProvider {
     ENABLED("Engedélyezve ", "Enabled"),
     DISABLED("Letiltva ", "Disabled"),
     TOGGLE_SERVICES("Válaszd ki, melyik servicet szeretnéd letiltani / engedélyezni: ", "Select service to toggle status:"),
-    BUILD_THREAD_COUNT_DEFAULT("Szalak szama build soran (%s)", "Built Thread Count (%s)"),
+    BUILD_THREAD_COUNT_DEFAULT("Szalak szama build soran (%s)", "Build Thread Count (%s)"),
+    THREAD_COUNT_FOR_PRODUCTION_RELEASE("Szalak szama prod deployment soran:", "Thread count during production deployment:"),
     ;
 
     private final String hu;
