@@ -139,6 +139,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                     value={item.name}
                     onchangeCallback={(newValue) => updateProperty("name", newValue)}
                     scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME, newValue, nw => !Utils.isBlank(nw))}
+                    style={{width: 8 * item.name.length + "px"}}
                 />
             </td>
             <td>

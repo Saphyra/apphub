@@ -46,11 +46,14 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * CSS
     * Basics of Programming
     * JavaScript
+* VillanyAtesz
+  * Inventory management designed for a specific customer
 
 ## Modules Overview
 
 * Build and Deployment scripts: Located in the root directory
 * apphub-api: Endpoint definitions of the external/internal communication
+* apphub-ci: A tool to manage the servers and tests
 * apphub-fronted: React based frontend
 * apphub-integration: BE and FE test framework for integration tests
 * apphub-integration-server: Statistic tool for measuring integration tests
@@ -108,259 +111,142 @@ The app's purpose is to provide an easy-to extend frame for multiple application
   * User role configuration
 * ### utils
   * Small tools
+* ### villany-atesz
+  * Inventory management system
 
 ## How to use
 
-### System requirements:
+### Recommended system requirements:
 
-* CPU: AMD Ryzen R5 2600
+* CPU: AMD Ryzen R5 2600 / Intel i5 8500
 * RAM: 24 GB
 * Empty Disk Space: 20GB
 * maven installed
 * JDK17 installed
 * npm installed
 * PostgreSQL installed and running
+* PgAdmin (or any PostgreSQL-compatible database manager) installed
+* git installed
 
-### Script usage
+# Usage
 
-### For local run
+## Databases used
 
-How to start up:
-* Start postgres database
-  * Create database "apphub"
-  * If you plan run integration tests, create database "integration"
+It is recommended/required to create them before first start of the application
+
+* apphub: Used by the services run on the host machine (Local Run)
+* apphub-ci: Used by the CI app
+* integration: Used by integration tests
+* apphub_production: Used by the production server
+
+## Start the CI app
+
+* You can start the CI application by running "ci_start.sh"
+
+## Run the server directly on host
+
+### Start
+
 * Start the WebUI
   * Open terminal to apphub-frontend directory
   * run command "npm install react-scripts"
     * Need to do only during the first startup
   * run command "npm start" from directory "apphub-frontend"
   * Close the opened tab (or change the port to 8080)
+* Select option "[1] - Local Run" in the CI app
+* Create database (if does not exist) apphub
+* Select option "[1] - Start" in the CI app
 
-Be careful! Startup process eats the CPU until all the services are up.
+CI tool will stop all the running services, rebuild them, and if build is successful, start them.
+Lots of command lines will open. (One for each service.)
 
-In local environment, React based pages reload automatically after a change is made.
+In local environment, React based pages reload automatically after a change is made in the WebUI code.
 
-#### local_start.sh
+### Start specific services
 
-* Stops the existing services if any
-* Builds the application
-* Starts all the services on local machine
-* Waits until all the services are started up
+If you don't want to (re)start the whole application, you can use "[2] - Start services" option to start only the desired ones.
 
-Usage: ./local_start.sh [skipTests | skipBuild]
+After selecting this option, CI tool will ask you to enter the name of the services you would like to (re)start.
+You can enter names of multiple services, spearated by commas ','
 
-* skipBuild: skip the build process of the application, just restart the services
-* skipTests: skip the unit testing part of the build process
+### Running tests
 
-#### local_stop.sh
+You can run the integration tests by selecting "[3] - Run Tests" option.
 
-Stops the locally running services.
+This will start the integration server, and run all the integration tests.
 
-Usage: ./local_stop.sh
+If you want to run only specific types of tests, you can use "[4] - Run test groups" option.
+You need to enter the test groups you want to run as a comma ',' separated list.
 
-#### local_run_tests.sh
+### Stopping the application
 
-Runs the integration tests against the local server.
+You can stop the BackEnd services by selecting "[5] - Stop" option.
 
-Usage: ./local_run_tests.sh [headless:true] [disabled groups:headed-only] [server port:8080] [database port:6432] [integration server port:8072]
+### Configurations
 
-Parameters:
+You can modify the settings of Local Run by selecting "[6] - Edit configuration" option.
 
-* headless:
-  * true (default): Selenium tests run in the background
-  * false: Selenium tests open browser windows
-* disabled groups: Name of test groups should not run
-  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
-* server port: The port of the main gateway (8080)
-* database port: Port of the local postgres server (5432)
-* integration server port: integration server listens to this port. Default: 8072
+Configurations you can edit:
+* [1] - Deploy mode: How the application should start
+  * Default: All the services will be rebuilt, unit tested, and started.
+  * Skip Tests: All the services will be rebuilt, unit tests will be skipped, then services will start.
+  * Skip Build: Services will not be rebuilt, only (re)started.
+* [2] - Build Thread Count: How many services to build in parallel in specific Deploy Modes
+* [3] - Integration Test Thread Count: How many integration tests are allowed to run parallel.
+* [4] - Service startup count limit: How many services to start parallel
+* [5] - Enable / Disable services: You can turn off starting up some optional services if you want to save up resources
 
-#### local_run_test_groups.sh
+## Run application on Minikube
 
-Runs the integration tests against the local server with the specified groups only.
+You can run the application on minikube. To do this, you need to install minikube.
 
-Usage: ./local_run_test_groups.sh [enabled groups] [headless:true] [disabled groups:headed-only] [server port:8080] [database port:6432] [integration server port:8072]
+Before you deploy the application, make sure the VM has enough CPU cores (Preferably threads of your CPU - 1),
+and RAM (Minimum: 8 GB / Recommended: 12 GB for every namespace you plan to use)!
 
-Parameters:
+You can start the Virtual Machine by selecting "[1] - Start VM" option. It also starts the dashboard, it should open in your default browser.
 
-* enabled groups: Name of the groups to run
-* headless:
-  * true (default): Selenium tests run in the background
-  * false: Selenium tests open browser windows
-* disabled groups: Name of test groups should not run
-  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
-* server port: The port of the main gateway (8080)
-* database port: Port of the local postgres server (5432)
-* integration server port: integration server listens to this port. Default: 8072
+### Deploy application to Minikube
 
-### For minikube deployments
-All minikube operations require administrator access.
+"[2] - Deploy to VM" option deploys the application to the Virtual Machine. It works very similar to the Local Run script, with a few differences:
+* During the Maven build, it creates Docker images from the services. Running Minikube is required for this step.
+* It also creates Docker image from the WebUI
+* Instead of starting the services on the host machine, it deploys the Docker images to Minikube
+  * The namespace used in Minikube is the name of the current git branch
+* Forwards the port of the main-gateway running in Minikube to the host machine's 9001 port
+* Forwards the port of the PostgreSQL database running in Minikube to the host machine's 9002 port
 
-#### minikube_up.sh
+You can use "[3] - Deploy services to VM" option to deploy only specific services, it works the same as "[2] - Start services" option in the "Local Run" menu.
 
-Used on "production machine"
+### Running tests against applciation deployed to Minikube
 
-* Starts up minikube, and minikube dashboard
-* Creates if not present, and scales up namespaces
-  * production
-  * name of the current branch (if not develop or master)
-* Starts production proxy
-* Forwards the ports to the current namespace
+"[4] - Run Tests", and "[5] - Run Test Groups" works as the same as the test options against Local environment.
 
-#### minikube_down.sh
+### Cleaning up
 
-Use when you need to stop any minikube
+You can use "[6] - Delete namespace" option to undeploy the application from Minikube. It is highly recommended to do after finishing work on the current branch, because unused namespaces still uses the resources of the VM.
 
-* Scales down namespaces
-  * production
-  * name of the current branch
-* Stops minikube
+If you want to keep the namespace for further use, but still shut down the VM, you can use "[7] - Stop VM" option.
+This option scales down the current namespace before shutting down the Virtual Machine.
+Later you can start the VM again by selecting option "[1] - Start VM", then "[2] - Deploy to VM" options. The database will store all the data until the namespace is deleted.
 
-#### local_minikube_up.sh
+### Configurations
 
-Use when you don't need to scale up production namespace
+You can edit configurations related to Minikube deployment by selecting "[8] - Edit configurations" option.
+Here you can edit the "Build Thread Count", "Deploy Mode", and "Integration Test Thread Count", like for Local Run.
 
-* Starts up minikube, and minikube dashboard
-* Creates if not present, and scales up namespace of the current branch
-* Forwards the ports to the current namespace
+Keep in mind, these values are different than the ones corresponding to Local Run.
 
-#### build_and_deploy.sh
+## Production server
 
-* Cleans up the hard disk space by deleting unused docker images
-* Builds the application
-* Creates and configures namespace
-* Deploys/re-deploys the services
-* Waits until all the services are up
-
-Usage: ./build_and_deploy.sh [skipBuild | skipTests] [namespace:current git branch]
-
-Parameters:
-
-* skipBuild: skip the build process of the application, deploy the existing images to the develop environment
-* skipTests: skip the unit testing part of the build process
-* namespace: Name of the namespace to use (production/develop). Default: name of the current git branch
-
-#### deploy_frontend.sh
-
-* Builds a docker image from the apphub-frontend module
-* Deploys the module
-* Waits until all the services are up
-
-Usage: ./deploy_frontend.sh [namespace] [directory]
-
-Parameters:
-
-* namespace: Name of the namespace to use. Default: name of the current git branch
-* directory:
-    * develop (default): The develop version of the service starts up
-    * production: The production version of the service starts up
-
-#### deploy_service.sh
-
-* Builds the specified services
-* Deploys these services
-* Waits until all the services are up
-
-Usage: ./deploy_service.sh [service name] [skipTest | skipBuild]
-
-Parameters:
-
-* service name: Name of the service(s) to build separated by commas. (E.g. main-gateway,event-gateway)
-* skipBuild: skip the build process of the application, deploy the existing images to the develop environment
-* skipTests: skip the unit testing part of the build process
-
-#### port_forward.sh
-
-* Exposes the application's endpoints and database
-
-Usage: ./port_forward.sh [namespace:current git branch]
-
-Parametes:
-
-* namespace: Name of the namespace to use. Default: name of the current git branch
-
-#### pp.sh
-
-* Exposes the application running on production namespace to a random port of the host machine
-* Builds module apphub-proxy
-* Starts apphub-proxy to expose the application outside the host machine
-
-Usage: ./production_proxy.sh
-
-#### production_release.sh
-
-* Cleans up the hard disk space by deleting unused docker images
-* Builds the application
-* Creates and configures develop namespace
-* Deploys/re-deploys the services to develop namespace
-* Waits until all the services are up
-* Runs automated tests against develop namespace
-* Tags docker images as release and pushes them to docker hub
-* Creates and configures production namespace
-* Deploys/re-deploys the services to production namespace
-* Waits until all the services are up
-* Runs automated tests against production namespace
-* Starts production-proxy
-
-Usage: ./production_release.sh [username] [password]
-
-Parameters:
-
-* username: DockerHub username
-* password: DockerHub password
-
-#### run_tests.sh
-
-Runs automated tests
-
-Usage: ./run_tests.sh [namespace:current git branch] [headless] [disabled groups] [server port:8070] [database port:8071] [integration server port:8072]
-
-Parametes:
-
-* namespace: Name of the namespace to use. Default: name of the current git branch
-* headless:
-    * true (default): Selenium tests run in the background
-    * false: Selenium tests open browser windows
-* disabled groups: Name of test groups should not run
-  * Default: headed-only. (Some tests cannot be run in headless mode, so they are excluded)
-* server port: Script forwards the main gateway's port to this port. Default: 8070
-* database port: Script forwards the database's port to this port. Default: 8071
-* integration server port: integration server listens to this port. Default: 8072
-
-#### run_production_tests.sh
-
-Some features are not production-ready, and disabled on production.
-Runs a special set of integration test against production environment.
-
-Usage: ./run_production_tests.sh
-
-### Defaults:
-
-#### Default ports:
-
-* 9000: Exposed port by apphub-proxy
-* 9001: Exposed endpoints with port_forward.sh
-* 9002: Exposed database with port_forward.sh
-* 8080: Port of the application run locally
-
-#### Default ports for local:
-
-* 3000: React app (WebUI) port
-* 8080: Main gateway (Entry point)
-* 8081-8100: Services
-* 5432: Postgres
-
-#### Parallelism:
-
-Builds and test runs are parallelized to achieve faster builds and test runs, but it requires higher performance, and can lead to failures on slower systems.
-To decrease the load on your machine, you can:
-
-* Decrease the maven build thread count: reduce the treadCount for  "mvn -T <threadCount>" commands found in build & deployment scripts
-* Decrease the threadCounts of automated tests.
-
-    * For apphub-integration it can be found in the pom.xml at project.build.plugins.plugin.configuration.threadCount path.
-    * Constant BROWSER_STARTUP_LIMIT sets the limit of how many browsers can be in opening phase parallel, and MAX_DRIVER_COUNT sets how many browser window can be opened maximum.
-
+Production server also runs on Minikube, but it has differences compared to dev deployments:
+* Pods have more memory available
+* Uses the host's database server instead of a database server deployed to the namespace
+* Menu offers additional options making the application live
+  * "[1] - Start VM" option does everything the one in the "Minikube" menu does, but it also scales up the production namespace, and starts the "production_proxy" application.
+  * "[2] - Production release" deploys the built images to DockerHUB (after providing correct credentials)
+  * "[3] - Run Tests" runs a filtered set of tests, it skips the features not enabled on production
+  * "[4] - Start Production Proxy" makes the production server available on port 9000
+  
 ## Testing
 
 * Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you dont want to see compile errors, add it manually at File -> Project

@@ -27,3 +27,8 @@
 .villany-atesz-stock-inventory-item input[type=number] {
     width: 75px;
 }
+
+.villany-atesz-stock-inventory-item-name{
+    font-family: monospace;
+    min-width: 100%;
+}

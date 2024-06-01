@@ -1,8 +1,8 @@
 package com.github.saphyra.integration.server.cleanup;
 
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.integration.server.domain.test_case_run.TestCaseRun;
 import com.github.saphyra.integration.server.domain.test_case_run.TestCaseRunRepository;
-import com.github.saphyra.integration.server.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

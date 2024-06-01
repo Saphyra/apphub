@@ -28,12 +28,16 @@ public class VillanyAteszContactActions {
     }
 
     public static List<ContactModel> getContacts(UUID accessTokenId) {
-        Response response =  RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CONTACTS));
+        Response response = getContactsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(ContactModel[].class));
+    }
+
+    public static Response getContactsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CONTACTS));
     }
 
     public static Response getEditContactResponse(UUID accessTokenId, UUID contactId, ContactModel request) {
@@ -51,11 +55,15 @@ public class VillanyAteszContactActions {
     }
 
     public static List<ContactModel> deleteContact(UUID accessTokenId, UUID contactId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-                .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_CONTACT, "contactId", contactId));
+        Response response = getDeleteContactResponse(accessTokenId, contactId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(ContactModel[].class));
+    }
+
+    public static Response getDeleteContactResponse(UUID accessTokenId, UUID contactId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_CONTACT, "contactId", contactId));
     }
 }

@@ -21,6 +21,7 @@ public class Endpoints {
     public static final String COMMUNITY_PAGE = "/web/community";
     public static final String VILLANY_ATESZ_PAGE = "/web/villany-atesz";
     public static final String VILLANY_ATESZ_CONTACTS_PAGE = "/web/villany-atesz/contacts";
+    public static final String VILLANY_ATESZ_STOCK_PAGE = "/web/villany-atesz/stock";
     public static final String NOTEBOOK_NEW_PAGE = "/web/notebook/new/{parent}";
     public static final String NOTEBOOK_NEW_LIST_ITEM_PAGE = "/web/notebook/new/{listItemType}/"; //{parent}
     public static final String NOTEBOOK_EDIT_LIST_ITEM_PAGE = "/web/notebook/edit";
@@ -252,6 +253,9 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_GET_STOCK_CATEGORIES = "/api/villany-atesz/stock/category";
     public static final String VILLANY_ATESZ_CREATE_STOCK_ITEM = "/api/villany-atesz/stock/item";
     public static final String VILLANY_ATESZ_DELETE_STOCK_ITEM = "/api/villany-atesz/stock/item/{stockItemId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY = "/api/villany-atesz/stock/item/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE = "/api/villany-atesz/stock/item/bar-code";
+    public static final String VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID = "/api/villany-atesz/stock/item/{stockItemId}/bar-code";
     public static final String VILLANY_ATESZ_GET_STOCK_ITEMS = "/api/villany-atesz/stock/item";
     public static final String VILLANY_ATESZ_CREATE_CART = "/api/villany-atesz/cart";
     public static final String VILLANY_ATESZ_GET_CARTS = "/api/villany-atesz/cart";
@@ -273,4 +277,5 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_REMOVE_FROM_CART = "/api/villany-atesz/cart/{cartId}/item/{stockItemId}";
     public static final String VILLANY_ATESZ_CART_EDIT_MARGIN = "/api/villany-atesz/cart/{cartId}/margin";
     public static final String VILLANY_ATESZ_INDEX_TOTAL_VALUE = "/api/villany-atesz/index/total-value";
+    public static final String VILLANY_ATESZ_RESET_INVENTORIED = "/api/villany-atesz/stock/inventory/reset-inventoried";
 }

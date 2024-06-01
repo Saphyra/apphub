@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
@@ -67,5 +68,9 @@ public class DateTimeUtil {
             CommonUtils.withLeadingZeros(time.getHour(), 2),
             CommonUtils.withLeadingZeros(time.getMinute(), 2)
         );
+    }
+
+    public OffsetDateTime getCurrentOffsetDateTime() {
+        return OffsetDateTime.now(ZoneOffset.UTC);
     }
 }

@@ -1,5 +1,7 @@
 package com.github.saphyra.integration.server;
 
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,11 +25,21 @@ import static java.util.Objects.isNull;
 @ComponentScan
 @Slf4j
 public class ApphubIntegrationServer {
+    private static final String CREATE_SCHEMA_SQL = "create schema if not exists %s";
+
     public static void main(String[] args) {
         SpringApplication.run(ApphubIntegrationServer.class, args);
     }
 
-    private static final String CREATE_SCHEMA_SQL = "create schema if not exists %s";
+    @Bean
+    IdGenerator idGenerator() {
+        return new IdGenerator();
+    }
+
+    @Bean
+    DateTimeUtil dateTimeUtil() {
+        return new DateTimeUtil();
+    }
 
     @Bean
     SpringLiquibase liquibase(

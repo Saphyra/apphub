@@ -11,11 +11,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VillanyAteszIndexActions {
     public static Integer getTotalValue(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_VALUE));
+        Response response = getTotalValueResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().jsonPath().getInt("value");
+    }
+
+    public static Response getTotalValueResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_VALUE));
     }
 }

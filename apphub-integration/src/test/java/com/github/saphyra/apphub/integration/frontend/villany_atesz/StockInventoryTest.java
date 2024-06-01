@@ -97,6 +97,13 @@ public class StockInventoryTest extends SeleniumTest {
             .returns(true, StockItemInventory::isInventoried)
             .returns(BAR_CODE, StockItemInventory::getBarCode);
 
+        //Reset inventoried
+        VillanyAteszStockInventoryPageActions.resetInventoried(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !VillanyAteszStockInventoryPageActions.getItems(driver).get(0).isInventoried())
+            .assertTrue("Inventoried status was not reset.");
+
         move(driver);
     }
 

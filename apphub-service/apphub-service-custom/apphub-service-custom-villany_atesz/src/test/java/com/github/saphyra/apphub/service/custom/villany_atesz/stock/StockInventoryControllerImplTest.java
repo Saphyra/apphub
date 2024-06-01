@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inve
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.ResetInventoriedService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,9 @@ public class StockInventoryControllerImplTest {
 
     @Mock
     private MoveStockService moveStockService;
+
+    @Mock
+    private ResetInventoriedService resetInventoriedService;
 
     @InjectMocks
     private StockInventoryControllerImpl underTest;
@@ -140,5 +144,14 @@ public class StockInventoryControllerImplTest {
         assertThat(underTest.moveStockToStorage(new OneParamRequest<>(AMOUNT), STOCK_ITEM_ID, accessTokenHeader)).containsExactly(stockItemInventoryResponse);
 
         then(moveStockService).should().moveToStorage(STOCK_ITEM_ID, AMOUNT);
+    }
+
+    @Test
+    void resetInventoried() {
+        given(stockItemInventoryQueryService.getItems(USER_ID)).willReturn(List.of(stockItemInventoryResponse));
+
+        assertThat(underTest.resetInventoried(accessTokenHeader)).containsExactly(stockItemInventoryResponse);
+
+        then(resetInventoriedService).should().resetInventoried(USER_ID);
     }
 }

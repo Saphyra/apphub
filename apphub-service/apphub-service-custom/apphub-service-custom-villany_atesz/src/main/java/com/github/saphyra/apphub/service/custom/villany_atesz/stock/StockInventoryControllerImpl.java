@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inve
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.inventory.StockItemInventoryQueryService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.DeleteStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.MoveStockService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.ResetInventoriedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ class StockInventoryControllerImpl implements StockInventoryController {
     private final EditStockItemService editStockItemService;
     private final DeleteStockItemService deleteStockItemService;
     private final MoveStockService moveStockService;
+    private final ResetInventoriedService resetInventoriedService;
 
     @Override
     public List<StockItemInventoryResponse> getItemsForInventory(AccessTokenHeader accessTokenHeader) {
@@ -104,6 +106,15 @@ class StockInventoryControllerImpl implements StockInventoryController {
         log.info("{} wants to move stock from storage to storage for stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
         moveStockService.moveToStorage(stockItemId, amount.getValue());
+
+        return getItemsForInventory(accessTokenHeader);
+    }
+
+    @Override
+    public List<StockItemInventoryResponse> resetInventoried(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to reset inventoried status for all of their items.", accessTokenHeader.getUserId());
+
+        resetInventoriedService.resetInventoried(accessTokenHeader.getUserId());
 
         return getItemsForInventory(accessTokenHeader);
     }

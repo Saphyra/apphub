@@ -54,5 +54,17 @@
     "bar-code": {
         "en": "Bar code",
         "hu": "Vonalkód"
+    },
+    "reset-inventoried": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "reset-inventoried-title": {
+        "en": "Reset inventoried?",
+        "hu": "Státusz visszaállítása?"
+    },
+    "reset-inventoried-content": {
+        "en": "Are you sure you want to reset the inventoried status for all the items?",
+        "hu": "Biztosan vissza szeretnéd állítani az összes termék állapotát?"
     }
 }

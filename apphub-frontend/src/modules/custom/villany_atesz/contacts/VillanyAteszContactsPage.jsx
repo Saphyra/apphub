@@ -30,8 +30,8 @@ const VillanyAteszContactsPage = () => {
     const [contacts, setContacts] = useState([]);
     const [editedContact, setEditedContact] = useState(null);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [order, setOrder] = useState(ContactOrder.DEFAULT)
-    const [reversed, setReversed] = useState(false);
+    const [order, setOrder] = useState(ContactOrder.CODE)
+    const [reversed, setReversed] = useState(true);
 
     const [code, setCode] = useState("");
     const [name, setName] = useState("");

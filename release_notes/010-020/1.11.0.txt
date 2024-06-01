@@ -1,0 +1,17 @@
+===FEATURES===
+    ApphubCI
+    VillanyAtesz
+        Reset inventoried
+        Select Options should be aligned left
+        Dynamic length for item name in inventory
+        Order contacts by desc code as default
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    VillanyAtesz
+        RoleProtection tests
+
+===ETC===

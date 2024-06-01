@@ -1,1 +1,0 @@
-./infra/deployment/script/release_port.sh "$1"

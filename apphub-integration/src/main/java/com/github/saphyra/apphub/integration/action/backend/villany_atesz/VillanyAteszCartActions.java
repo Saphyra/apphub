@@ -34,12 +34,16 @@ public class VillanyAteszCartActions {
     }
 
     public static List<CartResponse> getCarts(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CARTS));
+        Response response = getCartsResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(CartResponse[].class));
+    }
+
+    public static Response getCartsResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CARTS));
     }
 
     public static Response getAddToCartResponse(UUID accessTokenId, AddToCartRequest request) {
@@ -57,12 +61,16 @@ public class VillanyAteszCartActions {
     }
 
     public static CartModifiedResponse removeFromCart(UUID accessTokenId, UUID cartId, UUID stockItemId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
+        Response response = getRemoveFromCartResponse(accessTokenId, cartId, stockItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartModifiedResponse.class);
+    }
+
+    public static Response getRemoveFromCartResponse(UUID accessTokenId, UUID cartId, UUID stockItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
     }
 
     public static CartDeletedResponse finalize(UUID accessTokenId, UUID cartId) {
@@ -79,21 +87,29 @@ public class VillanyAteszCartActions {
     }
 
     public static CartDeletedResponse delete(UUID accessTokenId, UUID cartId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
+        Response response = getDeleteResponse(accessTokenId, cartId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartDeletedResponse.class);
     }
 
+    public static Response getDeleteResponse(UUID accessTokenId, UUID cartId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
+    }
+
     public static CartView getCart(UUID accessTokenId, UUID cartId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
+        Response response = getCartResponse(accessTokenId, cartId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartView.class);
+    }
+
+    public static Response getCartResponse(UUID accessTokenId, UUID cartId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
     }
 
     public static Response getEditMarginResponse(UUID accessTokenId, UUID cartId, Double margin) {

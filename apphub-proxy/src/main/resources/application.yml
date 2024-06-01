@@ -1,7 +1,7 @@
 server:
   port: ${server_port:9000}
 
-forwardedPort: ${forwarded_port:9001}
+forwardedPort: 8060
 host: localhost:${forwardedPort}
 
 spring:

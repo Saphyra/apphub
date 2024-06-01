@@ -8,6 +8,8 @@ import "./villany_atesz_stock_inventory.css";
 import Utils from "../../../../../common/js/Utils";
 import InventoryItem from "./InventoryItem";
 import Stream from "../../../../../common/js/collection/Stream";
+import Button from "../../../../../common/component/input/Button";
+import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
 const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -57,6 +59,37 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
             .toList();
     }
 
+    const openResetInventoriedConfirmation = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "villany-atesz-stock-inventory-reset-inventoried-confirmation",
+            localizationHandler.get("reset-inventoried-title"),
+            localizationHandler.get("reset-inventoried-content"),
+            [
+                <Button
+                    key="reset"
+                    id="villany-atesz-stock-inventory-reset-inventoried-confirm-button"
+                    label={localizationHandler.get("reset-inventoried")}
+                    onclick={resetInventoried}
+                />,
+                <Button
+                    key="cancel"
+                    id="villany-atesz-stock-inventory-reset-inventoried-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    const resetInventoried = async () => {
+        const response = await Endpoints.VILLANY_ATESZ_RESET_INVENTORIED.createRequest()
+            .send();
+
+        setItems(response);
+
+        setConfirmationDialogData(null);
+    }
+
     return (
         <div id="villany-atesz-stock-inventory">
             <InputField
@@ -69,7 +102,14 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
             <table id="villany-atesz-stock-inventory-items-table" className="formatted-table">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>
+                            <Button
+                                id="villany-atesz-stock-inventory-reset-inventoried"
+                                label="X"
+                                title={localizationHandler.get("reset-inventoried")}
+                                onclick={openResetInventoriedConfirmation}
+                            />
+                        </th>
                         <th>{localizationHandler.get("category")}</th>
                         <th>{localizationHandler.get("name")}</th>
                         <th>{localizationHandler.get("serial-number")}</th>
