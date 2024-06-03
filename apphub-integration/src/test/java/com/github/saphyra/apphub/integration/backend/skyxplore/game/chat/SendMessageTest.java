@@ -18,6 +18,8 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +28,7 @@ public class SendMessageTest extends BackEndTest {
     private static final String MESSAGE = "message";
 
     @Test(groups = {"be", "skyxplore"})
-    public void createChatRoom() {
+    public void sendMessage() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
@@ -44,6 +46,27 @@ public class SendMessageTest extends BackEndTest {
         ApphubWsClient hostClient = gameWsClients.get(accessTokenId1);
         ApphubWsClient memberClient = gameWsClients.get(accessTokenId2);
 
+        messageTooLong(hostClient, memberClient);
+
+        sendMessage(hostClient, userId1, characterModel1, memberClient);
+    }
+
+    private void messageTooLong(ApphubWsClient hostClient, ApphubWsClient memberClient) {
+        IncomingChatWsMessageForGame message = new IncomingChatWsMessageForGame(
+            Constants.GENERAL_CHAT_ROOM_NAME,
+            Stream.generate(() -> "a").limit(1025).collect(Collectors.joining())
+        );
+        WebSocketEvent sentEvent = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE)
+            .payload(message)
+            .build();
+        hostClient.send(sentEvent);
+
+        assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE)).isEmpty();
+        assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE)).isEmpty();
+    }
+
+    private static void sendMessage(ApphubWsClient hostClient, UUID userId1, SkyXploreCharacterModel characterModel1, ApphubWsClient memberClient) {
         IncomingChatWsMessageForGame message = new IncomingChatWsMessageForGame(Constants.GENERAL_CHAT_ROOM_NAME, MESSAGE);
         WebSocketEvent sentEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE)
@@ -59,7 +82,5 @@ public class SendMessageTest extends BackEndTest {
             .build();
         assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE).map(event -> event.getPayloadAs(OutgoingChatWsMessageForGame.class))).contains(expectedMessage);
         assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE).map(event -> event.getPayloadAs(OutgoingChatWsMessageForGame.class))).contains(expectedMessage);
-
-        ApphubWsClient.cleanUpConnections();
     }
 }

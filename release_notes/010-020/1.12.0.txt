@@ -5,5 +5,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    SkyXplore
+        Limit size of chat messages
 
 ===ETC===

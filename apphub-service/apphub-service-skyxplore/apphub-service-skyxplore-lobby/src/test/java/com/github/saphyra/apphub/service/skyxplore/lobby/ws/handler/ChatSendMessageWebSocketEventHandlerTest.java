@@ -9,7 +9,9 @@ import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.CharacterProxy;
+import com.github.saphyra.apphub.service.skyxplore.lobby.utils.LobbyConstants;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -68,6 +72,13 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     @Test
     public void canHandle_otherEvent() {
         assertThat(underTest.canHandle(WebSocketEventName.SKYXPLORE_GAME_USER_LEFT)).isFalse();
+    }
+
+    @Test
+    void handle_messageTooLong() {
+        given(receivedEvent.getPayload()).willReturn(Stream.generate(() -> "a").limit(LobbyConstants.MAX_CHAT_MESSAGE_LENGTH + 1).collect(Collectors.joining()));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.handle(FROM, receivedEvent, lobbyWebSocketHandler), "message", "too long");
     }
 
     @Test

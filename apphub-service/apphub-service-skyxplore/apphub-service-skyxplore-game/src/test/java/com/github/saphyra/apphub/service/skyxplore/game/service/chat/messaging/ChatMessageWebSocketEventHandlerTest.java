@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.main.SkyXploreGameMainWebSocketHandler;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,9 +20,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -76,16 +78,25 @@ public class ChatMessageWebSocketEventHandlerTest {
     private Player player;
 
     @Test
+    void tooLongMessage(){
+        given(event.getPayload()).willReturn(incomingChatMessage);
+        given(objectMapperWrapper.convertValue(incomingChatMessage, IncomingChatMessage.class)).willReturn(incomingChatMessage);
+        given(incomingChatMessage.getMessage()).willReturn(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.handle(SENDER, event, webSocketHandler), "message", "too long");
+    }
+
+    @Test
     public void handle() {
         given(event.getPayload()).willReturn(incomingChatMessage);
         given(objectMapperWrapper.convertValue(incomingChatMessage, IncomingChatMessage.class)).willReturn(incomingChatMessage);
         given(gameDao.findByUserIdValidated(SENDER)).willReturn(game);
         given(game.getChat()).willReturn(chat);
-        given(chat.getRooms()).willReturn(Arrays.asList(chatRoom));
+        given(chat.getRooms()).willReturn(List.of(chatRoom));
         given(incomingChatMessage.getRoom()).willReturn(CHAT_ROOM);
         given(incomingChatMessage.getMessage()).willReturn(MESSAGE);
         given(game.getPlayers()).willReturn(CollectionUtils.singleValueMap(PLAYER_ID, player));
-        given(chatRoomMemberFilter.getMembers(SENDER, CHAT_ROOM, Arrays.asList(chatRoom), CollectionUtils.singleValueMap(PLAYER_ID, player))).willReturn(Arrays.asList(PLAYER_ID));
+        given(chatRoomMemberFilter.getMembers(SENDER, CHAT_ROOM, List.of(chatRoom), CollectionUtils.singleValueMap(PLAYER_ID, player))).willReturn(List.of(PLAYER_ID));
         given(characterProxy.getCharacterByUserId(SENDER)).willReturn(characterModel);
         given(characterModel.getName()).willReturn(SENDER_NAME);
 

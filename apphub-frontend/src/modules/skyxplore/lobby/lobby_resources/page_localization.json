@@ -115,7 +115,7 @@
         "en": "{name} disconnected.",
         "hu": "{name} lecsatlakozott."
     },
-    "not-everyone-joined-title" : {
+    "not-everyone-joined-title": {
         "en": "Not everyone joined",
         "hu": "Nem mindenki csatlakozott"
     },
@@ -134,5 +134,9 @@
     "no-active-friend": {
         "en": "No active friend.",
         "hu": "Nincs elérhető barát."
+    },
+    "chat-message-too-long": {
+        "en": "Message too long.",
+        "hu": "Az üzenet túl hosszú."
     }
 }

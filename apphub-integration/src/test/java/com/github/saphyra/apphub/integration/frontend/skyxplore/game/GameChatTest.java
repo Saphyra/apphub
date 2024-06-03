@@ -8,13 +8,10 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
-import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
-import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.*;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.GameChatMessage;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.GameChatRoom;
@@ -102,9 +99,16 @@ public class GameChatTest extends SeleniumTest {
         SkyXploreGameChatActions.openChat(driver2);
         SkyXploreGameChatActions.openChat(driver3);
 
+        messageTooLong(driver1);
         chatInGeneralRoom(driver1, driver2, driver3, userData1);
         chatInAllianceRoom(driver1, driver2, driver3, userData1);
         chatInCustomRoom(driver1, driver2, driver3, userData1, userData3);
+    }
+
+    private void messageTooLong(WebDriver driver) {
+        SkyXploreGameChatActions.postMessageToRoom(driver, GENERAL_ROOM_NAME, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()) );
+
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_CHAT_MESSAGE_TOO_LONG);
     }
 
     private void chatInGeneralRoom(WebDriver driver1, WebDriver driver2, WebDriver driver3, RegistrationParameters userData1) {

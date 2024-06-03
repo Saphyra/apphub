@@ -2,5 +2,9 @@
     "placeholder": {
         "en": "Message",
         "hu": "Üzenet"
+    },
+    "chat-message-too-long": {
+        "en": "Message too long.",
+        "hu": "Az üzenet túl hosszú."
     }
 }

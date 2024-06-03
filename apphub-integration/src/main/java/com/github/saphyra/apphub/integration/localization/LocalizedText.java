@@ -34,6 +34,7 @@ public enum LocalizedText {
     NOTEBOOK_PIN_GROUP_NAME_TOO_LONG("Pin group name too long. (Maximum 30 characters)"),
 
     //SKYXPLORE
+    SKYXPLORE_CHAT_MESSAGE_TOO_LONG("Message too long."),
     SKYXPLORE_CHARACTER_SAVED("Character saved."),
     SKYXPLORE_CHARACTER_NAME_ALREADY_EXISTS("Character name already exists."),
     SKYXPLORE_LOBBY_PLAYERS_NOT_READY("Not all the players are ready."),

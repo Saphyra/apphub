@@ -7,12 +7,16 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyChatMessage;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,6 +58,11 @@ public class LobbyChatTest extends SeleniumTest {
             .until(() -> SkyXploreLobbyActions.getSystemMessages(driver2).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
             .assertTrue();
 
+        //Message too long
+        SkyXploreLobbyActions.sendMessage(driver1, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
+        ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_CHAT_MESSAGE_TOO_LONG);
+
+        //Send message
         SkyXploreLobbyActions.sendMessage(driver1, MESSAGE_TEXT_1);
 
         List<LobbyChatMessage> hostMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> !lobbyChatMessages.isEmpty());

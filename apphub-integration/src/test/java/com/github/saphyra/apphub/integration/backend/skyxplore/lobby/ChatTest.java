@@ -15,6 +15,8 @@ import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,6 +48,22 @@ public class ChatTest extends BackEndTest {
         ApphubWsClient hostClient = ApphubWsClient.createSkyXploreLobby(accessTokenId1, accessTokenId1);
         ApphubWsClient memberClient = ApphubWsClient.createSkyXploreLobby(accessTokenId2, accessTokenId2);
 
+        messageTooLong(hostClient, memberClient);
+        sendMessage(hostClient, userId1, characterModel1, memberClient);
+    }
+
+    private void messageTooLong(ApphubWsClient hostClient, ApphubWsClient memberClient) {
+        WebSocketEvent event = WebSocketEvent.builder()
+            .eventName(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)
+            .payload(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()))
+            .build();
+        hostClient.send(event);
+
+        assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)).isEmpty();
+        assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)).isEmpty();
+    }
+
+    private static void sendMessage(ApphubWsClient hostClient, UUID userId1, SkyXploreCharacterModel characterModel1, ApphubWsClient memberClient) {
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE)
             .payload(MESSAGE)
@@ -60,7 +78,5 @@ public class ChatTest extends BackEndTest {
 
         assertThat(hostClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
         assertThat(memberClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE).map(event1 -> event1.getPayloadAs(ChatWsMessageForLobby.class))).contains(expected);
-
-        ApphubWsClient.cleanUpConnections();
     }
 }
