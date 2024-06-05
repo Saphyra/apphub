@@ -1,7 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
-
+    Platform
+        Use Awaitility for findListItem
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
