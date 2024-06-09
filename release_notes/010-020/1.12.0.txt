@@ -3,7 +3,9 @@
 ===BUGFIXES===
     Platform
         Use Awaitility for findListItem
+
 ===PLATFORM CHANGES===
+    Pre-Create WebDrivers
 
 ===TECHNICAL DEBTS===
     SkyXplore

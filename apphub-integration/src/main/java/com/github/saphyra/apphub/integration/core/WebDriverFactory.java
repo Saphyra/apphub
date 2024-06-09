@@ -32,7 +32,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final int BROWSER_STARTUP_LIMIT = 3;
-    private static final int MAX_DRIVER_COUNT = 30;
+    private static final int MAX_DRIVER_COUNT = 300;
 
     private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
 
@@ -40,6 +40,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     static {
         DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
+        DRIVER_POOL_CONFIG.setMaxIdle(MAX_DRIVER_COUNT);
     }
 
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
@@ -73,7 +74,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     static void release(WebDriverWrapper webDriverWrapper) {
-        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() == WebDriverMode.DEFAULT) {
+        if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() != WebDriverMode.HEADED) {
             returnDriverToCache(webDriverWrapper);
         } else {
             stopDriver(webDriverWrapper);
@@ -128,6 +129,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     private static ChromeDriver createDriver(WebDriverMode mode) {
+        log.info("Creating WebDriver with mode {}", mode);
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
             try {
@@ -158,6 +160,8 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     private static void stopDriver(WebDriverWrapper webDriverWrapper) {
+        log.info("Stopping driver with mode {}", webDriverWrapper.getMode());
+
         WebDriver driver = webDriverWrapper.getDriver();
         for (int tryCount = 0; tryCount < 3; tryCount++) {
             try {

@@ -94,4 +94,18 @@ public class PropertyDao {
             .orElse(Collections.emptyList());
         return new ArrayList<>(disabledServices);
     }
+
+    public Integer getLocalRunPreCreateDriverCount() {
+        return propertyRepository.findById(PropertyName.LOCAL_RUN_TESTS_PRE_CREATE_DRIVER_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getLocalRunTestsPreCreateDriverCount);
+    }
+
+    public Integer getRemoteRunPreCreateDriverCount() {
+        return propertyRepository.findById(PropertyName.REMOTE_RUN_TESTS_PRE_CREATE_DRIVER_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getRemoteRunTestsPreCreateDriverCount);
+    }
 }

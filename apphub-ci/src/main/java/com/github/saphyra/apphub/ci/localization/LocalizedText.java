@@ -63,6 +63,8 @@ public enum LocalizedText implements LocalizationProvider {
     TOGGLE_SERVICES("Válaszd ki, melyik servicet szeretnéd letiltani / engedélyezni: ", "Select service to toggle status:"),
     BUILD_THREAD_COUNT_DEFAULT("Szalak szama build soran (%s)", "Build Thread Count (%s)"),
     THREAD_COUNT_FOR_PRODUCTION_RELEASE("Szalak szama prod deployment soran:", "Thread count during production deployment:"),
+    PRE_CREATE_DRIVERS("WebDriverek létrehozása integrációs tesztek futtatása előtt (%s)", "Pre-create WebDrivers before running integration tests (%s)"),
+    PRE_CREATE_DRIVERS_COUNT("Hány WebDrivert szeretnél létrehozni az integrációs tesztek futtatása előtt?", "How many WebDrivers would you like to create before running integration tests?"),
     ;
 
     private final String hu;
