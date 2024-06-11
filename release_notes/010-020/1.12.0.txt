@@ -3,6 +3,9 @@
 ===BUGFIXES===
     Platform
         Use Awaitility for findListItem
+    ApphubCI
+        Encoding issues
+        getLocalDeployMode queried remote deployment mode
 
 ===PLATFORM CHANGES===
     Pre-Create WebDrivers
@@ -10,5 +13,7 @@
 ===TECHNICAL DEBTS===
     SkyXplore
         Limit size of chat messages
+    ApphubCI
+        Build only enabled services during local start
 
 ===ETC===

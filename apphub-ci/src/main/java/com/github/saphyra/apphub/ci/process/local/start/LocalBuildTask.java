@@ -21,7 +21,9 @@ public class LocalBuildTask {
     private final Services services;
 
     public boolean buildServices() {
-        return buildServices(new String[0]);
+        List<String> disabledServices = propertyDao.getDisabledServices();
+
+        return buildServices(services.getServices().stream().filter(service -> !disabledServices.contains(service.getName())).map(Service::getModuleName).toList());
     }
 
     public boolean buildServices(String[] serviceNames) {

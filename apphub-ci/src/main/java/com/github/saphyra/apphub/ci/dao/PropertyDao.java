@@ -26,7 +26,7 @@ public class PropertyDao {
     }
 
     public DeployMode getLocalDeployMode() {
-        return propertyRepository.findById(PropertyName.REMOTE_DEPLOY_MODE)
+        return propertyRepository.findById(PropertyName.LOCAL_DEPLOY_MODE)
             .map(property -> DeployMode.valueOf(property.getValue()))
             .orElseGet(defaultProperties::getLocalDeployMode);
     }
