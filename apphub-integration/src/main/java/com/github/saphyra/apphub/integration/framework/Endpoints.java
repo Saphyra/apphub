@@ -25,6 +25,9 @@ public class Endpoints {
     public static final String NOTEBOOK_NEW_PAGE = "/web/notebook/new/{parent}";
     public static final String NOTEBOOK_NEW_LIST_ITEM_PAGE = "/web/notebook/new/{listItemType}/"; //{parent}
     public static final String NOTEBOOK_EDIT_LIST_ITEM_PAGE = "/web/notebook/edit";
+    public static final String UTILS_BASE64_PAGE = "/web/utils/base64";
+    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
+    public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
 
     //Training
     public static final String TRAINING_HTML_PAGE = "/web/training/html/001_introduction";

@@ -1,0 +1,34 @@
+#base64 main {
+    display: flex;
+    flex-direction: column;
+}
+
+#base64 main textarea {
+    margin: 30px;
+}
+
+#base64-commands {
+    text-align: center;
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 50px;
+}
+
+#base64-commands button {
+    display: inline-block;
+    min-width: 25%;
+}
+
+#base64-input {
+    height: 100px;
+}
+
+#base64-output {
+    cursor: text;
+    border: none;
+    outline: none;
+    flex-grow: 3;
+    font-size: 16px;
+}

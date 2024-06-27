@@ -11,6 +11,8 @@
 
 ===PLATFORM CHANGES===
     Pre-Create WebDrivers
+    React Migration
+        Base64
 
 ===TECHNICAL DEBTS===
     SkyXplore
