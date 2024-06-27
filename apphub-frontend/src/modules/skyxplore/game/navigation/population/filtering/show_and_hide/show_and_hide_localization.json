@@ -10,5 +10,21 @@
     "hide-all": {
         "en": "Hide all",
         "hu": "Összes elrejtése"
+    },
+    "save-planet-default": {
+        "en": "Save as planet default",
+        "hu": "Alapértelmezés a bolygóra"
+    },
+    "save-global-default": {
+        "en": "Save as global default",
+        "hu": "Alapértelmezés világra"
+    },
+    "delete-planet-default": {
+        "en": "Delete planet default",
+        "hu": "Bolygó alapértelmezés törlése"
+    },
+    "delete-global-default": {
+        "en": "Delete global default",
+        "hu": "Világ alapértelmezés törlése"
     }
 }

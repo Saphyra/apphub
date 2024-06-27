@@ -278,4 +278,9 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_CART_EDIT_MARGIN = "/api/villany-atesz/cart/{cartId}/margin";
     public static final String VILLANY_ATESZ_INDEX_TOTAL_VALUE = "/api/villany-atesz/index/total-value";
     public static final String VILLANY_ATESZ_RESET_INVENTORIED = "/api/villany-atesz/stock/inventory/reset-inventoried";
+
+    //SKYXPLORE-DATA-SETTINGS
+    public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";
+    public static final String SKYXPLORE_DATA_GET_SETTING = "/api/skyxplore/data/setting";
+    public static final String SKYXPLORE_DATA_DELETE_SETTING = "/api/skyxplore/data/setting";
 }

@@ -108,4 +108,8 @@ public class Constants {
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";
+
+    //SkyXplore skills
+    public static final String SKILL_AIMING = "AIMING";
+    public static final String SKILL_BUILDING = "BUILDING";
 }

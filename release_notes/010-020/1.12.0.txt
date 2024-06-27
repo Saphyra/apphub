@@ -1,4 +1,6 @@
 ===FEATURES===
+    SkyXplore
+        Save order and hidden properties settings for planet or game
 
 ===BUGFIXES===
     Platform

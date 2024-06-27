@@ -16,10 +16,10 @@ import java.util.UUID;
 
 public interface SkyXploreGameController {
     /**
-     * Used by page controllers to redirect the user to the proper page
+     * Used by page controllers to redirect the user to the proper page, and SkyXplore data to fetch the current game-id of a player
      */
-    @GetMapping(Endpoints.SKYXPLORE_IS_USER_IN_GAME)
-    OneParamResponse<Boolean> isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @GetMapping(Endpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
+    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * If the game is abandoned by the users, it will be shut down and removed from the memory eventually

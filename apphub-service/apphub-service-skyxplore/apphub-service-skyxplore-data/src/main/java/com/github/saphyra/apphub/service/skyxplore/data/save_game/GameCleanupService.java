@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.config.GameDataProperties;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class GameCleanupService {
     private final GameDao gameDao;
     private final GameDataProperties properties;
     private final List<GameItemService> gameItemServices;
+    private final SettingDao settingDao;
 
     @Transactional
     public void deleteMarkedGames() {
@@ -34,6 +36,7 @@ public class GameCleanupService {
         gameDao.getGamesMarkedForDeletion()
             .stream()
             .filter(gameModel -> isNull(gameModel.getMarkedForDeletionAt()) || gameModel.getMarkedForDeletionAt().isBefore(expirationDate))
+            .peek(gameModel -> settingDao.deleteByGameId(gameModel.getGameId()))
             .forEach(gameModel -> gameItemServices.forEach(gameItemService -> gameItemService.deleteByGameId(gameModel.getGameId())));
     }
 }

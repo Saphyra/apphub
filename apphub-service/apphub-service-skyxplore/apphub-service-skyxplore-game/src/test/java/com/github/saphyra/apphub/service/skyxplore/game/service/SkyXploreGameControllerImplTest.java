@@ -52,8 +52,9 @@ public class SkyXploreGameControllerImplTest {
     public void userIsInGame() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
+        given(game.getGameId()).willReturn(GAME_ID);
 
-        assertThat(underTest.isUserInGame(accessTokenHeader).getValue()).isTrue();
+        assertThat(underTest.getGameId(accessTokenHeader).getValue()).isEqualTo(GAME_ID);
     }
 
     @Test
@@ -61,7 +62,7 @@ public class SkyXploreGameControllerImplTest {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
-        assertThat(underTest.isUserInGame(accessTokenHeader).getValue()).isFalse();
+        assertThat(underTest.getGameId(accessTokenHeader).getValue()).isNull();
     }
 
     @Test

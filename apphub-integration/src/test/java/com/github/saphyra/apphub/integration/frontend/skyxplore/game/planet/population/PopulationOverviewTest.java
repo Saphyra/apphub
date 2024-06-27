@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CitizenOverviewTest extends SeleniumTest {
+public class PopulationOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 

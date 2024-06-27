@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.google.common.base.Stopwatch;
@@ -143,7 +144,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 driver = new ChromeDriver(options);
                 log.debug("Driver created: {}", driver);
                 SleepUtil.sleep(1000);
-                driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
+                Navigation.toUrl(driver, UrlFactory.create(Endpoints.ERROR_PAGE));
                 numberOfDriversCreated++;
                 return driver;
             } catch (Exception e) {

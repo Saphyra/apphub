@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 public class Navigation {
     public static String toIndexPage(WebDriver driver) {
         String url = UrlFactory.create(Endpoints.INDEX_PAGE);
-        driver.navigate().to(url);
+        toUrl(driver, url);
         return url;
     }
 
@@ -18,7 +18,7 @@ public class Navigation {
         }
     }
 
-    public static void toUrl(WebDriver driver, String url) {
+    public synchronized static void toUrl(WebDriver driver, String url) {
         driver.navigate().to(url);
     }
 }

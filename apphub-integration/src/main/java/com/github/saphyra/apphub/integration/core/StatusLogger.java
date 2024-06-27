@@ -46,13 +46,15 @@ public class StatusLogger {
 
         StringBuilder progressBar = new StringBuilder();
 
+        progressBar.append("|");
         for (int i = 0; i < 100; i += 2) {
             if (i < finishedPercentage) {
                 progressBar.append("=");
             } else {
-                progressBar.append("_");
+                progressBar.append(".");
             }
         }
+        progressBar.append("|");
 
         log.info("{} {}% {}/{} - {} Duration: {}ms", progressBar, finishedPercentage, FINISHED_TESTS.size(), TOTAL_TEST_COUNT, TestUtils.getTestCaseName(method), duration);
     }

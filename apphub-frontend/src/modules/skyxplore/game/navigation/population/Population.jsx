@@ -7,11 +7,13 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Citizen from "./citizen/Citizen";
 import "./population.css";
 import PopulationFiltering from "./filtering/PopulationFiltering";
-import { ByNameCitizenComparator } from "./filtering/sort/CitizenComparator";
+import { ByNameCitizenComparator, fromComparatorData } from "./filtering/sort/CitizenComparator";
 import Order from "./filtering/sort/Order";
 import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import useLoadSetting, { SettingType } from "../../common/hook/Setting";
+import Utils from "../../../../../common/js/Utils";
 
 const Population = ({ footer, closePage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -19,8 +21,28 @@ const Population = ({ footer, closePage, planetId }) => {
     const [population, setPopulation] = useState([]);
     const [hiddenProperties, setHiddenProperties] = useState([]);
     const [citizenComparator, setCitizenComparator] = useState(new ByNameCitizenComparator(Order.ASCENDING));
+    const [hideSetting, setHideSetting] = useState(null);
+    const [orderSetting, setOrderSetting] = useState(null);
+
+    const updateHidden = (o) => {
+        if (Utils.hasValue(o)) {
+            setHiddenProperties(o.data);
+        }
+
+        setHideSetting(o);
+    }
+
+    const updateOrder = (o) => {
+        if (Utils.hasValue(o)) {
+            setCitizenComparator(fromComparatorData(o.data));
+        }
+
+        setOrderSetting(o);
+    }
 
     useEffect(() => loadPopulation(), []);
+    useLoadSetting(SettingType.POPULATION_HIDE, planetId, updateHidden);
+    useLoadSetting(SettingType.POPULATION_ORDER, planetId, updateOrder);
 
     useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_POPULATION,
@@ -78,6 +100,11 @@ const Population = ({ footer, closePage, planetId }) => {
                     setHiddenProperties={setHiddenProperties}
                     citizenComparator={citizenComparator}
                     setCitizenComparator={setCitizenComparator}
+                    hideSetting={hideSetting}
+                    updateHidden={updateHidden}
+                    orderSetting={orderSetting}
+                    updateOrder={updateOrder}
+                    planetId={planetId}
                 />
 
                 <div id="skyxplore-game-population-citizens">

@@ -1,6 +1,6 @@
 import React from "react";
-import ByNameOptions from "./ByNameOptions";
 import ByStatOptions from "./ByStatOptions";
+import BySkillOptions from "./BySkillOptions";
 import { CitizenComparatorName } from "../../CitizenComparator";
 import Utils from "../../../../../../../../../common/js/Utils";
 
@@ -17,13 +17,13 @@ const ComparatorMethodOptions = ({
         case CitizenComparatorName.BY_NAME:
             return;
         case CitizenComparatorName.BY_STAT:
-            return <ByNameOptions
+            return <ByStatOptions
                 selectedStat={selectedStat}
                 stats={stats}
                 setSelectedStat={setSelectedStat}
             />
         case CitizenComparatorName.BY_SKILL:
-            return <ByStatOptions
+            return <BySkillOptions
                 selectedSkill={selectedSkill}
                 skills={skills}
                 setSelectedSkill={setSelectedSkill}

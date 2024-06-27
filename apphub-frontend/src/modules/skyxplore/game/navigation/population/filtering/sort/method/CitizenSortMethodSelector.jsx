@@ -20,6 +20,22 @@ const CitizenSortMethodSelector = ({
     const [selectedStat, setSelectedStat] = useState("MORALE");
     const [selectedSkill, setSelectedSkill] = useState("BUILDING");
 
+    useEffect(
+        () => {
+            if (Utils.hasValue(citizenComparator.stat)) {
+                setSelectedStat(citizenComparator.stat);
+            }
+        },
+        [citizenComparator]
+    );
+    useEffect(
+        () => {
+            if (Utils.hasValue(citizenComparator.skill)) {
+                setSelectedSkill(citizenComparator.skill);
+            }
+        },
+        [citizenComparator]
+    );
     useEffect(() => setCitizenComparator(citizenComparator.withStat(selectedStat)), [selectedStat]);
     useEffect(() => setCitizenComparator(citizenComparator.withSkill(selectedSkill)), [selectedSkill]);
 

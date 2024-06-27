@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useLoader = (request, mapper, listener = [], condition = () => true, alternateiveResult = null) => {
+const useLoader = (request, mapper, listener = [], condition = () => true, alternativeResult = null) => {
     useEffect(() => loader(), listener);
 
     const loader = () => {
@@ -11,7 +11,7 @@ const useLoader = (request, mapper, listener = [], condition = () => true, alter
             }
             fetch();
         } else {
-            mapper(alternateiveResult);
+            mapper(alternativeResult);
         }
     }
 }

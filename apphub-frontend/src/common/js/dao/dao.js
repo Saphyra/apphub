@@ -192,7 +192,7 @@ const Endpoints = {
     //SkyXplore platform
     SKYXPLORE_PLATFORM_HAS_CHARACTER: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/exists"),
     SKYXPLORE_GET_CHARACTER_NAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/name"),
-    SKYXPLORE_IS_USER_IN_GAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
+    SKYXPLORE_GAME_GET_GAME_ID: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
 
     //SkyXplore Data
     SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/character"),
@@ -205,6 +205,9 @@ const Endpoints = {
     SKYXPLORE_ACCEPT_FRIEND_REQUEST: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/friend/request/{friendRequestId}"),
     SKYXPLORE_GET_FRIENDS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/friend"),
     SKYXPLORE_REMOVE_FRIEND: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/friend/{friendshipId}"),
+    SKYXPLORE_DATA_GET_SETTING: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/setting"),
+    SKYXPLORE_DATA_CREATE_SETTING: new Endpoint(RequestMethod.PUT, "/api/skyxplore/data/setting"),
+    SKYXPLORE_DATA_DELETE_SETTING: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/setting"),
 
     //SkyXplore Lobby
     SKYXPLORE_CREATE_LOBBY: new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby"),
