@@ -8,6 +8,17 @@
     margin: 10px;
     border-radius: 5px;
     overflow: auto;
+    position: relative;
+}
+
+.skyxplore-game-planet-overview-tab-expand-button {
+    font-size: 15px;
+    padding: 1px;
+    border-width: 2px;
+    margin: 1px;
+    margin-left: 4px;
+    float: right;
+    width: 20px;
 }
 
 .skyxplore-game-planet-overview-tab-title {
@@ -33,4 +44,10 @@
     margin: 0;
     margin-left: 4px;
     float: right;
+    width: 20px;
+}
+
+#skyxplore-game-planet-overview-save-expands-button{
+    display: block;
+    margin: auto;
 }

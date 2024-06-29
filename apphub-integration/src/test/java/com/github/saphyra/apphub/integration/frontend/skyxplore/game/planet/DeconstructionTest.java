@@ -137,11 +137,11 @@ public class DeconstructionTest extends SeleniumTest {
         surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
         assertThat(surface.isEmpty()).isTrue();
 
+        SkyXplorePlanetActions.toggleBuildings(driver);
+
         PlanetBuildingOverviewItem planetBuildingOverview = SkyXplorePlanetActions.getBuildingOverview(driver)
             .getForSurfaceType(Constants.SURFACE_TYPE_DESERT);
 
-        planetBuildingOverview.toggleDetails();
-
-        assertThat(planetBuildingOverview.getForDataId(Constants.DATA_ID_SOLAR_PANEL)).isEmpty();
+        assertThat(planetBuildingOverview.getUsedSlots()).isZero();
     }
 }

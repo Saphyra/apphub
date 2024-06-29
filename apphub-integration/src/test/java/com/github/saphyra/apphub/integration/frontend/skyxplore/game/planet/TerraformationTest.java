@@ -108,12 +108,10 @@ public class TerraformationTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not opened.");
 
+        SkyXplorePlanetActions.toggleBuildings(driver);
+
         int desertSlotCount = SkyXplorePlanetActions.getBuildingOverview(driver)
             .getForSurfaceType(Constants.SURFACE_TYPE_DESERT)
-            .getTotalSots();
-
-        int concreteSlotCount = SkyXplorePlanetActions.getBuildingOverview(driver)
-            .getForSurfaceType(Constants.SURFACE_TYPE_CONCRETE)
             .getTotalSots();
 
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT);
@@ -137,6 +135,6 @@ public class TerraformationTest extends SeleniumTest {
         assertThat(surface.getSurfaceType()).isEqualTo(Constants.SURFACE_TYPE_CONCRETE);
 
         assertThat(SkyXplorePlanetActions.getBuildingOverview(driver).getForSurfaceType(Constants.SURFACE_TYPE_DESERT).getTotalSots()).isEqualTo(desertSlotCount - 1);
-        assertThat(SkyXplorePlanetActions.getBuildingOverview(driver).getForSurfaceType(Constants.SURFACE_TYPE_CONCRETE).getTotalSots()).isEqualTo(concreteSlotCount + 1);
+        assertThat(SkyXplorePlanetActions.getBuildingOverview(driver).getForSurfaceType(Constants.SURFACE_TYPE_CONCRETE).getTotalSots()).isEqualTo(1);
     }
 }

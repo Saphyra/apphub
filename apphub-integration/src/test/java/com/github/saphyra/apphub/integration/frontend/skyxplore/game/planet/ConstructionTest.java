@@ -167,6 +167,8 @@ public class ConstructionTest extends SeleniumTest {
         assertThat(surface.getBuildingLevel()).isEqualTo(1);
         assertThat(surface.isConstructionInProgress()).isFalse();
 
+        SkyXplorePlanetActions.toggleBuildings(driver);
+
         PlanetBuildingOverviewItem planetBuildingOverview = SkyXplorePlanetActions.getBuildingOverview(driver)
             .getForSurfaceType(Constants.SURFACE_TYPE_FOREST);
 
@@ -233,6 +235,8 @@ public class ConstructionTest extends SeleniumTest {
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_SOLAR_PANEL);
         assertThat(surface.getBuildingLevel()).isEqualTo(2);
         assertThat(surface.isConstructionInProgress()).isFalse();
+
+        SkyXplorePlanetActions.toggleBuildings(driver);
 
         PlanetBuildingOverviewItem planetBuildingOverview = SkyXplorePlanetActions.getBuildingOverview(driver)
             .getForSurfaceType(Constants.SURFACE_TYPE_DESERT);

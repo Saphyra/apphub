@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../../../../../../common/component/input/Button";
 import BuildingTypeOverviewDetails from "./details/BuildingTypeOverviewDetails";
+import Utils from "../../../../../../../../common/js/Utils";
 
-const BuildingTypeOverview = ({ surfaceType, surfaceTypeDetails, surfaceLocalizationHandler }) => {
+const BuildingTypeOverview = ({ surfaceType, surfaceTypeDetails, surfaceLocalizationHandler, tabSettings, updateTabSettings }) => {
     const [displayDetails, setDisplayDetails] = useState(false);
+
+    useEffect(
+        () => {
+            setDisplayDetails(Utils.isTrue(tabSettings.building[surfaceType]));
+        },
+        [tabSettings]
+    );
+
+    const updateDisplayDetails = (newValue) => {
+        tabSettings.building[surfaceType] = newValue;
+
+        updateTabSettings(tabSettings);
+        setDisplayDetails(newValue);
+    }
+
 
     return (
         <div
@@ -20,7 +36,7 @@ const BuildingTypeOverview = ({ surfaceType, surfaceTypeDetails, surfaceLocaliza
                 <Button
                     className="skyxplore-game-planet-overview-tab-item-expand-button"
                     label={displayDetails ? "-" : "+"}
-                    onclick={() => setDisplayDetails(!displayDetails)}
+                    onclick={() => updateDisplayDetails(!displayDetails)}
                 />
             }
 

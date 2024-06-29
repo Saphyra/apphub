@@ -1,6 +1,8 @@
 ===FEATURES===
     SkyXplore
         Save order and hidden properties settings for planet or game
+        Expandable tabs for PlanetOverview
+        Remember expanded tabs for PlanetOverview
 
 ===BUGFIXES===
     Platform
