@@ -39,6 +39,7 @@ import VillanyAteszIndexPage from './modules/custom/villany_atesz/VillanyAteszIn
 import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/VillanyAteszContactsPage';
 import VillanyAteszStockPage from './modules/custom/villany_atesz/stock/VillanyAteszStockPage';
 import Base64Page from './modules/utils/base64/Base64Page';
+import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage';
 
 const router = createBrowserRouter([
   {
@@ -242,6 +243,10 @@ const router = createBrowserRouter([
   {
     path: "/web/utils/base64",
     element: <Base64Page />
+  },
+  {
+    path: "/web/utils/json-formatter",
+    element: <JsonFormatterPage />
   },
 ]);
 
