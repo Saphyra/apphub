@@ -1,20 +1,39 @@
 import React from "react";
+import MapStream from "../../js/collection/MapStream";
 
-const FileInput = ({ id, className, onchangeCallback, accept }) => {
+const FileInput = ({ id, className, onchangeCallback, accept, multiple = false }) => {
     const onchange = (e) => {
         if (!e.target.files || e.target.files.length === 0) {
             onchangeCallback(null);
             return;
         }
 
-        const file = e.target.files[0];
-        const fileData = {
-            fileName: file.name,
-            size: file.size,
-            file: file,
-            e: e
+        if (multiple) {
+            const result = [];
+
+            for (let i = 0; i < e.target.files.length; i++) {
+                const file = e.target.files[i];
+                const fileData = {
+                    fileName: file.name,
+                    size: file.size,
+                    file: file,
+                    e: e
+                }
+
+                result.push(fileData);
+            }
+
+            onchangeCallback(result);
+        } else {
+            const file = e.target.files[0];
+            const fileData = {
+                fileName: file.name,
+                size: file.size,
+                file: file,
+                e: e
+            }
+            onchangeCallback(fileData);
         }
-        onchangeCallback(fileData);
     }
 
     return (
@@ -24,6 +43,7 @@ const FileInput = ({ id, className, onchangeCallback, accept }) => {
             type="file"
             onChange={onchange}
             accept={accept}
+            multiple={multiple}
         />
     );
 }

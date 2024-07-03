@@ -40,6 +40,8 @@ import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/Vi
 import VillanyAteszStockPage from './modules/custom/villany_atesz/stock/VillanyAteszStockPage';
 import Base64Page from './modules/utils/base64/Base64Page';
 import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage';
+import NewFilesPage from './modules/notebook/new/new_file/NewFilesPage';
+import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
 
 const router = createBrowserRouter([
   {
@@ -163,6 +165,24 @@ const router = createBrowserRouter([
   {
     path: "/web/notebook/new/file/:parent",
     element: <NewFilePage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/files/:parent",
+    element: <NewFilesPage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/images/:parent",
+    element: <NewImagesPage />,
     loader: ({ params }) => {
       return {
         parent: params.parent

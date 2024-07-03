@@ -1,7 +1,11 @@
-#notebook-new-file-content-wrapper{
+#notebook-new-file-content-wrapper {
     text-align: center;
 }
 
-#notebook-new-file-input{
+.notebook-new-files-group{
+    text-align: center;
+}
+
+#notebook-new-file-input {
     width: 90%;
 }

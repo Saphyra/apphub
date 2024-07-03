@@ -1,0 +1,19 @@
+.notebook-new-files-group {
+    border: 1px solid white;
+    margin: 10px auto;
+    width: 90%;
+    padding: 10px;
+}
+
+.notebook-new-files-group-files table {
+    margin-bottom: 10px;
+}
+
+.notebook-new-files-group-files table td {
+    padding: 3px 10px;
+    text-align: left;
+}
+
+.notebook-new-file-input {
+    width: 100%;
+}

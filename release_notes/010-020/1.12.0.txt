@@ -3,6 +3,8 @@
         Save order and hidden properties settings for planet or game
         Expandable tabs for PlanetOverview
         Remember expanded tabs for PlanetOverview
+    Notebook
+        Upload multiple files and images at once
 
 ===BUGFIXES===
     Platform

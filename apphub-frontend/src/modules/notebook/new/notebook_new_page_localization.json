@@ -50,5 +50,13 @@
     "file": {
         "en": "File",
         "hu": "Fájl"
+    },
+    "files": {
+        "en": "Files",
+        "hu": "Fájlok"
+    },
+    "images": {
+        "en": "Images",
+        "hu": "Képek"
     }
 }

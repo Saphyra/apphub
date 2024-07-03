@@ -1,0 +1,20 @@
+.notebook-new-images-group {
+    border: 1px solid white;
+    margin: 10px auto;
+    width: 90%;
+    padding: 10px;
+}
+
+.notebook-new-image-input {
+    width: 100%;
+}
+
+.notebook-new-images-group-image-wrapper img {
+    max-width: 30vw;
+    max-height: 30vh;
+    min-width: 200px;
+    min-height: 200px;
+    margin: 3px;
+    border: 2px ridge white;
+    padding: 2px;
+}

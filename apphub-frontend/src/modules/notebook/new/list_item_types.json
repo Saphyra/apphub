@@ -8,5 +8,7 @@
     "custom-table": "/web/notebook/new/custom-table",
     "only-title": "/web/notebook/new/only-title",
     "image": "/web/notebook/new/image",
-    "file": "/web/notebook/new/file"
+    "images": "/web/notebook/new/images",
+    "file": "/web/notebook/new/file",
+    "files": "/web/notebook/new/files"
 }

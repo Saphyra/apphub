@@ -31,7 +31,7 @@ const create = async (listItemTitle, file, parent, setDisplaySpinner) => {
     const storedFileResponse = await Endpoints.NBOTEBOOK_CREATE_FILE.createRequest(payload)
         .send();
 
-    uploadFile(file, storedFileResponse.value, setDisplaySpinner)
+    return uploadFile(file, storedFileResponse.value, setDisplaySpinner);
 }
 
 export default create;

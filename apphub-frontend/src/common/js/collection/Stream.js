@@ -21,6 +21,10 @@ const Stream = class {
         return this;
     }
 
+    allMatch(predicate) {
+        return this.items.every(predicate);
+    }
+
     anyMatch(predicate) {
         return this.items.some(predicate);
     }
