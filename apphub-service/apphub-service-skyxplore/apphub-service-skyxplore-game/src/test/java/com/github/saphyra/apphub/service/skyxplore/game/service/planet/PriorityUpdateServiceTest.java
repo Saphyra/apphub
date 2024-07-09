@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.PriorityValidator
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priority;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityConverter;
@@ -72,6 +74,12 @@ public class PriorityUpdateServiceTest {
     @Mock
     private GameProgressDiff progressDiff;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
     @AfterEach
     public void validate() {
         verify(priorityValidator).validate(NEW_PRIORITY);
@@ -85,9 +93,23 @@ public class PriorityUpdateServiceTest {
     }
 
     @Test
+    void forbiddenOperation() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.updatePriority(USER_ID, PLANET_ID, PriorityType.CONSTRUCTION.name(), NEW_PRIORITY));
+    }
+
+    @Test
     public void setPriority() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getPriorities()).willReturn(priorities);
         given(priorities.findByLocationAndType(PLANET_ID, PriorityType.CONSTRUCTION)).willReturn(priority);
 

@@ -15,11 +15,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruction.DeconstructionProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -107,10 +110,30 @@ class DeconstructBuildingServiceTest {
     @Mock
     private ProcessModel processModel;
 
-    @Test
-    void constructionInProgress() {
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
+    @BeforeEach
+    void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+    }
+
+    @Test
+    void forbiddenOperation() {
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.deconstructBuilding(USER_ID, PLANET_ID, BUILDING_ID));
+    }
+
+    @Test
+    void constructionInProgress() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(construction));
 
@@ -121,8 +144,6 @@ class DeconstructBuildingServiceTest {
 
     @Test
     void deconstructBuilding() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
         given(deconstructionFactory.create(BUILDING_ID, PLANET_ID)).willReturn(deconstruction);

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
@@ -33,6 +34,10 @@ public class CancelDeconstructionService {
         Deconstruction deconstruction = game.getData()
             .getDeconstructions()
             .findByExternalReferenceValidated(buildingId);
+
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(deconstruction.getLocation()).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel deconstruction  " + deconstruction.getDeconstructionId());
+        }
 
         processCancellation(game, deconstruction);
     }

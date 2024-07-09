@@ -22,6 +22,7 @@
 ===TECHNICAL DEBTS===
     SkyXplore
         Limit size of chat messages
+        Authorize planet operations
     ApphubCI
         Build only enabled services during local start
 

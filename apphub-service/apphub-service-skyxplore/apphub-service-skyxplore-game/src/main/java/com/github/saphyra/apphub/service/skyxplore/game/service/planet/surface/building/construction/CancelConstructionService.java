@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -42,6 +43,10 @@ public class CancelConstructionService {
         Building building = game.getData()
             .getBuildings()
             .findByBuildingId(buildingId);
+
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(building.getLocation()).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of building " + buildingId);
+        }
 
         Construction construction = game.getData()
             .getConstructions()

@@ -11,11 +11,13 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Bui
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import org.junit.jupiter.api.AfterEach;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,19 +25,22 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class CancelConstructionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
+    private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -79,6 +84,12 @@ class CancelConstructionServiceTest {
     @Mock
     private Process process;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
     @BeforeEach
     void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -94,15 +105,6 @@ class CancelConstructionServiceTest {
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCTION)).willReturn(process);
     }
 
-    @AfterEach
-    void validate() {
-        verify(executionResult).getOrThrow();
-        verify(process).cleanup();
-        verify(constructions).remove(construction);
-        verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
-    }
-
     @Test
     void cancelUpgradeOfConstruction() {
         given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
@@ -113,9 +115,25 @@ class CancelConstructionServiceTest {
         underTest.cancelConstructionOfConstruction(USER_ID, CONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        then(eventLoop).should().processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
+
+        then(executionResult).should().getOrThrow();
+        then(process).should().cleanup();
+        then(constructions).should().remove(construction);
+        then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+    }
+
+    @Test
+    void cancelConstructionOfBuilding_forbiddenOperation() {
+        given(gameData.getPlanets()).willReturn(planets);
+        given(building.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelConstructionOfBuilding(USER_ID, BUILDING_ID));
     }
 
     @Test
@@ -124,15 +142,24 @@ class CancelConstructionServiceTest {
         given(constructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(construction);
         given(building.getLevel()).willReturn(0);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(building.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.cancelConstructionOfBuilding(USER_ID, BUILDING_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        then(eventLoop).should().processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(buildings).remove(building);
-        verify(progressDiff).delete(BUILDING_ID, GameItemType.BUILDING);
+        then(buildings).should().remove(building);
+        then(progressDiff).should().delete(BUILDING_ID, GameItemType.BUILDING);
+        then(executionResult).should().getOrThrow();
+        then(process).should().cleanup();
+        then(constructions).should().remove(construction);
+        then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
     }
 }

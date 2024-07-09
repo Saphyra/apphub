@@ -21,12 +21,15 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construction.ConstructionProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -129,10 +132,30 @@ public class UpgradeBuildingServiceTest {
     @Mock
     private ProcessModel processModel;
 
-    @Test
-    void deconstructionAlreadyInProgress() {
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
+    @BeforeEach
+    void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+    }
+
+    @Test
+    void forbiddenOperation() {
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.upgradeBuilding(USER_ID, PLANET_ID, BUILDING_ID));
+    }
+
+    @Test
+    void deconstructionAlreadyInProgress() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.of(deconstruction));
 
@@ -143,8 +166,6 @@ public class UpgradeBuildingServiceTest {
 
     @Test
     public void constructionAlreadyInProgress() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
         given(gameData.getConstructions()).willReturn(constructions);
@@ -160,8 +181,6 @@ public class UpgradeBuildingServiceTest {
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
         given(building.getDataId()).willReturn(DATA_ID);
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
         given(gameData.getConstructions()).willReturn(constructions);
@@ -183,8 +202,6 @@ public class UpgradeBuildingServiceTest {
         given(gameData.getBuildings()).willReturn(buildings);
         given(buildings.findByBuildingId(BUILDING_ID)).willReturn(building);
         given(building.getDataId()).willReturn(DATA_ID);
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_ID)).willReturn(Optional.empty());
         given(gameData.getConstructions()).willReturn(constructions);

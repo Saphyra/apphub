@@ -48,6 +48,10 @@ public class ConstructNewBuildingService {
 
         Game game = gameDao.findByUserIdValidated(userId);
 
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot construct new building on planet " + planetId);
+        }
+
         if (game.getData().getConstructions().findByExternalReference(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Cannot build on surface under terraformation on planet " + planetId + " and surface " + surfaceId);
         }

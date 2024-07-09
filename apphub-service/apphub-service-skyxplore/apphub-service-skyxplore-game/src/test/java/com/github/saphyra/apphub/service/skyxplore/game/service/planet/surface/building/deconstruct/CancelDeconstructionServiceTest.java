@@ -9,9 +9,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,13 +27,13 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CancelDeconstructionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
+    private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -65,6 +68,12 @@ class CancelDeconstructionServiceTest {
     @Mock
     private Deconstructions deconstructions;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
     @Test
     void cancelDeconstructionOfDeconstruction() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -83,14 +92,28 @@ class CancelDeconstructionServiceTest {
         underTest.cancelDeconstructionOfDeconstruction(USER_ID, DECONSTRUCTION_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        then(eventLoop).should().processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(deconstructions).remove(deconstruction);
-        verify(process).cleanup();
-        verify(executionResult).getOrThrow();
+        then(deconstructions).should().remove(deconstruction);
+        then(process).should().cleanup();
+        then(executionResult).should().getOrThrow();
         then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+    }
+
+    @Test
+    void cancelDeconstructionOfBuilding_forbiddenOperation() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(deconstruction);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(deconstruction.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelDeconstructionOfBuilding(USER_ID, BUILDING_ID));
     }
 
     @Test
@@ -99,6 +122,10 @@ class CancelDeconstructionServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReferenceValidated(BUILDING_ID)).willReturn(deconstruction);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(deconstruction.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         given(game.getEventLoop()).willReturn(eventLoop);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
@@ -111,13 +138,13 @@ class CancelDeconstructionServiceTest {
         underTest.cancelDeconstructionOfBuilding(USER_ID, BUILDING_ID);
 
         ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(eventLoop).processWithWait(argumentCaptor.capture());
+        then(eventLoop).should().processWithWait(argumentCaptor.capture());
         argumentCaptor.getValue()
             .run();
 
-        verify(deconstructions).remove(deconstruction);
-        verify(process).cleanup();
-        verify(executionResult).getOrThrow();
+        then(deconstructions).should().remove(deconstruction);
+        then(process).should().cleanup();
+        then(executionResult).should().getOrThrow();
 
         then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
     }

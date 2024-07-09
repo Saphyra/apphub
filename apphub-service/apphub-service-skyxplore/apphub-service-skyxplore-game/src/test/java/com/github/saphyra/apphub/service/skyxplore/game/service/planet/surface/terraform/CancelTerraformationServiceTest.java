@@ -9,17 +9,23 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.UUID;
 
@@ -30,10 +36,12 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CancelTerraformationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID PLANET_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -71,19 +79,38 @@ public class CancelTerraformationServiceTest {
     @Mock
     private Constructions constructions;
 
-    @Test
-    public void cancelTerraformationQueueItem() {
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
+    @BeforeEach
+    void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
-
-        //Common
+        given(gameData.getPlanets()).willReturn(planets);
+        given(terraformation.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(gameData.getProcesses()).willReturn(processes);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
+    }
 
+    @Test
+    void cancelTerraformationQueueItem_forbiddenOperation() {
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelTerraformationQueueItem(USER_ID, CONSTRUCTION_ID));
+    }
+
+    @Test
+    public void cancelTerraformationQueueItem() {
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(game.getProgressDiff()).willReturn(progressDiff);
 
@@ -103,18 +130,16 @@ public class CancelTerraformationServiceTest {
     }
 
     @Test
-    public void cancelTerraformationOfSurface() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
-        given(gameData.getConstructions()).willReturn(constructions);
+    void cancelTerraformationOfSurface_forbiddenOperation() {
         given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
 
-        //Common
-        given(game.getEventLoop()).willReturn(eventLoop);
-        given(gameData.getProcesses()).willReturn(processes);
-        given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
-        given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.TERRAFORMATION)).willReturn(process);
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelTerraformationOfSurface(USER_ID, SURFACE_ID));
+    }
 
+    @Test
+    public void cancelTerraformationOfSurface() {
+        given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
         given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(game.getProgressDiff()).willReturn(progressDiff);
 

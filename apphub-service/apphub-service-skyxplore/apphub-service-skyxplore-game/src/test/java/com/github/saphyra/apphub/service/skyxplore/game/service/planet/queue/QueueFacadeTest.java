@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +55,12 @@ public class QueueFacadeTest {
     @Mock
     private QueueResponse queueResponse;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
     @BeforeEach
     public void setUp() {
         underTest = QueueFacade.builder()
@@ -82,8 +90,24 @@ public class QueueFacadeTest {
     }
 
     @Test
+    void setPriority_forbiddenOperation() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
+    }
+
+    @Test
     public void setPriority_serviceNotFound() {
         given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
 
@@ -93,6 +117,11 @@ public class QueueFacadeTest {
     @Test
     public void setPriority() {
         given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, PRIORITY);
 
@@ -107,8 +136,24 @@ public class QueueFacadeTest {
     }
 
     @Test
+    void cancelItem_forbiddenOperation() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
+    }
+
+    @Test
     public void cancelItem_serviceNotFound() {
         given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
 
@@ -118,6 +163,11 @@ public class QueueFacadeTest {
     @Test
     public void cancelItem() {
         given(queueService.getType()).willReturn(QueueItemType.TERRAFORMATION);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
 
         underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID);
 
