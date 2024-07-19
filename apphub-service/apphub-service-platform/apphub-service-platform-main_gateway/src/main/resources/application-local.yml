@@ -50,7 +50,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web/community, /web/calendar, /web/utils/log-formatter
+        - Path=/web/community, /web/calendar
       - id: error-page
         uri: http://localhost:8083
         predicates:

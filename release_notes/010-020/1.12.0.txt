@@ -27,3 +27,6 @@
         Build only enabled services during local start
 
 ===ETC===
+    Utils
+        Removed service
+        Removed LogFormatter

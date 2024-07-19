@@ -61,7 +61,7 @@ spring:
       - id: common-pages
         uri: http://web-content:8080
         predicates:
-        - Path=/web/community, /web/calendar, /web/utils/log-formatter
+        - Path=/web/community, /web/calendar
       - id: error-page
         uri: http://web-content:8080
         predicates:

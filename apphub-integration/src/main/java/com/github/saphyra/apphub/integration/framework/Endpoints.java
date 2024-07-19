@@ -26,7 +26,6 @@ public class Endpoints {
     public static final String NOTEBOOK_NEW_LIST_ITEM_PAGE = "/web/notebook/new/{listItemType}/"; //{parent}
     public static final String NOTEBOOK_EDIT_LIST_ITEM_PAGE = "/web/notebook/edit";
     public static final String UTILS_BASE64_PAGE = "/web/utils/base64";
-    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
 
     //Training
@@ -126,10 +125,6 @@ public class Endpoints {
     public static final String NOTEBOOK_PIN_GROUP_OPENED = "/api/notebook/pin-group/{pinGroupId}";
     public static final String NOTEBOOK_CREATE_IMAGE = "/api/notebook/image";
     public static final String NOTEBOOK_CREATE_FILE = "/api/notebook/file";
-
-    //UTILS
-    public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
-    public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
 
     //SKYXPLORE-DATA
     public static final String SKYXPLORE_CREATE_OR_UPDATE_CHARACTER = "/api/skyxplore/data/character";

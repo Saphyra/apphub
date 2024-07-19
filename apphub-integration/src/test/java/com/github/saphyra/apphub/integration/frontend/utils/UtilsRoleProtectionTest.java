@@ -26,7 +26,6 @@ public class UtilsRoleProtectionTest extends SeleniumTest {
         SleepUtil.sleep(3000);
 
         CommonUtils.verifyMissingRole(driver, Endpoints.UTILS_BASE64_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.UTILS_LOG_FORMATTER_PAGE);
         CommonUtils.verifyMissingRole(driver, Endpoints.UTILS_JSON_FORMATTER_PAGE);
     }
 

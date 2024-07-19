@@ -145,12 +145,6 @@ services:
   moduleName: apphub-service-custom-villany_atesz
   group: 1
   optional: true
-- name: utils
-  port: 8100
-  location: "./apphub-service/apphub-service-utils/target/application.jar"
-  moduleName: apphub-service-utils
-  group: 1
-  optional: true
 - name: training
   port: 8086
   location: "./apphub-service/apphub-service-training/target/application.jar"
