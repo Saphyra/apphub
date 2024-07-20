@@ -40,6 +40,7 @@ public class StockItemCrudTest extends BackEndTest {
     private static final Integer IN_CART = 3;
     private static final String BAR_CODE = "bar-code";
     private static final String NEW_BAR_CODE = "new-bar-code";
+    private static final Integer FORCED_PRICE = PRICE - 1;
 
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemCrud() {
@@ -66,7 +67,9 @@ public class StockItemCrudTest extends BackEndTest {
         acquire_nullInStorage(accessTokenId, stockItemId);
         acquire_nullPrice(accessTokenId, stockItemId);
         acquire_nullBarCode(accessTokenId, stockItemId);
+        acquire_nullForceUpdatePrice(accessTokenId, stockItemId);
         acquire(accessTokenId, stockItemId);
+        acquire_forceUpdatePrice(accessTokenId, stockItemId);
 
         addToCart(accessTokenId, stockItemId);
 
@@ -214,6 +217,7 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "stockItemId", "must not be null");
@@ -226,6 +230,7 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "inCar", "must not be null");
@@ -238,6 +243,7 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(null)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "inStorage", "must not be null");
@@ -250,6 +256,7 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(null)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "price", "must not be null");
@@ -262,9 +269,23 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(null)
+            .forceUpdatePrice(false)
             .build();
 
         ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "barCode", "must not be null");
+    }
+
+    private void acquire_nullForceUpdatePrice(UUID accessTokenId, UUID stockItemId) {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(stockItemId)
+            .inCar(ACQUIRE_IN_CAR)
+            .inStorage(ACQUIRE_IN_STORAGE)
+            .price(ACQUIRE_PRICE)
+            .barCode(BAR_CODE)
+            .forceUpdatePrice(null)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "forceUpdatePrice", "must not be null");
     }
 
     private void acquire(UUID accessTokenId, UUID stockItemId) {
@@ -274,6 +295,7 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         VillanyAteszStockItemActions.acquire(accessTokenId, request);
@@ -282,6 +304,25 @@ public class StockItemCrudTest extends BackEndTest {
             .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(ACQUIRE_PRICE, StockItemOverviewResponse::getPrice)
+            .returns(NEW_BAR_CODE, StockItemOverviewResponse::getBarCode);
+    }
+
+    private void acquire_forceUpdatePrice(UUID accessTokenId, UUID stockItemId) {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(stockItemId)
+            .inCar(0)
+            .inStorage(0)
+            .price(FORCED_PRICE)
+            .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(true)
+            .build();
+
+        VillanyAteszStockItemActions.acquire(accessTokenId, request);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemActions.getStockItems(accessTokenId))
+            .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
+            .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage)
+            .returns(FORCED_PRICE, StockItemOverviewResponse::getPrice)
             .returns(NEW_BAR_CODE, StockItemOverviewResponse::getBarCode);
     }
 

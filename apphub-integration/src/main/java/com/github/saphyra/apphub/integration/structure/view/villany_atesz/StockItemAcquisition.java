@@ -14,12 +14,14 @@ public class StockItemAcquisition {
             .click();
     }
 
-    public void chooseCategory(String categoryName) {
+    public StockItemAcquisition chooseCategory(String categoryName) {
         WebElementUtils.selectOptionByLabel(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-category")), categoryName);
+        return this;
     }
 
-    public void chooseItem(String stockItemName) {
+    public StockItemAcquisition chooseItem(String stockItemName) {
         WebElementUtils.selectOptionByLabel(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-item")), stockItemName);
+        return this;
     }
 
     public void setToCar(Integer toCar) {
@@ -30,8 +32,9 @@ public class StockItemAcquisition {
         WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-to-storage")), toStorage);
     }
 
-    public void setPrice(Integer price) {
+    public StockItemAcquisition setPrice(Integer price) {
         WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-price")), price);
+        return this;
     }
 
     public void setBarCodeSearch(String barCode) {
@@ -53,5 +56,10 @@ public class StockItemAcquisition {
 
     public void setBarCode(String newBarCode) {
         WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-bar-code")), newBarCode);
+    }
+
+    public StockItemAcquisition setForceUpdatePrice(boolean forceUpdatePrice) {
+        WebElementUtils.setCheckboxState(webElement.findElement(By.className("villany-atesz-stock-acquisition-item-force-update-price")), forceUpdatePrice);
+        return this;
     }
 }

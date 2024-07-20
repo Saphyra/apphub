@@ -37,7 +37,7 @@ public class SkyXploreCharacterActions {
         CharacterPage.submitButton(driver).click();
     }
 
-    public static void createCharacter(WebDriver driver) {
+    public synchronized static void createCharacter(WebDriver driver) {
         submitForm(driver);
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))

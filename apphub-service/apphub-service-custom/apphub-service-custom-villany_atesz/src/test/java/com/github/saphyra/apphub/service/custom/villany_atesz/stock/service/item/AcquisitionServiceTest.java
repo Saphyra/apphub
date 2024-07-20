@@ -58,6 +58,7 @@ class AcquisitionServiceTest {
             .inStorage(REQUEST_IN_STORAGE)
             .price(PRICE)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
         given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
@@ -74,6 +75,36 @@ class AcquisitionServiceTest {
         then(stockItem).should().setInStorage(ORIGINAL_IN_STORAGE + REQUEST_IN_STORAGE);
         then(stockItem).should().setBarCode(BAR_CODE);
         then(stockItemDao).should().save(stockItem);
+        then(stockItemPriceDao).should().save(stockItemPrice);
+        then(stockItemPriceDao).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void forceUpdatePrice() {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(STOCK_ITEM_ID)
+            .inCar(REQUEST_IN_CAR)
+            .inStorage(REQUEST_IN_STORAGE)
+            .price(PRICE)
+            .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
+            .build();
+
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+        given(stockItem.getInCar()).willReturn(ORIGINAL_IN_CAR);
+        given(stockItem.getInStorage()).willReturn(ORIGINAL_IN_STORAGE);
+        given(stockItem.getUserId()).willReturn(USER_ID);
+
+        given(stockItemPriceFactory.create(USER_ID, STOCK_ITEM_ID, PRICE)).willReturn(stockItemPrice);
+
+        underTest.acquire(List.of(request));
+
+        then(addToStockRequestValidator).should().validate(List.of(request));
+        then(stockItem).should().setInCar(ORIGINAL_IN_CAR + REQUEST_IN_CAR);
+        then(stockItem).should().setInStorage(ORIGINAL_IN_STORAGE + REQUEST_IN_STORAGE);
+        then(stockItem).should().setBarCode(BAR_CODE);
+        then(stockItemDao).should().save(stockItem);
+        then(stockItemPriceDao).should().deleteByStockItemId(STOCK_ITEM_ID);
         then(stockItemPriceDao).should().save(stockItemPrice);
     }
 }

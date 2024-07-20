@@ -32,9 +32,11 @@ public class StockAcquisitionTest extends SeleniumTest {
     private static final String MEASUREMENT = "measurement";
     private static final Integer IN_CAR = 42;
     private static final Integer IN_STORAGE = 46;
-    private static final Integer PRICE = 534;
+    private static final int DEFAULT_PRICE = 100;
+    private static final Integer PRICE = DEFAULT_PRICE + 1;
     private static final String BAR_CODE = "bar-code";
     private static final String NEW_BAR_CODE = "new-bar-code";
+    private static final Integer FORCED_PRICE = DEFAULT_PRICE - 1;
 
     @Test(groups = {"fe", "villany-atesz"})
     public void stockAcquisition() {
@@ -50,7 +52,7 @@ public class StockAcquisitionTest extends SeleniumTest {
         ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);
-        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", "", 0, 0, 0);
+        VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", "", 0, 0, DEFAULT_PRICE);
         VillanyAteszNavigation.openAcquisition(driver);
 
         addItem(driver);
@@ -60,6 +62,7 @@ public class StockAcquisitionTest extends SeleniumTest {
         noCategoryChosen(driver);
         noStockItemChosen(driver);
         acquire(driver);
+        acquire_forceUpdatePrice(driver);
     }
 
     @Test(groups = {"fe", "villany-atesz"})
@@ -130,6 +133,30 @@ public class StockAcquisitionTest extends SeleniumTest {
             .returns(IN_CAR + " " + MEASUREMENT, StockItemOverview::getInCar)
             .returns(IN_STORAGE + " " + MEASUREMENT, StockItemOverview::getInStorage)
             .returns(PRICE + Constants.FT_SUFFIX, StockItemOverview::getPrice);
+    }
+
+    private void acquire_forceUpdatePrice(WebDriver driver) {
+        VillanyAteszNavigation.openAcquisition(driver);
+        addItem(driver);
+
+        VillanyAteszStockAcquisitionPageActions.getItems(driver)
+            .stream()
+            .findFirst()
+            .orElseThrow()
+            .chooseCategory(CATEGORY_NAME)
+            .chooseItem(STOCK_ITEM_NAME)
+            .setPrice(FORCED_PRICE)
+            .setForceUpdatePrice(true);
+
+        VillanyAteszStockAcquisitionPageActions.addToStock(driver);
+
+        driver.findElement(By.id("villany-atesz-stock-acquisition-confirm-button"))
+            .click();
+
+        VillanyAteszNavigation.openStockOverview(driver);
+
+        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockOverviewPageActions.getItems(driver), stockItemOverviews -> !stockItemOverviews.isEmpty(), stockItemOverviews -> stockItemOverviews.get(0))
+            .returns(FORCED_PRICE + Constants.FT_SUFFIX, StockItemOverview::getPrice);
     }
 
     private void noStockItemChosen(WebDriver driver) {

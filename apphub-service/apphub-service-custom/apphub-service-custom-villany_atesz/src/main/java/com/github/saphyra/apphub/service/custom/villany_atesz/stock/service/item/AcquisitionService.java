@@ -35,6 +35,10 @@ public class AcquisitionService {
         stockItem.setBarCode(request.getBarCode());
         stockItemDao.save(stockItem);
 
+        if (request.getForceUpdatePrice()) {
+            stockItemPriceDao.deleteByStockItemId(request.getStockItemId());
+        }
+
         StockItemPrice price = stockItemPriceFactory.create(stockItem.getUserId(), request.getStockItemId(), request.getPrice());
         stockItemPriceDao.save(price);
     }

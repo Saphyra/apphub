@@ -27,6 +27,7 @@ class AddToStockRequestValidatorTest {
             .inStorage(IN_STORAGE)
             .price(PRICE)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "stockItemId", "must not be null");
@@ -40,6 +41,7 @@ class AddToStockRequestValidatorTest {
             .inStorage(IN_STORAGE)
             .price(PRICE)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "inCar", "must not be null");
@@ -53,6 +55,7 @@ class AddToStockRequestValidatorTest {
             .inStorage(null)
             .price(PRICE)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "inStorage", "must not be null");
@@ -66,6 +69,7 @@ class AddToStockRequestValidatorTest {
             .inStorage(IN_STORAGE)
             .price(null)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "price", "must not be null");
@@ -79,9 +83,24 @@ class AddToStockRequestValidatorTest {
             .inStorage(IN_STORAGE)
             .price(PRICE)
             .barCode(null)
+            .forceUpdatePrice(true)
             .build();
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "barCode", "must not be null");
+    }
+
+    @Test
+    void nullForceUpdatePrice() {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(STOCK_ITEM_ID)
+            .inCar(IN_CAR)
+            .inStorage(IN_STORAGE)
+            .price(PRICE)
+            .barCode(BAR_CODE)
+            .forceUpdatePrice(null)
+            .build();
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(request)), "forceUpdatePrice", "must not be null");
     }
 
     @Test
@@ -92,6 +111,7 @@ class AddToStockRequestValidatorTest {
             .inStorage(IN_STORAGE)
             .price(PRICE)
             .barCode(BAR_CODE)
+            .forceUpdatePrice(true)
             .build();
 
         underTest.validate(List.of(request));

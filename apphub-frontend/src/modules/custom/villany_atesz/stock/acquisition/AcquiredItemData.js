@@ -9,6 +9,7 @@ const AcquiredItemData = class {
         this.inStorage = 0;
         this.price = 0;
         this.barCode = "";
+        this.forceUpdatePrice = false;
     }
 }
 

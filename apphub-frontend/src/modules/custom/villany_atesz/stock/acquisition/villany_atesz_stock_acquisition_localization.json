@@ -62,5 +62,9 @@
     "reset": {
         "en": "Reset",
         "hu": "Alaphelyzet"
+    },
+    "force-update-price": {
+        "en": "Force update price",
+        "hu": "Fix ár"
     }
 }

@@ -5,6 +5,8 @@
         Remember expanded tabs for PlanetOverview
     Notebook
         Upload multiple files and images at once
+    VillanyAtesz
+        Force update prices
 
 ===BUGFIXES===
     Platform

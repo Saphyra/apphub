@@ -10,6 +10,7 @@ import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
 import useFocus from "../../../../../common/hook/UseFocus";
 import ErrorHandler from "../../../../../common/js/dao/ErrorHandler";
+import PostLabeledInputField from "../../../../../common/component/input/PostLabeledInputField";
 
 const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     const [barCode, setBarCode] = useState("");
@@ -190,6 +191,18 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                         placeholder={localizationHandler.get("bar-code")}
                         value={item.barCode}
                         onchangeCallback={(value) => set("barCode", value)}
+                    />}
+                />
+            }
+
+            {!Utils.isBlank(item.stockItemId) &&
+                <PostLabeledInputField
+                    label={localizationHandler.get("force-update-price")}
+                    input={<InputField
+                        className={"villany-atesz-stock-acquisition-item-force-update-price"}
+                        type="checkbox"
+                        checked={item.forceUpdatePrice}
+                        onchangeCallback={(checked) => set("forceUpdatePrice", checked)}
                     />}
                 />
             }
