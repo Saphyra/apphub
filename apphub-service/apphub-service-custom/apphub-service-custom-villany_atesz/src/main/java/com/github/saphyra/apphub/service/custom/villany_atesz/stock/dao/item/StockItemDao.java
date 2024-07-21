@@ -41,4 +41,8 @@ public class StockItemDao extends AbstractDao<StockItemEntity, StockItem, String
     public List<StockItem> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    public List<StockItem> getByUserIdAndMarkedForAcquisition(UUID userId) {
+        return converter.convertEntity(repository.getByUserIdAndMarkedForAcquisition(uuidConverter.convertDomain(userId), true));
+    }
 }

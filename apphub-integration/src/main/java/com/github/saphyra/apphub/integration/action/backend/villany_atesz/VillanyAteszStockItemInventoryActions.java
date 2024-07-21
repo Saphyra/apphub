@@ -152,4 +152,10 @@ public class VillanyAteszStockItemInventoryActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_RESET_INVENTORIED));
     }
+
+    public static Response getEditMarkedForAcquisitionResponse(UUID accessTokenId, UUID stockItemId, Boolean markedForAcquisition) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(markedForAcquisition))
+            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION, "stockItemId", stockItemId));
+    }
 }

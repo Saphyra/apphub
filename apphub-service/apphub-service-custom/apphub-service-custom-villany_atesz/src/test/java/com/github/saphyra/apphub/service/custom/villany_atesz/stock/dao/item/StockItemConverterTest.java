@@ -73,6 +73,7 @@ class StockItemConverterTest {
             .inCar(IN_CAR)
             .inStorage(IN_STORAGE)
             .inventoried(true)
+            .markedForAcquisition(true)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_IN_ACCESS_TOKEN);
@@ -95,7 +96,8 @@ class StockItemConverterTest {
             .returns(ENCRYPTED_BAR_CODE, StockItemEntity::getBarCode)
             .returns(ENCRYPTED_IN_CAR, StockItemEntity::getInCar)
             .returns(ENCRYPTED_IN_STORAGE, StockItemEntity::getInStorage)
-            .returns(ENCRYPTED_INVENTORIED, StockItemEntity::getInventoried);
+            .returns(ENCRYPTED_INVENTORIED, StockItemEntity::getInventoried)
+            .returns(true, StockItemEntity::getMarkedForAcquisition);
     }
 
     @Test
@@ -110,6 +112,7 @@ class StockItemConverterTest {
             .inCar(ENCRYPTED_IN_CAR)
             .inStorage(ENCRYPTED_IN_STORAGE)
             .inventoried(ENCRYPTED_INVENTORIED)
+            .markedForAcquisition(true)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_IN_ACCESS_TOKEN);
@@ -132,6 +135,7 @@ class StockItemConverterTest {
             .returns(BAR_CODE, StockItem::getBarCode)
             .returns(IN_CAR, StockItem::getInCar)
             .returns(IN_STORAGE, StockItem::getInStorage)
-            .returns(true, StockItem::isInventoried);
+            .returns(true, StockItem::isInventoried)
+            .returns(true, StockItem::isMarkedForAcquisition);
     }
 }

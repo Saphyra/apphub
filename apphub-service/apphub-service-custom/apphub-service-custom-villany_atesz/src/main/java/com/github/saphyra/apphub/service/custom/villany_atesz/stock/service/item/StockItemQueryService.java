@@ -100,6 +100,17 @@ public class StockItemQueryService {
 
     public StockItemResponse findByStockItemId(UUID stockItemId) {
         StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
+        return toResponse(stockItem);
+    }
+
+    public List<StockItemResponse> getStockItemsMarkedForAcquisition(UUID userId) {
+        return stockItemDao.getByUserIdAndMarkedForAcquisition(userId)
+            .stream()
+            .map(StockItemQueryService::toResponse)
+            .collect(Collectors.toList());
+    }
+
+    private static StockItemResponse toResponse(StockItem stockItem) {
         return StockItemResponse.builder()
             .stockItemId(stockItem.getStockItemId())
             .stockCategoryId(stockItem.getStockCategoryId())
@@ -109,6 +120,7 @@ public class StockItemQueryService {
             .inCar(stockItem.getInCar())
             .inStorage(stockItem.getInStorage())
             .inventoried(stockItem.isInventoried())
+            .markedForAcquisition(stockItem.isMarkedForAcquisition())
             .build();
     }
 }

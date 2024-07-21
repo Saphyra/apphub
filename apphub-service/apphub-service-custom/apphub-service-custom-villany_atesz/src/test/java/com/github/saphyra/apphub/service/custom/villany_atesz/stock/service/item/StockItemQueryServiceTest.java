@@ -160,6 +160,7 @@ public class StockItemQueryServiceTest {
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
 
         assertThat(underTest.findByStockItemId(STOCK_ITEM_ID))
             .returns(STOCK_ITEM_ID, StockItemResponse::getStockItemId)
@@ -169,6 +170,33 @@ public class StockItemQueryServiceTest {
             .returns(BAR_CODE, StockItemResponse::getBarCode)
             .returns(IN_CAR, StockItemResponse::getInCar)
             .returns(IN_STORAGE, StockItemResponse::getInStorage)
-            .returns(true, StockItemResponse::getInventoried);
+            .returns(true, StockItemResponse::getInventoried)
+            .returns(true, StockItemResponse::getMarkedForAcquisition);
+    }
+
+    @Test
+    void getStockItemsMarkedForAcquisition() {
+        given(stockItemDao.getByUserIdAndMarkedForAcquisition(USER_ID)).willReturn(List.of(stockItem));
+
+        given(stockItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
+        given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
+        given(stockItem.getName()).willReturn(NAME);
+        given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+        given(stockItem.getInCar()).willReturn(IN_CAR);
+        given(stockItem.getInStorage()).willReturn(IN_STORAGE);
+        given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
+
+        CustomAssertions.singleListAssertThat(underTest.getStockItemsMarkedForAcquisition(USER_ID))
+            .returns(STOCK_ITEM_ID, StockItemResponse::getStockItemId)
+            .returns(STOCK_CATEGORY_ID, StockItemResponse::getStockCategoryId)
+            .returns(NAME, StockItemResponse::getName)
+            .returns(SERIAL_NUMBER, StockItemResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemResponse::getBarCode)
+            .returns(IN_CAR, StockItemResponse::getInCar)
+            .returns(IN_STORAGE, StockItemResponse::getInStorage)
+            .returns(true, StockItemResponse::getInventoried)
+            .returns(true, StockItemResponse::getMarkedForAcquisition);
     }
 }

@@ -20,4 +20,5 @@ public class StockItemResponse {
     private Integer inCar;
     private Integer inStorage;
     private Boolean inventoried;
+    private Boolean markedForAcquisition;
 }

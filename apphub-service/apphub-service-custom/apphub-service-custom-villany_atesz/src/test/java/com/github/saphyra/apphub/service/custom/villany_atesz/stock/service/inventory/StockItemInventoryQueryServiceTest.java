@@ -68,6 +68,7 @@ class StockItemInventoryQueryServiceTest {
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
 
         CustomAssertions.singleListAssertThat(underTest.getItems(USER_ID))
             .returns(STOCK_ITEM_ID, StockItemInventoryResponse::getStockItemId)
@@ -78,7 +79,8 @@ class StockItemInventoryQueryServiceTest {
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)
-            .returns(true, StockItemInventoryResponse::getInCart);
+            .returns(true, StockItemInventoryResponse::getInCart)
+            .returns(true, StockItemInventoryResponse::getMarkedForAcquisition);
     }
 
     @Test
@@ -97,6 +99,7 @@ class StockItemInventoryQueryServiceTest {
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
 
         CustomAssertions.singleListAssertThat(underTest.getItems(USER_ID))
             .returns(STOCK_ITEM_ID, StockItemInventoryResponse::getStockItemId)
@@ -107,7 +110,8 @@ class StockItemInventoryQueryServiceTest {
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)
-            .returns(false, StockItemInventoryResponse::getInCart);
+            .returns(false, StockItemInventoryResponse::getInCart)
+            .returns(true, StockItemInventoryResponse::getMarkedForAcquisition);
     }
 
     @Test
@@ -123,6 +127,7 @@ class StockItemInventoryQueryServiceTest {
         given(stockItem.getInCar()).willReturn(IN_CAR);
         given(stockItem.getInStorage()).willReturn(IN_STORAGE);
         given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
 
         CustomAssertions.singleListAssertThat(underTest.getItems(USER_ID))
             .returns(STOCK_ITEM_ID, StockItemInventoryResponse::getStockItemId)
@@ -133,6 +138,7 @@ class StockItemInventoryQueryServiceTest {
             .returns(IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(IN_STORAGE, StockItemInventoryResponse::getInStorage)
             .returns(true, StockItemInventoryResponse::getInventoried)
-            .returns(false, StockItemInventoryResponse::getInCart);
+            .returns(false, StockItemInventoryResponse::getInCart)
+            .returns(true, StockItemInventoryResponse::getMarkedForAcquisition);
     }
 }

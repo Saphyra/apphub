@@ -20,7 +20,8 @@
     border-color: orange;
 }
 
-.villany-atesz-stock-inventory-item-inventoried {
+.villany-atesz-stock-inventory-item-inventoried,
+.villany-atesz-stock-inventory-item-marked-for-acquisition {
     transform: scale(1.5);
 }
 
@@ -28,7 +29,7 @@
     width: 75px;
 }
 
-.villany-atesz-stock-inventory-item-name{
+.villany-atesz-stock-inventory-item-name {
     font-family: monospace;
     min-width: 100%;
 }

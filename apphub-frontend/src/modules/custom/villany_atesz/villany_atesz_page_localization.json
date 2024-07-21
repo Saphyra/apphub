@@ -14,5 +14,9 @@
     "total-value": {
         "en": "Total value of stock",
         "hu": "A készlet összértéke"
+    },
+    "stock-items-marked-for-acquisition": {
+        "en": "Stock items marked for acquisition",
+        "hu": "Beszerzendő cikkek"
     }
 }

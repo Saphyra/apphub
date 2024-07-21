@@ -66,5 +66,9 @@
     "reset-inventoried-content": {
         "en": "Are you sure you want to reset the inventoried status for all the items?",
         "hu": "Biztosan vissza szeretnéd állítani az összes termék állapotát?"
+    },
+    "marked-for-acquisition": {
+        "en": "Marked for acquisition",
+        "hu": "Beszerzésre jelölve"
     }
 }

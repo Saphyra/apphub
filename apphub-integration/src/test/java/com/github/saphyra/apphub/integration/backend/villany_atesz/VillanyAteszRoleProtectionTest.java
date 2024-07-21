@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.villany_atesz;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszAcquisitionActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszCartActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszContactActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszIndexActions;
@@ -35,6 +36,7 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
 
         //Index
         CommonUtils.verifyMissingRole(() -> VillanyAteszIndexActions.getTotalValueResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszIndexActions.getStockItemsMarkedForAcquisitionResponse(accessTokenId));
 
         //Contact
         CommonUtils.verifyMissingRole(() -> VillanyAteszContactActions.getCreateContactResponse(accessTokenId, new ContactModel()));
@@ -61,6 +63,7 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getDeleteResponse(accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditCategoryResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditInventoriedResponse(accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, UUID.randomUUID(), false));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditNameResponse(accessTokenId, UUID.randomUUID(), ""));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditSerialNumberResponse(accessTokenId, UUID.randomUUID(), ""));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemInventoryActions.getEditBarCodeResponse(accessTokenId, UUID.randomUUID(), ""));
@@ -79,6 +82,10 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getFinalizeCartResponse(accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getDeleteResponse(accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getEditMarginResponse(accessTokenId, UUID.randomUUID(), 1d));
+
+        //Acquisition
+        CommonUtils.verifyMissingRole(() -> VillanyAteszAcquisitionActions.getDatesResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszAcquisitionActions.getAcquisitionsOnDayResponse(accessTokenId, LocalDate.now()));
     }
 
     @DataProvider(parallel = true)

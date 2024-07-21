@@ -98,4 +98,13 @@ class StockItemDaoTest {
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
     }
+
+    @Test
+    void getByUserIdAndMarkedForAcquisition() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserIdAndMarkedForAcquisition(USER_ID_STRING, true)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByUserIdAndMarkedForAcquisition(USER_ID)).containsExactly(domain);
+    }
 }

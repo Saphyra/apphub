@@ -2,6 +2,10 @@
     padding: 0;
 }
 
-#villany-atesz-total-stock-value{
+#villany-atesz-total-stock-value {
     margin: 5px;
+}
+
+#villany-atesz-stock-items-marked-for-acquisition {
+    margin: 10px;
 }

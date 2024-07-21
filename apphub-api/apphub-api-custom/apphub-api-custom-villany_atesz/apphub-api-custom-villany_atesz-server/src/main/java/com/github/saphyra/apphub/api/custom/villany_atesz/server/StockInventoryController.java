@@ -28,6 +28,9 @@ public interface StockInventoryController {
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED)
     void editInventoried(@RequestBody OneParamRequest<Boolean> inventoried, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION)
+    void editMarkedForAcquisition(@RequestBody OneParamRequest<Boolean> markedForAcquisition, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME)
     void editName(@RequestBody OneParamRequest<String> name, @PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

@@ -52,7 +52,8 @@ class StockItemFactoryTest {
             .returns(NAME, StockItem::getName)
             .returns(SERIAL_NUMBER, StockItem::getSerialNumber)
             .returns(IN_CAR, StockItem::getInCar)
-            .returns(IN_STORAGE, StockItem::getInStorage);
+            .returns(IN_STORAGE, StockItem::getInStorage)
+            .returns(false, StockItem::isInventoried)
+            .returns(false, StockItem::isMarkedForAcquisition);
     }
-
 }

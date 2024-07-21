@@ -19,8 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VillanyAteszAcquisitionActions {
     public static List<LocalDate> getDates(UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_ACQUISITION_DATES));
+        Response response = getDatesResponse(accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -29,13 +28,22 @@ public class VillanyAteszAcquisitionActions {
             .collect(Collectors.toList());
     }
 
+    public static Response getDatesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_ACQUISITION_DATES));
+    }
+
     public static List<AcquisitionResponse> getAcquisitionsOnDay(UUID accessTokenId, LocalDate date) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_ACQUISITIONS, "acquiredAt", date));
+        Response response = getAcquisitionsOnDayResponse(accessTokenId, date);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(AcquisitionResponse[].class));
+    }
+
+    public static Response getAcquisitionsOnDayResponse(UUID accessTokenId, LocalDate date) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_ACQUISITIONS, "acquiredAt", date));
     }
 
     public static void openHistory(WebDriver driver) {

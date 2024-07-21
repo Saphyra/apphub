@@ -19,4 +19,5 @@ public class StockItem {
     private int inCar;
     private int inStorage;
     private boolean inventoried;
+    private boolean markedForAcquisition;
 }

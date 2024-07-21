@@ -12,4 +12,6 @@ interface StockItemRepository extends CrudRepository<StockItemEntity, String> {
     List<StockItemEntity> getByStockCategoryId(String stockCategoryId);
 
     List<StockItemEntity> getByUserId(String userId);
+
+    List<StockItemEntity> getByUserIdAndMarkedForAcquisition(String userId, boolean markedForAcquisition);
 }

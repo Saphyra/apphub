@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StockItemRepositoryTest {
     private static final String STOCK_ITEM_ID_1 = "stock-item-id-1";
     private static final String STOCK_ITEM_ID_2 = "stock-item-id-2";
+    private static final String STOCK_ITEM_ID_3 = "stock-item-id-3";
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
     private static final String STOCK_CATEGORY_ID_1 = "stock-category-id-1";
@@ -102,5 +103,31 @@ class StockItemRepositoryTest {
         underTest.save(entity2);
 
         assertThat(underTest.getByUserId(USER_ID_1)).containsExactly(entity1);
+    }
+
+    @Test
+    void getByUserIdAndMarkedForAcquisition() {
+        StockItemEntity entity1 = StockItemEntity.builder()
+            .stockItemId(STOCK_ITEM_ID_1)
+            .userId(USER_ID_1)
+            .markedForAcquisition(true)
+            .build();
+        underTest.save(entity1);
+
+        StockItemEntity entity2 = StockItemEntity.builder()
+            .stockItemId(STOCK_ITEM_ID_2)
+            .userId(USER_ID_1)
+            .markedForAcquisition(false)
+            .build();
+        underTest.save(entity2);
+
+        StockItemEntity entity3 = StockItemEntity.builder()
+            .stockItemId(STOCK_ITEM_ID_3)
+            .userId(USER_ID_2)
+            .markedForAcquisition(true)
+            .build();
+        underTest.save(entity3);
+
+        assertThat(underTest.getByUserIdAndMarkedForAcquisition(USER_ID_1, true)).containsExactly(entity1);
     }
 }

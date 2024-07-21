@@ -38,6 +38,7 @@ public class StockItemInventoryQueryService {
             .inStorage(stockItem.getInStorage())
             .inCart(isInCart(stockItem.getStockItemId()))
             .inventoried(stockItem.isInventoried())
+            .markedForAcquisition(stockItem.isMarkedForAcquisition())
             .build();
     }
 

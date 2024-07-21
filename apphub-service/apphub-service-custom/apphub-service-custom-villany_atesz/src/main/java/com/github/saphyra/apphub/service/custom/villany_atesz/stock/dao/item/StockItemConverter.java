@@ -42,6 +42,7 @@ class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
             .inCar(integerEncryptor.encrypt(domain.getInCar(), userId, stockId, COLUMN_IN_CAR))
             .inStorage(integerEncryptor.encrypt(domain.getInStorage(), userId, stockId, COLUMN_IN_STORAGE))
             .inventoried(booleanEncryptor.encrypt(domain.isInventoried(), userId, stockId, COLUMN_INVENTORIED))
+            .markedForAcquisition(domain.isMarkedForAcquisition())
             .build();
     }
 
@@ -59,6 +60,7 @@ class StockItemConverter extends ConverterBase<StockItemEntity, StockItem> {
             .inCar(integerEncryptor.decrypt(entity.getInCar(), userId, entity.getStockItemId(), COLUMN_IN_CAR))
             .inStorage(integerEncryptor.decrypt(entity.getInStorage(), userId, entity.getStockItemId(), COLUMN_IN_STORAGE))
             .inventoried(Optional.ofNullable(entity.getInventoried()).map(inventoried -> booleanEncryptor.decrypt(inventoried, userId, entity.getStockItemId(), COLUMN_INVENTORIED)).orElse(false))
+            .markedForAcquisition(entity.getMarkedForAcquisition())
             .build();
     }
 }
