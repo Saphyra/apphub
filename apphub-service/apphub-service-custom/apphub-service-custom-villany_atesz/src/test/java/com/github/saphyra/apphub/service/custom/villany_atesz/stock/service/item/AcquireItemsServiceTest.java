@@ -85,6 +85,7 @@ class AcquireItemsServiceTest {
         then(stockItem).should().setBarCode(BAR_CODE);
         then(stockItemDao).should().save(stockItem);
         then(acquisitionService).should().createAcquisitions(USER_ID, request);
+        then(stockItem).should().setMarkedForAcquisition(false);
         then(stockItemPriceDao).should().save(stockItemPrice);
         then(stockItemPriceDao).shouldHaveNoMoreInteractions();
     }
@@ -118,5 +119,6 @@ class AcquireItemsServiceTest {
         then(acquisitionService).should().createAcquisitions(USER_ID, request);
         then(stockItemPriceDao).should().deleteByStockItemId(STOCK_ITEM_ID);
         then(stockItemPriceDao).should().save(stockItemPrice);
+        then(stockItem).should().setMarkedForAcquisition(false);
     }
 }

@@ -38,6 +38,7 @@ public class AcquireItemsService {
         stockItem.setInCar(stockItem.getInCar() + request.getInCar());
         stockItem.setInStorage(stockItem.getInStorage() + request.getInStorage());
         stockItem.setBarCode(request.getBarCode());
+        stockItem.setMarkedForAcquisition(false);
         stockItemDao.save(stockItem);
 
         if (request.getForceUpdatePrice()) {
