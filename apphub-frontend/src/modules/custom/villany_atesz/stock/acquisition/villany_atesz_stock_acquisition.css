@@ -5,6 +5,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     border-bottom: 1px solid white;
+    background-color: black;
 }
 
 .villany-atesz-stock-acquisition-item {

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.ite
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItem;
@@ -95,5 +96,19 @@ public class StockItemQueryService {
     public String findBarCodeByStockItemId(UUID stockItemId) {
         return stockItemDao.findByIdValidated(stockItemId)
             .getBarCode();
+    }
+
+    public StockItemResponse findByStockItemId(UUID stockItemId) {
+        StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
+        return StockItemResponse.builder()
+            .stockItemId(stockItem.getStockItemId())
+            .stockCategoryId(stockItem.getStockCategoryId())
+            .name(stockItem.getName())
+            .serialNumber(stockItem.getSerialNumber())
+            .barCode(stockItem.getBarCode())
+            .inCar(stockItem.getInCar())
+            .inStorage(stockItem.getInStorage())
+            .inventoried(stockItem.isInventoried())
+            .build();
     }
 }

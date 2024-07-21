@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.villany_atesz;
 
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszAcquisitionActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.villany_atesz.VillanyAteszNavigation;
@@ -17,6 +18,7 @@ import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.villany_atesz.AcquisitionHistoryItem;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.StockItemAcquisition;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.StockItemInventory;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.StockItemOverview;
@@ -63,6 +65,8 @@ public class StockAcquisitionTest extends SeleniumTest {
         noStockItemChosen(driver);
         acquire(driver);
         acquire_forceUpdatePrice(driver);
+
+        checkAcquisitionHistory(driver);
     }
 
     @Test(groups = {"fe", "villany-atesz"})
@@ -157,6 +161,16 @@ public class StockAcquisitionTest extends SeleniumTest {
 
         AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockOverviewPageActions.getItems(driver), stockItemOverviews -> !stockItemOverviews.isEmpty(), stockItemOverviews -> stockItemOverviews.get(0))
             .returns(FORCED_PRICE + Constants.FT_SUFFIX, StockItemOverview::getPrice);
+    }
+
+    private void checkAcquisitionHistory(WebDriver driver) {
+        VillanyAteszNavigation.openAcquisition(driver);
+
+        VillanyAteszAcquisitionActions.openHistory(driver);
+
+        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszAcquisitionActions.getHistoryItems(driver))
+            .returns(IN_CAR + IN_STORAGE, AcquisitionHistoryItem::getAmount)
+            .returns(STOCK_ITEM_NAME, AcquisitionHistoryItem::getItemName);
     }
 
     private void noStockItemChosen(WebDriver driver) {

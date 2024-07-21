@@ -66,5 +66,13 @@
     "force-update-price": {
         "en": "Force update price",
         "hu": "Fix ár"
+    },
+    "show-history": {
+        "en": "Show history",
+        "hu": "Korábbi beszerzések mutatása"
+    },
+    "hide-history": {
+        "en": "Hide history",
+        "hu": "Korábbi beszerzések elrejtése"
     }
 }

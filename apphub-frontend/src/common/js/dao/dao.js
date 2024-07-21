@@ -383,7 +383,7 @@ const Endpoints = {
     VILLANY_ATESZ_GET_CART: new Endpoint(RequestMethod.GET, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_DELETE_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_FINALIZE_CART: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}"),
-    VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockCategoryId}"),
+    VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/category/{stockCategoryId}"),
     VILLANY_ATESZ_STOCK_ACQUIRE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/acquire"),
     VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/inventory"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/name"),
@@ -402,6 +402,9 @@ const Endpoints = {
     VILLANY_ATESZ_CART_EDIT_MARGIN: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}/margin"),
     VILLANY_ATESZ_INDEX_TOTAL_VALUE: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/total-value"),
     VILLANY_ATESZ_RESET_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/reset-inventoried"),
+    VILLANY_ATESZ_GET_ACQUISITION_DATES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/acquisition"),
+    VILLANY_ATESZ_GET_ACQUISITIONS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/acquisition/{acquiredAt}"),
+    VILLANY_ATESZ_GET_STOCK_ITEM: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}"),
 }
 
 export default Endpoints;

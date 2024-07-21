@@ -15,4 +15,5 @@
     <include file="database/change_sets/stock_item_price.xml"/>
     <include file="database/change_sets/cart.xml"/>
     <include file="database/change_sets/cart_item.xml"/>
+    <include file="database/change_sets/acquisition.xml"/>
 </databaseChangeLog>

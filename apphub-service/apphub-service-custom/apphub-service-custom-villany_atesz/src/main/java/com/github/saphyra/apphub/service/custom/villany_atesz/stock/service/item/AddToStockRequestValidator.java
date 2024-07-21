@@ -1,15 +1,18 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.AcquisitionRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 class AddToStockRequestValidator {
-    public void validate(List<AddToStockRequest> requests) {
-        requests.forEach(this::validate);
+    public void validate(AcquisitionRequest request) {
+
+        ValidationUtil.notNull(request.getItems(), "items");
+        ValidationUtil.notNull(request.getAcquiredAt(), "acquiredAt");
+        request.getItems()
+            .forEach(this::validate);
     }
 
     private void validate(AddToStockRequest request) {

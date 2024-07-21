@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.AcquisitionRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -32,11 +33,14 @@ public interface StockItemController {
     List<StockItemForCategoryResponse> getStockItemsForCategory(@PathVariable("stockCategoryId") UUID stockCategoryId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE)
-    void acquire(@RequestBody List<AddToStockRequest> request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void acquire(@RequestBody AcquisitionRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(Endpoints.VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE)
     ResponseEntity<StockItemAcquisitionResponse> findByBarCode(@RequestBody OneParamRequest<String> barCode, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID)
     OneParamResponse<String> findBarCodeByStockItemId(@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEM)
+    StockItemResponse getStockItem(@PathVariable("stockItemId") UUID stockItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

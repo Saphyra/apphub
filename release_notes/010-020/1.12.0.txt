@@ -7,6 +7,7 @@
         Upload multiple files and images at once
     VillanyAtesz
         Force update prices
+        Date of acquisitions
 
 ===BUGFIXES===
     Platform

@@ -20,6 +20,7 @@ import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCa
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class VillanyAteszRoleProtectionTest extends BackEndTest {
@@ -51,7 +52,7 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getCreateResponse(accessTokenId, new CreateStockItemRequest()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getStockItemsResponse(accessTokenId));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getStockItemsForCategoryResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getAcquireResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, LocalDate.now()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getFindByBarcodeResponse(accessTokenId, ""));
         CommonUtils.verifyMissingRole(() -> VillanyAteszStockItemActions.getFindBarCodeByStockItemIdResponse(accessTokenId, UUID.randomUUID()));
 

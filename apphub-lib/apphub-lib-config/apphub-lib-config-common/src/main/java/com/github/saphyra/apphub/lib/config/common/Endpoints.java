@@ -335,7 +335,8 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_ADD_TO_CART = "/api/villany-atesz/cart";
     public static final String VILLANY_ATESZ_FINALIZE_CART = "/api/villany-atesz/cart/{cartId}";
     public static final String VILLANY_ATESZ_DELETE_CART = "/api/villany-atesz/cart/{cartId}";
-    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY = "/api/villany-atesz/stock/item/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY = "/api/villany-atesz/stock/category/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEM = "/api/villany-atesz/stock/item/{stockItemId}";
     public static final String VILLANY_ATESZ_STOCK_ACQUIRE = "/api/villany-atesz/stock/acquire";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS = "/api/villany-atesz/stock/inventory";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME = "/api/villany-atesz/stock/inventory/{stockItemId}/name";
@@ -344,7 +345,7 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE = "/api/villany-atesz/stock/inventory/{stockItemId}/bar-code";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR = "/api/villany-atesz/stock/inventory/{stockItemId}/in-car";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE = "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage";
-    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED ="/api/villany-atesz/stock/inventory/{stockItemId}/inventoried" ;
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED = "/api/villany-atesz/stock/inventory/{stockItemId}/inventoried";
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_CAR = "/api/villany-atesz/stock/item/{stockItemId}/to-car";
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE = "/api/villany-atesz/stock/item/{stockItemId}/to-storage";
     public static final String VILLANY_ATESZ_REMOVE_FROM_CART = "/api/villany-atesz/cart/{cartId}/item/{stockItemId}";
@@ -353,6 +354,8 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_CART_EDIT_MARGIN = "/api/villany-atesz/cart/{cartId}/margin";
     public static final String VILLANY_ATESZ_INDEX_TOTAL_VALUE = "/api/villany-atesz/index/total-value";
     public static final String VILLANY_ATESZ_RESET_INVENTORIED = "/api/villany-atesz/stock/inventory/reset-inventoried";
+    public static final String VILLANY_ATESZ_GET_ACQUISITION_DATES = "/api/villany-atesz/acquisition";
+    public static final String VILLANY_ATESZ_GET_ACQUISITIONS = "/api/villany-atesz/acquisition/{acquiredAt}";
 
     //SKYXPLORE-DATA-SETTINGS
     public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";

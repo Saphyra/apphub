@@ -12,11 +12,16 @@ import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import { validateAcquiredItems } from "../../validation/VillanyAteszValidation";
 import useCache from "../../../../../common/hook/Cache";
+import LocalDate from "../../../../../common/js/date/LocalDate";
+import InputField from "../../../../../common/component/input/InputField";
+import VillanyAteszStockAcquisitionHistory from "./history/VillanyAteszStockAcquisitionHistory";
 
 const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(loclaizationData);
 
     const [items, setItems] = useState(Utils.hasValue(sessionStorage.stockItems) ? JSON.parse(sessionStorage.stockItems) : []);
+    const [acquiredAt, setAcquiredAt] = useState(LocalDate.now().toString());
+    const [displayHistory, setDisplayHistory] = useState(false);
 
     const refetchCategories = useCache(
         "stock-categories",
@@ -65,7 +70,12 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     }
 
     const addToStock = async () => {
-        await Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE.createRequest(items)
+        const payload = {
+            items: items,
+            acquiredAt: acquiredAt
+        }
+
+        await Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE.createRequest(payload)
             .send();
 
         updateItems([]);
@@ -95,21 +105,47 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
                     onclick={() => Utils.addAndSet(items, new AcquiredItemData(), updateItems)}
                 />
 
-                <Button
-                    id="villany-atesz-stock-acquisition-add-to-stock-button"
-                    label={localizationHandler.get("add-to-stock")}
-                    onclick={openAddToStockConfirmation}
-                />
+                <div>
+                    <InputField
+                        id="villany-atesz-stock-acquisition-acquired-at"
+                        type="date"
+                        value={acquiredAt}
+                        onchangeCallback={setAcquiredAt}
+                    />
+
+                    <Button
+                        id="villany-atesz-stock-acquisition-add-to-stock-button"
+                        label={localizationHandler.get("add-to-stock")}
+                        onclick={openAddToStockConfirmation}
+                    />
+                </div>
 
                 <Button
                     id="villany-atesz-stock-acquisition-reset-button"
                     label={localizationHandler.get("reset")}
                     onclick={reset}
                 />
+
+                {displayHistory &&
+                    <Button
+                        id="villany-atesz-stock-acquisition-hide-history-button"
+                        label={localizationHandler.get("hide-history")}
+                        onclick={() => setDisplayHistory(false)}
+                    />
+                }
+
+                {!displayHistory &&
+                    <Button
+                        id="villany-atesz-stock-acquisition-show-history-button"
+                        label={localizationHandler.get("show-history")}
+                        onclick={() => setDisplayHistory(true)}
+                    />
+                }
             </div>
 
             <div id="villany-atesz-stock-acquisition-items">
-                {getItems()}
+                {!displayHistory && getItems()}
+                {displayHistory && <VillanyAteszStockAcquisitionHistory/>}
             </div>
         </div>
     );

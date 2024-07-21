@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.AcquisitionRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOvervie
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquireItemsService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class StockItemControllerImplTest {
+class StockItemControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID STOCK_CATEGORY_ID = UUID.randomUUID();
     private static final String BAR_CODE = "bar-code";
@@ -43,7 +43,7 @@ public class StockItemControllerImplTest {
     private StockItemQueryService stockItemQueryService;
 
     @Mock
-    private AcquisitionService acquisitionService;
+    private AcquireItemsService acquireItemsService;
 
     @InjectMocks
     private StockItemControllerImpl underTest;
@@ -61,7 +61,7 @@ public class StockItemControllerImplTest {
     private StockItemForCategoryResponse stockItemForCategoryResponse;
 
     @Mock
-    private AddToStockRequest addToStockRequest;
+    private AcquisitionRequest acquisitionRequest;
 
     @Mock
     private StockItemAcquisitionResponse stockItemAcquisitionResponse;
@@ -94,9 +94,9 @@ public class StockItemControllerImplTest {
 
     @Test
     void acquire() {
-        underTest.acquire(List.of(addToStockRequest), accessTokenHeader);
+        underTest.acquire(acquisitionRequest, accessTokenHeader);
 
-        then(acquisitionService).should().acquire(List.of(addToStockRequest));
+        then(acquireItemsService).should().acquire(USER_ID, acquisitionRequest);
     }
 
     @Test

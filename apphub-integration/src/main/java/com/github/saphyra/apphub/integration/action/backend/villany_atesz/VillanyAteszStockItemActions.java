@@ -4,11 +4,13 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AcquisitionRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToStockRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemOverviewResponse;
 import io.restassured.response.Response;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -41,14 +43,23 @@ public class VillanyAteszStockItemActions {
             .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS));
     }
 
-    public static Response getAcquireResponse(UUID accessTokenId, AddToStockRequest... requests) {
+    public static Response getAcquireResponse(UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
+        return getAcquireResponse(accessTokenId, date, Arrays.asList(requests));
+    }
+
+    public static Response getAcquireResponse(UUID accessTokenId, LocalDate date, List<AddToStockRequest> requests) {
+        AcquisitionRequest acquisitionRequest = AcquisitionRequest.builder()
+            .items(requests)
+            .acquiredAt(date)
+            .build();
+
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .body(Arrays.asList(requests))
+            .body(acquisitionRequest)
             .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE));
     }
 
-    public static void acquire(UUID accessTokenId, AddToStockRequest... requests) {
-        Response response = getAcquireResponse(accessTokenId, requests);
+    public static void acquire(UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
+        Response response = getAcquireResponse(accessTokenId, date, requests);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
