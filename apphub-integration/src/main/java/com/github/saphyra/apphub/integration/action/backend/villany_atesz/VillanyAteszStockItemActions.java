@@ -92,4 +92,9 @@ public class VillanyAteszStockItemActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID, "stockItemId", stockItemId));
     }
+
+    public static Response getStockItemResponse(UUID accessTokenId, UUID stockItemId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEM, "stockItemId", stockItemId));
+    }
 }

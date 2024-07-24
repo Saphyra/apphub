@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-tool" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="villany_atesz" tableName="tool"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="villany_atesz" tableName="tool">
+            <column name="tool_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="brand" type="text"/>
+            <column name="name" type="text"/>
+            <column name="cost" type="text"/>
+            <column name="acquired_at" type="text"/>
+            <column name="warranty_expires_at" type="text"/>
+            <column name="status" type="text"/>
+            <column name="scrapped_at" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="villany_atesz" tableName="tool" columnNames="tool_id"/>
+    </changeSet>
+</databaseChangeLog>

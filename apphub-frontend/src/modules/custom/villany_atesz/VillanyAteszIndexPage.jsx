@@ -19,10 +19,12 @@ const VillanyAteszIndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [totalValue, setTotalValue] = useState(0);
+    const [totalStockValue, setTotalStockValue] = useState(0);
+    const [totalToolboxValue, setTotalToolboxValue] = useState(0);
     const [items, setItems] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_VALUE.createRequest(), (response) => setTotalValue(response.value));
+    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE.createRequest(), (response) => setTotalStockValue(response.value));
+    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE.createRequest(), (response) => setTotalToolboxValue(response.value));
     useLoader(Endpoints.VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION.createRequest(), setItems);
 
     useEffect(sessionChecker, []);
@@ -50,9 +52,9 @@ const VillanyAteszIndexPage = () => {
 
                 <div >
                     <div id="villany-atesz-total-stock-value">
-                        <span>{localizationHandler.get("total-value")}</span>
+                        <span>{localizationHandler.get("total-stock-value")}</span>
                         <span>: </span>
-                        <span id="villany-atesz-total-stock-value-value">{totalValue}</span>
+                        <span id="villany-atesz-total-stock-value-value">{totalStockValue}</span>
                         <span> Ft</span>
                     </div>
 
@@ -63,6 +65,13 @@ const VillanyAteszIndexPage = () => {
                             {getStockItems()}
                         </ul>
                     </fieldset>
+
+                    <div id="villany-atesz-total-toolbox-value">
+                        <span>{localizationHandler.get("total-toolbox-value")}</span>
+                        <span>: </span>
+                        <span id="villany-atesz-total-toolbox-value-value">{totalToolboxValue}</span>
+                        <span> Ft</span>
+                    </div>
                 </div>
             </main>
 

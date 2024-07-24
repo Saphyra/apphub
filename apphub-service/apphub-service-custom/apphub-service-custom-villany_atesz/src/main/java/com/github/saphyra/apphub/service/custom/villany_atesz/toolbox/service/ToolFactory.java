@@ -1,0 +1,31 @@
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service;
+
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateToolRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.Tool;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+class ToolFactory {
+    private final IdGenerator idGenerator;
+
+    Tool create(UUID userId, CreateToolRequest request) {
+        return Tool.builder()
+            .toolId(idGenerator.randomUuid())
+            .userId(userId)
+            .brand(request.getBrand())
+            .name(request.getName())
+            .cost(request.getCost())
+            .acquiredAt(request.getAcquiredAt())
+            .status(ToolStatus.DEFAULT)
+            .warrantyExpiresAt(request.getWarrantyExpiresAt())
+            .build();
+    }
+}

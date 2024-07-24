@@ -5,16 +5,19 @@ import com.github.saphyra.apphub.integration.action.backend.villany_atesz.Villan
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockCategoryActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockItemActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockItemInventoryActions;
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszToolboxActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCategoryModel;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemResponse;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +32,11 @@ public class VillanyAteszIndexTest extends BackEndTest {
     private static final Integer IN_STORAGE_2 = 455;
     private static final Integer PRICE_1 = 35;
     private static final Integer PRICE_2 = 355;
+    private static final String TOOL_NAME_1 = "tool-name-1";
+    private static final String TOOL_NAME_2 = "tool-name-2";
 
     @Test(groups = {"be", "villany-atesz"})
-    public void totalValue() {
+    public void totalStockValue() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
@@ -66,7 +71,32 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .build();
         VillanyAteszStockItemActions.create(accessTokenId, stockItemRequest2);
 
-        assertThat(VillanyAteszIndexActions.getTotalValue(accessTokenId)).isEqualTo((IN_CAR_1 + IN_STORAGE_1) * PRICE_1 + (IN_CAR_2 + IN_STORAGE_2) * PRICE_2);
+        assertThat(VillanyAteszIndexActions.getTotalStockValue(accessTokenId)).isEqualTo((IN_CAR_1 + IN_STORAGE_1) * PRICE_1 + (IN_CAR_2 + IN_STORAGE_2) * PRICE_2);
+    }
+
+    @Test(groups = {"be", "villany-atesz"})
+    public void totalToolboxValue() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
+
+        CreateToolRequest createToolRequest1 = CreateToolRequest.builder()
+            .brand("")
+            .name(TOOL_NAME_1)
+            .cost(PRICE_1)
+            .acquiredAt(LocalDate.now())
+            .build();
+        CreateToolRequest createToolRequest2 = CreateToolRequest.builder()
+            .brand("")
+            .name(TOOL_NAME_2)
+            .cost(PRICE_2)
+            .acquiredAt(LocalDate.now())
+            .build();
+
+        VillanyAteszToolboxActions.createTool(accessTokenId, createToolRequest1);
+        VillanyAteszToolboxActions.createTool(accessTokenId, createToolRequest2);
+
+        assertThat(VillanyAteszIndexActions.getTotalToolboxValue(accessTokenId)).isEqualTo(PRICE_1 + PRICE_2);
     }
 
     @Test(groups = {"be", "villany-atesz"})

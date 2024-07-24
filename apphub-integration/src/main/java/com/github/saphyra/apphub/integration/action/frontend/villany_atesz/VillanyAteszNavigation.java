@@ -90,4 +90,28 @@ public class VillanyAteszNavigation {
             .until(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("villany-atesz-total-stock-value"))).isPresent())
             .assertTrue("Index page is not loaded.");
     }
+
+    public static void openToolbox(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-toolbox"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.VILLANY_ATESZ_TOOLBOX_PAGE))
+            .assertTrue("Contacts are not opened");
+    }
+
+    public static void openToolboxNew(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-toolbox-navigation-new-tool-button"))
+            .click();
+    }
+
+    public static void openToolboxOverview(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-toolbox-navigation-overview-button"))
+            .click();
+    }
+
+    public static void openToolboxScrapped(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-toolbox-navigation-scrapped-button"))
+            .click();
+    }
 }

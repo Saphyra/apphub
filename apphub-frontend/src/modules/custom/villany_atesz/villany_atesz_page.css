@@ -2,7 +2,8 @@
     padding: 0;
 }
 
-#villany-atesz-total-stock-value {
+#villany-atesz-total-stock-value,
+#villany-atesz-total-toolbox-value {
     margin: 5px;
 }
 

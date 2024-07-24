@@ -11,9 +11,13 @@
         "en": "Home",
         "hu": "Kezdőlap"
     },
-    "total-value": {
+    "total-stock-value": {
         "en": "Total value of stock",
         "hu": "A készlet összértéke"
+    },
+    "total-toolbox-value": {
+        "en": "Total toolbox value",
+        "hu": "Szerszámok összértéke"
     },
     "stock-items-marked-for-acquisition": {
         "en": "Stock items marked for acquisition",

@@ -9,6 +9,7 @@
         Force update prices
         Date of acquisitions
         Mark stock items for acquisition
+        Toolbox
 
 ===BUGFIXES===
     Platform

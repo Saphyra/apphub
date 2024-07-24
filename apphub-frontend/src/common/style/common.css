@@ -432,3 +432,15 @@ textarea {
 .inline {
     display: inline;
 }
+
+.background-red {
+    background-color: red !important;
+}
+
+.background-yellow {
+    background-color: yellow !important;
+}
+
+.background-orange {
+    background-color: orange !important;
+}
