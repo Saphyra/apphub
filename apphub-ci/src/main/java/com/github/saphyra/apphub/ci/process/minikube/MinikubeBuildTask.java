@@ -26,7 +26,7 @@ public class MinikubeBuildTask {
         String threadCount = String.valueOf(propertyDao.getThreadCount(deployMode));
 
         try {
-            Process process = new ProcessBuilder("bash", "-c", "./infra/install_all.sh %s %s".formatted(threadCount, deployMode))
+            Process process = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/install_all.sh %s %s".formatted(threadCount, deployMode))
                 .inheritIO()
                 .start();
 
@@ -58,7 +58,7 @@ public class MinikubeBuildTask {
                 .map(serviceName -> ":" + services.findByNameValidated(serviceName).getModuleName())
                 .collect(Collectors.joining(","));
 
-            Process process = new ProcessBuilder("bash", "-c", "./infra/install_services.sh %s %s %s".formatted(threadCount, deployMode, moduleNames))
+            Process process = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/install_services.sh %s %s %s".formatted(threadCount, deployMode, moduleNames))
                 .inheritIO()
                 .start();
 
@@ -81,7 +81,7 @@ public class MinikubeBuildTask {
         String threadCount = String.valueOf(propertyDao.getThreadCount(DeployMode.DEFAULT));
 
         try {
-            Process process = new ProcessBuilder("bash", "-c", "./infra/deploy_all.sh %s %s %s".formatted(threadCount, username, password))
+            Process process = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/deploy_all.sh %s %s %s".formatted(threadCount, username, password))
                 .inheritIO()
                 .start();
 

@@ -73,7 +73,7 @@ public abstract class MenuBase {
 
     protected List<MenuOption> getOptions() {
         return options.stream()
-            .filter(menuOption -> menuOption.getMenu() == menu)
+            .filter(menuOption -> menuOption.getMenus().contains(menu))
             .collect(Collectors.toList());
     }
 

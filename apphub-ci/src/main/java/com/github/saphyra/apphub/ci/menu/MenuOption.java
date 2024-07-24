@@ -3,10 +3,15 @@ package com.github.saphyra.apphub.ci.menu;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.utils.Utils;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface MenuOption {
     Menu getMenu();
+
+    default List<Menu> getMenus() {
+        return List.of(getMenu());
+    }
 
     String getCommand();
 

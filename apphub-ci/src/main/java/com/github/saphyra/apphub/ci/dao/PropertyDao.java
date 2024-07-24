@@ -108,4 +108,10 @@ public class PropertyDao {
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getRemoteRunTestsPreCreateDriverCount);
     }
+
+    public String getBashFileLocation() {
+        return propertyRepository.findById(PropertyName.BASH_FILE_LOCATION)
+            .map(Property::getValue)
+            .orElseGet(defaultProperties::getBashFileLocation);
+    }
 }

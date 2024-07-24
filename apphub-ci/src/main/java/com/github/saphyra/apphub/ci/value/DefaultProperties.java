@@ -18,4 +18,5 @@ public class DefaultProperties {
     private Integer localServiceStartupCountLimit;
     private Integer localRunTestsPreCreateDriverCount;
     private Integer remoteRunTestsPreCreateDriverCount;
+    private String bashFileLocation;
 }

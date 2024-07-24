@@ -61,6 +61,7 @@ defaults:
   localServiceStartupCountLimit: 5
   localRunTestsPreCreateDriverCount: 0
   remoteRunTestsPreCreateDriverCount: 0
+  bashFileLocation: bash
 
 services:
 #Crutial platform
