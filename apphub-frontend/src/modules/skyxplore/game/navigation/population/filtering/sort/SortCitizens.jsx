@@ -4,13 +4,80 @@ import LocalizationHandler from "../../../../../../../common/js/LocalizationHand
 import CitizenOrder from "./order/CitizenOrder";
 import CitizenSortMethodSelector from "./method/CitizenSortMethodSelector";
 import Order from "./Order";
+import Button from "../../../../../../../common/component/input/Button";
+import Utils from "../../../../../../../common/js/Utils";
+import { SettingType } from "../../../../common/hook/Setting";
+import Endpoints from "../../../../../../../common/js/dao/dao";
+import { CitizenComparatorName } from "./CitizenComparator";
 
-const SortCitizens = ({ citizenComparator, setCitizenComparator }) => {
+const SortCitizens = ({
+    citizenComparator,
+    setCitizenComparator,
+    orderSetting,
+    updateOrder,
+    planetId
+}) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [order, setOrder] = useState(Order.ASCENDING);
 
+    useEffect(() => setOrder(citizenComparator.order), [citizenComparator]);
     useEffect(() => setCitizenComparator(citizenComparator.withOrder(order)), [order]);
+
+    const getDeleteSettingButton = () => {
+        if (!Utils.hasValue(orderSetting)) {
+            return;
+        } else if (!Utils.hasValue(orderSetting.location)) {
+            return <Button
+                id="skyxplore-game-population-order-delete-global-default-button"
+                label={localizationHandler.get("delete-global-default")}
+                onclick={() => deleteSetting(null)}
+            />
+        } else {
+            return <Button
+                id="skyxplore-game-population-order-delete-planet-default-button"
+                label={localizationHandler.get("delete-planet-default")}
+                onclick={() => deleteSetting(planetId)}
+            />
+        }
+    }
+
+    const saveSetting = (location) => {
+        const data = {
+            order: citizenComparator.order.name,
+            type: citizenComparator.name
+        }
+
+        switch (citizenComparator.name) {
+            case CitizenComparatorName.BY_STAT:
+                data.stat = citizenComparator.stat;
+                break;
+            case CitizenComparatorName.BY_SKILL:
+                data.skill = citizenComparator.skill;
+                break;
+        }
+
+        const payload = {
+            location: location,
+            type: SettingType.POPULATION_ORDER,
+            data: data
+        }
+
+        Endpoints.SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
+            .send();
+    }
+
+    const deleteSetting = async (location) => {
+        const payload = {
+            location: location,
+            type: SettingType.POPULATION_ORDER,
+        }
+
+        const response = await Endpoints.SKYXPLORE_DATA_DELETE_SETTING.createRequest(payload)
+            .send();
+
+        updateOrder(response.value);
+    }
 
     return (
         <div className="skyxplore-game-population-filtering-panel">
@@ -28,6 +95,21 @@ const SortCitizens = ({ citizenComparator, setCitizenComparator }) => {
                 citizenComparator={citizenComparator}
                 setCitizenComparator={setCitizenComparator}
             />
+
+            <div className="skyxplore-game-population-default-buttons">
+                <Button
+                    id="skyxplore-game-population-order-save-planet-default-button"
+                    label={localizationHandler.get("save-planet-default")}
+                    onclick={() => saveSetting(planetId)}
+                />
+                <Button
+                    id="skyxplore-game-population-order-save-global-default-button"
+                    label={localizationHandler.get("save-global-default")}
+                    onclick={() => saveSetting(null)}
+                />
+
+                {getDeleteSettingButton()}
+            </div>
         </div>
     );
 }

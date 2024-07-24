@@ -22,5 +22,13 @@
     "file-title": {
         "en": "Title",
         "hu": "Cím"
+    },
+    "add-group": {
+        "en": "Add file group",
+        "hu": "Új fájl törlési csoport"
+    },
+    "file-upload-failed": {
+        "en": "Failed uploading all the files.",
+        "hu": "Nem sikerült feltölteni az összes fájlt."
     }
 }

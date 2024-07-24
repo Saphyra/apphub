@@ -39,6 +39,10 @@ public class UpgradeBuildingService {
     public void upgradeBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot upgrade building on planet " + planetId);
+        }
+
         if (game.getData().getDeconstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, buildingId + " on planet " + planetId + " is under deconstruction.");
         }

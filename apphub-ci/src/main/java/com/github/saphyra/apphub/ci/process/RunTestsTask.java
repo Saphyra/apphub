@@ -24,7 +24,8 @@ public class RunTestsTask {
                 platformProperties.getLocalServerPort(),
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getLocalDatabaseName(),
-                ""
+                "",
+                testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -41,7 +42,8 @@ public class RunTestsTask {
                 platformProperties.getMinikubeTestServerPort(),
                 platformProperties.getMinikubeTestDatabasePort(),
                 platformProperties.getMinikubeDatabaseName(),
-                ""
+                "",
+                testGroups.length() > 0 ? 0 : propertyDao.getRemoteRunPreCreateDriverCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -57,14 +59,15 @@ public class RunTestsTask {
                 platformProperties.getMinikubeTestServerPort(),
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getProdDatabaseName(),
-                String.join(",", platformProperties.getProdDisabledTestGroups())
+                String.join(",", platformProperties.getProdDisabledTestGroups()),
+                propertyDao.getRemoteRunPreCreateDriverCount()
             );
         } finally {
             killChromeDriverTask.run();
         }
     }
 
-    private void runTests(String enabledGroups, Integer threadCount, Integer serverPort, Integer databasePort, String databaseName, String disabledGroups) {
+    private void runTests(String enabledGroups, Integer threadCount, Integer serverPort, Integer databasePort, String databaseName, String disabledGroups, Integer preCreateDrivers) {
         List<String> command = List.of(
             "cmd",
             "/c",
@@ -84,6 +87,7 @@ public class RunTestsTask {
             "-DintegrationServerEnabled=true",
             "-DenabledGroups=%s".formatted(enabledGroups),
             "-DdisabledGroups=%s".formatted(disabledGroups),
+            "-DpreCreateWebDrivers=%s".formatted(preCreateDrivers),
             "\"",
             "clean",
             "test"

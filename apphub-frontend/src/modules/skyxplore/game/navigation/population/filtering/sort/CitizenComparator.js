@@ -1,4 +1,20 @@
 import Utils from "../../../../../../../common/js/Utils";
+import { fromName } from "./Order";
+
+export const fromComparatorData = (comparatorData) => {
+    const order = fromName(comparatorData.order);
+
+    switch (comparatorData.type) {
+        case CitizenComparatorName.BY_NAME:
+            return new ByNameCitizenComparator(order);
+        case CitizenComparatorName.BY_STAT:
+            return new ByStatCitizenComparator(order, comparatorData.stat);
+        case CitizenComparatorName.BY_SKILL:
+            return new BySkillCitizenComparator(order, comparatorData.skill);
+        default:
+            Utils.throwException("IllegalArgument", "Unhandled CitizenComparatorName " + comparatorData.type);
+    }
+}
 
 export const CitizenComparatorName = {
     BY_NAME: "by-name",
@@ -69,7 +85,7 @@ export const BySkillCitizenComparator = class {
     compare(a, b) {
         const levelComparison = a.skills[this.skill].level - b.skills[this.skill].level;
 
-        if(levelComparison === 0){
+        if (levelComparison === 0) {
             return this.order.modify(a.skills[this.skill].experience - b.skills[this.skill].experience);
         }
 

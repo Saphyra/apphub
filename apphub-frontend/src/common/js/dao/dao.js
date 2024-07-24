@@ -192,7 +192,7 @@ const Endpoints = {
     //SkyXplore platform
     SKYXPLORE_PLATFORM_HAS_CHARACTER: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/exists"),
     SKYXPLORE_GET_CHARACTER_NAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/name"),
-    SKYXPLORE_IS_USER_IN_GAME: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
+    SKYXPLORE_GAME_GET_GAME_ID: new Endpoint(RequestMethod.GET, "/api/skyxplore/game"),
 
     //SkyXplore Data
     SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/character"),
@@ -205,6 +205,9 @@ const Endpoints = {
     SKYXPLORE_ACCEPT_FRIEND_REQUEST: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/friend/request/{friendRequestId}"),
     SKYXPLORE_GET_FRIENDS: new Endpoint(RequestMethod.GET, "/api/skyxplore/data/friend"),
     SKYXPLORE_REMOVE_FRIEND: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/friend/{friendshipId}"),
+    SKYXPLORE_DATA_GET_SETTING: new Endpoint(RequestMethod.POST, "/api/skyxplore/data/setting"),
+    SKYXPLORE_DATA_CREATE_SETTING: new Endpoint(RequestMethod.PUT, "/api/skyxplore/data/setting"),
+    SKYXPLORE_DATA_DELETE_SETTING: new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/setting"),
 
     //SkyXplore Lobby
     SKYXPLORE_CREATE_LOBBY: new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby"),
@@ -380,7 +383,7 @@ const Endpoints = {
     VILLANY_ATESZ_GET_CART: new Endpoint(RequestMethod.GET, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_DELETE_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}"),
     VILLANY_ATESZ_FINALIZE_CART: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}"),
-    VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockCategoryId}"),
+    VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/category/{stockCategoryId}"),
     VILLANY_ATESZ_STOCK_ACQUIRE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/acquire"),
     VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/inventory"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/name"),
@@ -390,6 +393,7 @@ const Endpoints = {
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/category"),
     VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/inventoried"),
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/{stockItemId}/marked-for-acquisition"),
     VILLANY_ATESZ_MOVE_STOCK_TO_CAR: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/{stockItemId}/to-car"),
     VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/{stockItemId}/to-storage"),
     VILLANY_ATESZ_REMOVE_FROM_CART: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/cart/{cartId}/item/{stockItemId}"),
@@ -397,8 +401,17 @@ const Endpoints = {
     VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/item/bar-code"),
     VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}/bar-code"),
     VILLANY_ATESZ_CART_EDIT_MARGIN: new Endpoint(RequestMethod.POST, "/api/villany-atesz/cart/{cartId}/margin"),
-    VILLANY_ATESZ_INDEX_TOTAL_VALUE: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/total-value"),
+    VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/total-value/stock"),
+    VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/total-value/toolbox"),
+    VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION: new Endpoint(RequestMethod.GET, "/api/villany-atesz/index/stock-item/marked-for-acquisition"),
     VILLANY_ATESZ_RESET_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/stock/inventory/reset-inventoried"),
+    VILLANY_ATESZ_GET_ACQUISITION_DATES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/acquisition"),
+    VILLANY_ATESZ_GET_ACQUISITIONS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/acquisition/{acquiredAt}"),
+    VILLANY_ATESZ_GET_STOCK_ITEM: new Endpoint(RequestMethod.GET, "/api/villany-atesz/stock/item/{stockItemId}"),
+    VILLANY_ATESZ_GET_TOOLS: new Endpoint(RequestMethod.GET, "/api/villany-atesz/tool"),
+    VILLANY_ATESZ_CREATE_TOOL: new Endpoint(RequestMethod.PUT, "/api/villany-atesz/tool"),
+    VILLANY_ATESZ_SET_TOOL_STATUS: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/{toolId}"),
+    VILLANY_ATESZ_DELETE_TOOL: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/{toolId}"),
 }
 
 export default Endpoints;

@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import localizationData from "./building_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import MapStream from "../../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import surfaceLocalizationData from "../../../../common/localization/surface_localization.json";
 import BuildingTypeOverview from "./type/BuildingTypeOverview";
+import Utils from "../../../../../../../common/js/Utils";
+import Button from "../../../../../../../common/component/input/Button";
 
-const BuildingOverview = ({ buildings, planetSize }) => {
+const BuildingOverview = ({ buildings, planetSize, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);
+
+    const [displayDetails, setDisplayDetails] = useState(true);
+
+    useEffect(
+        () => {
+            setDisplayDetails(Utils.isTrue(tabSettings.tabs.buildings));
+        },
+        [tabSettings]
+    );
+
+    const updateDisplayDetails = (newValue) => {
+        tabSettings.tabs.buildings = newValue;
+
+        updateTabSettings(tabSettings);
+        setDisplayDetails(newValue);
+    }
 
     const getBuildings = () => {
         return new MapStream(buildings)
@@ -18,6 +36,8 @@ const BuildingOverview = ({ buildings, planetSize }) => {
                 surfaceType={surfaceType}
                 surfaceTypeDetails={surfaceTypeDetails}
                 surfaceLocalizationHandler={surfaceLocalizationHandler}
+                tabSettings={tabSettings}
+                updateTabSettings={updateTabSettings}
             />)
             .toList();
     }
@@ -40,22 +60,36 @@ const BuildingOverview = ({ buildings, planetSize }) => {
 
     return (
         <div id="skyxplore-game-planet-overview-building" className="skyxplore-gamep-planet-overview-tab">
+            <Button
+                className="skyxplore-game-planet-overview-tab-expand-button"
+                label={displayDetails ? "-" : "+"}
+                onclick={() => updateDisplayDetails(!displayDetails)}
+            />
+
             <div className="skyxplore-game-planet-overview-tab-title">{localizationHandler.get("tab-title")}</div>
 
-            {getBuildings()}
+            {displayDetails &&
+                [
+                    getBuildings(),
 
-            <div id="skyxplore-game-planet-overview-building-total" className="skyxplore-gamep-planet-overview-tab-item">
-                <span>{localizationHandler.get("total")}</span>
-                <span>: </span>
-                <span id="skyxplore-game-planet-overview-building-total-buildings">{getTotalBuildingAmount()}</span>
-                <span> / </span>
-                <span id="skyxplore-game-planet-overview-building-planet-size">{planetSize}</span>
-                <span> (</span>
-                <span>{localizationHandler.get("level")}</span>
-                <span>: </span>
-                <span id="skyxplore-game-planet-overview-building-total-level">{getTotalLevel()}</span>
-                <span>)</span>
-            </div>
+                    <div
+                        key="total"
+                        id="skyxplore-game-planet-overview-building-total"
+                        className="skyxplore-gamep-planet-overview-tab-item"
+                    >
+                        <span>{localizationHandler.get("total")}</span>
+                        <span>: </span>
+                        <span id="skyxplore-game-planet-overview-building-total-buildings">{getTotalBuildingAmount()}</span>
+                        <span> / </span>
+                        <span id="skyxplore-game-planet-overview-building-planet-size">{planetSize}</span>
+                        <span> (</span>
+                        <span>{localizationHandler.get("level")}</span>
+                        <span>: </span>
+                        <span id="skyxplore-game-planet-overview-building-total-level">{getTotalLevel()}</span>
+                        <span>)</span>
+                    </div>
+                ]
+            }
         </div>
     );
 }

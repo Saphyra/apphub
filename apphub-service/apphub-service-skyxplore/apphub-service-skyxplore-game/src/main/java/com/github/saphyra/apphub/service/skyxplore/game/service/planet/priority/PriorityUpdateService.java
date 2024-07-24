@@ -29,6 +29,11 @@ public class PriorityUpdateService {
             .orElseThrow(() -> ExceptionFactory.invalidParam("priorityType", "unknown value"));
 
         Game game = gameDao.findByUserIdValidated(userId);
+
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot modify priority on planet " + planetId);
+        }
+
         Priority priority = game.getData()
             .getPriorities()
             .findByLocationAndType(planetId, priorityType);

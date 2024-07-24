@@ -83,6 +83,16 @@ public class AwaitilityWrapper {
         return helper.getResult(t -> Optional.ofNullable(t).map(Optional::get));
     }
 
+    public static <T> T getSingleItemFromListWithWait(Supplier<List<T>> supplier) {
+        List<T> result = getListWithWait(supplier, list -> !list.isEmpty());
+
+        if (result.size() != 1) {
+            throw new RuntimeException("Expected list size exceeded.");
+        }
+
+        return result.get(0);
+    }
+
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
         GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
 
@@ -105,7 +115,7 @@ public class AwaitilityWrapper {
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier) {
-        return assertWithWaitList(supplier, list -> !list.isEmpty(), list -> list.get(0));
+        return assertWithWaitList(supplier, list -> list.size() == 1, list -> list.get(0));
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier, Predicate<List<T>> predicate, Function<List<T>, T> selector) {

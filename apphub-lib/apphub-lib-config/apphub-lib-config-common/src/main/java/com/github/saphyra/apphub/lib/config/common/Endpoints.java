@@ -13,7 +13,6 @@ public class Endpoints {
     public static final String NOTEBOOK_PAGE = "/web/notebook";
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";
     public static final String UTILS_JSON_FORMATTER_PAGE = "/web/utils/json-formatter";
-    public static final String UTILS_LOG_FORMATTER_PAGE = "/web/utils/log-formatter";
     public static final String UTILS_BASE64_ENCODER_PAGE = "/web/utils/base64";
     public static final String COMMUNITY_PAGE = "/web/community";
     public static final String CALENDAR_PAGE = "/web/calendar";
@@ -171,10 +170,6 @@ public class Endpoints {
     public static final String NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP = "/api/notebook/pin-group/{pinGroupId}/remove/{listItemId}";
     public static final String NOTEBOOK_PIN_GROUP_OPENED = "/api/notebook/pin-group/{pinGroupId}";
 
-    //UTILS
-    public static final String UTILS_LOG_FORMATTER_GET_VISIBILITY = "/api/utils/log-formatter/visibility";
-    public static final String UTILS_LOG_FORMATTER_SET_VISIBILITY = "/api/utils/log-formatter/visibility";
-
     //SKYXPLORE-DATA
     public static final String SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID = "/allowed-internal/skyxplore/data/character/{userId}";
     public static final String SKYXPLORE_INTERNAL_SAVE_GAME_DATA = "/allowed-internal/skyxplore/data/game/data";
@@ -235,7 +230,7 @@ public class Endpoints {
 
     public static final String SKYXPLORE_GAME_SAVE = "/api/skyxplore/game";
     public static final String SKYXPLORE_GAME_IS_HOST = "/api/skyxplore/game/host";
-    public static final String SKYXPLORE_IS_USER_IN_GAME = "/api/skyxplore/game";
+    public static final String SKYXPLORE_GET_GAME_ID_OF_USER = "/api/skyxplore/game";
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_MAP = "/api/skyxplore/game/universe";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
@@ -340,7 +335,8 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_ADD_TO_CART = "/api/villany-atesz/cart";
     public static final String VILLANY_ATESZ_FINALIZE_CART = "/api/villany-atesz/cart/{cartId}";
     public static final String VILLANY_ATESZ_DELETE_CART = "/api/villany-atesz/cart/{cartId}";
-    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY = "/api/villany-atesz/stock/item/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY = "/api/villany-atesz/stock/category/{stockCategoryId}";
+    public static final String VILLANY_ATESZ_GET_STOCK_ITEM = "/api/villany-atesz/stock/item/{stockItemId}";
     public static final String VILLANY_ATESZ_STOCK_ACQUIRE = "/api/villany-atesz/stock/acquire";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS = "/api/villany-atesz/stock/inventory";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME = "/api/villany-atesz/stock/inventory/{stockItemId}/name";
@@ -349,13 +345,27 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE = "/api/villany-atesz/stock/inventory/{stockItemId}/bar-code";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR = "/api/villany-atesz/stock/inventory/{stockItemId}/in-car";
     public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE = "/api/villany-atesz/stock/inventory/{stockItemId}/in-storage";
-    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED ="/api/villany-atesz/stock/inventory/{stockItemId}/inventoried" ;
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED = "/api/villany-atesz/stock/inventory/{stockItemId}/inventoried";
+    public static final String VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION = "/api/villany-atesz/stock/inventory/{stockItemId}/marked-for-acquisition";
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_CAR = "/api/villany-atesz/stock/item/{stockItemId}/to-car";
     public static final String VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE = "/api/villany-atesz/stock/item/{stockItemId}/to-storage";
     public static final String VILLANY_ATESZ_REMOVE_FROM_CART = "/api/villany-atesz/cart/{cartId}/item/{stockItemId}";
     public static final String VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE = "/api/villany-atesz/stock/item/bar-code";
     public static final String VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID = "/api/villany-atesz/stock/item/{stockItemId}/bar-code";
     public static final String VILLANY_ATESZ_CART_EDIT_MARGIN = "/api/villany-atesz/cart/{cartId}/margin";
-    public static final String VILLANY_ATESZ_INDEX_TOTAL_VALUE = "/api/villany-atesz/index/total-value";
+    public static final String VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE = "/api/villany-atesz/index/total-value/stock";
+    public static final String VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE = "/api/villany-atesz/index/total-value/toolbox";
+    public static final String VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION = "/api/villany-atesz/index/stock-item/marked-for-acquisition";
     public static final String VILLANY_ATESZ_RESET_INVENTORIED = "/api/villany-atesz/stock/inventory/reset-inventoried";
+    public static final String VILLANY_ATESZ_GET_ACQUISITION_DATES = "/api/villany-atesz/acquisition";
+    public static final String VILLANY_ATESZ_GET_ACQUISITIONS = "/api/villany-atesz/acquisition/{acquiredAt}";
+    public static final String VILLANY_ATESZ_GET_TOOLS = "/api/villany-atesz/tool";
+    public static final String VILLANY_ATESZ_CREATE_TOOL = "/api/villany-atesz/tool";
+    public static final String VILLANY_ATESZ_SET_TOOL_STATUS = "/api/villany-atesz/tool/{toolId}";
+    public static final String VILLANY_ATESZ_DELETE_TOOL = "/api/villany-atesz/tool/{toolId}";
+
+    //SKYXPLORE-DATA-SETTINGS
+    public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";
+    public static final String SKYXPLORE_DATA_GET_SETTING = "/api/skyxplore/data/setting";
+    public static final String SKYXPLORE_DATA_DELETE_SETTING = "/api/skyxplore/data/setting";
 }

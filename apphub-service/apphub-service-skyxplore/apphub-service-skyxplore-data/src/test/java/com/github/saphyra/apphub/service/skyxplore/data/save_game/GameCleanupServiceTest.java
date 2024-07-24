@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.config.GameDataProperties;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +38,9 @@ public class GameCleanupServiceTest {
     @Mock
     private GameItemService gameItemService;
 
+    @Mock
+    private SettingDao settingDao;
+
     private GameCleanupService underTest;
 
     @Mock
@@ -52,6 +56,7 @@ public class GameCleanupServiceTest {
             .gameDao(gameDao)
             .properties(properties)
             .gameItemServices(List.of(gameItemService))
+            .settingDao(settingDao)
             .build();
     }
 
@@ -66,7 +71,8 @@ public class GameCleanupServiceTest {
 
         underTest.deleteMarkedGames();
 
-        verify(gameItemService).deleteByGameId(GAME_ID);
+        then(settingDao).should().deleteByGameId(GAME_ID);
+        then(gameItemService).should().deleteByGameId(GAME_ID);
         verifyNoMoreInteractions(gameItemService);
     }
 }

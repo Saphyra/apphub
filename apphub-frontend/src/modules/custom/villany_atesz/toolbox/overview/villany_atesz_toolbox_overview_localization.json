@@ -1,0 +1,42 @@
+{
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "brand": {
+        "en": "Brand",
+        "hu": "Márka"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "cost": {
+        "en": "Cost",
+        "hu": "Beszerzési ár"
+    },
+    "acquired-at": {
+        "en": "Acquired at",
+        "hu": "Beszerezve"
+    },
+    "warranty-expires-at": {
+        "en": "Warranty expires at",
+        "hu": "Garancia lejár"
+    },
+    "set-status-to-default": {
+        "en": "Everything is fine",
+        "hu": "Minden rendben"
+    },
+    "set-status-to-damaged": {
+        "en": "Tool is damaged",
+        "hu": "A szerszám sérült"
+    },
+    "set-status-to-scrapped": {
+        "en": "Scrap tool",
+        "hu": "Leselejtezés"
+    },
+    "set-status-to-lost": {
+        "en": "I lost this tool",
+        "hu": "Elhagytam a szerszámot"
+    }
+}

@@ -4,7 +4,7 @@ import uploadFile from "../../common/FileUploader";
 import validateFile from "../../common/validator/FileValidator";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 
-const create = async (listItemTitle, file, setDisplaySpinner, parent) => {
+const create = async (listItemTitle, file, parent, setDisplaySpinner) => {
     const listItemTitleValidationResult = validateListItemTitle(listItemTitle);
     if (!listItemTitleValidationResult.valid) {
         NotificationService.showError(listItemTitleValidationResult.message);
@@ -31,7 +31,7 @@ const create = async (listItemTitle, file, setDisplaySpinner, parent) => {
     const storedFileResponse = await Endpoints.NBOTEBOOK_CREATE_IMAGE.createRequest(payload)
         .send();
 
-    uploadFile(file, storedFileResponse.value, setDisplaySpinner)
+    return uploadFile(file, storedFileResponse.value, setDisplaySpinner)
 }
 
 export default create;

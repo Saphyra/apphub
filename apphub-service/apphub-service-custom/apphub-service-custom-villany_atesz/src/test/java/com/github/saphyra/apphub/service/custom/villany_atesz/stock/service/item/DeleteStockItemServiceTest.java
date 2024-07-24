@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item;
 
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItemDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.acquisition.AcquisitionDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItem;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.price.StockItemPriceDao;
@@ -31,6 +32,9 @@ class DeleteStockItemServiceTest {
     @Mock
     private CartItemDao cartItemDao;
 
+    @Mock
+    private AcquisitionDao acquisitionDao;
+
     @InjectMocks
     private DeleteStockItemService underTest;
 
@@ -48,5 +52,6 @@ class DeleteStockItemServiceTest {
         then(stockItemDao).should().deleteByUserIdAndStockItemId(USER_ID, STOCK_ITEM_ID);
         then(stockItemPriceDao).should().deleteByStockItemId(STOCK_ITEM_ID);
         then(cartItemDao).should().deleteByStockItemId(STOCK_ITEM_ID);
+        then(acquisitionDao).should().deleteByStockItemIdAndUserId(STOCK_ITEM_ID, USER_ID);
     }
 }

@@ -1,15 +1,16 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.AddToStockRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.AcquisitionRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateStockItemRequest;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.StockItemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquisitionService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.AcquireItemsService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.CreateStockItemService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.UUID;
 class StockItemControllerImpl implements StockItemController {
     private final CreateStockItemService createStockItemService;
     private final StockItemQueryService stockItemQueryService;
-    private final AcquisitionService acquisitionService;
+    private final AcquireItemsService acquireItemsService;
 
     @Override
     public void createStockItem(CreateStockItemRequest request, AccessTokenHeader accessTokenHeader) {
@@ -50,10 +51,10 @@ class StockItemControllerImpl implements StockItemController {
     }
 
     @Override
-    public void acquire(List<AddToStockRequest> request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add {} items to the stock.", accessTokenHeader.getUserId(), request.size());
+    public void acquire(AcquisitionRequest request, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to add items to the stock.", accessTokenHeader.getUserId());
 
-        acquisitionService.acquire(request);
+        acquireItemsService.acquire(accessTokenHeader.getUserId(), request);
     }
 
     @Override
@@ -66,5 +67,12 @@ class StockItemControllerImpl implements StockItemController {
         log.info("{} wants to know the barCode of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 
         return new OneParamResponse<>(stockItemQueryService.findBarCodeByStockItemId(stockItemId));
+    }
+
+    @Override
+    public StockItemResponse getStockItem(UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to query stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        return stockItemQueryService.findByStockItemId(stockItemId);
     }
 }

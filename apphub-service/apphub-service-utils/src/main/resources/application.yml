@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: utils
-
-liquibase:
-  schema: utils

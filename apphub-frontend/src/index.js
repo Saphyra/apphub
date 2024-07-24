@@ -38,6 +38,11 @@ import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
 import VillanyAteszIndexPage from './modules/custom/villany_atesz/VillanyAteszIndexPage';
 import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/VillanyAteszContactsPage';
 import VillanyAteszStockPage from './modules/custom/villany_atesz/stock/VillanyAteszStockPage';
+import Base64Page from './modules/utils/base64/Base64Page';
+import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage';
+import NewFilesPage from './modules/notebook/new/new_file/NewFilesPage';
+import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
+import VillanyAteszToolboxPage from './modules/custom/villany_atesz/toolbox/VillanyAteszToolboxPage';
 
 const router = createBrowserRouter([
   {
@@ -168,6 +173,24 @@ const router = createBrowserRouter([
     }
   },
   {
+    path: "/web/notebook/new/files/:parent",
+    element: <NewFilesPage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
+    path: "/web/notebook/new/images/:parent",
+    element: <NewImagesPage />,
+    loader: ({ params }) => {
+      return {
+        parent: params.parent
+      }
+    }
+  },
+  {
     path: "/web/notebook/edit/:listItemId",
     element: <NotebookEditListItemPage />,
     loader: ({ params }) => {
@@ -237,6 +260,18 @@ const router = createBrowserRouter([
   {
     path: "/web/villany-atesz/stock",
     element: <VillanyAteszStockPage />
+  },
+  {
+    path: "/web/villany-atesz/toolbox",
+    element: <VillanyAteszToolboxPage />
+  },
+  {
+    path: "/web/utils/base64",
+    element: <Base64Page />
+  },
+  {
+    path: "/web/utils/json-formatter",
+    element: <JsonFormatterPage />
   },
 ]);
 

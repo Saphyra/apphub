@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import localizationData from "./priority_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import MapStream from "../../../../../../../common/js/collection/MapStream";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../../../../../common/component/input/NumberInput";
 import Endpoints from "../../../../../../../common/js/dao/dao";
+import Utils from "../../../../../../../common/js/Utils";
+import Button from "../../../../../../../common/component/input/Button";
 
-const PriorityOverview = ({ priorities, setPriorities, planetId }) => {
+const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
+
+    const [displayDetails, setDisplayDetails] = useState(true);
+
+    useEffect(
+        () => {
+            setDisplayDetails(Utils.isTrue(tabSettings.tabs.priorities));
+        },
+        [tabSettings]
+    );
+
+    const updateDisplayDetails = (newValue) => {
+        tabSettings.tabs.priorities = newValue;
+
+        updateTabSettings(tabSettings);
+        setDisplayDetails(newValue);
+    }
 
     const setValue = async (priorityType, newPriority) => {
         await Endpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, priorityType: priorityType })
@@ -33,9 +51,15 @@ const PriorityOverview = ({ priorities, setPriorities, planetId }) => {
 
     return (
         <div id="skyxplore-game-planet-overview-priorities" className="skyxplore-gamep-planet-overview-tab">
+            <Button
+                className="skyxplore-game-planet-overview-tab-expand-button"
+                label={displayDetails ? "-" : "+"}
+                onclick={() => updateDisplayDetails(!displayDetails)}
+            />
+
             <div className="skyxplore-game-planet-overview-tab-title">{localizationHandler.get("tab-title")}</div>
 
-            {getPriorities()}
+            {displayDetails && getPriorities()}
         </div>
     );
 }

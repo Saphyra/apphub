@@ -8,6 +8,9 @@ spring:
 liquibase:
   schema: skyxplore
 
+setting:
+  maxDataSize: 1024
+
 game:
   deletion:
     expirationMinutes: 10

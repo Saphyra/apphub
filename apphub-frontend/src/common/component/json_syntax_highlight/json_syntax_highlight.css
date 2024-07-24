@@ -1,0 +1,19 @@
+.json-string {
+    color: lightgreen;
+}
+
+.json-number {
+    color: orange;
+}
+
+.json-boolean {
+    color: cyan;
+}
+
+.json-null {
+    color: pink;
+}
+
+.json-key {
+    color: white;
+}

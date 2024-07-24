@@ -10,5 +10,9 @@
     "stock": {
         "en": "Stock",
         "hu": "Raktár készlet"
+    },
+    "toolbox": {
+        "en": "Toolbox",
+        "hu": "Szerszámok"
     }
 }

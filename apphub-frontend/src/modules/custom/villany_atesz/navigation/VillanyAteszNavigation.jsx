@@ -35,6 +35,14 @@ const VillanyAteszNavigation = ({ page, customs }) => {
                         label={localizationHandler.get("stock")}
                     />
                 }
+
+                {page !== VillanyAteszPage.TOOLBOX &&
+                    <Button
+                        id="villany-atesz-toolbox"
+                        onclick={() => window.location.href = Constants.VILLANY_ATESZ_TOOLBOX_PAGE}
+                        label={localizationHandler.get("toolbox")}
+                    />
+                }
             </span>
 
             <span id="villany-atesz-navigation-customs">{customs}</span>

@@ -17,4 +17,5 @@ public class AddToStockRequest {
     private Integer inStorage;
     private Integer price;
     private String barCode;
+    private Boolean forceUpdatePrice;
 }

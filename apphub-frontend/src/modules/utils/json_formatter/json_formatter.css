@@ -1,0 +1,30 @@
+#json-formatter main {
+    display: grid;
+    grid-template-rows: 200px 40px auto;
+}
+
+#json-formatter-commands {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#json-formatter-commands button {
+    display: inline-block;
+    min-width: 25%;
+}
+
+#json-formatter-input {
+    margin: 30px;
+}
+
+#json-formatter-output {
+    cursor: text;
+    border: 3px outset white;
+    border-radius: 5px;
+    font-size: 16px;
+    margin: 30px;
+    overflow: auto;
+    padding: 5px;
+}

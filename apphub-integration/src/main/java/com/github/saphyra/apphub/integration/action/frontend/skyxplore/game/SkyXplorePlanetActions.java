@@ -120,4 +120,9 @@ public class SkyXplorePlanetActions {
     public static PlanetBuildingOverview getBuildingOverview(WebDriver driver) {
         return new PlanetBuildingOverview(driver);
     }
+
+    public static void toggleBuildings(WebDriver driver) {
+        driver.findElement(By.cssSelector("#skyxplore-game-planet-overview-building .skyxplore-game-planet-overview-tab-expand-button"))
+            .click();
+    }
 }

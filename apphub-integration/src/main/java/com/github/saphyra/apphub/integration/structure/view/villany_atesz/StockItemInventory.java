@@ -87,4 +87,8 @@ public class StockItemInventory {
         return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
             .getAttribute("value");
     }
+
+    public void markForAcquisition(boolean markedForAcquisition) {
+        WebElementUtils.setCheckboxState(webElement.findElement(By.className("villany-atesz-stock-inventory-item-marked-for-acquisition")), markedForAcquisition);
+    }
 }

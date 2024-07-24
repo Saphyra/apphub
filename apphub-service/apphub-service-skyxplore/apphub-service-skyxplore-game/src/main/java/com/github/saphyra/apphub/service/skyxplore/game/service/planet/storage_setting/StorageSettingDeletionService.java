@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
@@ -30,6 +31,10 @@ public class StorageSettingDeletionService {
         StorageSetting storageSetting = game.getData()
             .getStorageSettings()
             .findByStorageSettingIdValidated(storageSettingId);
+
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(storageSetting.getLocation()).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot delete StorageSetting " + storageSettingId);
+        }
 
         return game.getEventLoop()
             .processWithResponse(

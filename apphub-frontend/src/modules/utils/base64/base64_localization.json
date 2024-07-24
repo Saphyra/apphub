@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "Base64 decoder",
+        "hu": "Base64 kódoló"
+    },
+    "page-title": {
+        "en": "Base64 decoder - Apphub",
+        "hu": "Base64 kódoló - Apphub"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "input": {
+        "en": "Input",
+        "hu": "Bemenet"
+    },
+    "encode": {
+        "en": "Encode",
+        "hu": "Kódolás"
+    },
+    "decode": {
+        "en": "Decode",
+        "hu": "Dekódolás"
+    },
+    "output": {
+        "en": "Output",
+        "hu": "Kimenet"
+    }
+}

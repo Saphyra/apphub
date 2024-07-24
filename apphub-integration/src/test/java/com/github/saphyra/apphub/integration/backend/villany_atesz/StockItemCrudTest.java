@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.backend.villany_atesz;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszAcquisitionActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszCartActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszContactActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockCategoryActions;
@@ -12,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AcquisitionResponse;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToCartRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToStockRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CartView;
@@ -21,7 +23,9 @@ import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCa
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemOverviewResponse;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +44,8 @@ public class StockItemCrudTest extends BackEndTest {
     private static final Integer IN_CART = 3;
     private static final String BAR_CODE = "bar-code";
     private static final String NEW_BAR_CODE = "new-bar-code";
+    private static final Integer FORCED_PRICE = PRICE - 1;
+    private static final LocalDate DATE = LocalDate.now().minusDays(3);
 
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemCrud() {
@@ -61,17 +67,22 @@ public class StockItemCrudTest extends BackEndTest {
 
         UUID stockItemId = getStockItemId(accessTokenId);
 
+        acquire_nullItems(accessTokenId);
+        acquire_nullAcquiredAt(accessTokenId, stockItemId);
         acquire_nullStockItemId(accessTokenId);
         acquire_nullInCar(accessTokenId, stockItemId);
         acquire_nullInStorage(accessTokenId, stockItemId);
         acquire_nullPrice(accessTokenId, stockItemId);
         acquire_nullBarCode(accessTokenId, stockItemId);
+        acquire_nullForceUpdatePrice(accessTokenId, stockItemId);
         acquire(accessTokenId, stockItemId);
+        acquire_forceUpdatePrice(accessTokenId, stockItemId);
 
         addToCart(accessTokenId, stockItemId);
 
         delete(accessTokenId, stockItemId);
     }
+
 
     private void create_nullStockCategoryId(UUID accessTokenId) {
         CreateStockItemRequest request = CreateStockItemRequest.builder()
@@ -207,6 +218,24 @@ public class StockItemCrudTest extends BackEndTest {
             .returns(PRICE, StockItemOverviewResponse::getPrice);
     }
 
+    private void acquire_nullItems(UUID accessTokenId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, (List<AddToStockRequest>) null), "items", "must not be null");
+    }
+
+    private void acquire_nullAcquiredAt(UUID accessTokenId, UUID stockItemId) {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(stockItemId)
+            .inCar(ACQUIRE_IN_CAR)
+            .inStorage(ACQUIRE_IN_STORAGE)
+            .price(ACQUIRE_PRICE)
+            .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, null, request), "acquiredAt", "must not be null");
+    }
+
+
     private void acquire_nullStockItemId(UUID accessTokenId) {
         AddToStockRequest request = AddToStockRequest.builder()
             .stockItemId(null)
@@ -214,9 +243,10 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "stockItemId", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "stockItemId", "must not be null");
     }
 
     private void acquire_nullInCar(UUID accessTokenId, UUID stockItemId) {
@@ -226,9 +256,10 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "inCar", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "inCar", "must not be null");
     }
 
     private void acquire_nullInStorage(UUID accessTokenId, UUID stockItemId) {
@@ -238,9 +269,10 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(null)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "inStorage", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "inStorage", "must not be null");
     }
 
     private void acquire_nullPrice(UUID accessTokenId, UUID stockItemId) {
@@ -250,9 +282,10 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(null)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "price", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "price", "must not be null");
     }
 
     private void acquire_nullBarCode(UUID accessTokenId, UUID stockItemId) {
@@ -262,9 +295,23 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(null)
+            .forceUpdatePrice(false)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, request), "barCode", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "barCode", "must not be null");
+    }
+
+    private void acquire_nullForceUpdatePrice(UUID accessTokenId, UUID stockItemId) {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(stockItemId)
+            .inCar(ACQUIRE_IN_CAR)
+            .inStorage(ACQUIRE_IN_STORAGE)
+            .price(ACQUIRE_PRICE)
+            .barCode(BAR_CODE)
+            .forceUpdatePrice(null)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemActions.getAcquireResponse(accessTokenId, DATE, request), "forceUpdatePrice", "must not be null");
     }
 
     private void acquire(UUID accessTokenId, UUID stockItemId) {
@@ -274,15 +321,42 @@ public class StockItemCrudTest extends BackEndTest {
             .inStorage(ACQUIRE_IN_STORAGE)
             .price(ACQUIRE_PRICE)
             .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(false)
             .build();
 
-        VillanyAteszStockItemActions.acquire(accessTokenId, request);
+        VillanyAteszStockItemActions.acquire(accessTokenId, DATE, request);
 
         CustomAssertions.singleListAssertThat(VillanyAteszStockItemActions.getStockItems(accessTokenId))
             .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
             .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage)
             .returns(ACQUIRE_PRICE, StockItemOverviewResponse::getPrice)
             .returns(NEW_BAR_CODE, StockItemOverviewResponse::getBarCode);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszAcquisitionActions.getDates(accessTokenId)).isEqualTo(DATE);
+        CustomAssertions.singleListAssertThat(VillanyAteszAcquisitionActions.getAcquisitionsOnDay(accessTokenId, DATE))
+            .returns(ACQUIRE_IN_CAR + ACQUIRE_IN_STORAGE, AcquisitionResponse::getAmount)
+            .returns(stockItemId, AcquisitionResponse::getStockItemId);
+    }
+
+    private void acquire_forceUpdatePrice(UUID accessTokenId, UUID stockItemId) {
+        AddToStockRequest request = AddToStockRequest.builder()
+            .stockItemId(stockItemId)
+            .inCar(0)
+            .inStorage(0)
+            .price(FORCED_PRICE)
+            .barCode(NEW_BAR_CODE)
+            .forceUpdatePrice(true)
+            .build();
+
+        VillanyAteszStockItemActions.acquire(accessTokenId, DATE, request);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemActions.getStockItems(accessTokenId))
+            .returns(IN_CAR + ACQUIRE_IN_CAR, StockItemOverviewResponse::getInCar)
+            .returns(IN_STORAGE + ACQUIRE_IN_STORAGE, StockItemOverviewResponse::getInStorage)
+            .returns(FORCED_PRICE, StockItemOverviewResponse::getPrice)
+            .returns(NEW_BAR_CODE, StockItemOverviewResponse::getBarCode);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszAcquisitionActions.getDates(accessTokenId)).isEqualTo(DATE);
     }
 
     private void addToCart(UUID accessTokenId, UUID stockItemId) {

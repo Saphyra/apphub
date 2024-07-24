@@ -1,0 +1,20 @@
+#villany-atesz-toolbox-overview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#villany-atesz-toolbox-overview-search {
+    display: block;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 5px;
+}
+
+#villany-atesz-toolbox-overview-table{
+    margin: auto;
+}

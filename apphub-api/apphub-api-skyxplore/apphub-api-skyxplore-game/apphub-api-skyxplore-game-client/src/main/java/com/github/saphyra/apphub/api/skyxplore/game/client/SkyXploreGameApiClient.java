@@ -14,8 +14,8 @@ import java.util.UUID;
 
 @FeignClient(name = "skyxplore-game", url = "${serviceUrls.skyxploreGame}")
 public interface SkyXploreGameApiClient {
-    @GetMapping(Endpoints.SKYXPLORE_IS_USER_IN_GAME)
-    OneParamResponse<Boolean> isUserInGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    @GetMapping(Endpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
+    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
 
     @PostMapping(Endpoints.EVENT_SKYXPLORE_GAME_CLEANUP)
     void cleanUpExpiredGames(@RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -6,11 +6,13 @@ import com.github.saphyra.apphub.lib.exception.LoggedException;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.lib.exception.RestException;
+import org.assertj.core.api.ThrowableAssert;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.fail;
 
 public class ExceptionValidator {
@@ -111,5 +113,9 @@ public class ExceptionValidator {
 
     public static void validateForbiddenOperation(Throwable ex) {
         validateNotLoggedException(ex, HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
+    }
+
+    public static void validateForbiddenOperation(ThrowableAssert.ThrowingCallable call) {
+        validateNotLoggedException(catchThrowable(call), HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION);
     }
 }

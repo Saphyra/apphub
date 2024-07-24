@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.index;
 
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.custom.villany_atesz.index.service.StockTotalValueQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.item.StockItemQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.ToolQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,11 +26,20 @@ class IndexControllerImplTest {
     @Mock
     private StockTotalValueQueryService stockTotalValueQueryService;
 
+    @Mock
+    private StockItemQueryService stockItemQueryService;
+
+    @Mock
+    private ToolQueryService toolQueryService;
+
     @InjectMocks
     private IndexControllerImpl underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
+
+    @Mock
+    private StockItemResponse stockItemResponse;
 
     @BeforeEach
     void setUp() {
@@ -34,9 +47,23 @@ class IndexControllerImplTest {
     }
 
     @Test
-    void setTotalValue() {
+    void getTotalStockValue() {
         given(stockTotalValueQueryService.getTotalValue(USER_ID)).willReturn(TOTAL_VALUE);
 
-        assertThat(underTest.getTotalValue(accessTokenHeader).getValue()).isEqualTo(TOTAL_VALUE);
+        assertThat(underTest.getTotalStockValue(accessTokenHeader).getValue()).isEqualTo(TOTAL_VALUE);
+    }
+
+    @Test
+    void getTotalToolboxValue() {
+        given(toolQueryService.getTotalValue(USER_ID)).willReturn(TOTAL_VALUE);
+
+        assertThat(underTest.getTotalToolboxValue(accessTokenHeader).getValue()).isEqualTo(TOTAL_VALUE);
+    }
+
+    @Test
+    void getStockItemsMarkedForAcquisition() {
+        given(stockItemQueryService.getStockItemsMarkedForAcquisition(USER_ID)).willReturn(List.of(stockItemResponse));
+
+        assertThat(underTest.getStockItemsMarkedForAcquisition(accessTokenHeader)).containsExactly(stockItemResponse);
     }
 }

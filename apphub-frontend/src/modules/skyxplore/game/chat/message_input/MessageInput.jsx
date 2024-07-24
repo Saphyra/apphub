@@ -4,6 +4,8 @@ import InputField from "../../../../../common/component/input/InputField";
 import localizationData from "./message_input_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import Constants from "../../../../../common/js/Constants";
+import NotificationService from "../../../../../common/js/notification/NotificationService";
 
 const MessageInput = ({ sendMessage, currentChatRoom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -12,6 +14,11 @@ const MessageInput = ({ sendMessage, currentChatRoom }) => {
 
     const sendIfEnter = (e) => {
         if (e.which === 13) {
+            if(message.length > Constants.SKYXPLORE_MAX_CHAT_MESSAGE_SIZE){
+                NotificationService.showError(localizationHandler.get("chat-message-too-long"));
+                return;
+            }
+
             const event = {
                 eventName: WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE,
                 payload: {

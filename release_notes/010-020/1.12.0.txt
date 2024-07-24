@@ -1,0 +1,37 @@
+===FEATURES===
+    SkyXplore
+        Save order and hidden properties settings for planet or game
+        Expandable tabs for PlanetOverview
+        Remember expanded tabs for PlanetOverview
+    Notebook
+        Upload multiple files and images at once
+    VillanyAtesz
+        Force update prices
+        Date of acquisitions
+        Mark stock items for acquisition
+        Toolbox
+
+===BUGFIXES===
+    Platform
+        Use Awaitility for findListItem
+    ApphubCI
+        Encoding issues
+        getLocalDeployMode queried remote deployment mode
+
+===PLATFORM CHANGES===
+    Pre-Create WebDrivers
+    React Migration
+        Base64
+        JSON formatter
+
+===TECHNICAL DEBTS===
+    SkyXplore
+        Limit size of chat messages
+        Authorize planet operations
+    ApphubCI
+        Build only enabled services during local start
+
+===ETC===
+    Utils
+        Removed service
+        Removed LogFormatter

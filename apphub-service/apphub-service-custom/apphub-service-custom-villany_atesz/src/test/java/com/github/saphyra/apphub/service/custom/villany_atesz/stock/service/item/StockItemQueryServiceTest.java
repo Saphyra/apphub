@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockCategoryMod
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemAcquisitionResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemForCategoryResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemOverviewResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockItemResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.item.CartItem;
@@ -145,6 +146,57 @@ public class StockItemQueryServiceTest {
 
         assertThat(underTest.findBarCodeByStockItemId(STOCK_ITEM_ID))
             .isEqualTo(BAR_CODE);
+    }
 
+    @Test
+    void findByStockItemId() {
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+
+        given(stockItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
+        given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
+        given(stockItem.getName()).willReturn(NAME);
+        given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+        given(stockItem.getInCar()).willReturn(IN_CAR);
+        given(stockItem.getInStorage()).willReturn(IN_STORAGE);
+        given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
+
+        assertThat(underTest.findByStockItemId(STOCK_ITEM_ID))
+            .returns(STOCK_ITEM_ID, StockItemResponse::getStockItemId)
+            .returns(STOCK_CATEGORY_ID, StockItemResponse::getStockCategoryId)
+            .returns(NAME, StockItemResponse::getName)
+            .returns(SERIAL_NUMBER, StockItemResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemResponse::getBarCode)
+            .returns(IN_CAR, StockItemResponse::getInCar)
+            .returns(IN_STORAGE, StockItemResponse::getInStorage)
+            .returns(true, StockItemResponse::getInventoried)
+            .returns(true, StockItemResponse::getMarkedForAcquisition);
+    }
+
+    @Test
+    void getStockItemsMarkedForAcquisition() {
+        given(stockItemDao.getByUserIdAndMarkedForAcquisition(USER_ID)).willReturn(List.of(stockItem));
+
+        given(stockItem.getStockItemId()).willReturn(STOCK_ITEM_ID);
+        given(stockItem.getStockCategoryId()).willReturn(STOCK_CATEGORY_ID);
+        given(stockItem.getName()).willReturn(NAME);
+        given(stockItem.getSerialNumber()).willReturn(SERIAL_NUMBER);
+        given(stockItem.getBarCode()).willReturn(BAR_CODE);
+        given(stockItem.getInCar()).willReturn(IN_CAR);
+        given(stockItem.getInStorage()).willReturn(IN_STORAGE);
+        given(stockItem.isInventoried()).willReturn(true);
+        given(stockItem.isMarkedForAcquisition()).willReturn(true);
+
+        CustomAssertions.singleListAssertThat(underTest.getStockItemsMarkedForAcquisition(USER_ID))
+            .returns(STOCK_ITEM_ID, StockItemResponse::getStockItemId)
+            .returns(STOCK_CATEGORY_ID, StockItemResponse::getStockCategoryId)
+            .returns(NAME, StockItemResponse::getName)
+            .returns(SERIAL_NUMBER, StockItemResponse::getSerialNumber)
+            .returns(BAR_CODE, StockItemResponse::getBarCode)
+            .returns(IN_CAR, StockItemResponse::getInCar)
+            .returns(IN_STORAGE, StockItemResponse::getInStorage)
+            .returns(true, StockItemResponse::getInventoried)
+            .returns(true, StockItemResponse::getMarkedForAcquisition);
     }
 }

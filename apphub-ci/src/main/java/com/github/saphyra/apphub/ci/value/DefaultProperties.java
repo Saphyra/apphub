@@ -16,4 +16,6 @@ public class DefaultProperties {
     private Integer localRunTestsThreadCount;
     private Integer remoteTestsThreadCount;
     private Integer localServiceStartupCountLimit;
+    private Integer localRunTestsPreCreateDriverCount;
+    private Integer remoteRunTestsPreCreateDriverCount;
 }

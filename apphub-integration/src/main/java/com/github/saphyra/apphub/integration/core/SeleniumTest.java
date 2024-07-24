@@ -13,6 +13,7 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,20 @@ import static java.util.Objects.isNull;
 @Slf4j
 public abstract class SeleniumTest extends TestBase {
     private static final ThreadLocal<List<WebDriverWrapper>> driverWrappers = new ThreadLocal<>();
+
+    @BeforeSuite(alwaysRun = true)
+    public void preCreateWebDrivers() {
+        if (TestConfiguration.PRE_CREATE_WEB_DRIVERS == 0) {
+            return;
+        }
+        log.info("Pre-creating {} drivers...", TestConfiguration.PRE_CREATE_WEB_DRIVERS);
+
+        extractDrivers(TestConfiguration.PRE_CREATE_WEB_DRIVERS);
+        driverWrappers.get()
+            .forEach(WebDriverFactory::release);
+
+        log.info("Drivers created.");
+    }
 
     @AfterMethod(alwaysRun = true)
     public synchronized void afterMethod(ITestResult testResult) {

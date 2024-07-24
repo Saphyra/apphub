@@ -29,6 +29,8 @@ spring:
             /web/admin-panel/ban/*,\
             /web/villany-atesz,\
             /web/villany-atesz/**,\
+            /web/utils/base64,\
+            /web/utils/json-formatter,\
             /web/user/account"
       - id: frontend-resources
         uri: http://localhost:3000
@@ -48,7 +50,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web/admin-panel/**, /web/utils/**, /web/community, /web/calendar
+        - Path=/web/community, /web/calendar
       - id: error-page
         uri: http://localhost:8083
         predicates:

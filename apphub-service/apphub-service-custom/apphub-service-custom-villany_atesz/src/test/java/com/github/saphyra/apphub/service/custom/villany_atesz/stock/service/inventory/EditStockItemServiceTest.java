@@ -142,4 +142,19 @@ class EditStockItemServiceTest {
         then(stockItem).should().setInventoried(true);
         then(stockItemDao).should().save(stockItem);
     }
+
+    @Test
+    void editMarkedForAcquisition_null(){
+        ExceptionValidator.validateInvalidParam(() -> underTest.editMarkedForAcquisition(STOCK_ITEM_ID, null), "markedForAcquisition", "must not be null");
+    }
+
+    @Test
+    void editMarkedForAcquisition() {
+        given(stockItemDao.findByIdValidated(STOCK_ITEM_ID)).willReturn(stockItem);
+
+        underTest.editMarkedForAcquisition(STOCK_ITEM_ID, true);
+
+        then(stockItem).should().setMarkedForAcquisition(true);
+        then(stockItemDao).should().save(stockItem);
+    }
 }

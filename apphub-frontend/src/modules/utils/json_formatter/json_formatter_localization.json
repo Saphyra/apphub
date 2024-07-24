@@ -1,0 +1,22 @@
+{
+    "title": {
+        "en": "JSON formatter",
+        "hu": "JSON formázó"
+    },
+    "page-title": {
+        "en": "JSON formatter - Apphub",
+        "hu": "JSON formázó - Apphub"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "input": {
+        "en": "Input",
+        "hu": "Bemenet"
+    },
+    "format": {
+        "en": "Format",
+        "hu": "Formázás"
+    }
+}

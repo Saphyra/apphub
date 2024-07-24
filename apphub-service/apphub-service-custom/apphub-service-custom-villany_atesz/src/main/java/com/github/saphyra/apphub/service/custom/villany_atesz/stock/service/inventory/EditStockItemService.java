@@ -85,4 +85,14 @@ public class EditStockItemService {
 
         stockItemDao.save(stockItem);
     }
+
+    public void editMarkedForAcquisition(UUID stockItemId, Boolean markedForAcquisition) {
+        ValidationUtil.notNull(markedForAcquisition, "markedForAcquisition");
+
+        StockItem stockItem = stockItemDao.findByIdValidated(stockItemId);
+
+        stockItem.setMarkedForAcquisition(markedForAcquisition);
+
+        stockItemDao.save(stockItem);
+    }
 }

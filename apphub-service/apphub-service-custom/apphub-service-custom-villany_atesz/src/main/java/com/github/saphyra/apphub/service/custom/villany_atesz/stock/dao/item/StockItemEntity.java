@@ -25,4 +25,5 @@ class StockItemEntity {
     private String inCar;
     private String inStorage;
     private String inventoried;
+    private Boolean markedForAcquisition;
 }

@@ -24,7 +24,7 @@ public class NotebookActions {
     }
 
     public static ListItem findListItemByTitleValidated(WebDriver driver, String title) {
-        return findListItemByTitle(driver, title)
+        return AwaitilityWrapper.getOptionalWithWait(() -> findListItemByTitle(driver, title))
             .orElseThrow(() -> new RuntimeException("No listItem found by title '" + title + "'"));
     }
 

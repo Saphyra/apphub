@@ -1,0 +1,6 @@
+{
+    "not-a-valid-json": {
+        "en": "Input is not a valid JSON.",
+        "hu": "A bemenet nem JSON."
+    }
+}

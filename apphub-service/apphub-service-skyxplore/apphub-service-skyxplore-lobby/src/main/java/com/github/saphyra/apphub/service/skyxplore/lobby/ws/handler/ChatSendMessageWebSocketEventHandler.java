@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.skyxplore.lobby.utils.LobbyConstants;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
@@ -32,6 +34,9 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
     @Override
     public void handle(UUID from, WebSocketEvent event, SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler) {
         log.info("Sending message from {}", from);
+        String messageText = event.getPayload().toString();
+        ValidationUtil.maxLength(messageText, LobbyConstants.MAX_CHAT_MESSAGE_LENGTH, "message");
+
         Lobby lobby = lobbyDao.findByUserIdValidated(from);
 
         String senderName = characterProxy.getCharacter(from)
@@ -40,7 +45,7 @@ public class ChatSendMessageWebSocketEventHandler implements WebSocketEventHandl
         Message message = Message.builder()
             .senderId(from)
             .senderName(senderName)
-            .message(event.getPayload().toString())
+            .message(messageText)
             .createdAt(dateTimeUtil.getCurrentTimeEpochMillis())
             .build();
 

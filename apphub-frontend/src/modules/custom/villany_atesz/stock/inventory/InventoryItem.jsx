@@ -47,6 +47,12 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
         sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED, inventoried);
     }
 
+    const updateMarkedForAcquisition = async (markedForAcquisition) => {
+        updateProperty("markedForAcquisition", markedForAcquisition);
+
+        sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION, markedForAcquisition);
+    }
+
     const getCategoryOptions = () => {
         return new MapStream(categories)
             .sorted((a, b) => a.value.localeCompare(b.value))
@@ -160,6 +166,14 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                     value={item.barCode}
                     onchangeCallback={(newValue) => updateProperty("barCode", newValue)}
                     scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE, newValue)}
+                />
+            </td>
+            <td>
+                <InputField
+                    type="checkbox"
+                    className="villany-atesz-stock-inventory-item-marked-for-acquisition"
+                    checked={item.markedForAcquisition}
+                    onchangeCallback={updateMarkedForAcquisition}
                 />
             </td>
             <td>

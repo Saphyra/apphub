@@ -42,6 +42,10 @@ class TerraformationService {
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();
 
+        if (!userId.equals(gameData.getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot terraform on planet " + planetId);
+        }
+
         if (gameData.getConstructions().findByExternalReference(surfaceId).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Terraformation already in progress on surface " + surfaceId);
         }

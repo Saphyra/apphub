@@ -60,9 +60,6 @@ modules:
     - name: json-formatter
       url: /web/utils/json-formatter
       mobileAllowed: true
-    - name: log-formatter
-      url: /web/utils/log-formatter
-      mobileAllowed: true
     - name: base64
       url: /web/utils/base64
       mobileAllowed: true

@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./population_overview.css";
 import localizationData from "./population_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import NavigationHistoryItem from "../../../NavigationHistoryItem";
 import PageName from "../../../PageName";
+import Utils from "../../../../../../../common/js/Utils";
+import Button from "../../../../../../../common/component/input/Button";
 
-const PopulationOverview = ({ population, capacity, openPage, planetId }) => {
+const PopulationOverview = ({ population, capacity, openPage, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
+
+    const [displayDetails, setDisplayDetails] = useState(true);
+
+    useEffect(
+        () => {
+            setDisplayDetails(Utils.isTrue(tabSettings.tabs.population));
+        },
+        [tabSettings]
+    );
+
+    const updateDisplayDetails = (newValue) => {
+        tabSettings.tabs.population = newValue;
+
+        updateTabSettings(tabSettings);
+        setDisplayDetails(newValue);
+    }
 
     const percentage = population / capacity * 100;
 
@@ -24,26 +42,33 @@ const PopulationOverview = ({ population, capacity, openPage, planetId }) => {
 
     return (
         <div id="skyxplore-game-planet-overview-population" className="skyxplore-gamep-planet-overview-tab">
+            <Button
+                className="skyxplore-game-planet-overview-tab-expand-button"
+                label={displayDetails ? "-" : "+"}
+                onclick={() => updateDisplayDetails(!displayDetails)}
+            />
             <div className="skyxplore-game-planet-overview-tab-title">{localizationHandler.get("tab-title")}</div>
 
-            <div id="skyxplore-game-planet-overview-population-status">
-                <div
-                    id="skyxplore-game-planet-overview-population-status-bar"
-                    style={{
-                        width: width,
-                        backgroundColor: getBackgroundColor()
-                    }}
-                />
+            {displayDetails &&
+                <div id="skyxplore-game-planet-overview-population-status">
+                    <div
+                        id="skyxplore-game-planet-overview-population-status-bar"
+                        style={{
+                            width: width,
+                            backgroundColor: getBackgroundColor()
+                        }}
+                    />
 
-                <div
-                    id="skyxplore-game-planet-overview-population-status-text"
-                    className="skyxplore-gamep-planet-overview-tab-item"
-                >
-                    <span id="skyxplore-game-planet-overview-population-status-current">{population}</span>
-                    <span> / </span>
-                    <span id="skyxplore-game-planet-overview-population-status-capacity">{capacity}</span>
+                    <div
+                        id="skyxplore-game-planet-overview-population-status-text"
+                        className="skyxplore-gamep-planet-overview-tab-item"
+                    >
+                        <span id="skyxplore-game-planet-overview-population-status-current">{population}</span>
+                        <span> / </span>
+                        <span id="skyxplore-game-planet-overview-population-status-capacity">{capacity}</span>
+                    </div>
                 </div>
-            </div>
+            }
 
             <div
                 id="skyxplore-game-planet-overview-population-details-button"

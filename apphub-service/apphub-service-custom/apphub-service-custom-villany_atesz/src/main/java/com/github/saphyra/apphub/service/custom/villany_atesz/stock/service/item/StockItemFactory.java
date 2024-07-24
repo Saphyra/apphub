@@ -25,6 +25,8 @@ class StockItemFactory {
             .barCode(request.getBarCode())
             .inCar(request.getInCar())
             .inStorage(request.getInStorage())
+            .inventoried(false)
+            .markedForAcquisition(false)
             .build();
     }
 }

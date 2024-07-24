@@ -1,12 +1,12 @@
 import React from "react";
 import getSelector from "./OptionSelectorFactory";
 
-const ByStatOptions = ({ selectedSkill, skills, setSelectedSkill }) => {
+const ByStatOptions = ({ stats, selectedStat, setSelectedStat }) => {
     return getSelector(
-        "skyxplore-game-population-skill-selector",
-        selectedSkill,
-        skills,
-        setSelectedSkill
+        "skyxplore-game-population-stat-selector",
+        selectedStat,
+        stats,
+        setSelectedStat
     );
 }
 

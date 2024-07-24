@@ -29,6 +29,10 @@ public class DeconstructBuildingService {
     public void deconstructBuilding(UUID userId, UUID planetId, UUID buildingId) {
         Game game = gameDao.findByUserIdValidated(userId);
 
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot deconstruct building on planet " + planetId);
+        }
+
         if (game.getData().getConstructions().findByExternalReference(buildingId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation(buildingId + " is under construction");
         }

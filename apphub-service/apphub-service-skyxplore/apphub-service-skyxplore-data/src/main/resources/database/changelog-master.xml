@@ -45,4 +45,5 @@
     <include file="database/change_sets/citizen_allocation.xml"/>
     <include file="database/change_sets/building_allocation.xml"/>
     <include file="database/change_sets/durability.xml"/>
+    <include file="database/change_sets/setting.xml"/>
 </databaseChangeLog>

@@ -94,6 +94,13 @@ public class StockInventoryControllerImplTest {
     }
 
     @Test
+    void editMarkedForAcquisition() {
+        underTest.editMarkedForAcquisition(new OneParamRequest<>(true), STOCK_ITEM_ID, accessTokenHeader);
+
+        then(editStockItemService).should().editMarkedForAcquisition(STOCK_ITEM_ID, true);
+    }
+
+    @Test
     void editName() {
         underTest.editName(new OneParamRequest<>(NAME), STOCK_ITEM_ID, accessTokenHeader);
 

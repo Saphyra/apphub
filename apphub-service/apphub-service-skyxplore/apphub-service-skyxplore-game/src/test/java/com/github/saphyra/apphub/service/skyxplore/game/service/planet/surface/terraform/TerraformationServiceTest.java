@@ -20,6 +20,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
@@ -28,12 +30,15 @@ import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.Ev
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
@@ -48,6 +53,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class TerraformationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
@@ -128,6 +134,28 @@ public class TerraformationServiceTest {
     @Mock
     private ConstructionModel constructionModel;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
+    @BeforeEach
+    void setUp() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+    }
+
+    @Test
+    void forbiddenOperation() {
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
+    }
+
     @Test
     public void invalidSurfaceType() {
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, "afe"));
@@ -137,8 +165,6 @@ public class TerraformationServiceTest {
 
     @Test
     public void terraformationAlreadyInProgress() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(terraformation));
 
@@ -149,8 +175,6 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceNotEmpty() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -163,8 +187,6 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceTypeCannotBeTerraformed() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -181,8 +203,6 @@ public class TerraformationServiceTest {
 
     @Test
     public void surfaceCannotBeTerraformedToGivenType() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);
@@ -199,8 +219,6 @@ public class TerraformationServiceTest {
 
     @Test
     public void terraform() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
-        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
         given(gameData.getBuildings()).willReturn(buildings);

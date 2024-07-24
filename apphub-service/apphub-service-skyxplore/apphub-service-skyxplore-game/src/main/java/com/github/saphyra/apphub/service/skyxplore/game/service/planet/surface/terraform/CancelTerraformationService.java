@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -28,7 +29,7 @@ public class CancelTerraformationService {
         Construction terraformation = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
-        processCancellation(game, terraformation);
+        processCancellation(userId, game, terraformation);
     }
 
     void cancelTerraformationOfSurface(UUID userId, UUID surfaceId) {
@@ -38,11 +39,15 @@ public class CancelTerraformationService {
         Construction terraformation = gameData.getConstructions()
             .findByExternalReferenceValidated(surfaceId);
 
-        processCancellation(game, terraformation);
+        processCancellation(userId, game, terraformation);
     }
 
     @SneakyThrows
-    private void processCancellation(Game game, Construction terraformation) {
+    private void processCancellation(UUID userId, Game game, Construction terraformation) {
+        if (!userId.equals(game.getData().getPlanets().findByIdValidated(terraformation.getLocation()).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel terraformation on planet " + terraformation.getConstructionId());
+        }
+
         game.getEventLoop()
             .processWithWait(() -> {
                 game.getData()

@@ -12,7 +12,7 @@ public class PlanetBuildingOverview {
 
     public PlanetBuildingOverviewItem getForSurfaceType(String surfaceType) {
         WebElement webElement = WebElementUtils.getIfPresent(() -> driver.findElement(By.id("skyxplore-game-planet-overview-building-" + surfaceType.toLowerCase())))
-            .orElse(null);
+            .orElseThrow(() -> new RuntimeException("BuildingDetails item not found for surfaceType " + surfaceType));
         return new PlanetBuildingOverviewItem(webElement);
     }
 }

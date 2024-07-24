@@ -44,4 +44,16 @@
             <column name="bar_code" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-marked_for_acquisition-to-stock_item" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="stock_item" columnName="marked_for_acquisition"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="stock_item">
+            <column name="marked_for_acquisition" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

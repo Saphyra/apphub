@@ -6,6 +6,8 @@ import Message from "./chat/Message";
 import Stream from "../../../../common/js/collection/Stream";
 import MessageType from "./chat/MessageType";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import Constants from "../../../../common/js/Constants";
+import NotificationService from "../../../../common/js/notification/NotificationService";
 
 const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
     const [messages, setMessages] = useState([]);
@@ -71,18 +73,25 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
 
     const onkeyup = (event) => {
         if (event.which === 13) {
-            sendMessage(event.target.value);
-            event.target.value = "";
+            if(sendMessage(event.target.value)){
+                event.target.value = "";
+            }
         }
     }
 
     const sendMessage = (message) => {
+        if(message.length > Constants.SKYXPLORE_MAX_CHAT_MESSAGE_SIZE){
+            NotificationService.showError(localizationHandler.get("chat-message-too-long"));
+            return false;
+        }
+
         const event = {
             eventName: WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE,
             payload: message
         }
 
         sendWsMessage(JSON.stringify(event));
+        return true;
     }
 
     const getMessages = () => {

@@ -23,7 +23,7 @@ public class MemoryMonitoringTest extends BackEndTest {
     public void memoryMonitoring() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin( userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         ApphubWsClient wsClient = ApphubWsClient.createAdminPanelMonitoring(language, accessTokenId, accessTokenId);
@@ -38,25 +38,6 @@ public class MemoryMonitoringTest extends BackEndTest {
             .map(webSocketEvent -> webSocketEvent.getPayloadAs(MemoryStatusModel.class).getService())
             .collect(Collectors.toSet());
 
-        assertThat(services).containsExactlyInAnyOrder(
-            "event-gateway",
-            "admin-panel",
-            "main-gateway",
-            "modules",
-            "notebook",
-            "scheduler",
-            "skyxplore-data",
-            "skyxplore-game",
-            "skyxplore-lobby",
-            "training",
-            "user",
-            "utils",
-            "web-content",
-            "community",
-            "calendar",
-            "encryption",
-            "storage",
-            "villany-atesz"
-        );
+        assertThat(services).containsExactlyInAnyOrderElementsOf(Constants.SERVICES);
     }
 }

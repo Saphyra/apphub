@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import localizationData from "./show_and_hide_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import "./show_and_hide.css";
@@ -7,8 +7,11 @@ import Stream from "../../../../../../../common/js/collection/Stream";
 import PostLabeledInputField from "../../../../../../../common/component/input/PostLabeledInputField";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Utils from "../../../../../../../common/js/Utils";
+import Button from "../../../../../../../common/component/input/Button";
+import { SettingType } from "../../../../common/hook/Setting";
+import Endpoints from "../../../../../../../common/js/dao/dao";
 
-const ShowAndHide = ({ hiddenProperties, setHiddenProperties }) => {
+const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const citizenLocalizationHandler = new LocalizationHandler(citizenLocalizationData);
 
@@ -40,6 +43,47 @@ const ShowAndHide = ({ hiddenProperties, setHiddenProperties }) => {
         }
     }
 
+    const getDeleteSettingButton = () => {
+        if (!Utils.hasValue(hideSetting)) {
+            return;
+        } else if (!Utils.hasValue(hideSetting.location)) {
+            return <Button
+                id="skyxplore-game-population-hide-delete-global-default-button"
+                label={localizationHandler.get("delete-global-default")}
+                onclick={() => deleteSetting(null)}
+            />
+        } else {
+            return <Button
+                id="skyxplore-game-population-hide-delete-planet-default-button"
+                label={localizationHandler.get("delete-planet-default")}
+                onclick={() => deleteSetting(planetId)}
+            />
+        }
+    }
+
+    const saveSetting = (location) => {
+        const payload = {
+            location: location,
+            type: SettingType.POPULATION_HIDE,
+            data: hiddenProperties
+        }
+
+        Endpoints.SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
+            .send();
+    }
+
+    const deleteSetting = async (location) => {
+        const payload = {
+            location: location,
+            type: SettingType.POPULATION_HIDE,
+        }
+
+        const response = await Endpoints.SKYXPLORE_DATA_DELETE_SETTING.createRequest(payload)
+            .send();
+
+        updateHidden(response.value);
+    }
+
     return (
         <div className="skyxplore-game-population-filtering-panel">
             <div className="skyxplore-game-population-filtering-panel-title">
@@ -64,6 +108,21 @@ const ShowAndHide = ({ hiddenProperties, setHiddenProperties }) => {
                 </div>
 
                 {getProperties()}
+            </div>
+
+            <div className="skyxplore-game-population-default-buttons">
+                <Button
+                    id="skyxplore-game-population-hide-save-planet-default-button"
+                    label={localizationHandler.get("save-planet-default")}
+                    onclick={() => saveSetting(planetId)}
+                />
+                <Button
+                    id="skyxplore-game-population-hide-save-global-default-button"
+                    label={localizationHandler.get("save-global-default")}
+                    onclick={() => saveSetting(null)}
+                />
+
+                {getDeleteSettingButton()}
             </div>
         </div>
     );

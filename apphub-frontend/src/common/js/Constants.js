@@ -21,6 +21,7 @@ const Constants = {
     MAX_GAME_NAME_LENGTH: 30,
     FILE_SIZE_LIMIT: 104_857_600, //100 MB
     MAX_PIN_GROUP_NAME_LENGTH: 30,
+    SKYXPLORE_MAX_CHAT_MESSAGE_SIZE: 1024,
 
     //PAGES
     MODULES_PAGE: "/web/modules",
@@ -36,6 +37,7 @@ const Constants = {
     VILLANY_ATESZ_INDEX_PAGE: "/web/villany-atesz",
     VILLANY_ATESZ_CONTACTS_PAGE: "/web/villany-atesz/contacts",
     VILLANY_ATESZ_STOCK_PAGE: "/web/villany-atesz/stock",
+    VILLANY_ATESZ_TOOLBOX_PAGE: "/web/villany-atesz/toolbox",
 
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,

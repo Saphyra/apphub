@@ -15,11 +15,6 @@ public class UtilsPageController {
         return "utils/json_formatter";
     }
 
-    @GetMapping(Endpoints.UTILS_LOG_FORMATTER_PAGE)
-    public String logFormatterPage() {
-        return "utils/log_formatter";
-    }
-
     @GetMapping(Endpoints.UTILS_BASE64_ENCODER_PAGE)
     public String base64() {
         return "utils/base64";

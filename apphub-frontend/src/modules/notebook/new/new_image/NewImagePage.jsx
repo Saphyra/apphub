@@ -13,13 +13,7 @@ import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
 import FileInput from "../../../../common/component/input/FileInput";
 import "./new_image.css";
-import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import validateFile from "../../common/validator/FileValidator";
 import Spinner from "../../../../common/component/Spinner";
-import Endpoints from "../../../../common/js/dao/dao";
-import Utils from "../../../../common/js/Utils";
-import Response from "../../../../common/js/dao/Response";
-import getDefaultErrorHandler from "../../../../common/js/dao/DefaultErrorHandler";
 import create from "./NewImageSaver";
 
 const NewImagePage = () => {
@@ -44,9 +38,16 @@ const NewImagePage = () => {
         }
 
         const objectUrl = URL.createObjectURL(image.file);
-        setPreview(objectUrl)
+        setPreview(objectUrl);
 
         return () => URL.revokeObjectURL(objectUrl)
+    }
+
+    const save = async () => {
+        const fileUploadSuccessful = await create(listItemTitle, image, parentId, setDisplaySpinner);
+        if (fileUploadSuccessful) {
+            window.location.href = Constants.NOTEBOOK_PAGE;
+        };
     }
 
     return (
@@ -105,7 +106,7 @@ const NewImagePage = () => {
                         key="create-button"
                         id="notebook-new-image-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, image, setDisplaySpinner, parentId)}
+                        onclick={() => save()}
                     />
                 ]}
             />

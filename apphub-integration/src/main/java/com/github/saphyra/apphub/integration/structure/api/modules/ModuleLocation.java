@@ -31,7 +31,9 @@ public enum ModuleLocation {
     HTML("training", "html", Endpoints.TRAINING_HTML_PAGE, "HTML"),
     CSS("training", "css", Endpoints.TRAINING_CSS_PAGE, "CSS"),
     BASICS_OF_PROGRAMMING("training", "basics-of-programming", Endpoints.TRAINING_BASICS_OF_PROGRAMMING_PAGE, "A programozás alapja"),
-    JAVASCRIPT("training", "javascript", Endpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript");
+    JAVASCRIPT("training", "javascript", Endpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript"),
+    UTILS_BASE_64("development-utils", "base64", Endpoints.UTILS_BASE64_PAGE, "Base64 Encoder"),
+    ;
 
     private final String categoryId;
     private final String moduleId;

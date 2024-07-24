@@ -102,10 +102,6 @@ window.Mapping = new function(){
         NOTEBOOK_UPDATE_CUSTOM_TABLE_ROW_STATUS: new Endpoint("/api/notebook/custom-table/{listItemId}/{rowIndex}", HttpMethod.POST),
         NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CUSTOM_TABLE: new Endpoint("/api/notebook/custom-table/{listItemId}/checked", HttpMethod.DELETE),
 
-        //Utils
-        UTILS_LOG_FORMATTER_GET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.PUT),
-        UTILS_LOG_FORMATTER_SET_VISIBILITY: new Endpoint("/api/utils/log-formatter/visibility", HttpMethod.POST),
-
         //SkyXplore data
         SKYXPLORE_CREATE_OR_UPDATE_CHARACTER: new Endpoint("/api/skyxplore/data/character", HttpMethod.POST),
         SKYXPLORE_GET_GAMES: new Endpoint("/api/skyxplore/data/saved-game", HttpMethod.GET),

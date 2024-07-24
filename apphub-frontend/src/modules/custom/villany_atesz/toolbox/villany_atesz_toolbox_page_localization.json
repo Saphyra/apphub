@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Toolbox - VillanyAtesz - Apphub",
+        "hu": "Szerszámok - VillanyAtesz - Apphub"
+    },
+    "page-title": {
+        "en": "Toolbox",
+        "hu": "Szerszámok"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "overview": {
+        "en": "Overview",
+        "hu": "Áttekintés"
+    },
+    "new-tool": {
+        "en": "New tool",
+        "hu": "Új szerszám"
+    },
+    "scrapped": {
+        "en": "Scrapped tools",
+        "hu": "Leselejtezett szerszámok"
+    }
+}

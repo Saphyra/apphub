@@ -124,6 +124,16 @@ const nullIfEmpty = (input) => {
     return input;
 }
 
+const isJsonString = (input) => {
+    try {
+        JSON.parse(input);
+
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -139,7 +149,8 @@ const Utils = {
     addAndSet: addAndSet,
     removeAndSet: removeAndSet,
     isTrue: isTrue,
-    nullIfEmpty: nullIfEmpty
+    nullIfEmpty: nullIfEmpty,
+    isJsonString: isJsonString,
 }
 
 export default Utils;

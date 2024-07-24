@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +23,11 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final SaveGameService saveGameService;
 
     @Override
-    public OneParamResponse<Boolean> isUserInGame(AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> getGameId(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is in game.", accessTokenHeader.getUserId());
-        boolean result = gameDao.findByUserId(accessTokenHeader.getUserId()).isPresent();
+        UUID result = gameDao.findByUserId(accessTokenHeader.getUserId())
+            .map(Game::getGameId)
+            .orElse(null);
         return new OneParamResponse<>(result);
     }
 

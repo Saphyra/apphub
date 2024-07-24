@@ -7,11 +7,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -28,7 +31,7 @@ import java.util.concurrent.Future;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class StorageSettingEditionServiceTest {
@@ -87,8 +90,42 @@ public class StorageSettingEditionServiceTest {
     @Mock
     private StorageSettingModel model;
 
+    @Mock
+    private Planets planets;
+
+    @Mock
+    private Planet planet;
+
     @Captor
     private ArgumentCaptor<Callable<List<StorageSettingApiModel>>> argumentCaptor;
+
+    @Test
+    public void forbiddenOperation() throws Exception {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(game.getEventLoop()).willReturn(eventLoop);
+        //noinspection unchecked
+        given(eventLoop.processWithResponse(any(Callable.class))).willReturn(future);
+        given(future.get()).willReturn(executionResult);
+        given(executionResult.getOrThrow()).willReturn(List.of(response));
+
+        given(request.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
+
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
+        given(storageSetting.getLocation()).willReturn(PLANET_ID);
+
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(UUID.randomUUID());
+
+        List<StorageSettingApiModel> result = underTest.edit(USER_ID, request);
+
+        then(eventLoop).should().processWithResponse(argumentCaptor.capture());
+        ExceptionValidator.validateForbiddenOperation(() -> argumentCaptor.getValue().call());
+
+        then(storageSettingsModelValidator).should().validate(request);
+    }
 
     @Test
     public void edit() throws Exception {
@@ -112,16 +149,20 @@ public class StorageSettingEditionServiceTest {
         given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(response));
         given(game.getProgressDiff()).willReturn(progressDiff);
 
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+
         List<StorageSettingApiModel> result = underTest.edit(USER_ID, request);
 
-        verify(eventLoop).processWithResponse(argumentCaptor.capture());
+        then(eventLoop).should().processWithResponse(argumentCaptor.capture());
         argumentCaptor.getValue()
             .call();
 
-        verify(storageSettingsModelValidator).validate(request);
-        verify(storageSetting).setPriority(PRIORITY);
-        verify(storageSetting).setTargetAmount(TARGET_AMOUNT);
-        verify(progressDiff).save(model);
+        then(storageSettingsModelValidator).should().validate(request);
+        then(storageSetting).should().setPriority(PRIORITY);
+        then(storageSetting).should().setTargetAmount(TARGET_AMOUNT);
+        then(progressDiff).should().save(model);
         assertThat(result).containsExactly(response);
     }
 }

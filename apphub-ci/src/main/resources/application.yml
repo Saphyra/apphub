@@ -59,6 +59,8 @@ defaults:
   localRunTestsThreadCount: 20
   remoteTestsThreadCount: 6
   localServiceStartupCountLimit: 5
+  localRunTestsPreCreateDriverCount: 0
+  remoteRunTestsPreCreateDriverCount: 0
 
 services:
 #Crutial platform
@@ -141,12 +143,6 @@ services:
   port: 8084
   location: "./apphub-service/apphub-service-custom/apphub-service-custom-villany_atesz/target/application.jar"
   moduleName: apphub-service-custom-villany_atesz
-  group: 1
-  optional: true
-- name: utils
-  port: 8100
-  location: "./apphub-service/apphub-service-utils/target/application.jar"
-  moduleName: apphub-service-utils
   group: 1
   optional: true
 - name: training

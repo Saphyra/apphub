@@ -61,6 +61,7 @@ public abstract class TestBase {
         log.info("RestLoggingEnabled: {}", TestConfiguration.REST_LOGGING_ENABLED);
         log.info("IntegrationServerEnabled: {}", TestConfiguration.INTEGRATION_SERVER_ENABLED);
         log.info("IntegrationServerPort: {}", TestConfiguration.INTEGRATION_SERVER_PORT);
+        log.info("Pre-create WebDrivers: {}", TestConfiguration.PRE_CREATE_WEB_DRIVERS);
 
         TestConfiguration.CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
 

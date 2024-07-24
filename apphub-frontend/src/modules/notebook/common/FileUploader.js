@@ -17,7 +17,7 @@ const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => 
         }
     }
 
-    await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileId }), options)
+    return fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileId }), options)
         .then(r => {
             setDisplaySpinner(false);
 
@@ -28,8 +28,9 @@ const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => 
                         getDefaultErrorHandler()
                             .handle(response);
                     });
+                return false;
             } else {
-                window.location.href = Constants.NOTEBOOK_PAGE;
+                return true;
             }
         });
 }

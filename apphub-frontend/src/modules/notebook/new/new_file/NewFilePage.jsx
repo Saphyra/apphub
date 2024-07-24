@@ -29,6 +29,13 @@ const NewFilePage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
+    const save = async () => {
+        const fileUploadSuccessful = await create(listItemTitle, file, parentId, setDisplaySpinner);
+        if (fileUploadSuccessful) {
+            window.location.href = Constants.NOTEBOOK_PAGE;
+        };
+    }
+
     return (
         <div id="notebook-new-file" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
@@ -75,7 +82,7 @@ const NewFilePage = () => {
                         key="create-button"
                         id="notebook-new-file-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, file, parent, setDisplaySpinner)}
+                        onclick={() => save()}
                     />
                 ]}
             />

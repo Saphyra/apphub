@@ -53,6 +53,9 @@ public class StockItemInventoryTest extends BackEndTest {
         editCategory_nonExistingStockCategoryId(accessTokenId, stockItemId);
         editCategory(accessTokenId, stockItemId, stockCategoryId2);
 
+        editMarkedForAcquisition_null(accessTokenId, stockItemId);
+        editMarkedForAcquisition(accessTokenId, stockItemId);
+
         editInventoried_null(accessTokenId, stockItemId);
         editInventoried(accessTokenId, stockItemId);
 
@@ -98,6 +101,17 @@ public class StockItemInventoryTest extends BackEndTest {
 
         CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
             .returns(stockCategoryId, StockItemInventoryResponse::getStockCategoryId);
+    }
+
+    private void editMarkedForAcquisition_null(UUID accessTokenId, UUID stockItemId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, stockItemId, null), "markedForAcquisition", "must not be null");
+    }
+
+    private void editMarkedForAcquisition(UUID accessTokenId, UUID stockItemId) {
+        VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, stockItemId, true);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+            .returns(true, StockItemInventoryResponse::getMarkedForAcquisition);
     }
 
     private void editInventoried_null(UUID accessTokenId, UUID stockItemId) {

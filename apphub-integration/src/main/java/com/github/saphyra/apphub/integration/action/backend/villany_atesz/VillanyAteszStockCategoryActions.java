@@ -64,6 +64,6 @@ public class VillanyAteszStockCategoryActions {
 
     public static Response getDeleteResponse(UUID accessTokenId, UUID stockCategoryId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
+            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 }

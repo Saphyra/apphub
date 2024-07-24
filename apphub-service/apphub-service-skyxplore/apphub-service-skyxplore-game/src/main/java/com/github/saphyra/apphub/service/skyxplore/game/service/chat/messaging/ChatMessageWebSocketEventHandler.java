@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat.messaging;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.chat.ChatRoom;
@@ -34,6 +36,8 @@ class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
     public void handle(UUID from, WebSocketEvent event, SkyXploreGameMainWebSocketHandler webSocketHandler) {
         IncomingChatMessage incomingChatMessage = objectMapperWrapper.convertValue(event.getPayload(), IncomingChatMessage.class);
         log.info("{} sent a message to room {}", from, incomingChatMessage.getRoom());
+
+        ValidationUtil.maxLength(incomingChatMessage.getMessage(), GameConstants.MAXIMUM_CHAT_MESSAGE_LENGTH, "message");
 
         Game game = gameDao.findByUserIdValidated(from);
 

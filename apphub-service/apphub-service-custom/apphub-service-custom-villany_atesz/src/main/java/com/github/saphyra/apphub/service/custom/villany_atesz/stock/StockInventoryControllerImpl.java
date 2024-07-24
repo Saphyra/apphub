@@ -57,6 +57,13 @@ class StockInventoryControllerImpl implements StockInventoryController {
     }
 
     @Override
+    public void editMarkedForAcquisition(OneParamRequest<Boolean> markedForAcquisition, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit the markedForAcquisition of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
+
+        editStockItemService.editMarkedForAcquisition(stockItemId, markedForAcquisition.getValue());
+    }
+
+    @Override
     public void editName(OneParamRequest<String> name, UUID stockItemId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit the name of stockItem {}", accessTokenHeader.getUserId(), stockItemId);
 

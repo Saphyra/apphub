@@ -36,6 +36,8 @@ spring:
             /web/admin-panel/ban/*,\
             /web/villany-atesz,\
             /web/villany-atesz/**,\
+            /web/utils/base64,\
+            /web/utils/json-formatter,\
             /web/user/account"
         filters:
         - StripPrefix=10
@@ -59,7 +61,7 @@ spring:
       - id: common-pages
         uri: http://web-content:8080
         predicates:
-        - Path=/web/admin-panel/**, /web/utils/**, /web/community, /web/calendar
+        - Path=/web/community, /web/calendar
       - id: error-page
         uri: http://web-content:8080
         predicates:

@@ -45,12 +45,20 @@ public class QueueFacade {
     public void setPriority(UUID userId, UUID planetId, String type, UUID itemId, Integer priority) {
         QueueItemType itemType = ValidationUtil.convertToEnumChecked(type, QueueItemType::valueOf, "type");
 
+        if (!userId.equals(gameDao.findByUserIdValidated(userId).getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot set priority of QueueItem on planet " + planetId);
+        }
+
         findQueueService(itemType)
             .setPriority(userId, planetId, itemId, priority);
     }
 
     public void cancelItem(UUID userId, UUID planetId, String type, UUID itemId) {
         QueueItemType itemType = ValidationUtil.convertToEnumChecked(type, QueueItemType::valueOf, "type");
+
+        if (!userId.equals(gameDao.findByUserIdValidated(userId).getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel QueueItem on planet " + planetId);
+        }
 
         findQueueService(itemType)
             .cancel(userId, planetId, itemId);

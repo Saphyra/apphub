@@ -27,3 +27,10 @@
     max-height: 100%;
     border: 2px ridge white;
 }
+
+.notebook-new-images-group-images{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
