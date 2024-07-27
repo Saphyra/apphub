@@ -17,6 +17,7 @@ spring:
         uri: http://frontend:3000
         predicates:
         - "Path=\
+            /,\
             /web,\
             /web/modules,\
             /web/skyxplore,\

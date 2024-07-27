@@ -5,5 +5,5 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
-
+    Remove ThymeLeaf dependency from main-gateway
 ===ETC===
