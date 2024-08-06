@@ -37,15 +37,6 @@ public class RootControllerTest {
     private UserAuthenticationClient userAuthenticationClient;
 
     @Test
-    public void callRoot() {
-        int statusCode = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, "/api"))
-            .getStatusCode();
-
-        assertThat(statusCode).isEqualTo(HttpStatus.OK.value());
-    }
-
-    @Test
     void getOwnUserId_nullAccessToken() {
         Response response = RequestFactory.createRequest()
             .get(UrlFactory.create(serverPort, Endpoints.GET_OWN_USER_ID));

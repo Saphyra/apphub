@@ -70,13 +70,6 @@
             <artifactId>apphub-lib-config-whitelist</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <!-- Needed for Root redirection -->
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-thymeleaf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
