@@ -3,7 +3,7 @@
         AcquisitionHistory
             Ordering
             Indentation
-        Increase size of input fields when adding stockItem or tool
+        Dynamic length for input fields when creating stockItem or tool
 
 ===BUGFIXES===
 

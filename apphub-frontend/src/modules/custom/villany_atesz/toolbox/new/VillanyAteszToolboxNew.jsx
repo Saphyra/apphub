@@ -63,6 +63,10 @@ const VillanyAteszToolboxNew = ({ }) => {
                             placeholder={localizationHandler.get("brand")}
                             value={brand}
                             onchangeCallback={setBrand}
+                            style={{
+                                width: 8 * brand.length + "px",
+                                minWidth: "200px"
+                            }}
                         />}
                     />
 
@@ -73,6 +77,10 @@ const VillanyAteszToolboxNew = ({ }) => {
                             placeholder={localizationHandler.get("name")}
                             value={name}
                             onchangeCallback={setName}
+                            style={{
+                                width: 8 * name.length + "px",
+                                minWidth: "200px"
+                            }}
                         />}
                     />
                 </fieldset>
