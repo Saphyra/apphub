@@ -1,4 +1,9 @@
 ===FEATURES===
+    VillanyAtesz
+        AcquisitionHistory
+            Ordering
+            Indentation
+        Increase size of input fields when adding stockItem or tool
 
 ===BUGFIXES===
 

@@ -59,10 +59,18 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     }
 
     const getContentForSelectedDate = () => {
+        const padding = new Stream(acquisitions)
+            .map(item => item.amount)
+            .max(Utils.numberOfDigits)
+            .orElse(0);
+
+
         return new Stream(acquisitions)
+            .sorted((a, b) => a.stockItemName.localeCompare(b.stockItemName))
             .map(item => <AcquisitionHistoryItem
                 key={item.acquisitionId}
                 item={item}
+                padding={padding}
             />
             )
             .toList();

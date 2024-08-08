@@ -1,7 +1,13 @@
-#villany-atesz-stock-acquisition-history{
+#villany-atesz-stock-acquisition-history {
     padding: 10px;
+    font-family: monospace;
+    font-size: 16px;
 }
 
-#villany-atesz-stock-acquisition-history fieldset{
+#villany-atesz-stock-acquisition-history fieldset {
     margin: 10px
+}
+
+.villany-atesz-stock-acquisition-history-item pre {
+    display: inline;
 }
