@@ -9,6 +9,8 @@
             StorageBox
 
 ===BUGFIXES===
+    Notebook
+        Multiple file upload uploaded only first file from fileGroup multiple times
 
 ===PLATFORM CHANGES===
 
