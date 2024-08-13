@@ -12,6 +12,8 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class CreateToolRequest {
+    private StorageBoxModel storageBox;
+    private ToolTypeModel toolType;
     private String brand;
     private String name;
     private Integer cost;

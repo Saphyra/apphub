@@ -8,6 +8,7 @@ import "./villany_atesz_toolbox_overview.css";
 import Stream from "../../../../../common/js/collection/Stream";
 import ToolStatus from "../ToolStatus";
 import ToolboxOverviewItem from "./ToolboxOverviewItem";
+import filterTool from "../ToolFilter";
 
 const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -20,13 +21,7 @@ const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
     const getTools = () => {
         return new Stream(tools)
             .filter(tool => tool.status !== ToolStatus.SCRAPPED)
-            .filter(tool => search.length === 0
-                || tool.brand.indexOf(search) > 0
-                || tool.name.indexOf(search) > 0
-                || tool.cost.indexOf(search) > 0
-                || tool.acquiredAt.indexOf(search) > 0
-                || tool.warrantyExpiresAt.indexOf(search) > 0
-            )
+            .filter(tool => filterTool(tool, search))
             .sorted((a, b) => a.name.localeCompare(b.name))
             .map(tool => <ToolboxOverviewItem
                 key={tool.toolId}
@@ -49,8 +44,10 @@ const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
             <table id="villany-atesz-toolbox-overview-table" className="formatted-table">
                 <thead>
                     <tr>
+                        <th>{localizationHandler.get("tool-type")}</th>
                         <th>{localizationHandler.get("brand")}</th>
                         <th>{localizationHandler.get("name")}</th>
+                        <th>{localizationHandler.get("storage-box")}</th>
                         <th>{localizationHandler.get("cost")}</th>
                         <th>{localizationHandler.get("acquired-at")}</th>
                         <th>{localizationHandler.get("warranty-expires-at")}</th>

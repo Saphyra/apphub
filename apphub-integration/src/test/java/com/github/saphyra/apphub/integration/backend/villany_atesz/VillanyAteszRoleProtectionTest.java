@@ -96,6 +96,8 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getToolsResponse(accessTokenId));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, new CreateToolRequest()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getDeleteResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getToolTypesResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getStorageBoxesResponse(accessTokenId));
     }
 
     @DataProvider(parallel = true)

@@ -21,11 +21,17 @@ const VillanyAteszToolboxPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [openedTab, setOpenedTab] = useState(ToolboxTab.OVERVIEW);
+    const [openedTab, setOpenedTab] = useState(sessionStorage.villanyAteszToolboxPageOpenedTab || ToolboxTab.OVERVIEW);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    const updateOpenedTab = (tab) => {
+        sessionStorage.villanyAteszToolboxPageOpenedTab = tab;
+
+        setOpenedTab(tab);
+    }
 
     const getNavButtons = () => {
         return [
@@ -33,21 +39,21 @@ const VillanyAteszToolboxPage = () => {
                 key="overview"
                 id="villany-atesz-toolbox-navigation-overview-button"
                 className={openedTab === ToolboxTab.OVERVIEW ? "opened" : ""}
-                onclick={() => setOpenedTab(ToolboxTab.OVERVIEW)}
+                onclick={() => updateOpenedTab(ToolboxTab.OVERVIEW)}
                 label={localizationHandler.get("overview")}
             />,
             <Button
                 key="new-tool"
                 id="villany-atesz-toolbox-navigation-new-tool-button"
                 className={openedTab === ToolboxTab.NEW ? "opened" : ""}
-                onclick={() => setOpenedTab(ToolboxTab.NEW)}
+                onclick={() => updateOpenedTab(ToolboxTab.NEW)}
                 label={localizationHandler.get("new-tool")}
             />,
             <Button
                 key="scrapped"
                 id="villany-atesz-toolbox-navigation-scrapped-button"
                 className={openedTab === ToolboxTab.SCRAPPED ? "opened" : ""}
-                onclick={() => setOpenedTab(ToolboxTab.SCRAPPED)}
+                onclick={() => updateOpenedTab(ToolboxTab.SCRAPPED)}
                 label={localizationHandler.get("scrapped")}
             />,
         ];

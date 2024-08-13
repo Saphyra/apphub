@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -15,12 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_ACQUIRED_AT;
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_BRAND;
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_COST;
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_NAME;
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_SCRAPPED_AT;
-import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolConverter.COLUMN_WARRANTY_EXPIRES_AT;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_ACQUIRED_AT;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_BRAND;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_COST;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_NAME;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_SCRAPPED_AT;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_WARRANTY_EXPIRES_AT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -43,6 +43,10 @@ class ToolConverterTest {
     private static final String ENCRYPTED_ACQUIRED_AT = "encrypted-acquired-at";
     private static final String ENCRYPTED_WARRANTY_EXPIRES_AT = "encrypted-warranty-expires-at";
     private static final String ENCRYPTED_SCRAPPED_AT = "encrypted-scrapped-at";
+    private static final UUID STORAGE_BOX_ID = UUID.randomUUID();
+    private static final UUID TOOL_TYPE_ID = UUID.randomUUID();
+    private static final String TOOL_TYPE_ID_STRING = "tool-type-id";
+    private static final String STORAGE_BOX_ID_STRING = "storage-box-id";
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
@@ -67,6 +71,8 @@ class ToolConverterTest {
         Tool domain = Tool.builder()
             .toolId(TOOL_ID)
             .userId(USER_ID)
+            .storageBoxId(STORAGE_BOX_ID)
+            .toolTypeId(TOOL_TYPE_ID)
             .brand(BRAND)
             .name(NAME)
             .cost(COST)
@@ -80,6 +86,8 @@ class ToolConverterTest {
 
         given(uuidConverter.convertDomain(TOOL_ID)).willReturn(TOOL_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(TOOL_TYPE_ID)).willReturn(TOOL_TYPE_ID_STRING);
+        given(uuidConverter.convertDomain(STORAGE_BOX_ID)).willReturn(STORAGE_BOX_ID_STRING);
         given(stringEncryptor.encrypt(BRAND, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_BRAND)).willReturn(ENCRYPTED_BRAND);
         given(stringEncryptor.encrypt(NAME, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_NAME)).willReturn(ENCRYPTED_NAME);
         given(integerEncryptor.encrypt(COST, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_COST)).willReturn(ENCRYPTED_COST);
@@ -90,6 +98,8 @@ class ToolConverterTest {
         assertThat(underTest.convertDomain(domain))
             .returns(TOOL_ID_STRING, ToolEntity::getToolId)
             .returns(USER_ID_STRING, ToolEntity::getUserId)
+            .returns(TOOL_TYPE_ID_STRING, ToolEntity::getToolTypeId)
+            .returns(STORAGE_BOX_ID_STRING, ToolEntity::getStorageBoxId)
             .returns(ENCRYPTED_BRAND, ToolEntity::getBrand)
             .returns(ENCRYPTED_NAME, ToolEntity::getName)
             .returns(ENCRYPTED_COST, ToolEntity::getCost)
@@ -104,6 +114,8 @@ class ToolConverterTest {
         ToolEntity domain = ToolEntity.builder()
             .toolId(TOOL_ID_STRING)
             .userId(USER_ID_STRING)
+            .storageBoxId(STORAGE_BOX_ID_STRING)
+            .toolTypeId(TOOL_TYPE_ID_STRING)
             .brand(ENCRYPTED_BRAND)
             .name(ENCRYPTED_NAME)
             .cost(ENCRYPTED_COST)
@@ -117,6 +129,8 @@ class ToolConverterTest {
 
         given(uuidConverter.convertEntity(TOOL_ID_STRING)).willReturn(TOOL_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(uuidConverter.convertEntity(TOOL_TYPE_ID_STRING)).willReturn(TOOL_TYPE_ID);
+        given(uuidConverter.convertEntity(STORAGE_BOX_ID_STRING)).willReturn(STORAGE_BOX_ID);
         given(stringEncryptor.decrypt(ENCRYPTED_BRAND, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_BRAND)).willReturn(BRAND);
         given(stringEncryptor.decrypt(ENCRYPTED_NAME, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_NAME)).willReturn(NAME);
         given(integerEncryptor.decrypt(ENCRYPTED_COST, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_COST)).willReturn(COST);
@@ -127,6 +141,8 @@ class ToolConverterTest {
         assertThat(underTest.convertEntity(domain))
             .returns(TOOL_ID, Tool::getToolId)
             .returns(USER_ID, Tool::getUserId)
+            .returns(STORAGE_BOX_ID, Tool::getStorageBoxId)
+            .returns(TOOL_TYPE_ID, Tool::getToolTypeId)
             .returns(BRAND, Tool::getBrand)
             .returns(NAME, Tool::getName)
             .returns(COST, Tool::getCost)

@@ -8,8 +8,9 @@ import ToolboxScrappedItem from "./ToolboxScrappedItem";
 import InputField from "../../../../../common/component/input/InputField";
 import Stream from "../../../../../common/js/collection/Stream";
 import "./villany_atesz_toolbox_scrapped.css";
+import filterTool from "../ToolFilter";
 
-const VillanyAteszToolboxScrapped = ({setConfirmationDialogData }) => {
+const VillanyAteszToolboxScrapped = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [search, setSearch] = useState("");
@@ -20,13 +21,7 @@ const VillanyAteszToolboxScrapped = ({setConfirmationDialogData }) => {
     const getTools = () => {
         return new Stream(tools)
             .filter(tool => tool.status === ToolStatus.SCRAPPED)
-            .filter(tool => search.length === 0
-                || tool.brand.indexOf(search) > 0
-                || tool.name.indexOf(search) > 0
-                || tool.cost.indexOf(search) > 0
-                || tool.acquiredAt.indexOf(search) > 0
-                || tool.warrantyExpiresAt.indexOf(search) > 0
-            )
+            .filter(tool => filterTool(tool, search))
             .sorted((a, b) => a.name.localeCompare(b.name))
             .map(tool => <ToolboxScrappedItem
                 key={tool.toolId}
@@ -49,8 +44,10 @@ const VillanyAteszToolboxScrapped = ({setConfirmationDialogData }) => {
             <table id="villany-atesz-toolbox-scrapped-table" className="formatted-table">
                 <thead>
                     <tr>
+                        <th>{localizationHandler.get("tool-type")}</th>
                         <th>{localizationHandler.get("brand")}</th>
                         <th>{localizationHandler.get("name")}</th>
+                        <th>{localizationHandler.get("storage-box")}</th>
                         <th>{localizationHandler.get("cost")}</th>
                         <th>{localizationHandler.get("acquired-at")}</th>
                         <th>{localizationHandler.get("warranty-expires-at")}</th>

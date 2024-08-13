@@ -1,3 +1,7 @@
-#villany-atesz-navigation{
+#villany-atesz-navigation {
     border-bottom: 3px ridge white;
+}
+
+#villany-atesz-navigation-defaults .opened {
+    border-color: lime;
 }

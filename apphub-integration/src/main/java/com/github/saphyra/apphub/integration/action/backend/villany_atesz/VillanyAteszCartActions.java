@@ -123,4 +123,14 @@ public class VillanyAteszCartActions {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
+
+    public static Response getToolTypesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES));
+    }
+
+    public static Response getStorageBoxesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES));
+    }
 }

@@ -17,4 +17,6 @@
     <include file="database/change_sets/cart_item.xml"/>
     <include file="database/change_sets/acquisition.xml"/>
     <include file="database/change_sets/tool.xml"/>
+    <include file="database/change_sets/tool_type.xml"/>
+    <include file="database/change_sets/storage_box.xml"/>
 </databaseChangeLog>

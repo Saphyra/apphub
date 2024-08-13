@@ -412,6 +412,8 @@ const Endpoints = {
     VILLANY_ATESZ_CREATE_TOOL: new Endpoint(RequestMethod.PUT, "/api/villany-atesz/tool"),
     VILLANY_ATESZ_SET_TOOL_STATUS: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/{toolId}"),
     VILLANY_ATESZ_DELETE_TOOL: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/{toolId}"),
+    VILLANY_ATESZ_GET_TOOL_TYPES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/tool/type"),
+    VILLANY_ATESZ_GET_STORAGE_BOXES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/toolbox/storage-box"),
 }
 
 export default Endpoints;

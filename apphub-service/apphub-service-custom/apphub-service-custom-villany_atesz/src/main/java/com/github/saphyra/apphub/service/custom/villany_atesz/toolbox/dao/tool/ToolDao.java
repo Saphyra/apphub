@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;

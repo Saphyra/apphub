@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
 import jakarta.persistence.Entity;
@@ -21,6 +21,8 @@ public class ToolEntity {
     @Id
     private String toolId;
     private String userId;
+    private String storageBoxId;
+    private String toolTypeId;
     private String brand;
     private String name;
     private String cost;

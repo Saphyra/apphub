@@ -4,6 +4,9 @@
             Ordering
             Indentation
         Dynamic length for input fields when creating stockItem or tool
+        ToolBox
+            ToolType
+            StorageBox
 
 ===BUGFIXES===
 

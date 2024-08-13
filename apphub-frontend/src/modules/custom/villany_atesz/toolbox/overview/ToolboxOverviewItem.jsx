@@ -3,6 +3,7 @@ import ToolStatus from "../ToolStatus";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
 import Utils from "../../../../../common/js/Utils";
+import Optional from "../../../../../common/js/collection/Optional";
 
 const StatusMapping = {};
 StatusMapping[ToolStatus.DEFAULT] = "";
@@ -19,8 +20,10 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
 
     return (
         <tr className={"villany-atesz-toolbox-overview-item " + StatusMapping[tool.status]}>
+            <td className="villany-atesz-toolbox-overview-tool-type">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
             <td className="villany-atesz-toolbox-overview-item-brand">{tool.brand}</td>
             <td className="villany-atesz-toolbox-overview-item-name">{tool.name}</td>
+            <td className="villany-atesz-toolbox-overview-storage-box">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
             <td >
                 <span className="villany-atesz-toolbox-overview-item-cost">{tool.cost}</span>
                 <span> Ft</span>

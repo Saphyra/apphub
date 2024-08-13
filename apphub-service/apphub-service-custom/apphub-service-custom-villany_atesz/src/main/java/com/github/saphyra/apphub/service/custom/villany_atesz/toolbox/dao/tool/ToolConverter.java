@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -35,6 +35,8 @@ class ToolConverter extends ConverterBase<ToolEntity, Tool> {
         return ToolEntity.builder()
             .toolId(toolId)
             .userId(uuidConverter.convertDomain(domain.getUserId()))
+            .storageBoxId(uuidConverter.convertDomain(domain.getStorageBoxId()))
+            .toolTypeId(uuidConverter.convertDomain(domain.getToolTypeId()))
             .brand(stringEncryptor.encrypt(domain.getBrand(), userId, toolId, COLUMN_BRAND))
             .name(stringEncryptor.encrypt(domain.getName(), userId, toolId, COLUMN_NAME))
             .cost(integerEncryptor.encrypt(domain.getCost(), userId, toolId, COLUMN_COST))
@@ -52,6 +54,8 @@ class ToolConverter extends ConverterBase<ToolEntity, Tool> {
         return Tool.builder()
             .toolId(uuidConverter.convertEntity(entity.getToolId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
+            .storageBoxId(uuidConverter.convertEntity(entity.getStorageBoxId()))
+            .toolTypeId(uuidConverter.convertEntity(entity.getToolTypeId()))
             .brand(stringEncryptor.decrypt(entity.getBrand(), userId, entity.getToolId(), COLUMN_BRAND))
             .name(stringEncryptor.decrypt(entity.getName(), userId, entity.getToolId(), COLUMN_NAME))
             .cost(integerEncryptor.decrypt(entity.getCost(), userId, entity.getToolId(), COLUMN_COST))

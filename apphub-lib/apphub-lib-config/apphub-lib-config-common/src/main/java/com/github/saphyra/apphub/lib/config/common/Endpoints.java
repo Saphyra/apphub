@@ -363,6 +363,8 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_CREATE_TOOL = "/api/villany-atesz/tool";
     public static final String VILLANY_ATESZ_SET_TOOL_STATUS = "/api/villany-atesz/tool/{toolId}";
     public static final String VILLANY_ATESZ_DELETE_TOOL = "/api/villany-atesz/tool/{toolId}";
+    public static final String VILLANY_ATESZ_GET_TOOL_TYPES = "/api/villany-atesz/tool/type";
+    public static final String VILLANY_ATESZ_GET_STORAGE_BOXES = "/api/villany-atesz/toolbox/storage-box";
 
     //SKYXPLORE-DATA-SETTINGS
     public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";

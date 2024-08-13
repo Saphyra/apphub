@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,8 @@ import java.util.UUID;
 public class Tool {
     private final UUID toolId;
     private final UUID userId;
+    private final UUID storageBoxId;
+    private final UUID toolTypeId;
     private final String brand;
     private final String name;
     private final Integer cost;

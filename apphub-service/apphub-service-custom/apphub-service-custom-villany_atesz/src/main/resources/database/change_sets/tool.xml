@@ -22,4 +22,28 @@
 
         <addPrimaryKey schemaName="villany_atesz" tableName="tool" columnNames="tool_id"/>
     </changeSet>
+
+    <changeSet id="add-column-tool_type_id-to-tool" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="tool" columnName="tool_type_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="tool">
+            <column name="tool_type_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-storage_box_id-to-tool" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="tool" columnName="storage_box_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="tool">
+            <column name="storage_box_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

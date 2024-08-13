@@ -12,37 +12,33 @@ const VillanyAteszNavigation = ({ page, customs }) => {
     return (
         <div id="villany-atesz-navigation">
             <span id="villany-atesz-navigation-defaults">
-                {page !== VillanyAteszPage.INDEX &&
-                    <Button
-                        id="villany-atesz-index"
-                        onclick={() => window.location.href = Constants.VILLANY_ATESZ_INDEX_PAGE}
-                        label={localizationHandler.get("index")}
-                    />
-                }
+                <Button
+                    id="villany-atesz-index"
+                    onclick={() => window.location.href = Constants.VILLANY_ATESZ_INDEX_PAGE}
+                    label={localizationHandler.get("index")}
+                    className={page === VillanyAteszPage.INDEX ? "opened" : ""}
+                />
 
-                {page !== VillanyAteszPage.CONTACTS &&
-                    <Button
-                        id="villany-atesz-contacts"
-                        onclick={() => window.location.href = Constants.VILLANY_ATESZ_CONTACTS_PAGE}
-                        label={localizationHandler.get("contacts")}
-                    />
-                }
+                <Button
+                    id="villany-atesz-contacts"
+                    onclick={() => window.location.href = Constants.VILLANY_ATESZ_CONTACTS_PAGE}
+                    label={localizationHandler.get("contacts")}
+                    className={page === VillanyAteszPage.CONTACTS ? "opened" : ""}
+                />
 
-                {page !== VillanyAteszPage.STOCK &&
-                    <Button
-                        id="villany-atesz-stock"
-                        onclick={() => window.location.href = Constants.VILLANY_ATESZ_STOCK_PAGE}
-                        label={localizationHandler.get("stock")}
-                    />
-                }
+                <Button
+                    id="villany-atesz-stock"
+                    onclick={() => window.location.href = Constants.VILLANY_ATESZ_STOCK_PAGE}
+                    label={localizationHandler.get("stock")}
+                    className={page === VillanyAteszPage.STOCK ? "opened" : ""}
+                />
 
-                {page !== VillanyAteszPage.TOOLBOX &&
-                    <Button
-                        id="villany-atesz-toolbox"
-                        onclick={() => window.location.href = Constants.VILLANY_ATESZ_TOOLBOX_PAGE}
-                        label={localizationHandler.get("toolbox")}
-                    />
-                }
+                <Button
+                    id="villany-atesz-toolbox"
+                    onclick={() => window.location.href = Constants.VILLANY_ATESZ_TOOLBOX_PAGE}
+                    label={localizationHandler.get("toolbox")}
+                    className={page === VillanyAteszPage.TOOLBOX ? "opened" : ""}
+                />
             </span>
 
             <span id="villany-atesz-navigation-customs">{customs}</span>

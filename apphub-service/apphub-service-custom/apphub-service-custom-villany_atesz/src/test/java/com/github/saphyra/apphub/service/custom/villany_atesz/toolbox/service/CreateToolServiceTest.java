@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateToolRequest;
-import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.Tool;
-import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.Tool;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
