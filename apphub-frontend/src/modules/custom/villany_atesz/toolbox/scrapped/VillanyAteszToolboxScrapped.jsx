@@ -9,6 +9,7 @@ import InputField from "../../../../../common/component/input/InputField";
 import Stream from "../../../../../common/js/collection/Stream";
 import "./villany_atesz_toolbox_scrapped.css";
 import filterTool from "../ToolFilter";
+import sortTools from "../ToolSorter";
 
 const VillanyAteszToolboxScrapped = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -22,7 +23,7 @@ const VillanyAteszToolboxScrapped = ({ setConfirmationDialogData }) => {
         return new Stream(tools)
             .filter(tool => tool.status === ToolStatus.SCRAPPED)
             .filter(tool => filterTool(tool, search))
-            .sorted((a, b) => a.name.localeCompare(b.name))
+            .sorted(sortTools)
             .map(tool => <ToolboxScrappedItem
                 key={tool.toolId}
                 localizationHandler={localizationHandler}

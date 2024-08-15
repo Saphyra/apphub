@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.action.backend.villany_atesz.Villan
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockItemActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockItemInventoryActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszToolboxActions;
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszToolboxInventoryActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -20,6 +21,8 @@ import com.github.saphyra.apphub.integration.structure.api.villany_atesz.Contact
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCategoryModel;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StorageBoxModel;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolTypeModel;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -96,8 +99,21 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getToolsResponse(accessTokenId));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, new CreateToolRequest()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getDeleteResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getToolTypesResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> VillanyAteszCartActions.getStorageBoxesResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getToolTypesResponse(accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getStorageBoxesResponse(accessTokenId));
+
+        //Toolbox inventory
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(accessTokenId, UUID.randomUUID(), new StorageBoxModel()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditToolTypeResponse(accessTokenId, UUID.randomUUID(), new ToolTypeModel()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditBrandResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditNameResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditCostResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditAcquiredAtResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditWarrantyExpiresAtResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditStatusResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditScrappedAtResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditInventoriedResponse(accessTokenId, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getResetInventoriedResponse(accessTokenId));
     }
 
     @DataProvider(parallel = true)

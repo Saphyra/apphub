@@ -46,4 +46,16 @@
             <column name="storage_box_id" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-inventoried-to-tool" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="villany_atesz" tableName="tool" columnName="inventoried"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="villany_atesz" tableName="tool">
+            <column name="inventoried" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -74,6 +74,7 @@ class ToolQueryServiceTest {
         given(tool.getScrappedAt()).willReturn(SCRAPPED_AT);
         given(tool.getToolTypeId()).willReturn(TOOL_TYPE_ID);
         given(tool.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
+        given(tool.isInventoried()).willReturn(true);
 
         given(toolTypeDao.findByIdValidated(TOOL_TYPE_ID)).willReturn(toolType);
         given(toolType.getToolTypeId()).willReturn(TOOL_TYPE_ID);
@@ -93,7 +94,8 @@ class ToolQueryServiceTest {
             .returns(ACQUIRED_AT, ToolResponse::getAcquiredAt)
             .returns(WARRANTY_EXPIRES_AT, ToolResponse::getWarrantyExpiresAt)
             .returns(ToolStatus.DEFAULT, ToolResponse::getStatus)
-            .returns(SCRAPPED_AT, ToolResponse::getScrappedAt);
+            .returns(SCRAPPED_AT, ToolResponse::getScrappedAt)
+            .returns(true, ToolResponse::getInventoried);
     }
 
     @Test

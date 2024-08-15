@@ -146,6 +146,10 @@ footer label {
     text-align: center;
 }
 
+select option {
+    text-align: center;
+}
+
 .button.disabled {
     border-color: rgb(100, 100, 100) !important;
     cursor: no-drop;

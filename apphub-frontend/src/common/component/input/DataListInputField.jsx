@@ -4,9 +4,10 @@ import Stream from "../../js/collection/Stream";
 
 const DataListInputField = ({
     id,
-    value,
+    className,
+    value = new DataListInputEntry(),
     setValue,
-    options = {},
+    options = [],
     placeholder
 }) => {
     const [dataListId] = useState(Utils.generateRandomId());
@@ -40,6 +41,7 @@ const DataListInputField = ({
         <span>
             <input
                 id={id}
+                className={className}
                 value={value.value}
                 onChange={updateValue}
                 list={dataListId}

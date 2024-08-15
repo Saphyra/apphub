@@ -290,6 +290,17 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_DELETE_TOOL = "/api/villany-atesz/tool/{toolId}";
     public static final String VILLANY_ATESZ_GET_TOOL_TYPES = "/api/villany-atesz/tool/type";
     public static final String VILLANY_ATESZ_GET_STORAGE_BOXES = "/api/villany-atesz/toolbox/storage-box";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX = "/api/villany-atesz/tool/inventory/{toolId}/storage-box";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE = "/api/villany-atesz/tool/inventory/{toolId}/tool-type";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND = "/api/villany-atesz/tool/inventory/{toolId}/brand";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME = "/api/villany-atesz/tool/inventory/{toolId}/name";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST = "/api/villany-atesz/tool/inventory/{toolId}/cost";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT = "/api/villany-atesz/tool/inventory/{toolId}/acquired-at";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_WARRANTY_EXPIRES_AT = "/api/villany-atesz/tool/inventory/{toolId}/warranty-expires-at";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STATUS = "/api/villany-atesz/tool/inventory/{toolId}/status";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT = "/api/villany-atesz/tool/inventory/{toolId}/scrapped-at";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED = "/api/villany-atesz/tool/inventory/{toolId}/inventoried";
+    public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED = "/api/villany-atesz/tool/inventory/reset-inventoried";
 
     //SKYXPLORE-DATA-SETTINGS
     public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";

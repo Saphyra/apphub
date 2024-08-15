@@ -67,7 +67,7 @@ public class WebElementUtils {
         navigator.perform();
     }
 
-    public static void selectOption(WebElement selectMenu, String value) {
+    public static void selectOptionByValue(WebElement selectMenu, String value) {
         selectMenu.click();
         selectMenu.findElement(By.cssSelector(String.format(":scope option[value=\"%s\"]", value)))
             .click();

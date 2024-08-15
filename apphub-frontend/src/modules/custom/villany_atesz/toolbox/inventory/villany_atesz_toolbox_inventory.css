@@ -1,0 +1,46 @@
+#villany-atesz-stock-toolbox-items-search {
+    display: block;
+    width: 90%;
+    margin: 5px auto;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 5px;
+    z-index: 2;
+}
+
+#villany-atesz-toolbox-inventory .formatted-table {
+    margin: 10px auto;
+}
+
+#villany-atesz-toolbox-inventory .formatted-table td {
+    text-align: center;
+}
+
+.villany-atesz-toolbox-inventory-item input.scheduled {
+    border-color: orange;
+}
+
+.villany-atesz-toolbox-inventory-item-inventoried {
+    transform: scale(1.5);
+}
+
+.villany-atesz-toolbox-inventory-item-name,
+.villany-atesz-toolbox-inventory-item-brand {
+    min-width: 100%;
+}
+
+.villany-atesz-toolbox-inventory-item input[type=number] {
+    width: 75px;
+}
+
+.villany-atesz-toolbox-inventory-item-data-list-cell{
+    white-space: nowrap;
+}
+
+.villany-atesz-toolbox-inventory-item-data-list-cell button{
+    background-image: url("../../../../../common/style/img/save.png");
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+    
+}

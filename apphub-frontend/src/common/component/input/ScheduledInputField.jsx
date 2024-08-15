@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import InputField from "../../../../../common/component/input/InputField";
-import Utils from "../../../../../common/js/Utils";
+import InputField from "./InputField";
+import Utils from "../../js/Utils";
 
 const ScheduledInputField = ({
     className,

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ScheduledInputField from "./ScheduledInputField";
 import Utils from "../../../../../common/js/Utils";
 import Endpoints from "../../../../../common/js/dao/dao";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
@@ -10,6 +9,7 @@ import ConfirmationDialogData from "../../../../../common/component/confirmation
 import { validateOverviewAmount } from "../../validation/VillanyAteszValidation";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import NumberInput from "../../../../../common/component/input/NumberInput";
+import ScheduledInputField from "../../../../../common/component/input/ScheduledInputField";
 
 const InventoryItem = ({ localizationHandler, item, items, categories, setItems, setConfirmationDialogData }) => {
     const [amount, setAmount] = useState(0);

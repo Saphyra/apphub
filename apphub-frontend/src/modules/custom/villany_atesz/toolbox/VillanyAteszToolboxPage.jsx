@@ -16,6 +16,7 @@ import "./villany_atesz_toolbox_page.css";
 import VillanyAteszToolboxNew from "./new/VillanyAteszToolboxNew";
 import VillanyAteszToolboxOverview from "./overview/VillanyAteszToolboxOverview";
 import VillanyAteszToolboxScrapped from "./scrapped/VillanyAteszToolboxScrapped";
+import VillanyAteszToolboxInventory from "./inventory/VillanyAteszToolboxInventory";
 
 const VillanyAteszToolboxPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -56,6 +57,13 @@ const VillanyAteszToolboxPage = () => {
                 onclick={() => updateOpenedTab(ToolboxTab.SCRAPPED)}
                 label={localizationHandler.get("scrapped")}
             />,
+            <Button
+                key="inventory"
+                id="villany-atesz-toolbox-navigation-inventory-button"
+                className={openedTab === ToolboxTab.INVENTORY ? "opened" : ""}
+                onclick={() => updateOpenedTab(ToolboxTab.INVENTORY)}
+                label={localizationHandler.get("inventory")}
+            />,
         ];
     }
 
@@ -69,6 +77,10 @@ const VillanyAteszToolboxPage = () => {
                 />
             case ToolboxTab.SCRAPPED:
                 return <VillanyAteszToolboxScrapped
+                    setConfirmationDialogData={setConfirmationDialogData}
+                />
+            case ToolboxTab.INVENTORY:
+                return <VillanyAteszToolboxInventory
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
             default:

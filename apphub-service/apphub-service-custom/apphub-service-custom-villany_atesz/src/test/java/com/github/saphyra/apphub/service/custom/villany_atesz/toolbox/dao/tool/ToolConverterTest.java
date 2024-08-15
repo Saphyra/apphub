@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LocalDateEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_ACQUIRED_AT;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_BRAND;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_COST;
+import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_INVENTORIED;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_NAME;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_SCRAPPED_AT;
 import static com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter.COLUMN_WARRANTY_EXPIRES_AT;
@@ -47,6 +49,7 @@ class ToolConverterTest {
     private static final UUID TOOL_TYPE_ID = UUID.randomUUID();
     private static final String TOOL_TYPE_ID_STRING = "tool-type-id";
     private static final String STORAGE_BOX_ID_STRING = "storage-box-id";
+    private static final String ENCRYPTED_INVENTORIED = "encrypted-inventoried";
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
@@ -62,6 +65,9 @@ class ToolConverterTest {
 
     @Mock
     private LocalDateEncryptor localDateEncryptor;
+
+    @Mock
+    private BooleanEncryptor booleanEncryptor;
 
     @InjectMocks
     private ToolConverter underTest;
@@ -80,6 +86,7 @@ class ToolConverterTest {
             .warrantyExpiresAt(WARRANTY_EXPIRES_AT)
             .status(ToolStatus.DAMAGED)
             .scrappedAt(SCRAPPED_AT)
+            .inventoried(true)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
@@ -94,6 +101,7 @@ class ToolConverterTest {
         given(localDateEncryptor.encrypt(ACQUIRED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_ACQUIRED_AT)).willReturn(ENCRYPTED_ACQUIRED_AT);
         given(localDateEncryptor.encrypt(WARRANTY_EXPIRES_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_WARRANTY_EXPIRES_AT)).willReturn(ENCRYPTED_WARRANTY_EXPIRES_AT);
         given(localDateEncryptor.encrypt(SCRAPPED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_SCRAPPED_AT)).willReturn(ENCRYPTED_SCRAPPED_AT);
+        given(booleanEncryptor.encrypt(true, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_INVENTORIED)).willReturn(ENCRYPTED_INVENTORIED);
 
         assertThat(underTest.convertDomain(domain))
             .returns(TOOL_ID_STRING, ToolEntity::getToolId)
@@ -106,7 +114,8 @@ class ToolConverterTest {
             .returns(ENCRYPTED_ACQUIRED_AT, ToolEntity::getAcquiredAt)
             .returns(ENCRYPTED_WARRANTY_EXPIRES_AT, ToolEntity::getWarrantyExpiresAt)
             .returns(ToolStatus.DAMAGED, ToolEntity::getStatus)
-            .returns(ENCRYPTED_SCRAPPED_AT, ToolEntity::getScrappedAt);
+            .returns(ENCRYPTED_SCRAPPED_AT, ToolEntity::getScrappedAt)
+            .returns(ENCRYPTED_INVENTORIED, ToolEntity::getInventoried);
     }
 
     @Test
@@ -123,6 +132,7 @@ class ToolConverterTest {
             .warrantyExpiresAt(ENCRYPTED_WARRANTY_EXPIRES_AT)
             .status(ToolStatus.DAMAGED)
             .scrappedAt(ENCRYPTED_SCRAPPED_AT)
+            .inventoried(ENCRYPTED_INVENTORIED)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
@@ -137,6 +147,7 @@ class ToolConverterTest {
         given(localDateEncryptor.decrypt(ENCRYPTED_ACQUIRED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_ACQUIRED_AT)).willReturn(ACQUIRED_AT);
         given(localDateEncryptor.decrypt(ENCRYPTED_WARRANTY_EXPIRES_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_WARRANTY_EXPIRES_AT)).willReturn(WARRANTY_EXPIRES_AT);
         given(localDateEncryptor.decrypt(ENCRYPTED_SCRAPPED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_SCRAPPED_AT)).willReturn(SCRAPPED_AT);
+        given(booleanEncryptor.decrypt(ENCRYPTED_INVENTORIED, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_INVENTORIED)).willReturn(true);
 
         assertThat(underTest.convertEntity(domain))
             .returns(TOOL_ID, Tool::getToolId)
@@ -149,6 +160,53 @@ class ToolConverterTest {
             .returns(ACQUIRED_AT, Tool::getAcquiredAt)
             .returns(WARRANTY_EXPIRES_AT, Tool::getWarrantyExpiresAt)
             .returns(ToolStatus.DAMAGED, Tool::getStatus)
-            .returns(SCRAPPED_AT, Tool::getScrappedAt);
+            .returns(SCRAPPED_AT, Tool::getScrappedAt)
+            .returns(true, Tool::isInventoried);
+    }
+
+    @Test
+    void convertEntity_null() {
+        ToolEntity domain = ToolEntity.builder()
+            .toolId(TOOL_ID_STRING)
+            .userId(USER_ID_STRING)
+            .storageBoxId(STORAGE_BOX_ID_STRING)
+            .toolTypeId(TOOL_TYPE_ID_STRING)
+            .brand(ENCRYPTED_BRAND)
+            .name(ENCRYPTED_NAME)
+            .cost(ENCRYPTED_COST)
+            .acquiredAt(ENCRYPTED_ACQUIRED_AT)
+            .warrantyExpiresAt(ENCRYPTED_WARRANTY_EXPIRES_AT)
+            .status(ToolStatus.DAMAGED)
+            .scrappedAt(ENCRYPTED_SCRAPPED_AT)
+            .inventoried(ENCRYPTED_INVENTORIED)
+            .build();
+
+        given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
+
+        given(uuidConverter.convertEntity(TOOL_ID_STRING)).willReturn(TOOL_ID);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(uuidConverter.convertEntity(TOOL_TYPE_ID_STRING)).willReturn(TOOL_TYPE_ID);
+        given(uuidConverter.convertEntity(STORAGE_BOX_ID_STRING)).willReturn(STORAGE_BOX_ID);
+        given(stringEncryptor.decrypt(ENCRYPTED_BRAND, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_BRAND)).willReturn(BRAND);
+        given(stringEncryptor.decrypt(ENCRYPTED_NAME, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_NAME)).willReturn(NAME);
+        given(integerEncryptor.decrypt(ENCRYPTED_COST, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_COST)).willReturn(COST);
+        given(localDateEncryptor.decrypt(ENCRYPTED_ACQUIRED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_ACQUIRED_AT)).willReturn(ACQUIRED_AT);
+        given(localDateEncryptor.decrypt(ENCRYPTED_WARRANTY_EXPIRES_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_WARRANTY_EXPIRES_AT)).willReturn(WARRANTY_EXPIRES_AT);
+        given(localDateEncryptor.decrypt(ENCRYPTED_SCRAPPED_AT, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_SCRAPPED_AT)).willReturn(SCRAPPED_AT);
+        given(booleanEncryptor.decrypt(ENCRYPTED_INVENTORIED, USER_ID_FROM_ACCESS_TOKEN, TOOL_ID_STRING, COLUMN_INVENTORIED)).willReturn(null);
+
+        assertThat(underTest.convertEntity(domain))
+            .returns(TOOL_ID, Tool::getToolId)
+            .returns(USER_ID, Tool::getUserId)
+            .returns(STORAGE_BOX_ID, Tool::getStorageBoxId)
+            .returns(TOOL_TYPE_ID, Tool::getToolTypeId)
+            .returns(BRAND, Tool::getBrand)
+            .returns(NAME, Tool::getName)
+            .returns(COST, Tool::getCost)
+            .returns(ACQUIRED_AT, Tool::getAcquiredAt)
+            .returns(WARRANTY_EXPIRES_AT, Tool::getWarrantyExpiresAt)
+            .returns(ToolStatus.DAMAGED, Tool::getStatus)
+            .returns(SCRAPPED_AT, Tool::getScrappedAt)
+            .returns(false, Tool::isInventoried);
     }
 }

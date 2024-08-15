@@ -189,7 +189,7 @@ public class CalendarActions {
     }
 
     public static void setCreateEventRepetitionType(WebDriver driver, RepetitionType repetitionType) {
-        WebElementUtils.selectOption(CalendarPage.createEventRepetitionTypeSelect(driver), repetitionType.name());
+        WebElementUtils.selectOptionByValue(CalendarPage.createEventRepetitionTypeSelect(driver), repetitionType.name());
     }
 
     public static void selectDayOfWeek(WebDriver driver, DayOfWeek dayOfWeek) {
@@ -245,11 +245,11 @@ public class CalendarActions {
     }
 
     public static void setCreateEventMinutes(WebDriver driver, String minutes) {
-        WebElementUtils.selectOption(CalendarPage.createEventMinutes(driver), minutes);
+        WebElementUtils.selectOptionByValue(CalendarPage.createEventMinutes(driver), minutes);
     }
 
     public static void setCreateEventHours(WebDriver driver, String hours) {
-        WebElementUtils.selectOption(CalendarPage.createEventHours(driver), hours);
+        WebElementUtils.selectOptionByValue(CalendarPage.createEventHours(driver), hours);
     }
 
     public static void searchInFooter(WebDriver driver, String query) {

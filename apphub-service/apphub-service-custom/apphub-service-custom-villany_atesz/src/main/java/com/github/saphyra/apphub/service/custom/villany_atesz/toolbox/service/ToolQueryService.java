@@ -38,11 +38,12 @@ public class ToolQueryService {
                 .warrantyExpiresAt(tool.getWarrantyExpiresAt())
                 .status(tool.getStatus())
                 .scrappedAt(tool.getScrappedAt())
+                .inventoried(tool.isInventoried())
                 .build())
             .collect(Collectors.toList());
     }
 
-    private ToolTypeModel getToolType(UUID toolTypeId) {
+    public ToolTypeModel getToolType(UUID toolTypeId) {
         return Optional.ofNullable(toolTypeId)
             .map(uuid -> toolTypeDao.findByIdValidated(toolTypeId))
             .map(storageBox -> ToolTypeModel.builder()
@@ -52,7 +53,7 @@ public class ToolQueryService {
             .orElse(null);
     }
 
-    private StorageBoxModel getStorageBox(UUID storageBoxId) {
+    public StorageBoxModel getStorageBox(UUID storageBoxId) {
         return Optional.ofNullable(storageBoxId)
             .map(uuid -> storageBoxDao.findByIdValidated(storageBoxId))
             .map(storageBox -> StorageBoxModel.builder()

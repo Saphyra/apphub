@@ -9,6 +9,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import ToolStatus from "../ToolStatus";
 import ToolboxOverviewItem from "./ToolboxOverviewItem";
 import filterTool from "../ToolFilter";
+import sortTools from "../ToolSorter";
 
 const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -22,7 +23,7 @@ const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
         return new Stream(tools)
             .filter(tool => tool.status !== ToolStatus.SCRAPPED)
             .filter(tool => filterTool(tool, search))
-            .sorted((a, b) => a.name.localeCompare(b.name))
+            .sorted(sortTools)
             .map(tool => <ToolboxOverviewItem
                 key={tool.toolId}
                 localizationHandler={localizationHandler}

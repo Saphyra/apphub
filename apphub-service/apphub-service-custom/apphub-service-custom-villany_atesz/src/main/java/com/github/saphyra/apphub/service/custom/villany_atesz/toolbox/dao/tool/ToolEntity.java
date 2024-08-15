@@ -31,4 +31,5 @@ public class ToolEntity {
     @Enumerated(EnumType.STRING)
     private ToolStatus status;
     private String scrappedAt;
+    private String inventoried;
 }

@@ -414,6 +414,17 @@ const Endpoints = {
     VILLANY_ATESZ_DELETE_TOOL: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/{toolId}"),
     VILLANY_ATESZ_GET_TOOL_TYPES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/tool/type"),
     VILLANY_ATESZ_GET_STORAGE_BOXES: new Endpoint(RequestMethod.GET, "/api/villany-atesz/toolbox/storage-box"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/name"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/brand"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/cost"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/inventoried"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/acquired-at"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_WARRANTY_EXPIRES_AT: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/warranty-expires-at"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/scrapped-at"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STATUS: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/status"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/tool-type"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/storage-box"),
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/reset-inventoried"),
 }
 
 export default Endpoints;

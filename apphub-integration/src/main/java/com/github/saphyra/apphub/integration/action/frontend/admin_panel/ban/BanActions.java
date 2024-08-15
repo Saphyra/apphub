@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFill;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.clearAndFillContentEditable;
-import static com.github.saphyra.apphub.integration.framework.WebElementUtils.selectOption;
+import static com.github.saphyra.apphub.integration.framework.WebElementUtils.selectOptionByValue;
 import static com.github.saphyra.apphub.integration.framework.WebElementUtils.setCheckboxState;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,11 +33,11 @@ public class BanActions {
     }
 
     public static void setUpAdminForm(WebDriver driver, String bannedRole, boolean permanent, int duration, String chronoUnit, String reason, String password) {
-        selectOption(driver.findElement(By.id("ban-user-role-to-ban-select")), bannedRole);
+        selectOptionByValue(driver.findElement(By.id("ban-user-role-to-ban-select")), bannedRole);
         setCheckboxState(driver.findElement(By.id("ban-user-is-permanent-input")), permanent);
         if (!permanent) {
             clearAndFill(driver.findElement(By.id("ban-user-duration")), String.valueOf(duration));
-            selectOption(driver.findElement(By.id("ban-user-banned-until-input")), chronoUnit);
+            selectOptionByValue(driver.findElement(By.id("ban-user-banned-until-input")), chronoUnit);
         }
         clearAndFillContentEditable(driver, driver.findElement(By.id("ban-user-ban-password")), password);
         clearAndFill(driver.findElement(By.id("ban-user-reason")), reason);

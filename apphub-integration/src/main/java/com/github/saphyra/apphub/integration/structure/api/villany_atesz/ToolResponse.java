@@ -23,4 +23,5 @@ public class ToolResponse {
     private LocalDate warrantyExpiresAt;
     private ToolStatus status;
     private LocalDate scrappedAt;
+    private Boolean inventoried;
 }
