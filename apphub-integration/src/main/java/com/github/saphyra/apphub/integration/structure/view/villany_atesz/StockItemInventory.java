@@ -84,8 +84,13 @@ public class StockItemInventory {
     }
 
     public String getBarCode() {
-        return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
+                .getText();
+        } else {
+            return webElement.findElement(By.className("villany-atesz-stock-inventory-item-bar-code"))
+                .getAttribute("value");
+        }
     }
 
     public void markForAcquisition(boolean markedForAcquisition) {

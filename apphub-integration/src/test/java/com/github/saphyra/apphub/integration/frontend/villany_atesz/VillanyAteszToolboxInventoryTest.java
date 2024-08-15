@@ -54,13 +54,13 @@ public class VillanyAteszToolboxInventoryTest extends SeleniumTest {
         VillanyAteszNavigation.openToolboxInventory(driver);
 
         ToolInventoryItem item = AwaitilityWrapper.getSingleItemFromListWithWait(() -> VillanyAteszToolboxInventoryPageActions.getItems(driver));
-        item.setInventoried(true);
         item.editToolType(NEW_TOOL_TYPE);
         item.editBrand(NEW_BRAND);
         item.editName(NEW_NAME);
         item.editStorageBox(NEW_STORAGE_BOX);
         item.editCost(NEW_COST);
         item.editStatus(ToolStatus.DAMAGED);
+        item.setInventoried(true);
 
         SleepUtil.sleep(3000);
         VillanyAteszNavigation.openToolboxOverview(driver);

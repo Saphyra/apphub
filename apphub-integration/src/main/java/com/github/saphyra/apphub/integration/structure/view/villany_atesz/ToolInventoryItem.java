@@ -51,36 +51,70 @@ public class ToolInventoryItem {
     }
 
     public String getToolType() {
-        return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-tool-type"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-tool-type"))
+                .getText();
+        } else {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-tool-type"))
+                .getAttribute("value");
+        }
     }
 
     public String getBrand() {
-        return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-brand"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-brand"))
+                .getText();
+        } else {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-brand"))
+                .getAttribute("value");
+        }
     }
 
     public String getName() {
-        return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-name"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-name"))
+                .getText();
+        } else {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-name"))
+                .getAttribute("value");
+        }
     }
 
     public Integer getCost() {
-        String value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-cost"))
-            .getAttribute("value");
+        String value;
+        if (isInventoried()) {
+            value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-cost"))
+                .getText();
+        } else {
+            value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-cost"))
+                .getAttribute("value");
+        }
+
         return Integer.parseInt(value);
     }
 
     public String getStorageBox() {
-        return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-storage-box"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-storage-box"))
+                .getText();
+        } else {
+            return webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-storage-box"))
+                .getAttribute("value");
+        }
     }
 
     public ToolStatus getToolStatus() {
-        String value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-status"))
-            .getAttribute("value");
+        if (isInventoried()) {
+            String value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-status"))
+                .getText();
 
-        return ToolStatus.valueOf(value);
+            return ToolStatus.fromLabel(value);
+        } else {
+            String value = webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-status"))
+                .getAttribute("value");
+
+            return ToolStatus.valueOf(value);
+        }
     }
 
     public void delete(WebDriver driver) {

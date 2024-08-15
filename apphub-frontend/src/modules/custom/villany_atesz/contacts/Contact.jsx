@@ -33,6 +33,7 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
 
         sessionStorage.activeCart = cartId;
 
+        delete sessionStorage.villanyAteszStockOpenedTab;
         window.location.href = Constants.VILLANY_ATESZ_STOCK_PAGE;
     }
 

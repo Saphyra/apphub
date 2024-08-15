@@ -142,138 +142,187 @@ const ToolboxInventoryItem = ({
         setConfirmationDialogData(null);
     }
 
-    return (
-        <tr className="villany-atesz-toolbox-inventory-item">
-            <td>
-                <InputField
-                    className="villany-atesz-toolbox-inventory-item-inventoried"
-                    type="checkbox"
-                    checked={tool.inventoried}
-                    onchangeCallback={editInventoried}
-                />
-            </td>
-            <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
-                <DataListInputField
-                    className="villany-atesz-toolbox-inventory-item-tool-type"
-                    value={toolType}
-                    setValue={setToolType}
-                    options={toolTypes}
-                    placeholder={localizationHandler.get("tool-type")}
+    if (tool.inventoried) {
+        return (
+            <tr className="villany-atesz-toolbox-inventory-item">
+                <td>
+                    <InputField
+                        className="villany-atesz-toolbox-inventory-item-inventoried"
+                        type="checkbox"
+                        checked={tool.inventoried}
+                        onchangeCallback={editInventoried}
+                    />
+                </td>
+                <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
+                    <span className="villany-atesz-toolbox-inventory-item-tool-type">{toolType.value}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-brand">{tool.brand}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-name">{tool.name}</span>
+                </td>
+                <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
+                    <span className="villany-atesz-toolbox-inventory-item-storage-box">{storageBox.value}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-cost">{tool.cost}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-acquired-at">{tool.acquiredAt}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-warranty-expires-at">{tool.warrantyExpiresAt}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-scrapped-at">{tool.scrappedAt}</span>
+                </td>
+                <td>
+                    <span className="villany-atesz-toolbox-inventory-item-status">{localizationHandler.get(tool.status.toLowerCase())}</span>
+                </td>
+                <td>
+                    <Button
+                        className="villany-atesz-toolbox-inventory-item-delete"
+                        label={localizationHandler.get("delete")}
+                        onclick={confirmDeletion}
+                    />
+                </td>
+            </tr>
+        );
+    } else {
+        return (
+            <tr className="villany-atesz-toolbox-inventory-item">
+                <td>
+                    <InputField
+                        className="villany-atesz-toolbox-inventory-item-inventoried"
+                        type="checkbox"
+                        checked={tool.inventoried}
+                        onchangeCallback={editInventoried}
+                    />
+                </td>
+                <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
+                    <DataListInputField
+                        className="villany-atesz-toolbox-inventory-item-tool-type"
+                        value={toolType}
+                        setValue={setToolType}
+                        options={toolTypes}
+                        placeholder={localizationHandler.get("tool-type")}
 
-                />
-                <Button
-                    className="villany-atesz-toolbox-inventory-item-tool-type-save-button"
-                    onclick={editToolType}
-                />
-            </td>
-            <td>
-                <ScheduledInputField
-                    type="text"
-                    className="villany-atesz-toolbox-inventory-item-brand"
-                    placeholder={localizationHandler.get("brand")}
-                    value={tool.brand}
-                    onchangeCallback={(newValue) => updateProperty("brand", newValue)}
-                    scheduledCallback={(newValue) => sendRequest(
-                        Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
-                        newValue
-                    )}
-                    style={{ width: 8 * tool.name.length + "px" }}
-                />
-            </td>
-            <td>
-                <ScheduledInputField
-                    type="text"
-                    className="villany-atesz-toolbox-inventory-item-name"
-                    placeholder={localizationHandler.get("name")}
-                    value={tool.name}
-                    onchangeCallback={(newValue) => updateProperty("name", newValue)}
-                    scheduledCallback={(newValue) => sendRequest(
-                        Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
-                        newValue,
-                        nw => { return { value: nw } },
-                        nw => !Utils.isBlank(nw)
-                    )}
-                    style={{ width: 8 * tool.name.length + "px" }}
-                />
-            </td>
-            <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
-                <DataListInputField
-                    className="villany-atesz-toolbox-inventory-item-storage-box"
-                    value={storageBox}
-                    setValue={setStorageBox}
-                    options={storageBoxes}
-                    placeholder={localizationHandler.get("storage-box")}
+                    />
+                    <Button
+                        className="villany-atesz-toolbox-inventory-item-tool-type-save-button"
+                        onclick={editToolType}
+                    />
+                </td>
+                <td>
+                    <ScheduledInputField
+                        type="text"
+                        className="villany-atesz-toolbox-inventory-item-brand"
+                        placeholder={localizationHandler.get("brand")}
+                        value={tool.brand}
+                        onchangeCallback={(newValue) => updateProperty("brand", newValue)}
+                        scheduledCallback={(newValue) => sendRequest(
+                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
+                            newValue
+                        )}
+                        style={{ width: 8 * tool.name.length + "px" }}
+                    />
+                </td>
+                <td>
+                    <ScheduledInputField
+                        type="text"
+                        className="villany-atesz-toolbox-inventory-item-name"
+                        placeholder={localizationHandler.get("name")}
+                        value={tool.name}
+                        onchangeCallback={(newValue) => updateProperty("name", newValue)}
+                        scheduledCallback={(newValue) => sendRequest(
+                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
+                            newValue,
+                            nw => { return { value: nw } },
+                            nw => !Utils.isBlank(nw)
+                        )}
+                        style={{ width: 8 * tool.name.length + "px" }}
+                    />
+                </td>
+                <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
+                    <DataListInputField
+                        className="villany-atesz-toolbox-inventory-item-storage-box"
+                        value={storageBox}
+                        setValue={setStorageBox}
+                        options={storageBoxes}
+                        placeholder={localizationHandler.get("storage-box")}
 
-                />
-                <Button
-                    className="villany-atesz-toolbox-inventory-item-storage-box-save-button"
-                    onclick={editStorageBox}
-                />
-            </td>
-            <td>
-                <ScheduledInputField
-                    type="number"
-                    className="villany-atesz-toolbox-inventory-item-cost"
-                    placeholder={localizationHandler.get("cost")}
-                    value={tool.cost}
-                    onchangeCallback={(newValue) => updateProperty("cost", newValue)}
-                    scheduledCallback={(newValue) => sendRequest(
-                        Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
-                        newValue,
-                        nw => { return { value: nw } },
-                        nw => !Utils.isBlank(nw)
-                    )}
-                />
-            </td>
-            <td>
-                <InputField
-                    type="date"
-                    className={"villany-atesz-toolbox-inventory-item-acquired-at" + (Utils.isBlank(tool.acquiredAt) ? " scheduled" : "")}
-                    placeholder={localizationHandler.get("acquired-at")}
-                    value={tool.acquiredAt}
-                    onchangeCallback={editAcquiredAt}
-                />
-            </td>
-            <td>
-                <InputField
-                    type="date"
-                    className="villany-atesz-toolbox-inventory-item-warranty-expires-at"
-                    placeholder={localizationHandler.get("warranty-expires-at")}
-                    value={tool.warrantyExpiresAt}
-                    onchangeCallback={editWarrantyExpiresAt}
-                />
-            </td>
-            <td>
-                <InputField
-                    type="date"
-                    className="villany-atesz-toolbox-inventory-item-scrapped-at"
-                    placeholder={localizationHandler.get("scrapped-at")}
-                    value={tool.scrappedAt}
-                    onchangeCallback={editScrappedAt}
-                />
-            </td>
-            <td>
-                <SelectInput
-                    className="villany-atesz-toolbox-inventory-item-status"
-                    value={tool.status}
-                    options={[
-                        new SelectOption(localizationHandler.get("default"), ToolStatus.DEFAULT),
-                        new SelectOption(localizationHandler.get("lost"), ToolStatus.LOST),
-                        new SelectOption(localizationHandler.get("scrapped"), ToolStatus.SCRAPPED),
-                        new SelectOption(localizationHandler.get("damaged"), ToolStatus.DAMAGED),
-                    ]}
-                    onchangeCallback={editStatus}
-                />
-            </td>
-            <td>
-                <Button
-                    className="villany-atesz-toolbox-inventory-item-delete"
-                    label={localizationHandler.get("delete")}
-                    onclick={confirmDeletion}
-                />
-            </td>
-        </tr>
-    );
+                    />
+                    <Button
+                        className="villany-atesz-toolbox-inventory-item-storage-box-save-button"
+                        onclick={editStorageBox}
+                    />
+                </td>
+                <td>
+                    <ScheduledInputField
+                        type="number"
+                        className="villany-atesz-toolbox-inventory-item-cost"
+                        placeholder={localizationHandler.get("cost")}
+                        value={tool.cost}
+                        onchangeCallback={(newValue) => updateProperty("cost", newValue)}
+                        scheduledCallback={(newValue) => sendRequest(
+                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
+                            newValue,
+                            nw => { return { value: nw } },
+                            nw => !Utils.isBlank(nw)
+                        )}
+                    />
+                </td>
+                <td>
+                    <InputField
+                        type="date"
+                        className={"villany-atesz-toolbox-inventory-item-acquired-at" + (Utils.isBlank(tool.acquiredAt) ? " scheduled" : "")}
+                        placeholder={localizationHandler.get("acquired-at")}
+                        value={tool.acquiredAt}
+                        onchangeCallback={editAcquiredAt}
+                    />
+                </td>
+                <td>
+                    <InputField
+                        type="date"
+                        className="villany-atesz-toolbox-inventory-item-warranty-expires-at"
+                        placeholder={localizationHandler.get("warranty-expires-at")}
+                        value={tool.warrantyExpiresAt}
+                        onchangeCallback={editWarrantyExpiresAt}
+                    />
+                </td>
+                <td>
+                    <InputField
+                        type="date"
+                        className="villany-atesz-toolbox-inventory-item-scrapped-at"
+                        placeholder={localizationHandler.get("scrapped-at")}
+                        value={tool.scrappedAt}
+                        onchangeCallback={editScrappedAt}
+                    />
+                </td>
+                <td>
+                    <SelectInput
+                        className="villany-atesz-toolbox-inventory-item-status"
+                        value={tool.status}
+                        options={[
+                            new SelectOption(localizationHandler.get("default"), ToolStatus.DEFAULT),
+                            new SelectOption(localizationHandler.get("lost"), ToolStatus.LOST),
+                            new SelectOption(localizationHandler.get("scrapped"), ToolStatus.SCRAPPED),
+                            new SelectOption(localizationHandler.get("damaged"), ToolStatus.DAMAGED),
+                        ]}
+                        onchangeCallback={editStatus}
+                    />
+                </td>
+                <td>
+                    <Button
+                        className="villany-atesz-toolbox-inventory-item-delete"
+                        label={localizationHandler.get("delete")}
+                        onclick={confirmDeletion}
+                    />
+                </td>
+            </tr>
+        );
+    }
 }
 
 export default ToolboxInventoryItem;
