@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import org.springframework.data.repository.CrudRepository;
 

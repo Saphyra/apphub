@@ -97,11 +97,11 @@ public class SkyXplorePopulationOverviewActions {
     }
 
     public static void orderCitizensBy(WebDriver driver, OrderType orderType) {
-        WebElementUtils.selectOption(driver.findElement(By.id("skyxplore-game-population-comparator-selector")), orderType.getValue());
+        WebElementUtils.selectOptionByValue(driver.findElement(By.id("skyxplore-game-population-comparator-selector")), orderType.getValue());
     }
 
     public static void selectStatType(WebDriver driver, StatType statType) {
-        WebElementUtils.selectOption(driver.findElement(By.id("skyxplore-game-population-stat-selector")), statType.name());
+        WebElementUtils.selectOptionByValue(driver.findElement(By.id("skyxplore-game-population-stat-selector")), statType.name());
     }
 
     public static void saveOrderAsGlobalDefault(WebDriver driver) {
@@ -110,7 +110,7 @@ public class SkyXplorePopulationOverviewActions {
     }
 
     public static void selectSkillType(WebDriver driver, SkillType skillType) {
-        WebElementUtils.selectOption(driver.findElement(By.id("skyxplore-game-population-skill-selector")), skillType.name());
+        WebElementUtils.selectOptionByValue(driver.findElement(By.id("skyxplore-game-population-skill-selector")), skillType.name());
     }
 
     public static void saveOrderAsPlanetDefault(WebDriver driver) {

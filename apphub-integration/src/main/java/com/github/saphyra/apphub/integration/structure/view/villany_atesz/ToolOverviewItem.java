@@ -59,4 +59,14 @@ public class ToolOverviewItem {
         webElement.findElement(By.className("villany-atesz-toolbox-overview-item-set-to-scrapped-button"))
             .click();
     }
+
+    public String getToolType() {
+        return webElement.findElement(By.className("villany-atesz-toolbox-overview-tool-type"))
+            .getText();
+    }
+
+    public String getStorageBox() {
+        return webElement.findElement(By.className("villany-atesz-toolbox-overview-storage-box"))
+            .getText();
+    }
 }

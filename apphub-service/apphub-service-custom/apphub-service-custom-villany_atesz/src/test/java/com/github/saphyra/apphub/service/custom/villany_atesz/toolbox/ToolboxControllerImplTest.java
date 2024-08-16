@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateToolRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StorageBoxModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolTypeModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.CreateToolService;
@@ -52,6 +54,12 @@ class ToolboxControllerImplTest {
     @Mock
     private CreateToolRequest createToolRequest;
 
+    @Mock
+    private ToolTypeModel toolTypeModel;
+
+    @Mock
+    private StorageBoxModel storageBoxModel;
+
     @BeforeEach
     void setUp() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
@@ -87,5 +95,21 @@ class ToolboxControllerImplTest {
         assertThat(underTest.deleteTool(TOOL_ID, accessTokenHeader)).containsExactly(toolResponse);
 
         then(deleteToolService).should().deleteTool(USER_ID, TOOL_ID);
+    }
+
+    @Test
+    void getToolTypes() {
+        given(toolQueryService.getToolTypes(USER_ID)).willReturn(List.of(toolTypeModel));
+
+        assertThat(underTest.getToolTypes(accessTokenHeader))
+            .containsExactly(toolTypeModel);
+    }
+
+    @Test
+    void getStorageBoxes() {
+        given(toolQueryService.getStorageBoxes(USER_ID)).willReturn(List.of(storageBoxModel));
+
+        assertThat(underTest.getStorageBoxes(accessTokenHeader))
+            .containsExactly(storageBoxModel);
     }
 }

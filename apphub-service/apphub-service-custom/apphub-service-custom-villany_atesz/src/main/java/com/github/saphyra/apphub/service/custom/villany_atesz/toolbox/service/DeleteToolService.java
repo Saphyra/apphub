@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service;
 
-import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

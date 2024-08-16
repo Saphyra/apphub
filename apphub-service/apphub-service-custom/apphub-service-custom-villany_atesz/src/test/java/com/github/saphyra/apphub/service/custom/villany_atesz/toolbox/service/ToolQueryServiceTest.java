@@ -1,9 +1,15 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service;
 
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StorageBoxModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
-import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.Tool;
-import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.ToolDao;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolTypeModel;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.storage_box.StorageBox;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.storage_box.StorageBoxDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.Tool;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool_type.ToolType;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool_type.ToolTypeDao;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +34,16 @@ class ToolQueryServiceTest {
     private static final LocalDate ACQUIRED_AT = LocalDate.now();
     private static final LocalDate WARRANTY_EXPIRES_AT = ACQUIRED_AT.minusDays(1);
     private static final LocalDate SCRAPPED_AT = WARRANTY_EXPIRES_AT.minusDays(1);
+    private static final UUID TOOL_TYPE_ID = UUID.randomUUID();
+    private static final UUID STORAGE_BOX_ID = UUID.randomUUID();
+    private static final String TOOL_TYPE_NAME = "tool-type-name";
+    private static final String STORAGE_BOX_NAME = "storage-box-name";
+
+    @Mock
+    private ToolTypeDao toolTypeDao;
+
+    @Mock
+    private StorageBoxDao storageBoxDao;
 
     @Mock
     private ToolDao toolDao;
@@ -37,6 +53,12 @@ class ToolQueryServiceTest {
 
     @Mock
     private Tool tool;
+
+    @Mock
+    private ToolType toolType;
+
+    @Mock
+    private StorageBox storageBox;
 
     @Test
     void getTools() {
@@ -50,16 +72,30 @@ class ToolQueryServiceTest {
         given(tool.getWarrantyExpiresAt()).willReturn(WARRANTY_EXPIRES_AT);
         given(tool.getStatus()).willReturn(ToolStatus.DEFAULT);
         given(tool.getScrappedAt()).willReturn(SCRAPPED_AT);
+        given(tool.getToolTypeId()).willReturn(TOOL_TYPE_ID);
+        given(tool.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
+        given(tool.isInventoried()).willReturn(true);
+
+        given(toolTypeDao.findByIdValidated(TOOL_TYPE_ID)).willReturn(toolType);
+        given(toolType.getToolTypeId()).willReturn(TOOL_TYPE_ID);
+        given(toolType.getName()).willReturn(TOOL_TYPE_NAME);
+
+        given(storageBoxDao.findByIdValidated(STORAGE_BOX_ID)).willReturn(storageBox);
+        given(storageBox.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
+        given(storageBox.getName()).willReturn(STORAGE_BOX_NAME);
 
         CustomAssertions.singleListAssertThat(underTest.getTools(USER_ID))
             .returns(TOOL_ID, ToolResponse::getToolId)
+            .returns(ToolTypeModel.builder().toolTypeId(TOOL_TYPE_ID).name(TOOL_TYPE_NAME).build(), ToolResponse::getToolType)
+            .returns(StorageBoxModel.builder().storageBoxId(STORAGE_BOX_ID).name(STORAGE_BOX_NAME).build(), ToolResponse::getStorageBox)
             .returns(BRAND, ToolResponse::getBrand)
             .returns(NAME, ToolResponse::getName)
             .returns(COST, ToolResponse::getCost)
             .returns(ACQUIRED_AT, ToolResponse::getAcquiredAt)
             .returns(WARRANTY_EXPIRES_AT, ToolResponse::getWarrantyExpiresAt)
             .returns(ToolStatus.DEFAULT, ToolResponse::getStatus)
-            .returns(SCRAPPED_AT, ToolResponse::getScrappedAt);
+            .returns(SCRAPPED_AT, ToolResponse::getScrappedAt)
+            .returns(true, ToolResponse::getInventoried);
     }
 
     @Test
@@ -68,5 +104,27 @@ class ToolQueryServiceTest {
         given(tool.getCost()).willReturn(COST);
 
         assertThat(underTest.getTotalValue(USER_ID)).isEqualTo(2 * COST);
+    }
+
+    @Test
+    void getToolTypes() {
+        given(toolTypeDao.getByUserId(USER_ID)).willReturn(List.of(toolType));
+        given(toolType.getToolTypeId()).willReturn(TOOL_TYPE_ID);
+        given(toolType.getName()).willReturn(TOOL_TYPE_NAME);
+
+        CustomAssertions.singleListAssertThat(underTest.getToolTypes(USER_ID))
+            .returns(TOOL_TYPE_ID, ToolTypeModel::getToolTypeId)
+            .returns(TOOL_TYPE_NAME, ToolTypeModel::getName);
+    }
+
+    @Test
+    void getStorageBoxes() {
+        given(storageBoxDao.getByUserId(USER_ID)).willReturn(List.of(storageBox));
+        given(storageBox.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
+        given(storageBox.getName()).willReturn(STORAGE_BOX_NAME);
+
+        CustomAssertions.singleListAssertThat(underTest.getStorageBoxes(USER_ID))
+            .returns(STORAGE_BOX_ID, StorageBoxModel::getStorageBoxId)
+            .returns(STORAGE_BOX_NAME, StorageBoxModel::getName);
     }
 }

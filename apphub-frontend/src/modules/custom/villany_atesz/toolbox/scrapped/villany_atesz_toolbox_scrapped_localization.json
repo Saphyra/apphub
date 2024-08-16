@@ -46,5 +46,13 @@
     "cancel": {
         "en": "Cancel",
         "hu": "Mégse"
+    },
+    "tool-type": {
+        "en": "Type",
+        "hu": "Típus"
+    },
+    "storage-box": {
+        "en": "Storage box",
+        "hu": "Tároló"
     }
 }

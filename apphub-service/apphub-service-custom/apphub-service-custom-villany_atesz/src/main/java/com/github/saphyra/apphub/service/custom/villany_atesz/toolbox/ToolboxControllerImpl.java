@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateToolRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StorageBoxModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolTypeModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.ToolboxController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -56,5 +58,19 @@ public class ToolboxControllerImpl implements ToolboxController {
         deleteToolService.deleteTool(accessTokenHeader.getUserId(), toolId);
 
         return getTools(accessTokenHeader);
+    }
+
+    @Override
+    public List<ToolTypeModel> getToolTypes(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know their toolTypes", accessTokenHeader.getUserId());
+
+        return toolQueryService.getToolTypes(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public List<StorageBoxModel> getStorageBoxes(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know their storageBoxes", accessTokenHeader.getUserId());
+
+        return toolQueryService.getStorageBoxes(accessTokenHeader.getUserId());
     }
 }

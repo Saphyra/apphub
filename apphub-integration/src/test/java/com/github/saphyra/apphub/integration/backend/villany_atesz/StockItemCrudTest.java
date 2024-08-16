@@ -335,7 +335,8 @@ public class StockItemCrudTest extends BackEndTest {
         CustomAssertions.singleListAssertThat(VillanyAteszAcquisitionActions.getDates(accessTokenId)).isEqualTo(DATE);
         CustomAssertions.singleListAssertThat(VillanyAteszAcquisitionActions.getAcquisitionsOnDay(accessTokenId, DATE))
             .returns(ACQUIRE_IN_CAR + ACQUIRE_IN_STORAGE, AcquisitionResponse::getAmount)
-            .returns(stockItemId, AcquisitionResponse::getStockItemId);
+            .returns(stockItemId, AcquisitionResponse::getStockItemId)
+            .returns(NAME, AcquisitionResponse::getStockItemName);
     }
 
     private void acquire_forceUpdatePrice(UUID accessTokenId, UUID stockItemId) {

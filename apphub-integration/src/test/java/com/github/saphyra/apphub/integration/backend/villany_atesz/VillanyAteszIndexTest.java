@@ -15,6 +15,8 @@ import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateS
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCategoryModel;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemResponse;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StorageBoxModel;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolTypeModel;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -85,12 +87,16 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .name(TOOL_NAME_1)
             .cost(PRICE_1)
             .acquiredAt(LocalDate.now())
+            .storageBox(StorageBoxModel.builder().name("").build())
+            .toolType(ToolTypeModel.builder().name("").build())
             .build();
         CreateToolRequest createToolRequest2 = CreateToolRequest.builder()
             .brand("")
             .name(TOOL_NAME_2)
             .cost(PRICE_2)
             .acquiredAt(LocalDate.now())
+            .storageBox(StorageBoxModel.builder().name("").build())
+            .toolType(ToolTypeModel.builder().name("").build())
             .build();
 
         VillanyAteszToolboxActions.createTool(accessTokenId, createToolRequest1);

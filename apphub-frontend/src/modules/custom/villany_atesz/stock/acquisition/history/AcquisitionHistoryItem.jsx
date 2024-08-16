@@ -1,21 +1,19 @@
 import React, { useState } from "react";
-import useCache from "../../../../../../common/hook/Cache";
-import Endpoints from "../../../../../../common/js/dao/dao";
+import Utils from "../../../../../../common/js/Utils";
 
-const AcquisitionHistoryItem = ({ item }) => {
-    const [stockItem, setStockItem] = useState({});
+const AcquisitionHistoryItem = ({ item, padding }) => {
+    let extraSpaces = "";
+    for (let i = Utils.numberOfDigits(item.amount); i < padding; i++) {
+        extraSpaces += " ";
+    }
 
-    useCache(
-        item.stockItemId,
-        Endpoints.VILLANY_ATESZ_GET_STOCK_ITEM.createRequest(null, { stockItemId: item.stockItemId }),
-        setStockItem
-    )
+    console.log(padding, extraSpaces.length);
 
     return (
-        <li className="villany-atesz-stock-acquisition-history-item">
+        <li className="villany-atesz-stock-acquisition-history-item selectable">
             <span className="villany-atesz-stock-acquisition-history-item-amount">{item.amount}</span>
-            <span> x </span>
-            <span className="villany-atesz-stock-acquisition-history-item-name">{stockItem.name}</span>
+            <pre>{extraSpaces} x </pre>
+            <span className="villany-atesz-stock-acquisition-history-item-name">{item.stockItemName}</span>
         </li>
     );
 }

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.storage_box;
 
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
@@ -13,31 +13,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-class ToolRepositoryTest {
-    private static final String TOOL_ID_1 = "tool-id-1";
-    private static final String TOOL_ID_2 = "tool-id-2";
+class StorageBoxRepositoryTest {
+    private static final String STORAGE_BOX_ID_1 = "storage-box-id-1";
+    private static final String STORAGE_BOX_ID_2 = "storage-box-id-2";
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
 
     @Autowired
-    private ToolRepository underTest;
+    private StorageBoxRepository underTest;
 
     @AfterEach
     void clear() {
         underTest.deleteAll();
     }
 
-    @Transactional
     @Test
+    @Transactional
     void deleteByUserId() {
-        ToolEntity entity1 = ToolEntity.builder()
-            .toolId(TOOL_ID_1)
+        StorageBoxEntity entity1 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_1)
             .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
 
-        ToolEntity entity2 = ToolEntity.builder()
-            .toolId(TOOL_ID_2)
+        StorageBoxEntity entity2 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_2)
             .userId(USER_ID_2)
             .build();
         underTest.save(entity2);
@@ -49,38 +49,18 @@ class ToolRepositoryTest {
 
     @Test
     void getByUserId() {
-        ToolEntity entity1 = ToolEntity.builder()
-            .toolId(TOOL_ID_1)
+        StorageBoxEntity entity1 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_1)
             .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
 
-        ToolEntity entity2 = ToolEntity.builder()
-            .toolId(TOOL_ID_2)
+        StorageBoxEntity entity2 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_2)
             .userId(USER_ID_2)
             .build();
         underTest.save(entity2);
 
         assertThat(underTest.getByUserId(USER_ID_1)).containsExactly(entity1);
-    }
-
-    @Transactional
-    @Test
-    void deleteByUserIdAndToolId() {
-        ToolEntity entity1 = ToolEntity.builder()
-            .toolId(TOOL_ID_1)
-            .userId(USER_ID_1)
-            .build();
-        underTest.save(entity1);
-
-        ToolEntity entity2 = ToolEntity.builder()
-            .toolId(TOOL_ID_2)
-            .userId(USER_ID_2)
-            .build();
-        underTest.save(entity2);
-
-        underTest.deleteByUserIdAndToolId(USER_ID_1, TOOL_ID_1);
-
-        assertThat(underTest.findAll()).containsExactly(entity2);
     }
 }

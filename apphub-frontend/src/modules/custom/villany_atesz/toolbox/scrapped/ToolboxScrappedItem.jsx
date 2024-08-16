@@ -4,6 +4,7 @@ import Utils from "../../../../../common/js/Utils";
 import ToolStatus from "../ToolStatus";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import Optional from "../../../../../common/js/collection/Optional";
 
 const ToolboxScrappedItem = ({ localizationHandler, tool, setTools, setConfirmationDialogData }) => {
     const descrap = async () => {
@@ -47,8 +48,10 @@ const ToolboxScrappedItem = ({ localizationHandler, tool, setTools, setConfirmat
 
     return (
         <tr className="villany-atesz-toolbox-scrapped-item">
+            <td className="villany-atesz-toolbox-overview-tool-type">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
             <td className="villany-atesz-toolbox-scrapped-item-brand">{tool.brand}</td>
             <td className="villany-atesz-toolbox-scrapped-item-name">{tool.name}</td>
+            <td className="villany-atesz-toolbox-overview-storage-box">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
             <td >
                 <span className="villany-atesz-toolbox-scrapped-item-cost">{tool.cost}</span>
                 <span> Ft</span>

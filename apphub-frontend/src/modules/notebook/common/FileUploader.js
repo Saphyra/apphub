@@ -5,7 +5,7 @@ import Endpoints from "../../../common/js/dao/dao";
 
 const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => {
     const formData = new FormData();
-    formData.append("file", file.e.target.files[0]);
+    formData.append("file", file.file);
 
     const options = {
         method: "PUT",

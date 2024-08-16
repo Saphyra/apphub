@@ -1,0 +1,21 @@
+===FEATURES===
+    VillanyAtesz
+        AcquisitionHistory
+            Ordering
+            Indentation
+        Dynamic length for input fields when creating stockItem or tool
+        ToolBox
+            ToolType
+            StorageBox
+            Inventory
+        Unmodifiable inventoried entries
+
+===BUGFIXES===
+    Notebook
+        Multiple file upload uploaded only first file from fileGroup multiple times
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

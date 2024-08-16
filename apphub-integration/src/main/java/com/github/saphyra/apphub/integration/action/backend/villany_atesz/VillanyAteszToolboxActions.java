@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StorageBoxModel;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolResponse;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolStatus;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolTypeModel;
 import io.restassured.response.Response;
 
 import java.util.Arrays;
@@ -66,5 +68,31 @@ public class VillanyAteszToolboxActions {
     public static Response getDeleteResponse(UUID accessTokenId, UUID toolId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_TOOL, "toolId", toolId));
+    }
+
+    public static Response getToolTypesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES));
+    }
+
+    public static Response getStorageBoxesResponse(UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES));
+    }
+
+    public static List<StorageBoxModel> getStorageBoxes(UUID accessTokenId) {
+        Response response = getStorageBoxesResponse(accessTokenId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(StorageBoxModel[].class));
+    }
+
+    public static List<ToolTypeModel> getToolTypes(UUID accessTokenId) {
+        Response response = getToolTypesResponse(accessTokenId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(ToolTypeModel[].class));
     }
 }

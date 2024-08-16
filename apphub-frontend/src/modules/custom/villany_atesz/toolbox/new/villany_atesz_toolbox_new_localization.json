@@ -42,5 +42,13 @@
     "tool-created": {
         "en": "Tool created.",
         "hu": "Szerszám létrehozva."
+    },
+    "storage-box": {
+        "en": "Storage box",
+        "hu": "Tároló"
+    },
+    "tool-type": {
+        "en": "Type",
+        "hu": "Típus"
     }
 }

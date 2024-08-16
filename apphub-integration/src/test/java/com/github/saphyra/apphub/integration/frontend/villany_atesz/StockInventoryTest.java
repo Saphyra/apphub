@@ -63,7 +63,6 @@ public class StockInventoryTest extends SeleniumTest {
             .orElseThrow();
 
         //Modify values
-        item.setInventoried(true);
         item.setCategory(CATEGORY_NAME_2);
         item.setName(" ");
         item.setSerialNumber(SERIAL_NUMBER);
@@ -81,6 +80,8 @@ public class StockInventoryTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> !item.isNamePending())
             .assertTrue("Item name is still pending");
+
+        item.setInventoried(true);
 
         //Modifications displayed in overview
         VillanyAteszNavigation.openStockOverview(driver);

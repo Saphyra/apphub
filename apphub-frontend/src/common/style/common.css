@@ -146,6 +146,10 @@ footer label {
     text-align: center;
 }
 
+select option {
+    text-align: center;
+}
+
 .button.disabled {
     border-color: rgb(100, 100, 100) !important;
     cursor: no-drop;
@@ -188,10 +192,9 @@ textarea,
     border: 3px outset white;
     border-radius: 5px;
     padding: 3px;
-    ;
     margin: 3px;
-    ;
     color: white;
+    font-family: monospace;
 }
 
 div[contenteditable='true'] {

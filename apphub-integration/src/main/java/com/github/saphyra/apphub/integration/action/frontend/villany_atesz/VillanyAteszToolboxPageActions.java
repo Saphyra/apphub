@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.villany_atesz;
 
+import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ScrappedTool;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ToolOverviewItem;
 import org.openqa.selenium.By;
@@ -10,10 +12,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class VillanyAteszToolboxPageActions {
-    public static void fillForm(WebDriver driver, String brand, String name, Integer cost) {
+    public static void create(WebDriver driver, String brand, String name, Integer cost, String toolTypeName, String storageBoxName) {
+        fillForm(driver, brand, name, cost, toolTypeName, storageBoxName);
+        submit(driver);
+
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.VILLANY_ATESZ_TOOLBOX_NEW_CREATED);
+    }
+
+    public static void fillForm(WebDriver driver, String brand, String name, Integer cost, String toolTypeName, String storageBoxName) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-toolbox-new-brand")), brand);
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-toolbox-new-name")), name);
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-toolbox-new-cost")), cost);
+        WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-toolbox-new-tool-type")), toolTypeName);
+        WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-toolbox-new-storage-box")), storageBoxName);
     }
 
     public static void submit(WebDriver driver) {

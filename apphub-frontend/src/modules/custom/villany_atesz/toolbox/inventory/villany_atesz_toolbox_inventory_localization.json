@@ -1,0 +1,90 @@
+{
+    "inventoried": {
+        "en": "Inventoried",
+        "hu": "Leltárazva"
+    },
+    "tool-type": {
+        "en": "Type",
+        "hu": "Típus"
+    },
+    "brand": {
+        "en": "Brand",
+        "hu": "Márka"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "storage-box": {
+        "en": "Storage box",
+        "hu": "Tároló"
+    },
+    "cost": {
+        "en": "Cost",
+        "hu": "Beszerzési ár"
+    },
+    "acquired-at": {
+        "en": "Acquired at",
+        "hu": "Beszerezve"
+    },
+    "warranty-expires-at": {
+        "en": "Warranty expires at",
+        "hu": "Garancia lejár"
+    },
+    "scrapped-at": {
+        "en": "Scrapped at",
+        "hu": "Leselejtezve"
+    },
+    "status": {
+        "en": "Status",
+        "hu": "Állapot"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "default": {
+        "en": "Default",
+        "hu": "Alapértelmezett"
+    },
+    "lost": {
+        "en": "Lost",
+        "hu": "Elveszett"
+    },
+    "scrapped": {
+        "en": "Scrapped",
+        "hu": "Leselejtezett"
+    },
+    "damaged": {
+        "en": "Damaged",
+        "hu": "Sérült"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "confirm-reset-inventoried-title": {
+        "en": "Reset inventoried?",
+        "hu": "Státusz visszaállítása?"
+    },
+    "confirm-reset-inventoried-detail": {
+        "en": "Are you sure you want to reset the inventoried status for all the tools?",
+        "hu": "Biztosan vissza szeretnéd állítani az összes szerszám állapotát?"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "deletion-confirmation-title": {
+        "en": "Delete tool?",
+        "hu": "Szerszám törlése?"
+    },
+    "deletion-confirmation-content": {
+        "en": "Are you sure you want to delete tool {name}?",
+        "hu": "Biztosan törölni szeretnéd a {name} szerszámot?"
+    }
+}

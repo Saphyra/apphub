@@ -134,6 +134,10 @@ const isJsonString = (input) => {
     }
 }
 
+const numberOfDigits = (input) => {
+    return Math.floor(Math.log(Math.abs(input)) * Math.LOG10E + 1 | 0);
+}
+
 const Utils = {
     getCookie: getCookie,
     setCookie: setCookie,
@@ -151,6 +155,7 @@ const Utils = {
     isTrue: isTrue,
     nullIfEmpty: nullIfEmpty,
     isJsonString: isJsonString,
+    numberOfDigits: numberOfDigits,
 }
 
 export default Utils;
