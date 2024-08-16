@@ -140,6 +140,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 }
                 options.addArguments("--lang=hu");
                 options.addArguments("window-size=1920,1080");
+                options.addArguments("--disable-search-engine-choice-screen");
 
                 driver = new ChromeDriver(options);
                 log.debug("Driver created: {}", driver);

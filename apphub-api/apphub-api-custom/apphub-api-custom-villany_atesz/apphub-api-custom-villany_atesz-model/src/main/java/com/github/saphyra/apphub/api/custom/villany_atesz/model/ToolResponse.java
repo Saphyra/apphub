@@ -14,6 +14,8 @@ import java.util.UUID;
 @Builder
 public class ToolResponse {
     private UUID toolId;
+    private StorageBoxModel storageBox;
+    private ToolTypeModel toolType;
     private String brand;
     private String name;
     private Integer cost;
@@ -21,4 +23,5 @@ public class ToolResponse {
     private LocalDate warrantyExpiresAt;
     private ToolStatus status;
     private LocalDate scrappedAt;
+    private Boolean inventoried;
 }

@@ -26,6 +26,8 @@ public class ToolboxCrudTest extends SeleniumTest {
     private static final String BRAND = "brand";
     private static final Integer COST = 43;
     private static final String NAME = "name";
+    private static final String TOOL_TYPE_NAME = "tool-type-name";
+    private static final String STORAGE_BOX_NAME = "storage-box-name";
 
     @Test(groups = {"fe", "villany-atesz"})
     public void toolboxCrud() {
@@ -114,7 +116,7 @@ public class ToolboxCrudTest extends SeleniumTest {
     }
 
     private void create(WebDriver driver) {
-        VillanyAteszToolboxPageActions.fillForm(driver, BRAND, NAME, COST);
+        VillanyAteszToolboxPageActions.fillForm(driver, BRAND, NAME, COST, TOOL_TYPE_NAME, STORAGE_BOX_NAME);
         VillanyAteszToolboxPageActions.submit(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.VILLANY_ATESZ_TOOLBOX_NEW_CREATED);
@@ -126,13 +128,15 @@ public class ToolboxCrudTest extends SeleniumTest {
             .returns(NAME, ToolOverviewItem::getName)
             .returns(COST, ToolOverviewItem::getCost)
             .returns(LocalDate.now(), ToolOverviewItem::getAcquiredAt)
-            .returns(ToolStatus.DEFAULT, ToolOverviewItem::getStatus);
+            .returns(ToolStatus.DEFAULT, ToolOverviewItem::getStatus)
+            .returns(TOOL_TYPE_NAME, ToolOverviewItem::getToolType)
+            .returns(STORAGE_BOX_NAME, ToolOverviewItem::getStorageBox);
     }
 
     private void create_blankName(WebDriver driver) {
         VillanyAteszNavigation.openToolboxNew(driver);
 
-        VillanyAteszToolboxPageActions.fillForm(driver, BRAND, " ", COST);
+        VillanyAteszToolboxPageActions.fillForm(driver, BRAND, " ", COST, TOOL_TYPE_NAME, STORAGE_BOX_NAME);
         VillanyAteszToolboxPageActions.submit(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.VILLANY_ATESZ_TOOLBOX_NEW_NAME_MUST_NOT_BE_BLANK);

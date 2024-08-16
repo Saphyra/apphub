@@ -23,11 +23,17 @@ const VillanyAteszStockPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
-    const [openedTab, setOpenedTab] = useState(StockTab.OVERVIEW);
+    const [openedTab, setOpenedTab] = useState(sessionStorage.villanyAteszStockOpenedTab || StockTab.OVERVIEW);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    const updateOpenedTab = (tab) => {
+        sessionStorage.villanyAteszStockOpenedTab = tab;
+
+        setOpenedTab(tab);
+    }
 
     const getNavButtons = () => {
         return [
@@ -35,35 +41,35 @@ const VillanyAteszStockPage = () => {
                 key="overview"
                 id="villany-atesz-stock-navigation-overview-button"
                 className={openedTab === StockTab.OVERVIEW ? "opened" : ""}
-                onclick={() => setOpenedTab(StockTab.OVERVIEW)}
+                onclick={() => updateOpenedTab(StockTab.OVERVIEW)}
                 label={localizationHandler.get("overview")}
             />,
             <Button
                 key="categories"
                 id="villany-atesz-stock-navigation-categories-button"
                 className={openedTab === StockTab.CATEGORIES ? "opened" : ""}
-                onclick={() => setOpenedTab(StockTab.CATEGORIES)}
+                onclick={() => updateOpenedTab(StockTab.CATEGORIES)}
                 label={localizationHandler.get("categories")}
             />,
             <Button
                 key="new-item"
                 id="villany-atesz-stock-navigation-new-item-button"
                 className={openedTab === StockTab.NEW_ITEM ? "opened" : ""}
-                onclick={() => setOpenedTab(StockTab.NEW_ITEM)}
+                onclick={() => updateOpenedTab(StockTab.NEW_ITEM)}
                 label={localizationHandler.get("new-item")}
             />,
             <Button
                 key="acquisition"
                 id="villany-atesz-stock-navigation-acquisition-button"
                 className={openedTab === StockTab.ACQUISITION ? "opened" : ""}
-                onclick={() => setOpenedTab(StockTab.ACQUISITION)}
+                onclick={() => updateOpenedTab(StockTab.ACQUISITION)}
                 label={localizationHandler.get("acquisition")}
             />,
             <Button
                 key="inventory"
                 id="villany-atesz-stock-navigation-inventory-button"
                 className={openedTab === StockTab.INVENTORY ? "opened" : ""}
-                onclick={() => setOpenedTab(StockTab.INVENTORY)}
+                onclick={() => updateOpenedTab(StockTab.INVENTORY)}
                 label={localizationHandler.get("inventory")}
             />,
         ];

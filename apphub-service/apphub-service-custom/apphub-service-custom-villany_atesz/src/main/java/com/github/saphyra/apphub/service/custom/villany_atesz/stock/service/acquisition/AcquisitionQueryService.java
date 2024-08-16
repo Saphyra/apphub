@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.acq
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.AcquisitionResponse;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.acquisition.AcquisitionDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.item.StockItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AcquisitionQueryService {
     private final AcquisitionDao acquisitionDao;
+    private final StockItemDao stockItemDao;
 
     public List<AcquisitionResponse> getAcquisitionsOnDay(UUID userId, LocalDate acquiredAt) {
         return acquisitionDao.getByAcquiredAtAndUserId(acquiredAt, userId)
@@ -23,6 +25,7 @@ public class AcquisitionQueryService {
             .map(acquisition -> AcquisitionResponse.builder()
                 .acquisitionId(acquisition.getAcquisitionId())
                 .stockItemId(acquisition.getStockItemId())
+                .stockItemName(stockItemDao.findByIdValidated(acquisition.getStockItemId()).getName())
                 .amount(acquisition.getAmount())
                 .build())
             .collect(Collectors.toList());

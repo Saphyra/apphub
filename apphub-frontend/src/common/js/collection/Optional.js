@@ -5,6 +5,18 @@ const Optional = class {
         this.value = value;
     }
 
+    filter(predicate)  {
+        if(this.isPresent()){
+            return predicate(this.value) ? this : new Optional();
+        }
+
+        return new Optional();
+    }
+
+    get() {
+        return this.value;
+    }
+
     ifPresent(consumer) {
         if (this.isPresent()) {
             consumer(this.value);

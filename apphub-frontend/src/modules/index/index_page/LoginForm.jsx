@@ -30,6 +30,7 @@ const LoginForm = ({ localizationHandler }) => {
                 placeholder={localizationHandler.get("email-address")}
                 onchangeCallback={setEmail}
                 onkeyupCallback={loginIfEnter}
+                value={email}
             />
 
             <InputField
@@ -38,6 +39,7 @@ const LoginForm = ({ localizationHandler }) => {
                 placeholder={localizationHandler.get("password")}
                 onchangeCallback={setPassword}
                 onkeyupCallback={loginIfEnter}
+                value={password}
             />
 
             <PostLabeledInputField

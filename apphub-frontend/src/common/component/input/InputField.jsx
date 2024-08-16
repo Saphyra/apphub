@@ -1,4 +1,5 @@
 import React from "react";
+import Utils from "../../js/Utils";
 
 const InputField = ({
     id,
@@ -35,7 +36,7 @@ const InputField = ({
             id={id}
             className={className}
             type={type}
-            value={value}
+            value={value == null ? "" : value}
             placeholder={placeholder}
             onChange={onchange}
             onKeyUp={onkeyupCallback}

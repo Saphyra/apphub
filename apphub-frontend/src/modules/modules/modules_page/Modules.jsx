@@ -56,6 +56,7 @@ const Modules = ({ pageLocalizationHandler, modules, updateModules }) => {
                     type="text"
                     placeholder={pageLocalizationHandler.get("search")}
                     onchangeCallback={queryModified}
+                    value={query}
                 />
             </div>
 

@@ -38,5 +38,13 @@
     "set-status-to-lost": {
         "en": "I lost this tool",
         "hu": "Elhagytam a szerszámot"
+    },
+    "tool-type": {
+        "en": "Type",
+        "hu": "Típus"
+    },
+    "storage-box": {
+        "en": "Storage box",
+        "hu": "Tároló"
     }
 }

@@ -21,7 +21,6 @@ const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
         updateModules(newModules);
     }
 
-    //TODO replace a with Link when all the pages were migrated
     return (
         <div
             id={module.name}

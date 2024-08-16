@@ -1,7 +1,12 @@
-package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao;
+package com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.Tool;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolConverter;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolDao;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolEntity;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.dao.tool.ToolRepository;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

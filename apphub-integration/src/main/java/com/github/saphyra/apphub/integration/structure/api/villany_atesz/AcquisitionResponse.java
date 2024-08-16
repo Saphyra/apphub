@@ -14,5 +14,6 @@ import java.util.UUID;
 public class AcquisitionResponse {
     private UUID acquisitionId;
     private UUID stockItemId;
+    private String stockItemName;
     private Integer amount;
 }

@@ -98,6 +98,10 @@ const VillanyAteszStockNewItem = ({ }) => {
                             placeholder={localizationHandler.get("name")}
                             value={name}
                             onchangeCallback={setName}
+                            style={{
+                                width: 8 * name.length + "px",
+                                minWidth: "200px"
+                            }}
                         />}
                     />
 
@@ -108,6 +112,10 @@ const VillanyAteszStockNewItem = ({ }) => {
                             placeholder={localizationHandler.get("serial-number")}
                             value={serialNumber}
                             onchangeCallback={setSerialNumber}
+                            style={{
+                                width: 8 * serialNumber.length + "px",
+                                minWidth: "200px"
+                            }}
                         />}
                     />
 
@@ -118,6 +126,10 @@ const VillanyAteszStockNewItem = ({ }) => {
                             placeholder={localizationHandler.get("bar-code")}
                             value={barCode}
                             onchangeCallback={setBarCode}
+                            style={{
+                                width: 8 * barCode.length + "px",
+                                minWidth: "200px"
+                            }}
                         />}
                     />
                 </fieldset>

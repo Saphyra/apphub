@@ -11,6 +11,7 @@ import NotificationService from "../../../../common/js/notification/Notification
 
 const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
     const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
 
     useEffect(() => handleEvent(), [lastEvent]);
 
@@ -73,8 +74,8 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
 
     const onkeyup = (event) => {
         if (event.which === 13) {
-            if(sendMessage(event.target.value)){
-                event.target.value = "";
+            if(sendMessage(message)){
+                setMessage("");
             }
         }
     }
@@ -115,6 +116,8 @@ const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
                     id="skyxplore-lobby-chat-input"
                     placeholder={localizationHandler.get("message")}
                     onkeyupCallback={onkeyup}
+                    onchangeCallback={setMessage}
+                    value={message}
                 />
             </div>
 

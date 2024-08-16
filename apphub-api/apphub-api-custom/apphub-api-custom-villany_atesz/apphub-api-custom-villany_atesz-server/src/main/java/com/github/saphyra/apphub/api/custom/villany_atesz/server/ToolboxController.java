@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CreateToolRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.StorageBoxModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolResponse;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolStatus;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolTypeModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -30,4 +32,10 @@ public interface ToolboxController {
 
     @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_TOOL)
     List<ToolResponse> deleteTool(@PathVariable("toolId") UUID toolId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES)
+    List<ToolTypeModel> getToolTypes(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES)
+    List<StorageBoxModel> getStorageBoxes(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }
