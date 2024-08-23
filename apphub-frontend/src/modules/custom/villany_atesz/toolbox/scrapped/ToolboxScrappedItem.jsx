@@ -48,17 +48,17 @@ const ToolboxScrappedItem = ({ localizationHandler, tool, setTools, setConfirmat
 
     return (
         <tr className="villany-atesz-toolbox-scrapped-item">
-            <td className="villany-atesz-toolbox-overview-tool-type">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
-            <td className="villany-atesz-toolbox-scrapped-item-brand">{tool.brand}</td>
-            <td className="villany-atesz-toolbox-scrapped-item-name">{tool.name}</td>
-            <td className="villany-atesz-toolbox-overview-storage-box">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
-            <td >
+            <td className="villany-atesz-toolbox-overview-tool-type selectable">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
+            <td className="villany-atesz-toolbox-scrapped-item-brand selectable">{tool.brand}</td>
+            <td className="villany-atesz-toolbox-scrapped-item-name selectable">{tool.name}</td>
+            <td className="villany-atesz-toolbox-overview-storage-box selectable">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
+            <td className="selectable">
                 <span className="villany-atesz-toolbox-scrapped-item-cost">{tool.cost}</span>
                 <span> Ft</span>
             </td>
-            <td className="villany-atesz-toolbox-scrapped-item-acquired-at">{tool.acquiredAt}</td>
-            <td className="villany-atesz-toolbox-scrapped-item-warranty-expires-at">{tool.warrantyExpiresAt}</td>
-            <td className="villany-atesz-toolbox-scrapped-item-scrapped-at">{tool.scrappedAt}</td>
+            <td className="villany-atesz-toolbox-scrapped-item-acquired-at selectable">{tool.acquiredAt}</td>
+            <td className="villany-atesz-toolbox-scrapped-item-warranty-expires-at selectable">{tool.warrantyExpiresAt}</td>
+            <td className="villany-atesz-toolbox-scrapped-item-scrapped-at selectable">{tool.scrappedAt}</td>
             <td>
                 <Button
                     className="villany-atesz-toolbox-scrapped-item-set-to-default-button"

@@ -31,14 +31,14 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
 
     return (
         <tr className="villany-atesz-stock-overview-item">
-            <td className="villany-atesz-stock-overview-item-category">{item.category.name}</td>
-            <td className="villany-atesz-stock-overview-item-name">{item.name}</td>
-            <td className="villany-atesz-stock-overview-item-serial-number">{item.serialNumber}</td>
-            <td className="villany-atesz-stock-overview-item-in-car">{inCar}</td>
-            <td className={"villany-atesz-stock-overview-item-in-cart" + (item.inCart > 0 ? " in-cart" : "")}>{inCart}</td>
-            <td className="villany-atesz-stock-overview-item-in-storage">{inStorage}</td>
-            <td className="villany-atesz-stock-overview-item-price">{item.price} Ft</td>
-            <td className="villany-atesz-stock-overview-item-stock-value">{item.price * (item.inCar + item.inStorage)} Ft</td>
+            <td className="villany-atesz-stock-overview-item-category selectable">{item.category.name}</td>
+            <td className="villany-atesz-stock-overview-item-name selectable">{item.name}</td>
+            <td className="villany-atesz-stock-overview-item-serial-number selectable">{item.serialNumber}</td>
+            <td className="villany-atesz-stock-overview-item-in-car selectable">{inCar}</td>
+            <td className={"villany-atesz-stock-overview-item-in-cart selectable" + (item.inCart > 0 ? " in-cart" : "")}>{inCart}</td>
+            <td className="villany-atesz-stock-overview-item-in-storage selectable">{inStorage}</td>
+            <td className="villany-atesz-stock-overview-item-price selectable">{item.price} Ft</td>
+            <td className="villany-atesz-stock-overview-item-stock-value selectable">{item.price * (item.inCar + item.inStorage)} Ft</td>
             {!Utils.isBlank(activeCart) &&
                 <td className="villany-atesz-stock-overview-item-stock-operations">
                     <NumberInput

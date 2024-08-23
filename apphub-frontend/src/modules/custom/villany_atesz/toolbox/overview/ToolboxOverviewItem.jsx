@@ -20,16 +20,16 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
 
     return (
         <tr className={"villany-atesz-toolbox-overview-item " + StatusMapping[tool.status]}>
-            <td className="villany-atesz-toolbox-overview-tool-type">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
-            <td className="villany-atesz-toolbox-overview-item-brand">{tool.brand}</td>
-            <td className="villany-atesz-toolbox-overview-item-name">{tool.name}</td>
-            <td className="villany-atesz-toolbox-overview-storage-box">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
-            <td >
+            <td className="villany-atesz-toolbox-overview-tool-type selectable">{new Optional(tool.toolType).map(toolType => toolType.name).orElse("")}</td>
+            <td className="villany-atesz-toolbox-overview-item-brand selectable">{tool.brand}</td>
+            <td className="villany-atesz-toolbox-overview-item-name selectable">{tool.name}</td>
+            <td className="villany-atesz-toolbox-overview-storage-box selectable">{new Optional(tool.storageBox).map(storageBox => storageBox.name).orElse("")}</td>
+            <td className="selectable">
                 <span className="villany-atesz-toolbox-overview-item-cost">{tool.cost}</span>
                 <span> Ft</span>
             </td>
-            <td className="villany-atesz-toolbox-overview-item-acquired-at">{tool.acquiredAt}</td>
-            <td className="villany-atesz-toolbox-overview-item-warranty-expires-at">{tool.warrantyExpiresAt}</td>
+            <td className="villany-atesz-toolbox-overview-item-acquired-at selectable">{tool.acquiredAt}</td>
+            <td className="villany-atesz-toolbox-overview-item-warranty-expires-at selectable">{tool.warrantyExpiresAt}</td>
             <td>
                 {tool.status !== ToolStatus.DEFAULT &&
                     <Button

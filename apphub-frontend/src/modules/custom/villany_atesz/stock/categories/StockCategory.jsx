@@ -81,8 +81,8 @@ const StockCategory = ({ localizationHandler, category, setCategories, setConfir
 
     return (
         <tr className="villany-atesz-stock-category">
-            <td className="villany-atesz-stock-category-name">{getName()}</td>
-            <td className="villany-atesz-stock-category-measurement">{getMeasurement()}</td>
+            <td className="villany-atesz-stock-category-name selectable">{getName()}</td>
+            <td className="villany-atesz-stock-category-measurement selectable">{getMeasurement()}</td>
             <td>
                 <Button
                     className="villany-atesz-stock-category-delete-button"

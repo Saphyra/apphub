@@ -19,6 +19,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
 
     const getGrantedRoles = () => {
         return new Stream(user.roles)
+            .filter(role => roles.indexOf(role) >= 0)
             .sorted(roleComparator)
             .map(role => <Button
                 key={role}
@@ -46,7 +47,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
         return roleLocalizationHandler.get(a).localeCompare(roleLocalizationHandler.get(b));
     }
 
-    const grantRole = async (role) => {
+    const grantRole = async () => {
         if (password.length === 0) {
             NotificationService.showError(localizationHandler.get("empty-password"));
             return;
