@@ -153,7 +153,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                         />
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset className="selectable">
                         <legend>{localizationHandler.get("contact-info")}</legend>
 
                         <div>
@@ -204,7 +204,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                     <fieldset>
                         <legend>{localizationHandler.get("items")}</legend>
 
-                        <div id="villany-atesz-stock-overview-cart-items">{getItems()}</div>
+                        <div id="villany-atesz-stock-overview-cart-items" className="selectable">{getItems()}</div>
                     </fieldset>
                 </div>
             }

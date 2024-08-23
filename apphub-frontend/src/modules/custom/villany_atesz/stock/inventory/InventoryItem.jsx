@@ -139,16 +139,16 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                     />
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-category">{getCategoryName()}</span>
+                    <span className="villany-atesz-stock-inventory-item-category selectable">{getCategoryName()}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-name">{item.name}</span>
+                    <span className="villany-atesz-stock-inventory-item-name selectable">{item.name}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-serial-number">{item.serialNumber}</span>
+                    <span className="villany-atesz-stock-inventory-item-serial-number selectable">{item.serialNumber}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-bar-code">{item.barCode}</span>
+                    <span className="villany-atesz-stock-inventory-item-bar-code selectable">{item.barCode}</span>
                 </td>
                 <td>
                     <InputField
@@ -159,10 +159,10 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                     />
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-in-car">{item.inCar}</span>
+                    <span className="villany-atesz-stock-inventory-item-in-car selectable">{item.inCar}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-stock-inventory-item-in-storage">{item.inStorage}</span>
+                    <span className="villany-atesz-stock-inventory-item-in-storage selectable">{item.inStorage}</span>
                 </td>
                 <td>
                 </td>
