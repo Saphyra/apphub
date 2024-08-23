@@ -42,11 +42,11 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
             className="villany-atesz-contacts-contact"
             onClick={() => setEditedContact(contact)}
         >
-            <td className="villany-atesz-contacts-contact-code">{contact.code}</td>
-            <td className="villany-atesz-contacts-contact-name">{contact.name}</td>
-            <td className="villany-atesz-contacts-contact-phone">{contact.phone}</td>
-            <td className="villany-atesz-contacts-contact-address">{contact.address}</td>
-            <td className="villany-atesz-contacts-contact-note">{contact.note}</td>
+            <td className="villany-atesz-contacts-contact-code selectable">{contact.code}</td>
+            <td className="villany-atesz-contacts-contact-name selectable">{contact.name}</td>
+            <td className="villany-atesz-contacts-contact-phone selectable">{contact.phone}</td>
+            <td className="villany-atesz-contacts-contact-address selectable">{contact.address}</td>
+            <td className="villany-atesz-contacts-contact-note selectable">{contact.note}</td>
             <td>
                 <Button
                     className="villany-atesz-contacts-contact-create-cart-button"

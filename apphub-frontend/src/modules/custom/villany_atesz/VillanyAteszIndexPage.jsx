@@ -51,7 +51,7 @@ const VillanyAteszIndexPage = () => {
                 <VillanyAteszNavigation page={VillanyAteszPage.INDEX} />
 
                 <div >
-                    <div id="villany-atesz-total-stock-value">
+                    <div id="villany-atesz-total-stock-value" className="selectable">
                         <span>{localizationHandler.get("total-stock-value")}</span>
                         <span>: </span>
                         <span id="villany-atesz-total-stock-value-value">{totalStockValue}</span>
@@ -61,12 +61,12 @@ const VillanyAteszIndexPage = () => {
                     <fieldset id="villany-atesz-stock-items-marked-for-acquisition">
                         <legend>{localizationHandler.get("stock-items-marked-for-acquisition")}</legend>
 
-                        <ul>
+                        <ul className="selectable">
                             {getStockItems()}
                         </ul>
                     </fieldset>
 
-                    <div id="villany-atesz-total-toolbox-value">
+                    <div id="villany-atesz-total-toolbox-value" className="selectable">
                         <span>{localizationHandler.get("total-toolbox-value")}</span>
                         <span>: </span>
                         <span id="villany-atesz-total-toolbox-value-value">{totalToolboxValue}</span>

@@ -1,0 +1,14 @@
+===FEATURES===
+    VillanyAtesz
+        Selectable content
+
+===BUGFIXES===
+    Admin Panel
+        Role management
+            Display roles with localization only
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

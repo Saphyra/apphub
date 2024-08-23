@@ -154,31 +154,31 @@ const ToolboxInventoryItem = ({
                     />
                 </td>
                 <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
-                    <span className="villany-atesz-toolbox-inventory-item-tool-type">{toolType.value}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-tool-type selectable">{toolType.value}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-brand">{tool.brand}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-brand selectable">{tool.brand}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-name">{tool.name}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-name selectable">{tool.name}</span>
                 </td>
                 <td className="villany-atesz-toolbox-inventory-item-data-list-cell">
-                    <span className="villany-atesz-toolbox-inventory-item-storage-box">{storageBox.value}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-storage-box selectable">{storageBox.value}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-cost">{tool.cost}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-cost selectable">{tool.cost}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-acquired-at">{tool.acquiredAt}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-acquired-at selectable">{tool.acquiredAt}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-warranty-expires-at">{tool.warrantyExpiresAt}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-warranty-expires-at selectable">{tool.warrantyExpiresAt}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-scrapped-at">{tool.scrappedAt}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-scrapped-at selectable">{tool.scrappedAt}</span>
                 </td>
                 <td>
-                    <span className="villany-atesz-toolbox-inventory-item-status">{localizationHandler.get(tool.status.toLowerCase())}</span>
+                    <span className="villany-atesz-toolbox-inventory-item-status selectable">{localizationHandler.get(tool.status.toLowerCase())}</span>
                 </td>
                 <td>
                     <Button
