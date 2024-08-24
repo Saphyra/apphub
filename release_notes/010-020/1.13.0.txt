@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Do not expect disabled services' health if running local test groups
 
 ===BUGFIXES===
 
