@@ -26,7 +26,7 @@ public class ModulesTest extends BackEndTest {
         IndexPageActions.registerUser(registrationRequest);
         UUID accessTokenId = IndexPageActions.login(
             LoginRequest.builder()
-                .email(registrationRequest.getEmail())
+                .userIdentifier(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
                 .build()
         );

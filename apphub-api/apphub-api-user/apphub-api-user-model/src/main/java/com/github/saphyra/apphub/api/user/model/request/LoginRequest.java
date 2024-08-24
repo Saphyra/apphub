@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = "password")
 public class LoginRequest {
-    private String email;
+    private String userIdentifier;
     private String password;
     private Boolean rememberMe;
 }

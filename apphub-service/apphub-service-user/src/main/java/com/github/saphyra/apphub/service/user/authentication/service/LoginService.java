@@ -33,9 +33,9 @@ public class LoginService {
     private final AccessTokenProvider accessTokenProvider;
 
     public AccessToken login(LoginRequest loginRequest) {
-        User user = userDao.findByEmail(loginRequest.getEmail().toLowerCase())
+        User user = userDao.findByUsernameOrEmail(loginRequest.getUserIdentifier().toLowerCase())
             .filter(u -> !u.isMarkedForDeletion())
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, String.format("User not found with email %s", loginRequest.getEmail())));
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, String.format("User not found with email %s", loginRequest.getUserIdentifier())));
 
         if (nonNull(user.getLockedUntil()) && user.getLockedUntil().isAfter(dateTimeUtil.getCurrentDateTime())) {
             throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, "User account locked.");

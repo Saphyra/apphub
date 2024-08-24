@@ -94,7 +94,7 @@ public class ChangeEmailTest extends SeleniumTest {
         ModulesPageActions.logout(driver);
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(changeParameters.getEmail()).password(userData.getPassword()).build());
+        IndexPageActions.submitLogin(driver, LoginParameters.builder().userIdentifier(changeParameters.getEmail()).password(userData.getPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();

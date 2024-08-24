@@ -35,7 +35,7 @@ public class LoginTest extends BackEndTest {
 
     private static void unknownEmail(RegistrationParameters userData) {
         LoginRequest unknownEmailRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .build();
         Response unknownEmailResponse = IndexPageActions.getLoginResponse(unknownEmailRequest);
@@ -46,7 +46,7 @@ public class LoginTest extends BackEndTest {
         IndexPageActions.registerUser(userData.toRegistrationRequest());
 
         LoginRequest incorrectPasswordRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password("asd")
             .build();
         Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(incorrectPasswordRequest);
@@ -56,7 +56,7 @@ public class LoginTest extends BackEndTest {
 
     private static void successfulLogin_rememberMe(RegistrationParameters userData) {
         LoginRequest rememberMeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(true)
             .build();
@@ -73,7 +73,7 @@ public class LoginTest extends BackEndTest {
 
     private static LoginResponse oneTimeLogin(RegistrationParameters userData) {
         LoginRequest oneTimeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(false)
             .build();
@@ -97,7 +97,7 @@ public class LoginTest extends BackEndTest {
 
     private static void lockUser(RegistrationParameters userData, LoginRequest incorrectPasswordRequest) {
         LoginRequest oneTimeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(false)
             .build();

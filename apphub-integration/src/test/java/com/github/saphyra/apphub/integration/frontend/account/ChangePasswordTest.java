@@ -85,7 +85,7 @@ public class ChangePasswordTest extends SeleniumTest {
         IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(changeParameters.getNewPassword()).build());
+        IndexPageActions.submitLogin(driver, LoginParameters.builder().userIdentifier(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
             .assertTrue();

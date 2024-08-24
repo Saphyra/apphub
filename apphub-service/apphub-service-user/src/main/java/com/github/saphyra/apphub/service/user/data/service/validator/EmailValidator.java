@@ -27,7 +27,7 @@ public class EmailValidator {
             throw ExceptionFactory.invalidParam("email", "invalid format");
         }
 
-        if (userDao.findByEmail(email.toLowerCase()).isPresent()) {
+        if (userDao.findByUsernameOrEmail(email.toLowerCase()).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.EMAIL_ALREADY_EXISTS, "Email already exists.");
         }
     }

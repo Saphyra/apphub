@@ -5,7 +5,7 @@ import PostLabeledInputField from "../../../common/component/input/PostLabeledIn
 import login from "../controller/LoginController";
 
 const LoginForm = ({ localizationHandler }) => {
-    const [email, setEmail] = useState("");
+    const [userIdentifier, setUserIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
 
@@ -18,19 +18,19 @@ const LoginForm = ({ localizationHandler }) => {
 
     const loginIfEnter = (e) => {
         if (e.which === 13) {
-            login(email, password, rememberMe);
+            login(userIdentifier, password, rememberMe);
         }
     }
 
     return (
         <div className="login-form">
             <InputField
-                id="login-email"
+                id="login-user-identifier"
                 type="email"
-                placeholder={localizationHandler.get("email-address")}
-                onchangeCallback={setEmail}
+                placeholder={localizationHandler.get("user-identifier")}
+                onchangeCallback={setUserIdentifier}
                 onkeyupCallback={loginIfEnter}
-                value={email}
+                value={userIdentifier}
             />
 
             <InputField
@@ -51,7 +51,7 @@ const LoginForm = ({ localizationHandler }) => {
             <Button
                 id="login-button"
                 label={localizationHandler.get("login-button")}
-                onclick={() => login(email, password, rememberMe)}
+                onclick={() => login(userIdentifier, password, rememberMe)}
             />
         </div>
     );

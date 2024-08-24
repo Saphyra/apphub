@@ -104,12 +104,12 @@ public class ChangePasswordTest extends BackEndTest {
 
         assertThat(successfulPasswordChangeResponse.getStatusCode()).isEqualTo(200);
 
-        Response failedLoginResponse = IndexPageActions.getLoginResponse(LoginRequest.builder().password(userData.getPassword()).email(userData.getEmail()).build());
+        Response failedLoginResponse = IndexPageActions.getLoginResponse(LoginRequest.builder().password(userData.getPassword()).userIdentifier(userData.getEmail()).build());
         assertThat(failedLoginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = failedLoginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
 
-        IndexPageActions.login(LoginRequest.builder().password(DataConstants.VALID_PASSWORD2).email(userData.getEmail()).build());
+        IndexPageActions.login(LoginRequest.builder().password(DataConstants.VALID_PASSWORD2).userIdentifier(userData.getEmail()).build());
     }
 
     @Test(groups = {"be", "account"})

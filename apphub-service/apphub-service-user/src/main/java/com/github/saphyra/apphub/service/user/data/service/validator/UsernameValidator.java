@@ -27,7 +27,7 @@ public class UsernameValidator {
             throw ExceptionFactory.invalidParam("username", "too long");
         }
 
-        if (userDao.findByUsername(username).isPresent()) {
+        if (userDao.findByUsernameOrEmail(username).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.USERNAME_ALREADY_EXISTS, "Username already exists.");
         }
     }

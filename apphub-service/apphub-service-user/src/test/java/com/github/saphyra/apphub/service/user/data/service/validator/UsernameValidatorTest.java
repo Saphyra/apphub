@@ -54,7 +54,7 @@ public class UsernameValidatorTest {
 
     @Test
     public void usernameAlreadyExists() {
-        given(userDao.findByUsername(USERNAME)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(USERNAME)).willReturn(Optional.of(user));
 
         Throwable ex = catchThrowable(() -> underTest.validateUsername(USERNAME));
 
@@ -63,7 +63,7 @@ public class UsernameValidatorTest {
 
     @Test
     public void valid() {
-        given(userDao.findByUsername(USERNAME)).willReturn(Optional.empty());
+        given(userDao.findByUsernameOrEmail(USERNAME)).willReturn(Optional.empty());
 
         underTest.validateUsername(USERNAME);
     }

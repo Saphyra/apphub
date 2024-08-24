@@ -14,9 +14,12 @@ import com.github.saphyra.apphub.integration.structure.api.user.registration.Use
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class RegistrationTest extends SeleniumTest {
     @Test(groups = {"fe", "index"})
-    public void verifyValidation() {
+    public void registrationValidation() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(driver);
 
@@ -24,6 +27,16 @@ public class RegistrationTest extends SeleniumTest {
         RegistrationParameters existingUser = registrationSuccessful(driver);
         usernameAlreadyExists(driver, existingUser);
         emailAlreadyExists(driver, existingUser);
+        emailAlreadyExistsAsUsername(driver, existingUser);
+    }
+
+    private void emailAlreadyExistsAsUsername(WebDriver driver, RegistrationParameters existingUser) {
+        RegistrationParameters emailAlreadyExists = RegistrationParameters.validParameters().toBuilder()
+            .email(existingUser.getUsername())
+            .build();
+        IndexPageActions.fillRegistrationForm(driver, emailAlreadyExists);
+        IndexPageActions.submitRegistration(driver);
+        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMAIL_ALREADY_IN_USE);
     }
 
     private static void invalidRegistrationParameters(WebDriver driver) {
@@ -37,6 +50,15 @@ public class RegistrationTest extends SeleniumTest {
 
     private static RegistrationParameters registrationSuccessful(WebDriver driver) {
         RegistrationParameters existingUser = RegistrationParameters.validParameters();
+
+        String emailifiedUsername = Arrays.stream(existingUser.getUsername().split(""))
+                .limit(20)
+                    .collect(Collectors.joining())
+            + "@email.com";
+        existingUser = existingUser.toBuilder()
+            .username(emailifiedUsername)
+            .build();
+
         IndexPageActions.registerUser(driver, existingUser);
         ModulesPageActions.logout(driver);
         return existingUser;

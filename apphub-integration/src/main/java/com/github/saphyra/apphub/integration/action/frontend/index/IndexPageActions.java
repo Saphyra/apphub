@@ -89,7 +89,7 @@ public class IndexPageActions {
             .until(() -> isLoginPageLoaded(driver))
             .assertTrue("LoginPage is not loaded.");
 
-        clearAndFill(IndexPage.loginEmail(driver), loginParameters.getEmail());
+        clearAndFill(IndexPage.loginUserIdentifier(driver), loginParameters.getUserIdentifier());
         clearAndFill(IndexPage.loginPassword(driver), loginParameters.getPassword());
 
         IndexPage.loginButton(driver).click();

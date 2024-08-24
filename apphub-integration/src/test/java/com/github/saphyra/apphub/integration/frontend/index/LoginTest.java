@@ -36,6 +36,22 @@ public class LoginTest extends SeleniumTest {
         lockUser(driver, registrationParameters, loginParameters);
     }
 
+    @Test(groups = {"fe", "index"})
+    public void loginWithUsername() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(driver);
+
+        RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, registrationParameters);
+        ModulesPageActions.logout(driver);
+
+        IndexPageActions.submitLogin(driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .assertTrue("Login failed.");
+    }
+
     private static void emptyEmail(WebDriver driver) {
         IndexPageActions.submitLogin(driver, emptyEmail());
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);

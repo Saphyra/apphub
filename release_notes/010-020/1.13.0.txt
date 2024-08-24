@@ -1,6 +1,7 @@
 ===FEATURES===
     ApphubCI
         Do not expect disabled services' health if running local test groups
+    Login by both e-mail or username
 
 ===BUGFIXES===
 

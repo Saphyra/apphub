@@ -88,10 +88,10 @@ public class ChangeEmailTest extends BackEndTest {
             .build();
         Response response = AccountActions.getChangeEmailResponse(accessTokenId1, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
-        Response failedLoginResponse = IndexPageActions.getLoginResponse(LoginRequest.builder().password(userData1.getPassword()).email(userData1.getEmail()).build());
+        Response failedLoginResponse = IndexPageActions.getLoginResponse(LoginRequest.builder().password(userData1.getPassword()).userIdentifier(userData1.getEmail()).build());
         assertThat(failedLoginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = failedLoginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        IndexPageActions.login(LoginRequest.builder().password(userData1.getPassword()).email(newEmail).build());
+        IndexPageActions.login(LoginRequest.builder().password(userData1.getPassword()).userIdentifier(newEmail).build());
     }
 }
