@@ -62,7 +62,6 @@ public class UserDao extends AbstractDao<UserEntity, User, String, UserRepositor
         return findById(uuidConverter.convertDomain(userId));
     }
 
-    //TODO unit test
     public Optional<User> findByUsernameOrEmail(String input) {
         return converter.convertEntity(repository.findByUsernameOrEmail(input));
     }

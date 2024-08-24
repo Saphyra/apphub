@@ -28,6 +28,7 @@ public class UserDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final String QUERY_STRING = "query-string";
     public static final int MAX_NUMBER_OF_USERS_FOUND = 100;
+    private static final String USER_IDENTIFIER = "user-identifier";
 
     @Mock
     private UserRepository repository;
@@ -136,5 +137,13 @@ public class UserDaoTest {
         Optional<User> result = underTest.findById(USER_ID);
 
         assertThat(result).contains(user);
+    }
+
+    @Test
+    void findByUsernameOrEmail() {
+        given(repository.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(user));
+
+        assertThat(underTest.findByUsernameOrEmail(USER_IDENTIFIER)).contains(user);
     }
 }
