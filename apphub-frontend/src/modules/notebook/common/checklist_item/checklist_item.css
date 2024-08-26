@@ -59,8 +59,12 @@
     background-size: cover;
 }
 
-#notebook-checklist-item-edit-input{
+#notebook-checklist-item-edit-input {
     display: block;
     margin: auto;
     width: 90%;
+}
+
+#notebook-checklist-item-edit-input {
+    min-width: 250px;
 }

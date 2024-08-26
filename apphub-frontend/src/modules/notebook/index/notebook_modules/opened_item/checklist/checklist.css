@@ -1,30 +1,34 @@
-#notebook-view-checklist-empty{
+#notebook-view-checklist-empty {
     text-align: center;
     font-size: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
-.notebook-checklist-item.editable .notebook-checklist-item-content:focus{
+.notebook-checklist-item.editable .notebook-checklist-item-content:focus {
     font-size: 20px;
 }
 
-#notebook-content-checklist-content{
+#notebook-content-checklist-content {
     padding: 10px;
 }
 
-#notebook-content-checklist-content .notebook-checklist-item{
+#notebook-content-checklist-content .notebook-checklist-item {
     margin: 10px 0px;
 }
 
-.notebook-content-checklist-add-button{
+.notebook-content-checklist-add-button {
     display: block;
     margin: auto;
     width: 50%;
 }
 
-#notebook-add-checklist-item-to-the-edge-input{
+#notebook-add-checklist-item-to-the-edge-input {
     display: block;
     margin: auto;
     width: 90%;
+}
+
+#notebook-add-checklist-item-to-the-edge-input {
+    min-width: 250px;
 }

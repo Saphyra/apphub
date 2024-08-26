@@ -53,11 +53,11 @@ const Category = ({
     const loadCategory = () => {
         const fetch = async () => {
             const listItemId = openedListItem.id;
-            
+
             const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
             const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
-            
+
             if (openedListItem.id === listItemId) {
                 setOpenedCategoryContent(response);
             }
@@ -134,25 +134,23 @@ const Category = ({
                 changeUserSettings={changeUserSettings}
             />
 
-            <div id="notebook-content-category-content">
-                <div
-                    id="notebook-content-category-content-navigation"
-                    onDrop={handleOnDrop}
-                    onDragOver={handleOnDragOver}
-                >
-                    <div id="notebook-content-category-content-title"> {openedListItem.id === null ? localizationHandler.get("root") : openedCategoryContent.title} </div>
+            <div
+                id="notebook-content-category-content-navigation"
+                onDrop={handleOnDrop}
+                onDragOver={handleOnDragOver}
+            >
+                <div id="notebook-content-category-content-title"> {openedListItem.id === null ? localizationHandler.get("root") : openedCategoryContent.title} </div>
 
-                    <Button
-                        id="notebook-content-category-content-up-button"
-                        label={localizationHandler.get("up")}
-                        onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: OpenedPageType.CATEGORY })}
-                        disabled={openedListItem.id === null}
-                    />
-                </div>
+                <Button
+                    id="notebook-content-category-content-up-button"
+                    label={localizationHandler.get("up")}
+                    onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: OpenedPageType.CATEGORY })}
+                    disabled={openedListItem.id === null}
+                />
+            </div>
 
-                <div id="notebook-category-content-list">
-                    {getContent()}
-                </div>
+            <div id="notebook-category-content-list">
+                {getContent()}
             </div>
         </div>
     );

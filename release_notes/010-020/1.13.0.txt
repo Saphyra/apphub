@@ -4,6 +4,9 @@
     Login by both e-mail or username
 
 ===BUGFIXES===
+    Notebook
+        Dynamic width for Edit checklist item / Add checklist item dialog inputs
+        Only list of category is scrollable
 
 ===PLATFORM CHANGES===
 

@@ -1,26 +1,26 @@
-#notebook-content-category{
+#notebook-content-category {
     display: grid;
-    grid-template-rows: 38px auto;
+    grid-template-rows: 38px 66px auto;
 }
 
-#notebook-content-category-content{
+#notebook-content-category-content {
     display: grid;
     grid-template-rows: 70px auto;
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-#notebook-content-category-content-navigation{
+#notebook-content-category-content-navigation {
     border-bottom: 1px solid white;
 }
 
-#notebook-content-category-content-title{
+#notebook-content-category-content-title {
     text-align: center;
     font-size: 24px;
     font-weight: bold;
     margin: 5px;
 }
 
-#notebook-content-category-content-up-button{
+#notebook-content-category-content-up-button {
     display: block;
     margin: 5px auto;
     width: 90%;
@@ -30,4 +30,8 @@
     text-align: center;
     font-size: 24px;
     padding: 20px;
+}
+
+#notebook-category-content-list {
+    overflow: auto;
 }
