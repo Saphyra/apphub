@@ -10,6 +10,7 @@
         Use textarea for custom table text type
 
 ===PLATFORM CHANGES===
+    Integration tests default to local run
 
 ===TECHNICAL DEBTS===
     Remove ThymeLeaf dependency from main-gateway

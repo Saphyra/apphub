@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.localization.Language;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -30,9 +29,9 @@ public class TestConfiguration {
     public static final int INTEGRATION_SERVER_PORT = Integer.parseInt(System.getProperty("integrationServerPort", "8072"));
 
     //Connection
-    public static final int SERVER_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("serverPort"), "serverPort is null"));
-    public static final int DATABASE_PORT = Integer.parseInt(Objects.requireNonNull(System.getProperty("databasePort"), "databasePort is null"));
-    public static final String DATABASE_NAME = System.getProperty("databaseName", "postgres");
+    public static final int SERVER_PORT = Integer.parseInt(System.getProperty("serverPort", "8080"));
+    public static final int DATABASE_PORT = Integer.parseInt(System.getProperty("databasePort", "5432"));
+    public static final String DATABASE_NAME = System.getProperty("databaseName", "apphub");
     public static Connection CONNECTION;
 
     //Defaults
