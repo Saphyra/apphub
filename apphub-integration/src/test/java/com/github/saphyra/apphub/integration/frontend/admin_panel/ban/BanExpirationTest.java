@@ -35,12 +35,13 @@ public class BanExpirationTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
+        Integer serverPort = getServerPort();
+        RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.BAN);
 
         BanActions.searchUser(adminDriver, testUserData.getEmail());
         WebElement searchResult = AwaitilityWrapper.getListWithWait(() -> BanActions.getSearchResult(adminDriver), ts -> !ts.isEmpty())
@@ -73,7 +74,7 @@ public class BanExpirationTest extends SeleniumTest {
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
                 testDriver.navigate()
-                    .to(UrlFactory.create(Endpoints.MODULES_PAGE));
+                    .to(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
                 return AwaitilityWrapper.create(5, 1)
                     .until(() -> testDriver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
                     .isResult();

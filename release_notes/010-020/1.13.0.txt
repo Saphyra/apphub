@@ -8,6 +8,7 @@
         Dynamic width for Edit checklist item / Add checklist item dialog inputs
         Only list of category is scrollable
         Use textarea for custom table text type
+    Connection cache to avoid timeout during minikube test
 
 ===PLATFORM CHANGES===
     Integration tests default to local run

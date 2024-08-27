@@ -23,11 +23,11 @@ public class RemoveRoleTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void removeRole() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(testUser.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
         UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         nullUserId(accessTokenId);
@@ -36,7 +36,7 @@ public class RemoveRoleTest extends BackEndTest {
         userNotFound(accessTokenId, userData);
         roleNotFound(accessTokenId, userData, userId);
         incorrectPassword(accessTokenId, userId);
-        removeRole(accessTokenId, userData, testUser, userId);
+        removeRole(accessTokenId, userData, userId);
     }
 
     private void incorrectPassword(UUID accessTokenId, UUID userId) {
@@ -45,7 +45,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_NOTEBOOK)
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
-        Response response = RoleManagementActions.getRemoveRoleResponse(accessTokenId, removeRoleRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, removeRoleRequest);
         verifyErrorResponse(response, 400, ErrorCode.INCORRECT_PASSWORD);
     }
 
@@ -55,7 +55,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(null)
             .build();
-        Response response = RoleManagementActions.getRemoveRoleResponse(accessTokenId, nullUserIdRequest);
+        Response response = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
         verifyInvalidParam(response, "password", "must not be null");
     }
 
@@ -64,7 +64,7 @@ public class RemoveRoleTest extends BackEndTest {
             .userId(null)
             .role(Constants.ROLE_ADMIN)
             .build();
-        Response nullUserIdResponse = RoleManagementActions.getRemoveRoleResponse(accessTokenId, nullUserIdRequest);
+        Response nullUserIdResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
         verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
     }
 
@@ -73,7 +73,7 @@ public class RemoveRoleTest extends BackEndTest {
             .userId(UUID.randomUUID())
             .role(" ")
             .build();
-        Response blankRoleResponse = RoleManagementActions.getRemoveRoleResponse(accessTokenId, blankRoleRequest);
+        Response blankRoleResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, blankRoleRequest);
         verifyInvalidParam(blankRoleResponse, "role", "must not be null or blank");
     }
 
@@ -83,7 +83,7 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(userData.getPassword())
             .build();
-        Response userNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(accessTokenId, userNotFoundRequest);
+        Response userNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, userNotFoundRequest);
         verifyErrorResponse(userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
     }
 
@@ -93,17 +93,17 @@ public class RemoveRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(userData.getPassword())
             .build();
-        Response roleNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(accessTokenId, roleNotFoundRequest);
+        Response roleNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, roleNotFoundRequest);
         verifyErrorResponse(roleNotFoundResponse, 404, ErrorCode.ROLE_NOT_FOUND);
     }
 
-    private static void removeRole(UUID accessTokenId, RegistrationParameters userData, RegistrationParameters testUser, UUID userId) {
+    private static void removeRole(UUID accessTokenId, RegistrationParameters userData, UUID userId) {
         RoleRequest removeRoleRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_NOTEBOOK)
             .password(userData.getPassword())
             .build();
-        UserRoleResponse userRoleResponse = RoleManagementActions.removeRole(accessTokenId, removeRoleRequest);
+        UserRoleResponse userRoleResponse = RoleManagementActions.removeRole(getServerPort(), accessTokenId, removeRoleRequest);
 
         assertThat(userRoleResponse.getRoles()).doesNotContain(Constants.ROLE_NOTEBOOK);
     }

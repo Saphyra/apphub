@@ -32,12 +32,12 @@ public class GameSettingsTest extends BackEndTest {
     public void gameSettings() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
 
-        SkyXploreLobbyActions.createLobby(accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
 
-        SkyXploreGameSettings settings = SkyXploreLobbyActions.getGameSettings(accessTokenId1);
+        SkyXploreGameSettings settings = SkyXploreLobbyActions.getGameSettings(getServerPort(), accessTokenId1);
 
         assertThat(settings.getMaxPlayersPerSolarSystem()).isEqualTo(2);
         assertThat(settings.getAdditionalSolarSystems()).isEqualTo(new Range<>(1, 2));
@@ -62,8 +62,8 @@ public class GameSettingsTest extends BackEndTest {
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 21)), accessTokenId1, "planetSize.max", "too high");
         validation(VALID_SETTINGS.toBuilder().planetSize(new Range<>(13, 12)), accessTokenId1, "planetSize.max", "too low");
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(accessTokenId1, accessTokenId1);
-        Response response = SkyXploreLobbyActions.getEditSettingsResponse(accessTokenId1, VALID_SETTINGS);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId1, accessTokenId1);
+        Response response = SkyXploreLobbyActions.getEditSettingsResponse(getServerPort(), accessTokenId1, VALID_SETTINGS);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -75,7 +75,7 @@ public class GameSettingsTest extends BackEndTest {
     }
 
     private void validation(SkyXploreGameSettings.SkyXploreGameSettingsBuilder builder, UUID accessTokenId, String field, String value) {
-        Response response = SkyXploreLobbyActions.getEditSettingsResponse(accessTokenId, builder.build());
+        Response response = SkyXploreLobbyActions.getEditSettingsResponse(getServerPort(), accessTokenId, builder.build());
 
         ResponseValidator.verifyInvalidParam(response, field, value);
     }

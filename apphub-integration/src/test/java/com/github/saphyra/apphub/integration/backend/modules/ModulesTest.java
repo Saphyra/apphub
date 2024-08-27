@@ -23,15 +23,16 @@ public class ModulesTest extends BackEndTest {
     public void getModules() {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        IndexPageActions.registerUser(registrationRequest);
+        IndexPageActions.registerUser(getServerPort(), registrationRequest);
         UUID accessTokenId = IndexPageActions.login(
+            getServerPort(),
             LoginRequest.builder()
                 .userIdentifier(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
                 .build()
         );
 
-        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(accessTokenId);
+        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(getServerPort(), accessTokenId);
 
         assertThat(result).containsKeys("accounts", "office", "development-utils");
 
@@ -114,7 +115,7 @@ public class ModulesTest extends BackEndTest {
     @Test(groups = {"be", "modules"})
     public void setAsFavorite() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         unknownModule(accessTokenId);
         favoriteNull(accessTokenId);
@@ -122,17 +123,17 @@ public class ModulesTest extends BackEndTest {
     }
 
     private static void unknownModule(UUID accessTokenId) {
-        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(accessTokenId, "unknown-module", true);
+        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessTokenId, "unknown-module", true);
         verifyInvalidParam(unknownModuleResponse, "module", "does not exist");
     }
 
     private static void favoriteNull(UUID accessTokenId) {
-        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(accessTokenId, "account", null);
+        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessTokenId, "account", null);
         verifyInvalidParam(favoriteNullResponse, "value", "must not be null");
     }
 
     private static void setAsFavorite(UUID accessTokenId) {
-        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(accessTokenId, "account", true);
+        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(getServerPort(), accessTokenId, "account", true);
 
         assertThat(setAsFavoriteResponse).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()

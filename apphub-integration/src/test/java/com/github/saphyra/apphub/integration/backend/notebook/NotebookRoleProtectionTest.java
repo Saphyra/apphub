@@ -39,72 +39,72 @@ public class NotebookRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "notebook"})
     public void notebookRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
         //Text
-        CommonUtils.verifyMissingRole(() -> TextActions.getCreateTextResponse(accessTokenId, new CreateTextRequest()));
-        CommonUtils.verifyMissingRole(() -> TextActions.getTextResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> TextActions.getEditTextResponse(accessTokenId, UUID.randomUUID(), new EditTextRequest()));
+        CommonUtils.verifyMissingRole(() -> TextActions.getCreateTextResponse(getServerPort(), accessTokenId, new CreateTextRequest()));
+        CommonUtils.verifyMissingRole(() -> TextActions.getTextResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> TextActions.getEditTextResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new EditTextRequest()));
 
         //Table
-        CommonUtils.verifyMissingRole(() -> TableActions.getCreateTableResponse(accessTokenId, new CreateTableRequest()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getEditTableResponse(accessTokenId, UUID.randomUUID(), new EditTableRequest()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getTableResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getUpdateChecklistTableRowStatusResponse(accessTokenId, UUID.randomUUID(), false));
-        CommonUtils.verifyMissingRole(() -> TableActions.getDeleteCheckedResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getEditCheckboxStatusResponse(accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> TableActions.getCreateTableResponse(getServerPort(), accessTokenId, new CreateTableRequest()));
+        CommonUtils.verifyMissingRole(() -> TableActions.getEditTableResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new EditTableRequest()));
+        CommonUtils.verifyMissingRole(() -> TableActions.getTableResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> TableActions.getDeleteCheckedResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> TableActions.getEditCheckboxStatusResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
 
         //Pin
-        CommonUtils.verifyMissingRole(() -> PinActions.getPinResponse(accessTokenId, UUID.randomUUID(), false));
-        CommonUtils.verifyMissingRole(() -> PinActions.getPinnedItemsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> PinActions.getCreatePinGroupResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> PinActions.getRenamePinGroupResponse(accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> PinActions.getPinGroupsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> PinActions.getDeletePinGroupResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> PinActions.getAddItemToPinGroupResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> PinActions.getReniveItemFromPinGroupResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> PinActions.getPinGroupOpenedResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> PinActions.getPinResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> PinActions.getPinnedItemsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> PinActions.getCreatePinGroupResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> PinActions.getRenamePinGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> PinActions.getPinGroupsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> PinActions.getDeletePinGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> PinActions.getAddItemToPinGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> PinActions.getReniveItemFromPinGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> PinActions.getPinGroupOpenedResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
 
         //Only title
-        CommonUtils.verifyMissingRole(() -> OnlyTitleActions.getCreateOnlyTitleResponse(accessTokenId, new CreateOnlyTitleRequest()));
+        CommonUtils.verifyMissingRole(() -> OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessTokenId, new CreateOnlyTitleRequest()));
 
         //List item
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getFindListItemResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getDeleteListItemResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getEditListItemResponse(accessTokenId, new EditListItemRequest(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getMoveListItemResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getCloneListItemResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getSearchResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> ListItemActions.getArchiveResponse(accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getFindListItemResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getDeleteListItemResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, new EditListItemRequest(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getMoveListItemResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getCloneListItemResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getSearchResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> ListItemActions.getArchiveResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
 
         //Link
-        CommonUtils.verifyMissingRole(() -> LinkActions.getCreateLinkResponse(accessTokenId, new CreateLinkRequest()));
+        CommonUtils.verifyMissingRole(() -> LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, new CreateLinkRequest()));
 
         //Image
-        CommonUtils.verifyMissingRole(() -> ImageActions.getCreateImageResponse(accessTokenId, new CreateFileRequest()));
+        CommonUtils.verifyMissingRole(() -> ImageActions.getCreateImageResponse(getServerPort(), accessTokenId, new CreateFileRequest()));
 
         //File
-        CommonUtils.verifyMissingRole(() -> FileActions.getCreateFileResponse(accessTokenId, new CreateFileRequest()));
+        CommonUtils.verifyMissingRole(() -> FileActions.getCreateFileResponse(getServerPort(), accessTokenId, new CreateFileRequest()));
 
         //Checklist
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getCreateChecklistItemResponse(accessTokenId, new CreateChecklistRequest()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistResponse(accessTokenId, new EditChecklistRequest(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getChecklistResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getUpdateChecklistItemStatusResponse(accessTokenId, UUID.randomUUID(), false));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteChecklistItemResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteCheckedChecklistItemsResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getOrderItemsResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistItemResponse(accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getAddChecklistItemResponse(accessTokenId, UUID.randomUUID(), new AddChecklistItemRequest()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, new CreateChecklistRequest()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, new EditChecklistRequest(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getChecklistResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getUpdateChecklistItemStatusResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteChecklistItemResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteCheckedChecklistItemsResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getOrderItemsResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new AddChecklistItemRequest()));
 
         //Category
-        CommonUtils.verifyMissingRole(() -> CategoryActions.getCreateCategoryResponse(accessTokenId, new CreateCategoryRequest()));
-        CommonUtils.verifyMissingRole(() -> CategoryActions.getCategoryTreeResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> CategoryActions.getChildrenOfCategoryResponse(accessTokenId, UUID.randomUUID(), Collections.emptyList()));
+        CommonUtils.verifyMissingRole(() -> CategoryActions.getCreateCategoryResponse(getServerPort(), accessTokenId, new CreateCategoryRequest()));
+        CommonUtils.verifyMissingRole(() -> CategoryActions.getCategoryTreeResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> CategoryActions.getChildrenOfCategoryResponse(getServerPort(), accessTokenId, UUID.randomUUID(), Collections.emptyList()));
     }
 
     @DataProvider(parallel = true)

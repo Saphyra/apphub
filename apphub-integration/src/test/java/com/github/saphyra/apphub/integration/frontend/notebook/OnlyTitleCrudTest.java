@@ -25,14 +25,14 @@ public class OnlyTitleCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void onlyTitleCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.ONLY_TITLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.ONLY_TITLE);
 
         create_blankTitle(driver);
         create(driver);
@@ -59,7 +59,7 @@ public class OnlyTitleCrudTest extends SeleniumTest {
 
     private static void edit_blankTitle(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, ONLY_TITLE_TITLE)
-            .edit(driver);
+            .edit(getServerPort(), driver);
         EditListItemActions.fillTitle(driver, " ");
 
         EditListItemActions.submitForm(driver);

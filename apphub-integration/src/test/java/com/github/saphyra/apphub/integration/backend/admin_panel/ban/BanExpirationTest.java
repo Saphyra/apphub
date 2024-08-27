@@ -25,11 +25,12 @@ public class BanExpirationTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin( userData);
+        Integer serverPort = getServerPort();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        UUID testAccessTokenId = IndexPageActions.registerAndLogin( testUser);
+        UUID testAccessTokenId = IndexPageActions.registerAndLogin(serverPort, testUser);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         //Ban
@@ -43,15 +44,15 @@ public class BanExpirationTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        BanActions.ban(accessTokenId, banRequest);
+        BanActions.ban(serverPort, accessTokenId, banRequest);
 
-        Response response = ModulesActions.getModulesResponse(testAccessTokenId);
+        Response response = ModulesActions.getModulesResponse(serverPort, testAccessTokenId);
         ResponseValidator.verifyErrorResponse(response, 403, ErrorCode.MISSING_ROLE);
 
         AwaitilityWrapper.create(300, 10)
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
-                return ModulesActions.getModulesResponse(testAccessTokenId).getStatusCode() == 200;
+                return ModulesActions.getModulesResponse(serverPort, testAccessTokenId).getStatusCode() == 200;
             })
             .assertTrue("Ban was not revoked in the given time.");
     }

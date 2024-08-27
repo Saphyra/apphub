@@ -27,12 +27,12 @@ public class BanCrudTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void banCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID adminUserId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(testUser.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         ban_nullBannedUserId(userData, accessTokenId);
@@ -61,7 +61,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_nullBannedUserIdResponse = BanActions.getBanResponse(accessTokenId, ban_nullBannedUserIdRequest);
+        Response ban_nullBannedUserIdResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_nullBannedUserIdRequest);
 
         ResponseValidator.verifyInvalidParam(ban_nullBannedUserIdResponse, "bannedUserId", "must not be null");
     }
@@ -77,7 +77,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_blankBannedRoleResponse = BanActions.getBanResponse(accessTokenId, ban_blankBannedRoleRequest);
+        Response ban_blankBannedRoleResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_blankBannedRoleRequest);
 
         ResponseValidator.verifyInvalidParam(ban_blankBannedRoleResponse, "bannedRole", "must not be null or blank");
     }
@@ -93,7 +93,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_nullPermanentResponse = BanActions.getBanResponse(accessTokenId, ban_nullPermanentRequest);
+        Response ban_nullPermanentResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_nullPermanentRequest);
 
         ResponseValidator.verifyInvalidParam(ban_nullPermanentResponse, "permanent", "must not be null");
     }
@@ -109,7 +109,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_blankReasonResponse = BanActions.getBanResponse(accessTokenId, ban_blankReasonRequest);
+        Response ban_blankReasonResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_blankReasonRequest);
 
         ResponseValidator.verifyInvalidParam(ban_blankReasonResponse, "reason", "must not be null or blank");
     }
@@ -125,7 +125,7 @@ public class BanCrudTest extends BackEndTest {
             .password(" ")
             .build();
 
-        Response ban_blankPasswordResponse = BanActions.getBanResponse(accessTokenId, ban_blankPasswordRequest);
+        Response ban_blankPasswordResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_blankPasswordRequest);
 
         ResponseValidator.verifyInvalidParam(ban_blankPasswordResponse, "password", "must not be null or blank");
     }
@@ -141,7 +141,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_nullDurationResponse = BanActions.getBanResponse(accessTokenId, ban_nullDurationRequest);
+        Response ban_nullDurationResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_nullDurationRequest);
 
         ResponseValidator.verifyInvalidParam(ban_nullDurationResponse, "duration", "must not be null");
     }
@@ -157,7 +157,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_durationTooLowResponse = BanActions.getBanResponse(accessTokenId, ban_durationTooLowRequest);
+        Response ban_durationTooLowResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_durationTooLowRequest);
 
         ResponseValidator.verifyInvalidParam(ban_durationTooLowResponse, "duration", "too low");
     }
@@ -173,7 +173,7 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response ban_unknownChronoUnitResponse = BanActions.getBanResponse(accessTokenId, ban_unknownChronoUnitRequest);
+        Response ban_unknownChronoUnitResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_unknownChronoUnitRequest);
 
         ResponseValidator.verifyInvalidParam(ban_unknownChronoUnitResponse, "chronoUnit", "invalid value");
     }
@@ -193,17 +193,17 @@ public class BanCrudTest extends BackEndTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                Response ban_incorrectPasswordResponse = BanActions.getBanResponse(ati, ban_incorrectPasswordRequest);
+                Response ban_incorrectPasswordResponse = BanActions.getBanResponse(getServerPort(), ati, ban_incorrectPasswordRequest);
 
                 ResponseValidator.verifyBadRequest(ban_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
             });
 
-        Response ban_accountLockedResponse = BanActions.getBanResponse(accessTokenId, ban_incorrectPasswordRequest);
+        Response ban_accountLockedResponse = BanActions.getBanResponse(getServerPort(), accessTokenId, ban_incorrectPasswordRequest);
         verifyErrorResponse(ban_accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        accessTokenId = IndexPageActions.login(userData.toLoginRequest());
+        accessTokenId = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         return accessTokenId;
     }
 
@@ -218,11 +218,11 @@ public class BanCrudTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        BanActions.ban(accessTokenId, banRequest);
+        BanActions.ban(getServerPort(), accessTokenId, banRequest);
     }
 
     private static BanDetailsResponse getBans(RegistrationParameters userData, UUID accessTokenId, UUID adminUserId, RegistrationParameters testUser, UUID testUserId) {
-        BanResponse bans = BanActions.getBans(accessTokenId, testUserId);
+        BanResponse bans = BanActions.getBans(getServerPort(), accessTokenId, testUserId);
 
         assertThat(bans.getUserId()).isEqualTo(testUserId);
         assertThat(bans.getEmail()).isEqualTo(testUser.getEmail());
@@ -239,7 +239,7 @@ public class BanCrudTest extends BackEndTest {
     }
 
     private static void revokeBan_blankPassword(UUID accessTokenId, BanDetailsResponse ban) {
-        Response revokeBan_blankPasswordResponse = BanActions.getRevokeBanResponse(accessTokenId, ban.getId(), " ");
+        Response revokeBan_blankPasswordResponse = BanActions.getRevokeBanResponse(getServerPort(), accessTokenId, ban.getId(), " ");
 
         ResponseValidator.verifyInvalidParam(revokeBan_blankPasswordResponse, "password", "must not be null or blank");
     }
@@ -250,20 +250,20 @@ public class BanCrudTest extends BackEndTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                Response revokeBan_incorrectPasswordResponse = BanActions.getRevokeBanResponse(ati2, ban.getId(), "asd");
+                Response revokeBan_incorrectPasswordResponse = BanActions.getRevokeBanResponse(getServerPort(), ati2, ban.getId(), "asd");
                 ResponseValidator.verifyBadRequest(revokeBan_incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
             });
 
-        Response revokeBan_accountLockedResponse = BanActions.getRevokeBanResponse(ati2, ban.getId(), "asd");
+        Response revokeBan_accountLockedResponse = BanActions.getRevokeBanResponse(getServerPort(), ati2, ban.getId(), "asd");
         verifyErrorResponse(revokeBan_accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        accessTokenId = IndexPageActions.login(userData.toLoginRequest());
+        accessTokenId = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
 
         //Revoke ban
-        BanActions.revokeBan(accessTokenId, ban.getId(), userData.getPassword());
+        BanActions.revokeBan(getServerPort(), accessTokenId, ban.getId(), userData.getPassword());
 
-        bans = BanActions.getBans(accessTokenId, testUserId);
+        bans = BanActions.getBans(getServerPort(), accessTokenId, testUserId);
 
         assertThat(bans.getBans()).isEmpty();
     }

@@ -17,14 +17,14 @@ public class SkyXploreSavedGamesRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
     public void savedGamesRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> SkyXploreSavedGameActions.getSavedGamesResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreSavedGameActions.getDeleteGameResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSavedGameActions.getSavedGamesResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

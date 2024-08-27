@@ -24,8 +24,8 @@ public class DeleteAccountActions {
             .click();
     }
 
-    public static void fillDeleteAccountForm(WebDriver driver, String password) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+    public static void fillDeleteAccountForm(int serverPort, WebDriver driver, String password) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
 
         clearAndFillContentEditable(driver, By.id("account-delete-account-password-input"), password);
     }

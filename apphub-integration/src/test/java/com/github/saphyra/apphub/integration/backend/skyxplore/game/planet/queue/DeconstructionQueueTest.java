@@ -36,21 +36,21 @@ public class DeconstructionQueueTest extends BackEndTest {
     public void deconstructionQueueCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
 
-        SkyXploreBuildingFlow.constructBuilding(accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
+        SkyXploreBuildingFlow.constructBuilding(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP);
 
         UUID buildingId = findBuilding(accessTokenId, planetId, Constants.DATA_ID_CAMP);
 
-        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
-        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), buildingId)
+        SkyXploreBuildingActions.deconstructBuilding(getServerPort(), accessTokenId, planetId, buildingId);
+        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId), buildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
 
         QueueResponse queueResponse = getQueue(accessTokenId, planetId, surfaceResponse);
@@ -62,7 +62,7 @@ public class DeconstructionQueueTest extends BackEndTest {
     }
 
     private static QueueResponse getQueue(UUID accessTokenId, UUID planetId, SurfaceResponse surfaceResponse) {
-        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId)
             .getQueue();
 
         assertThat(queue).hasSize(1);
@@ -76,27 +76,27 @@ public class DeconstructionQueueTest extends BackEndTest {
     }
 
     private static void updatePriority_invalidType(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
+        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
 
         ResponseValidator.verifyInvalidParam(setPriority_invalidTypeResponse, "type", "invalid value");
     }
 
     private static void updatePriority_priorityTooLow(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
+        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
 
         ResponseValidator.verifyInvalidParam(setPriority_priorityTooLowResponse, "priority", "too low");
     }
 
     private static void updatePriority_priorityTooHigh(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
+        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
 
         ResponseValidator.verifyInvalidParam(setPriority_priorityTooHighResponse, "priority", "too high");
     }
 
     private QueueResponse updatePriority(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        SkyXplorePlanetQueueActions.setPriority(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
+        SkyXplorePlanetQueueActions.setPriority(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
-        queueResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+        queueResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId)
             .getQueue()
             .get(0);
 
@@ -107,9 +107,9 @@ public class DeconstructionQueueTest extends BackEndTest {
     }
 
     private static void cancelDeconstruction(UUID accessTokenId, UUID planetId, QueueResponse queueResponse, UUID buildingId) {
-        SkyXplorePlanetQueueActions.cancelItem(accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+        SkyXplorePlanetQueueActions.cancelItem(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
 
-        PlanetOverviewResponse planetOverview = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverview = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
         assertThat(planetOverview.getQueue()).isEmpty();
 
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverview.getSurfaces(), buildingId)
@@ -121,7 +121,7 @@ public class DeconstructionQueueTest extends BackEndTest {
     }
 
     private UUID findBuilding(UUID accessTokenId, UUID planetId, String dataId) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
             .map(SurfaceResponse::getBuilding)
             .filter(building -> !isNull(building))

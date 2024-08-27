@@ -16,19 +16,19 @@ public class BlacklistSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchUsersToBlacklist() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerAndLogin(testUserData);
+        IndexPageActions.registerAndLogin(getServerPort(), testUserData);
 
-        List<SearchResultItem> searchResult = BlacklistActions.search(accessTokenId, getEmailDomain());
+        List<SearchResultItem> searchResult = BlacklistActions.search(getServerPort(), accessTokenId, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.get(0).getUsername()).isEqualTo(testUserData.getUsername());
         assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
 
-        BlacklistActions.createBlacklist(accessTokenId, searchResult.get(0).getUserId());
+        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, searchResult.get(0).getUserId());
 
-        assertThat(BlacklistActions.search(accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(BlacklistActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
     }
 }

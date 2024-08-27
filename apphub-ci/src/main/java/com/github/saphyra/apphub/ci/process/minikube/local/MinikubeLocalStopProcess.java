@@ -14,7 +14,7 @@ public class MinikubeLocalStopProcess {
     private final NamespaceNameProvider namespaceNameProvider;
 
     public void stopMinikube() {
-        minikubeScaleProcess.scale(namespaceNameProvider.getBranchName(), 0);
+        minikubeScaleProcess.scale(namespaceNameProvider.getNamespaceName(), 0);
 
         minikubeStopProcess.stopMinikube();
     }

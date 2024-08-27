@@ -30,7 +30,7 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void markOccurrenceDefault() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -42,7 +42,7 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         CalendarResponse calendarResponse = responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())
@@ -56,7 +56,7 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        OccurrenceActions.markOccurrenceDone(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        OccurrenceActions.markOccurrenceDone(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         nullReferenceDateDay(accessTokenId, occurrenceResponse);
         nullReferenceDateMonth(accessTokenId, occurrenceResponse);
@@ -69,7 +69,7 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
@@ -80,14 +80,14 @@ public class MarkOccurrenceDefaultTest extends BackEndTest {
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceDefaultResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
 
     private static void markOccurrenceSnoozed(UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
         List<CalendarResponse> responses;
-        responses = OccurrenceActions.markOccurrenceDefault(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        responses = OccurrenceActions.markOccurrenceDefault(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         OccurrenceResponse occurrence = responses.stream()
             .flatMap(cr -> cr.getEvents().stream())

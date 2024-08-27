@@ -27,7 +27,7 @@ public class CustomTableRangeTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableNumberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullData(accessTokenId);
         create_failedToParse(accessTokenId);
@@ -40,11 +40,11 @@ public class CustomTableRangeTest extends BackEndTest {
         create_valueNotInRange(accessTokenId);
         create(accessTokenId);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         edit(accessTokenId, listItemId, tableResponse);
     }
@@ -62,9 +62,9 @@ public class CustomTableRangeTest extends BackEndTest {
             number
         );
 
-        TableActions.editTable(accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -79,14 +79,14 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(1d, 3d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, range);
 
-        TableActions.createTable(accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessTokenId, request);
     }
 
     private void create_valueNotInRange(UUID accessTokenId) {
         Range range = new Range(1d, 3d, 3d, 0d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.value", "too low");
     }
@@ -95,7 +95,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(2d, 1d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.max", "too low");
     }
@@ -104,7 +104,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(1d, null, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.max", "must not be null");
     }
@@ -113,7 +113,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(null, 3d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.min", "must not be null");
     }
@@ -122,7 +122,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(1d, 3d, 0d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.step", "too low");
     }
@@ -131,7 +131,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(1d, 3d, null, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.step", "must not be null");
     }
@@ -140,7 +140,7 @@ public class CustomTableRangeTest extends BackEndTest {
         Range range = new Range(1d, 3d, 4d, null);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.value", "must not be null");
     }
@@ -148,7 +148,7 @@ public class CustomTableRangeTest extends BackEndTest {
     private void create_failedToParse(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, "asd");
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range", "failed to parse");
     }
@@ -156,7 +156,7 @@ public class CustomTableRangeTest extends BackEndTest {
     private void create_nullData(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, null);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "range", "must not be null");
     }

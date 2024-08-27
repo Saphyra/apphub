@@ -18,7 +18,7 @@ public class AdminPanelRoleProtectionTest extends SeleniumTest {
     public void adminPanelRoleProtection(String role) {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -26,12 +26,12 @@ public class AdminPanelRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_BAN_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_BAN_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE);
     }
 
     @DataProvider(parallel = true)

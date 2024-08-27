@@ -28,13 +28,13 @@ public class RolesForAllTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
     public void addAndRemoveRoleFromAll() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.ROLES_FOR_ALL);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.ROLES_FOR_ALL);
 
         AwaitilityWrapper.createDefault()
             .until(() -> !RolesForAllActions.getRoles(driver).isEmpty())
@@ -54,7 +54,7 @@ public class RolesForAllTest extends SeleniumTest {
     }
 
     private void restrictedRolesNotPresent(WebDriver driver, RegistrationParameters registrationParameters) {
-        RolesForAllActions.getRestrictedRoles(registrationParameters)
+        RolesForAllActions.getRestrictedRoles(getServerPort(), registrationParameters)
             .forEach(role -> assertThat(RolesForAllActions.findRole(driver, role)).isEmpty());
     }
 
@@ -82,17 +82,18 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmAddToAll(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
+        Integer serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         SleepUtil.sleep(3000);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
             .assertTrue("User is not logged in");
@@ -140,17 +141,18 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmRevokeFromAll(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
+        Integer serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         SleepUtil.sleep(3000);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
             .assertTrue("User is not logged in");

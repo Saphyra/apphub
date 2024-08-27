@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.core.driver;
 
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.google.common.base.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

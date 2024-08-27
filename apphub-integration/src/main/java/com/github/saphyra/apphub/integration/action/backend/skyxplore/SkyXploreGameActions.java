@@ -11,20 +11,20 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameActions {
-    public static void setPaused(UUID accessTokenId, boolean isPaused) {
-        Response response = getPauseGameResponse(accessTokenId, isPaused);
+    public static void setPaused(int serverPort, UUID accessTokenId, boolean isPaused) {
+        Response response = getPauseGameResponse(serverPort, accessTokenId, isPaused);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getPauseGameResponse(UUID accessTokenId, boolean isPaused) {
+    public static Response getPauseGameResponse(int serverPort, UUID accessTokenId, boolean isPaused) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(isPaused))
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_GAME_PAUSE));
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_PAUSE));
     }
 
-    public static boolean isHost(UUID accessTokenId) {
-        Response response = getIsHostResponse(accessTokenId);
+    public static boolean isHost(int serverPort, UUID accessTokenId) {
+        Response response = getIsHostResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -33,35 +33,35 @@ public class SkyXploreGameActions {
             .getBoolean("value");
     }
 
-    public static Response getIsHostResponse(UUID accessTokenId) {
+    public static Response getIsHostResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GAME_IS_HOST));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_IS_HOST));
     }
 
-    public static void saveGame(UUID accessTokenId) {
-        Response response = getSaveGameResponse(accessTokenId);
+    public static void saveGame(int serverPort, UUID accessTokenId) {
+        Response response = getSaveGameResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getSaveGameResponse(UUID accessTokenId) {
+    public static Response getSaveGameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_GAME_SAVE));
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_SAVE));
     }
 
-    public static void exit(UUID accessTokenId) {
-        Response response = getExitResponse(accessTokenId);
+    public static void exit(int serverPort, UUID accessTokenId) {
+        Response response = getExitResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getExitResponse(UUID accessTokenId) {
+    public static Response getExitResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_EXIT_GAME));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_EXIT_GAME));
     }
 
-    public static Response getIsUserInGameResponse(UUID accessTokenId) {
+    public static Response getIsUserInGameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_IS_USER_IN_GAME));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_IS_USER_IN_GAME));
     }
 }

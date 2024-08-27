@@ -32,7 +32,7 @@ public class ToolboxCrudTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void toolboxCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         create_nullBrand(accessTokenId);
@@ -65,9 +65,9 @@ public class ToolboxCrudTest extends BackEndTest {
             .storageBox(StorageBoxModel.builder().storageBoxId(storageBoxId).build())
             .toolType(ToolTypeModel.builder().toolTypeId(toolTypeId).build())
             .build();
-        VillanyAteszToolboxActions.createTool(accessTokenId, request);
+        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, request);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(BRAND, ToolResponse::getBrand)
             .returns(NAME, ToolResponse::getName)
             .returns(COST, ToolResponse::getCost)
@@ -90,7 +90,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().toolTypeId(UUID.randomUUID()).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "toolTypeId", "not found");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "toolTypeId", "not found");
     }
 
     private void create_nullToolTypeIdAndToolTypeName(UUID accessTokenId) {
@@ -104,7 +104,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "toolType.name", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "toolType.name", "must not be null");
     }
 
     private void create_nullToolType(UUID accessTokenId) {
@@ -118,7 +118,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "toolType", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "toolType", "must not be null");
     }
 
     private void create_storageBoxNotFound(UUID accessTokenId) {
@@ -132,7 +132,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "storageBoxId", "not found");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "storageBoxId", "not found");
     }
 
     private void create_nullStorageBox(UUID accessTokenId) {
@@ -146,7 +146,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "storageBox", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "storageBox", "must not be null");
     }
 
     private void create_nullStorageBoxIdAndStorageBoxName(UUID accessTokenId) {
@@ -160,25 +160,25 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "storageBox.name", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "storageBox.name", "must not be null");
     }
 
     private void delete(UUID accessTokenId, UUID toolId) {
-        assertThat(VillanyAteszToolboxActions.delete(accessTokenId, toolId)).isEmpty();
+        assertThat(VillanyAteszToolboxActions.delete(getServerPort(), accessTokenId, toolId)).isEmpty();
     }
 
     private void setStatus(UUID accessTokenId, UUID toolId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.setToolStatus(accessTokenId, toolId, ToolStatus.DAMAGED))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.setToolStatus(getServerPort(), accessTokenId, toolId, ToolStatus.DAMAGED))
             .returns(ToolStatus.DAMAGED, ToolResponse::getStatus)
             .returns(null, ToolResponse::getScrappedAt);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.setToolStatus(accessTokenId, toolId, ToolStatus.SCRAPPED))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.setToolStatus(getServerPort(), accessTokenId, toolId, ToolStatus.SCRAPPED))
             .returns(ToolStatus.SCRAPPED, ToolResponse::getStatus)
             .returns(LocalDate.now(), ToolResponse::getScrappedAt);
     }
 
     private void setStatus_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getSetToolStatusResponse(accessTokenId, toolId, null), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getSetToolStatusResponse(getServerPort(), accessTokenId, toolId, null), "status", "must not be null");
     }
 
     private ToolResponse create(UUID accessTokenId) {
@@ -191,9 +191,9 @@ public class ToolboxCrudTest extends BackEndTest {
             .storageBox(StorageBoxModel.builder().name(STORAGE_BOX_NAME).build())
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
-        VillanyAteszToolboxActions.createTool(accessTokenId, request);
+        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, request);
 
-        ToolResponse toolResponse = VillanyAteszToolboxActions.getTools(accessTokenId)
+        ToolResponse toolResponse = VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId)
             .get(0);
 
         assertThat(toolResponse)
@@ -220,7 +220,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "acquiredAt", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "acquiredAt", "must not be null");
     }
 
     private void create_nullCost(UUID accessTokenId) {
@@ -233,7 +233,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "cost", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "cost", "must not be null");
     }
 
     private void create_blankName(UUID accessTokenId) {
@@ -246,7 +246,7 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "name", "must not be null or blank");
     }
 
     private void create_nullBrand(UUID accessTokenId) {
@@ -259,6 +259,6 @@ public class ToolboxCrudTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(accessTokenId, request), "brand", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getCreateToolResponse(getServerPort(), accessTokenId, request), "brand", "must not be null");
     }
 }

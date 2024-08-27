@@ -31,7 +31,7 @@ public class ContactCrudTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void contactCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         createContact_blankName(accessTokenId);
@@ -54,7 +54,7 @@ public class ContactCrudTest extends BackEndTest {
     }
 
     private UUID gteContactId(UUID accessTokenId) {
-        return VillanyAteszContactActions.getContacts(accessTokenId)
+        return VillanyAteszContactActions.getContacts(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("User has no contact created."))
@@ -70,7 +70,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(accessTokenId, request), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(getServerPort(), accessTokenId, request), "name", "must not be null or blank");
     }
 
     private void createContact_nullCode(UUID accessTokenId) {
@@ -82,7 +82,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(accessTokenId, request), "code", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(getServerPort(), accessTokenId, request), "code", "must not be null");
     }
 
     private void createContact_nullPhone(UUID accessTokenId) {
@@ -94,7 +94,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(accessTokenId, request), "phone", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(getServerPort(), accessTokenId, request), "phone", "must not be null");
     }
 
     private void createContact_nullAddress(UUID accessTokenId) {
@@ -106,7 +106,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(accessTokenId, request), "address", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(getServerPort(), accessTokenId, request), "address", "must not be null");
     }
 
     private void createContact_nullNote(UUID accessTokenId) {
@@ -118,7 +118,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(accessTokenId, request), "note", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getCreateContactResponse(getServerPort(), accessTokenId, request), "note", "must not be null");
     }
 
     private void createContact(UUID accessTokenId) {
@@ -130,7 +130,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszContactActions.createContact(accessTokenId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszContactActions.createContact(getServerPort(), accessTokenId, request))
             .returns(NAME, ContactModel::getName)
             .returns(CODE, ContactModel::getCode)
             .returns(PHONE, ContactModel::getPhone)
@@ -147,7 +147,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NEW_NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(accessTokenId, contactId, request), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(getServerPort(), accessTokenId, contactId, request), "name", "must not be null or blank");
     }
 
     private void editContact_nullCode(UUID accessTokenId, UUID contactId) {
@@ -159,7 +159,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NEW_NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(accessTokenId, contactId, request), "code", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(getServerPort(), accessTokenId, contactId, request), "code", "must not be null");
     }
 
     private void editContact_nullPhone(UUID accessTokenId, UUID contactId) {
@@ -171,7 +171,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NEW_NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(accessTokenId, contactId, request), "phone", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(getServerPort(), accessTokenId, contactId, request), "phone", "must not be null");
     }
 
     private void editContact_nullAddress(UUID accessTokenId, UUID contactId) {
@@ -183,7 +183,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NEW_NOTE)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(accessTokenId, contactId, request), "address", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(getServerPort(), accessTokenId, contactId, request), "address", "must not be null");
     }
 
     private void editContact_nullNote(UUID accessTokenId, UUID contactId) {
@@ -195,7 +195,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(accessTokenId, contactId, request), "note", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszContactActions.getEditContactResponse(getServerPort(), accessTokenId, contactId, request), "note", "must not be null");
     }
 
     private void editContact(UUID accessTokenId, UUID contactId) {
@@ -207,7 +207,7 @@ public class ContactCrudTest extends BackEndTest {
             .note(NEW_NOTE)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszContactActions.editContact(accessTokenId, contactId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszContactActions.editContact(getServerPort(), accessTokenId, contactId, request))
             .returns(contactId, ContactModel::getContactId)
             .returns(NEW_NAME, ContactModel::getName)
             .returns(NEW_CODE, ContactModel::getCode)
@@ -217,10 +217,10 @@ public class ContactCrudTest extends BackEndTest {
     }
 
     private void deleteContact(UUID accessTokenId, UUID contactId) {
-        VillanyAteszCartActions.create(accessTokenId, contactId);
+        VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
 
-        assertThat(VillanyAteszContactActions.deleteContact(accessTokenId, contactId)).isEmpty();
+        assertThat(VillanyAteszContactActions.deleteContact(getServerPort(), accessTokenId, contactId)).isEmpty();
 
-        assertThat(VillanyAteszCartActions.getCarts(accessTokenId)).isEmpty();
+        assertThat(VillanyAteszCartActions.getCarts(getServerPort(), accessTokenId)).isEmpty();
     }
 }

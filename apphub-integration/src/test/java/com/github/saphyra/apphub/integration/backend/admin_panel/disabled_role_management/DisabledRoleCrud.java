@@ -23,15 +23,15 @@ public class DisabledRoleCrud extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void disabledRoleCrud() {
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(testUser.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         //Initial check
-        assertThat(DisabledRoleActions.getDisabledRoles(accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
+        assertThat(DisabledRoleActions.getDisabledRoles(getServerPort(), accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
 
         disableRole_unknownRole(testUser, accessTokenId);
         accessTokenId = disableRole_incorrectPassword(userData, accessTokenId);
@@ -41,7 +41,7 @@ public class DisabledRoleCrud extends BackEndTest {
     }
 
     private static void disableRole_unknownRole(RegistrationParameters testUser, UUID accessTokenId) {
-        Response unknownRoleResponse = DisabledRoleActions.getDisableRoleResponse(accessTokenId, testUser.getPassword(), "asd");
+        Response unknownRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessTokenId, testUser.getPassword(), "asd");
         verifyInvalidParam(unknownRoleResponse, "role", "unknown or cannot be disabled");
     }
 
@@ -50,22 +50,22 @@ public class DisabledRoleCrud extends BackEndTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                Response incorrectPasswordDisableResponse = DisabledRoleActions.getDisableRoleResponse(ati, "asd", Constants.ROLE_TEST);
+                Response incorrectPasswordDisableResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), ati, "asd", Constants.ROLE_TEST);
                 verifyBadRequest(incorrectPasswordDisableResponse, ErrorCode.INCORRECT_PASSWORD);
             });
 
-        Response accountLockedDisableRoleResponse = DisabledRoleActions.getDisableRoleResponse(accessTokenId, "asd", Constants.ROLE_TEST);
+        Response accountLockedDisableRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessTokenId, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedDisableRoleResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        accessTokenId = IndexPageActions.login(userData.toLoginRequest());
+        accessTokenId = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         return accessTokenId;
     }
 
     private static void disableRole(RegistrationParameters testUser, UUID accessTokenId) {
-        Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
+        Response disableRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(disableRoleResponse.getStatusCode()).isEqualTo(200);
-        assertThat(DisabledRoleActions.getDisabledRoles(accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, true));
+        assertThat(DisabledRoleActions.getDisabledRoles(getServerPort(), accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, true));
     }
 
     private static UUID enableRole_incorrectPassword(RegistrationParameters userData, UUID accessTokenId) {
@@ -73,21 +73,21 @@ public class DisabledRoleCrud extends BackEndTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                Response incorrectPasswordEnableResponse = DisabledRoleActions.getEnableRoleResponse(ati2, "asd", Constants.ROLE_TEST);
+                Response incorrectPasswordEnableResponse = DisabledRoleActions.getEnableRoleResponse(getServerPort(), ati2, "asd", Constants.ROLE_TEST);
                 verifyBadRequest(incorrectPasswordEnableResponse, ErrorCode.INCORRECT_PASSWORD);
             });
 
-        Response accountLockedEnableResponse = DisabledRoleActions.getEnableRoleResponse(ati2, "asd", Constants.ROLE_TEST);
+        Response accountLockedEnableResponse = DisabledRoleActions.getEnableRoleResponse(getServerPort(), ati2, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedEnableResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        accessTokenId = IndexPageActions.login(userData.toLoginRequest());
+        accessTokenId = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         return accessTokenId;
     }
 
     private static void enableRole(RegistrationParameters testUser, UUID accessTokenId) {
-        Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
+        Response enableRoleResponse = DisabledRoleActions.getEnableRoleResponse(getServerPort(), accessTokenId, testUser.getPassword(), Constants.ROLE_TEST);
         assertThat(enableRoleResponse.getStatusCode()).isEqualTo(200);
-        assertThat(DisabledRoleActions.getDisabledRoles(accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
+        assertThat(DisabledRoleActions.getDisabledRoles(getServerPort(), accessTokenId)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
     }
 }

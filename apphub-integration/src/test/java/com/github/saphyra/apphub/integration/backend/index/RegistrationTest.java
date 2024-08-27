@@ -32,49 +32,49 @@ public class RegistrationTest extends BackEndTest {
     private static void invalidEmail() {
         RegistrationRequest invalidEmailRequest = RegistrationParameters.invalidEmailParameters()
             .toRegistrationRequest();
-        Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(invalidEmailRequest);
+        Response invalidEmailResponse = IndexPageActions.getRegistrationResponse(getServerPort(), invalidEmailRequest);
         verifyInvalidParam(invalidEmailResponse, "email", "invalid format");
     }
 
     private static void usernameTooShort() {
         RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
             .toRegistrationRequest();
-        Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(usernameTooShortRequest);
+        Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(getServerPort(), usernameTooShortRequest);
         verifyInvalidParam(usernameTooShortResponse, "username", "too short");
     }
 
     private static void usernameTooLong() {
         RegistrationRequest usernameTooLongRequest = RegistrationParameters.tooLongUsernameParameters()
             .toRegistrationRequest();
-        Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(usernameTooLongRequest);
+        Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(getServerPort(), usernameTooLongRequest);
         verifyInvalidParam(usernameTooLongResponse, "username", "too long");
     }
 
     private static void passwordTooShort() {
         RegistrationRequest passwordTooShortRequest = RegistrationParameters.tooShortPasswordParameters()
             .toRegistrationRequest();
-        Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(passwordTooShortRequest);
+        Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(getServerPort(), passwordTooShortRequest);
         verifyInvalidParam(passwordTooShortResponse, "password", "too short");
     }
 
     private static void passwordTooLong() {
         RegistrationRequest passwordTooLongRequest = RegistrationParameters.tooLongPasswordParameters()
             .toRegistrationRequest();
-        Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(passwordTooLongRequest);
+        Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(getServerPort(), passwordTooLongRequest);
         verifyInvalidParam(passwordTooLongResponse, "password", "too long");
     }
 
     private static RegistrationRequest existingEmail() {
         RegistrationRequest existingUserRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        IndexPageActions.registerUser(existingUserRequest);
+        IndexPageActions.registerUser(getServerPort(), existingUserRequest);
 
         RegistrationRequest existingEmailRequest = RegistrationParameters.validParameters()
             .toBuilder()
             .email(existingUserRequest.getEmail())
             .build()
             .toRegistrationRequest();
-        Response existingEmailResponse = IndexPageActions.getRegistrationResponse(existingEmailRequest);
+        Response existingEmailResponse = IndexPageActions.getRegistrationResponse(getServerPort(), existingEmailRequest);
         verifyErrorResponse(existingEmailResponse, 409, ErrorCode.EMAIL_ALREADY_EXISTS);
         return existingUserRequest;
     }
@@ -85,14 +85,14 @@ public class RegistrationTest extends BackEndTest {
             .username(existingUserRequest.getUsername())
             .build()
             .toRegistrationRequest();
-        Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(existingUsernameRequest);
+        Response existingUsernameResponse = IndexPageActions.getRegistrationResponse(getServerPort(), existingUsernameRequest);
         verifyErrorResponse(existingUsernameResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
     }
 
     private static void successfulRegistration() {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
-        Response response = IndexPageActions.getRegistrationResponse(registrationRequest);
+        Response response = IndexPageActions.getRegistrationResponse(getServerPort(), registrationRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
         List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
         assertThat(roles).containsExactlyInAnyOrder(

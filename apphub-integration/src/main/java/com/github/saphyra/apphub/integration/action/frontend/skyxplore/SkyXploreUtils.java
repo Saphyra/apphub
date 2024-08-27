@@ -21,9 +21,9 @@ import static com.github.saphyra.apphub.integration.core.TestBase.EXECUTOR_SERVI
 
 @Slf4j
 public class SkyXploreUtils {
-    public static void registerAndNavigateToMainMenu(List<BiWrapper<WebDriver, RegistrationParameters>> users) {
+    public static void registerAndNavigateToMainMenu(int serverPort, List<BiWrapper<WebDriver, RegistrationParameters>> users) {
         List<FutureWrapper<Void>> futures = users.stream()
-            .map(SkyXploreUtils::registerAndNavigateToMainMenu)
+            .map(biWrapper -> registerAndNavigateToMainMenu(serverPort, biWrapper))
             .toList();
 
         futures.stream()
@@ -31,16 +31,16 @@ public class SkyXploreUtils {
             .forEach(ExecutionResult::getOrThrow);
     }
 
-    private static FutureWrapper<Void> registerAndNavigateToMainMenu(BiWrapper<WebDriver, RegistrationParameters> biWrapper) {
-        return registerAndNavigateToMainMenu(biWrapper.getEntity1(), biWrapper.getEntity2());
+    private static FutureWrapper<Void> registerAndNavigateToMainMenu(int serverPort, BiWrapper<WebDriver, RegistrationParameters> biWrapper) {
+        return registerAndNavigateToMainMenu(serverPort, biWrapper.getEntity1(), biWrapper.getEntity2());
     }
 
-    private static FutureWrapper<Void> registerAndNavigateToMainMenu(WebDriver driver, RegistrationParameters userData) {
+    private static FutureWrapper<Void> registerAndNavigateToMainMenu(int serverPort, WebDriver driver, RegistrationParameters userData) {
         return EXECUTOR_SERVICE.execute(() -> {
-            Navigation.toIndexPage(driver);
+            Navigation.toIndexPage(serverPort, driver);
             IndexPageActions.registerUser(driver, userData);
 
-            ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+            ModulesPageActions.openModule(serverPort, driver, ModuleLocation.SKYXPLORE);
             SleepUtil.sleep(1000);
             SkyXploreCharacterActions.submitForm(driver);
 

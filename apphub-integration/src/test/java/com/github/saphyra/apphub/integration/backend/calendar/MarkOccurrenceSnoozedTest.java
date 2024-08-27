@@ -31,7 +31,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void markOccurrenceSnoozed() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -43,7 +43,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         CalendarResponse calendarResponse = responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())
@@ -64,7 +64,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
@@ -75,7 +75,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
@@ -87,7 +87,7 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        responses = OccurrenceActions.markOccurrenceSnoozed(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        responses = OccurrenceActions.markOccurrenceSnoozed(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         OccurrenceResponse occurrence = responses.stream()
             .flatMap(cr -> cr.getEvents().stream())
@@ -100,9 +100,9 @@ public class MarkOccurrenceSnoozedTest extends BackEndTest {
     }
 
     private static void markDoneSnoozed(UUID accessTokenId, OccurrenceResponse occurrenceResponse, ReferenceDate referenceDate) {
-        OccurrenceActions.markOccurrenceDone(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        OccurrenceActions.markOccurrenceDone(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
-        Response markDoneSnoozedResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
+        Response markDoneSnoozedResponse = OccurrenceActions.getMarkOccurrenceSnoozedResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), referenceDate);
 
         ResponseValidator.verifyErrorResponse(markDoneSnoozedResponse, 409, ErrorCode.INVALID_STATUS);
     }

@@ -17,16 +17,16 @@ public class MigrationTasksRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel"})
     public void migrationTasksRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getGetMigrationTasksResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getTriggerTaskResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getDeleteTaskResponse(accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getGetMigrationTasksResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getDeleteTaskResponse(getServerPort(), accessTokenId, ""));
     }
 
     @DataProvider(parallel = true)

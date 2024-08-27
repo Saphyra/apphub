@@ -22,17 +22,18 @@ public class FriendshipCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void friendshipCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        Integer serverPort = getServerPort();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData);
 
         RegistrationParameters friendUserData = RegistrationParameters.validParameters();
-        UUID friendUserAccessTokenId = IndexPageActions.registerAndLogin(friendUserData);
+        UUID friendUserAccessTokenId = IndexPageActions.registerAndLogin(serverPort, friendUserData);
         UUID friendUserId = DatabaseUtil.getUserIdByEmail(friendUserData.getEmail());
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(testUserData);
+        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(serverPort, testUserData);
 
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, friendUserId);
-        FriendshipResponse friendshipResponse = FriendRequestActions.acceptFriendRequest(friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(serverPort, accessTokenId, friendUserId);
+        FriendshipResponse friendshipResponse = FriendRequestActions.acceptFriendRequest(serverPort, friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
         queryBySender(accessTokenId, friendUserData, friendshipResponse);
         queryByReceiver(friendUserAccessTokenId, friendshipResponse);
@@ -43,7 +44,7 @@ public class FriendshipCrudTest extends BackEndTest {
     }
 
     private static void queryBySender(UUID accessTokenId, RegistrationParameters friendUserData, FriendshipResponse friendshipResponse) {
-        List<FriendshipResponse> friendshipsOfSender = FriendshipActions.getFriendships(accessTokenId);
+        List<FriendshipResponse> friendshipsOfSender = FriendshipActions.getFriendships(getServerPort(), accessTokenId);
 
         assertThat(friendshipsOfSender).hasSize(1);
         assertThat(friendshipsOfSender.get(0).getFriendshipId()).isEqualTo(friendshipResponse.getFriendshipId());
@@ -52,39 +53,39 @@ public class FriendshipCrudTest extends BackEndTest {
     }
 
     private static void queryByReceiver(UUID friendUserAccessTokenId, FriendshipResponse friendshipResponse) {
-        List<FriendshipResponse> friendshipsOfReceiver = FriendshipActions.getFriendships(friendUserAccessTokenId);
+        List<FriendshipResponse> friendshipsOfReceiver = FriendshipActions.getFriendships(getServerPort(), friendUserAccessTokenId);
 
         assertThat(friendshipsOfReceiver).containsExactly(friendshipResponse);
     }
 
     private static void delete_notFound(UUID accessTokenId) {
-        Response delete_notFoundResponse = FriendshipActions.getDeleteFriendshipResponse(accessTokenId, UUID.randomUUID());
+        Response delete_notFoundResponse = FriendshipActions.getDeleteFriendshipResponse(getServerPort(), accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(delete_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void delete_forbiddenOperation(UUID testUserAccessTokenId, FriendshipResponse friendshipResponse) {
-        Response delete_forbiddenOperationResponse = FriendshipActions.getDeleteFriendshipResponse(testUserAccessTokenId, friendshipResponse.getFriendshipId());
+        Response delete_forbiddenOperationResponse = FriendshipActions.getDeleteFriendshipResponse(getServerPort(), testUserAccessTokenId, friendshipResponse.getFriendshipId());
 
         ResponseValidator.verifyForbiddenOperation(delete_forbiddenOperationResponse);
     }
 
     private static void deleteBySender(UUID accessTokenId, UUID friendUserAccessTokenId, FriendshipResponse friendshipResponse) {
-        FriendshipActions.deleteFriendship(accessTokenId, friendshipResponse.getFriendshipId());
+        FriendshipActions.deleteFriendship(getServerPort(), accessTokenId, friendshipResponse.getFriendshipId());
 
-        assertThat(FriendshipActions.getFriendships(accessTokenId)).isEmpty();
-        assertThat(FriendshipActions.getFriendships(friendUserAccessTokenId)).isEmpty();
+        assertThat(FriendshipActions.getFriendships(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendshipActions.getFriendships(getServerPort(), friendUserAccessTokenId)).isEmpty();
     }
 
     private static void deleteByReceiver(UUID accessTokenId, UUID friendUserAccessTokenId, UUID friendUserId) {
         FriendRequestResponse friendRequestResponse;
         FriendshipResponse friendshipResponse;
-        friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, friendUserId);
-        friendshipResponse = FriendRequestActions.acceptFriendRequest(friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, friendUserId);
+        friendshipResponse = FriendRequestActions.acceptFriendRequest(getServerPort(), friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        FriendshipActions.deleteFriendship(friendUserAccessTokenId, friendshipResponse.getFriendshipId());
+        FriendshipActions.deleteFriendship(getServerPort(), friendUserAccessTokenId, friendshipResponse.getFriendshipId());
 
-        assertThat(FriendshipActions.getFriendships(accessTokenId)).isEmpty();
-        assertThat(FriendshipActions.getFriendships(friendUserAccessTokenId)).isEmpty();
+        assertThat(FriendshipActions.getFriendships(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendshipActions.getFriendships(getServerPort(), friendUserAccessTokenId)).isEmpty();
     }
 }

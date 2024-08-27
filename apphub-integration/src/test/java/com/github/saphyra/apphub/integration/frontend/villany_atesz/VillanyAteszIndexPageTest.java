@@ -33,7 +33,7 @@ public class VillanyAteszIndexPageTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void totalValue() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -41,7 +41,7 @@ public class VillanyAteszIndexPageTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, "");
         VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME_1, "", "", IN_CAR_1, IN_STORAGE_1, PRICE_1);
@@ -55,7 +55,7 @@ public class VillanyAteszIndexPageTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void itemsMarkedForAcquisition() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -63,7 +63,7 @@ public class VillanyAteszIndexPageTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, "");
         VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME_1, "", "", IN_CAR_1, IN_STORAGE_1, PRICE_1);

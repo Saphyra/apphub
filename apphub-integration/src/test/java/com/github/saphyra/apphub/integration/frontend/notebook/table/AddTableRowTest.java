@@ -31,14 +31,14 @@ public class AddTableRowTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void addRowsToTable() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST_TABLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST_TABLE);
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
             .get(0)

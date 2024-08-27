@@ -23,14 +23,14 @@ public class FriendRequestCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void friendRequestCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters friendUserData = RegistrationParameters.validParameters();
-        UUID friendUserAccessTokenId = IndexPageActions.registerAndLogin(friendUserData);
+        UUID friendUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendUserData);
         UUID friendUserId = DatabaseUtil.getUserIdByEmail(friendUserData.getEmail());
 
         RegistrationParameters blockedUserData = RegistrationParameters.validParameters();
-        UUID blockedUserAccessTokenId = IndexPageActions.registerAndLogin(blockedUserData);
+        UUID blockedUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
         UUID blockedUserId = DatabaseUtil.getUserIdByEmail(blockedUserData.getEmail());
 
         create_userNotFound(accessTokenId);
@@ -50,21 +50,21 @@ public class FriendRequestCrudTest extends BackEndTest {
     }
 
     private static void create_userNotFound(UUID accessTokenId) {
-        Response create_userNotFoundResponse = FriendRequestActions.getCreateFriendRequestResponse(accessTokenId, UUID.randomUUID());
+        Response create_userNotFoundResponse = FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(create_userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
     }
 
     private static void create_blocked(UUID accessTokenId, UUID blockedUserId) {
-        BlacklistActions.createBlacklist(accessTokenId, blockedUserId);
+        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, blockedUserId);
 
-        Response create_blockedResponse = FriendRequestActions.getCreateFriendRequestResponse(accessTokenId, blockedUserId);
+        Response create_blockedResponse = FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, blockedUserId);
 
         ResponseValidator.verifyForbiddenOperation(create_blockedResponse);
     }
 
     private static FriendRequestResponse create(UUID accessTokenId, RegistrationParameters friendUserData, UUID friendUserId) {
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, friendUserId);
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, friendUserId);
 
         assertThat(friendRequestResponse.getUsername()).isEqualTo(friendUserData.getUsername());
         assertThat(friendRequestResponse.getEmail()).isEqualTo(friendUserData.getEmail());
@@ -72,19 +72,19 @@ public class FriendRequestCrudTest extends BackEndTest {
     }
 
     private static void create_alreadyExists(UUID accessTokenId, UUID friendUserId) {
-        Response create_alreadyExistsResponse = FriendRequestActions.getCreateFriendRequestResponse(accessTokenId, friendUserId);
+        Response create_alreadyExistsResponse = FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, friendUserId);
 
         ResponseValidator.verifyErrorResponse(create_alreadyExistsResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
     private static void query_sent(UUID accessTokenId, FriendRequestResponse friendRequestResponse) {
-        List<FriendRequestResponse> sentFriendRequests = FriendRequestActions.getSentFriendRequests(accessTokenId);
+        List<FriendRequestResponse> sentFriendRequests = FriendRequestActions.getSentFriendRequests(getServerPort(), accessTokenId);
 
         assertThat(sentFriendRequests).containsExactly(friendRequestResponse);
     }
 
     private static void query_received(RegistrationParameters userData, UUID friendUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        List<FriendRequestResponse> receivedFriendRequests = FriendRequestActions.getReceivedFriendRequests(friendUserAccessTokenId);
+        List<FriendRequestResponse> receivedFriendRequests = FriendRequestActions.getReceivedFriendRequests(getServerPort(), friendUserAccessTokenId);
 
         FriendRequestResponse expected = FriendRequestResponse.builder()
             .friendRequestId(friendRequestResponse.getFriendRequestId())
@@ -95,65 +95,65 @@ public class FriendRequestCrudTest extends BackEndTest {
     }
 
     private static void delete_notFound(UUID accessTokenId) {
-        Response delete_notFoundResponse = FriendRequestActions.getDeleteFriendRequestResponse(accessTokenId, UUID.randomUUID());
+        Response delete_notFoundResponse = FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(delete_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void delete_forbiddenOperation(UUID blockedUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        Response delete_forbiddenOperationResponse = FriendRequestActions.getDeleteFriendRequestResponse(blockedUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        Response delete_forbiddenOperationResponse = FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), blockedUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
         ResponseValidator.verifyForbiddenOperation(delete_forbiddenOperationResponse);
     }
 
     private static void deleteBySender(UUID accessTokenId, UUID friendUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        FriendRequestActions.deleteFriendRequest(accessTokenId, friendRequestResponse.getFriendRequestId());
+        FriendRequestActions.deleteFriendRequest(getServerPort(), accessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.getSentFriendRequests(accessTokenId)).isEmpty();
-        assertThat(FriendRequestActions.getReceivedFriendRequests(friendUserAccessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getReceivedFriendRequests(getServerPort(), friendUserAccessTokenId)).isEmpty();
     }
 
     private static void deleteByReceiver(UUID accessTokenId, UUID friendUserAccessTokenId, UUID friendUserId) {
         FriendRequestResponse friendRequestResponse;
-        friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, friendUserId);
+        friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, friendUserId);
 
-        FriendRequestActions.deleteFriendRequest(friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        FriendRequestActions.deleteFriendRequest(getServerPort(), friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.getSentFriendRequests(accessTokenId)).isEmpty();
-        assertThat(FriendRequestActions.getReceivedFriendRequests(friendUserAccessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getReceivedFriendRequests(getServerPort(), friendUserAccessTokenId)).isEmpty();
     }
 
     private static FriendRequestResponse accept_notFound(UUID accessTokenId, UUID friendUserAccessTokenId, UUID friendUserId) {
         FriendRequestResponse friendRequestResponse;
-        friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, friendUserId);
+        friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, friendUserId);
 
-        Response accept_notFoundResponse = FriendRequestActions.getAcceptFriendRequestResponse(friendUserAccessTokenId, UUID.randomUUID());
+        Response accept_notFoundResponse = FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), friendUserAccessTokenId, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(accept_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
         return friendRequestResponse;
     }
 
     private static void accept_forbiddenOperation(UUID blockedUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        Response accept_forbiddenOperationResponse = FriendRequestActions.getAcceptFriendRequestResponse(blockedUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        Response accept_forbiddenOperationResponse = FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), blockedUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
         ResponseValidator.verifyForbiddenOperation(accept_forbiddenOperationResponse);
     }
 
     private static void accept(RegistrationParameters userData, UUID accessTokenId, UUID friendUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        FriendshipResponse friendshipResponse = FriendRequestActions.acceptFriendRequest(friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        FriendshipResponse friendshipResponse = FriendRequestActions.acceptFriendRequest(getServerPort(), friendUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
         assertThat(friendshipResponse.getUsername()).isEqualTo(userData.getUsername());
         assertThat(friendshipResponse.getEmail()).isEqualTo(userData.getEmail());
 
-        assertThat(FriendRequestActions.getSentFriendRequests(accessTokenId)).isEmpty();
-        assertThat(FriendRequestActions.getReceivedFriendRequests(friendUserAccessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getReceivedFriendRequests(getServerPort(), friendUserAccessTokenId)).isEmpty();
 
-        assertThat(FriendshipActions.getFriendships(accessTokenId)).hasSize(1);
-        assertThat(FriendshipActions.getFriendships(friendUserAccessTokenId)).hasSize(1);
+        assertThat(FriendshipActions.getFriendships(getServerPort(), accessTokenId)).hasSize(1);
+        assertThat(FriendshipActions.getFriendships(getServerPort(), friendUserAccessTokenId)).hasSize(1);
     }
 
     private static void create_alreadyFriends(UUID accessTokenId, UUID friendUserId) {
-        Response create_alreadyFriendsResponse = FriendRequestActions.getCreateFriendRequestResponse(accessTokenId, friendUserId);
+        Response create_alreadyFriendsResponse = FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, friendUserId);
 
         ResponseValidator.verifyErrorResponse(create_alreadyFriendsResponse, 409, ErrorCode.ALREADY_EXISTS);
     }

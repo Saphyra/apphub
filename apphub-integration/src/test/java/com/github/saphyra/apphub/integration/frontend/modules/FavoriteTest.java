@@ -20,7 +20,7 @@ public class FavoriteTest extends SeleniumTest {
     @Test(groups = {"fe", "modules"})
     public void addToFavorites() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 

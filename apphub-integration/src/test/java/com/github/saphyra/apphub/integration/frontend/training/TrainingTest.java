@@ -33,11 +33,11 @@ public class TrainingTest extends SeleniumTest {
     @Test(dataProvider = "bookDataProvider", groups = {"fe", "training"})
     public void bookStepThroughTest(ModuleLocation moduleLocation) {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, moduleLocation);
+        ModulesPageActions.openModule(getServerPort(), driver, moduleLocation);
 
         List<String> chapters = TrainingPageActions.getMenuItems(driver)
             .stream()

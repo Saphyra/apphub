@@ -38,12 +38,12 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
+        RegistrationUtils.registerUsers(getServerPort(), List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        ModulesPageActions.openModule(getServerPort(), adminDriver, ModuleLocation.BAN);
 
         openUser(adminDriver, testUserData);
 

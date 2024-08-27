@@ -27,7 +27,7 @@ public class AddItemToChecklistTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void addItemToChecklist() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateChecklistRequest createRequest = CreateChecklistRequest.builder()
             .title(TITLE)
@@ -37,7 +37,7 @@ public class AddItemToChecklistTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        UUID listItemId = ChecklistActions.createChecklist(accessTokenId, createRequest);
+        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessTokenId, createRequest);
 
         nullContent(accessTokenId, listItemId);
         nullIndex(accessTokenId, listItemId);
@@ -50,7 +50,7 @@ public class AddItemToChecklistTest extends BackEndTest {
             .index(-1)
             .build();
 
-        Response response = ChecklistActions.getAddChecklistItemResponse(accessTokenId, listItemId, request);
+        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessTokenId, listItemId, request);
 
         ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
     }
@@ -61,7 +61,7 @@ public class AddItemToChecklistTest extends BackEndTest {
             .index(null)
             .build();
 
-        Response response = ChecklistActions.getAddChecklistItemResponse(accessTokenId, listItemId, request);
+        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessTokenId, listItemId, request);
 
         ResponseValidator.verifyInvalidParam(response, "index", "must not be null");
     }
@@ -72,9 +72,9 @@ public class AddItemToChecklistTest extends BackEndTest {
             .index(-1)
             .build();
 
-        ChecklistActions.addChecklistItem(accessTokenId, listItemId, request);
+        ChecklistActions.addChecklistItem(getServerPort(), accessTokenId, listItemId, request);
 
-        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(accessTokenId, listItemId);
+        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
 
         assertThat(checklistResponse.getItems()).hasSize(2);
         List<ChecklistItemModel> items = checklistResponse.getItems()

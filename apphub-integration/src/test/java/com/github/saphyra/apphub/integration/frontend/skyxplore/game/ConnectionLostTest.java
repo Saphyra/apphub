@@ -39,7 +39,7 @@ public class ConnectionLostTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver1);
 
-        Navigation.toIndexPage(driver2);
+        Navigation.toIndexPage(getServerPort(), driver2);
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPlayerDisconnectedDialogOpened(driver1))
@@ -47,7 +47,7 @@ public class ConnectionLostTest extends SeleniumTest {
 
         assertThat(SkyXploreGameActions.isPaused(driver1)).isTrue();
 
-        Navigation.toUrl(driver2, UrlFactory.create(Endpoints.SKYXPLORE_GAME_PAGE));
+        Navigation.toUrl(driver2, UrlFactory.create(getServerPort(), Endpoints.SKYXPLORE_GAME_PAGE));
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPlayerReconnectedDialogOpened(driver1))
@@ -74,7 +74,7 @@ public class ConnectionLostTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver1);
 
-        Navigation.toIndexPage(driver1);
+        Navigation.toIndexPage(getServerPort(), driver1);
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPausedNotHost(driver2))
@@ -82,14 +82,16 @@ public class ConnectionLostTest extends SeleniumTest {
     }
 
     private static void createGame(WebDriver driver1, WebDriver driver2, RegistrationParameters userData1, RegistrationParameters userData2) {
+        Integer serverPort = getServerPort();
+
         BiWrapper<WebDriver, RegistrationParameters> player1 = new BiWrapper<>(driver1, userData1);
         BiWrapper<WebDriver, RegistrationParameters> player2 = new BiWrapper<>(driver2, userData2);
         Stream.of(player1, player2)
             .parallel()
             .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
-                Navigation.toIndexPage(biWrapper.getEntity1());
+                Navigation.toIndexPage(serverPort, biWrapper.getEntity1());
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
-                ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
+                ModulesPageActions.openModule(serverPort, biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
                 AwaitilityWrapper.createDefault()
                     .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))

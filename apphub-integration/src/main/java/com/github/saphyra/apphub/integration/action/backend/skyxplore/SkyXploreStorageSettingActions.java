@@ -13,55 +13,55 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreStorageSettingActions {
-    public static List<StorageSettingModel> createStorageSetting(UUID accessTokenId, UUID planetId, StorageSettingModel model) {
-        Response response = getCreateStorageSettingResponse(accessTokenId, planetId, model);
+    public static List<StorageSettingModel> createStorageSetting(int serverPort, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+        Response response = getCreateStorageSettingResponse(serverPort, accessTokenId, planetId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
-    public static Response getCreateStorageSettingResponse(UUID accessTokenId, UUID planetId, StorageSettingModel model) {
+    public static Response getCreateStorageSettingResponse(int serverPort, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(model)
-            .put(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_CREATE_STORAGE_SETTING, "planetId", planetId));
+            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_CREATE_STORAGE_SETTING, "planetId", planetId));
     }
 
-    public static List<StorageSettingModel> getStorageSettings(UUID accessTokenId, UUID planetId) {
-        Response response = getStorageSettingsResponse(accessTokenId, planetId);
+    public static List<StorageSettingModel> getStorageSettings(int serverPort, UUID accessTokenId, UUID planetId) {
+        Response response = getStorageSettingsResponse(serverPort, accessTokenId, planetId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
-    public static Response getStorageSettingsResponse(UUID accessTokenId, UUID planetId) {
+    public static Response getStorageSettingsResponse(int serverPort, UUID accessTokenId, UUID planetId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS, "planetId", planetId));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS, "planetId", planetId));
     }
 
-    public static void deleteStorageSetting(UUID accessTokenId, UUID storageSettingId) {
-        Response response = getDeleteStorageSettingResponse(accessTokenId, storageSettingId);
+    public static void deleteStorageSetting(int serverPort, UUID accessTokenId, UUID storageSettingId) {
+        Response response = getDeleteStorageSettingResponse(serverPort, accessTokenId, storageSettingId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteStorageSettingResponse(UUID accessTokenId, UUID storageSettingId) {
+    public static Response getDeleteStorageSettingResponse(int serverPort, UUID accessTokenId, UUID storageSettingId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, "storageSettingId", storageSettingId));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, "storageSettingId", storageSettingId));
     }
 
-    public static List<StorageSettingModel> editStorageSetting(UUID accessTokenId, StorageSettingModel model) {
-        Response response = getEditStorageSettingResponse(accessTokenId, model);
+    public static List<StorageSettingModel> editStorageSetting(int serverPort, UUID accessTokenId, StorageSettingModel model) {
+        Response response = getEditStorageSettingResponse(serverPort, accessTokenId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StorageSettingModel[].class));
     }
 
-    public static Response getEditStorageSettingResponse(UUID accessTokenId, StorageSettingModel model) {
+    public static Response getEditStorageSettingResponse(int serverPort, UUID accessTokenId, StorageSettingModel model) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(model)
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING));
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING));
     }
 }

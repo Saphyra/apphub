@@ -22,11 +22,11 @@ public class Base64Test extends SeleniumTest {
     @Test(groups = {"fe", "utils"})
     public void encodeDecodeBase64() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.UTILS_BASE_64);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.UTILS_BASE_64);
 
         encode(driver);
         decode(driver);

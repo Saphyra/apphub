@@ -26,9 +26,9 @@ import static com.github.saphyra.apphub.integration.core.TestBase.OBJECT_MAPPER_
 import static java.util.Objects.isNull;
 
 public class NotebookUtils {
-    public static void newCategory(WebDriver driver, String title, String... parents) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CATEGORY);
+    public static void newCategory(int serverPort, WebDriver driver, String title, String... parents) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.CATEGORY);
 
         selectParent(driver, parents);
 
@@ -48,9 +48,9 @@ public class NotebookUtils {
         }
     }
 
-    public static void newLink(WebDriver driver, String title, String url) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.LINK);
+    public static void newLink(int serverPort, WebDriver driver, String title, String url) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.LINK);
 
         NewLinkActions.fillTitle(driver, title);
         NewLinkActions.fillUrl(driver, url);
@@ -65,9 +65,9 @@ public class NotebookUtils {
             .assertTrue("Notebook page is not opened");
     }
 
-    public static void newText(WebDriver driver, String title, String content, String... parents) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TEXT);
+    public static void newText(int serverPort, WebDriver driver, String title, String content, String... parents) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.TEXT);
 
         NewTextActions.fillTitle(driver, title);
         NewTextActions.fillContent(driver, content);
@@ -77,9 +77,9 @@ public class NotebookUtils {
         waitForNotebookPageOpened(driver);
     }
 
-    public static void newChecklist(WebDriver driver, String title, List<BiWrapper<String, Boolean>> items, String... parents) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST);
+    public static void newChecklist(int serverPort, WebDriver driver, String title, List<BiWrapper<String, Boolean>> items, String... parents) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.CHECKLIST);
 
         NewChecklistActions.fillTitle(driver, title);
 
@@ -107,9 +107,9 @@ public class NotebookUtils {
         waitForNotebookPageOpened(driver);
     }
 
-    public static void newTable(WebDriver driver, String title, List<String> tableHeads, List<List<String>> columns) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TABLE);
+    public static void newTable(int serverPort, WebDriver driver, String title, List<String> tableHeads, List<List<String>> columns) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.TABLE);
 
         NewTableActions.fillTitle(driver, title);
 
@@ -146,9 +146,9 @@ public class NotebookUtils {
         waitForNotebookPageOpened(driver);
     }
 
-    public static void newChecklistTable(WebDriver driver, String title, List<String> tableHeads, List<BiWrapper<Boolean, List<String>>> rows) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST_TABLE);
+    public static void newChecklistTable(int serverPort, WebDriver driver, String title, List<String> tableHeads, List<BiWrapper<Boolean, List<String>>> rows) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.CHECKLIST_TABLE);
 
         NewTableActions.fillTitle(driver, title);
 
@@ -209,9 +209,9 @@ public class NotebookUtils {
         }
     }
 
-    public static void newOnlyTitle(WebDriver driver, String title) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.ONLY_TITLE);
+    public static void newOnlyTitle(int serverPort, WebDriver driver, String title) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.ONLY_TITLE);
 
         NewOnlyTitleActions.fillTitle(driver, title);
         NewOnlyTitleActions.submit(driver);
@@ -219,9 +219,9 @@ public class NotebookUtils {
         waitForNotebookPageOpened(driver);
     }
 
-    public static void newCustomTable(WebDriver driver, String title, List<String> tableHeads, List<List<BiWrapper<ColumnType, Object>>> rows) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CUSTOM_TABLE);
+    public static void newCustomTable(int serverPort, WebDriver driver, String title, List<String> tableHeads, List<List<BiWrapper<ColumnType, Object>>> rows) {
+        NotebookActions.newListItem(serverPort, driver);
+        NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.CUSTOM_TABLE);
 
         NewTableActions.fillTitle(driver, title);
 

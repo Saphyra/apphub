@@ -36,18 +36,18 @@ public class ApphubWsClient extends WebSocketClient {
     private volatile boolean opened;
     private final Object name;
 
-    private ApphubWsClient(String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
-        this(TestConfiguration.DEFAULT_LANGUAGE, endpoint, accessTokenId, name);
+    private ApphubWsClient(int serverPort, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
+        this(serverPort, TestConfiguration.DEFAULT_LANGUAGE, endpoint, accessTokenId, name);
     }
 
-    private ApphubWsClient(Language language, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
+    private ApphubWsClient(int serverPort, Language language, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
         super(
-            new URI(String.format("ws://localhost:%s%s", TestConfiguration.SERVER_PORT, endpoint)),
+            new URI(String.format("ws://localhost:%s%s", serverPort, endpoint)),
             new Draft_6455(),
             CollectionUtils.toMap(
                 new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessTokenId + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),
-                new BiWrapper<>("Host", "localhost:" + TestConfiguration.SERVER_PORT),
-                new BiWrapper<>("Origin", "http://localhost:" + TestConfiguration.SERVER_PORT)
+                new BiWrapper<>("Host", "localhost:" + serverPort),
+                new BiWrapper<>("Origin", "http://localhost:" + serverPort)
             ),
             10000
         );
@@ -61,41 +61,41 @@ public class ApphubWsClient extends WebSocketClient {
         this.name = name;
     }
 
-    public static ApphubWsClient createAdminPanelMonitoring(Language language, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createAdminPanelMonitoring(int serverPort, Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
+            return new ApphubWsClient(serverPort, language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreMainMenu(UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreMainMenu(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
+            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreLobby(UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreLobby(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
+            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreGameMain(UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreGameMain(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
+            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
     @SneakyThrows
-    public static ApphubWsClient createSkyXploreLobbyInvitation(UUID accessTokenId, Object name) {
-        return new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
+    public static ApphubWsClient createSkyXploreLobbyInvitation(int serverPort, UUID accessTokenId, Object name) {
+        return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
     }
 
     public static List<WebSocketClient> getClients() {
@@ -103,8 +103,8 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     @SneakyThrows
-    public static ApphubWsClient createSkyXploreGamePlanet(UUID accessTokenId, UUID planetId) {
-        ApphubWsClient client = new ApphubWsClient(Endpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
+    public static ApphubWsClient createSkyXploreGamePlanet(int serverPort, UUID accessTokenId, UUID planetId) {
+        ApphubWsClient client = new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED)

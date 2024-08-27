@@ -14,17 +14,17 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarSearchActions {
-    public static List<EventSearchResponse> search(UUID accessTokenId, String query) {
-        Response response = getSearchResponse(accessTokenId, query);
+    public static List<EventSearchResponse> search(int serverPort, UUID accessTokenId, String query) {
+        Response response = getSearchResponse(serverPort, accessTokenId, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventSearchResponse[].class));
     }
 
-    public static Response getSearchResponse(UUID accessTokenId, String query) {
+    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(Endpoints.CALENDAR_SEARCH));
+            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_SEARCH));
     }
 }

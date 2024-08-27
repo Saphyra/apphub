@@ -31,14 +31,14 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void getChildrenOfCategory() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         invalidType(accessTokenId);
         get(accessTokenId);
     }
 
     private static void invalidType(UUID accessTokenId) {
-        Response response = CategoryActions.getChildrenOfCategoryResponse(accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
+        Response response = CategoryActions.getChildrenOfCategoryResponse(getServerPort(), accessTokenId, null, Arrays.asList(ListItemType.CATEGORY.name(), "asd"));
         ResponseValidator.verifyInvalidParam(response, "type", "contains invalid argument");
     }
 
@@ -46,35 +46,35 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
         CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();
-        UUID parentId = CategoryActions.createCategory(accessTokenId, parentRequest);
+        UUID parentId = CategoryActions.createCategory(getServerPort(), accessTokenId, parentRequest);
 
         CreateCategoryRequest childCategoryRequest = CreateCategoryRequest.builder()
             .title(TITLE_2)
             .parent(parentId)
             .build();
-        UUID childCategoryId = CategoryActions.createCategory(accessTokenId, childCategoryRequest);
+        UUID childCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, childCategoryRequest);
 
         CreateCategoryRequest excludedCategoryRequest = CreateCategoryRequest.builder()
             .title(TITLE_5)
             .parent(parentId)
             .build();
-        UUID excludedCategoryId = CategoryActions.createCategory(accessTokenId, excludedCategoryRequest);
+        UUID excludedCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, excludedCategoryRequest);
 
         CreateTextRequest childTextRequest = CreateTextRequest.builder()
             .title(TITLE_3)
             .content("content")
             .parent(parentId)
             .build();
-        UUID childTextId = TextActions.createText(accessTokenId, childTextRequest);
+        UUID childTextId = TextActions.createText(getServerPort(), accessTokenId, childTextRequest);
 
         CreateLinkRequest createLinkRequest = CreateLinkRequest.builder()
             .title(TITLE_4)
             .parent(parentId)
             .url("asd")
             .build();
-        LinkActions.createLink(accessTokenId, createLinkRequest);
+        LinkActions.createLink(getServerPort(), accessTokenId, createLinkRequest);
 
-        ChildrenOfCategoryResponse result = CategoryActions.getChildrenOfCategory(accessTokenId, parentId, Arrays.asList(ListItemType.CATEGORY.name(), ListItemType.TEXT.name()), excludedCategoryId);
+        ChildrenOfCategoryResponse result = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId, Arrays.asList(ListItemType.CATEGORY.name(), ListItemType.TEXT.name()), excludedCategoryId);
 
         NotebookView categoryView = NotebookView.builder()
             .id(childCategoryId)

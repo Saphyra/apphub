@@ -39,13 +39,13 @@ public class BuildingCrudTest extends BackEndTest {
     public void buildingCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(getServerPort(), new Player(accessTokenId, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
 
         //Create and cancel construction
@@ -56,7 +56,7 @@ public class BuildingCrudTest extends BackEndTest {
         cancel(accessTokenId, planetId, emptyDesertSurfaceId, modifiedSurface);
 
         //Finish construction
-        UUID emptyForestSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
+        UUID emptyForestSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
         finishConstruction(accessTokenId, planetId, emptyForestSurfaceId);
 
         //Upgrade building
@@ -79,9 +79,9 @@ public class BuildingCrudTest extends BackEndTest {
 
     //Create and cancel construction
     private static UUID invalidDataId(UUID accessTokenId, UUID planetId) {
-        UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID emptyDesertSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        Response invalidDataIdResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(accessTokenId, planetId, emptyDesertSurfaceId, "asd");
+        Response invalidDataIdResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(getServerPort(), accessTokenId, planetId, emptyDesertSurfaceId, "asd");
 
         ResponseValidator.verifyInvalidParam(invalidDataIdResponse, "dataId", "invalid value");
         return emptyDesertSurfaceId;
@@ -90,23 +90,23 @@ public class BuildingCrudTest extends BackEndTest {
     private void buildingAlreadyExists(UUID accessTokenId, UUID planetId) {
         UUID occupiedSurfaceId = findOccupiedMilitary(accessTokenId, planetId);
 
-        Response buildingAlreadyExistsResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(accessTokenId, planetId, occupiedSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        Response buildingAlreadyExistsResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(getServerPort(), accessTokenId, planetId, occupiedSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         ResponseValidator.verifyErrorResponse(buildingAlreadyExistsResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
     private static void incompatibleSurfaceType(UUID accessTokenId, UUID planetId) {
-        UUID emptyLakeSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
+        UUID emptyLakeSurfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
 
-        Response incompatibleSurfaceTypeResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(accessTokenId, planetId, emptyLakeSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        Response incompatibleSurfaceTypeResponse = SkyXploreBuildingActions.getConstructNewBuildingResponse(getServerPort(), accessTokenId, planetId, emptyLakeSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
         ResponseValidator.verifyForbiddenOperation(incompatibleSurfaceTypeResponse);
     }
 
     private SurfaceResponse build(UUID accessTokenId, UUID planetId, UUID emptyDesertSurfaceId) {
-        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        SkyXploreBuildingActions.constructNewBuilding(getServerPort(), accessTokenId, planetId, emptyDesertSurfaceId, Constants.DATA_ID_SOLAR_PANEL);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         SurfaceResponse modifiedSurface = findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), emptyDesertSurfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -115,7 +115,7 @@ public class BuildingCrudTest extends BackEndTest {
         assertThat(modifiedSurface.getBuilding().getLevel()).isEqualTo(0);
         assertThat(modifiedSurface.getBuilding().getConstruction().getCurrentWorkPoints()).isEqualTo(0);
 
-        PlanetStorageResponse storageResponse = SkyXplorePlanetActions.getStorageOverview(accessTokenId, planetId);
+        PlanetStorageResponse storageResponse = SkyXplorePlanetActions.getStorageOverview(getServerPort(), accessTokenId, planetId);
 
         assertThat(storageResponse.getEnergy().getReservedStorageAmount()).isEqualTo(1);
         assertThat(storageResponse.getBulk().getReservedStorageAmount()).isEqualTo(1);
@@ -139,16 +139,16 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private void cancel(UUID accessTokenId, UUID planetId, UUID emptyDesertSurfaceId, SurfaceResponse modifiedSurface) {
-        SkyXploreBuildingActions.cancelConstruction(accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
+        SkyXploreBuildingActions.cancelConstruction(getServerPort(), accessTokenId, planetId, modifiedSurface.getBuilding().getBuildingId());
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         modifiedSurface = findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), emptyDesertSurfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
 
         assertThat(modifiedSurface.getBuilding()).isNull();
 
-        PlanetStorageResponse storageResponse = SkyXplorePlanetActions.getStorageOverview(accessTokenId, planetId);
+        PlanetStorageResponse storageResponse = SkyXplorePlanetActions.getStorageOverview(getServerPort(), accessTokenId, planetId);
 
         assertThat(storageResponse.getEnergy().getReservedStorageAmount()).isEqualTo(0);
         assertThat(storageResponse.getBulk().getReservedStorageAmount()).isEqualTo(0);
@@ -162,10 +162,11 @@ public class BuildingCrudTest extends BackEndTest {
 
     //Finish construction
     private void finishConstruction(UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        Integer serverPort = getServerPort();
+        SkyXploreBuildingActions.constructNewBuilding(serverPort, accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> findSurfaceBySurfaceId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), surfaceId)
+            .until(() -> findSurfaceBySurfaceId(SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId), surfaceId)
                 .flatMap(surfaceResponse -> Optional.ofNullable(surfaceResponse.getBuilding()))
                 .isPresent()
             )
@@ -173,10 +174,10 @@ public class BuildingCrudTest extends BackEndTest {
 
 
         //Resume game
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
 
         PlanetOverviewResponse planetOverviewResponse = AwaitilityWrapper.getWithWait(
-                () -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId),
+                () -> SkyXplorePlanetActions.getPlanetOverview(serverPort, accessTokenId, planetId),
                 por -> findSurfaceBySurfaceId(por.getSurfaces(), surfaceId)
                     .map(SurfaceResponse::getBuilding)
                     .filter(surfaceBuildingResponse -> isNull(surfaceBuildingResponse.getConstruction()))
@@ -191,22 +192,22 @@ public class BuildingCrudTest extends BackEndTest {
         PlanetBuildingDetailsValidator.verifyBuildingDetails(planetOverviewResponse.getBuildings(), Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP, 1, 1);
 
         //Pause game again
-        SkyXploreGameActions.setPaused(accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
     }
 
     //Upgrade building
     private void buildingAtMaxLevel(UUID accessTokenId, UUID planetId) {
         UUID maxLevelBuildingId = findBuildingIdByDataId(accessTokenId, planetId, Constants.DATA_ID_CAMP);
 
-        Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(accessTokenId, planetId, maxLevelBuildingId);
+        Response maxLevelResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(getServerPort(), accessTokenId, planetId, maxLevelBuildingId);
 
         ResponseValidator.verifyForbiddenOperation(maxLevelResponse);
     }
 
     private static void upgradeBuilding(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
-        SkyXploreBuildingActions.upgradeBuilding(accessTokenId, planetId, upgradableBuildingId);
+        SkyXploreBuildingActions.upgradeBuilding(getServerPort(), accessTokenId, planetId, upgradableBuildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         SurfaceResponse modifiedSurface = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), upgradableBuildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -233,15 +234,15 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private static void constructionAlreadyInProgress(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
-        Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(accessTokenId, planetId, upgradableBuildingId);
+        Response inProgressResponse = SkyXploreBuildingActions.getUpgradeBuildingResponse(getServerPort(), accessTokenId, planetId, upgradableBuildingId);
 
         ResponseValidator.verifyErrorResponse(inProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
     private void cancel(UUID accessTokenId, UUID planetId, UUID upgradableBuildingId) {
-        SkyXploreBuildingActions.cancelConstruction(accessTokenId, planetId, upgradableBuildingId);
+        SkyXploreBuildingActions.cancelConstruction(getServerPort(), accessTokenId, planetId, upgradableBuildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         SurfaceResponse modifiedSurface = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), upgradableBuildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -256,14 +257,14 @@ public class BuildingCrudTest extends BackEndTest {
     //Create and cancel deconstruction
     private void storageInUse(UUID accessTokenId, UUID planetId) {
         UUID buildingId = findBuildingIdByDataId(accessTokenId, planetId, Constants.DATA_ID_HEADQUARTERS);
-        Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(accessTokenId, planetId, buildingId);
+        Response response = SkyXploreBuildingActions.getDeconstructBuildingResponse(getServerPort(), accessTokenId, planetId, buildingId);
 
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.SKYXPLORE_STORAGE_USED);
     }
 
     private static void buildingUnderConstruction(UUID accessTokenId, UUID surfaceId, UUID planetId) {
-        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
-        UUID buildingId = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId)
+        SkyXploreBuildingActions.constructNewBuilding(getServerPort(), accessTokenId, planetId, surfaceId, Constants.DATA_ID_SOLAR_PANEL);
+        UUID buildingId = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId)
             .getSurfaces()
             .stream()
             .filter(surfaceResponse -> surfaceResponse.getSurfaceId().equals(surfaceId))
@@ -272,15 +273,15 @@ public class BuildingCrudTest extends BackEndTest {
             .getBuilding()
             .getBuildingId();
 
-        Response constructionInProgressResponse = SkyXploreBuildingActions.getDeconstructBuildingResponse(accessTokenId, planetId, buildingId);
+        Response constructionInProgressResponse = SkyXploreBuildingActions.getDeconstructBuildingResponse(getServerPort(), accessTokenId, planetId, buildingId);
 
         ResponseValidator.verifyForbiddenOperation(constructionInProgressResponse);
     }
 
     private static void deconstructBuilding(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.deconstructBuilding(getServerPort(), accessTokenId, planetId, buildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), buildingId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -303,9 +304,9 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private static void cancelDeconstruction(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        SkyXploreBuildingActions.cancelDeconstruction(accessTokenId, planetId, buildingId);
+        SkyXploreBuildingActions.cancelDeconstruction(getServerPort(), accessTokenId, planetId, buildingId);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
 
         SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceByBuildingId(planetOverviewResponse.getSurfaces(), buildingId)
             .orElseThrow(() -> new RuntimeException("SurfaceResponse not found"));
@@ -319,17 +320,18 @@ public class BuildingCrudTest extends BackEndTest {
 
     //Finish deconstruction
     private void finishDeconstruction(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        SkyXploreBuildingActions.deconstructBuilding(accessTokenId, planetId, buildingId);
+        Integer serverPort = getServerPort();
+        SkyXploreBuildingActions.deconstructBuilding(serverPort, accessTokenId, planetId, buildingId);
 
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
 
         AwaitilityWrapper.create(180, 5)
-            .until(() -> SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId), buildingId).isEmpty())
+            .until(() -> SkyXplorePlanetActions.findSurfaceByBuildingId(SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId), buildingId).isEmpty())
             .assertTrue("Building is not deconstructed.");
 
-        PlanetBuildingDetailsValidator.verifyBuildingDetails(SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planetId).getBuildings(), Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP, 0, 0);
+        PlanetBuildingDetailsValidator.verifyBuildingDetails(SkyXplorePlanetActions.getPlanetOverview(serverPort, accessTokenId, planetId).getBuildings(), Constants.SURFACE_TYPE_FOREST, Constants.DATA_ID_CAMP, 0, 0);
 
-        SkyXploreGameActions.setPaused(accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
     }
 
     //Helpers
@@ -342,7 +344,7 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private SurfaceResponse findSurfaceBySurfaceId(UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
             .filter(surfaceResponse -> surfaceResponse.getSurfaceId().equals(surfaceId))
             .findFirst()
@@ -350,7 +352,7 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private UUID findOccupiedMilitary(UUID accessTokenId, UUID planetId) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
             .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
             .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_MILITARY))
@@ -360,7 +362,7 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private SurfaceBuildingResponse findBuildingByBuildingId(UUID accessTokenId, UUID planetId, UUID buildingId) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
             .map(SurfaceResponse::getBuilding)
             .filter(building -> !isNull(building))
@@ -370,7 +372,7 @@ public class BuildingCrudTest extends BackEndTest {
     }
 
     private UUID findBuildingIdByDataId(UUID accessTokenId, UUID planetId, String dataId) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
             .map(SurfaceResponse::getBuilding)
             .filter(building -> !isNull(building))

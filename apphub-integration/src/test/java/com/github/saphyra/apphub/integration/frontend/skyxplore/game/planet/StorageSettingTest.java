@@ -29,10 +29,10 @@ public class StorageSettingTest extends SeleniumTest {
     public void storageSettingCrud() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
@@ -110,10 +110,10 @@ public class StorageSettingTest extends SeleniumTest {
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());

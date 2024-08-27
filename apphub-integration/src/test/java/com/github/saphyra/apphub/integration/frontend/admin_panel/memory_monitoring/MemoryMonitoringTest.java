@@ -24,13 +24,13 @@ public class MemoryMonitoringTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
     public void memoryMonitoring() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.MEMORY_MONITORING);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MEMORY_MONITORING);
 
         assertServicesLoaded(driver);
 

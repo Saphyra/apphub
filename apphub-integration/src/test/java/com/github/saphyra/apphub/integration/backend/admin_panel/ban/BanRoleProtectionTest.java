@@ -19,23 +19,23 @@ public class BanRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel"})
     public void banRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> BanActions.getBanResponse(accessTokenId, new BanRequest()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getRevokeBanResponse(accessTokenId, UUID.randomUUID(), userData.getPassword()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getGetBansResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getMarkForDeletionResponse(accessTokenId, UUID.randomUUID(), new MarkUserForDeletionRequest()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getUnmarkUserForDeletionResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getSearchResponse(accessTokenId, "asd"));
+        CommonUtils.verifyMissingRole(() -> BanActions.getBanResponse(getServerPort(), accessTokenId, new BanRequest()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getRevokeBanResponse(getServerPort(), accessTokenId, UUID.randomUUID(), userData.getPassword()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getGetBansResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new MarkUserForDeletionRequest()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getUnmarkUserForDeletionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getSearchResponse(getServerPort(), accessTokenId, "asd"));
     }
 
     @DataProvider(parallel = true)
-    public Object[][] roleProvider(){
+    public Object[][] roleProvider() {
         return new Object[][]{
             new Object[]{Constants.ROLE_ADMIN},
             new Object[]{Constants.ROLE_ACCESS}

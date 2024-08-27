@@ -17,18 +17,18 @@ public class FriendRequestRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community"})
     public void friendRequestRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSearchResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSentFriendRequestsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequeestsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getCreateFriendRequestResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getDeleteFriendRequestResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getAcceptFriendRequestResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSearchResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSentFriendRequestsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequeestsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

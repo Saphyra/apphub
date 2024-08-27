@@ -11,22 +11,24 @@ import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
 
+@Slf4j
 public class LoginTest extends SeleniumTest {
     private static final String INCORRECT_PASSWORD = "incorrect-password";
 
     @Test(groups = {"fe", "index"})
     public void login() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, registrationParameters);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
         emptyEmail(driver);
         emptyPassword(driver);
@@ -39,13 +41,13 @@ public class LoginTest extends SeleniumTest {
     @Test(groups = {"fe", "index"})
     public void loginWithUsername() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, registrationParameters);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
+        IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
@@ -53,28 +55,28 @@ public class LoginTest extends SeleniumTest {
     }
 
     private static void emptyEmail(WebDriver driver) {
-        IndexPageActions.submitLogin(driver, emptyEmail());
+        IndexPageActions.submitLogin(getServerPort(), driver, emptyEmail());
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void emptyPassword(WebDriver driver) {
-        IndexPageActions.submitLogin(driver, emptyPassword());
+        IndexPageActions.submitLogin(getServerPort(), driver, emptyPassword());
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void incorrectEmail(WebDriver driver, RegistrationParameters registrationParameters) {
-        IndexPageActions.submitLogin(driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
+        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static void incorrectPassword(WebDriver driver, RegistrationParameters registrationParameters) {
-        IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static LoginParameters successfulLogin(WebDriver driver, RegistrationParameters registrationParameters) {
         LoginParameters loginParameters = LoginParameters.fromRegistrationParameters(registrationParameters);
-        IndexPageActions.submitLogin(driver, loginParameters);
+        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
@@ -83,24 +85,24 @@ public class LoginTest extends SeleniumTest {
     }
 
     private static void lockUser(WebDriver driver, RegistrationParameters registrationParameters, LoginParameters loginParameters) {
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+                IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
                 ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
             });
 
-        IndexPageActions.submitLogin(driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        IndexPageActions.submitLogin(driver, loginParameters);
+        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 
-        IndexPageActions.submitLogin(driver, loginParameters);
+        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))

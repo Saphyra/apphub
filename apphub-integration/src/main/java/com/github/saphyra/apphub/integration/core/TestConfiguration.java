@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.localization.Language;
 
-import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +31,9 @@ public class TestConfiguration {
     public static final int SERVER_PORT = Integer.parseInt(System.getProperty("serverPort", "8080"));
     public static final int DATABASE_PORT = Integer.parseInt(System.getProperty("databasePort", "5432"));
     public static final String DATABASE_NAME = System.getProperty("databaseName", "apphub");
-    public static Connection CONNECTION;
+    public static final Boolean SERVER_CONNECTION_CACHE_ENABLED = Boolean.parseBoolean(System.getProperty("serverConnectionCacheEnabled", "false"));
+    public static final Boolean DATABASE_CONNECTION_CACHE_ENABLED = Boolean.parseBoolean(System.getProperty("databaseConnectionCacheEnabled", "false"));
+    public static final String NAMESPACE_NAME = System.getProperty("namespaceName");
 
     //Defaults
     public static final Language DEFAULT_LANGUAGE = Language.ENGLISH;

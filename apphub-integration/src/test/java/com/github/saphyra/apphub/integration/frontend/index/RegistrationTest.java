@@ -21,7 +21,7 @@ public class RegistrationTest extends SeleniumTest {
     @Test(groups = {"fe", "index"})
     public void registrationValidation() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         invalidRegistrationParameters(driver);
         RegistrationParameters existingUser = registrationSuccessful(driver);
@@ -60,7 +60,7 @@ public class RegistrationTest extends SeleniumTest {
             .build();
 
         IndexPageActions.registerUser(driver, existingUser);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
         return existingUser;
     }
 

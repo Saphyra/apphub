@@ -18,11 +18,11 @@ public class AccountPageRoleProtectionTest extends SeleniumTest {
     public void accountRoleProtection() {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
         SleepUtil.sleep(3000);
@@ -30,6 +30,6 @@ public class AccountPageRoleProtectionTest extends SeleniumTest {
         driver.navigate()
             .refresh();
 
-        CommonUtils.verifyMissingRole(driver.getCurrentUrl());
+        CommonUtils.verifyMissingRole(getServerPort(), driver.getCurrentUrl());
     }
 }

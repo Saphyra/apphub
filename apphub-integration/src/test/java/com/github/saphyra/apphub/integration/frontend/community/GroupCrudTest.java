@@ -28,11 +28,11 @@ public class GroupCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "community"})
     public void groupCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.COMMUNITY);
         CommunityActions.openGroupsTab(driver);
 
         createGroup_nameTooLong(driver);

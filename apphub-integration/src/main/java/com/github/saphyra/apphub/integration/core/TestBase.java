@@ -1,7 +1,11 @@
 package com.github.saphyra.apphub.integration.core;
 
+import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
+import com.github.saphyra.apphub.integration.core.driver.WebDriverFactory;
 import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
+import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
+import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
@@ -22,7 +26,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
+import java.sql.Connection;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -43,11 +47,17 @@ public abstract class TestBase {
     private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS, true);
 
     private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
+    protected static final ThreadLocal<CacheItemWrapper<Integer>> SERVER_PORT_CACHED_ITEM = new ThreadLocal<>();
     private static final ThreadLocal<Stopwatch> DURATION_STOPWATCH = new ThreadLocal<>();
     private static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
     public static String getEmailDomain() {
         return EMAIL_DOMAIN.get();
+    }
+
+    protected static int getServerPort() {
+        return SERVER_PORT_CACHED_ITEM.get()
+            .getItem();
     }
 
     @BeforeSuite(alwaysRun = true)
@@ -62,10 +72,21 @@ public abstract class TestBase {
         log.info("IntegrationServerEnabled: {}", TestConfiguration.INTEGRATION_SERVER_ENABLED);
         log.info("IntegrationServerPort: {}", TestConfiguration.INTEGRATION_SERVER_PORT);
         log.info("Pre-create WebDrivers: {}", TestConfiguration.PRE_CREATE_WEB_DRIVERS);
+        log.info("Server connection cache enabled: {}", TestConfiguration.SERVER_CONNECTION_CACHE_ENABLED);
+        log.info("Database connection cache enabled: {}", TestConfiguration.DATABASE_CONNECTION_CACHE_ENABLED);
+        log.info("Namespace name: {}", TestConfiguration.NAMESPACE_NAME);
 
-        TestConfiguration.CONNECTION = DatabaseUtil.getConnection(); //Checking if database is accessible
-
+        IntegrationServer.start();
         StatusLogger.setTotalTestCount(context);
+
+        //Checking if database is accessible
+        // noinspection unused
+        try (AutoCloseableImpl<Connection> conn = ConnectionProvider.getDatabaseConnection()) {
+            log.info("Database connection successfully tested");
+        } catch (Exception e) {
+            log.error("Database check failed", e);
+            System.exit(1);
+        }
 
         for (ITestNGMethod method : context.getAllTestMethods()) {
             method.getXmlTest()
@@ -78,8 +99,6 @@ public abstract class TestBase {
         }
 
         System.setProperty("testng.show.stack.frames", "true");
-
-        IntegrationServer.start();
     }
 
     public static boolean isEnabled(ITestNGMethod method) {
@@ -92,10 +111,9 @@ public abstract class TestBase {
     }
 
     @AfterSuite(alwaysRun = true)
-    public void tearDownSuite(ITestContext context) throws SQLException {
+    public void tearDownSuite(ITestContext context) {
         WebDriverFactory.stopDrivers();
-
-        TestConfiguration.CONNECTION.close();
+        ConnectionProvider.shutdownCaches();
 
         StatusLogger.logTestStartOrder();
 
@@ -116,6 +134,9 @@ public abstract class TestBase {
 
         EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
         StatusLogger.addToStartOrder(method);
+
+        CacheItemWrapper<Integer> serverPort = ConnectionProvider.getServerPort();
+        SERVER_PORT_CACHED_ITEM.set(serverPort);
     }
 
     private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
@@ -143,6 +164,10 @@ public abstract class TestBase {
 
         EMAIL_DOMAIN.remove();
         DURATION_STOPWATCH.remove();
+        if (!isNull(SERVER_PORT_CACHED_ITEM.get())) {
+            ConnectionProvider.releaseServerPort(SERVER_PORT_CACHED_ITEM.get());
+            SERVER_PORT_CACHED_ITEM.remove();
+        }
 
         log.debug("Test {} completed", methodName);
 

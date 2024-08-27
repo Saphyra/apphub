@@ -15,67 +15,67 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ListItemActions {
-    public static void deleteListItem(UUID accessTokenId, UUID listItemId) {
-        Response response = getDeleteListItemResponse(accessTokenId, listItemId);
+    public static void deleteListItem(int serverPort, UUID accessTokenId, UUID listItemId) {
+        Response response = getDeleteListItemResponse(serverPort, accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteListItemResponse(UUID accessTokenId, UUID listItemId) {
+    public static Response getDeleteListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", listItemId));
+            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static void editListItem(UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
-        Response response = getEditListItemResponse(accessTokenId, editListItemRequest, listItemId);
+    public static void editListItem(int serverPort, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+        Response response = getEditListItemResponse(serverPort, accessTokenId, editListItemRequest, listItemId);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditListItemResponse(UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
+    public static Response getEditListItemResponse(int serverPort, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editListItemRequest)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static Response getCloneListItemResponse(UUID accessTokenId, UUID listItemId) {
+    public static Response getCloneListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static Response getSearchResponse(UUID accessTokenId, String searchText) {
+    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String searchText) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(searchText))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_SEARCH));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_SEARCH));
     }
 
-    public static List<NotebookView> search(UUID accessTokenId, String search) {
-        Response response = getSearchResponse(accessTokenId, search);
+    public static List<NotebookView> search(int serverPort, UUID accessTokenId, String search) {
+        Response response = getSearchResponse(serverPort, accessTokenId, search);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(NotebookView[].class));
     }
 
-    public static void archive(UUID accessTokenId, UUID listItemId, boolean archived) {
-        Response response = getArchiveResponse(accessTokenId, listItemId, archived);
+    public static void archive(int serverPort, UUID accessTokenId, UUID listItemId, boolean archived) {
+        Response response = getArchiveResponse(serverPort, accessTokenId, listItemId, archived);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getArchiveResponse(UUID accessTokenId, UUID listItemId, Boolean archived) {
+    public static Response getArchiveResponse(int serverPort, UUID accessTokenId, UUID listItemId, Boolean archived) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(archived))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static Response getFindListItemResponse(UUID accessTokenId, UUID listItemId) {
+    public static Response getFindListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_LIST_ITEM, "listItemId", listItemId));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_LIST_ITEM, "listItemId", listItemId));
     }
 
-    public static Response getMoveListItemResponse(UUID accessTokenId, UUID listItemId, UUID parent) {
+    public static Response getMoveListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId, UUID parent) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(parent))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_MOVE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_MOVE_LIST_ITEM, "listItemId", listItemId));
     }
 }

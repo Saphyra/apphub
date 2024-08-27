@@ -19,55 +19,55 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryActions {
-    public static UUID createCategory(UUID accessTokenId, CreateCategoryRequest request) {
-        Response response = getCreateCategoryResponse(accessTokenId, request);
+    public static UUID createCategory(int serverPort, UUID accessTokenId, CreateCategoryRequest request) {
+        Response response = getCreateCategoryResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateCategoryResponse(UUID accessTokenId, CreateCategoryRequest request) {
+    public static Response getCreateCategoryResponse(int serverPort, UUID accessTokenId, CreateCategoryRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_CATEGORY));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
     }
 
-    public static List<CategoryTreeView> getCategoryTree(UUID accessTokenId) {
+    public static List<CategoryTreeView> getCategoryTree(int serverPort, UUID accessTokenId) {
         return Arrays.stream(
-                getCategoryTreeResponse(accessTokenId)
+                getCategoryTreeResponse(serverPort, accessTokenId)
                     .getBody()
                     .as(CategoryTreeView[].class)
             )
             .collect(Collectors.toList());
     }
 
-    public static Response getCategoryTreeResponse(UUID accessTokenId) {
+    public static Response getCategoryTreeResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CATEGORY_TREE));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CATEGORY_TREE));
     }
 
-    public static ChildrenOfCategoryResponse getChildrenOfCategory(UUID accessTokenId, UUID categoryId) {
-        return getChildrenOfCategory(accessTokenId, categoryId, Collections.emptyList(), null);
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(int serverPort, UUID accessTokenId, UUID categoryId) {
+        return getChildrenOfCategory(serverPort, accessTokenId, categoryId, Collections.emptyList(), null);
     }
 
-    public static ChildrenOfCategoryResponse getChildrenOfCategory(UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
-        Response response = getChildrenOfCategoryResponse(accessTokenId, categoryId, types, exclude);
+    public static ChildrenOfCategoryResponse getChildrenOfCategory(int serverPort, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
+        Response response = getChildrenOfCategoryResponse(serverPort, accessTokenId, categoryId, types, exclude);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(ChildrenOfCategoryResponse.class);
     }
 
-    public static Response getChildrenOfCategoryResponse(UUID accessTokenId, UUID categoryId, List<String> types) {
-        return getChildrenOfCategoryResponse(accessTokenId, categoryId, types, null);
+    public static Response getChildrenOfCategoryResponse(int serverPort, UUID accessTokenId, UUID categoryId, List<String> types) {
+        return getChildrenOfCategoryResponse(serverPort, accessTokenId, categoryId, types, null);
     }
 
-    public static Response getChildrenOfCategoryResponse(UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
+    public static Response getChildrenOfCategoryResponse(int serverPort, UUID accessTokenId, UUID categoryId, List<String> types, UUID exclude) {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("categoryId", categoryId);
         queryParams.put("type", String.join(",", types));
         queryParams.put("exclude", exclude);
 
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
     }
 }

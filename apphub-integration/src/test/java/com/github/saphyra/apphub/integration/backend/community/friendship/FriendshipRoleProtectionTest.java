@@ -17,14 +17,14 @@ public class FriendshipRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community"})
     public void friendshipRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> FriendshipActions.getFriendshipsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> FriendshipActions.getDeleteFriendshipResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendshipActions.getFriendshipsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> FriendshipActions.getDeleteFriendshipResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

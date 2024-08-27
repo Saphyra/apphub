@@ -21,9 +21,9 @@ public class CalendarTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void getCalendar() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        List<CalendarResponse> calendarResponses = CalendarActions.getCalendar(accessTokenId, DATE)
+        List<CalendarResponse> calendarResponses = CalendarActions.getCalendar(getServerPort(), accessTokenId, DATE)
             .stream()
             .sorted(Comparator.comparing(CalendarResponse::getDate))
             .collect(Collectors.toList());

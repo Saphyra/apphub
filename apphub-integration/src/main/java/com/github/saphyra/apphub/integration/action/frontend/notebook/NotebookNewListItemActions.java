@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.Map;
 
 public class NotebookNewListItemActions {
-    public static void selectListItemType(WebDriver driver, ListItemType type) {
+    public static void selectListItemType(int serverPort, WebDriver driver, ListItemType type) {
         driver.findElement(By.id(String.format("notebook-new-%s", type.getSelector())))
             .click();
 
@@ -19,7 +19,7 @@ public class NotebookNewListItemActions {
         );
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(Endpoints.NOTEBOOK_NEW_LIST_ITEM_PAGE, pathVariables)))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_NEW_LIST_ITEM_PAGE, pathVariables)))
             .assertTrue("New " + type.getSelector() + " page is not opened");
     }
 }

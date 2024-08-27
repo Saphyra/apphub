@@ -31,11 +31,11 @@ public class SkyXploreSettingTest extends BackEndTest {
     public void settingCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
-        SkyXploreFlow.startGame(new Player(accessTokenId, userId));
+        SkyXploreFlow.startGame(getServerPort(), new Player(accessTokenId, userId));
 
         create_nullType(accessTokenId);
         create_dataTooLarge(accessTokenId);
@@ -49,14 +49,14 @@ public class SkyXploreSettingTest extends BackEndTest {
     }
 
     private void delete(UUID accessTokenId) {
-        assertThat(SkyXploreSettingActions.delete(accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(LOCATION).build()))
+        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(LOCATION).build()))
             .returns(DATA_2, SettingModel::getData);
 
-        assertThat(SkyXploreSettingActions.delete(accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build())).isNull();
+        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build())).isNull();
     }
 
     private void delete_notFound(UUID accessTokenId) {
-        ResponseValidator.verifyErrorResponse(SkyXploreSettingActions.getDeleteResponse(accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_HIDE).location(LOCATION).build()), 404, ErrorCode.DATA_NOT_FOUND);
+        ResponseValidator.verifyErrorResponse(SkyXploreSettingActions.getDeleteResponse(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_HIDE).location(LOCATION).build()), 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private void create(UUID accessTokenId, UUID location) {
@@ -66,9 +66,9 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(DATA_1)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
 
-        assertThat(SkyXploreSettingActions.getSetting(accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(location).build()))
+        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(location).build()))
             .returns(DATA_1, SettingModel::getData);
     }
 
@@ -78,9 +78,9 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(DATA_2)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
 
-        assertThat(SkyXploreSettingActions.getSetting(accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build()))
+        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build()))
             .returns(DATA_2, SettingModel::getData);
     }
 
@@ -90,7 +90,7 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(DATA_1)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
     }
 
     private void create_dataTooLarge(UUID accessTokenId) {
@@ -99,7 +99,7 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()))
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(accessTokenId, settingModel), "data", "too long");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessTokenId, settingModel), "data", "too long");
     }
 
     private void create_nullType(UUID accessTokenId) {
@@ -108,6 +108,6 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(DATA_1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(accessTokenId, settingModel), "type", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessTokenId, settingModel), "type", "must not be null");
     }
 }

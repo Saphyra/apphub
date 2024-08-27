@@ -16,7 +16,7 @@ public class ModulesRoleProtectionTest extends SeleniumTest {
     public void modulesRoleProtection() {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -26,6 +26,6 @@ public class ModulesRoleProtectionTest extends SeleniumTest {
         driver.navigate()
             .refresh();
 
-        CommonUtils.verifyMissingRole(driver.getCurrentUrl());
+        CommonUtils.verifyMissingRole(getServerPort(), driver.getCurrentUrl());
     }
 }

@@ -23,15 +23,15 @@ public class ChangeUsernameTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changeUsername() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters existingUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, existingUserData);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
         tooShortUsername(driver);
         tooLongUsername(driver);
@@ -42,17 +42,17 @@ public class ChangeUsernameTest extends SeleniumTest {
     }
 
     private void tooShortUsername(WebDriver driver) {
-        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooShortUsername());
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, ChangeUsernameParameters.tooShortUsername());
         ChangeUsernameActions.verifyChangeUsernameForm(driver, tooShortUsername());
     }
 
     private void tooLongUsername(WebDriver driver) {
-        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.tooLongUsername());
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, ChangeUsernameParameters.tooLongUsername());
         ChangeUsernameActions.verifyChangeUsernameForm(driver, tooLongUsername());
     }
 
     private void emptyPassword(WebDriver driver) {
-        ChangeUsernameActions.fillChangeUsernameForm(driver, ChangeUsernameParameters.emptyPassword());
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, ChangeUsernameParameters.emptyPassword());
         ChangeUsernameActions.verifyChangeUsernameForm(driver, emptyPassword());
     }
 
@@ -62,7 +62,7 @@ public class ChangeUsernameTest extends SeleniumTest {
             .username(existingUserData.getUsername())
             .build();
 
-        ChangeUsernameActions.fillChangeUsernameForm(driver, usernameAlreadyExistsParameters);
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, usernameAlreadyExistsParameters);
         ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
         ChangeUsernameActions.changeUsername(driver);
 
@@ -75,7 +75,7 @@ public class ChangeUsernameTest extends SeleniumTest {
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
 
-        ChangeUsernameActions.fillChangeUsernameForm(driver, incorrectPasswordParameters);
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, incorrectPasswordParameters);
         ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
         ChangeUsernameActions.changeUsername(driver);
 
@@ -84,7 +84,7 @@ public class ChangeUsernameTest extends SeleniumTest {
 
     private static void change(WebDriver driver) {
         ChangeUsernameParameters parameters = ChangeUsernameParameters.valid();
-        ChangeUsernameActions.fillChangeUsernameForm(driver, parameters);
+        ChangeUsernameActions.fillChangeUsernameForm(getServerPort(), driver, parameters);
         ChangeUsernameActions.verifyChangeUsernameForm(driver, valid());
         ChangeUsernameActions.changeUsername(driver);
 

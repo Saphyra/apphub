@@ -25,11 +25,11 @@ public class ChangeLanguageTest extends SeleniumTest {
     @Test(dataProvider = "languages", groups = {"fe", "account"})
     public void changeLanguage(Language language) {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
         ChangeLanguageActions.selectLanguage(driver, language);
 

@@ -82,12 +82,12 @@ public class ListItem {
             .assertTrue("ListItem is still archived");
     }
 
-    public void edit(WebDriver driver) {
+    public void edit(int serverPort, WebDriver driver) {
         webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-edit-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
             .assertTrue("Edit ListItem page is not opened");
     }
 

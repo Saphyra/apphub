@@ -1,6 +1,6 @@
 #notebook-content-search{
     display: grid;
-    grid-template-rows: 38px auto;
+    grid-template-rows: 38px 66px auto;
 }
 
 #notebook-content-search-content{

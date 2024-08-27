@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.core.driver;
 
 import lombok.Builder;
 import lombok.Data;

@@ -22,11 +22,11 @@ public class CharacterCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
     public void createAndEditCharacter() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData1);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("New character");
         assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
@@ -45,12 +45,12 @@ public class CharacterCrudTest extends SeleniumTest {
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
 
         SkyXploreMainMenuActions.back(driver);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData2);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
         SkyXploreCharacterActions.submitForm(driver);

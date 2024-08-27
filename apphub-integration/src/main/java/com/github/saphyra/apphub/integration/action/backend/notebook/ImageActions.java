@@ -9,9 +9,9 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class ImageActions {
-    public static Response getCreateImageResponse(UUID accessTokenId, CreateFileRequest request) {
+    public static Response getCreateImageResponse(int serverPort, UUID accessTokenId, CreateFileRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_IMAGE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_IMAGE));
     }
 }

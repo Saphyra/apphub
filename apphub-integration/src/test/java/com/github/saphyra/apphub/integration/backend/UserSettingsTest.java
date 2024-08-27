@@ -23,20 +23,20 @@ public class UserSettingsTest extends BackEndTest {
     @Test(groups = {"be", "misc"})
     public void userSettingsRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getQueryUserSettingsResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getUpdateUserSettingsResponse(accessTokenId, new SetUserSettingsRequest()));
+        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getQueryUserSettingsResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessTokenId, new SetUserSettingsRequest()));
     }
 
 
     @Test(groups = {"be", "misc"})
     public void userSettingsTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         query_categoryNotFound(accessTokenId);
         query_defaults(accessTokenId);
@@ -47,13 +47,13 @@ public class UserSettingsTest extends BackEndTest {
     }
 
     private static void query_categoryNotFound(UUID accessTokenId) {
-        Response query_categoryNotFoundResponse = UserSettingsActions.getQueryUserSettingsResponse(accessTokenId, "asd");
+        Response query_categoryNotFoundResponse = UserSettingsActions.getQueryUserSettingsResponse(getServerPort(), accessTokenId, "asd");
 
         ResponseValidator.verifyErrorResponse(query_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void query_defaults(UUID accessTokenId) {
-        Map<String, String> settings = UserSettingsActions.getUserSettings(accessTokenId, Constants.USER_SETTING_CATEGORY_NOTEBOOK);
+        Map<String, String> settings = UserSettingsActions.getUserSettings(getServerPort(), accessTokenId, Constants.USER_SETTING_CATEGORY_NOTEBOOK);
 
         assertThat(settings).containsEntry(Constants.USER_SETTING_KEY_SHOW_ARCHIVED, String.valueOf(true));
     }
@@ -65,7 +65,7 @@ public class UserSettingsTest extends BackEndTest {
             .value("asd")
             .build();
 
-        Response update_blankKeyResponse = UserSettingsActions.getUpdateUserSettingsResponse(accessTokenId, blankKeyRequest);
+        Response update_blankKeyResponse = UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessTokenId, blankKeyRequest);
 
         ResponseValidator.verifyInvalidParam(update_blankKeyResponse, "key", "must not be null or blank");
     }
@@ -77,7 +77,7 @@ public class UserSettingsTest extends BackEndTest {
             .value("asd")
             .build();
 
-        Response update_categoryNotFoundResponse = UserSettingsActions.getUpdateUserSettingsResponse(accessTokenId, categoryNotFoundRequest);
+        Response update_categoryNotFoundResponse = UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessTokenId, categoryNotFoundRequest);
 
         ResponseValidator.verifyErrorResponse(update_categoryNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
@@ -89,7 +89,7 @@ public class UserSettingsTest extends BackEndTest {
             .value("asd")
             .build();
 
-        Response update_keyNotSupportedResponse = UserSettingsActions.getUpdateUserSettingsResponse(accessTokenId, unsupportedKeyRequest);
+        Response update_keyNotSupportedResponse = UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessTokenId, unsupportedKeyRequest);
 
         ResponseValidator.verifyInvalidParam(update_keyNotSupportedResponse, "key", "not supported");
     }
@@ -101,7 +101,7 @@ public class UserSettingsTest extends BackEndTest {
             .value(String.valueOf(false))
             .build();
 
-        Map<String, String> modifiedSettings = UserSettingsActions.setUserSetting(accessTokenId, setUserSettingsRequest);
+        Map<String, String> modifiedSettings = UserSettingsActions.setUserSetting(getServerPort(), accessTokenId, setUserSettingsRequest);
 
         assertThat(modifiedSettings).containsEntry(Constants.USER_SETTING_KEY_SHOW_ARCHIVED, String.valueOf(false));
     }

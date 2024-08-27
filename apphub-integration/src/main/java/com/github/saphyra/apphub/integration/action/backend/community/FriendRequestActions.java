@@ -16,82 +16,82 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendRequestActions {
-    public static FriendRequestResponse createFriendRequest(UUID accessTokenId, UUID friendUserId) {
-        Response response = getCreateFriendRequestResponse(accessTokenId, friendUserId);
+    public static FriendRequestResponse createFriendRequest(int serverPort, UUID accessTokenId, UUID friendUserId) {
+        Response response = getCreateFriendRequestResponse(serverPort, accessTokenId, friendUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(FriendRequestResponse.class);
     }
 
-    public static Response getCreateFriendRequestResponse(UUID accessTokenId, UUID friendUserId) {
+    public static Response getCreateFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendUserId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(friendUserId))
-            .put(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_CREATE));
+            .put(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_CREATE));
     }
 
-    public static List<FriendRequestResponse> getSentFriendRequests(UUID accessTokenId) {
-        Response response = getSentFriendRequestsResponse(accessTokenId);
+    public static List<FriendRequestResponse> getSentFriendRequests(int serverPort, UUID accessTokenId) {
+        Response response = getSentFriendRequestsResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendRequestResponse[].class));
     }
 
-    public static Response getSentFriendRequestsResponse(UUID accessTokenId) {
+    public static Response getSentFriendRequestsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
+            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
     }
 
-    public static List<FriendRequestResponse> getReceivedFriendRequests(UUID accessTokenId) {
-        Response response = getReceivedFriendRequeestsResponse(accessTokenId);
+    public static List<FriendRequestResponse> getReceivedFriendRequests(int serverPort, UUID accessTokenId) {
+        Response response = getReceivedFriendRequeestsResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendRequestResponse[].class));
     }
 
-    public static Response getReceivedFriendRequeestsResponse(UUID accessTokenId) {
+    public static Response getReceivedFriendRequeestsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
+            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
     }
 
-    public static FriendshipResponse acceptFriendRequest(UUID accessToken, UUID friendRequestId) {
+    public static FriendshipResponse acceptFriendRequest(int serverPort, UUID accessToken, UUID friendRequestId) {
         Response response = RequestFactory.createAuthorizedRequest(accessToken)
-            .post(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
+            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(FriendshipResponse.class);
     }
 
-    public static List<SearchResultItem> search(UUID accessTokenId, String query) {
-        Response response = getSearchResponse(accessTokenId, query);
+    public static List<SearchResultItem> search(int serverPort, UUID accessTokenId, String query) {
+        Response response = getSearchResponse(serverPort, accessTokenId, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
     }
 
-    public static Response getSearchResponse(UUID accessTokenId, String query) {
+    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
+            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
     }
 
-    public static void deleteFriendRequest(UUID accessTokenId, UUID friendRequestId) {
-        Response response = getDeleteFriendRequestResponse(accessTokenId, friendRequestId);
+    public static void deleteFriendRequest(int serverPort, UUID accessTokenId, UUID friendRequestId) {
+        Response response = getDeleteFriendRequestResponse(serverPort, accessTokenId, friendRequestId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteFriendRequestResponse(UUID accessTokenId, UUID friendRequestId) {
+    public static Response getDeleteFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_DELETE, "friendRequestId", friendRequestId));
+            .delete(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_DELETE, "friendRequestId", friendRequestId));
     }
 
-    public static Response getAcceptFriendRequestResponse(UUID accessTokenId, UUID friendRequestId) {
+    public static Response getAcceptFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
+            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
     }
 }

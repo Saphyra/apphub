@@ -34,14 +34,14 @@ public class PinGroupTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     void openParentOfPinnedItem() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newOnlyTitle(driver, LIST_ITEM_TITLE_1);
-        NotebookUtils.newOnlyTitle(driver, LIST_ITEM_TITLE_2);
+        NotebookUtils.newOnlyTitle(getServerPort(), driver, LIST_ITEM_TITLE_1);
+        NotebookUtils.newOnlyTitle(getServerPort(), driver, LIST_ITEM_TITLE_2);
         NotebookActions.findListItemByTitleValidated(driver, LIST_ITEM_TITLE_1)
             .pin(driver);
         NotebookActions.findListItemByTitleValidated(driver, LIST_ITEM_TITLE_2)
@@ -151,11 +151,11 @@ public class PinGroupTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void orderPinGroups() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
         PinActions.openPinGroupManager(driver);
 

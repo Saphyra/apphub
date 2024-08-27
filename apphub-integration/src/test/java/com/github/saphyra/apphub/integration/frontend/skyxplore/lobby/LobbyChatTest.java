@@ -36,7 +36,7 @@ public class LobbyChatTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
+        SkyXploreUtils.registerAndNavigateToMainMenu(getServerPort(), List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
 

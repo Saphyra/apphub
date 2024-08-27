@@ -27,33 +27,34 @@ public class MoraleRecoveryTest extends BackEndTest {
 
     @Test(groups = {"be", "skyxplore"})
     public void checkMoraleRecovery() {
+        Integer serverPort = getServerPort();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(serverPort, Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
             .getPlanetId();
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SkyXploreSurfaceActions.terraform(accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
         AwaitilityWrapper.create(60, 5)
-            .until(() -> SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
+            .until(() -> SkyXplorePopulationActions.getPopulation(serverPort, accessTokenId, planetId)
                 .stream()
                 .anyMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() < REFERENCE_MORALE)
             )
             .assertTrue("Morale is not decreased for citizens");
 
         AwaitilityWrapper.create(180, 10)
-            .until(() -> SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
+            .until(() -> SkyXplorePopulationActions.getPopulation(serverPort, accessTokenId, planetId)
                 .stream()
                 .allMatch(citizenResponse -> citizenResponse.getStats().get(CitizenStat.MORALE).getValue() >= REFERENCE_MORALE)
             )

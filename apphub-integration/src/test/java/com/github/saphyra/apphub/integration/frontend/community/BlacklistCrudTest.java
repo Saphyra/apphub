@@ -30,9 +30,11 @@ public class BlacklistCrudTest extends SeleniumTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
 
+        Integer serverPort = getServerPort();
         RegistrationUtils.registerUsers(
+            serverPort,
             List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)),
-            (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
+            (driver, registrationParameters) -> ModulesPageActions.openModule(serverPort, driver, ModuleLocation.COMMUNITY)
         );
 
         CommunityActions.openBlacklistTab(driver1);

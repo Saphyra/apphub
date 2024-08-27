@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integration.framework;
 
-import com.github.saphyra.apphub.integration.core.TestConfiguration;
+import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
+import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Occurrence;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,7 +19,6 @@ import java.util.UUID;
 @Slf4j
 public class DatabaseUtil {
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String DB_URL = "jdbc:postgresql://localhost:%s/%s";
 
     private static final String ADD_ROLE_BY_EMAIL_QUERY = "INSERT INTO apphub_user.apphub_role (role_id, user_id, apphub_role) VALUES('%s', (SELECT user_id FROM apphub_user.apphub_user WHERE email='%s'), '%s')";
     private static final String REMOVE_ROLE_BY_EMAIL_QUERY = "DELETE FROM apphub_user.apphub_role WHERE user_id=(SELECT user_id FROM apphub_user.apphub_user WHERE email='%s') AND apphub_role='%s'";
@@ -37,30 +36,29 @@ public class DatabaseUtil {
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
-        Statement statement = TestConfiguration.CONNECTION.createStatement();
+        try (AutoCloseableImpl<Connection> conn = ConnectionProvider.getDatabaseConnection()) {
+            Connection connection = conn.getObject();
+            try (Statement statement = connection.createStatement()) {
+                ResultSet resultSet = statement.executeQuery(sql);
 
-        ResultSet resultSet = statement.executeQuery(sql);
+                T result = mapper.map(resultSet);
 
-        T result = mapper.map(resultSet);
+                statement.close();
 
-        statement.close();
-
-        return result;
+                return result;
+            }
+        }
     }
 
     private static void execute(String sql) throws Exception {
         Class.forName(JDBC_DRIVER);
 
-        Statement statement = TestConfiguration.CONNECTION.createStatement();
-
-        statement.execute(sql);
-
-        statement.close();
-    }
-
-    @SneakyThrows
-    public static Connection getConnection() {
-        return DriverManager.getConnection(String.format(DB_URL, TestConfiguration.DATABASE_PORT, TestConfiguration.DATABASE_NAME), "postgres", "postgres");
+        try (AutoCloseableImpl<Connection> conn = ConnectionProvider.getDatabaseConnection()) {
+            Connection connection = conn.getObject();
+            try (Statement statement = connection.createStatement()) {
+                statement.execute(sql);
+            }
+        }
     }
 
     @SneakyThrows

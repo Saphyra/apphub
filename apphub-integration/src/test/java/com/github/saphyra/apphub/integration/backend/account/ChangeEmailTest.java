@@ -21,7 +21,7 @@ public class ChangeEmailTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void changeEmail() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
 
         nullEmail(userData1, accessTokenId1);
         invalidEmail(userData1, accessTokenId1);
@@ -36,7 +36,7 @@ public class ChangeEmailTest extends BackEndTest {
             .email(null)
             .password(userData1.getPassword())
             .build();
-        Response nullEmailResponse = AccountActions.getChangeEmailResponse(accessTokenId1, nullEmailRequest);
+        Response nullEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, nullEmailRequest);
         ResponseValidator.verifyInvalidParam(nullEmailResponse, "email", "must not be null");
     }
 
@@ -45,7 +45,7 @@ public class ChangeEmailTest extends BackEndTest {
             .email("a@a.a")
             .password(userData1.getPassword())
             .build();
-        Response invalidEmailResponse = AccountActions.getChangeEmailResponse(accessTokenId1, invalidEmailRequest);
+        Response invalidEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, invalidEmailRequest);
         ResponseValidator.verifyInvalidParam(invalidEmailResponse, "email", "invalid format");
     }
 
@@ -54,7 +54,7 @@ public class ChangeEmailTest extends BackEndTest {
             .email(RandomDataProvider.generateEmail())
             .password(null)
             .build();
-        Response nullPasswordResponse = AccountActions.getChangeEmailResponse(accessTokenId1, nullPasswordRequest);
+        Response nullPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, nullPasswordRequest);
         ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
     }
 
@@ -63,18 +63,18 @@ public class ChangeEmailTest extends BackEndTest {
             .email(RandomDataProvider.generateEmail())
             .password("incorrect-password")
             .build();
-        Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(accessTokenId1, incorrectPasswordRequest);
+        Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, incorrectPasswordRequest);
         ResponseValidator.verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
 
     private static void emailAlreadyExists(RegistrationParameters userData1, UUID accessTokenId1) {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        IndexPageActions.registerAndLogin(userData2);
+        IndexPageActions.registerAndLogin(getServerPort(), userData2);
         ChangeEmailRequest emailAlreadyExistsRequest = ChangeEmailRequest.builder()
             .email(userData2.getEmail())
             .password(userData1.getPassword())
             .build();
-        Response emailAlreadyExistsResponse = AccountActions.getChangeEmailResponse(accessTokenId1, emailAlreadyExistsRequest);
+        Response emailAlreadyExistsResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, emailAlreadyExistsRequest);
         assertThat(emailAlreadyExistsResponse.getStatusCode()).isEqualTo(409);
         ErrorResponse emailAlreadyExistsErrorResponse = emailAlreadyExistsResponse.getBody().as(ErrorResponse.class);
         assertThat(emailAlreadyExistsErrorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
@@ -86,12 +86,12 @@ public class ChangeEmailTest extends BackEndTest {
             .email(newEmail)
             .password(userData1.getPassword())
             .build();
-        Response response = AccountActions.getChangeEmailResponse(accessTokenId1, request);
+        Response response = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
-        Response failedLoginResponse = IndexPageActions.getLoginResponse(LoginRequest.builder().password(userData1.getPassword()).userIdentifier(userData1.getEmail()).build());
+        Response failedLoginResponse = IndexPageActions.getLoginResponse(getServerPort(), LoginRequest.builder().password(userData1.getPassword()).userIdentifier(userData1.getEmail()).build());
         assertThat(failedLoginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = failedLoginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
-        IndexPageActions.login(LoginRequest.builder().password(userData1.getPassword()).userIdentifier(newEmail).build());
+        IndexPageActions.login(getServerPort(), LoginRequest.builder().password(userData1.getPassword()).userIdentifier(newEmail).build());
     }
 }

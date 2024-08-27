@@ -19,11 +19,11 @@ public class CalendarRoleProtectionTest extends SeleniumTest {
     public void calendarRoleProtection(String role) {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
@@ -31,7 +31,7 @@ public class CalendarRoleProtectionTest extends SeleniumTest {
         driver.navigate()
             .refresh();
 
-        CommonUtils.verifyMissingRole(driver.getCurrentUrl());
+        CommonUtils.verifyMissingRole(getServerPort(), driver.getCurrentUrl());
     }
 
     @DataProvider(parallel = true)

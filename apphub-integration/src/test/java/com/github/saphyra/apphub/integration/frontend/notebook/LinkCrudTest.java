@@ -33,15 +33,15 @@ public class LinkCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void linkCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
-        NotebookUtils.newCategory(driver, CATEGORY);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.LINK);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.LINK);
 
         create_blankTitle(driver);
         create_blankUrl(driver);
@@ -70,7 +70,7 @@ public class LinkCrudTest extends SeleniumTest {
     }
 
     private static void create(WebDriver driver) {
-        NewLinkActions.fillUrl(driver, UrlFactory.create(Endpoints.MODULES_PAGE));
+        NewLinkActions.fillUrl(driver, UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
         ParentSelectorActions.selectParent(driver, CATEGORY);
 
         NewLinkActions.submit(driver);
@@ -88,14 +88,14 @@ public class LinkCrudTest extends SeleniumTest {
             .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
 
     private static void edit_blankTitle(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
-            .edit(driver);
+            .edit(getServerPort(), driver);
         EditListItemActions.fillTitle(driver, " ");
 
         EditListItemActions.submitForm(driver);
@@ -113,7 +113,7 @@ public class LinkCrudTest extends SeleniumTest {
     }
 
     private static void edit(WebDriver driver) {
-        EditListItemActions.fillValue(driver, UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        EditListItemActions.fillValue(driver, UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
         ParentSelectorActions.up(driver);
 
         EditListItemActions.submitForm(driver);
@@ -131,7 +131,7 @@ public class LinkCrudTest extends SeleniumTest {
             .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }

@@ -9,12 +9,13 @@ import java.io.InputStreamReader;
 @Component
 public class NamespaceNameProvider {
     @SneakyThrows
-    public String getBranchName() {
+    public String getNamespaceName() {
         Process process = Runtime.getRuntime().exec("git rev-parse --abbrev-ref HEAD");
         process.waitFor();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        return reader.readLine();
+        String branchName = reader.readLine();
+        return branchName.equals("master") ? "production" : branchName;
     }
 }

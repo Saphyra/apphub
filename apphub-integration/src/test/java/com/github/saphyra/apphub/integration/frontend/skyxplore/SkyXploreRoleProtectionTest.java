@@ -18,17 +18,17 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
     public void calendarRoleProtection(String role) {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(driver, Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.SKYXPLORE_CHARACTER_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.SKYXPLORE_LOBBY_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.SKYXPLORE_GAME_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_CHARACTER_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_LOBBY_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_GAME_PAGE);
     }
 
     @DataProvider(parallel = true)

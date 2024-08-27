@@ -1,5 +1,8 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.core.driver;
 
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
+import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
+import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
@@ -31,7 +34,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.isNull;
 
 @Slf4j
-class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
+public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final int BROWSER_STARTUP_LIMIT = 3;
     private static final int MAX_DRIVER_COUNT = 300;
 
@@ -42,14 +45,15 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     static {
         DRIVER_POOL_CONFIG.setMaxTotal(MAX_DRIVER_COUNT);
         DRIVER_POOL_CONFIG.setMaxIdle(MAX_DRIVER_COUNT);
+        DRIVER_POOL_CONFIG.setTestOnBorrow(true);
     }
 
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
-    static synchronized List<WebDriverWrapper> getDrivers(int driverCount) {
+    public static synchronized List<WebDriverWrapper> getDrivers(int serverPort, int driverCount) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        List<WebDriverWrapper> result = Stream.generate(WebDriverFactory::getDriver)
+        List<WebDriverWrapper> result = Stream.generate(() -> getDriver(serverPort))
             .limit(driverCount)
             .collect(Collectors.toList());
         stopwatch.stop();
@@ -61,28 +65,28 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     @SneakyThrows
-    private static WebDriverWrapper getDriver() {
+    private static WebDriverWrapper getDriver(int serverPort) {
         if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED) {
             return DRIVER_POOL.borrowObject();
         } else {
-            return createNewDriver();
+            return createNewDriver(serverPort);
         }
     }
 
-    private static WebDriverWrapper createNewDriver() {
-        Future<WebDriver> future = EXECUTOR.submit(() -> createDriver(WebDriverMode.DEFAULT));
+    private static WebDriverWrapper createNewDriver(int serverPort) {
+        Future<WebDriver> future = EXECUTOR.submit(() -> createDriver(serverPort, WebDriverMode.DEFAULT));
         return new WebDriverWrapper(future, WebDriverMode.DEFAULT);
     }
 
-    static void release(WebDriverWrapper webDriverWrapper) {
+    public static void release(int serverPort, WebDriverWrapper webDriverWrapper) {
         if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() != WebDriverMode.HEADED) {
-            returnDriverToCache(webDriverWrapper);
+            returnDriverToCache(serverPort, webDriverWrapper);
         } else {
             stopDriver(webDriverWrapper);
         }
     }
 
-    private static void returnDriverToCache(WebDriverWrapper webDriverWrapper) {
+    private static void returnDriverToCache(int serverPort, WebDriverWrapper webDriverWrapper) {
         log.debug("Releasing webDriver with id {}", webDriverWrapper.getId());
         try {
             WebDriver driver = webDriverWrapper.getDriver();
@@ -95,7 +99,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
             }
 
             driver.switchTo().window(handles.get(0));
-            driver.navigate().to(UrlFactory.create(Endpoints.ERROR_PAGE));
+            driver.navigate().to(UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
 
             AwaitilityWrapper.createDefault()
                 .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ERROR_PAGE))
@@ -118,18 +122,18 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     @SneakyThrows
-    static void invalidate(WebDriverWrapper webDriverWrapper) {
+    public static void invalidate(WebDriverWrapper webDriverWrapper) {
         if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() == WebDriverMode.DEFAULT) {
             DRIVER_POOL.invalidateObject(webDriverWrapper, DestroyMode.ABANDONED);
         }
         stopDriver(webDriverWrapper);
     }
 
-    public static Future<WebDriver> createDriverExternal(WebDriverMode mode) {
-        return EXECUTOR.submit(() -> createDriver(mode));
+    public static Future<WebDriver> createDriverExternal(int serverPort, WebDriverMode mode) {
+        return EXECUTOR.submit(() -> createDriver(serverPort, mode));
     }
 
-    private static ChromeDriver createDriver(WebDriverMode mode) {
+    private static ChromeDriver createDriver(int serverPort, WebDriverMode mode) {
         log.info("Creating WebDriver with mode {}", mode);
         ChromeDriver driver = null;
         for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
@@ -145,7 +149,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                 driver = new ChromeDriver(options);
                 log.debug("Driver created: {}", driver);
                 SleepUtil.sleep(1000);
-                Navigation.toUrl(driver, UrlFactory.create(Endpoints.ERROR_PAGE));
+                Navigation.toUrl(driver, UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
                 numberOfDriversCreated++;
                 return driver;
             } catch (Exception e) {
@@ -156,7 +160,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         throw new RuntimeException("Failed to create webDriver");
     }
 
-    static void stopDrivers() {
+    public static void stopDrivers() {
         DRIVER_POOL.close();
         log.info("NumberOfDriversCreated: {}", numberOfDriversCreated);
     }
@@ -178,9 +182,13 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @Override
     public PooledObject<WebDriverWrapper> makeObject() {
-        WebDriverWrapper newDriver = createNewDriver();
-
-        return new DefaultPooledObject<>(newDriver);
+        CacheItemWrapper<Integer> port = ConnectionProvider.getServerPort();
+        try {
+            WebDriverWrapper newDriver = createNewDriver(port.getItem());
+            return new DefaultPooledObject<>(newDriver);
+        } finally {
+            ConnectionProvider.releaseServerPort(port);
+        }
     }
 
     @Override

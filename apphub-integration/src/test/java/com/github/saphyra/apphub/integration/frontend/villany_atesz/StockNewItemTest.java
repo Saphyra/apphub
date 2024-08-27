@@ -33,7 +33,7 @@ public class StockNewItemTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void creteStockItem() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -41,7 +41,7 @@ public class StockNewItemTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);
         VillanyAteszNavigation.openStockNewItem(driver);
 

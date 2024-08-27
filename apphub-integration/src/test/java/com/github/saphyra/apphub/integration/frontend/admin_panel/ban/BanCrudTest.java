@@ -41,12 +41,13 @@ public class BanCrudTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        RegistrationUtils.registerUsers(List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
+        Integer serverPort = getServerPort();
+        RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         adminDriver.navigate().refresh();
-        ModulesPageActions.openModule(adminDriver, ModuleLocation.BAN);
+        ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.BAN);
 
         openUser(adminDriver, testUserData);
 
@@ -60,11 +61,11 @@ public class BanCrudTest extends SeleniumTest {
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(adminDriver))
+            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, adminDriver))
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
-        IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("Ban Details page is not opened.");
@@ -93,11 +94,11 @@ public class BanCrudTest extends SeleniumTest {
         revokeBan_runValidation(adminDriver, "asd", LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(adminDriver))
+            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, adminDriver))
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
-        IndexPageActions.submitLogin(adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("Ban Details page is not opened.");
@@ -105,7 +106,7 @@ public class BanCrudTest extends SeleniumTest {
         revokeBan(adminDriver, adminUserData);
 
         testDriver.navigate()
-            .to(UrlFactory.create(Endpoints.MODULES_PAGE));
+            .to(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
         AwaitilityWrapper.createDefault()
             .until(() -> testDriver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
             .assertTrue("TestUser is still banned.");

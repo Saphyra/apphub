@@ -22,7 +22,7 @@ public class ChangeUsernameTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void changeUsername() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
 
         nullUsername(userData1, accessTokenId);
         tooShortUsername(userData1, accessTokenId);
@@ -38,7 +38,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(null)
             .password(userData1.getPassword())
             .build();
-        Response nullUsernameResponse = AccountActions.getChangeUsernameResponse(accessTokenId, nullUsernameRequest);
+        Response nullUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, nullUsernameRequest);
         verifyInvalidParam(nullUsernameResponse, "username", "must not be null");
     }
 
@@ -47,7 +47,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(DataConstants.TOO_SHORT_USERNAME)
             .password(userData1.getPassword())
             .build();
-        Response tooShortUsernameResponse = AccountActions.getChangeUsernameResponse(accessTokenId, tooShortUsernameRequest);
+        Response tooShortUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, tooShortUsernameRequest);
         verifyInvalidParam(tooShortUsernameResponse, "username", "too short");
     }
 
@@ -56,19 +56,19 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(DataConstants.TOO_LONG_USERNAME)
             .password(userData1.getPassword())
             .build();
-        Response tooLongUsernameResponse = AccountActions.getChangeUsernameResponse(accessTokenId, tooLongUsernameRequest);
+        Response tooLongUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, tooLongUsernameRequest);
         verifyInvalidParam(tooLongUsernameResponse, "username", "too long");
     }
 
     private static void usernameAlreadyExists(RegistrationParameters userData1, UUID accessTokenId) {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        IndexPageActions.registerAndLogin(userData2);
+        IndexPageActions.registerAndLogin(getServerPort(), userData2);
 
         ChangeUsernameRequest usernameAlreadyExistsRequest = ChangeUsernameRequest.builder()
             .username(userData2.getUsername())
             .password(userData1.getPassword())
             .build();
-        Response usernameAlreadyExistsResponse = AccountActions.getChangeUsernameResponse(accessTokenId, usernameAlreadyExistsRequest);
+        Response usernameAlreadyExistsResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, usernameAlreadyExistsRequest);
         verifyErrorResponse(usernameAlreadyExistsResponse, 409, ErrorCode.USERNAME_ALREADY_EXISTS);
     }
 
@@ -77,7 +77,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(RandomDataProvider.generateUsername())
             .password(null)
             .build();
-        Response nullPasswordResponse = AccountActions.getChangeUsernameResponse(accessTokenId, nullPasswordRequest);
+        Response nullPasswordResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, nullPasswordRequest);
         verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
     }
 
@@ -86,7 +86,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(RandomDataProvider.generateUsername())
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
-        Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(accessTokenId, incorrectPasswordRequest);
+        Response incorrectPasswordResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, incorrectPasswordRequest);
         verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
 
@@ -95,7 +95,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .username(RandomDataProvider.generateUsername())
             .password(userData1.getPassword())
             .build();
-        Response successfulChangeResponse = AccountActions.getChangeUsernameResponse(accessTokenId, successfulChangeRequest);
+        Response successfulChangeResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessTokenId, successfulChangeRequest);
         assertThat(successfulChangeResponse.getStatusCode()).isEqualTo(200);
     }
 }

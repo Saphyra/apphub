@@ -18,15 +18,15 @@ public class UtilsRoleProtectionTest extends SeleniumTest {
     public void utilsRoleProtection(String role){
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(driver, Endpoints.UTILS_BASE64_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.UTILS_JSON_FORMATTER_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.UTILS_BASE64_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.UTILS_JSON_FORMATTER_PAGE);
     }
 
     @DataProvider(parallel = true)

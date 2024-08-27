@@ -34,12 +34,12 @@ public class EventCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void oneTimeEvent_changeStatuses() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarActions.openCreateEventWindowAt(driver, CURRENT_DATE);
 
@@ -208,12 +208,12 @@ public class EventCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void daysOfWeekEvent_editEvent() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 
@@ -310,12 +310,12 @@ public class EventCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void daysOfMonthEvent() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 
@@ -361,12 +361,12 @@ public class EventCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void everyXDaysEvent() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarActions.openCreateEventWindowAt(driver, FIRST_OF_MONTH);
 

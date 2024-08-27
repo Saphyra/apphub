@@ -19,23 +19,23 @@ public class GroupRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community"})
     public void groupRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> GroupActions.getGroupsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getCreateGroupResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getDeleteGroupResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getChangeOwnerResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getRenameGroupResponse(accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getChangeInvitationTypeResponse(accessTokenId, UUID.randomUUID(), GroupInvitationType.FRIENDS));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getMembersResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getSearchResponse(accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getCreateGroupMemberResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getDeleteGroupMemberResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> GroupActions.getModifyRolesResponse(accessTokenId, UUID.randomUUID(), UUID.randomUUID(), new GroupMemberRoleRequest()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getGroupsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getCreateGroupResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getDeleteGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getChangeOwnerResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getRenameGroupResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getChangeInvitationTypeResponse(getServerPort(), accessTokenId, UUID.randomUUID(), GroupInvitationType.FRIENDS));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getMembersResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getSearchResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getCreateGroupMemberResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getDeleteGroupMemberResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> GroupActions.getModifyRolesResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID(), new GroupMemberRoleRequest()));
     }
 
     @DataProvider(parallel = true)

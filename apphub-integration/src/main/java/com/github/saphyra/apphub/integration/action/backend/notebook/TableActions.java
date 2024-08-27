@@ -10,26 +10,25 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTa
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
 import io.restassured.response.Response;
 
-import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableActions {
-    public static void createTable(UUID accessTokenId, CreateTableRequest request) {
-        Response response = getCreateTableResponse(accessTokenId, request);
+    public static void createTable(int serverPort, UUID accessTokenId, CreateTableRequest request) {
+        Response response = getCreateTableResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateTableResponse(UUID accessTokenId, CreateTableRequest request) {
+    public static Response getCreateTableResponse(int serverPort, UUID accessTokenId, CreateTableRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_TABLE));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TABLE));
     }
 
-    public static EditTableResponse editTable(UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
-        Response response = getEditTableResponse(accessTokenId, listItemId, editTableRequest);
+    public static EditTableResponse editTable(int serverPort, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+        Response response = getEditTableResponse(serverPort, accessTokenId, listItemId, editTableRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -37,51 +36,49 @@ public class TableActions {
             .as(EditTableResponse.class);
     }
 
-    public static Response getEditTableResponse(UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
+    public static Response getEditTableResponse(int serverPort, UUID accessTokenId, UUID listItemId, EditTableRequest editTableRequest) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editTableRequest)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TABLE, "listItemId", listItemId));
     }
 
-    public static TableResponse getTable(UUID accessTokenId, UUID listItemId) {
-        Response response = getTableResponse(accessTokenId, listItemId);
+    public static TableResponse getTable(int serverPort, UUID accessTokenId, UUID listItemId) {
+        Response response = getTableResponse(serverPort, accessTokenId, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TableResponse.class);
     }
 
-    public static Response getTableResponse(UUID accessTokenId, UUID listItemId) {
+    public static Response getTableResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TABLE, "listItemId", listItemId));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TABLE, "listItemId", listItemId));
     }
 
-    public static void updateChecklistTableRowStatus(UUID accessTokenId, UUID rowId, Boolean status) {
-        Response response = getUpdateChecklistTableRowStatusResponse(accessTokenId, rowId, status);
+    public static void updateChecklistTableRowStatus(int serverPort, UUID accessTokenId, UUID rowId, Boolean status) {
+        Response response = getUpdateChecklistTableRowStatusResponse(serverPort, accessTokenId, rowId, status);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistTableRowStatusResponse(UUID accessTokenId, UUID rowId, Boolean status) {
-        Map<String, Object> pathVariables = Map.of("rowId", rowId);
-
+    public static Response getUpdateChecklistTableRowStatusResponse(int serverPort, UUID accessTokenId, UUID rowId, Boolean status) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_TABLE_SET_ROW_STATUS, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_TABLE_SET_ROW_STATUS, "rowId", rowId));
     }
 
-    public static void editCheckboxStatus(UUID accessTokenId, UUID columnId, Boolean status) {
-        Response response = getEditCheckboxStatusResponse(accessTokenId, columnId, status);
+    public static void editCheckboxStatus(int serverPort, UUID accessTokenId, UUID columnId, Boolean status) {
+        Response response = getEditCheckboxStatusResponse(serverPort, accessTokenId, columnId, status);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditCheckboxStatusResponse(UUID accessTokenId, UUID columnId, Boolean status) {
+    public static Response getEditCheckboxStatusResponse(int serverPort, UUID accessTokenId, UUID columnId, Boolean status) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS, "columnId", columnId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS, "columnId", columnId));
     }
 
-    public static Response getDeleteCheckedResponse(UUID accessTokenId, UUID listItemId) {
+    public static Response getDeleteCheckedResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED, "listItemId", listItemId));
+            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED, "listItemId", listItemId));
     }
 }

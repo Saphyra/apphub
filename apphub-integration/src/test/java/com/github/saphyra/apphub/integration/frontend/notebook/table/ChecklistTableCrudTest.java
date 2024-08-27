@@ -39,16 +39,16 @@ public class ChecklistTableCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void checklistTableCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST_TABLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST_TABLE);
 
         create_blankTitle(driver);
         create_hasBlankColumnName(driver);

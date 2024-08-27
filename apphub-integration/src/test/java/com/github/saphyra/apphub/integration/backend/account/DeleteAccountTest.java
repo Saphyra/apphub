@@ -24,7 +24,7 @@ public class DeleteAccountTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void deleteAccount() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         nullPassword(accessTokenId);
         accessTokenId = incorrectPassword(userData, accessTokenId);
@@ -32,7 +32,7 @@ public class DeleteAccountTest extends BackEndTest {
     }
 
     private static void nullPassword(UUID accessTokenId) {
-        Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(accessTokenId, new OneParamRequest<>(null));
+        Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(getServerPort(), accessTokenId, new OneParamRequest<>(null));
         verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
     }
 
@@ -41,22 +41,22 @@ public class DeleteAccountTest extends BackEndTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(ati, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
+                Response incorrectPasswordResponse = AccountActions.getDeleteAccountResponse(getServerPort(), ati, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
                 ResponseValidator.verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
             });
 
-        Response accountLockedResponse = AccountActions.getDeleteAccountResponse(accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
+        Response accountLockedResponse = AccountActions.getDeleteAccountResponse(getServerPort(), accessTokenId, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
         verifyErrorResponse(accountLockedResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        accessTokenId = IndexPageActions.login(userData.toLoginRequest());
+        accessTokenId = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         return accessTokenId;
     }
 
     private static void successfulDeletion(RegistrationParameters userData, UUID accessTokenId) {
-        Response response = AccountActions.getDeleteAccountResponse(accessTokenId, new OneParamRequest<>(userData.getPassword()));
+        Response response = AccountActions.getDeleteAccountResponse(getServerPort(), accessTokenId, new OneParamRequest<>(userData.getPassword()));
         assertThat(response.getStatusCode()).isEqualTo(200);
-        Response loginResponse = IndexPageActions.getLoginResponse(userData.toLoginRequest());
+        Response loginResponse = IndexPageActions.getLoginResponse(getServerPort(), userData.toLoginRequest());
         assertThat(loginResponse.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = loginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());

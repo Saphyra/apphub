@@ -27,23 +27,23 @@ public class MigrationTasksTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void migrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         DatabaseUtil.insertMigrationTask(EVENT, NAME, false);
 
-        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(accessTokenId, EVENT);
+        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
         assertThat(task.getCompleted()).isFalse();
 
-        MigrationTasksActions.triggerTask(accessTokenId, EVENT);
-        task = MigrationTasksActions.findMigrationTaskByEventValidated(accessTokenId, EVENT);
+        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
+        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
         assertThat(task.getCompleted()).isTrue();
 
-        Response response = MigrationTasksActions.getTriggerTaskResponse(accessTokenId, EVENT);
+        Response response = MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessTokenId, EVENT);
         assertThat(response.getStatusCode()).isEqualTo(410);
 
-        MigrationTasksActions.deleteTask(accessTokenId, EVENT);
+        MigrationTasksActions.deleteTask(getServerPort(), accessTokenId, EVENT);
 
-        assertThat(MigrationTasksActions.findMigrationTaskByEvent(accessTokenId, EVENT)).isEmpty();
+        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessTokenId, EVENT)).isEmpty();
     }
 }

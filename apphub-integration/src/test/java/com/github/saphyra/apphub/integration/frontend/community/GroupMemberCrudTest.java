@@ -27,6 +27,8 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
     @Test(groups = {"fe", "community"})
     public void groupMemberCrud() {
+        Integer serverPort = getServerPort();
+
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
         WebDriver driver2 = drivers.get(1);
@@ -37,8 +39,9 @@ public class GroupMemberCrudTest extends SeleniumTest {
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
         RegistrationUtils.registerUsers(
+            serverPort,
             List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)),
-            (driver, registrationParameters) -> ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY)
+            (driver, registrationParameters) -> ModulesPageActions.openModule(serverPort, driver, ModuleLocation.COMMUNITY)
         );
 
         CommunityActions.setUpFriendship(driver1, userData1.getUsername(), userData2.getUsername(), driver2);

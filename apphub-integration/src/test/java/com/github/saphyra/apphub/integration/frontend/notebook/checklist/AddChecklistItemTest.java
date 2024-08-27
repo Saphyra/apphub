@@ -30,14 +30,14 @@ public class AddChecklistItemTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void addChecklistItem() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CHECKLIST);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST);
         NewChecklistActions.fillTitle(driver, TITLE);
         NewChecklistActions.getItems(driver)
             .get(0)

@@ -22,9 +22,9 @@ public class PinTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void pinListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID listItemId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID listItemId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
 
         pin_nullPinned(accessTokenId, listItemId);
         pin(accessTokenId, listItemId);
@@ -32,23 +32,23 @@ public class PinTest extends BackEndTest {
     }
 
     private static void pin_nullPinned(UUID accessTokenId, UUID listItemId) {
-        Response pin_nullPinnedResponse = PinActions.getPinResponse(accessTokenId, listItemId, null);
+        Response pin_nullPinnedResponse = PinActions.getPinResponse(getServerPort(), accessTokenId, listItemId, null);
         ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "pinned", "must not be null");
     }
 
     private static void pin(UUID accessTokenId, UUID listItemId) {
-        PinActions.pin(accessTokenId, listItemId, true);
+        PinActions.pin(getServerPort(), accessTokenId, listItemId, true);
 
-        List<NotebookView> pinnedItems = PinActions.getPinnedItems(accessTokenId);
+        List<NotebookView> pinnedItems = PinActions.getPinnedItems(getServerPort(), accessTokenId);
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
     }
 
     private static void unpin(UUID accessTokenId, UUID listItemId) {
         List<NotebookView> pinnedItems;
-        PinActions.pin(accessTokenId, listItemId, false);
+        PinActions.pin(getServerPort(), accessTokenId, listItemId, false);
 
-        pinnedItems = PinActions.getPinnedItems(accessTokenId);
+        pinnedItems = PinActions.getPinnedItems(getServerPort(), accessTokenId);
         assertThat(pinnedItems).isEmpty();
     }
 }

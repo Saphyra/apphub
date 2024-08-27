@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementActions {
-    public static List<UserRoleResponse> getRoles(UUID accessTokenId, String queryString) {
-        Response response = getRolesResponse(accessTokenId, queryString);
+    public static List<UserRoleResponse> getRoles(int serverPort, UUID accessTokenId, String queryString) {
+        Response response = getRolesResponse(serverPort, accessTokenId, queryString);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -25,46 +25,46 @@ public class RoleManagementActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getRolesResponse(UUID accessTokenId, String queryString) {
+    public static Response getRolesResponse(int serverPort, UUID accessTokenId, String queryString) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(queryString))
-            .post(UrlFactory.create(Endpoints.USER_DATA_GET_USER_ROLES));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_GET_USER_ROLES));
     }
 
-    public static UserRoleResponse addRole(UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getAddRoleResponse(accessTokenId, roleRequest);
+    public static UserRoleResponse addRole(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
+        Response response = getAddRoleResponse(serverPort, accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(UserRoleResponse.class);
     }
 
-    public static Response getAddRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {
+    public static Response getAddRoleResponse(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(roleRequest)
-            .put(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE));
+            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE));
     }
 
-    public static UserRoleResponse removeRole(UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getRemoveRoleResponse(accessTokenId, roleRequest);
+    public static UserRoleResponse removeRole(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
+        Response response = getRemoveRoleResponse(serverPort, accessTokenId, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(UserRoleResponse.class);
     }
 
-    public static Response getRemoveRoleResponse(UUID accessTokenId, RoleRequest roleRequest) {
+    public static Response getRemoveRoleResponse(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(roleRequest)
-            .delete(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE));
+            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE));
     }
 
-    public static Response getAddToAllResponse(UUID accessTokenId, String password, String role) {
+    public static Response getAddToAllResponse(int serverPort, UUID accessTokenId, String password, String role) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(password))
-            .post(UrlFactory.create(Endpoints.USER_DATA_ADD_ROLE_TO_ALL, "role", role));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_ADD_ROLE_TO_ALL, "role", role));
     }
 
-    public static Response getRemoveFromAllResponse(UUID accessTokenId, String password, String role) {
+    public static Response getRemoveFromAllResponse(int serverPort, UUID accessTokenId, String password, String role) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(password))
-            .post(UrlFactory.create(Endpoints.USER_DATA_REMOVE_ROLE_FROM_ALL, "role", role));
+            .post(UrlFactory.create(serverPort, Endpoints.USER_DATA_REMOVE_ROLE_FROM_ALL, "role", role));
     }
 }

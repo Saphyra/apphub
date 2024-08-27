@@ -38,7 +38,7 @@ public class StockItemInventoryTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void stockItemInventory() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         createCategory(accessTokenId);
@@ -59,7 +59,7 @@ public class StockItemInventoryTest extends BackEndTest {
         editInventoried_null(accessTokenId, stockItemId);
         editInventoried(accessTokenId, stockItemId);
 
-        resetInventoried(accessTokenId, stockItemId);
+        resetInventoried(accessTokenId);
 
         editName_blank(accessTokenId, stockItemId);
         editName(accessTokenId, stockItemId);
@@ -83,119 +83,119 @@ public class StockItemInventoryTest extends BackEndTest {
         moveStockToStorage(accessTokenId, stockItemId);
     }
 
-    private void resetInventoried(UUID accessTokenId, UUID stockItemId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.resetInventoried(accessTokenId))
+    private void resetInventoried(UUID accessTokenId) {
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.resetInventoried(getServerPort(), accessTokenId))
             .returns(false, StockItemInventoryResponse::getInventoried);
     }
 
     private void editCategory_nullStockCategoryId(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditCategoryResponse(accessTokenId, stockItemId, null), "stockCategoryId", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditCategoryResponse(getServerPort(), accessTokenId, stockItemId, null), "stockCategoryId", "must not be null");
     }
 
     private void editCategory_nonExistingStockCategoryId(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyErrorResponse(VillanyAteszStockItemInventoryActions.getEditCategoryResponse(accessTokenId, stockItemId, UUID.randomUUID()), 404, ErrorCode.DATA_NOT_FOUND);
+        ResponseValidator.verifyErrorResponse(VillanyAteszStockItemInventoryActions.getEditCategoryResponse(getServerPort(), accessTokenId, stockItemId, UUID.randomUUID()), 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private void editCategory(UUID accessTokenId, UUID stockItemId, UUID stockCategoryId) {
-        VillanyAteszStockItemInventoryActions.editCategory(accessTokenId, stockItemId, stockCategoryId);
+        VillanyAteszStockItemInventoryActions.editCategory(getServerPort(), accessTokenId, stockItemId, stockCategoryId);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(stockCategoryId, StockItemInventoryResponse::getStockCategoryId);
     }
 
     private void editMarkedForAcquisition_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, stockItemId, null), "markedForAcquisition", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(getServerPort(), accessTokenId, stockItemId, null), "markedForAcquisition", "must not be null");
     }
 
     private void editMarkedForAcquisition(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, stockItemId, true);
+        VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(getServerPort(), accessTokenId, stockItemId, true);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(true, StockItemInventoryResponse::getMarkedForAcquisition);
     }
 
     private void editInventoried_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInventoriedResponse(accessTokenId, stockItemId, null), "inventoried", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInventoriedResponse(getServerPort(), accessTokenId, stockItemId, null), "inventoried", "must not be null");
     }
 
     private void editInventoried(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editInventoried(accessTokenId, stockItemId, true);
+        VillanyAteszStockItemInventoryActions.editInventoried(getServerPort(), accessTokenId, stockItemId, true);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(true, StockItemInventoryResponse::getInventoried);
     }
 
     private void editName_blank(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditNameResponse(accessTokenId, stockItemId, " "), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditNameResponse(getServerPort(), accessTokenId, stockItemId, " "), "name", "must not be null or blank");
     }
 
     private void editName(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editName(accessTokenId, stockItemId, NEW_NAME);
+        VillanyAteszStockItemInventoryActions.editName(getServerPort(), accessTokenId, stockItemId, NEW_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(NEW_NAME, StockItemInventoryResponse::getName);
     }
 
     private void editSerialNumber_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditSerialNumberResponse(accessTokenId, stockItemId, null), "serialNumber", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditSerialNumberResponse(getServerPort(), accessTokenId, stockItemId, null), "serialNumber", "must not be null");
     }
 
     private void editSerialNumber(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editSerialNumber(accessTokenId, stockItemId, NEW_SERIAL_NUMBER);
+        VillanyAteszStockItemInventoryActions.editSerialNumber(getServerPort(), accessTokenId, stockItemId, NEW_SERIAL_NUMBER);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(NEW_SERIAL_NUMBER, StockItemInventoryResponse::getSerialNumber);
     }
 
     private void editBarCode_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditBarCodeResponse(accessTokenId, stockItemId, null), "barCode", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditBarCodeResponse(getServerPort(), accessTokenId, stockItemId, null), "barCode", "must not be null");
     }
 
     private void editBarCode(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editBarCode(accessTokenId, stockItemId, NEW_BAR_CODE);
+        VillanyAteszStockItemInventoryActions.editBarCode(getServerPort(), accessTokenId, stockItemId, NEW_BAR_CODE);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(NEW_BAR_CODE, StockItemInventoryResponse::getBarCode);
     }
 
     private void editInCar_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInCarResponse(accessTokenId, stockItemId, null), "inCar", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInCarResponse(getServerPort(), accessTokenId, stockItemId, null), "inCar", "must not be null");
     }
 
     private void editInCar(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editInCar(accessTokenId, stockItemId, NEW_IN_CAR);
+        VillanyAteszStockItemInventoryActions.editInCar(getServerPort(), accessTokenId, stockItemId, NEW_IN_CAR);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(NEW_IN_CAR, StockItemInventoryResponse::getInCar);
     }
 
     private void editInStorage_null(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInStorageResponse(accessTokenId, stockItemId, null), "inStorage", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getEditInStorageResponse(getServerPort(), accessTokenId, stockItemId, null), "inStorage", "must not be null");
     }
 
     private void editInStorage(UUID accessTokenId, UUID stockItemId) {
-        VillanyAteszStockItemInventoryActions.editInStorage(accessTokenId, stockItemId, NEW_IN_STORAGE);
+        VillanyAteszStockItemInventoryActions.editInStorage(getServerPort(), accessTokenId, stockItemId, NEW_IN_STORAGE);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.getItems(getServerPort(), accessTokenId))
             .returns(NEW_IN_STORAGE, StockItemInventoryResponse::getInStorage);
     }
 
     private void moveStockToCar_zeroAmount(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToCarResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToCarResponse(getServerPort(), accessTokenId, stockItemId, 0), "amount", "must not be zero");
     }
 
     private void moveStockToCar(UUID accessTokenId, UUID stockItemId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToCar(accessTokenId, stockItemId, AMOUNT))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToCar(getServerPort(), accessTokenId, stockItemId, AMOUNT))
             .returns(NEW_IN_CAR + AMOUNT, StockItemInventoryResponse::getInCar)
             .returns(NEW_IN_STORAGE - AMOUNT, StockItemInventoryResponse::getInStorage);
     }
 
     private void moveStockToStorage_zeroAmount(UUID accessTokenId, UUID stockItemId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToStorageResponse(accessTokenId, stockItemId, 0), "amount", "must not be zero");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockItemInventoryActions.getMoveStockToStorageResponse(getServerPort(), accessTokenId, stockItemId, 0), "amount", "must not be zero");
     }
 
     private void moveStockToStorage(UUID accessTokenId, UUID stockItemId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToStorage(accessTokenId, stockItemId, AMOUNT))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockItemInventoryActions.moveStockToStorage(getServerPort(), accessTokenId, stockItemId, AMOUNT))
             .returns(NEW_IN_CAR, StockItemInventoryResponse::getInCar)
             .returns(NEW_IN_STORAGE, StockItemInventoryResponse::getInStorage);
     }
@@ -212,9 +212,9 @@ public class StockItemInventoryTest extends BackEndTest {
             .price(PRICE)
             .build();
 
-        VillanyAteszStockItemActions.create(accessTokenId, request);
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, request);
 
-        return VillanyAteszStockItemActions.getStockItems(accessTokenId)
+        return VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -222,7 +222,7 @@ public class StockItemInventoryTest extends BackEndTest {
     }
 
     private List<UUID> getCategoryIds(UUID accessTokenId) {
-        return VillanyAteszStockCategoryActions.getStockCategories(accessTokenId)
+        return VillanyAteszStockCategoryActions.getStockCategories(getServerPort(), accessTokenId)
             .stream()
             .map(StockCategoryModel::getStockCategoryId)
             .collect(Collectors.toList());
@@ -234,6 +234,6 @@ public class StockItemInventoryTest extends BackEndTest {
             .measurement("")
             .build();
 
-        VillanyAteszStockCategoryActions.create(accessTokenId, request);
+        VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, request);
     }
 }
