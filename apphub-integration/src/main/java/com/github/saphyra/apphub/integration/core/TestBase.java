@@ -75,6 +75,7 @@ public abstract class TestBase {
         log.info("Server connection cache enabled: {}", TestConfiguration.SERVER_CONNECTION_CACHE_ENABLED);
         log.info("Database connection cache enabled: {}", TestConfiguration.DATABASE_CONNECTION_CACHE_ENABLED);
         log.info("Namespace name: {}", TestConfiguration.NAMESPACE_NAME);
+        log.info("Browser startup limit: {}", TestConfiguration.BROWSER_STARTUP_LIMIT);
 
         IntegrationServer.start();
         StatusLogger.setTotalTestCount(context);

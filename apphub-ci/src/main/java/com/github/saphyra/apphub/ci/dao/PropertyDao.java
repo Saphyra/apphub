@@ -114,4 +114,11 @@ public class PropertyDao {
             .map(Property::getValue)
             .orElseGet(defaultProperties::getBashFileLocation);
     }
+
+    public Integer getBrowserStartupLimit() {
+        return propertyRepository.findById(PropertyName.BROWSER_STARTUP_LIMIT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getBrowserStartupLimit);
+    }
 }

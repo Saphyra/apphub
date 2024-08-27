@@ -35,7 +35,6 @@ import static java.util.Objects.isNull;
 
 @Slf4j
 public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
-    private static final int BROWSER_STARTUP_LIMIT = 3;
     private static final int MAX_DRIVER_COUNT = 300;
 
     private static final GenericObjectPoolConfig<WebDriverWrapper> DRIVER_POOL_CONFIG = new GenericObjectPoolConfig<>();
@@ -48,7 +47,8 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         DRIVER_POOL_CONFIG.setTestOnBorrow(true);
     }
 
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(BROWSER_STARTUP_LIMIT);
+
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(TestConfiguration.BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
     public static synchronized List<WebDriverWrapper> getDrivers(int serverPort, int driverCount) {

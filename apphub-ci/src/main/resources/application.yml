@@ -62,6 +62,7 @@ defaults:
   localRunTestsPreCreateDriverCount: 0
   remoteRunTestsPreCreateDriverCount: 0
   bashFileLocation: bash
+  browserStartupLimit: 3
 
 services:
 #Crutial platform

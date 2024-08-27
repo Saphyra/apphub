@@ -2,17 +2,22 @@
     ApphubCI
         Do not expect disabled services' health if running local test groups
     Login by both e-mail or username
+    Integration
+        Configurable browser startup limit
 
 ===BUGFIXES===
     Notebook
         Dynamic width for Edit checklist item / Add checklist item dialog inputs
         Only list of category is scrollable
         Use textarea for custom table text type
-    Connection cache to avoid timeout during minikube test
+    Integration
+        Connection cache to avoid timeout during minikube test
 
 ===PLATFORM CHANGES===
-    Integration tests default to local run
+    Integration
+        Tests default to local run
 
 ===TECHNICAL DEBTS===
     Remove ThymeLeaf dependency from main-gateway
+
 ===ETC===

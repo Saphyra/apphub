@@ -19,4 +19,5 @@ public class DefaultProperties {
     private Integer localRunTestsPreCreateDriverCount;
     private Integer remoteRunTestsPreCreateDriverCount;
     private String bashFileLocation;
+    private Integer browserStartupLimit;
 }

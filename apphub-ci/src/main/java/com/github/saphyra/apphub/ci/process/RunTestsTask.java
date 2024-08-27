@@ -109,6 +109,7 @@ public class RunTestsTask {
             "-DnamespaceName=%s".formatted(namespaceNameProvider.getNamespaceName()),
             "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
             "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
+            "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
             "\"",
             "clean",
             "test"
