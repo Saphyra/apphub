@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
@@ -52,9 +53,9 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(TestConfiguration.BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
-    public static synchronized List<WebDriverWrapper> getDrivers(int serverPort, int driverCount) {
+    public static synchronized List<WebDriverWrapper> getDrivers(int driverCount) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        List<FutureWrapper<WebDriverWrapper>> futures = Stream.generate(() -> TestBase.EXECUTOR_SERVICE.asyncProcess(() -> getDriver(serverPort)))
+        List<FutureWrapper<WebDriverWrapper>> futures = Stream.generate(() -> TestBase.EXECUTOR_SERVICE.asyncProcess(WebDriverFactory::getDriver))
             .limit(driverCount)
             .toList();
 
@@ -70,29 +71,32 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     }
 
     @SneakyThrows
-    private static WebDriverWrapper getDriver(int serverPort) {
+    private static WebDriverWrapper getDriver() {
         if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED) {
             return DRIVER_POOL.borrowObject();
         } else {
-            return createNewDriver(serverPort);
+            return createNewDriver();
         }
     }
 
-    private static WebDriverWrapper createNewDriver(int serverPort) {
-        Future<WebDriver> future = EXECUTOR.submit(() -> createDriver(serverPort, WebDriverMode.DEFAULT));
+    private static WebDriverWrapper createNewDriver() {
+        Future<WebDriver> future = EXECUTOR.submit(() -> createDriver(WebDriverMode.DEFAULT));
         return new WebDriverWrapper(future, WebDriverMode.DEFAULT);
     }
 
-    public static void release(int serverPort, WebDriverWrapper webDriverWrapper) {
+    public static void release(WebDriverWrapper webDriverWrapper) {
         if (TestConfiguration.WEB_DRIVER_CACHE_ENABLED && webDriverWrapper.getMode() != WebDriverMode.HEADED) {
-            returnDriverToCache(serverPort, webDriverWrapper);
+            returnDriverToCache(webDriverWrapper);
         } else {
             stopDriver(webDriverWrapper);
         }
     }
 
-    private static void returnDriverToCache(int serverPort, WebDriverWrapper webDriverWrapper) {
+    private static void returnDriverToCache(WebDriverWrapper webDriverWrapper) {
         log.debug("Releasing webDriver with id {}", webDriverWrapper.getId());
+
+        CacheItemWrapper<Integer> serverPort = ConnectionProvider.getServerPort();
+
         try {
             WebDriver driver = webDriverWrapper.getDriver();
 
@@ -104,7 +108,7 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
             }
 
             driver.switchTo().window(handles.get(0));
-            driver.navigate().to(UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
+            driver.navigate().to(UrlFactory.create(serverPort.getItem(), Endpoints.ERROR_PAGE));
 
             AwaitilityWrapper.createDefault()
                 .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ERROR_PAGE))
@@ -121,6 +125,8 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
+        } finally {
+            ConnectionProvider.releaseServerPort(serverPort);
         }
 
         DRIVER_POOL.returnObject(webDriverWrapper);
@@ -134,35 +140,44 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         stopDriver(webDriverWrapper);
     }
 
-    public static Future<WebDriver> createDriverExternal(int serverPort, WebDriverMode mode) {
-        return EXECUTOR.submit(() -> createDriver(serverPort, mode));
+    public static Future<WebDriver> createDriverExternal(WebDriverMode mode) {
+        return EXECUTOR.submit(() -> createDriver(mode));
     }
 
-    private static ChromeDriver createDriver(int serverPort, WebDriverMode mode) {
+    private static ChromeDriver createDriver(WebDriverMode mode) {
         log.info("Creating WebDriver with mode {}", mode);
-        ChromeDriver driver = null;
-        for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
-            try {
-                ChromeOptions options = new ChromeOptions();
-                if (mode.getMode().get()) {
-                    options.addArguments("--headless=new");
+        CacheItemWrapper<Integer> serverPort = ConnectionProvider.getServerPort();
+        try {
+            ChromeDriver driver = null;
+
+            for (int tryCount = 0; tryCount < 3 && isNull(driver); tryCount++) {
+                try {
+                    ChromeOptions options = new ChromeOptions();
+                    if (mode.getMode().get()) {
+                        options.addArguments("--headless=new");
+                    }
+                    options.addArguments("--lang=hu");
+                    options.addArguments("window-size=1920,1080");
+                    options.addArguments("--disable-search-engine-choice-screen");
+
+                    driver = new ChromeDriver(options);
+                    log.debug("Driver created: {}", driver);
+                    SleepUtil.sleep(1000);
+                    Navigation.toUrl(driver, UrlFactory.create(serverPort.getItem(), Endpoints.ERROR_PAGE));
+                    numberOfDriversCreated++;
+                    return driver;
+                } catch (Exception e) {
+                    log.error("Could not create driver", e);
                 }
-                options.addArguments("--lang=hu");
-                options.addArguments("window-size=1920,1080");
-                options.addArguments("--disable-search-engine-choice-screen");
-
-                driver = new ChromeDriver(options);
-                log.debug("Driver created: {}", driver);
-                SleepUtil.sleep(1000);
-                Navigation.toUrl(driver, UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
-                numberOfDriversCreated++;
-                return driver;
-            } catch (Exception e) {
-                log.error("Could not create driver", e);
             }
-        }
 
-        throw new RuntimeException("Failed to create webDriver");
+            if (nonNull(driver)) {
+                driver.close();
+            }
+            throw new RuntimeException("Failed to create webDriver");
+        } finally {
+            ConnectionProvider.releaseServerPort(serverPort);
+        }
     }
 
     public static void stopDrivers() {
@@ -187,13 +202,8 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @Override
     public PooledObject<WebDriverWrapper> makeObject() {
-        CacheItemWrapper<Integer> port = ConnectionProvider.getServerPort();
-        try {
-            WebDriverWrapper newDriver = createNewDriver(port.getItem());
-            return new DefaultPooledObject<>(newDriver);
-        } finally {
-            ConnectionProvider.releaseServerPort(port);
-        }
+        WebDriverWrapper newDriver = createNewDriver();
+        return new DefaultPooledObject<>(newDriver);
     }
 
     @Override

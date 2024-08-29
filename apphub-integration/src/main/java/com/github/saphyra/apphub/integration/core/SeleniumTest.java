@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.core;
 
-import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverFactory;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverWrapper;
@@ -42,18 +41,10 @@ public abstract class SeleniumTest extends TestBase {
         }
         log.info("Pre-creating {} drivers...", TestConfiguration.PRE_CREATE_WEB_DRIVERS);
 
-        try {
-            SERVER_PORT_CACHED_ITEM.set(ConnectionProvider.getServerPort());
-            extractDrivers(TestConfiguration.PRE_CREATE_WEB_DRIVERS);
-            driverWrappers.get()
-                .forEach(webDriverWrapper -> WebDriverFactory.release(getServerPort(), webDriverWrapper));
-            log.info("Drivers created.");
-        } finally {
-            if (!isNull((SERVER_PORT_CACHED_ITEM.get()))) {
-                ConnectionProvider.releaseServerPort(SERVER_PORT_CACHED_ITEM.get());
-                SERVER_PORT_CACHED_ITEM.remove();
-            }
-        }
+        extractDrivers(TestConfiguration.PRE_CREATE_WEB_DRIVERS);
+        driverWrappers.get()
+            .forEach(webDriverWrapper -> WebDriverFactory.release(webDriverWrapper));
+        log.info("Drivers created.");
     }
 
     @AfterMethod(alwaysRun = true)
@@ -71,7 +62,7 @@ public abstract class SeleniumTest extends TestBase {
                     reportFailure(webDriverWrapper, testResult.getTestClass().getRealClass().getName(), testResult.getName(), driverIndex);
                     WebDriverFactory.invalidate(webDriverWrapper);
                 } else {
-                    WebDriverFactory.release(getServerPort(), webDriverWrapper);
+                    WebDriverFactory.release(webDriverWrapper);
                 }
             }
         } finally {
@@ -124,11 +115,11 @@ public abstract class SeleniumTest extends TestBase {
             .get(0);
     }
 
-    public static WebDriver extractDriver(int serverPort, WebDriverMode mode) {
+    public static WebDriver extractDriver(WebDriverMode mode) {
         if (mode == WebDriverMode.DEFAULT) {
             throw new IllegalArgumentException("Use extractDriver() to extract default driver.");
         }
-        WebDriverWrapper webDriverWrapper = new WebDriverWrapper(WebDriverFactory.createDriverExternal(serverPort, mode), mode);
+        WebDriverWrapper webDriverWrapper = new WebDriverWrapper(WebDriverFactory.createDriverExternal(mode), mode);
         addToDrivers(webDriverWrapper);
         return webDriverWrapper.getDriver();
     }
@@ -146,7 +137,7 @@ public abstract class SeleniumTest extends TestBase {
         StopWatch stopWatch = StopWatch.createStarted();
         List<WebDriverWrapper> webDriverWrappers;
         try {
-            webDriverWrappers = WebDriverFactory.getDrivers(getServerPort(), driverCount);
+            webDriverWrappers = WebDriverFactory.getDrivers(driverCount);
             stopWatch.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);

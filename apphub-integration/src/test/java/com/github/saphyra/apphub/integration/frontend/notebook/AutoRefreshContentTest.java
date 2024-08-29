@@ -42,7 +42,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshCategory() {
-        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -77,7 +77,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshSearchResult() {
-        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -114,7 +114,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
-        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -149,7 +149,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshTable() {
-        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
@@ -185,7 +185,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshText() {
-        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
