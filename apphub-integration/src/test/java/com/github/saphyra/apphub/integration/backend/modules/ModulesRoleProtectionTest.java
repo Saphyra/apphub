@@ -16,13 +16,13 @@ public class ModulesRoleProtectionTest extends BackEndTest {
     @Test(groups = {"be", "modules"})
     public void modulesRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> ModulesActions.getModulesResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> ModulesActions.getSetAsFavoriteResponse(accessTokenId, "asd", false));
+        CommonUtils.verifyMissingRole(() -> ModulesActions.getModulesResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessTokenId, "asd", false));
     }
 }

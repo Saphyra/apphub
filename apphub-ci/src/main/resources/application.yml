@@ -25,11 +25,11 @@ platform:
   minikubeProdServerPort: 9000
   minikubeProdMainGatewayPort: 8060
   minikubeDevServerPort: 9001
-  minikubeTestServerPort: 8070
+  minikubeTestServerPort: 8080
   localServerPort: 8080
 
   minikubeDatabasePort: 9002
-  minikubeTestDatabasePort: 8071
+  minikubeTestDatabasePort: 5432
   localDatabasePort: 5432
 
   minikubeDatabaseName: postgres
@@ -62,6 +62,7 @@ defaults:
   localRunTestsPreCreateDriverCount: 0
   remoteRunTestsPreCreateDriverCount: 0
   bashFileLocation: bash
+  browserStartupLimit: 3
 
 services:
 #Crutial platform

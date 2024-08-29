@@ -18,36 +18,36 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VillanyAteszStockItemActions {
-    public static Response getCreateResponse(UUID accessTokenId, CreateStockItemRequest request) {
+    public static Response getCreateResponse(int serverPort, UUID accessTokenId, CreateStockItemRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM));
+            .put(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM));
     }
 
-    public static void create(UUID accessTokenId, CreateStockItemRequest request) {
-        Response response = getCreateResponse(accessTokenId, request);
+    public static void create(int serverPort, UUID accessTokenId, CreateStockItemRequest request) {
+        Response response = getCreateResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<StockItemOverviewResponse> getStockItems(UUID accessTokenId) {
-        Response response = getStockItemsResponse(accessTokenId);
+    public static List<StockItemOverviewResponse> getStockItems(int serverPort, UUID accessTokenId) {
+        Response response = getStockItemsResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockItemOverviewResponse[].class));
     }
 
-    public static Response getStockItemsResponse(UUID accessTokenId) {
+    public static Response getStockItemsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS));
     }
 
-    public static Response getAcquireResponse(UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
-        return getAcquireResponse(accessTokenId, date, Arrays.asList(requests));
+    public static Response getAcquireResponse(int serverPort, UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
+        return getAcquireResponse(serverPort, accessTokenId, date, Arrays.asList(requests));
     }
 
-    public static Response getAcquireResponse(UUID accessTokenId, LocalDate date, List<AddToStockRequest> requests) {
+    public static Response getAcquireResponse(int serverPort, UUID accessTokenId, LocalDate date, List<AddToStockRequest> requests) {
         AcquisitionRequest acquisitionRequest = AcquisitionRequest.builder()
             .items(requests)
             .acquiredAt(date)
@@ -55,46 +55,46 @@ public class VillanyAteszStockItemActions {
 
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(acquisitionRequest)
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE));
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE));
     }
 
-    public static void acquire(UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
-        Response response = getAcquireResponse(accessTokenId, date, requests);
+    public static void acquire(int serverPort, UUID accessTokenId, LocalDate date, AddToStockRequest... requests) {
+        Response response = getAcquireResponse(serverPort, accessTokenId, date, requests);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<StockItemOverviewResponse> delete(UUID accessTokenId, UUID stockItemId) {
-        Response response = getDeleteResponse(accessTokenId, stockItemId);
+    public static List<StockItemOverviewResponse> delete(int serverPort, UUID accessTokenId, UUID stockItemId) {
+        Response response = getDeleteResponse(serverPort, accessTokenId, stockItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(StockItemOverviewResponse[].class));
     }
 
-    public static Response getDeleteResponse(UUID accessTokenId, UUID stockItemId) {
+    public static Response getDeleteResponse(int serverPort, UUID accessTokenId, UUID stockItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_STOCK_ITEM, "stockItemId", stockItemId));
+            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_STOCK_ITEM, "stockItemId", stockItemId));
     }
 
-    public static Response getStockItemsForCategoryResponse(UUID accessTokenId, UUID stockCategoryId) {
+    public static Response getStockItemsForCategoryResponse(int serverPort, UUID accessTokenId, UUID stockCategoryId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY, "stockCategoryId", stockCategoryId));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 
-    public static Response getFindByBarcodeResponse(UUID accessTokenId, String barCode) {
+    public static Response getFindByBarcodeResponse(int serverPort, UUID accessTokenId, String barCode) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(barCode))
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE));
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE));
     }
 
-    public static Response getFindBarCodeByStockItemIdResponse(UUID accessTokenId, UUID stockItemId) {
+    public static Response getFindBarCodeByStockItemIdResponse(int serverPort, UUID accessTokenId, UUID stockItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID, "stockItemId", stockItemId));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID, "stockItemId", stockItemId));
     }
 
-    public static Response getStockItemResponse(UUID accessTokenId, UUID stockItemId) {
+    public static Response getStockItemResponse(int serverPort, UUID accessTokenId, UUID stockItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEM, "stockItemId", stockItemId));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_STOCK_ITEM, "stockItemId", stockItemId));
     }
 }

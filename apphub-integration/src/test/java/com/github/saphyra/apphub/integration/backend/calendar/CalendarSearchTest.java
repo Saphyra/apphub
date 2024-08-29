@@ -40,7 +40,7 @@ public class CalendarSearchTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void searchInCalendar() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -54,7 +54,7 @@ public class CalendarSearchTest extends BackEndTest {
             .content(CONTENT)
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
-        List<CalendarResponse> calendar = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> calendar = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         UUID occurrenceId = calendar.stream()
             .filter(calendarResponse -> !calendarResponse.getEvents().isEmpty())
@@ -73,7 +73,7 @@ public class CalendarSearchTest extends BackEndTest {
             .content(CONTENT)
             .note(NOTE)
             .build();
-        OccurrenceActions.editOccurrence(accessTokenId, occurrenceId, editOccurrenceRequest);
+        OccurrenceActions.editOccurrence(getServerPort(), accessTokenId, occurrenceId, editOccurrenceRequest);
 
         queryTooShort(accessTokenId);
         searchByEvent(accessTokenId);
@@ -83,34 +83,34 @@ public class CalendarSearchTest extends BackEndTest {
     }
 
     private static void queryTooShort(UUID accessTokenId) {
-        Response queryTooShortResponse = CalendarSearchActions.getSearchResponse(accessTokenId, "as");
+        Response queryTooShortResponse = CalendarSearchActions.getSearchResponse(getServerPort(), accessTokenId, "as");
 
         ResponseValidator.verifyInvalidParam(queryTooShortResponse, "value", "too short");
     }
 
     private void searchByEvent(UUID accessTokenId) {
-        List<EventSearchResponse> searchResult = CalendarSearchActions.search(accessTokenId, TITLE);
+        List<EventSearchResponse> searchResult = CalendarSearchActions.search(getServerPort(), accessTokenId, TITLE);
 
         verifySearchResult(searchResult);
     }
 
     private void searchByOccurrence(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(accessTokenId, NOTE);
+        searchResult = CalendarSearchActions.search(getServerPort(), accessTokenId, NOTE);
 
         verifySearchResult(searchResult);
     }
 
     private void searchByDate(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(accessTokenId, EVENT_DATE.toString());
+        searchResult = CalendarSearchActions.search(getServerPort(), accessTokenId, EVENT_DATE.toString());
 
         verifySearchResult(searchResult);
     }
 
     private void searchByTime(UUID accessTokenId) {
         List<EventSearchResponse> searchResult;
-        searchResult = CalendarSearchActions.search(accessTokenId, EVENT_TIME.toString());
+        searchResult = CalendarSearchActions.search(getServerPort(), accessTokenId, EVENT_TIME.toString());
 
         verifySearchResult(searchResult);
     }

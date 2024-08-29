@@ -12,5 +12,5 @@ import java.util.UUID;
 public class ToolType {
     private final UUID toolTypeId;
     private final UUID userId;
-    private final String name;
+    private String name;
 }

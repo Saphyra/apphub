@@ -19,15 +19,15 @@ public class SkyXploreSettingRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
     public void settingRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getCreateOrUpdateSettingResponse(accessTokenId, SettingModel.builder().build()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getSettingResponse(accessTokenId, SettingIdentifier.builder().build()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getDeleteResponse(accessTokenId, SettingIdentifier.builder().build()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessTokenId, SettingModel.builder().build()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getSettingResponse(getServerPort(), accessTokenId, SettingIdentifier.builder().build()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSettingActions.getDeleteResponse(getServerPort(), accessTokenId, SettingIdentifier.builder().build()));
     }
 
     @DataProvider(parallel = true)

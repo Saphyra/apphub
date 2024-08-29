@@ -34,7 +34,7 @@ public class StockCategoryCrudTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void stockCategoryCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         create_blankName(accessTokenId);
@@ -51,7 +51,7 @@ public class StockCategoryCrudTest extends BackEndTest {
     }
 
     private UUID getStockCategoryId(UUID accessTokenId) {
-        return VillanyAteszStockCategoryActions.getStockCategories(accessTokenId)
+        return VillanyAteszStockCategoryActions.getStockCategories(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("User has no stock category created."))
@@ -64,7 +64,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(MEASUREMENT)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getCreateResponse(accessTokenId, request), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getCreateResponse(getServerPort(), accessTokenId, request), "name", "must not be null or blank");
     }
 
     private void create_nullMeasurement(UUID accessTokenId) {
@@ -73,7 +73,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getCreateResponse(accessTokenId, request), "measurement", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getCreateResponse(getServerPort(), accessTokenId, request), "measurement", "must not be null");
     }
 
     private void create(UUID accessTokenId) {
@@ -82,7 +82,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(MEASUREMENT)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.create(accessTokenId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, request))
             .returns(NAME, StockCategoryModel::getName)
             .returns(MEASUREMENT, StockCategoryModel::getMeasurement);
     }
@@ -93,7 +93,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(NEW_MEASUREMENT)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getEditResponse(accessTokenId, stockCategoryId, request), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getEditResponse(getServerPort(), accessTokenId, stockCategoryId, request), "name", "must not be null or blank");
     }
 
     private void edit_nullMeasurement(UUID accessTokenId, UUID stockCategoryId) {
@@ -102,7 +102,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getEditResponse(accessTokenId, stockCategoryId, request), "measurement", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszStockCategoryActions.getEditResponse(getServerPort(), accessTokenId, stockCategoryId, request), "measurement", "must not be null");
     }
 
     private void edit(UUID accessTokenId, UUID stockCategoryId) {
@@ -111,7 +111,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(NEW_MEASUREMENT)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.edit(accessTokenId, stockCategoryId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.edit(getServerPort(), accessTokenId, stockCategoryId, request))
             .returns(NEW_NAME, StockCategoryModel::getName)
             .returns(NEW_MEASUREMENT, StockCategoryModel::getMeasurement);
     }
@@ -126,8 +126,8 @@ public class StockCategoryCrudTest extends BackEndTest {
             .inStorage(0)
             .price(PRICE)
             .build();
-        VillanyAteszStockItemActions.create(accessTokenId, createStockItemRequest);
-        UUID stockItemId = VillanyAteszStockItemActions.getStockItems(accessTokenId)
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, createStockItemRequest);
+        UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -140,14 +140,14 @@ public class StockCategoryCrudTest extends BackEndTest {
             .address("")
             .note("")
             .build();
-        UUID contactId = VillanyAteszContactActions.createContact(accessTokenId, contactModel)
+        UUID contactId = VillanyAteszContactActions.createContact(getServerPort(), accessTokenId, contactModel)
             .stream()
             .findFirst()
             .orElseThrow()
             .getContactId();
 
-        VillanyAteszCartActions.create(accessTokenId, contactId);
-        UUID cartId = VillanyAteszCartActions.getCarts(accessTokenId)
+        VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        UUID cartId = VillanyAteszCartActions.getCarts(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -158,11 +158,11 @@ public class StockCategoryCrudTest extends BackEndTest {
             .stockItemId(stockItemId)
             .amount(AMOUNT)
             .build();
-        VillanyAteszCartActions.addToCart(accessTokenId, addToCartRequest);
+        VillanyAteszCartActions.addToCart(getServerPort(), accessTokenId, addToCartRequest);
 
-        assertThat(VillanyAteszStockCategoryActions.delete(accessTokenId, stockCategoryId)).isEmpty();
-        assertThat(VillanyAteszStockItemActions.getStockItems(accessTokenId)).isEmpty();
-        assertThat(VillanyAteszCartActions.getCart(accessTokenId, cartId))
+        assertThat(VillanyAteszStockCategoryActions.delete(getServerPort(), accessTokenId, stockCategoryId)).isEmpty();
+        assertThat(VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(VillanyAteszCartActions.getCart(getServerPort(), accessTokenId, cartId))
             .returns(0, CartView::getTotalPrice)
             .returns(Collections.emptyList(), CartView::getItems);
     }

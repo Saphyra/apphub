@@ -32,11 +32,11 @@ public class CustomTableTextTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void customTableTextCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
         createCustomTableWithTextCell(driver);
         openTable(driver);
@@ -70,8 +70,8 @@ public class CustomTableTextTest extends SeleniumTest {
     }
 
     private static void createCustomTableWithTextCell(WebDriver driver) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CUSTOM_TABLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CUSTOM_TABLE);
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)

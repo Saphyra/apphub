@@ -31,22 +31,22 @@ public class PauseGameTest extends BackEndTest {
     public void pauseAndResumeGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel1);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
-        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(accessTokenId, planetId);
+        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(getServerPort(), accessTokenId, planetId);
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
+        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
 
         //Create construction
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.constructNewBuilding(accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
+        SkyXploreBuildingActions.constructNewBuilding(getServerPort(), accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
         planetWsClient.awaitForEvent(
                 WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
                 webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(
@@ -60,7 +60,7 @@ public class PauseGameTest extends BackEndTest {
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
@@ -68,7 +68,7 @@ public class PauseGameTest extends BackEndTest {
         assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
 
         //Pause game
-        SkyXploreGameActions.setPaused(accessTokenId, true);
+        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, true);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not paused"));
 
@@ -79,7 +79,7 @@ public class PauseGameTest extends BackEndTest {
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 

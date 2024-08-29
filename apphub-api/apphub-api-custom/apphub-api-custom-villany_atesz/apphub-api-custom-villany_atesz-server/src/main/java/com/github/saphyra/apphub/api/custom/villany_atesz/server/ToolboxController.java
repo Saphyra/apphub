@@ -38,4 +38,16 @@ public interface ToolboxController {
 
     @GetMapping(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES)
     List<StorageBoxModel> getStorageBoxes(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE)
+    void editToolType(@RequestBody OneParamRequest<String> name, @PathVariable("toolTypeId") UUID toolTypeId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE)
+    void deleteToolType(@PathVariable("toolTypeId") UUID toolTypeId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX)
+    void editStorageBox(@RequestBody OneParamRequest<String> name, @PathVariable("storageBoxId") UUID storageBoxId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX)
+    void deleteStorageBox(@PathVariable("storageBoxId") UUID storageBoxId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -111,20 +111,18 @@ const Search = ({
                 changeUserSettings={changeUserSettings}
             />
 
-            <div id="notebook-content-search-content">
-                <div id="notebook-content-search-content-navigation">
-                    <div id="notebook-content-search-content-title"> {localizationHandler.get("search-result")} </div>
+            <div id="notebook-content-search-content-navigation">
+                <div id="notebook-content-search-content-title"> {localizationHandler.get("search-result")} </div>
 
-                    <Button
-                        id="notebook-content-search-content-up-button"
-                        label={localizationHandler.get("up")}
-                        onclick={() => setOpenedListItem({ id: openedListItem.parent, type: OpenedPageType.CATEGORY })}
-                    />
-                </div>
+                <Button
+                    id="notebook-content-search-content-up-button"
+                    label={localizationHandler.get("up")}
+                    onclick={() => setOpenedListItem({ id: openedListItem.parent, type: OpenedPageType.CATEGORY })}
+                />
+            </div>
 
-                <div id="notebook-category-content-list">
-                    {getContent()}
-                </div>
+            <div id="notebook-category-content-list">
+                {getContent()}
             </div>
         </div>
     );

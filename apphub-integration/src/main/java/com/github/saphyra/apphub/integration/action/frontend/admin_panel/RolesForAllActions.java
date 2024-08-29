@@ -54,11 +54,11 @@ public class RolesForAllActions {
             .click();
     }
 
-    public static List<String> getRestrictedRoles(RegistrationParameters registrationParameters) {
-        UUID accessToken = IndexPageActions.login(registrationParameters.toLoginRequest());
+    public static List<String> getRestrictedRoles(int serverPort, RegistrationParameters registrationParameters) {
+        UUID accessToken = IndexPageActions.login(serverPort, registrationParameters.toLoginRequest());
 
         Response response = RequestFactory.createAuthorizedRequest(accessToken)
-            .get(UrlFactory.create(Endpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
+            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

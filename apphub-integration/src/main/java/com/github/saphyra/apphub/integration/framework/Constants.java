@@ -7,6 +7,9 @@ import java.util.List;
 
 @UtilityClass
 public class Constants {
+    public static final Object SERVICE_NAME_MAIN_GATEWAY = "main-gateway";
+    public static final Object SERVICE_NAME_POSTGRES = "postgres";
+
     //Cookies
     public final String ACCESS_TOKEN_COOKIE = "access-token";
     public final String LOCALE_COOKIE = "language";

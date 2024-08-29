@@ -37,7 +37,7 @@ public class GameCrudTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)));
+        SkyXploreUtils.registerAndNavigateToMainMenu(getServerPort(), List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2), new BiWrapper<>(driver3, userData3)));
 
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver2, userData1.getUsername(), userData2.getUsername());
         SkyXploreFriendshipActions.setUpFriendship(driver1, driver3, userData1.getUsername(), userData3.getUsername());

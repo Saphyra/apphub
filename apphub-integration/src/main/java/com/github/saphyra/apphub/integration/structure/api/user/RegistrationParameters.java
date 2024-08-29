@@ -23,7 +23,7 @@ public class RegistrationParameters {
 
     public LoginRequest toLoginRequest() {
         return LoginRequest.builder()
-            .email(email)
+            .userIdentifier(email)
             .password(password)
             .rememberMe(false)
             .build();

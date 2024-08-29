@@ -37,7 +37,7 @@ public class ContactsCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void contactsCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -45,7 +45,7 @@ public class ContactsCrudTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
         VillanyAteszNavigation.openContacts(driver);
 
         createContact_blankName(driver);
@@ -151,7 +151,7 @@ public class ContactsCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void deleteContactAndCorrespondingCart() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -159,7 +159,7 @@ public class ContactsCrudTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createContact(driver, NAME, CODE);
 

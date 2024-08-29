@@ -19,10 +19,10 @@ public class FriendCandidateSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchFriendCandidates() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(testUserData);
+        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), testUserData);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUserData.getEmail());
 
         search(accessTokenId, testUserData, testUserId);
@@ -32,7 +32,7 @@ public class FriendCandidateSearchTest extends BackEndTest {
     }
 
     private static void search(UUID accessTokenId, RegistrationParameters testUserData, UUID testUserId) {
-        List<SearchResultItem> searchResult = FriendRequestActions.search(accessTokenId, getEmailDomain());
+        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.get(0).getUserId()).isEqualTo(testUserId);
@@ -41,21 +41,21 @@ public class FriendCandidateSearchTest extends BackEndTest {
     }
 
     private static FriendRequestResponse friendRequestAlreadySent(UUID accessTokenId, UUID testUserId) {
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(accessTokenId, testUserId);
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, testUserId);
 
-        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
         return friendRequestResponse;
     }
 
     private static void friendshipAlreadyExists(UUID accessTokenId, UUID testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
-        FriendRequestActions.acceptFriendRequest(testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
+        FriendRequestActions.acceptFriendRequest(getServerPort(), testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
     }
 
     private static void blacklisted(UUID accessTokenId, UUID testUserId) {
-        BlacklistActions.createBlacklist(accessTokenId, testUserId);
+        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, testUserId);
 
-        assertThat(FriendRequestActions.search(accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
     }
 }

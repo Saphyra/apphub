@@ -15,59 +15,59 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OccurrenceActions {
-    public static List<CalendarResponse> editOccurrence(UUID accessTokenId, UUID occurrenceId, EditOccurrenceRequest request) {
-        Response response = getEditOccurrenceResponse(accessTokenId, occurrenceId, request);
+    public static List<CalendarResponse> editOccurrence(int serverPort, UUID accessTokenId, UUID occurrenceId, EditOccurrenceRequest request) {
+        Response response = getEditOccurrenceResponse(serverPort, accessTokenId, occurrenceId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getEditOccurrenceResponse(UUID accessTokenId, UUID occurrenceId, EditOccurrenceRequest request) {
+    public static Response getEditOccurrenceResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, EditOccurrenceRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.CALENDAR_OCCURRENCE_EDIT, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_EDIT, "occurrenceId", occurrenceId));
     }
 
-    public static List<CalendarResponse> markOccurrenceDone(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
-        Response response = getMarkOccurrenceDoneResponse(accessTokenId, occurrenceId, referenceDate);
+    public static List<CalendarResponse> markOccurrenceDone(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+        Response response = getMarkOccurrenceDoneResponse(serverPort, accessTokenId, occurrenceId, referenceDate);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getMarkOccurrenceDoneResponse(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+    public static Response getMarkOccurrenceDoneResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(Endpoints.CALENDAR_OCCURRENCE_DONE, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_DONE, "occurrenceId", occurrenceId));
     }
 
-    public static List<CalendarResponse> markOccurrenceSnoozed(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
-        Response response = getMarkOccurrenceSnoozedResponse(accessTokenId, occurrenceId, referenceDate);
+    public static List<CalendarResponse> markOccurrenceSnoozed(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+        Response response = getMarkOccurrenceSnoozedResponse(serverPort, accessTokenId, occurrenceId, referenceDate);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getMarkOccurrenceSnoozedResponse(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+    public static Response getMarkOccurrenceSnoozedResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(Endpoints.CALENDAR_OCCURRENCE_SNOOZED, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_SNOOZED, "occurrenceId", occurrenceId));
     }
 
-    public static List<CalendarResponse> markOccurrenceDefault(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
-        Response response = getMarkOccurrenceDefaultResponse(accessTokenId, occurrenceId, referenceDate);
+    public static List<CalendarResponse> markOccurrenceDefault(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+        Response response = getMarkOccurrenceDefaultResponse(serverPort, accessTokenId, occurrenceId, referenceDate);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getMarkOccurrenceDefaultResponse(UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
+    public static Response getMarkOccurrenceDefaultResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(Endpoints.CALENDAR_OCCURRENCE_DEFAULT, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_DEFAULT, "occurrenceId", occurrenceId));
     }
 }

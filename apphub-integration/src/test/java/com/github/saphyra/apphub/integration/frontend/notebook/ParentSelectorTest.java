@@ -24,22 +24,22 @@ public class ParentSelectorTest extends SeleniumTest {
     @Test(groups = {"notebook", "fe"})
     public void selectParentAsDefaultIfListItemNotACategory() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, PARENT_TITLE);
-        NotebookUtils.newText(driver, TITLE, CONTENT, PARENT_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, PARENT_TITLE);
+        NotebookUtils.newText(getServerPort(), driver, TITLE, CONTENT, PARENT_TITLE);
 
         NotebookActions.findListItemByTitleValidated(driver, PARENT_TITLE)
             .open();
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
             .open();
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TEXT);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.TEXT);
 
         assertThat(ParentSelectorActions.getParent(driver)).isEqualTo(PARENT_TITLE);
     }

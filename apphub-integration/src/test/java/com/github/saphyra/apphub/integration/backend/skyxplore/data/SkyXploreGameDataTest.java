@@ -17,19 +17,19 @@ public class SkyXploreGameDataTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void getGameData() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         notFound(accessTokenId);
         get(accessTokenId);
     }
 
     private static void notFound(UUID accessTokenId) {
-        Response notFoundResponse = SkyXploreGameDataActions.getGameDateResponse(accessTokenId, "asd");
+        Response notFoundResponse = SkyXploreGameDataActions.getGameDateResponse(getServerPort(), accessTokenId, "asd");
         verifyErrorResponse(notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void get(UUID accessTokenId) {
-        Response getResponse = SkyXploreGameDataActions.getGameDateResponse(accessTokenId, "community_center");
+        Response getResponse = SkyXploreGameDataActions.getGameDateResponse(getServerPort(), accessTokenId, "community_center");
         assertThat(getResponse.getStatusCode()).isEqualTo(200);
         assertThat(getResponse.getBody().jsonPath().getString("id")).isEqualTo("community_center");
     }

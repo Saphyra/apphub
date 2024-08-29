@@ -36,14 +36,14 @@ public class PopulationTest extends BackEndTest {
     public void getAndRenameCitizens() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId1, userId1))
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1))
             .get(accessTokenId1);
 
-        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId1);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId1);
 
         CitizenResponse citizen = getCitizenResponse(accessTokenId1, planet);
         blankName(accessTokenId1, citizen);
@@ -53,7 +53,7 @@ public class PopulationTest extends BackEndTest {
     }
 
     private CitizenResponse getCitizenResponse(UUID accessTokenId1, PlanetLocationResponse planet) {
-        List<CitizenResponse> citizens = SkyXplorePopulationActions.getPopulation(accessTokenId1, planet.getPlanetId());
+        List<CitizenResponse> citizens = SkyXplorePopulationActions.getPopulation(getServerPort(), accessTokenId1, planet.getPlanetId());
 
         assertThat(citizens.size()).isEqualTo(10);
         citizens.forEach(this::validate);
@@ -62,24 +62,24 @@ public class PopulationTest extends BackEndTest {
     }
 
     private static void blankName(UUID accessTokenId1, CitizenResponse citizen) {
-        Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(accessTokenId1, citizen.getCitizenId(), " ");
+        Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessTokenId1, citizen.getCitizenId(), " ");
         verifyInvalidParam(blankNameResponse, "value", "must not be null or blank");
     }
 
     private static void tooLongName(UUID accessTokenId1, CitizenResponse citizen) {
-        Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(accessTokenId1, citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessTokenId1, citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
         verifyInvalidParam(tooLongNameResponse, "value", "too long");
     }
 
     private static void notFound(UUID accessTokenId1) {
-        Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(accessTokenId1, UUID.randomUUID(), NEW_NAME);
+        Response notFoundResponse = SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessTokenId1, UUID.randomUUID(), NEW_NAME);
         assertThat(notFoundResponse.getStatusCode()).isEqualTo(404);
     }
 
     private static void rename(UUID accessTokenId, UUID planetId, CitizenResponse citizen) {
-        SkyXplorePopulationActions.renameCitizen(accessTokenId, citizen.getCitizenId(), NEW_NAME);
+        SkyXplorePopulationActions.renameCitizen(getServerPort(), accessTokenId, citizen.getCitizenId(), NEW_NAME);
 
-        CitizenResponse citizenResponse = SkyXplorePopulationActions.getPopulation(accessTokenId, planetId)
+        CitizenResponse citizenResponse = SkyXplorePopulationActions.getPopulation(getServerPort(), accessTokenId, planetId)
             .stream()
             .filter(cr -> cr.getCitizenId().equals(citizen.getCitizenId()))
             .findAny()

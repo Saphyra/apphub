@@ -11,7 +11,9 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.CreateToolService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.DeleteToolService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.SetToolStatusService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.StorageBoxService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.ToolQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.ToolTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,8 @@ public class ToolboxControllerImpl implements ToolboxController {
     private final CreateToolService createToolService;
     private final SetToolStatusService setToolStatusService;
     private final DeleteToolService deleteToolService;
+    private final ToolTypeService toolTypeService;
+    private final StorageBoxService storageBoxService;
 
     @Override
     public List<ToolResponse> getTools(AccessTokenHeader accessTokenHeader) {
@@ -72,5 +76,32 @@ public class ToolboxControllerImpl implements ToolboxController {
         log.info("{} wants to know their storageBoxes", accessTokenHeader.getUserId());
 
         return toolQueryService.getStorageBoxes(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public void editToolType(OneParamRequest<String> name, UUID toolTypeId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit toolType {}", accessTokenHeader.getUserId(), toolTypeId);
+        toolTypeService.edit(toolTypeId, name.getValue());
+    }
+
+    @Override
+    public void deleteToolType(UUID toolTypeId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete toolType {}", accessTokenHeader.getUserId(), toolTypeId);
+
+        toolTypeService.delete(accessTokenHeader.getUserId(), toolTypeId);
+    }
+
+    @Override
+    public void editStorageBox(OneParamRequest<String> name, UUID storageBoxId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit storageBox {}", accessTokenHeader.getUserId(), storageBoxId);
+
+        storageBoxService.edit(storageBoxId, name.getValue());
+    }
+
+    @Override
+    public void deleteStorageBox(UUID storageBoxId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete storageBox {}", accessTokenHeader.getUserId(), storageBoxId);
+
+        storageBoxService.delete(accessTokenHeader.getUserId(), storageBoxId);
     }
 }

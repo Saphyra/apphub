@@ -35,14 +35,14 @@ public class StorageSettingTest extends BackEndTest {
     public void storageSettingCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId1, userId1))
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1))
             .get(accessTokenId1);
 
-        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId1);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId1);
 
         create_validation(accessTokenId1, planet);
         StorageSettingModel createModel = createForCrud(accessTokenId1, planet);
@@ -65,7 +65,7 @@ public class StorageSettingTest extends BackEndTest {
 
     private static StorageSettingModel createForCrud(UUID accessTokenId1, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
-        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(accessTokenId1, planet.getPlanetId(), createModel)
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(getServerPort(), accessTokenId1, planet.getPlanetId(), createModel)
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(createModel.getDataId()))
             .findAny()
@@ -79,7 +79,7 @@ public class StorageSettingTest extends BackEndTest {
 
     private static void get(UUID accessTokenId1, PlanetLocationResponse planet, StorageSettingModel createModel) {
         StorageSettingModel created;
-        List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(accessTokenId1, planet.getPlanetId())
+        List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .toList();
@@ -97,7 +97,7 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private UUID edit_validation(UUID accessTokenId1, PlanetLocationResponse planet) {
-        UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(accessTokenId1, planet.getPlanetId())
+        UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .findFirst()
@@ -121,7 +121,7 @@ public class StorageSettingTest extends BackEndTest {
             .priority(2)
             .dataId(createModel.getDataId())
             .build();
-        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(accessTokenId1, editModel)
+        StorageSettingModel edited = SkyXploreStorageSettingActions.editStorageSetting(getServerPort(), accessTokenId1, editModel)
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getStorageSettingId().equals(storageSettingId))
             .findAny()
@@ -131,7 +131,7 @@ public class StorageSettingTest extends BackEndTest {
         assertThat(edited.getPriority()).isEqualTo(editModel.getPriority());
         assertThat(edited.getStorageSettingId()).isEqualTo(editModel.getStorageSettingId());
 
-        List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(accessTokenId1, planet.getPlanetId())
+        List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
             .toList();
@@ -144,8 +144,8 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private static void delete(UUID accessTokenId1, PlanetLocationResponse planet, UUID storageSettingId) {
-        SkyXploreStorageSettingActions.deleteStorageSetting(accessTokenId1, storageSettingId);
-        assertThat(SkyXploreStorageSettingActions.getStorageSettings(accessTokenId1, planet.getPlanetId())).hasSize(1);
+        SkyXploreStorageSettingActions.deleteStorageSetting(getServerPort(), accessTokenId1, storageSettingId);
+        assertThat(SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())).hasSize(1);
 
         ApphubWsClient.cleanUpConnections();
     }
@@ -154,14 +154,14 @@ public class StorageSettingTest extends BackEndTest {
     public void produceResourcesForStorageSetting() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId, characterModel);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
-        ApphubWsClient wsClient = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId, userId))
+        ApphubWsClient wsClient = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId, userId))
             .get(accessTokenId);
 
-        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(accessTokenId);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId);
 
         StorageSettingModel createModel = create(accessTokenId, planet);
         checkStorageReserved(accessTokenId, wsClient, planet);
@@ -170,7 +170,7 @@ public class StorageSettingTest extends BackEndTest {
 
     private static StorageSettingModel create(UUID accessTokenId, PlanetLocationResponse planet) {
         StorageSettingModel createModel = StorageSettingModel.valid();
-        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(accessTokenId, planet.getPlanetId(), createModel)
+        StorageSettingModel created = SkyXploreStorageSettingActions.createStorageSetting(getServerPort(), accessTokenId, planet.getPlanetId(), createModel)
             .stream()
             .filter(storageSettingModel -> storageSettingModel.getDataId().equals(createModel.getDataId()))
             .findAny()
@@ -181,19 +181,21 @@ public class StorageSettingTest extends BackEndTest {
 
     private static void checkStorageReserved(UUID accessTokenId, ApphubWsClient wsClient, PlanetLocationResponse planet) {
         wsClient.clearMessages();
-        SkyXploreGameActions.setPaused(accessTokenId, false);
+        Integer serverPort = getServerPort();
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
 
         wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planet.getPlanetId()).getStorage().getBulk().getReservedStorageAmount() > 0)
+            .until(() -> SkyXplorePlanetActions.getPlanetOverview(serverPort, accessTokenId, planet.getPlanetId()).getStorage().getBulk().getReservedStorageAmount() > 0)
             .assertTrue("Storage not reserved.");
     }
 
     private static void checkResourceProduced(UUID accessTokenId, PlanetLocationResponse planet, StorageSettingModel createModel) {
+        Integer serverPort = getServerPort();
         AwaitilityWrapper.create(120, 10)
-            .until(() -> SkyXplorePlanetActions.getPlanetOverview(accessTokenId, planet.getPlanetId()).getStorage().getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
+            .until(() -> SkyXplorePlanetActions.getPlanetOverview(serverPort, accessTokenId, planet.getPlanetId()).getStorage().getBulk().getActualResourceAmount() == createModel.getTargetAmount() + 100)
             .assertTrue("Resource not produced.");
     }
 
@@ -204,7 +206,7 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private ErrorResponse create_runValidationTest(int status, ErrorCode errorCode, UUID accessTokenId, UUID planetId, StorageSettingModel model) {
-        Response response = SkyXploreStorageSettingActions.getCreateStorageSettingResponse(accessTokenId, planetId, model);
+        Response response = SkyXploreStorageSettingActions.getCreateStorageSettingResponse(getServerPort(), accessTokenId, planetId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(status);
 
@@ -215,7 +217,7 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private void edit_runValidationTest(UUID accessTokenId, StorageSettingModel model, String key, String value) {
-        Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(accessTokenId, model);
+        Response response = SkyXploreStorageSettingActions.getEditStorageSettingResponse(getServerPort(), accessTokenId, model);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
 

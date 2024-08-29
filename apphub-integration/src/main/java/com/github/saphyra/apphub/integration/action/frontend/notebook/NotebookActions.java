@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class NotebookActions {
-    public static void newListItem(WebDriver driver) {
+    public static void newListItem(int serverPprt, WebDriver driver) {
         driver.findElement(By.id("notebook-new-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(Endpoints.NOTEBOOK_NEW_PAGE, "parent", "")))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPprt, Endpoints.NOTEBOOK_NEW_PAGE, "parent", "")))
             .assertTrue("New ListItem page is not opened");
     }
 

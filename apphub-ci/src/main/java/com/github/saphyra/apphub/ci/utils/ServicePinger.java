@@ -20,6 +20,7 @@ public class ServicePinger {
     }
 
     public Optional<Exception> singlePingLocal(int port) {
+        log.debug("Pinging local port {}", port);
         return singlePing("http://localhost:%s/platform/health".formatted(port));
     }
 

@@ -11,29 +11,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommonUtils {
     public static String withLeadingZeros(int number, int length) {
-        String num = String.valueOf(number);
+        StringBuilder num = new StringBuilder(String.valueOf(number));
 
         while (num.length() < length) {
-            num = "0" + num;
+            num.insert(0, "0");
         }
 
-        return num;
+        return num.toString();
     }
 
     public static void verifyMissingRole(Supplier<Response> apiCall) {
         ResponseValidator.verifyErrorResponse(apiCall.get(), 403, ErrorCode.MISSING_ROLE);
     }
 
-    public static void verifyMissingRole(WebDriver driver, String page) {
-        driver.navigate().to(UrlFactory.create(page));
+    public static void verifyMissingRole(int serverPort, WebDriver driver, String page) {
+        driver.navigate().to(UrlFactory.create(serverPort, page));
 
-        verifyMissingRole(driver.getCurrentUrl());
+        verifyMissingRole(serverPort, driver.getCurrentUrl());
     }
 
-    public static void verifyMissingRole(String uri) {
+    public static void verifyMissingRole(int serverPort, String uri) {
         ParsedUri parsedUri = parseUri(uri);
 
-        assertThat(parsedUri.getUri()).isEqualTo(UrlFactory.create(Endpoints.ERROR_PAGE));
+        assertThat(parsedUri.getUri()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
         assertThat(parsedUri.getQueryParams()).containsEntry("error_code", ErrorCode.MISSING_ROLE.name());
     }
 

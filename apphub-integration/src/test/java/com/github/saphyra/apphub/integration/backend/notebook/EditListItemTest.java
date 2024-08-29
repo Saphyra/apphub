@@ -28,9 +28,9 @@ public class EditListItemTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void editListITem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID parentCategoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
+        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
 
         blankTitle(accessTokenId, parentCategoryId);
         newParentNotFound(accessTokenId, parentCategoryId);
@@ -42,7 +42,7 @@ public class EditListItemTest extends BackEndTest {
         EditListItemRequest blankTitleRequest = EditListItemRequest.builder()
             .title(" ")
             .build();
-        Response blankTitleResponse = ListItemActions.getEditListItemResponse(accessTokenId, blankTitleRequest, parentCategoryId);
+        Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, blankTitleRequest, parentCategoryId);
         verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
 
@@ -51,7 +51,7 @@ public class EditListItemTest extends BackEndTest {
             .title(NEW_TITLE)
             .parent(UUID.randomUUID())
             .build();
-        Response newParentNotFoundResponse = ListItemActions.getEditListItemResponse(accessTokenId, newParentNotFoundRequest, parentCategoryId);
+        Response newParentNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, newParentNotFoundRequest, parentCategoryId);
         verifyErrorResponse(newParentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
@@ -61,13 +61,13 @@ public class EditListItemTest extends BackEndTest {
             .title(ORIGINAL_TITLE)
             .url(ORIGINAL_URL)
             .build();
-        UUID linkId = LinkActions.createLink(accessTokenId, createLinkRequest);
+        UUID linkId = LinkActions.createLink(getServerPort(), accessTokenId, createLinkRequest);
 
         EditListItemRequest parentNotCategoryRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .parent(linkId)
             .build();
-        Response parentNotCategoryResponse = ListItemActions.getEditListItemResponse(accessTokenId, parentNotCategoryRequest, parentCategoryId);
+        Response parentNotCategoryResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, parentNotCategoryRequest, parentCategoryId);
         verifyErrorResponse(parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
@@ -75,7 +75,7 @@ public class EditListItemTest extends BackEndTest {
         EditListItemRequest listItemNotFoundRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .build();
-        Response listItemNotFoundResponse = ListItemActions.getEditListItemResponse(accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
+        Response listItemNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(listItemNotFoundResponse);
     }
 }

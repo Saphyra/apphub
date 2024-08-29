@@ -27,10 +27,10 @@ public class PinGroupTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void pinListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID listItemId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
-        PinActions.pin(accessTokenId, listItemId, true);
+        UUID listItemId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        PinActions.pin(getServerPort(), accessTokenId, listItemId, true);
 
         create_blankName(accessTokenId);
         create_tooLongName(accessTokenId);
@@ -42,7 +42,7 @@ public class PinGroupTest extends BackEndTest {
 
         addItem(accessTokenId, pinGroupId, listItemId);
 
-        assertThat(PinActions.getPinnedItems(accessTokenId, pinGroupId)).hasSize(1)
+        assertThat(PinActions.getPinnedItems(getServerPort(), accessTokenId, pinGroupId)).hasSize(1)
             .extracting(NotebookView::getId)
             .containsExactly(listItemId);
 
@@ -52,17 +52,17 @@ public class PinGroupTest extends BackEndTest {
     }
 
     private void delete(UUID accessTokenId, UUID pinGroupId) {
-        assertThat(PinActions.deletePinGroup(accessTokenId, pinGroupId)).isEmpty();
+        assertThat(PinActions.deletePinGroup(getServerPort(), accessTokenId, pinGroupId)).isEmpty();
     }
 
     private void removeItem(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
-        List<NotebookView> groupMembers = PinActions.removeItemFromPinGroup(accessTokenId, pinGroupId, listItemId);
+        List<NotebookView> groupMembers = PinActions.removeItemFromPinGroup(getServerPort(), accessTokenId, pinGroupId, listItemId);
 
         assertThat(groupMembers).isEmpty();
     }
 
     private void addItem(UUID accessTokenId, UUID pinGroupId, UUID listItemId) {
-        List<NotebookView> groupMembers = PinActions.addItemToPinGroup(accessTokenId, pinGroupId, listItemId);
+        List<NotebookView> groupMembers = PinActions.addItemToPinGroup(getServerPort(), accessTokenId, pinGroupId, listItemId);
 
         assertThat(groupMembers).hasSize(1)
             .extracting(NotebookView::getId)
@@ -70,26 +70,26 @@ public class PinGroupTest extends BackEndTest {
     }
 
     private void rename(UUID accessTokenId, UUID pinGroupId) {
-        List<PinGroupResponse> pinGroups = PinActions.renamePinGroup(accessTokenId, pinGroupId, NEW_PIN_GROUP_NAME);
+        List<PinGroupResponse> pinGroups = PinActions.renamePinGroup(getServerPort(), accessTokenId, pinGroupId, NEW_PIN_GROUP_NAME);
 
         assertThat(pinGroups).hasSize(1);
         assertThat(pinGroups.get(0).getPinGroupName()).isEqualTo(NEW_PIN_GROUP_NAME);
     }
 
     private void rename_tooLongName(UUID accessTokenId, UUID pinGroupId) {
-        Response response = PinActions.getRenamePinGroupResponse(accessTokenId, pinGroupId, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        Response response = PinActions.getRenamePinGroupResponse(getServerPort(), accessTokenId, pinGroupId, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(response, "pinGroupName", "too long");
     }
 
     private void rename_blankName(UUID accessTokenId, UUID pinGroupId) {
-        Response response = PinActions.getRenamePinGroupResponse(accessTokenId, pinGroupId, " ");
+        Response response = PinActions.getRenamePinGroupResponse(getServerPort(), accessTokenId, pinGroupId, " ");
 
         ResponseValidator.verifyInvalidParam(response, "pinGroupName", "must not be null or blank");
     }
 
     private UUID create(UUID accessTokenId) {
-        List<PinGroupResponse> pinGroups = PinActions.createPinGroup(accessTokenId, PIN_GROUP_NAME);
+        List<PinGroupResponse> pinGroups = PinActions.createPinGroup(getServerPort(), accessTokenId, PIN_GROUP_NAME);
 
         assertThat(pinGroups).hasSize(1);
         assertThat(pinGroups.get(0).getPinGroupName()).isEqualTo(PIN_GROUP_NAME);
@@ -99,13 +99,13 @@ public class PinGroupTest extends BackEndTest {
     }
 
     private void create_tooLongName(UUID accessTokenId) {
-        Response response = PinActions.getCreatePinGroupResponse(accessTokenId, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        Response response = PinActions.getCreatePinGroupResponse(getServerPort(), accessTokenId, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(response, "pinGroupName", "too long");
     }
 
     private void create_blankName(UUID accessTokenId) {
-        Response response = PinActions.getCreatePinGroupResponse(accessTokenId, " ");
+        Response response = PinActions.getCreatePinGroupResponse(getServerPort(), accessTokenId, " ");
 
         ResponseValidator.verifyInvalidParam(response, "pinGroupName", "must not be null or blank");
     }

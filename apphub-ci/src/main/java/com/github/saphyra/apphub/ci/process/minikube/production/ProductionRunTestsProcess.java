@@ -44,7 +44,6 @@ public class ProductionRunTestsProcess {
             log.error("Test run failed.", e);
         } finally {
             processKiller.killByPort(platformProperties.getMinikubeTestServerPort());
-            processKiller.killByPort(platformProperties.getMinikubeTestDatabasePort());
         }
     }
 }

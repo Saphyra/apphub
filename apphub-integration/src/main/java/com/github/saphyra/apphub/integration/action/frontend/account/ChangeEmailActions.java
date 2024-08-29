@@ -21,8 +21,8 @@ public class ChangeEmailActions {
             .click();
     }
 
-    public static void fillChangeEmailForm(WebDriver driver, ChangeEmailParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+    public static void fillChangeEmailForm(int serverPort, WebDriver driver, ChangeEmailParameters parameters) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-email-email-input")), parameters.getEmail());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-email-password-input")), parameters.getPassword());

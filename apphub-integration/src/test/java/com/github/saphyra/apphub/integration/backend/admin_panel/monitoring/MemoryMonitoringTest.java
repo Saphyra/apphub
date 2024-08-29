@@ -23,10 +23,10 @@ public class MemoryMonitoringTest extends BackEndTest {
     public void memoryMonitoring() {
         Language language = Language.HUNGARIAN;
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        ApphubWsClient wsClient = ApphubWsClient.createAdminPanelMonitoring(language, accessTokenId, accessTokenId);
+        ApphubWsClient wsClient = ApphubWsClient.createAdminPanelMonitoring(getServerPort(), language, accessTokenId, accessTokenId);
 
         wsClient.awaitForEvent(WebSocketEventName.ADMIN_PANEL_MONITORING_MEMORY_STATUS);
 

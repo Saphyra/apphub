@@ -33,17 +33,17 @@ public class LeaveChatRoomTest extends BackEndTest {
     public void leaveAllianceRoom() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId2, characterModel2);
+        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
+        Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
 
         leaveAllianceRoom(accessTokenId1);
         leaveGeneralRoom(accessTokenId1);
@@ -52,17 +52,17 @@ public class LeaveChatRoomTest extends BackEndTest {
     }
 
     private static void leaveAllianceRoom(UUID accessTokenId1) {
-        Response leaveAllianceRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(accessTokenId1, "alliance");
+        Response leaveAllianceRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId1, "alliance");
         verifyForbiddenOperation(leaveAllianceRoomResponse);
     }
 
     private static void leaveGeneralRoom(UUID accessTokenId1) {
-        Response leaveGeneralRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(accessTokenId1, "general");
+        Response leaveGeneralRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId1, "general");
         verifyForbiddenOperation(leaveGeneralRoomResponse);
     }
 
     private static void chatRoomNotFound(UUID accessTokenId1) {
-        Response chatRoomNotFoundResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(accessTokenId1, "unknown-chat-room");
+        Response chatRoomNotFoundResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId1, "unknown-chat-room");
         verifyNotTranslatedNotFound(chatRoomNotFoundResponse, 404);
     }
 
@@ -71,12 +71,12 @@ public class LeaveChatRoomTest extends BackEndTest {
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(userId1))
             .build();
-        SkyXploreGameChatActions.createChatRoom(accessTokenId2, createChatRoomRequest);
+        SkyXploreGameChatActions.createChatRoom(getServerPort(), accessTokenId2, createChatRoomRequest);
         String roomId = gameWsClients.get(accessTokenId2).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED)
             .map(event -> event.getPayloadAs(ChatRoomCreatedMessage.class))
             .map(ChatRoomCreatedMessage::getRoomId)
             .orElseThrow(() -> new RuntimeException("ChatRoom was not created"));
-        Response leaveChatRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(accessTokenId1, roomId);
+        Response leaveChatRoomResponse = SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId1, roomId);
 
         assertThat(leaveChatRoomResponse.getStatusCode()).isEqualTo(200);
 

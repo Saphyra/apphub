@@ -32,13 +32,13 @@ public class TextCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void blankTitle() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_blankTitle(accessTokenId);
         create_parentNotFound(accessTokenId);
         create_parentNotCategory(accessTokenId);
         create_nullContent(accessTokenId);
-        UUID parentCategoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
+        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
         UUID textId = create(accessTokenId, parentCategoryId);
         edit_blankTitle(accessTokenId, textId);
         edit_nullContent(accessTokenId, textId);
@@ -51,7 +51,7 @@ public class TextCrudTest extends BackEndTest {
             .title(" ")
             .content(CONTENT)
             .build();
-        Response create_blankTitleResponse = TextActions.getCreateTextResponse(accessTokenId, create_blankTitleRequest);
+        Response create_blankTitleResponse = TextActions.getCreateTextResponse(getServerPort(), accessTokenId, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
@@ -61,18 +61,18 @@ public class TextCrudTest extends BackEndTest {
             .content(CONTENT)
             .parent(UUID.randomUUID())
             .build();
-        Response create_parentNotFoundResponse = TextActions.getCreateTextResponse(accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = TextActions.getCreateTextResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
     private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID notParentCategoryId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title("pt").content("pc").build());
+        UUID notParentCategoryId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title("pt").content("pc").build());
         CreateTextRequest create_parentNotCategoryRequest = CreateTextRequest.builder()
             .title(TITLE)
             .content(CONTENT)
             .parent(notParentCategoryId)
             .build();
-        Response create_parentNotCategoryResponse = TextActions.getCreateTextResponse(accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = TextActions.getCreateTextResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
@@ -81,7 +81,7 @@ public class TextCrudTest extends BackEndTest {
             .title(TITLE)
             .content(null)
             .build();
-        Response create_nullContentResponse = TextActions.getCreateTextResponse(accessTokenId, create_nullContentRequest);
+        Response create_nullContentResponse = TextActions.getCreateTextResponse(getServerPort(), accessTokenId, create_nullContentRequest);
         verifyInvalidParam(create_nullContentResponse, "content", "must not be null");
     }
 
@@ -91,12 +91,12 @@ public class TextCrudTest extends BackEndTest {
             .content(CONTENT)
             .parent(parentCategoryId)
             .build();
-        UUID textId = TextActions.createText(accessTokenId, createRequest);
-        TextResponse textResponse = TextActions.getText(accessTokenId, textId);
+        UUID textId = TextActions.createText(getServerPort(), accessTokenId, createRequest);
+        TextResponse textResponse = TextActions.getText(getServerPort(), accessTokenId, textId);
         assertThat(textResponse.getTextId()).isEqualTo(textId);
         assertThat(textResponse.getTitle()).isEqualTo(TITLE);
         assertThat(textResponse.getContent()).isEqualTo(CONTENT);
-        ChildrenOfCategoryResponse childrenOfCategory = CategoryActions.getChildrenOfCategory(accessTokenId, parentCategoryId);
+        ChildrenOfCategoryResponse childrenOfCategory = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentCategoryId);
         assertThat(childrenOfCategory.getChildren()).hasSize(1);
         assertThat(childrenOfCategory.getChildren().get(0).getId()).isEqualTo(textId);
         assertThat(childrenOfCategory.getChildren().get(0).getTitle()).isEqualTo(TITLE);
@@ -109,7 +109,7 @@ public class TextCrudTest extends BackEndTest {
             .title(" ")
             .content(NEW_CONTENT)
             .build();
-        Response edit_blankTitleResponse = TextActions.getEditTextResponse(accessTokenId, textId, edit_blankTitleRequest);
+        Response edit_blankTitleResponse = TextActions.getEditTextResponse(getServerPort(), accessTokenId, textId, edit_blankTitleRequest);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
     }
 
@@ -118,7 +118,7 @@ public class TextCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .content(null)
             .build();
-        Response edit_nullContentResponse = TextActions.getEditTextResponse(accessTokenId, textId, edit_nullContentRequest);
+        Response edit_nullContentResponse = TextActions.getEditTextResponse(getServerPort(), accessTokenId, textId, edit_nullContentRequest);
         verifyInvalidParam(edit_nullContentResponse, "content", "must not be null");
     }
 
@@ -128,14 +128,14 @@ public class TextCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .content(NEW_CONTENT)
             .build();
-        TextActions.editText(accessTokenId, textId, editTextRequest);
-        textResponse = TextActions.getText(accessTokenId, textId);
+        TextActions.editText(getServerPort(), accessTokenId, textId, editTextRequest);
+        textResponse = TextActions.getText(getServerPort(), accessTokenId, textId);
         assertThat(textResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(textResponse.getContent()).isEqualTo(NEW_CONTENT);
     }
 
     private static void delete(UUID accessTokenId, UUID parentCategoryId, UUID textId) {
-        ListItemActions.deleteListItem(accessTokenId, textId);
-        assertThat(CategoryActions.getChildrenOfCategory(accessTokenId, parentCategoryId).getChildren()).isEmpty();
+        ListItemActions.deleteListItem(getServerPort(), accessTokenId, textId);
+        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentCategoryId).getChildren()).isEmpty();
     }
 }

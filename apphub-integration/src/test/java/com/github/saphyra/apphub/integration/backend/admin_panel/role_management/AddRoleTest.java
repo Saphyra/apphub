@@ -23,11 +23,11 @@ public class AddRoleTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void addRole() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(testUser.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
         UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         nullUserId(accessTokenId);
@@ -36,7 +36,7 @@ public class AddRoleTest extends BackEndTest {
         userNotFound(accessTokenId, userData);
         incorrectPassword(accessTokenId, userId);
         roleAlreadyExists(accessTokenId, userData, userId);
-        addRole(accessTokenId, userData, testUser, userId);
+        addRole(accessTokenId, userData, userId);
     }
 
     private void incorrectPassword(UUID accessTokenId, UUID userId) {
@@ -45,7 +45,7 @@ public class AddRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
-        Response response = RoleManagementActions.getAddRoleResponse(accessTokenId, roleAlreadyExistsRequest);
+        Response response = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, roleAlreadyExistsRequest);
         verifyErrorResponse(response, 400, ErrorCode.INCORRECT_PASSWORD);
     }
 
@@ -55,7 +55,7 @@ public class AddRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(null)
             .build();
-        Response response = RoleManagementActions.getAddRoleResponse(accessTokenId, nullUserIdRequest);
+        Response response = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
         verifyInvalidParam(response, "password", "must not be null");
     }
 
@@ -64,7 +64,7 @@ public class AddRoleTest extends BackEndTest {
             .userId(null)
             .role(Constants.ROLE_ADMIN)
             .build();
-        Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(accessTokenId, nullUserIdRequest);
+        Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
         verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
     }
 
@@ -73,7 +73,7 @@ public class AddRoleTest extends BackEndTest {
             .userId(UUID.randomUUID())
             .role(" ")
             .build();
-        Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(accessTokenId, blankRoleRequest);
+        Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, blankRoleRequest);
         verifyInvalidParam(blankRoleResponse, "role", "must not be null or blank");
     }
 
@@ -83,7 +83,7 @@ public class AddRoleTest extends BackEndTest {
             .role(Constants.ROLE_ADMIN)
             .password(userData.getPassword())
             .build();
-        Response userNotFoundResponse = RoleManagementActions.getAddRoleResponse(accessTokenId, userNotFoundRequest);
+        Response userNotFoundResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, userNotFoundRequest);
         verifyErrorResponse(userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
     }
 
@@ -93,17 +93,17 @@ public class AddRoleTest extends BackEndTest {
             .role(Constants.ROLE_NOTEBOOK)
             .password(userData.getPassword())
             .build();
-        Response roleAlreadyExistsResponse = RoleManagementActions.getAddRoleResponse(accessTokenId, roleAlreadyExistsRequest);
+        Response roleAlreadyExistsResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, roleAlreadyExistsRequest);
         verifyErrorResponse(roleAlreadyExistsResponse, 409, ErrorCode.ROLE_ALREADY_EXISTS);
     }
 
-    private static void addRole(UUID accessTokenId, RegistrationParameters userData, RegistrationParameters testUser, UUID userId) {
+    private static void addRole(UUID accessTokenId, RegistrationParameters userData, UUID userId) {
         RoleRequest addRoleRequest = RoleRequest.builder()
             .userId(userId)
             .role(Constants.ROLE_TEST)
             .password(userData.getPassword())
             .build();
-        UserRoleResponse userRoleResponse = RoleManagementActions.addRole(accessTokenId, addRoleRequest);
+        UserRoleResponse userRoleResponse = RoleManagementActions.addRole(getServerPort(), accessTokenId, addRoleRequest);
         assertThat(userRoleResponse.getRoles()).contains(Constants.ROLE_TEST);
     }
 }

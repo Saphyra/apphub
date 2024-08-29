@@ -10,6 +10,7 @@ spring:
         uri: http://localhost:3000
         predicates:
         - "Path=\
+            /,\
             /web,\
             /web/modules,\
             /web/skyxplore,\

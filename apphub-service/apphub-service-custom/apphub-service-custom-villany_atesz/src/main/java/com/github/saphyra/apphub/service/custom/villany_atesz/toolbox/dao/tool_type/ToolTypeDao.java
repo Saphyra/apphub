@@ -42,4 +42,8 @@ public class ToolTypeDao extends AbstractDao<ToolTypeEntity, ToolType, String, T
     public List<ToolType> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    public void deleteByUserIdAndToolTypeId(UUID userId, UUID toolTypeId) {
+        repository.deleteByUserIdAndToolTypeId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(toolTypeId));
+    }
 }

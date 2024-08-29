@@ -26,14 +26,14 @@ public class GroupCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void groupCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(userData2);
+        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        CommunityActions.setUpFriendship(accessTokenId1, accessTokenId2, userId2);
+        CommunityActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
 
         create_nameNull(accessTokenId1);
         rename_nameTooShort(accessTokenId1);
@@ -57,7 +57,7 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void create_nameNull(UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getCreateGroupResponse(accessTokenId1, null),
+            GroupActions.getCreateGroupResponse(getServerPort(), accessTokenId1, null),
             "groupName",
             "must not be null"
         );
@@ -65,7 +65,7 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void rename_nameTooShort(UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getCreateGroupResponse(accessTokenId1, "as"),
+            GroupActions.getCreateGroupResponse(getServerPort(), accessTokenId1, "as"),
             "groupName",
             "too short"
         );
@@ -73,14 +73,14 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void create_nameTooLong(UUID accessTokenId1) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getCreateGroupResponse(accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
+            GroupActions.getCreateGroupResponse(getServerPort(), accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
             "too long"
         );
     }
 
     private static GroupListResponse create(UUID accessTokenId1, UUID userId1) {
-        GroupListResponse group = GroupActions.createGroup(accessTokenId1, GROUP_NAME);
+        GroupListResponse group = GroupActions.createGroup(getServerPort(), accessTokenId1, GROUP_NAME);
 
         assertThat(group.getName()).isEqualTo(GROUP_NAME);
         assertThat(group.getOwnerId()).isEqualTo(userId1);
@@ -90,7 +90,7 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void rename_nameNull(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getRenameGroupResponse(accessTokenId1, group.getGroupId(), null),
+            GroupActions.getRenameGroupResponse(getServerPort(), accessTokenId1, group.getGroupId(), null),
             "groupName",
             "must not be null"
         );
@@ -98,7 +98,7 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void rename_nameTooShort(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getRenameGroupResponse(accessTokenId1, group.getGroupId(), "as"),
+            GroupActions.getRenameGroupResponse(getServerPort(), accessTokenId1, group.getGroupId(), "as"),
             "groupName",
             "too short"
         );
@@ -106,20 +106,20 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void rename_nameTooLong(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getRenameGroupResponse(accessTokenId1, group.getGroupId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
+            GroupActions.getRenameGroupResponse(getServerPort(), accessTokenId1, group.getGroupId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
             "too long"
         );
     }
 
     private static GroupMemberResponse rename_notOwner(UUID accessTokenId1, UUID accessTokenId2, UUID userId2, GroupListResponse group) {
-        GroupMemberResponse groupMember = GroupActions.createMember(accessTokenId1, group.getGroupId(), userId2);
-        ResponseValidator.verifyForbiddenOperation(GroupActions.getRenameGroupResponse(accessTokenId2, group.getGroupId(), NEW_GROUP_NAME));
+        GroupMemberResponse groupMember = GroupActions.createMember(getServerPort(), accessTokenId1, group.getGroupId(), userId2);
+        ResponseValidator.verifyForbiddenOperation(GroupActions.getRenameGroupResponse(getServerPort(), accessTokenId2, group.getGroupId(), NEW_GROUP_NAME));
         return groupMember;
     }
 
     private static GroupListResponse rename(UUID accessTokenId1, GroupListResponse group) {
-        group = GroupActions.renameGroup(accessTokenId1, group.getGroupId(), NEW_GROUP_NAME);
+        group = GroupActions.renameGroup(getServerPort(), accessTokenId1, group.getGroupId(), NEW_GROUP_NAME);
 
         assertThat(group.getName()).isEqualTo(NEW_GROUP_NAME);
         return group;
@@ -127,18 +127,18 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void changeInvitationType_null(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getChangeInvitationTypeResponse(accessTokenId1, group.getGroupId(), null),
+            GroupActions.getChangeInvitationTypeResponse(getServerPort(), accessTokenId1, group.getGroupId(), null),
             "invitationType",
             "must not be null"
         );
     }
 
     private static void changeInvitationType_notOwner(UUID accessTokenId2, GroupListResponse group) {
-        ResponseValidator.verifyForbiddenOperation(GroupActions.getChangeInvitationTypeResponse(accessTokenId2, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS));
+        ResponseValidator.verifyForbiddenOperation(GroupActions.getChangeInvitationTypeResponse(getServerPort(), accessTokenId2, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS));
     }
 
     private static GroupListResponse changeInvitationType(UUID accessTokenId1, GroupListResponse group) {
-        group = GroupActions.changeInvitationType(accessTokenId1, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
+        group = GroupActions.changeInvitationType(getServerPort(), accessTokenId1, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
 
         assertThat(group.getInvitationType()).isEqualTo(GroupInvitationType.FRIENDS_OF_FRIENDS);
         return group;
@@ -146,46 +146,46 @@ public class GroupCrudTest extends BackEndTest {
 
     private static void changeOwner_null(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
-            GroupActions.getChangeOwnerResponse(accessTokenId1, group.getGroupId(), null),
+            GroupActions.getChangeOwnerResponse(getServerPort(), accessTokenId1, group.getGroupId(), null),
             "groupMemberId",
             "must not be null"
         );
     }
 
     private static void changeOwner_notOwner(UUID accessTokenId2, GroupListResponse group, GroupMemberResponse groupMember) {
-        ResponseValidator.verifyForbiddenOperation(GroupActions.getChangeOwnerResponse(accessTokenId2, group.getGroupId(), groupMember.getGroupMemberId()));
+        ResponseValidator.verifyForbiddenOperation(GroupActions.getChangeOwnerResponse(getServerPort(), accessTokenId2, group.getGroupId(), groupMember.getGroupMemberId()));
     }
 
     private void changeOwner_alreadyOwner(UUID accessTokenId1, UUID userId1, GroupListResponse group) {
         ResponseValidator.verifyErrorResponse(
-            GroupActions.getChangeOwnerResponse(accessTokenId1, group.getGroupId(), getOwnMember(accessTokenId1, group.getGroupId(), userId1).getGroupMemberId()),
+            GroupActions.getChangeOwnerResponse(getServerPort(), accessTokenId1, group.getGroupId(), getOwnMember(accessTokenId1, group.getGroupId(), userId1).getGroupMemberId()),
             409,
             ErrorCode.GENERAL_ERROR
         );
     }
 
     private static void changeOwner(UUID accessTokenId1, GroupListResponse group, GroupMemberResponse groupMember) {
-        GroupActions.changeOwner(accessTokenId1, group.getGroupId(), groupMember.getGroupMemberId());
+        GroupActions.changeOwner(getServerPort(), accessTokenId1, group.getGroupId(), groupMember.getGroupMemberId());
 
-        assertThat(GroupActions.getGroups(accessTokenId1).get(0).getOwnerId());
+        assertThat(GroupActions.getGroups(getServerPort(), accessTokenId1).get(0).getOwnerId()).isEqualTo(groupMember.getUserId());
     }
 
     private static void deleteGroup_notOwner(UUID accessTokenId1, GroupListResponse group) {
         ResponseValidator.verifyForbiddenOperation(
 
-            GroupActions.getDeleteGroupResponse(accessTokenId1, group.getGroupId())
+            GroupActions.getDeleteGroupResponse(getServerPort(), accessTokenId1, group.getGroupId())
         );
     }
 
     private static void deleteGroup(UUID accessTokenId1, UUID accessTokenId2, GroupListResponse group) {
-        GroupActions.deleteGroup(accessTokenId2, group.getGroupId());
+        GroupActions.deleteGroup(getServerPort(), accessTokenId2, group.getGroupId());
 
-        assertThat(GroupActions.getGroups(accessTokenId1)).isEmpty();
-        assertThat(GroupActions.getGroups(accessTokenId2)).isEmpty();
+        assertThat(GroupActions.getGroups(getServerPort(), accessTokenId1)).isEmpty();
+        assertThat(GroupActions.getGroups(getServerPort(), accessTokenId2)).isEmpty();
     }
 
     private GroupMemberResponse getOwnMember(UUID accessTokenId, UUID groupId, UUID userId) {
-        return GroupActions.getMembers(accessTokenId, groupId)
+        return GroupActions.getMembers(getServerPort(), accessTokenId, groupId)
             .stream()
             .filter(groupMemberResponse -> groupMemberResponse.getUserId().equals(userId))
             .findFirst()

@@ -18,18 +18,18 @@ public class RoleManagementRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel"})
     public void roleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRolesResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddRoleResponse(accessTokenId, new RoleRequest()));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveRoleResponse(accessTokenId, new RoleRequest()));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddToAllResponse(accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveFromAllResponse(accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, new RoleRequest()));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, new RoleRequest()));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddToAllResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveFromAllResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
     }
 
     @DataProvider(parallel = true)

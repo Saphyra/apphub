@@ -27,16 +27,16 @@ public class CustomTableCheckboxTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableCheckboxCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullChecked(accessTokenId);
         create(accessTokenId);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         edit(accessTokenId, listItemId, tableResponse);
 
@@ -44,7 +44,7 @@ public class CustomTableCheckboxTest extends BackEndTest {
         setStatus(accessTokenId, listItemId, tableResponse);
         setStatus_notCheckboxColumn(accessTokenId, listItemId, tableResponse);
 
-        ListItemActions.deleteListItem(accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
     }
 
     private void setStatus_notCheckboxColumn(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
@@ -59,24 +59,24 @@ public class CustomTableCheckboxTest extends BackEndTest {
             null
         );
 
-        tableResponse = TableActions.editTable(accessTokenId, listItemId, editTableRequest)
+        tableResponse = TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest)
             .getTableResponse();
 
-        Response response = TableActions.getEditCheckboxStatusResponse(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
 
         ResponseValidator.verifyInvalidParam(response, "columnId", "not a " + ColumnType.CHECKBOX);
     }
 
     private void setStatus(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
-        TableActions.editCheckboxStatus(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+        TableActions.editCheckboxStatus(getServerPort(), accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
 
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(String.valueOf(false));
     }
 
     private void setStatus_nullStatus(UUID accessTokenId, TableResponse tableResponse) {
-        Response response = TableActions.getEditCheckboxStatusResponse(accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), null);
+        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessTokenId, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), null);
 
         ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
     }
@@ -92,9 +92,9 @@ public class CustomTableCheckboxTest extends BackEndTest {
             Boolean.TRUE
         );
 
-        TableActions.editTable(accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -104,13 +104,13 @@ public class CustomTableCheckboxTest extends BackEndTest {
     private void create(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.CHECKBOX, Boolean.FALSE);
 
-        TableActions.createTable(accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessTokenId, request);
     }
 
     private static void create_nullChecked(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.CHECKBOX, null);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "checked", "must not be null");
     }

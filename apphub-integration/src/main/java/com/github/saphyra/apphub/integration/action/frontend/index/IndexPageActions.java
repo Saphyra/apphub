@@ -84,18 +84,18 @@ public class IndexPageActions {
         submitButton.click();
     }
 
-    public static void submitLogin(WebDriver driver, LoginParameters loginParameters) {
+    public static void submitLogin(int serverPort, WebDriver driver, LoginParameters loginParameters) {
         AwaitilityWrapper.createDefault()
-            .until(() -> isLoginPageLoaded(driver))
+            .until(() -> isLoginPageLoaded(serverPort, driver))
             .assertTrue("LoginPage is not loaded.");
 
-        clearAndFill(IndexPage.loginEmail(driver), loginParameters.getEmail());
+        clearAndFill(IndexPage.loginUserIdentifier(driver), loginParameters.getUserIdentifier());
         clearAndFill(IndexPage.loginPassword(driver), loginParameters.getPassword());
 
         IndexPage.loginButton(driver).click();
     }
 
-    public static boolean isLoginPageLoaded(WebDriver driver) {
-        return driver.getCurrentUrl().split("\\?")[0].equals(UrlFactory.create(Endpoints.INDEX_PAGE));
+    public static boolean isLoginPageLoaded(int serverPort, WebDriver driver) {
+        return driver.getCurrentUrl().split("\\?")[0].equals(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE));
     }
 }

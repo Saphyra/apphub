@@ -17,16 +17,16 @@ public class BlacklistRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community"})
     public void blacklistRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> BlacklistActions.getSearchResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> BlacklistActions.getBlacklistsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> BlacklistActions.getCreateResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> BlacklistActions.getDeleteBlacklistResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BlacklistActions.getSearchResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> BlacklistActions.getBlacklistsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> BlacklistActions.getCreateResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BlacklistActions.getDeleteBlacklistResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

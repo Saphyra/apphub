@@ -24,20 +24,20 @@ public class CalendarRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "calendar"})
     public void calendarRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> CalendarActions.getCalendarResponse(accessTokenId, LocalDate.now()));
-        CommonUtils.verifyMissingRole(() -> CalendarSearchActions.getSearchResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> EventActions.getCreateEventResponse(accessTokenId, new CreateEventRequest()));
-        CommonUtils.verifyMissingRole(() -> EventActions.getDeleteEventResponse(accessTokenId, UUID.randomUUID(), new ReferenceDate()));
-        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getEditOccurrenceResponse(accessTokenId, UUID.randomUUID(), new EditOccurrenceRequest()));
-        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceDoneResponse(accessTokenId, UUID.randomUUID(), new ReferenceDate()));
-        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceSnoozedResponse(accessTokenId, UUID.randomUUID(), new ReferenceDate()));
-        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceDefaultResponse(accessTokenId, UUID.randomUUID(), new ReferenceDate()));
+        CommonUtils.verifyMissingRole(() -> CalendarActions.getCalendarResponse(getServerPort(), accessTokenId, LocalDate.now()));
+        CommonUtils.verifyMissingRole(() -> CalendarSearchActions.getSearchResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> EventActions.getCreateEventResponse(getServerPort(), accessTokenId, new CreateEventRequest()));
+        CommonUtils.verifyMissingRole(() -> EventActions.getDeleteEventResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new ReferenceDate()));
+        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new EditOccurrenceRequest()));
+        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceDoneResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new ReferenceDate()));
+        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceSnoozedResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new ReferenceDate()));
+        CommonUtils.verifyMissingRole(() -> OccurrenceActions.getMarkOccurrenceDefaultResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new ReferenceDate()));
     }
 
     @DataProvider(parallel = true)

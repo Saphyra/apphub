@@ -20,19 +20,19 @@ public class IsHostTest extends BackEndTest {
     public void isHost() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId2, characterModel2);
+        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFlow.startGame(new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
+        SkyXploreFlow.startGame(getServerPort(), new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
 
-        assertThat(SkyXploreGameActions.isHost(accessTokenId1)).isTrue();
-        assertThat(SkyXploreGameActions.isHost(accessTokenId2)).isFalse();
+        assertThat(SkyXploreGameActions.isHost(getServerPort(), accessTokenId1)).isTrue();
+        assertThat(SkyXploreGameActions.isHost(getServerPort(), accessTokenId2)).isFalse();
     }
 }

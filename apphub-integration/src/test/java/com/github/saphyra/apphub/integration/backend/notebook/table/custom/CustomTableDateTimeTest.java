@@ -28,17 +28,17 @@ public class CustomTableDateTimeTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableDateTimeCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullDateTime(accessTokenId);
         create_failedToParse(accessTokenId);
         create(accessTokenId);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         edit(accessTokenId, listItemId, tableResponse);
     }
@@ -54,9 +54,9 @@ public class CustomTableDateTimeTest extends BackEndTest {
             ""
         );
 
-        TableActions.editTable(accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -66,13 +66,13 @@ public class CustomTableDateTimeTest extends BackEndTest {
     private void create(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.DATE_TIME, DATE);
 
-        TableActions.createTable(accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessTokenId, request);
     }
 
     private void create_failedToParse(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.DATE_TIME, "asd");
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "dateTime", "failed to parse");
     }
@@ -80,7 +80,7 @@ public class CustomTableDateTimeTest extends BackEndTest {
     private void create_nullDateTime(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.DATE_TIME, null);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "dateTime", "must not be null");
     }

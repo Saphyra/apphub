@@ -68,8 +68,8 @@ class IndexPage {
         return driver.findElement(By.id("registration-button"));
     }
 
-    static WebElement loginEmail(WebDriver driver) {
-        return driver.findElement(By.id("login-email"));
+    static WebElement loginUserIdentifier(WebDriver driver) {
+        return driver.findElement(By.id("login-user-identifier"));
     }
 
     static WebElement loginPassword(WebDriver driver) {

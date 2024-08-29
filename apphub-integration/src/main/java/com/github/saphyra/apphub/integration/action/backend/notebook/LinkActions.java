@@ -11,16 +11,16 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LinkActions {
-    public static UUID createLink(UUID accessTokenId, CreateLinkRequest request) {
-        Response response = getCreateLinkResponse(accessTokenId, request);
+    public static UUID createLink(int serverPort, UUID accessTokenId, CreateLinkRequest request) {
+        Response response = getCreateLinkResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateLinkResponse(UUID accessTokenId, CreateLinkRequest request) {
+    public static Response getCreateLinkResponse(int serverPort, UUID accessTokenId, CreateLinkRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_LINK));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_LINK));
     }
 }

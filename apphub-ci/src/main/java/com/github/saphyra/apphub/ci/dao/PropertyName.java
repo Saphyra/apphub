@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.dao;
 public enum PropertyName {
     //Platform
     LANGUAGE,
+    BROWSER_STARTUP_LIMIT,
 
     //Local run
     LOCAL_DEPLOY_MODE,

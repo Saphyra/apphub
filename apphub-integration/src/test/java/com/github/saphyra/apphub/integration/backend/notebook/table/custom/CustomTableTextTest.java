@@ -28,20 +28,20 @@ public class CustomTableTextTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableTextCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullText(accessTokenId);
         create(accessTokenId);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         edit(accessTokenId, listItemId, tableResponse);
 
-        ListItemActions.deleteListItem(accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
     }
 
     private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
@@ -55,9 +55,9 @@ public class CustomTableTextTest extends BackEndTest {
             ""
         );
 
-        TableActions.editTable(accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -67,13 +67,13 @@ public class CustomTableTextTest extends BackEndTest {
     private void create(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TEXT, TEXT);
 
-        TableActions.createTable(accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessTokenId, request);
     }
 
     private static void create_nullText(UUID accessTokenId) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TEXT, null);
 
-        Response response = TableActions.getCreateTableResponse(accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
 
         ResponseValidator.verifyInvalidParam(response, "text", "must not be null");
     }

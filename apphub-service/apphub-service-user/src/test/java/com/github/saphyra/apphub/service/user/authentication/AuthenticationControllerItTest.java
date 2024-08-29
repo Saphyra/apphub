@@ -173,7 +173,7 @@ public class AuthenticationControllerItTest {
         given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(EMAIL)
             .password("wrong-password")
             .build();
         Response response = getLoginResponse(loginRequest);
@@ -191,7 +191,7 @@ public class AuthenticationControllerItTest {
         given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(EMAIL)
             .password(PASSWORD)
             .rememberMe(true)
             .build();
@@ -214,7 +214,7 @@ public class AuthenticationControllerItTest {
         given(localizationApi.translate(ErrorCode.BAD_CREDENTIALS.name(), LOCALE)).willReturn(LOCALIZED_MESSAGE);
 
         LoginRequest loginRequest = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(EMAIL)
             .password(PASSWORD)
             .rememberMe(false)
             .build();

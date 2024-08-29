@@ -17,19 +17,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesActions {
-    public static void logout(UUID accessTokenId) {
-        Response response = getLogoutResponse(accessTokenId);
+    public static void logout(int serverPort, UUID accessTokenId) {
+        Response response = getLogoutResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getLogoutResponse(UUID accessTokenId) {
+    public static Response getLogoutResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.LOGOUT));
+            .post(UrlFactory.create(serverPort, Endpoints.LOGOUT));
     }
 
-    public static Map<String, List<ModulesResponse>> getModules(UUID accessTokenId) {
-        Response response = getModulesResponse(accessTokenId);
+    public static Map<String, List<ModulesResponse>> getModules(int serverPort, UUID accessTokenId) {
+        Response response = getModulesResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -38,13 +38,13 @@ public class ModulesActions {
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Response getModulesResponse(UUID accessTokenId) {
+    public static Response getModulesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.MODULES_GET_MODULES_OF_USER));
+            .get(UrlFactory.create(serverPort, Endpoints.MODULES_GET_MODULES_OF_USER));
     }
 
-    public static Map<String, List<ModulesResponse>> setAsFavorite(UUID accessTokenId, String module, Boolean favorite) {
-        Response response = getSetAsFavoriteResponse(accessTokenId, module, favorite);
+    public static Map<String, List<ModulesResponse>> setAsFavorite(int serverPort, UUID accessTokenId, String module, Boolean favorite) {
+        Response response = getSetAsFavoriteResponse(serverPort, accessTokenId, module, favorite);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -53,12 +53,12 @@ public class ModulesActions {
         return TestBase.OBJECT_MAPPER_WRAPPER.readValue(response.getBody().asString(), ref);
     }
 
-    public static Response getSetAsFavoriteResponse(UUID accessTokenId, String module, Boolean favorite) {
+    public static Response getSetAsFavoriteResponse(int serverPort, UUID accessTokenId, String module, Boolean favorite) {
         Map<String, Object> pathVariables = new HashMap<>();
         pathVariables.put("module", module);
 
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(favorite))
-            .post(UrlFactory.create(Endpoints.MODULES_SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
     }
 }

@@ -13,30 +13,30 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserSettingsActions {
-    public static Map<String, String> getUserSettings(UUID accessTokenId, String category) {
-        Response response = getQueryUserSettingsResponse(accessTokenId, category);
+    public static Map<String, String> getUserSettings(int serverPort, UUID accessTokenId, String category) {
+        Response response = getQueryUserSettingsResponse(serverPort, accessTokenId, category);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(StringStringMap.class);
     }
 
-    public static Response getQueryUserSettingsResponse(UUID accessTokenId, String category) {
+    public static Response getQueryUserSettingsResponse(int serverPort, UUID accessTokenId, String category) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.GET_USER_SETTINGS, "category", category));
+            .get(UrlFactory.create(serverPort, Endpoints.GET_USER_SETTINGS, "category", category));
     }
 
-    public static Map<String, String> setUserSetting(UUID accessTokenId, SetUserSettingsRequest request) {
-        Response response = getUpdateUserSettingsResponse(accessTokenId, request);
+    public static Map<String, String> setUserSetting(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
+        Response response = getUpdateUserSettingsResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(StringStringMap.class);
     }
 
-    public static Response getUpdateUserSettingsResponse(UUID accessTokenId, SetUserSettingsRequest request) {
+    public static Response getUpdateUserSettingsResponse(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.SET_USER_SETTINGS));
+            .post(UrlFactory.create(serverPort, Endpoints.SET_USER_SETTINGS));
     }
 }

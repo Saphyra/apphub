@@ -30,11 +30,11 @@ public class CustomTableCheckboxTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void customTableCheckboxCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
         createCustomTableWithCheckedCell(driver);
         openTable(driver);
@@ -76,8 +76,8 @@ public class CustomTableCheckboxTest extends SeleniumTest {
     }
 
     private static void createCustomTableWithCheckedCell(WebDriver driver) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CUSTOM_TABLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CUSTOM_TABLE);
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)

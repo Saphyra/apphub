@@ -18,7 +18,7 @@ public class VillanyAteszRoleProtectionTest extends SeleniumTest {
     public void villanyAteszRoleProtection(String role) {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
@@ -26,10 +26,10 @@ public class VillanyAteszRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(driver, Endpoints.VILLANY_ATESZ_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.VILLANY_ATESZ_CONTACTS_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.VILLANY_ATESZ_STOCK_PAGE);
-        CommonUtils.verifyMissingRole(driver, Endpoints.VILLANY_ATESZ_TOOLBOX_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.VILLANY_ATESZ_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.VILLANY_ATESZ_CONTACTS_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.VILLANY_ATESZ_STOCK_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.VILLANY_ATESZ_TOOLBOX_PAGE);
     }
 
     @DataProvider(parallel = true)

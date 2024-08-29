@@ -21,10 +21,10 @@ public class SkyXploreCharacterTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void createAndEditCharacter() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(userData2);
+        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
 
         create_nullName(accessTokenId1);
         create_characterNameTooShort(accessTokenId1);
@@ -39,7 +39,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         SkyXploreCharacterModel create_nullNameModel = SkyXploreCharacterModel.builder()
             .name(null)
             .build();
-        Response create_nullNameResponse = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId1, create_nullNameModel);
+        Response create_nullNameResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId1, create_nullNameModel);
         verifyInvalidParam(create_nullNameResponse, "name", "must not be null");
     }
 
@@ -47,7 +47,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
         SkyXploreCharacterModel create_characterNameTooShortModel = SkyXploreCharacterModel.builder()
             .name("as")
             .build();
-        Response create_characterNameTooShortResponse = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId1, create_characterNameTooShortModel);
+        Response create_characterNameTooShortResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId1, create_characterNameTooShortModel);
         verifyInvalidParam(create_characterNameTooShortResponse, "characterName", "too short");
     }
 
@@ -55,31 +55,31 @@ public class SkyXploreCharacterTest extends BackEndTest {
         SkyXploreCharacterModel create_characterNameTooLongModel = SkyXploreCharacterModel.builder()
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
-        Response create_characterNameTooLongResponse = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId1, create_characterNameTooLongModel);
+        Response create_characterNameTooLongResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId1, create_characterNameTooLongModel);
         verifyInvalidParam(create_characterNameTooLongResponse, "characterName", "too long");
     }
 
     private static SkyXploreCharacterModel getCreateModel(RegistrationParameters userData1, UUID accessTokenId1) {
         SkyXploreCharacterModel createModel = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, createModel);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, createModel);
         assertThat(SkyXploreCharacterActions.getCharacterName(userData1.getEmail())).isEqualTo(createModel.getName());
         return createModel;
     }
 
     private static void edit_characterNameAlreadyExists(UUID accessTokenId2, SkyXploreCharacterModel createModel) {
-        Response create_characterNameAlreadyExists = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId2, createModel);
+        Response create_characterNameAlreadyExists = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId2, createModel);
         verifyErrorResponse(create_characterNameAlreadyExists, 409, ErrorCode.CHARACTER_NAME_ALREADY_EXISTS);
     }
 
     private static void edit_noChange(RegistrationParameters userData1, UUID accessTokenId1, SkyXploreCharacterModel createModel) {
-        Response edit_noChangeResponse = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId1, createModel);
+        Response edit_noChangeResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId1, createModel);
         assertThat(edit_noChangeResponse.getStatusCode()).isEqualTo(200);
         assertThat(SkyXploreCharacterActions.getCharacterName(userData1.getEmail())).isEqualTo(createModel.getName());
     }
 
     private static void edit(RegistrationParameters userData1, UUID accessTokenId1) {
         SkyXploreCharacterModel editModel = SkyXploreCharacterModel.valid();
-        Response editResponse = SkyXploreCharacterActions.getCreateCharacterResponse(accessTokenId1, editModel);
+        Response editResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId1, editModel);
         assertThat(editResponse.getStatusCode()).isEqualTo(200);
         String newCharacterName = SkyXploreCharacterActions.getCharacterName(userData1.getEmail());
         assertThat(newCharacterName).isEqualTo(editModel.getName());

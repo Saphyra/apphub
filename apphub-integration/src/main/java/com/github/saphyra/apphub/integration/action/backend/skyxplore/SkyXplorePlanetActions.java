@@ -17,38 +17,38 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePlanetActions {
-    public static PlanetOverviewResponse getPlanetOverview(UUID accessTokenId, UUID planetId) {
-        Response response = getPlanetOverviewResponse(accessTokenId, planetId);
+    public static PlanetOverviewResponse getPlanetOverview(int serverPort, UUID accessTokenId, UUID planetId) {
+        Response response = getPlanetOverviewResponse(serverPort, accessTokenId, planetId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(PlanetOverviewResponse.class);
     }
 
-    public static Response getPlanetOverviewResponse(UUID accessTokenId, UUID planetId) {
+    public static Response getPlanetOverviewResponse(int serverPort, UUID accessTokenId, UUID planetId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW, "planetId", planetId));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW, "planetId", planetId));
     }
 
-    public static Response getRenamePlanetResponse(UUID accessTokenId, UUID planetId, String planetName) {
+    public static Response getRenamePlanetResponse(int serverPort, UUID accessTokenId, UUID planetId, String planetName) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(planetName))
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_PLANET_RENAME, "planetId", planetId));
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_RENAME, "planetId", planetId));
     }
 
-    public static void renamePlanet(UUID accessTokenId, UUID planetId, String planetName) {
-        Response response = getRenamePlanetResponse(accessTokenId, planetId, planetName);
+    public static void renamePlanet(int serverPort, UUID accessTokenId, UUID planetId, String planetName) {
+        Response response = getRenamePlanetResponse(serverPort, accessTokenId, planetId, planetName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<SurfaceResponse> getSurfaces(UUID accessTokenId, UUID planetId) {
-        return getPlanetOverview(accessTokenId, planetId)
+    public static List<SurfaceResponse> getSurfaces(int serverPort, UUID accessTokenId, UUID planetId) {
+        return getPlanetOverview(serverPort, accessTokenId, planetId)
             .getSurfaces();
     }
 
-    public static PlanetStorageResponse getStorageOverview(UUID accessTokenId, UUID planetId) {
-        return getPlanetOverview(accessTokenId, planetId)
+    public static PlanetStorageResponse getStorageOverview(int serverPort, UUID accessTokenId, UUID planetId) {
+        return getPlanetOverview(serverPort, accessTokenId, planetId)
             .getStorage();
     }
 
@@ -66,8 +66,8 @@ public class SkyXplorePlanetActions {
             );
     }
 
-    public static UUID findEmptySurface(UUID accessTokenId, UUID planetId, String surfaceType) {
-        return SkyXplorePlanetActions.getSurfaces(accessTokenId, planetId)
+    public static UUID findEmptySurface(int serverPort, UUID accessTokenId, UUID planetId, String surfaceType) {
+        return SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId)
             .stream()
             .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
             .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))

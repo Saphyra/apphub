@@ -21,13 +21,13 @@ public class ArchiveTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void archiveListItem() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .pin(driver);

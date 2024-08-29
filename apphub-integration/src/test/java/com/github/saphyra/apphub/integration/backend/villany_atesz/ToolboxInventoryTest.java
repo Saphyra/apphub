@@ -41,16 +41,16 @@ public class ToolboxInventoryTest extends BackEndTest {
     @Test(groups = {"villany-atesz", "be"})
     public void toolboxInventory() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         UUID toolId = createTool(accessTokenId);
 
-        UUID storageBoxId = VillanyAteszToolboxActions.getStorageBoxes(accessTokenId)
+        UUID storageBoxId = VillanyAteszToolboxActions.getStorageBoxes(getServerPort(), accessTokenId)
             .get(0)
             .getStorageBoxId();
 
-        UUID toolTypeId = VillanyAteszToolboxActions.getToolTypes(accessTokenId)
+        UUID toolTypeId = VillanyAteszToolboxActions.getToolTypes(getServerPort(), accessTokenId)
             .get(0)
             .getToolTypeId();
 
@@ -92,88 +92,88 @@ public class ToolboxInventoryTest extends BackEndTest {
     }
 
     private void resetInventoried(UUID accessTokenId) {
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxInventoryActions.resetInventoried(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxInventoryActions.resetInventoried(getServerPort(), accessTokenId))
             .returns(false, ToolResponse::getInventoried);
     }
 
     private void editInventoried(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editInventoried(accessTokenId, toolId, true);
+        VillanyAteszToolboxInventoryActions.editInventoried(getServerPort(), accessTokenId, toolId, true);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(true, ToolResponse::getInventoried);
     }
 
     private void editInventoried_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditInventoriedResponse(accessTokenId, toolId, null), "inventoried", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditInventoriedResponse(getServerPort(), accessTokenId, toolId, null), "inventoried", "must not be null");
     }
 
     private void editScrappedAt(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editScrappedAt(accessTokenId, toolId, SCRAPPED_AT);
+        VillanyAteszToolboxInventoryActions.editScrappedAt(getServerPort(), accessTokenId, toolId, SCRAPPED_AT);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(SCRAPPED_AT, ToolResponse::getScrappedAt);
     }
 
     private void editStatus(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editStatus(accessTokenId, toolId, ToolStatus.SCRAPPED);
+        VillanyAteszToolboxInventoryActions.editStatus(getServerPort(), accessTokenId, toolId, ToolStatus.SCRAPPED);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(ToolStatus.SCRAPPED, ToolResponse::getStatus);
     }
 
     private void editStatus_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStatusResponse(accessTokenId, toolId, null), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStatusResponse(getServerPort(), accessTokenId, toolId, null), "status", "must not be null");
     }
 
     private void editWarrantyExpiresAt(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editWarrantyExpiresAt(accessTokenId, toolId, NEW_WARRANTY_EXPIRES_AT);
+        VillanyAteszToolboxInventoryActions.editWarrantyExpiresAt(getServerPort(), accessTokenId, toolId, NEW_WARRANTY_EXPIRES_AT);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(NEW_WARRANTY_EXPIRES_AT, ToolResponse::getWarrantyExpiresAt);
     }
 
     private void editAcquiredAt(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editAcquiredAt(accessTokenId, toolId, NEW_ACQUIRED_AT);
+        VillanyAteszToolboxInventoryActions.editAcquiredAt(getServerPort(), accessTokenId, toolId, NEW_ACQUIRED_AT);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(NEW_ACQUIRED_AT, ToolResponse::getAcquiredAt);
     }
 
     private void editAcquiredAt_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditAcquiredAtResponse(accessTokenId, toolId, null), "acquiredAt", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditAcquiredAtResponse(getServerPort(), accessTokenId, toolId, null), "acquiredAt", "must not be null");
     }
 
     private void editCost(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editCost(accessTokenId, toolId, NEW_COST);
+        VillanyAteszToolboxInventoryActions.editCost(getServerPort(), accessTokenId, toolId, NEW_COST);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(NEW_COST, ToolResponse::getCost);
     }
 
     private void editCost_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditCostResponse(accessTokenId, toolId, null), "cost", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditCostResponse(getServerPort(), accessTokenId, toolId, null), "cost", "must not be null");
     }
 
     private void editName(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editName(accessTokenId, toolId, NEW_NAME);
+        VillanyAteszToolboxInventoryActions.editName(getServerPort(), accessTokenId, toolId, NEW_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(NEW_NAME, ToolResponse::getName);
     }
 
     private void editName_blank(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditNameResponse(accessTokenId, toolId, " "), "name", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditNameResponse(getServerPort(), accessTokenId, toolId, " "), "name", "must not be null or blank");
     }
 
     private void editBrand(UUID accessTokenId, UUID toolId) {
-        VillanyAteszToolboxInventoryActions.editBrand(accessTokenId, toolId, NEW_BRAND);
+        VillanyAteszToolboxInventoryActions.editBrand(getServerPort(), accessTokenId, toolId, NEW_BRAND);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(NEW_BRAND, ToolResponse::getBrand);
     }
 
     private void editBrand_null(UUID accessTokenId, UUID toolId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditBrandResponse(accessTokenId, toolId, null), "brand", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditBrandResponse(getServerPort(), accessTokenId, toolId, null), "brand", "must not be null");
     }
 
     private void editToolType_existingToolType(UUID accessTokenId, UUID toolId, UUID toolTypeId) {
@@ -181,11 +181,11 @@ public class ToolboxInventoryTest extends BackEndTest {
             .toolTypeId(toolTypeId)
             .build();
 
-        ToolTypeModel existingToolType = VillanyAteszToolboxInventoryActions.editToolType(accessTokenId, toolId, toolTypeModel);
+        ToolTypeModel existingToolType = VillanyAteszToolboxInventoryActions.editToolType(getServerPort(), accessTokenId, toolId, toolTypeModel);
 
         assertThat(existingToolType.getName()).isEqualTo(TOOL_TYPE_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(existingToolType, ToolResponse::getToolType);
     }
 
@@ -194,9 +194,9 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name("")
             .build();
 
-        assertThat(VillanyAteszToolboxInventoryActions.editToolType(accessTokenId, toolId, toolTypeModel)).isNull();
+        assertThat(VillanyAteszToolboxInventoryActions.editToolType(getServerPort(), accessTokenId, toolId, toolTypeModel)).isNull();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(null, ToolResponse::getToolType);
     }
 
@@ -205,11 +205,11 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name(NEW_TOOL_TYPE_NAME)
             .build();
 
-        ToolTypeModel newToolType = VillanyAteszToolboxInventoryActions.editToolType(accessTokenId, toolId, toolTypeModel);
+        ToolTypeModel newToolType = VillanyAteszToolboxInventoryActions.editToolType(getServerPort(), accessTokenId, toolId, toolTypeModel);
 
         assertThat(newToolType.getName()).isEqualTo(NEW_TOOL_TYPE_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(newToolType, ToolResponse::getToolType);
     }
 
@@ -218,7 +218,7 @@ public class ToolboxInventoryTest extends BackEndTest {
             .toolTypeId(UUID.randomUUID())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditToolTypeResponse(accessTokenId, toolId, toolTypeModel), "toolTypeId", "not found");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditToolTypeResponse(getServerPort(), accessTokenId, toolId, toolTypeModel), "toolTypeId", "not found");
     }
 
     private void editToolType_nullName(UUID accessTokenId, UUID toolId) {
@@ -226,7 +226,7 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditToolTypeResponse(accessTokenId, toolId, toolTypeModel), "toolType.name", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditToolTypeResponse(getServerPort(), accessTokenId, toolId, toolTypeModel), "toolType.name", "must not be null");
     }
 
     private void editStorageBox_existingStorageBox(UUID accessTokenId, UUID toolId, UUID storageBoxId) {
@@ -234,11 +234,11 @@ public class ToolboxInventoryTest extends BackEndTest {
             .storageBoxId(storageBoxId)
             .build();
 
-        StorageBoxModel existingStorageBox = VillanyAteszToolboxInventoryActions.editStorageBox(accessTokenId, toolId, storageBoxModel);
+        StorageBoxModel existingStorageBox = VillanyAteszToolboxInventoryActions.editStorageBox(getServerPort(), accessTokenId, toolId, storageBoxModel);
 
         assertThat(existingStorageBox.getName()).isEqualTo(STORAGE_BOX_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(existingStorageBox, ToolResponse::getStorageBox);
     }
 
@@ -247,9 +247,9 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name("")
             .build();
 
-        assertThat(VillanyAteszToolboxInventoryActions.editStorageBox(accessTokenId, toolId, storageBoxModel)).isNull();
+        assertThat(VillanyAteszToolboxInventoryActions.editStorageBox(getServerPort(), accessTokenId, toolId, storageBoxModel)).isNull();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(null, ToolResponse::getStorageBox);
     }
 
@@ -258,10 +258,10 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name(NEW_STORAGE_BOX_NAME)
             .build();
 
-        StorageBoxModel newStorageBox = VillanyAteszToolboxInventoryActions.editStorageBox(accessTokenId, toolId, storageBoxModel);
+        StorageBoxModel newStorageBox = VillanyAteszToolboxInventoryActions.editStorageBox(getServerPort(), accessTokenId, toolId, storageBoxModel);
         assertThat(newStorageBox.getName()).isEqualTo(NEW_STORAGE_BOX_NAME);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId))
             .returns(newStorageBox, ToolResponse::getStorageBox);
     }
 
@@ -270,7 +270,7 @@ public class ToolboxInventoryTest extends BackEndTest {
             .storageBoxId(UUID.randomUUID())
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(accessTokenId, toolId, storageBoxModel), "storageBoxId", "not found");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(getServerPort(), accessTokenId, toolId, storageBoxModel), "storageBoxId", "not found");
     }
 
     private void editStorageBox_nullName(UUID accessTokenId, UUID toolId) {
@@ -278,7 +278,7 @@ public class ToolboxInventoryTest extends BackEndTest {
             .name(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(accessTokenId, toolId, storageBoxModel), "storageBox.name", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(getServerPort(), accessTokenId, toolId, storageBoxModel), "storageBox.name", "must not be null");
     }
 
     private UUID createTool(UUID accessTokenId) {
@@ -291,9 +291,9 @@ public class ToolboxInventoryTest extends BackEndTest {
             .storageBox(StorageBoxModel.builder().name(STORAGE_BOX_NAME).build())
             .toolType(ToolTypeModel.builder().name(TOOL_TYPE_NAME).build())
             .build();
-        VillanyAteszToolboxActions.createTool(accessTokenId, request);
+        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, request);
 
-        return VillanyAteszToolboxActions.getTools(accessTokenId)
+        return VillanyAteszToolboxActions.getTools(getServerPort(), accessTokenId)
             .get(0)
             .getToolId();
     }

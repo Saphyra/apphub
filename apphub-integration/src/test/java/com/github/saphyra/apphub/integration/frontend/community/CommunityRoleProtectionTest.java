@@ -19,11 +19,11 @@ public class CommunityRoleProtectionTest extends SeleniumTest {
     public void communityRoleProtection(String role) {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.COMMUNITY);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.COMMUNITY);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
@@ -31,7 +31,7 @@ public class CommunityRoleProtectionTest extends SeleniumTest {
         driver.navigate()
             .refresh();
 
-        CommonUtils.verifyMissingRole(driver.getCurrentUrl());
+        CommonUtils.verifyMissingRole(getServerPort(), driver.getCurrentUrl());
     }
 
     @DataProvider(parallel = true)

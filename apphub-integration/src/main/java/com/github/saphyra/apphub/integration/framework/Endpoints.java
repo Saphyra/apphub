@@ -301,6 +301,10 @@ public class Endpoints {
     public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT = "/api/villany-atesz/tool/inventory/{toolId}/scrapped-at";
     public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED = "/api/villany-atesz/tool/inventory/{toolId}/inventoried";
     public static final String VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED = "/api/villany-atesz/tool/inventory/reset-inventoried";
+    public static final String VILLANY_ATESZ_EDIT_TOOL_TYPE = "/api/villany-atesz/tool/tool-type/{toolTypeId}";
+    public static final String VILLANY_ATESZ_DELETE_TOOL_TYPE = "/api/villany-atesz/tool/tool-type/{toolTypeId}";
+    public static final String VILLANY_ATESZ_EDIT_STORAGE_BOX = "/api/villany-atesz/tool/storage-box/{storageBoxId}";
+    public static final String VILLANY_ATESZ_DELETE_STORAGE_BOX = "/api/villany-atesz/tool/storage-box/{storageBoxId}";
 
     //SKYXPLORE-DATA-SETTINGS
     public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";

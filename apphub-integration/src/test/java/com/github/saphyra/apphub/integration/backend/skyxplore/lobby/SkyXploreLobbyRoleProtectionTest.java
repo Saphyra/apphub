@@ -19,33 +19,33 @@ public class SkyXploreLobbyRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
     public void lobbyRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
         //Platform
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getIsUserInLobbyResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getCreateLobbyResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLobbyViewForPageResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getExitFromLobbyResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getInviteToLobbyResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAcceptInvitationResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLobbyPlayersResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getStartGameResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getActiveFriendsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLoadGameResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getIsUserInLobbyResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLobbyViewForPageResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getExitFromLobbyResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getInviteToLobbyResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAcceptInvitationResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLobbyPlayersResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getActiveFriendsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getLoadGameResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
 
         //Settings
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getEditSettingsResponse(accessTokenId, new SkyXploreGameSettings()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getGameSettingsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getCreateOrModifyAiResponse(accessTokenId, new AiPlayer()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getRemoveAiResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAisResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAlliancesResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getChangeAllianceOfPlayerResponse(accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getChangeAllianceOfAiResponse(accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getEditSettingsResponse(getServerPort(), accessTokenId, new SkyXploreGameSettings()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getGameSettingsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId, new AiPlayer()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getRemoveAiResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAisResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getAlliancesResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getChangeAllianceOfPlayerResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreLobbyActions.getChangeAllianceOfAiResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
     }
 
     @DataProvider(parallel = true)

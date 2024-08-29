@@ -24,16 +24,15 @@ public class ScheduleUserDeletionTest extends BackEndTest {
     private static final Integer HOURS = 23;
     private static final Integer MINUTES = 54;
     private static final String MARKED_FOR_DELETION_AT = String.format("%sT%s:%s", DATE, HOURS, MINUTES);
-    private static final String TIME = HOURS + ":" + MINUTES;
 
     @Test(groups = {"be", "admin-panel"})
     public void scheduleUserDeletionCd() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(testUser.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
 
         nullPassword(accessTokenId, testUserId);
@@ -50,7 +49,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
             .password(null)
             .build();
 
-        Response nullPasswordResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, nullPasswordRequest);
+        Response nullPasswordResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, testUserId, nullPasswordRequest);
 
         ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
     }
@@ -61,7 +60,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
             .password("asf")
             .build();
 
-        Response incorrectPasswordResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, incorrectPasswordRequest);
+        Response incorrectPasswordResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, testUserId, incorrectPasswordRequest);
 
         ResponseValidator.verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
@@ -72,7 +71,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response nullTimeResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, nullTimeRequest);
+        Response nullTimeResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, testUserId, nullTimeRequest);
 
         ResponseValidator.verifyInvalidParam(nullTimeResponse, "markForDeletionAt", "must not be null");
     }
@@ -83,7 +82,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        Response incorrectTimeResponse = BanActions.getMarkForDeletionResponse(accessTokenId, testUserId, incorrectTimeRequest);
+        Response incorrectTimeResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, testUserId, incorrectTimeRequest);
 
         ResponseValidator.verifyInvalidParam(incorrectTimeResponse, "markForDeletionAt", "failed to parse");
     }
@@ -94,14 +93,14 @@ public class ScheduleUserDeletionTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
 
-        BanResponse markUserForDeletionResponse = BanActions.markUserForDeletion(accessTokenId, testUserId, markUserForDeletionRequest);
+        BanResponse markUserForDeletionResponse = BanActions.markUserForDeletion(getServerPort(), accessTokenId, testUserId, markUserForDeletionRequest);
 
         assertThat(markUserForDeletionResponse.getMarkedForDeletion()).isTrue();
         assertThat(markUserForDeletionResponse.getMarkedForDeletionAt()).isEqualTo(DATE + String.format(" %s:%s", HOURS, MINUTES));
     }
 
     private static void unmarkUserForDeletion(UUID accessTokenId, UUID testUserId) {
-        BanResponse unmarkUserForDeletionResponse = BanActions.unmarkUserForDeletion(accessTokenId, testUserId);
+        BanResponse unmarkUserForDeletionResponse = BanActions.unmarkUserForDeletion(getServerPort(), accessTokenId, testUserId);
 
         assertThat(unmarkUserForDeletionResponse.getMarkedForDeletion()).isFalse();
         assertThat(unmarkUserForDeletionResponse.getMarkedForDeletionAt()).isNull();

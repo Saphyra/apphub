@@ -12,14 +12,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreCharacterActions {
-    public static void createOrUpdateCharacter(UUID accessTokenId, SkyXploreCharacterModel model) {
-        assertThat(getCreateCharacterResponse(accessTokenId, model).getStatusCode()).isEqualTo(200);
+    public static void createOrUpdateCharacter(int serverPort, UUID accessTokenId, SkyXploreCharacterModel model) {
+        assertThat(getCreateCharacterResponse(serverPort, accessTokenId, model).getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateCharacterResponse(UUID accessTokenId, SkyXploreCharacterModel model) {
+    public static Response getCreateCharacterResponse(int serverPort, UUID accessTokenId, SkyXploreCharacterModel model) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(model)
-            .post(UrlFactory.create(Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
+            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
     }
 
     public static String getCharacterName(String email) {
@@ -27,13 +27,13 @@ public class SkyXploreCharacterActions {
             .orElseThrow(() -> new RuntimeException("SkyXploreCharacter not found for email " + email));
     }
 
-    public static Response getCharacterNameResponse(UUID accessTokenId) {
+    public static Response getCharacterNameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_CHARACTER_NAME));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_CHARACTER_NAME));
     }
 
-    public static Response getExistsResponse(UUID accessTokenId) {
+    public static Response getExistsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_CHARACTER_EXISTS));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CHARACTER_EXISTS));
     }
 }

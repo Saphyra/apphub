@@ -40,14 +40,14 @@ public class VillanyAteszIndexTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void totalStockValue() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         StockCategoryModel category = StockCategoryModel.builder()
             .name(CATEGORY_NAME)
             .measurement("")
             .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(accessTokenId, category)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, category)
             .get(0)
             .getStockCategoryId();
 
@@ -60,7 +60,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_1)
             .price(PRICE_1)
             .build();
-        VillanyAteszStockItemActions.create(accessTokenId, stockItemRequest1);
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest1);
 
         CreateStockItemRequest stockItemRequest2 = CreateStockItemRequest.builder()
             .stockCategoryId(stockCategoryId)
@@ -71,15 +71,15 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_2)
             .price(PRICE_2)
             .build();
-        VillanyAteszStockItemActions.create(accessTokenId, stockItemRequest2);
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest2);
 
-        assertThat(VillanyAteszIndexActions.getTotalStockValue(accessTokenId)).isEqualTo((IN_CAR_1 + IN_STORAGE_1) * PRICE_1 + (IN_CAR_2 + IN_STORAGE_2) * PRICE_2);
+        assertThat(VillanyAteszIndexActions.getTotalStockValue(getServerPort(), accessTokenId)).isEqualTo((IN_CAR_1 + IN_STORAGE_1) * PRICE_1 + (IN_CAR_2 + IN_STORAGE_2) * PRICE_2);
     }
 
     @Test(groups = {"be", "villany-atesz"})
     public void totalToolboxValue() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         CreateToolRequest createToolRequest1 = CreateToolRequest.builder()
@@ -99,23 +99,23 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .toolType(ToolTypeModel.builder().name("").build())
             .build();
 
-        VillanyAteszToolboxActions.createTool(accessTokenId, createToolRequest1);
-        VillanyAteszToolboxActions.createTool(accessTokenId, createToolRequest2);
+        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, createToolRequest1);
+        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, createToolRequest2);
 
-        assertThat(VillanyAteszIndexActions.getTotalToolboxValue(accessTokenId)).isEqualTo(PRICE_1 + PRICE_2);
+        assertThat(VillanyAteszIndexActions.getTotalToolboxValue(getServerPort(), accessTokenId)).isEqualTo(PRICE_1 + PRICE_2);
     }
 
     @Test(groups = {"be", "villany-atesz"})
     public void getStockItemsMarkedForAcquisition() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         StockCategoryModel category = StockCategoryModel.builder()
             .name(CATEGORY_NAME)
             .measurement("")
             .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(accessTokenId, category)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, category)
             .get(0)
             .getStockCategoryId();
 
@@ -128,15 +128,15 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_1)
             .price(PRICE_1)
             .build();
-        VillanyAteszStockItemActions.create(accessTokenId, stockItemRequest);
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest);
 
-        UUID stockItemId = VillanyAteszStockItemActions.getStockItems(accessTokenId)
+        UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .get(0)
             .getStockItemId();
 
-        VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(accessTokenId, stockItemId, true);
+        VillanyAteszStockItemInventoryActions.getEditMarkedForAcquisitionResponse(getServerPort(), accessTokenId, stockItemId, true);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszIndexActions.getStockItemsMarkedForAcquisition(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszIndexActions.getStockItemsMarkedForAcquisition(getServerPort(), accessTokenId))
             .returns(stockItemId, StockItemResponse::getStockItemId);
     }
 }

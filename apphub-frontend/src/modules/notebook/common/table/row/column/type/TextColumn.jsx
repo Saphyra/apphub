@@ -1,6 +1,7 @@
 import React from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
+import Textarea from "../../../../../../../common/component/input/Textarea";
 
 const TextColumn = ({
     columnData,
@@ -19,9 +20,8 @@ const TextColumn = ({
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
                 <div className="table-column-wrapper">
                     <div className="table-column-content">
-                        <InputField
-                            className={"notebook-table-column-input" + (custom ? " notebook-table-column-input" : "")}
-                            type="text"
+                        <Textarea
+                            className={"notebook-table-column-input resizable" + (custom ? " notebook-table-column-input" : "")}
                             onchangeCallback={updateContent}
                             value={columnData.data}
                         />
@@ -40,9 +40,9 @@ const TextColumn = ({
     } else {
         return (
             <td className="table-column">
-                <div className="table-column-wrapper">
+                <pre className="table-column-wrapper">
                     {columnData.data}
-                </div>
+                </pre>
             </td >
         );
     }

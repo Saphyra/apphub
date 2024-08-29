@@ -1,0 +1,26 @@
+===FEATURES===
+    ApphubCI
+        Do not expect disabled services' health if running local test groups
+    Login by both e-mail or username
+    Integration
+        Configurable browser startup limit
+    VillanyAtesz
+        Edit and delete toolType and storageBox
+
+===BUGFIXES===
+    Notebook
+        Dynamic width for Edit checklist item / Add checklist item dialog inputs
+        Only list of category is scrollable
+        Use textarea for custom table text type
+    Integration
+        Parallel WebDriver creation during "preCreateDrivers"
+        Connection cache to avoid timeout during minikube test
+
+===PLATFORM CHANGES===
+    Integration
+        Tests default to local run
+
+===TECHNICAL DEBTS===
+    Remove ThymeLeaf dependency from main-gateway
+
+===ETC===

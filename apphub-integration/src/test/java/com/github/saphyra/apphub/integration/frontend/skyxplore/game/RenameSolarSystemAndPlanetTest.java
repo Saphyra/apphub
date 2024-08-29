@@ -33,10 +33,10 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
     public void renameSolarSystemAndPlanet() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver, registrationParameters.getUsername());

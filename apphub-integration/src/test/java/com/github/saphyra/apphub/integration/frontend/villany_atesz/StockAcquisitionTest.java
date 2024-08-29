@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.frontend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszAcquisitionActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.villany_atesz.VillanyAteszNavigation;
@@ -43,7 +42,7 @@ public class StockAcquisitionTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void stockAcquisition() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -51,7 +50,7 @@ public class StockAcquisitionTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);
         VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", "", 0, 0, DEFAULT_PRICE);
@@ -72,7 +71,7 @@ public class StockAcquisitionTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void searchByBarCode() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -80,7 +79,7 @@ public class StockAcquisitionTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);
         VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME, STOCK_ITEM_NAME, "", BAR_CODE, 0, 0, 0);
@@ -166,9 +165,9 @@ public class StockAcquisitionTest extends SeleniumTest {
     private void checkAcquisitionHistory(WebDriver driver) {
         VillanyAteszNavigation.openAcquisition(driver);
 
-        VillanyAteszAcquisitionActions.openHistory(driver);
+        VillanyAteszStockAcquisitionPageActions.openHistory(driver);
 
-        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszAcquisitionActions.getHistoryItems(driver))
+        AwaitilityWrapper.assertWithWaitList(() -> VillanyAteszStockAcquisitionPageActions.getHistoryItems(driver))
             .returns(IN_CAR + IN_STORAGE, AcquisitionHistoryItem::getAmount)
             .returns(STOCK_ITEM_NAME, AcquisitionHistoryItem::getItemName);
     }

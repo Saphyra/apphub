@@ -38,7 +38,7 @@ public class CartCrudTest extends BackEndTest {
     @Test(groups = {"be", "villany-atesz"})
     public void cartCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         UUID stockItemId = createStockItem(accessTokenId);
@@ -66,29 +66,29 @@ public class CartCrudTest extends BackEndTest {
     }
 
     private void editMargin(UUID accessTokenId, UUID cartId) {
-        VillanyAteszCartActions.editMargin(accessTokenId, cartId, MARGIN);
+        VillanyAteszCartActions.editMargin(getServerPort(), accessTokenId, cartId, MARGIN);
     }
 
     private void editMargin_negative(UUID accessTokenId, UUID cartId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(accessTokenId, cartId, -1.0), "margin", "too low");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(getServerPort(), accessTokenId, cartId, -1.0), "margin", "too low");
     }
 
     private void editMargin_null(UUID accessTokenId, UUID cartId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(accessTokenId, cartId, null), "margin", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getEditMarginResponse(getServerPort(), accessTokenId, cartId, null), "margin", "must not be null");
     }
 
     private void create_nullContactId(UUID accessTokenId) {
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getCreateResponse(accessTokenId, null), "contactId", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getCreateResponse(getServerPort(), accessTokenId, null), "contactId", "must not be null");
     }
 
     private void create_contactNotFound(UUID accessTokenId) {
-        ResponseValidator.verifyErrorResponse(VillanyAteszCartActions.getCreateResponse(accessTokenId, UUID.randomUUID()), 404, ErrorCode.DATA_NOT_FOUND);
+        ResponseValidator.verifyErrorResponse(VillanyAteszCartActions.getCreateResponse(getServerPort(), accessTokenId, UUID.randomUUID()), 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private UUID create(UUID accessTokenId, UUID contactId) {
-        UUID cartId = VillanyAteszCartActions.create(accessTokenId, contactId);
+        UUID cartId = VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
 
-        CustomAssertions.singleListAssertThat(VillanyAteszCartActions.getCarts(accessTokenId))
+        CustomAssertions.singleListAssertThat(VillanyAteszCartActions.getCarts(getServerPort(), accessTokenId))
             .extracting(CartResponse::getContact)
             .returns(contactId, ContactModel::getContactId);
 
@@ -102,7 +102,7 @@ public class CartCrudTest extends BackEndTest {
             .amount(AMOUNT)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(accessTokenId, request), "cartId", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(getServerPort(), accessTokenId, request), "cartId", "must not be null");
     }
 
     private void addToCart_nullStockItemId(UUID accessTokenId, UUID cartId) {
@@ -112,7 +112,7 @@ public class CartCrudTest extends BackEndTest {
             .amount(AMOUNT)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(accessTokenId, request), "stockItemId", "must not be null");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(getServerPort(), accessTokenId, request), "stockItemId", "must not be null");
     }
 
     private void addToCart_zeroAmount(UUID accessTokenId, UUID cartId, UUID stockItemId) {
@@ -122,7 +122,7 @@ public class CartCrudTest extends BackEndTest {
             .amount(0)
             .build();
 
-        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(accessTokenId, request), "amount", "must not be zero");
+        ResponseValidator.verifyInvalidParam(VillanyAteszCartActions.getAddToCartResponse(getServerPort(), accessTokenId, request), "amount", "must not be zero");
     }
 
     private void addToCart(UUID accessTokenId, UUID cartId, UUID stockItemId) {
@@ -132,7 +132,7 @@ public class CartCrudTest extends BackEndTest {
             .amount(AMOUNT)
             .build();
 
-        assertThat(VillanyAteszCartActions.addToCart(accessTokenId, request))
+        assertThat(VillanyAteszCartActions.addToCart(getServerPort(), accessTokenId, request))
             .returns(stockItemId, cartModifiedResponse -> cartModifiedResponse.getItems().get(0).getStockItemId())
             .returns(STOCK_ITEM_NAME, cartModifiedResponse -> cartModifiedResponse.getItems().get(0).getName())
             .returns(AMOUNT, cartModifiedResponse -> cartModifiedResponse.getItems().get(0).getInCart())
@@ -143,7 +143,7 @@ public class CartCrudTest extends BackEndTest {
     }
 
     private void removeFromCart(UUID accessTokenId, UUID cartId, UUID stockItemId) {
-        assertThat(VillanyAteszCartActions.removeFromCart(accessTokenId, cartId, stockItemId))
+        assertThat(VillanyAteszCartActions.removeFromCart(getServerPort(), accessTokenId, cartId, stockItemId))
             .returns(stockItemId, cartModifiedResponse -> cartModifiedResponse.getItems().get(0).getStockItemId())
             .returns(STOCK_ITEM_NAME, cartModifiedResponse -> cartModifiedResponse.getItems().get(0).getName())
             .returns(0, cartModifiedResponse -> cartModifiedResponse.getCart().getTotalPrice())
@@ -153,13 +153,13 @@ public class CartCrudTest extends BackEndTest {
     private void finalizeCart(UUID accessTokenId, UUID cartId, UUID stockItemId) {
         addToCart(accessTokenId, cartId, stockItemId);
 
-        assertThat(VillanyAteszCartActions.finalize(accessTokenId, cartId))
+        assertThat(VillanyAteszCartActions.finalize(getServerPort(), accessTokenId, cartId))
             .returns(IN_CAR - AMOUNT, cartDeletedResponse -> cartDeletedResponse.getItems().get(0).getInCar())
             .returns(Collections.emptyList(), CartDeletedResponse::getCarts);
     }
 
     private void finalizeCart_alreadyFinalized(UUID accessTokenId, UUID cartId) {
-        ResponseValidator.verifyForbiddenOperation(VillanyAteszCartActions.getFinalizeCartResponse(accessTokenId, cartId));
+        ResponseValidator.verifyForbiddenOperation(VillanyAteszCartActions.getFinalizeCartResponse(getServerPort(), accessTokenId, cartId));
     }
 
     private void delete(UUID accessTokenId, UUID contactId, UUID stockItemId) {
@@ -167,7 +167,7 @@ public class CartCrudTest extends BackEndTest {
 
         addToCart(accessTokenId, cartId, stockItemId);
 
-        assertThat(VillanyAteszCartActions.delete(accessTokenId, cartId))
+        assertThat(VillanyAteszCartActions.delete(getServerPort(), accessTokenId, cartId))
             .returns(IN_CAR - AMOUNT, cartDeletedResponse -> cartDeletedResponse.getItems().get(0).getInCar())
             .returns(0, cartDeletedResponse -> cartDeletedResponse.getItems().get(0).getInCart())
             .returns(Collections.emptyList(), CartDeletedResponse::getCarts);
@@ -183,7 +183,7 @@ public class CartCrudTest extends BackEndTest {
             .note("")
             .build();
 
-        return VillanyAteszContactActions.createContact(accessTokenId, request)
+        return VillanyAteszContactActions.createContact(getServerPort(), accessTokenId, request)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -196,7 +196,7 @@ public class CartCrudTest extends BackEndTest {
             .measurement("")
             .build();
 
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(accessTokenId, stockCategoryModel)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, stockCategoryModel)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -212,9 +212,9 @@ public class CartCrudTest extends BackEndTest {
             .price(PRICE)
             .build();
 
-        VillanyAteszStockItemActions.create(accessTokenId, request);
+        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, request);
 
-        return VillanyAteszStockItemActions.getStockItems(accessTokenId)
+        return VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
             .orElseThrow()

@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class LoginTest extends BackEndTest {
     @Test(groups = {"be", "index"})
     public void loginAndOut() {
@@ -35,59 +37,59 @@ public class LoginTest extends BackEndTest {
 
     private static void unknownEmail(RegistrationParameters userData) {
         LoginRequest unknownEmailRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .build();
-        Response unknownEmailResponse = IndexPageActions.getLoginResponse(unknownEmailRequest);
+        Response unknownEmailResponse = IndexPageActions.getLoginResponse(getServerPort(), unknownEmailRequest);
         verifyErrorResponse(unknownEmailResponse, 401, ErrorCode.BAD_CREDENTIALS);
     }
 
     private static LoginRequest incorrectPassword(RegistrationParameters userData) {
-        IndexPageActions.registerUser(userData.toRegistrationRequest());
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
 
         LoginRequest incorrectPasswordRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password("asd")
             .build();
-        Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(incorrectPasswordRequest);
+        Response incorrectPasswordResponse = IndexPageActions.getLoginResponse(getServerPort(), incorrectPasswordRequest);
         verifyErrorResponse(incorrectPasswordResponse, 401, ErrorCode.BAD_CREDENTIALS);
         return incorrectPasswordRequest;
     }
 
     private static void successfulLogin_rememberMe(RegistrationParameters userData) {
         LoginRequest rememberMeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(true)
             .build();
 
-        LoginResponse rememberMeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(rememberMeLoginRequest);
+        LoginResponse rememberMeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(getServerPort(), rememberMeLoginRequest);
         assertThat(rememberMeLoginResponse.getExpirationDays()).isEqualTo(365);
 
         LocalDateTime newLastAccess = LocalDateTime.now().minusDays(100);
         DatabaseUtil.updateAccessTokenLastAccess(rememberMeLoginResponse.getAccessTokenId(), newLastAccess);
 
-        Response modulesResponse = ModulesActions.getModulesResponse(rememberMeLoginResponse.getAccessTokenId());
+        Response modulesResponse = ModulesActions.getModulesResponse(getServerPort(), rememberMeLoginResponse.getAccessTokenId());
         assertThat(modulesResponse.getStatusCode()).isEqualTo(200);
     }
 
     private static LoginResponse oneTimeLogin(RegistrationParameters userData) {
         LoginRequest oneTimeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(false)
             .build();
 
-        LoginResponse oneTimeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(oneTimeLoginRequest);
+        LoginResponse oneTimeLoginResponse = IndexPageActions.getSuccessfulLoginResponse(getServerPort(), oneTimeLoginRequest);
         assertThat(oneTimeLoginResponse.getExpirationDays()).isNull();
         return oneTimeLoginResponse;
     }
 
     private static void logout(LoginResponse oneTimeLoginResponse) {
         UUID accessTokenId = oneTimeLoginResponse.getAccessTokenId();
-        ModulesActions.logout(accessTokenId);
+        ModulesActions.logout(getServerPort(), accessTokenId);
 
-        Response response = ModulesActions.getLogoutResponse(accessTokenId);
+        Response response = ModulesActions.getLogoutResponse(getServerPort(), accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(401);
 
@@ -97,24 +99,24 @@ public class LoginTest extends BackEndTest {
 
     private static void lockUser(RegistrationParameters userData, LoginRequest incorrectPasswordRequest) {
         LoginRequest oneTimeLoginRequest = LoginRequest.builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .rememberMe(false)
             .build();
 
         Stream.generate(() -> "")
             .limit(2)
-            .map(s -> IndexPageActions.getLoginResponse(incorrectPasswordRequest))
+            .map(s -> IndexPageActions.getLoginResponse(getServerPort(), incorrectPasswordRequest))
             .forEach(r -> verifyErrorResponse(r, 401, ErrorCode.BAD_CREDENTIALS));
 
-        Response lockedLoginResponse = IndexPageActions.getLoginResponse(incorrectPasswordRequest);
+        Response lockedLoginResponse = IndexPageActions.getLoginResponse(getServerPort(), incorrectPasswordRequest);
         verifyErrorResponse(lockedLoginResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
-        lockedLoginResponse = IndexPageActions.getLoginResponse(oneTimeLoginRequest);
+        lockedLoginResponse = IndexPageActions.getLoginResponse(getServerPort(), oneTimeLoginRequest);
         verifyErrorResponse(lockedLoginResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
 
-        IndexPageActions.getSuccessfulLoginResponse(oneTimeLoginRequest);
+        IndexPageActions.getSuccessfulLoginResponse(getServerPort(), oneTimeLoginRequest);
     }
 }

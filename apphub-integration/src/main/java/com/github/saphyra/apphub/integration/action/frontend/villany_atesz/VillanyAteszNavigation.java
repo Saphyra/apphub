@@ -119,4 +119,9 @@ public class VillanyAteszNavigation {
         driver.findElement(By.id("villany-atesz-toolbox-navigation-inventory-button"))
             .click();
     }
+
+    public static void openToolboxManage(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-toolbox-navigation-manage-button"))
+            .click();
+    }
 }

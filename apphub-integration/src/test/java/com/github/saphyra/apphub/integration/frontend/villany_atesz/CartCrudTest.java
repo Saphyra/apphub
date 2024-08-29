@@ -39,7 +39,7 @@ public class CartCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void cartCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -47,7 +47,7 @@ public class CartCrudTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createContact(driver, CONTACT_NAME, CONTACT_CODE);
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME, MEASUREMENT);

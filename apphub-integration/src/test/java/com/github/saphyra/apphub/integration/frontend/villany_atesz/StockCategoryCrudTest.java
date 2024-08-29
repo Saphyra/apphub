@@ -38,7 +38,7 @@ public class StockCategoryCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void stockCategoryCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -46,7 +46,7 @@ public class StockCategoryCrudTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
         VillanyAteszNavigation.openStockCategories(driver);
 
         create_blankName(driver);
@@ -123,7 +123,7 @@ public class StockCategoryCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void deleteStockCategoryWithRelatedStockAndCartItems() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -131,7 +131,7 @@ public class StockCategoryCrudTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createContact(driver, CONTACT_NAME, CONTACT_CODE);
         VillanyAteszContactsPageActions.getContacts(driver)

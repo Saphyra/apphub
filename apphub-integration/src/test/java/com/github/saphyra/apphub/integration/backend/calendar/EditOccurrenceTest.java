@@ -36,7 +36,7 @@ public class EditOccurrenceTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void editOccurrence() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -50,7 +50,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .repetitionDays(REPETITION_DAYS)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         CalendarResponse calendarResponse = responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())
@@ -74,7 +74,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        Response nullReferenceDateResponse = OccurrenceActions.getEditOccurrenceResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateRequest);
+        Response nullReferenceDateResponse = OccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateResponse, "referenceDate", "must not be null");
     }
@@ -90,7 +90,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        Response nullReferenceDateDayResponse = OccurrenceActions.getEditOccurrenceResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDayRequest);
+        Response nullReferenceDateDayResponse = OccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateDayRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
@@ -106,7 +106,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        Response nullReferenceDateMonthResponse = OccurrenceActions.getEditOccurrenceResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonthRequest);
+        Response nullReferenceDateMonthResponse = OccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), nullReferenceDateMonthRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
@@ -122,7 +122,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        Response blankTitleResponse = OccurrenceActions.getEditOccurrenceResponse(accessTokenId, occurrenceResponse.getOccurrenceId(), blankTitleRequest);
+        Response blankTitleResponse = OccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), blankTitleRequest);
 
         ResponseValidator.verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
@@ -139,7 +139,7 @@ public class EditOccurrenceTest extends BackEndTest {
             .note(NOTE)
             .build();
 
-        responses = OccurrenceActions.editOccurrence(accessTokenId, occurrenceResponse.getOccurrenceId(), editOccurrenceRequest);
+        responses = OccurrenceActions.editOccurrence(getServerPort(), accessTokenId, occurrenceResponse.getOccurrenceId(), editOccurrenceRequest);
 
         responses.stream()
             .filter(cr -> !cr.getEvents().isEmpty())

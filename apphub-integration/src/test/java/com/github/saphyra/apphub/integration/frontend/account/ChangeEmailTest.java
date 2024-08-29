@@ -27,15 +27,15 @@ public class ChangeEmailTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changeEmail() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters existingUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, existingUserData);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
         blankEmail(driver);
         invalidEmail(driver);
@@ -46,17 +46,17 @@ public class ChangeEmailTest extends SeleniumTest {
     }
 
     private void blankEmail(WebDriver driver) {
-        ChangeEmailActions.fillChangeEmailForm(driver, ChangeEmailParameters.blankEmail());
+        ChangeEmailActions.fillChangeEmailForm(getServerPort(), driver, ChangeEmailParameters.blankEmail());
         ChangeEmailActions.verifyChangeEmailForm(driver, blankEmail());
     }
 
     private static void invalidEmail(WebDriver driver) {
-        ChangeEmailActions.fillChangeEmailForm(driver, ChangeEmailParameters.invalidEmail());
+        ChangeEmailActions.fillChangeEmailForm(getServerPort(), driver, ChangeEmailParameters.invalidEmail());
         ChangeEmailActions.verifyChangeEmailForm(driver, invalidEmail());
     }
 
     private static void emptyPassword(WebDriver driver) {
-        ChangeEmailActions.fillChangeEmailForm(driver, ChangeEmailParameters.emptyPassword());
+        ChangeEmailActions.fillChangeEmailForm(getServerPort(), driver, ChangeEmailParameters.emptyPassword());
         ChangeEmailActions.verifyChangeEmailForm(driver, emptyPassword());
     }
 
@@ -66,7 +66,7 @@ public class ChangeEmailTest extends SeleniumTest {
             .email(existingUserData.getEmail())
             .build();
 
-        ChangeEmailActions.fillChangeEmailForm(driver, emailAlreadyExistsParameters);
+        ChangeEmailActions.fillChangeEmailForm(getServerPort(), driver, emailAlreadyExistsParameters);
         ChangeEmailActions.verifyChangeEmailForm(driver, valid());
         ChangeEmailActions.changeEmail(driver);
 
@@ -74,7 +74,7 @@ public class ChangeEmailTest extends SeleniumTest {
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        ChangeEmailActions.fillChangeEmailForm(driver, ChangeEmailParameters.incorrectPassword());
+        ChangeEmailActions.fillChangeEmailForm(getServerPort(), driver, ChangeEmailParameters.incorrectPassword());
         ChangeEmailActions.verifyChangeEmailForm(driver, valid());
         ChangeEmailActions.changeEmail(driver);
 
@@ -83,20 +83,21 @@ public class ChangeEmailTest extends SeleniumTest {
 
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangeEmailParameters changeParameters = ChangeEmailParameters.valid();
-        ChangeEmailActions.fillChangeEmailForm(driver, changeParameters);
+        Integer serverPort = getServerPort();
+        ChangeEmailActions.fillChangeEmailForm(serverPort, driver, changeParameters);
         ChangeEmailActions.verifyChangeEmailForm(driver, valid());
         ChangeEmailActions.changeEmail(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_EMAIL_CHANGED);
         assertThat(ChangeEmailActions.getCurrentEmail(driver)).isEqualTo(changeParameters.getEmail());
 
-        AccountPageActions.back(driver);
-        ModulesPageActions.logout(driver);
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        AccountPageActions.back(serverPort, driver);
+        ModulesPageActions.logout(serverPort, driver);
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(changeParameters.getEmail()).password(userData.getPassword()).build());
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.builder().userIdentifier(changeParameters.getEmail()).password(userData.getPassword()).build());
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
             .assertTrue();
     }
 

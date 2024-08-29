@@ -43,8 +43,16 @@ import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage'
 import NewFilesPage from './modules/notebook/new/new_file/NewFilesPage';
 import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
 import VillanyAteszToolboxPage from './modules/custom/villany_atesz/toolbox/VillanyAteszToolboxPage';
+import Constants from './common/js/Constants';
+import Redirection from './Redirection';
+
+
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Redirection url={Constants.INDEX_PAGE} />,
+  },
   {
     path: "/web",
     element: <IndexPage />,

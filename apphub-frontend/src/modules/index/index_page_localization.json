@@ -3,6 +3,10 @@
         "en": "Apphub",
         "hu": "Apphub"
     },
+    "user-identifier": {
+        "en": "Username or e-mail",
+        "hu": "Felhasználónév vagy e-mail"
+    },
     "email-address": {
         "en": "E-mail address",
         "hu": "E-mail cím"

@@ -42,4 +42,8 @@ public class StorageBoxDao extends AbstractDao<StorageBoxEntity, StorageBox, Str
     public List<StorageBox> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
+
+    public void deleteByUserIdAndStorageBoxId(UUID userId, UUID storageBoxId) {
+        repository.deleteByUserIdAndStorageBoxId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(storageBoxId));
+    }
 }

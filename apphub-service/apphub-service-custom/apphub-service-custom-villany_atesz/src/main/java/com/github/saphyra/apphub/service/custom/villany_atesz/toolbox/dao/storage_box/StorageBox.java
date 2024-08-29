@@ -12,5 +12,5 @@ import java.util.UUID;
 public class StorageBox {
     private final UUID storageBoxId;
     private final UUID userId;
-    private final String name;
+    private String name;
 }

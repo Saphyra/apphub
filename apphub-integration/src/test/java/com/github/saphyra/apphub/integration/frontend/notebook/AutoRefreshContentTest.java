@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewC
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
 import com.github.saphyra.apphub.integration.core.HeadedSeleniumTest;
-import com.github.saphyra.apphub.integration.core.WebDriverMode;
+import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
@@ -42,25 +42,25 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshCategory() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(driver);
+        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .pin(driver);
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Category not found"))
-            .edit(driver);
+            .edit(getServerPort(), driver);
 
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
         EditListItemActions.submitForm(driver);
@@ -77,14 +77,14 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshSearchResult() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(driver);
+        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
 
         NotebookActions.search(driver, NEW_CATEGORY_TITLE);
 
@@ -94,11 +94,11 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Category not found"))
-            .edit(driver);
+            .edit(getServerPort(), driver);
 
         EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
         EditListItemActions.submitForm(driver);
@@ -114,21 +114,21 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(driver);
+        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CONTENT, false)));
+        NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CONTENT, false)));
 
         NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
             .open();
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CHECKLIST_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
@@ -149,14 +149,14 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshTable() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(driver);
+        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newTable(driver, TABLE_TITLE, List.of(CONTENT), List.of(List.of(CONTENT)));
+        NotebookUtils.newTable(getServerPort(), driver, TABLE_TITLE, List.of(CONTENT), List.of(List.of(CONTENT)));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Table not found."))
@@ -164,7 +164,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
@@ -185,21 +185,21 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshText() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(driver);
+        WebDriver driver = extractDriver(getServerPort(), WebDriverMode.HEADED);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newText(driver, TEXT_TITLE, CONTENT);
+        NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, CONTENT);
 
         NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
             .open();
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))

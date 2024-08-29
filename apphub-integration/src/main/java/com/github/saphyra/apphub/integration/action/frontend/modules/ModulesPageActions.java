@@ -24,13 +24,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class ModulesPageActions {
-    public static void logout(WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
+    public static void logout(int serverPort, WebDriver driver) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
 
         ModulesPage.logoutButton(driver).click();
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE)))
-            .assertTrue();
+        AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE)));
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.INDEX_SUCCESSFULLY_LOGGED_OUT);
     }
@@ -61,10 +59,10 @@ public class ModulesPageActions {
             .collect(Collectors.toList());
     }
 
-    public static void openModule(WebDriver driver, ModuleLocation moduleLocation) {
+    public static void openModule(int serverPort, WebDriver driver, ModuleLocation moduleLocation) {
         log.debug("Opening module {}", moduleLocation);
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
             .assertTrue("Modules page is not loaded.");
 
         getModule(driver, moduleLocation)

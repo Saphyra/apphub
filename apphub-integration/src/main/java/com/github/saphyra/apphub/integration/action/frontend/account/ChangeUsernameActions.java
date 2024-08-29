@@ -24,8 +24,8 @@ public class ChangeUsernameActions {
         changeUsernameButton(driver).click();
     }
 
-    public static void fillChangeUsernameForm(WebDriver driver, ChangeUsernameParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+    public static void fillChangeUsernameForm(int serverPort, WebDriver driver, ChangeUsernameParameters parameters) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-username-username-input")), parameters.getUsername());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-username-password-input")), parameters.getPassword());

@@ -20,7 +20,7 @@ public class GetUserRolesTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void getRoles() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         nullQueryString(accessTokenId);
@@ -29,17 +29,17 @@ public class GetUserRolesTest extends BackEndTest {
     }
 
     private static void nullQueryString(UUID accessTokenId) {
-        Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(accessTokenId, null);
+        Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, null);
         verifyInvalidParam(nullQueryStringResponse, "query", "must not be null");
     }
 
     private static void tooShortQueryString(UUID accessTokenId) {
-        Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(accessTokenId, "as");
+        Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, "as");
         verifyInvalidParam(tooShortQueryStringResponse, "query", "too short");
     }
 
     private static void getUserRoles(RegistrationParameters userData, UUID accessTokenId) {
-        List<UserRoleResponse> successfulQueryResponse = RoleManagementActions.getRoles(accessTokenId, userData.getEmail());
+        List<UserRoleResponse> successfulQueryResponse = RoleManagementActions.getRoles(getServerPort(), accessTokenId, userData.getEmail());
 
         assertThat(successfulQueryResponse).hasSize(1);
         UserRoleResponse userRoleResponse = successfulQueryResponse.get(0);

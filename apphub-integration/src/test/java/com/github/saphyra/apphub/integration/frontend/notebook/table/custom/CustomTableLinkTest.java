@@ -38,11 +38,11 @@ public class CustomTableLinkTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void customTableLinkCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
         blankLabel(driver);
         createCustomTableWithLinkCell(driver);
@@ -70,7 +70,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         column.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
@@ -93,7 +93,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         column.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
@@ -118,8 +118,8 @@ public class CustomTableLinkTest extends SeleniumTest {
     }
 
     private void blankLabel(WebDriver driver) {
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CUSTOM_TABLE);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CUSTOM_TABLE);
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)

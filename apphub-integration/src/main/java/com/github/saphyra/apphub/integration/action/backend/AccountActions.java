@@ -14,38 +14,38 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountActions {
-    public static Response getChangeEmailResponse(UUID accessTokenId, ChangeEmailRequest request) {
+    public static Response getChangeEmailResponse(int serverPort, UUID accessTokenId, ChangeEmailRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_EMAIL));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_EMAIL));
     }
 
-    public static Response getChangeUsernameResponse(UUID accessTokenId, ChangeUsernameRequest request) {
+    public static Response getChangeUsernameResponse(int serverPort, UUID accessTokenId, ChangeUsernameRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_USERNAME));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_USERNAME));
     }
 
-    public static Response getChangePasswordResponse(UUID accessTokenId, ChangePasswordRequest request) {
+    public static Response getChangePasswordResponse(int serverPort, UUID accessTokenId, ChangePasswordRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.ACCOUNT_CHANGE_PASSWORD));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_CHANGE_PASSWORD));
     }
 
-    public static void deleteAccount(UUID accessTokenId, String password) {
-        Response response = getDeleteAccountResponse(accessTokenId, new OneParamRequest<>(password));
+    public static void deleteAccount(int serverPort, UUID accessTokenId, String password) {
+        Response response = getDeleteAccountResponse(serverPort, accessTokenId, new OneParamRequest<>(password));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteAccountResponse(UUID accessTokenId, OneParamRequest<String> request) {
+    public static Response getDeleteAccountResponse(int serverPort, UUID accessTokenId, OneParamRequest<String> request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .delete(UrlFactory.create(Endpoints.ACCOUNT_DELETE_ACCOUNT));
+            .delete(UrlFactory.create(serverPort, Endpoints.ACCOUNT_DELETE_ACCOUNT));
     }
 
-    public static void changePassword(UUID accessTokenId, ChangePasswordRequest request) {
-        Response response = getChangePasswordResponse(accessTokenId, request);
+    public static void changePassword(int serverPort, UUID accessTokenId, ChangePasswordRequest request) {
+        Response response = getChangePasswordResponse(serverPort, accessTokenId, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }

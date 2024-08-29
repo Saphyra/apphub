@@ -19,107 +19,107 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VillanyAteszCartActions {
-    public static Response getCreateResponse(UUID accessTokenId, UUID contactId) {
+    public static Response getCreateResponse(int serverPort, UUID accessTokenId, UUID contactId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(contactId))
-            .put(UrlFactory.create(Endpoints.VILLANY_ATESZ_CREATE_CART));
+            .put(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CREATE_CART));
     }
 
-    public static UUID create(UUID accessTokenId, UUID contactId) {
-        Response response = getCreateResponse(accessTokenId, contactId);
+    public static UUID create(int serverPort, UUID accessTokenId, UUID contactId) {
+        Response response = getCreateResponse(serverPort, accessTokenId, contactId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(UUID.class);
     }
 
-    public static List<CartResponse> getCarts(UUID accessTokenId) {
-        Response response = getCartsResponse(accessTokenId);
+    public static List<CartResponse> getCarts(int serverPort, UUID accessTokenId) {
+        Response response = getCartsResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(CartResponse[].class));
     }
 
-    public static Response getCartsResponse(UUID accessTokenId) {
+    public static Response getCartsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CARTS));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_CARTS));
     }
 
-    public static Response getAddToCartResponse(UUID accessTokenId, AddToCartRequest request) {
+    public static Response getAddToCartResponse(int serverPort, UUID accessTokenId, AddToCartRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_ADD_TO_CART));
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_ADD_TO_CART));
     }
 
-    public static CartModifiedResponse addToCart(UUID accessTokenId, AddToCartRequest request) {
-        Response response = getAddToCartResponse(accessTokenId, request);
+    public static CartModifiedResponse addToCart(int serverPort, UUID accessTokenId, AddToCartRequest request) {
+        Response response = getAddToCartResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartModifiedResponse.class);
     }
 
-    public static CartModifiedResponse removeFromCart(UUID accessTokenId, UUID cartId, UUID stockItemId) {
-        Response response = getRemoveFromCartResponse(accessTokenId, cartId, stockItemId);
+    public static CartModifiedResponse removeFromCart(int serverPort, UUID accessTokenId, UUID cartId, UUID stockItemId) {
+        Response response = getRemoveFromCartResponse(serverPort, accessTokenId, cartId, stockItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartModifiedResponse.class);
     }
 
-    public static Response getRemoveFromCartResponse(UUID accessTokenId, UUID cartId, UUID stockItemId) {
+    public static Response getRemoveFromCartResponse(int serverPort, UUID accessTokenId, UUID cartId, UUID stockItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
+            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
     }
 
-    public static CartDeletedResponse finalize(UUID accessTokenId, UUID cartId) {
-        Response response = getFinalizeCartResponse(accessTokenId, cartId);
+    public static CartDeletedResponse finalize(int serverPort, UUID accessTokenId, UUID cartId) {
+        Response response = getFinalizeCartResponse(serverPort, accessTokenId, cartId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartDeletedResponse.class);
     }
 
-    public static Response getFinalizeCartResponse(UUID accessTokenId, UUID cartId) {
+    public static Response getFinalizeCartResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_FINALIZE_CART, "cartId", cartId));
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_FINALIZE_CART, "cartId", cartId));
     }
 
-    public static CartDeletedResponse delete(UUID accessTokenId, UUID cartId) {
-        Response response = getDeleteResponse(accessTokenId, cartId);
+    public static CartDeletedResponse delete(int serverPort, UUID accessTokenId, UUID cartId) {
+        Response response = getDeleteResponse(serverPort, accessTokenId, cartId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartDeletedResponse.class);
     }
 
-    public static Response getDeleteResponse(UUID accessTokenId, UUID cartId) {
+    public static Response getDeleteResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
+            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
     }
 
-    public static CartView getCart(UUID accessTokenId, UUID cartId) {
-        Response response = getCartResponse(accessTokenId, cartId);
+    public static CartView getCart(int serverPort, UUID accessTokenId, UUID cartId) {
+        Response response = getCartResponse(serverPort, accessTokenId, cartId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(CartView.class);
     }
 
-    public static Response getCartResponse(UUID accessTokenId, UUID cartId) {
+    public static Response getCartResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
+            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
     }
 
-    public static Response getEditMarginResponse(UUID accessTokenId, UUID cartId, Double margin) {
+    public static Response getEditMarginResponse(int serverPort, UUID accessTokenId, UUID cartId, Double margin) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(margin))
-            .post(UrlFactory.create(Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN, "cartId", cartId));
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN, "cartId", cartId));
     }
 
-    public static void editMargin(UUID accessTokenId, UUID cartId, Double margin) {
-        Response response = getEditMarginResponse(accessTokenId, cartId, margin);
+    public static void editMargin(int serverPort, UUID accessTokenId, UUID cartId, Double margin) {
+        Response response = getEditMarginResponse(serverPort, accessTokenId, cartId, margin);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }

@@ -149,4 +149,28 @@ public class UserRepositoryTest {
 
         assertThat(result).containsExactly(entity4, entity2, entity1);
     }
+
+    @Test
+    void findByUsernameOrEmail_emailMatches() {
+        UserEntity entity = UserEntity.builder()
+            .userId(USER_ID_1)
+            .email(EMAIL_1)
+            .username(USERNAME_1)
+            .build();
+        underTest.save(entity);
+
+        assertThat(underTest.findByUsernameOrEmail(EMAIL_1)).contains(entity);
+    }
+
+    @Test
+    void findByUsernameOrEmail_usernameMatches() {
+        UserEntity entity = UserEntity.builder()
+            .userId(USER_ID_1)
+            .email(EMAIL_1)
+            .username(USERNAME_1)
+            .build();
+        underTest.save(entity);
+
+        assertThat(underTest.findByUsernameOrEmail(USERNAME_1)).contains(entity);
+    }
 }

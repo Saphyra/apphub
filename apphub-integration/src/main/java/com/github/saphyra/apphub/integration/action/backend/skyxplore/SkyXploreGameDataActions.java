@@ -8,8 +8,8 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class SkyXploreGameDataActions {
-    public static Response getGameDateResponse(UUID accessTokenId, String dataId) {
+    public static Response getGameDateResponse(int serverPort, UUID accessTokenId, String dataId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_ITEM_DATA, "dataId", dataId));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_ITEM_DATA, "dataId", dataId));
     }
 }

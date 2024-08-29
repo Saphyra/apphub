@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.villany_atesz;
 
+import com.github.saphyra.apphub.integration.structure.view.villany_atesz.AcquisitionHistoryItem;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.StockItemAcquisition;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,5 +19,17 @@ public class VillanyAteszStockAcquisitionPageActions {
     public static void addToStock(WebDriver driver) {
         driver.findElement(By.id("villany-atesz-stock-acquisition-add-to-stock-button"))
             .click();
+    }
+
+    public static void openHistory(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-stock-acquisition-show-history-button"))
+            .click();
+    }
+
+    public static List<AcquisitionHistoryItem> getHistoryItems(WebDriver driver) {
+        return driver.findElements(By.className("villany-atesz-stock-acquisition-history-item"))
+            .stream()
+            .map(AcquisitionHistoryItem::new)
+            .collect(Collectors.toList());
     }
 }

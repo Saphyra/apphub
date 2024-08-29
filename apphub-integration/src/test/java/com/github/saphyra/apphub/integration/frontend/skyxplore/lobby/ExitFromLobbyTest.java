@@ -33,11 +33,14 @@ public class ExitFromLobbyTest extends SeleniumTest {
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         RegistrationParameters userData4 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(
-            new BiWrapper<>(driver1, userData1),
-            new BiWrapper<>(driver2, userData2),
-            new BiWrapper<>(driver3, userData3),
-            new BiWrapper<>(driver4, userData4))
+        SkyXploreUtils.registerAndNavigateToMainMenu(
+            getServerPort(),
+            List.of(
+                new BiWrapper<>(driver1, userData1),
+                new BiWrapper<>(driver2, userData2),
+                new BiWrapper<>(driver3, userData3),
+                new BiWrapper<>(driver4, userData4)
+            )
         );
 
         SkyXploreFriendshipActions.setUpFriendship(driver2, driver4, userData2.getUsername(), userData4.getUsername());

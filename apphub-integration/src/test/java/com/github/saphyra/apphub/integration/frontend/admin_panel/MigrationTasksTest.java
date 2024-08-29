@@ -31,14 +31,14 @@ public class MigrationTasksTest extends SeleniumTest {
     public void migrationTasksTest() {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         DatabaseUtil.insertMigrationTask(EVENT, NAME, false);
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.MIGRATION_TASKS);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MIGRATION_TASKS);
 
         MigrationTask task = MigrationTasksActions.findMigrationTaskByEventValidated(driver, EVENT);
         assertThat(task.isCompleted()).isFalse();

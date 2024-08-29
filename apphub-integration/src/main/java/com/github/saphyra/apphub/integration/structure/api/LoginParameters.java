@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginParameters {
     @Builder.Default
-    private String email = "";
+    private String userIdentifier = "";
 
     @Builder.Default
     private String password = "";
 
     public static LoginParameters fromRegistrationParameters(RegistrationParameters userData) {
         return builder()
-            .email(userData.getEmail())
+            .userIdentifier(userData.getEmail())
             .password(userData.getPassword())
             .build();
     }

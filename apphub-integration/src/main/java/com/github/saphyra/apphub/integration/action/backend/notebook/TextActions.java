@@ -13,38 +13,38 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextActions {
-    public static UUID createText(UUID accessTokenId, CreateTextRequest request) {
-        Response response = getCreateTextResponse(accessTokenId, request);
+    public static UUID createText(int serverPort, UUID accessTokenId, CreateTextRequest request) {
+        Response response = getCreateTextResponse(serverPort, accessTokenId, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateTextResponse(UUID accessTokenId, CreateTextRequest request) {
+    public static Response getCreateTextResponse(int serverPort, UUID accessTokenId, CreateTextRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.NOTEBOOK_CREATE_TEXT));
+            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_TEXT));
     }
 
-    public static TextResponse getText(UUID accessTokenId, UUID textId) {
-        Response response = getTextResponse(accessTokenId, textId);
+    public static TextResponse getText(int serverPort, UUID accessTokenId, UUID textId) {
+        Response response = getTextResponse(serverPort, accessTokenId, textId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(TextResponse.class);
     }
 
-    public static Response getTextResponse(UUID accessTokenId, UUID textId) {
+    public static Response getTextResponse(int serverPort, UUID accessTokenId, UUID textId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
+            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_TEXT, "listItemId", textId));
     }
 
-    public static void editText(UUID accessTokenId, UUID textId, EditTextRequest request) {
-        Response response = getEditTextResponse(accessTokenId, textId, request);
+    public static void editText(int serverPort, UUID accessTokenId, UUID textId, EditTextRequest request) {
+        Response response = getEditTextResponse(serverPort, accessTokenId, textId, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditTextResponse(UUID accessTokenId, UUID textId, EditTextRequest editTextRequest) {
+    public static Response getEditTextResponse(int serverPort, UUID accessTokenId, UUID textId, EditTextRequest editTextRequest) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editTextRequest)
-            .post(UrlFactory.create(Endpoints.NOTEBOOK_EDIT_TEXT, "listItemId", textId));
+            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_TEXT, "listItemId", textId));
     }
 }

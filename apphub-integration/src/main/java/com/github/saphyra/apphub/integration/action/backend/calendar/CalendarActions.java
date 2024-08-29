@@ -15,16 +15,16 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarActions {
-    public static List<CalendarResponse> getCalendar(UUID accessTokenId, LocalDate date) {
-        Response response = getCalendarResponse(accessTokenId, date);
+    public static List<CalendarResponse> getCalendar(int serverPort, UUID accessTokenId, LocalDate date) {
+        Response response = getCalendarResponse(serverPort, accessTokenId, date);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getCalendarResponse(UUID accessTokenId, LocalDate date) {
+    public static Response getCalendarResponse(int serverPort, UUID accessTokenId, LocalDate date) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.CALENDAR_GET_CALENDAR, Collections.emptyMap(), CollectionUtils.singleValueMap("date", date)));
+            .get(UrlFactory.create(serverPort, Endpoints.CALENDAR_GET_CALENDAR, Collections.emptyMap(), CollectionUtils.singleValueMap("date", date)));
     }
 }

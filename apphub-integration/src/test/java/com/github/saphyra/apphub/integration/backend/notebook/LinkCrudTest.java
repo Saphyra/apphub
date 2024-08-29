@@ -34,13 +34,13 @@ public class LinkCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void linkCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_blankTitle(accessTokenId);
         create_parentNotCategory(accessTokenId);
         create_parentNotFound(accessTokenId);
         create_nullUrl(accessTokenId);
-        UUID parentId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
+        UUID parentId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
         UUID linkId = create(accessTokenId, parentId);
         editLink(accessTokenId, parentId, linkId);
         delete(accessTokenId, parentId, linkId);
@@ -51,18 +51,18 @@ public class LinkCrudTest extends BackEndTest {
             .title(" ")
             .url(URL)
             .build();
-        Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(accessTokenId, create_blankTitleRequest);
+        Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
     private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID notCategoryParentId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title("pt").content("pc").build());
+        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title("pt").content("pc").build());
         CreateLinkRequest create_parentNotCategoryRequest = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(notCategoryParentId)
             .build();
-        Response create_parentNotCategoryResponse = LinkActions.getCreateLinkResponse(accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
@@ -72,7 +72,7 @@ public class LinkCrudTest extends BackEndTest {
             .url(URL)
             .parent(UUID.randomUUID())
             .build();
-        Response create_parentNotFoundResponse = LinkActions.getCreateLinkResponse(accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
@@ -81,7 +81,7 @@ public class LinkCrudTest extends BackEndTest {
             .title(TITLE)
             .url(null)
             .build();
-        Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(accessTokenId, create_nullUrlRequest);
+        Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_nullUrlRequest);
         verifyInvalidParam(create_nullUrlResponse, "url", "must not be null");
     }
 
@@ -91,8 +91,8 @@ public class LinkCrudTest extends BackEndTest {
             .url(URL)
             .parent(parentId)
             .build();
-        UUID linkId = LinkActions.createLink(accessTokenId, createRequest);
-        ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(accessTokenId, parentId);
+        UUID linkId = LinkActions.createLink(getServerPort(), accessTokenId, createRequest);
+        ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId);
         assertThat(childrenOfCategoryResponse.getChildren()).hasSize(1);
         NotebookView view = childrenOfCategoryResponse.getChildren().get(0);
         assertThat(view.getId()).isEqualTo(linkId);
@@ -108,8 +108,8 @@ public class LinkCrudTest extends BackEndTest {
             .value(NEW_URL)
             .parent(parentId)
             .build();
-        ListItemActions.editListItem(accessTokenId, editLinkRequest, linkId);
-        ChildrenOfCategoryResponse childrenOfLinksParentResponse = CategoryActions.getChildrenOfCategory(accessTokenId, parentId);
+        ListItemActions.editListItem(getServerPort(), accessTokenId, editLinkRequest, linkId);
+        ChildrenOfCategoryResponse childrenOfLinksParentResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId);
         assertThat(childrenOfLinksParentResponse.getChildren()).hasSize(1);
         NotebookView linkView = childrenOfLinksParentResponse.getChildren().get(0);
         assertThat(linkView.getValue()).isEqualTo(NEW_URL);
@@ -117,7 +117,7 @@ public class LinkCrudTest extends BackEndTest {
     }
 
     private static void delete(UUID accessTokenId, UUID parentId, UUID linkId) {
-        ListItemActions.deleteListItem(accessTokenId, linkId);
-        assertThat(CategoryActions.getChildrenOfCategory(accessTokenId, parentId).getChildren()).isEmpty();
+        ListItemActions.deleteListItem(getServerPort(), accessTokenId, linkId);
+        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId).getChildren()).isEmpty();
     }
 }

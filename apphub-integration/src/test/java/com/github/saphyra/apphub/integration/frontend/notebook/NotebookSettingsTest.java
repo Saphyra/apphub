@@ -24,14 +24,14 @@ public class NotebookSettingsTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     void showAndHideArchived() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_1);
-        NotebookUtils.newCategory(driver, CATEGORY_2);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_1);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_2);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_2)
             .archive(driver);

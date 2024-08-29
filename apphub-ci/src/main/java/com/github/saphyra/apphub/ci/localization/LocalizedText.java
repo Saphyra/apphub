@@ -67,6 +67,8 @@ public enum LocalizedText implements LocalizationProvider {
     PRE_CREATE_DRIVERS_COUNT("Hány WebDrivert szeretnél létrehozni az integrációs tesztek futtatása előtt?", "How many WebDrivers would you like to create before running integration tests?"),
     SET_BASH_LOCATION("bash.exe helyének megadása", "Set bash.exe location"),
     BASH_FILE_LOCATION("bash.exe helye:", "Place of bash.exe:"),
+    BROWSER_STARTUP_LIMIT_MENU_OPTION_LABEL("Bongeszo inditas limit (%s)", "Browser startup limit (%s)"),
+    BROWSER_STARTUP_LIMIT("Hany bongeszo induljon egyszerre?", "How many browsers can be started at once?"),
     ;
 
     private final String hu;

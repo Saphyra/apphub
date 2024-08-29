@@ -82,4 +82,14 @@ class ToolTypeDaoTest {
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
     }
+
+    @Test
+    void deleteByUserIdAndToolTypeId() {
+        given(uuidConverter.convertDomain(TOOL_TYPE_ID)).willReturn(TOOL_TYPE_ID_STRING);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserIdAndToolTypeId(USER_ID, TOOL_TYPE_ID);
+
+        then(repository).should().deleteByUserIdAndToolTypeId(USER_ID_STRING, TOOL_TYPE_ID_STRING);
+    }
 }

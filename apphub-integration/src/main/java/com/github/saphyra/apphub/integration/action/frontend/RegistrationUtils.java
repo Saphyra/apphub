@@ -14,15 +14,15 @@ import java.util.function.BiConsumer;
 import static com.github.saphyra.apphub.integration.core.TestBase.EXECUTOR_SERVICE;
 
 public class RegistrationUtils {
-    public static void registerUsers(List<BiWrapper<WebDriver, RegistrationParameters>> users) {
-        registerUsers(users, (driver, registrationParameters) -> {
+    public static void registerUsers(int serverPort, List<BiWrapper<WebDriver, RegistrationParameters>> users) {
+        registerUsers(serverPort, users, (driver, registrationParameters) -> {
         });
     }
 
-    public static void registerUsers(List<BiWrapper<WebDriver, RegistrationParameters>> users, BiConsumer<WebDriver, RegistrationParameters> followUp) {
+    public static void registerUsers(int serverPort, List<BiWrapper<WebDriver, RegistrationParameters>> users, BiConsumer<WebDriver, RegistrationParameters> followUp) {
         List<FutureWrapper<Void>> futures = users.stream()
             .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
-                Navigation.toIndexPage(biWrapper.getEntity1());
+                Navigation.toIndexPage(serverPort, biWrapper.getEntity1());
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
                 followUp.accept(biWrapper.getEntity1(), biWrapper.getEntity2());
             }))

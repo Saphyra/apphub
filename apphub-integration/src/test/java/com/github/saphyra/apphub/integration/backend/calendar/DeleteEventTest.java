@@ -31,7 +31,7 @@ public class DeleteEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void deleteEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -45,7 +45,7 @@ public class DeleteEventTest extends BackEndTest {
             .repetitionDays(REPETITION_DAYS)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         UUID eventId = responses.stream()
             .filter(calendarResponse -> !calendarResponse.getEvents().isEmpty())
@@ -66,7 +66,7 @@ public class DeleteEventTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        Response nullReferenceDateDayResponse = EventActions.getDeleteEventResponse(accessTokenId, eventId, nullReferenceDateDay);
+        Response nullReferenceDateDayResponse = EventActions.getDeleteEventResponse(getServerPort(), accessTokenId, eventId, nullReferenceDateDay);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateDayResponse, "referenceDate.day", "must not be null");
     }
@@ -77,7 +77,7 @@ public class DeleteEventTest extends BackEndTest {
             .month(null)
             .build();
 
-        Response nullReferenceDateMonthResponse = EventActions.getDeleteEventResponse(accessTokenId, eventId, nullReferenceDateMonth);
+        Response nullReferenceDateMonthResponse = EventActions.getDeleteEventResponse(getServerPort(), accessTokenId, eventId, nullReferenceDateMonth);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
@@ -88,7 +88,7 @@ public class DeleteEventTest extends BackEndTest {
             .month(REFERENCE_DATE_MONTH)
             .build();
 
-        List<CalendarResponse> deleteEventResponse = EventActions.deleteEvent(accessTokenId, eventId, referenceDate);
+        List<CalendarResponse> deleteEventResponse = EventActions.deleteEvent(getServerPort(), accessTokenId, eventId, referenceDate);
 
         deleteEventResponse.forEach(calendarResponse -> assertThat(calendarResponse.getEvents()).isEmpty());
     }

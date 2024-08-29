@@ -60,6 +60,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     placeholder={localizationHandler.get("content")}
                     value={newItemContent}
                     onchangeCallback={setNewItemContent}
+                    style={{ width: 8 * newItemContent.length + "px" }}
                 />}
                 choices={[
                     <Button

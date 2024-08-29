@@ -41,7 +41,7 @@ public class StockInventoryTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void inventory() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -49,7 +49,7 @@ public class StockInventoryTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_1, MEASUREMENT);
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_2, MEASUREMENT);
@@ -145,7 +145,7 @@ public class StockInventoryTest extends SeleniumTest {
     @Test(groups = {"fe", "villany-atesz"})
     public void inCartAndDeletion() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
@@ -153,7 +153,7 @@ public class StockInventoryTest extends SeleniumTest {
         SleepUtil.sleep(2000);
         driver.navigate()
             .refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.VILLANY_ATESZ);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.VILLANY_ATESZ);
 
         VillanyAteszUtils.createCategory(driver, CATEGORY_NAME_1, MEASUREMENT);
         VillanyAteszUtils.createStockItem(driver, CATEGORY_NAME_1, STOCK_ITEM_NAME, "", "", 100, 0, 0);

@@ -15,31 +15,31 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EventActions {
-    public static List<CalendarResponse> createEvent(UUID accessTokenId, CreateEventRequest request) {
-        Response response = getCreateEventResponse(accessTokenId, request);
+    public static List<CalendarResponse> createEvent(int serverPort, UUID accessTokenId, CreateEventRequest request) {
+        Response response = getCreateEventResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getCreateEventResponse(UUID accessTokenId, CreateEventRequest request) {
+    public static Response getCreateEventResponse(int serverPort, UUID accessTokenId, CreateEventRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(Endpoints.CALENDAR_CREATE_EVENT));
+            .put(UrlFactory.create(serverPort, Endpoints.CALENDAR_CREATE_EVENT));
     }
 
-    public static List<CalendarResponse> deleteEvent(UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
-        Response response = getDeleteEventResponse(accessTokenId, eventId, referenceDate);
+    public static List<CalendarResponse> deleteEvent(int serverPort, UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
+        Response response = getDeleteEventResponse(serverPort, accessTokenId, eventId, referenceDate);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return CollectionUtils.toList(response.getBody().as(CalendarResponse[].class));
     }
 
-    public static Response getDeleteEventResponse(UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
+    public static Response getDeleteEventResponse(int serverPort, UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .delete(UrlFactory.create(Endpoints.CALENDAR_EVENT_DELETE, "eventId", eventId));
+            .delete(UrlFactory.create(serverPort, Endpoints.CALENDAR_EVENT_DELETE, "eventId", eventId));
     }
 }

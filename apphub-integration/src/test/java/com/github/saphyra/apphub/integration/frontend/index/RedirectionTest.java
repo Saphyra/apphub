@@ -30,28 +30,29 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create(Endpoints.MODULES_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
 
         //THEN
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.MODULES_PAGE)));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.MODULES_PAGE)));
     }
 
     @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterLogin() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Integer serverPort = getServerPort();
+        Navigation.toIndexPage(serverPort, driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
-        ModulesPageActions.logout(driver);
+        ModulesPageActions.logout(serverPort, driver);
 
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_PAGE));
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_PAGE)))
             .assertTrue("User is not redirected to notebook page.");
     }
 
@@ -59,14 +60,15 @@ public class RedirectionTest extends SeleniumTest {
     public void redirectToUrlAfterRegistration() {
         WebDriver driver = extractDriver();
 
-        driver.navigate().to(UrlFactory.create(Endpoints.NOTEBOOK_PAGE));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
+        Integer serverPort = getServerPort();
+        driver.navigate().to(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", Endpoints.NOTEBOOK_PAGE)));
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData, () -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.NOTEBOOK_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_PAGE)))
             .assertTrue("User is not redirected to notebook page.");
     }
 
@@ -76,37 +78,36 @@ public class RedirectionTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         //WHEN
-        driver.navigate().to(UrlFactory.create("/"));
+        driver.navigate().to(UrlFactory.create(getServerPort(), "/"));
 
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.INDEX_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.INDEX_PAGE));
     }
 
     @Test(groups = {"fe", "index"})
     public void autoLogin() {
         WebDriver driver = extractDriver();
 
-        Navigation.toIndexPage(driver);
+        Integer serverPort = getServerPort();
+        Navigation.toIndexPage(serverPort, driver);
         IndexPageActions.registerUser(driver, RegistrationParameters.validParameters());
 
-        Navigation.toIndexPage(driver, false);
+        Navigation.toIndexPage(serverPort, driver, false);
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
-            .assertTrue();
+        AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)));
     }
 
     @Test(groups = {"fe", "index"})
     public void redirectToErrorPage() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         IndexPageActions.registerUser(driver, RegistrationParameters.validParameters());
 
-        String url = UrlFactory.create(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
+        String url = UrlFactory.create(getServerPort(), Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
 
         driver.navigate().to(url);
 
-        assertThat(driver.getCurrentUrl()).startsWith(UrlFactory.create(Endpoints.ERROR_PAGE));
+        assertThat(driver.getCurrentUrl()).startsWith(UrlFactory.create(getServerPort(), Endpoints.ERROR_PAGE));
 
         ErrorMessageElement errorMessageElement = ErrorPageActions.getErrorMessage(driver);
         assertThat(errorMessageElement.getErrorCode()).isEqualTo(ErrorCode.MISSING_ROLE.name());

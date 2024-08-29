@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ public class RunTestsTask {
     private final PropertyDao propertyDao;
     private final PlatformProperties platformProperties;
     private final KillChromeDriverTask killChromeDriverTask;
+    private final NamespaceNameProvider namespaceNameProvider;
 
     public void localRunTests(String testGroups) {
         try {
@@ -25,7 +27,10 @@ public class RunTestsTask {
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getLocalDatabaseName(),
                 "",
-                testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount()
+                testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount(),
+                false,
+                false,
+                ""
             );
         } finally {
             killChromeDriverTask.run();
@@ -43,7 +48,10 @@ public class RunTestsTask {
                 platformProperties.getMinikubeTestDatabasePort(),
                 platformProperties.getMinikubeDatabaseName(),
                 "",
-                testGroups.length() > 0 ? 0 : propertyDao.getRemoteRunPreCreateDriverCount()
+                testGroups.length() > 0 ? 0 : propertyDao.getRemoteRunPreCreateDriverCount(),
+                true,
+                true,
+                namespaceNameProvider.getNamespaceName()
             );
         } finally {
             killChromeDriverTask.run();
@@ -60,14 +68,28 @@ public class RunTestsTask {
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getProdDatabaseName(),
                 String.join(",", platformProperties.getProdDisabledTestGroups()),
-                propertyDao.getRemoteRunPreCreateDriverCount()
+                propertyDao.getRemoteRunPreCreateDriverCount(),
+                true,
+                false,
+                "production"
             );
         } finally {
             killChromeDriverTask.run();
         }
     }
 
-    private void runTests(String enabledGroups, Integer threadCount, Integer serverPort, Integer databasePort, String databaseName, String disabledGroups, Integer preCreateDrivers) {
+    private void runTests(
+        String enabledGroups,
+        Integer threadCount,
+        Integer serverPort,
+        Integer databasePort,
+        String databaseName,
+        String disabledGroups,
+        Integer preCreateDrivers,
+        boolean serverConnectionCacheEnabled,
+        boolean databaseConnectionCacheEnabled,
+        String namespace
+    ) {
         List<String> command = List.of(
             "cmd",
             "/c",
@@ -88,6 +110,10 @@ public class RunTestsTask {
             "-DenabledGroups=%s".formatted(enabledGroups),
             "-DdisabledGroups=%s".formatted(disabledGroups),
             "-DpreCreateWebDrivers=%s".formatted(preCreateDrivers),
+            "-DnamespaceName=%s".formatted(namespace),
+            "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
+            "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
+            "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
             "\"",
             "clean",
             "test"

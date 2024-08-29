@@ -33,14 +33,14 @@ public class TextCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void textCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.TEXT);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.TEXT);
 
         create_emptyTitle(driver);
         create(driver);

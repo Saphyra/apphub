@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceTest {
-    private static final String EMAIL = "email";
+    private static final String USER_IDENTIFIER = "user-identifier";
     private static final String PASSWORD = "password";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
@@ -64,10 +64,10 @@ public class LoginServiceTest {
 
     @Test
     public void userNotFound() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.empty());
+        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.empty());
 
         LoginRequest request = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
 
@@ -78,12 +78,12 @@ public class LoginServiceTest {
 
     @Test
     public void userLocked() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(user.getLockedUntil()).willReturn(CURRENT_TIME.plusSeconds(1));
 
         LoginRequest request = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
 
@@ -94,12 +94,12 @@ public class LoginServiceTest {
 
     @Test
     public void invalidPassword() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID);
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willThrow(ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INCORRECT_PASSWORD, ""));
 
         LoginRequest request = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
 
@@ -113,11 +113,11 @@ public class LoginServiceTest {
 
     @Test
     public void userMarkedForDeletion() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(true);
 
         LoginRequest request = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
 
@@ -128,12 +128,12 @@ public class LoginServiceTest {
 
     @Test
     public void login() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID);
         given(accessTokenFactory.create(USER_ID, false)).willReturn(accessToken);
 
         LoginRequest request = LoginRequest.builder()
-            .email(EMAIL)
+            .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .rememberMe(null)
             .build();

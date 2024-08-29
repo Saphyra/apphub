@@ -30,24 +30,24 @@ public class AcceptFriendRequestTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void acceptFriendRequest() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(userData2);
+        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
-        UUID accessTokenId3 = IndexPageActions.registerAndLogin(userData3);
+        UUID accessTokenId3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
 
         SkyXploreCharacterModel model1 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, model1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, model1);
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId2, model2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId3, model3);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId3, model3);
 
         friendRequestNotFound(accessTokenId1);
         UUID friendRequestId = forbiddenOperation(accessTokenId1, accessTokenId3, userId2);
@@ -55,38 +55,38 @@ public class AcceptFriendRequestTest extends BackEndTest {
     }
 
     private static void friendRequestNotFound(UUID accessTokenId1) {
-        Response friendRequestNotFoundResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(accessTokenId1, UUID.randomUUID());
+        Response friendRequestNotFoundResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId1, UUID.randomUUID());
         verifyErrorResponse(friendRequestNotFoundResponse, 404, ErrorCode.FRIEND_REQUEST_NOT_FOUND);
     }
 
     private static UUID forbiddenOperation(UUID accessTokenId1, UUID accessTokenId3, UUID userId2) {
-        SkyXploreFriendActions.createFriendRequest(accessTokenId1, userId2);
+        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessTokenId1, userId2);
 
-        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(accessTokenId1)
+        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessTokenId1)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
-        Response forbiddenOperationResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(accessTokenId3, friendRequestId);
+        Response forbiddenOperationResponse = SkyXploreFriendActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId3, friendRequestId);
         verifyForbiddenOperation(forbiddenOperationResponse);
         return friendRequestId;
     }
 
     private static void accept(UUID accessTokenId1, UUID userId1, UUID accessTokenId2, SkyXploreCharacterModel model1, SkyXploreCharacterModel model2, UUID userId2, UUID friendRequestId) {
-        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(accessTokenId1, accessTokenId1);
+        ApphubWsClient senderClient = ApphubWsClient.createSkyXploreMainMenu(getServerPort(), accessTokenId1, accessTokenId1);
 
-        FriendshipResponse acceptResponse = SkyXploreFriendActions.acceptFriendRequest(accessTokenId2, friendRequestId);
+        FriendshipResponse acceptResponse = SkyXploreFriendActions.acceptFriendRequest(getServerPort(), accessTokenId2, friendRequestId);
 
         assertThat(acceptResponse.getFriendName()).isEqualTo(model1.getName());
         assertThat(acceptResponse.getFriendId()).isEqualTo(userId1);
 
-        assertThat(SkyXploreFriendActions.getSentFriendRequests(accessTokenId1)).isEmpty();
-        assertThat(SkyXploreFriendActions.getIncomingFriendRequests(accessTokenId2)).isEmpty();
+        assertThat(SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessTokenId1)).isEmpty();
+        assertThat(SkyXploreFriendActions.getIncomingFriendRequests(getServerPort(), accessTokenId2)).isEmpty();
 
-        List<FriendshipResponse> senderFriendships = SkyXploreFriendActions.getFriends(accessTokenId1);
+        List<FriendshipResponse> senderFriendships = SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId1);
         assertThat(senderFriendships).hasSize(1);
         assertThat(senderFriendships.get(0).getFriendName()).isEqualTo(model2.getName());
-        List<FriendshipResponse> receiverFriendships = SkyXploreFriendActions.getFriends(accessTokenId2);
+        List<FriendshipResponse> receiverFriendships = SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId2);
         assertThat(receiverFriendships).hasSize(1);
         assertThat(receiverFriendships.get(0).getFriendName()).isEqualTo(model1.getName());
 

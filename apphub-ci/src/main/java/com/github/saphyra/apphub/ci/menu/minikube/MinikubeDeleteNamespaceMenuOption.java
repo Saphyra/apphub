@@ -38,7 +38,7 @@ class MinikubeDeleteNamespaceMenuOption implements MenuOption {
 
     @Override
     public boolean process() {
-        String namespaceName = namespaceNameProvider.getBranchName();
+        String namespaceName = namespaceNameProvider.getNamespaceName();
 
         boolean result = validatingInputReader.getInput(
             language -> LocalizedText.CONFIRM_DELETE_NAMESPACE.getLocalizedText(language).formatted(namespaceName),

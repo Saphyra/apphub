@@ -22,8 +22,8 @@ public class ChangePasswordActions {
             .click();
     }
 
-    public static void fillChangePasswordForm(WebDriver driver, ChangePasswordParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+    public static void fillChangePasswordForm(int serverPort, WebDriver driver, ChangePasswordParameters parameters) {
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-password-new-password-input")), parameters.getNewPassword());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-password-confirm-password-input")), parameters.getConfirmPassword());

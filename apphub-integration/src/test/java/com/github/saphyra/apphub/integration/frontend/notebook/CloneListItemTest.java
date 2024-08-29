@@ -74,27 +74,28 @@ public class CloneListItemTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void cloneListItem() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, ROOT_TITLE);
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE, ROOT_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, ROOT_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE, ROOT_TITLE);
         NotebookActions.findListItemByTitleValidated(driver, ROOT_TITLE)
             .open(() -> NotebookActions.getOpenedCategoryName(driver).equals(ROOT_TITLE));
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .open(() -> NotebookActions.getOpenedCategoryName(driver).equals(CATEGORY_TITLE));
 
-        NotebookUtils.newCategory(driver, CHILD_CATEGORY_TITLE);
-        NotebookUtils.newLink(driver, LINK_TITLE, LINK_URL);
-        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_CONTENT);
-        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, true)));
-        NotebookUtils.newTable(driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
-        NotebookUtils.newChecklistTable(driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(true, List.of(CHECKLIST_TABLE_CONTENT))));
-        NotebookUtils.newOnlyTitle(driver, ONLY_TITLE_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CHILD_CATEGORY_TITLE);
+        NotebookUtils.newLink(getServerPort(), driver, LINK_TITLE, LINK_URL);
+        NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, TEXT_CONTENT);
+        NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, true)));
+        NotebookUtils.newTable(getServerPort(), driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
+        NotebookUtils.newChecklistTable(getServerPort(), driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(true, List.of(CHECKLIST_TABLE_CONTENT))));
+        NotebookUtils.newOnlyTitle(getServerPort(), driver, ONLY_TITLE_TITLE);
         NotebookUtils.newCustomTable(
+            getServerPort(),
             driver,
             CUSTOM_TABLE_TITLE,
             List.of(CUSTOM_TABLE_COLUMN_NAME),
@@ -117,7 +118,7 @@ public class CloneListItemTest extends SeleniumTest {
             .cloneListItem();
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
-            .edit(driver);
+            .edit(getServerPort(), driver);
         ParentSelectorActions.up(driver);
         EditListItemActions.submitForm(driver);
 
@@ -175,7 +176,7 @@ public class CloneListItemTest extends SeleniumTest {
         linkColumn.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
@@ -254,7 +255,7 @@ public class CloneListItemTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
             .open();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }

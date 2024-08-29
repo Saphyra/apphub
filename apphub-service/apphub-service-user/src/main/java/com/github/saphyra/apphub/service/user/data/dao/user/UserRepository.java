@@ -18,4 +18,7 @@ public interface UserRepository extends CrudRepository<UserEntity, String> {
 
     @Query("SELECT u FROM UserEntity u WHERE u.markedForDeletion=true ORDER BY u.markedForDeletionAt nulls last")
     List<UserEntity> getByUsersMarkedToDelete();
+
+    @Query("SELECT u FROM UserEntity u WHERE u.email=:input OR u.username=:input")
+    Optional<UserEntity> findByUsernameOrEmail(@Param("input") String input);
 }

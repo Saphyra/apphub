@@ -26,8 +26,8 @@ public class CreateLobbyTest extends BackEndTest {
     public void createLobby() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(accessTokenId1, characterModel1);
+        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         validation(accessTokenId1);
@@ -35,21 +35,21 @@ public class CreateLobbyTest extends BackEndTest {
     }
 
     private static void validation(UUID accessTokenId1) {
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(accessTokenId1, null), "lobbyName", "must not be null");
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(accessTokenId1, "aa"), "lobbyName", "too short");
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", "too long");
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessTokenId1, null), "lobbyName", "must not be null");
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessTokenId1, "aa"), "lobbyName", "too short");
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessTokenId1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", "too long");
 
-        assertThat(SkyXploreLobbyActions.isUserInLobby(accessTokenId1)).isFalse();
+        assertThat(SkyXploreLobbyActions.isUserInLobby(getServerPort(), accessTokenId1)).isFalse();
     }
 
     private static void create(SkyXploreCharacterModel characterModel1, UUID accessTokenId1, UUID userId1) {
-        SkyXploreLobbyActions.createLobby(accessTokenId1, GAME_NAME);
-        List<LobbyPlayerResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyPlayers(accessTokenId1);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        List<LobbyPlayerResponse> lobbyMembers = SkyXploreLobbyActions.getLobbyPlayers(getServerPort(), accessTokenId1);
         assertThat(lobbyMembers).hasSize(1);
         assertThat(lobbyMembers.get(0).getUserId()).isEqualTo(userId1);
         assertThat(lobbyMembers.get(0).getCharacterName()).isEqualTo(characterModel1.getName());
         assertThat(lobbyMembers.get(0).getStatus()).isEqualTo(LobbyPlayerStatus.NOT_READY);
 
-        assertThat(SkyXploreLobbyActions.isUserInLobby(accessTokenId1)).isTrue();
+        assertThat(SkyXploreLobbyActions.isUserInLobby(getServerPort(), accessTokenId1)).isTrue();
     }
 }

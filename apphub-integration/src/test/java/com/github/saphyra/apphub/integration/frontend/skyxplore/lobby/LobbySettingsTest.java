@@ -46,7 +46,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
+        SkyXploreUtils.registerAndNavigateToMainMenu(getServerPort(), List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
@@ -83,7 +83,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
+        SkyXploreUtils.registerAndNavigateToMainMenu(getServerPort(), List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
@@ -232,7 +232,7 @@ public class LobbySettingsTest extends SeleniumTest {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
 
-        SkyXploreUtils.registerAndNavigateToMainMenu(List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
+        SkyXploreUtils.registerAndNavigateToMainMenu(getServerPort(), List.of(new BiWrapper<>(driver1, userData1), new BiWrapper<>(driver2, userData2)));
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
@@ -324,9 +324,9 @@ public class LobbySettingsTest extends SeleniumTest {
         WebDriver driver = extractDriver();
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, userData);
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
         SkyXploreCharacterActions.submitForm(driver);
 
         AwaitilityWrapper.createDefault()

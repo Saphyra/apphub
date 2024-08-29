@@ -40,6 +40,8 @@ public class GameChatTest extends SeleniumTest {
 
     @Test(groups = {"fe", "skyxplore"})
     public void chatInGame() {
+        Integer serverPort = getServerPort();
+
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
         WebDriver driver2 = drivers.get(1);
@@ -52,12 +54,13 @@ public class GameChatTest extends SeleniumTest {
         BiWrapper<WebDriver, RegistrationParameters> player1 = new BiWrapper<>(driver1, userData1);
         BiWrapper<WebDriver, RegistrationParameters> player2 = new BiWrapper<>(driver2, userData2);
         BiWrapper<WebDriver, RegistrationParameters> player3 = new BiWrapper<>(driver3, userData3);
+
         Stream.of(player1, player2, player3)
             .parallel()
             .map(biWrapper -> EXECUTOR_SERVICE.execute(() -> {
-                Navigation.toIndexPage(biWrapper.getEntity1());
+                Navigation.toIndexPage(serverPort, biWrapper.getEntity1());
                 IndexPageActions.registerUser(biWrapper.getEntity1(), biWrapper.getEntity2());
-                ModulesPageActions.openModule(biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
+                ModulesPageActions.openModule(serverPort, biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
                 AwaitilityWrapper.createDefault()
                     .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
@@ -106,7 +109,7 @@ public class GameChatTest extends SeleniumTest {
     }
 
     private void messageTooLong(WebDriver driver) {
-        SkyXploreGameChatActions.postMessageToRoom(driver, GENERAL_ROOM_NAME, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()) );
+        SkyXploreGameChatActions.postMessageToRoom(driver, GENERAL_ROOM_NAME, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_CHAT_MESSAGE_TOO_LONG);
     }

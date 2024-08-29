@@ -36,7 +36,7 @@ public class MinikubeLocalDeployProcess {
             return;
         }
 
-        String namespaceName = namespaceNameProvider.getBranchName();
+        String namespaceName = namespaceNameProvider.getNamespaceName();
 
         minikubeServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, servicesToStart);
 
@@ -54,7 +54,7 @@ public class MinikubeLocalDeployProcess {
             return;
         }
 
-        String namespaceName = namespaceNameProvider.getBranchName();
+        String namespaceName = namespaceNameProvider.getNamespaceName();
 
         minikubeScaleProcess.scale(namespaceName, 0);
 

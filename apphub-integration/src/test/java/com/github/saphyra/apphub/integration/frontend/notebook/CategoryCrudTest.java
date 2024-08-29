@@ -34,14 +34,14 @@ public class CategoryCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void categoryCrud() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookActions.newListItem(driver);
-        NotebookNewListItemActions.selectListItemType(driver, ListItemType.CATEGORY);
+        NotebookActions.newListItem(getServerPort(), driver);
+        NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CATEGORY);
 
         //Create - Blank title
         NewCategoryActions.fillTitle(driver, " ");
@@ -63,10 +63,10 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1_TITLE);
 
         //Edit - Empty title
-        NotebookUtils.newCategory(driver, CATEGORY_2_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_2_TITLE);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_1_TITLE)
-            .edit(driver);
+            .edit(getServerPort(), driver);
 
         EditListItemActions.fillTitle(driver, " ");
         EditListItemActions.submitForm(driver);
@@ -123,14 +123,14 @@ public class CategoryCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void categoryTreeTest() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_1_TITLE);
-        NotebookUtils.newCategory(driver, CATEGORY_2_TITLE, CATEGORY_1_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_1_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_2_TITLE, CATEGORY_1_TITLE);
 
         //Check initial state
         CategoryTreeLeaf root = NotebookActions.getCategoryTree(driver);

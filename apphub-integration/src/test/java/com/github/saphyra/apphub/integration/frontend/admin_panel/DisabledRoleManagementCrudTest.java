@@ -27,14 +27,14 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
     public void disableAndEnableRole() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
-        ModulesPageActions.openModule(driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
         DisabledRole initialRole = initialCheck(driver);
 
@@ -66,12 +66,13 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.confirmDisableRole(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
+        Integer serverPort = getServerPort();
         AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, driver))
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
@@ -109,12 +110,13 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.confirmEnableRole(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
+        Integer serverPort = getServerPort();
         AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(driver))
+            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, driver))
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");

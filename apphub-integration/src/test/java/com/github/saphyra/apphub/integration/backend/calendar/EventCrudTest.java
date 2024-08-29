@@ -41,7 +41,7 @@ public class EventCrudTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void createEvent_validation() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         nullRepeat(accessTokenId);
         repeatTooLow(accessTokenId);
@@ -74,7 +74,7 @@ public class EventCrudTest extends BackEndTest {
             .repeat(null)
             .build();
 
-        Response nullRepeatResponse = EventActions.getCreateEventResponse(accessTokenId, nullRepeatRequest);
+        Response nullRepeatResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullRepeatRequest);
 
         ResponseValidator.verifyInvalidParam(nullRepeatResponse, "repeat", "must not be null");
     }
@@ -91,7 +91,7 @@ public class EventCrudTest extends BackEndTest {
             .repeat(0)
             .build();
 
-        Response repeatTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, repeatTooLowRequest);
+        Response repeatTooLowResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, repeatTooLowRequest);
 
         ResponseValidator.verifyInvalidParam(repeatTooLowResponse, "repeat", "too low");
     }
@@ -108,7 +108,7 @@ public class EventCrudTest extends BackEndTest {
             .repeat(366)
             .build();
 
-        Response repeatTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, repeatTooHighRequest);
+        Response repeatTooHighResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, repeatTooHighRequest);
 
         ResponseValidator.verifyInvalidParam(repeatTooHighResponse, "repeat", "too high");
     }
@@ -124,7 +124,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response blankTitleResponse = EventActions.getCreateEventResponse(accessTokenId, blankTitleRequest);
+        Response blankTitleResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, blankTitleRequest);
 
         ResponseValidator.verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
@@ -137,7 +137,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateRequest);
+        Response nullReferenceDateResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullReferenceDateRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateResponse, "referenceDate", "must not be null");
     }
@@ -153,7 +153,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateMonthResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateMonthRequest);
+        Response nullReferenceDateMonthResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullReferenceDateMonthRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateMonthResponse, "referenceDate.month", "must not be null");
     }
@@ -169,7 +169,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullReferenceDateDayhResponse = EventActions.getCreateEventResponse(accessTokenId, nullReferenceDateDayRequest);
+        Response nullReferenceDateDayhResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullReferenceDateDayRequest);
 
         ResponseValidator.verifyInvalidParam(nullReferenceDateDayhResponse, "referenceDate.day", "must not be null");
     }
@@ -185,7 +185,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(RepetitionType.ONE_TIME)
             .build();
 
-        Response nullDateResponse = EventActions.getCreateEventResponse(accessTokenId, nullDateRequest);
+        Response nullDateResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullDateRequest);
 
         ResponseValidator.verifyInvalidParam(nullDateResponse, "date", "must not be null");
     }
@@ -201,7 +201,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionType(null)
             .build();
 
-        Response nullRepetitionTypeResponse = EventActions.getCreateEventResponse(accessTokenId, nullRepetitionTypeRequest);
+        Response nullRepetitionTypeResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullRepetitionTypeRequest);
 
         ResponseValidator.verifyInvalidParam(nullRepetitionTypeResponse, "repetitionType", "must not be null");
     }
@@ -218,7 +218,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfWeek(Collections.emptyList())
             .build();
 
-        Response emptyRepetitionTypeDaysOfWeekResponse = EventActions.getCreateEventResponse(accessTokenId, emptyRepetitionTypeDaysOfWeekRequest);
+        Response emptyRepetitionTypeDaysOfWeekResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, emptyRepetitionTypeDaysOfWeekRequest);
 
         ResponseValidator.verifyInvalidParam(emptyRepetitionTypeDaysOfWeekResponse, "repetitionDaysOfWeek", "must not be empty");
     }
@@ -235,7 +235,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDays(0)
             .build();
 
-        Response zeroRepetitionTypeDaysResponse = EventActions.getCreateEventResponse(accessTokenId, zeroRepetitionTypeDaysRequest);
+        Response zeroRepetitionTypeDaysResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, zeroRepetitionTypeDaysRequest);
 
         ResponseValidator.verifyInvalidParam(zeroRepetitionTypeDaysResponse, "repetitionDays", "too low");
     }
@@ -253,7 +253,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(null)
             .build();
 
-        Response nullMinutesResponse = EventActions.getCreateEventResponse(accessTokenId, nullMinutesRequest);
+        Response nullMinutesResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullMinutesRequest);
 
         ResponseValidator.verifyInvalidParam(nullMinutesResponse, "minutes", "must not be null");
     }
@@ -271,7 +271,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(-1)
             .build();
 
-        Response minutesTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, minutesTooLowRequest);
+        Response minutesTooLowResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, minutesTooLowRequest);
 
         ResponseValidator.verifyInvalidParam(minutesTooLowResponse, "minutes", "too low");
     }
@@ -289,7 +289,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(60)
             .build();
 
-        Response minutesTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, minutesTooHighRequest);
+        Response minutesTooHighResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, minutesTooHighRequest);
 
         ResponseValidator.verifyInvalidParam(minutesTooHighResponse, "minutes", "too high");
     }
@@ -307,7 +307,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response nullHoursResponse = EventActions.getCreateEventResponse(accessTokenId, nullHoursRequest);
+        Response nullHoursResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, nullHoursRequest);
 
         ResponseValidator.verifyInvalidParam(nullHoursResponse, "hours", "must not be null");
     }
@@ -325,7 +325,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response hoursTooLowResponse = EventActions.getCreateEventResponse(accessTokenId, hoursTooLowRequest);
+        Response hoursTooLowResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, hoursTooLowRequest);
 
         ResponseValidator.verifyInvalidParam(hoursTooLowResponse, "hours", "too low");
     }
@@ -343,7 +343,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(1)
             .build();
 
-        Response hoursTooHighResponse = EventActions.getCreateEventResponse(accessTokenId, hoursTooHighRequest);
+        Response hoursTooHighResponse = EventActions.getCreateEventResponse(getServerPort(), accessTokenId, hoursTooHighRequest);
 
         ResponseValidator.verifyInvalidParam(hoursTooHighResponse, "hours", "too high");
     }
@@ -351,7 +351,7 @@ public class EventCrudTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void createOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -366,7 +366,7 @@ public class EventCrudTest extends BackEndTest {
             .minutes(MINUTES)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         responses.forEach(calendarResponse -> {
             if (calendarResponse.getDate().equals(EVENT_DATE)) {
@@ -401,7 +401,7 @@ public class EventCrudTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void createDaysOfWeekEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         List<DayOfWeek> daysOfWeek = List.of(DayOfWeek.MONDAY, DayOfWeek.THURSDAY);
         CreateEventRequest request = CreateEventRequest.builder()
@@ -416,7 +416,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfWeek(daysOfWeek)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
@@ -426,7 +426,7 @@ public class EventCrudTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void createDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -440,7 +440,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDaysOfMonth(List.of(REFERENCE_DATE_DAY.getDayOfMonth()))
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 
@@ -450,7 +450,7 @@ public class EventCrudTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void createEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateEventRequest request = CreateEventRequest.builder()
             .referenceDate(ReferenceDate.builder()
@@ -464,7 +464,7 @@ public class EventCrudTest extends BackEndTest {
             .repetitionDays(REPETITION_DAYS)
             .build();
 
-        List<CalendarResponse> responses = EventActions.createEvent(accessTokenId, request);
+        List<CalendarResponse> responses = EventActions.createEvent(getServerPort(), accessTokenId, request);
 
         assertThat(responses.stream().flatMap(calendarResponse -> calendarResponse.getEvents().stream()).findAny()).isNotEmpty();
 

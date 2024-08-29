@@ -15,7 +15,7 @@ public class AuthorizationTest extends BackEndTest {
     @Test(groups = {"be", "misc"})
     public void callProtectedEndpointWithoutAccessToken() {
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(Endpoints.CHECK_SESSION));
+            .get(UrlFactory.create(getServerPort(), Endpoints.CHECK_SESSION));
 
         assertThat(response.getStatusCode()).isEqualTo(401);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);

@@ -45,7 +45,7 @@ public class EmailValidatorTest {
 
     @Test
     public void emailAlreadyExists() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.of(user));
+        given(userDao.findByUsernameOrEmail(EMAIL)).willReturn(Optional.of(user));
 
         Throwable ex = catchThrowable(() -> underTest.validateEmail(EMAIL));
 
@@ -54,7 +54,7 @@ public class EmailValidatorTest {
 
     @Test
     public void valid() {
-        given(userDao.findByEmail(EMAIL)).willReturn(Optional.empty());
+        given(userDao.findByUsernameOrEmail(EMAIL)).willReturn(Optional.empty());
 
         underTest.validateEmail(EMAIL);
     }

@@ -13,27 +13,27 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSavedGameActions {
-    public static List<SavedGameResponse> getSavedGames(UUID accessTokenId) {
-        Response response = getSavedGamesResponse(accessTokenId);
+    public static List<SavedGameResponse> getSavedGames(int serverPort, UUID accessTokenId) {
+        Response response = getSavedGamesResponse(serverPort, accessTokenId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SavedGameResponse[].class));
     }
 
-    public static Response getSavedGamesResponse(UUID accessTokenId) {
+    public static Response getSavedGamesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(Endpoints.SKYXPLORE_GET_GAMES));
+            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_GAMES));
     }
 
-    public static void deleteGame(UUID accessTokenId, UUID gameId) {
-        Response response = getDeleteGameResponse(accessTokenId, gameId);
+    public static void deleteGame(int serverPort, UUID accessTokenId, UUID gameId) {
+        Response response = getDeleteGameResponse(serverPort, accessTokenId, gameId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteGameResponse(UUID accessTokenId, UUID gameId) {
+    public static Response getDeleteGameResponse(int serverPort, UUID accessTokenId, UUID gameId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(Endpoints.SKYXPLORE_DELETE_GAME, "gameId", gameId));
+            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_DELETE_GAME, "gameId", gameId));
     }
 }

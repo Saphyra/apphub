@@ -14,25 +14,25 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexPageActions {
-    public static UUID registerAndLogin(RegistrationParameters userData) {
-        registerUser(userData.toRegistrationRequest());
-        return login(userData.toLoginRequest());
+    public static UUID registerAndLogin(int serverPort, RegistrationParameters userData) {
+        registerUser(serverPort, userData.toRegistrationRequest());
+        return login(serverPort, userData.toLoginRequest());
     }
 
-    public static void registerUser(RegistrationRequest registrationRequest) {
-        Response response = getRegistrationResponse(registrationRequest);
+    public static void registerUser(int serverPort, RegistrationRequest registrationRequest) {
+        Response response = getRegistrationResponse(serverPort, registrationRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getRegistrationResponse(RegistrationRequest registrationRequest) {
+    public static Response getRegistrationResponse(int serverPort, RegistrationRequest registrationRequest) {
         return RequestFactory.createRequest()
             .body(registrationRequest)
-            .post(UrlFactory.create(Endpoints.ACCOUNT_REGISTER));
+            .post(UrlFactory.create(serverPort, Endpoints.ACCOUNT_REGISTER));
     }
 
-    public static UUID login(LoginRequest loginRequest) {
-        Response response = getLoginResponse(loginRequest);
+    public static UUID login(int serverPort, LoginRequest loginRequest) {
+        Response response = getLoginResponse(serverPort, loginRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -41,8 +41,8 @@ public class IndexPageActions {
             .getAccessTokenId();
     }
 
-    public static LoginResponse getSuccessfulLoginResponse(LoginRequest loginRequest) {
-        Response response = getLoginResponse(loginRequest);
+    public static LoginResponse getSuccessfulLoginResponse(int serverPort, LoginRequest loginRequest) {
+        Response response = getLoginResponse(serverPort, loginRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -50,9 +50,9 @@ public class IndexPageActions {
             .as(LoginResponse.class);
     }
 
-    public static Response getLoginResponse(LoginRequest loginRequest) {
+    public static Response getLoginResponse(int serverPort, LoginRequest loginRequest) {
         return RequestFactory.createRequest()
             .body(loginRequest)
-            .post(UrlFactory.create(Endpoints.LOGIN));
+            .post(UrlFactory.create(serverPort, Endpoints.LOGIN));
     }
 }

@@ -447,3 +447,7 @@ textarea {
 .background-orange {
     background-color: orange !important;
 }
+
+.resizable{
+    resize: both;
+}

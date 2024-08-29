@@ -28,11 +28,11 @@ public class ChangePasswordTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changePassword() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
         tooShortPassword(driver);
         tooLongPassword(driver);
@@ -43,27 +43,27 @@ public class ChangePasswordTest extends SeleniumTest {
     }
 
     private static void tooShortPassword(WebDriver driver) {
-        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooShortPassword());
+        ChangePasswordActions.fillChangePasswordForm(getServerPort(), driver, ChangePasswordParameters.tooShortPassword());
         ChangePasswordActions.verifyChangePasswordForm(driver, tooShortPassword());
     }
 
     private static void tooLongPassword(WebDriver driver) {
-        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.tooLongPassword());
+        ChangePasswordActions.fillChangePasswordForm(getServerPort(), driver, ChangePasswordParameters.tooLongPassword());
         ChangePasswordActions.verifyChangePasswordForm(driver, tooLongPassword());
     }
 
     private static void incorrectConfirmPassword(WebDriver driver) {
-        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectConfirmPassword());
+        ChangePasswordActions.fillChangePasswordForm(getServerPort(), driver, ChangePasswordParameters.incorrectConfirmPassword());
         ChangePasswordActions.verifyChangePasswordForm(driver, incorrectConfirmPassword());
     }
 
     private static void emptyPassword(WebDriver driver) {
-        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.emptyPassword());
+        ChangePasswordActions.fillChangePasswordForm(getServerPort(), driver, ChangePasswordParameters.emptyPassword());
         ChangePasswordActions.verifyChangePasswordForm(driver, emptyPassword());
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        ChangePasswordActions.fillChangePasswordForm(driver, ChangePasswordParameters.incorrectCurrentPassword());
+        ChangePasswordActions.fillChangePasswordForm(getServerPort(), driver, ChangePasswordParameters.incorrectCurrentPassword());
         ChangePasswordActions.verifyChangePasswordForm(driver, valid());
         ChangePasswordActions.changePassword(driver);
 
@@ -73,21 +73,22 @@ public class ChangePasswordTest extends SeleniumTest {
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
 
-        ChangePasswordActions.fillChangePasswordForm(driver, changeParameters);
+        Integer serverPort = getServerPort();
+        ChangePasswordActions.fillChangePasswordForm(serverPort, driver, changeParameters);
         ChangePasswordActions.verifyChangePasswordForm(driver, valid());
         ChangePasswordActions.changePassword(driver);
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
 
-        AccountPageActions.back(driver);
-        ModulesPageActions.logout(driver);
+        AccountPageActions.back(serverPort, driver);
+        ModulesPageActions.logout(serverPort, driver);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
 
-        IndexPageActions.submitLogin(driver, LoginParameters.builder().email(userData.getEmail()).password(changeParameters.getNewPassword()).build());
+        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.builder().userIdentifier(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
             .assertTrue();
     }
 
@@ -133,16 +134,17 @@ public class ChangePasswordTest extends SeleniumTest {
         WebDriver driver1 = drivers.get(0);
         WebDriver driver2 = drivers.get(1);
 
-        Navigation.toIndexPage(driver1);
+        Integer serverPort = getServerPort();
+        Navigation.toIndexPage(serverPort, driver1);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver1, userData);
-        ModulesPageActions.openModule(driver1, ModuleLocation.MANAGE_ACCOUNT);
+        ModulesPageActions.openModule(serverPort, driver1, ModuleLocation.MANAGE_ACCOUNT);
 
-        Navigation.toIndexPage(driver2);
-        IndexPageActions.submitLogin(driver2, LoginParameters.fromRegistrationParameters(userData));
+        Navigation.toIndexPage(serverPort, driver2);
+        IndexPageActions.submitLogin(serverPort, driver2, LoginParameters.fromRegistrationParameters(userData));
 
         ChangePasswordParameters changeParameters = ChangePasswordParameters.valid();
-        ChangePasswordActions.fillChangePasswordForm(driver1, changeParameters);
+        ChangePasswordActions.fillChangePasswordForm(serverPort, driver1, changeParameters);
         ChangePasswordActions.toggleDeactivateAllSessions(driver1);
         ChangePasswordActions.changePassword(driver1);
 
@@ -152,7 +154,7 @@ public class ChangePasswordTest extends SeleniumTest {
         ToastMessageUtil.verifySuccessToast(driver1, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
 
         AwaitilityWrapper.create(20, 3)
-            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(Endpoints.INDEX_PAGE + "?redirect=" + Endpoints.MODULES_PAGE)))
+            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE + "?redirect=" + Endpoints.MODULES_PAGE)))
             .assertTrue("Secondary session is not invalidated. PageUrl: " + driver2.getCurrentUrl());
     }
 

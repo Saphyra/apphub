@@ -49,13 +49,14 @@ public class SearchListItemTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void search() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID categoryId = CategoryActions.createCategory(accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
+        UUID categoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
 
-        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
-        TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
+        LinkActions.createLink(getServerPort(), accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
+        TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
         ChecklistActions.createChecklist(
+            getServerPort(),
             accessTokenId,
             CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
@@ -67,6 +68,7 @@ public class SearchListItemTest extends BackEndTest {
                 .build()
         );
         TableActions.createTable(
+            getServerPort(),
             accessTokenId,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
@@ -87,6 +89,7 @@ public class SearchListItemTest extends BackEndTest {
         );
 
         TableActions.createTable(
+            getServerPort(),
             accessTokenId,
             CreateTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
@@ -125,24 +128,24 @@ public class SearchListItemTest extends BackEndTest {
     }
 
     private static void searchTextTooShort(UUID accessTokenId) {
-        Response response = ListItemActions.getSearchResponse(accessTokenId, "as");
+        Response response = ListItemActions.getSearchResponse(getServerPort(), accessTokenId, "as");
         ResponseValidator.verifyInvalidParam(response, "search", "too short");
     }
 
     @Test(groups = {"be", "notebook"})
     public void sameItemShouldBeReturnedOnlyOnce() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        LinkActions.createLink(accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
+        LinkActions.createLink(getServerPort(), accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
 
-        List<NotebookView> searchResult = ListItemActions.search(accessTokenId, LINK_TITLE);
+        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessTokenId, LINK_TITLE);
 
         assertThat(searchResult).hasSize(1);
     }
 
     private void search(UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
-        List<NotebookView> searchResult = ListItemActions.search(accessTokenId, search);
+        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessTokenId, search);
 
         NotebookView expected = searchResult.stream()
             .filter(notebookView -> notebookView.getTitle().equals(listItemTitle))

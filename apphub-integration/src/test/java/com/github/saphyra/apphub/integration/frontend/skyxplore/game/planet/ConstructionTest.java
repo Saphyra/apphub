@@ -36,10 +36,10 @@ public class ConstructionTest extends SeleniumTest {
     public void createAndCancelConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
@@ -115,10 +115,10 @@ public class ConstructionTest extends SeleniumTest {
     public void finishConstruction() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
@@ -184,10 +184,10 @@ public class ConstructionTest extends SeleniumTest {
     public void finishUpgrade() {
         WebDriver driver = extractDriver();
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.SKYXPLORE);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());

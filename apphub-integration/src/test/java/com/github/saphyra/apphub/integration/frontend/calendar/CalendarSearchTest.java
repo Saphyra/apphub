@@ -27,12 +27,12 @@ public class CalendarSearchTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void searchInCalendar() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.CALENDAR);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarActions.createEvent(driver, CURRENT_DATE, TITLE);
 

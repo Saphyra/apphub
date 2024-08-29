@@ -13,16 +13,17 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePlanetQueueActions {
-    public static void setPriority(UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
-        Response response = getSetPriorityResponse(accessTokenId, planetId, type, itemId, priority);
+    public static void setPriority(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
+        Response response = getSetPriorityResponse(serverPort, accessTokenId, planetId, type, itemId, priority);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getSetPriorityResponse(UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
+    public static Response getSetPriorityResponse(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(priority))
             .post(UrlFactory.create(
+                serverPort,
                 Endpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY,
                 CollectionUtils.toMap(
                     new BiWrapper<>("planetId", planetId),
@@ -32,15 +33,16 @@ public class SkyXplorePlanetQueueActions {
             ));
     }
 
-    public static void cancelItem(UUID accessTokenId, UUID planetId, String type, UUID itemId) {
-        Response response = getCancelItemResponse(accessTokenId, planetId, type, itemId);
+    public static void cancelItem(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
+        Response response = getCancelItemResponse(serverPort, accessTokenId, planetId, type, itemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCancelItemResponse(UUID accessTokenId, UUID planetId, String type, UUID itemId) {
+    public static Response getCancelItemResponse(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(
+                serverPort,
                 Endpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM,
                 CollectionUtils.toMap(
                     new BiWrapper<>("planetId", planetId),

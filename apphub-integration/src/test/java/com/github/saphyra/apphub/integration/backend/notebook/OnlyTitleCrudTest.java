@@ -28,7 +28,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void onlyTitleCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_emptyTitle(accessTokenId);
         create_parentNotFound(accessTokenId);
@@ -41,7 +41,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
         CreateOnlyTitleRequest create_emptyTitleRequest = CreateOnlyTitleRequest.builder()
             .title(" ")
             .build();
-        Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(accessTokenId, create_emptyTitleRequest);
+        Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessTokenId, create_emptyTitleRequest);
         verifyInvalidParam(create_emptyTitleResponse, "title", "must not be null or blank");
     }
 
@@ -50,7 +50,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
             .title(TITLE)
             .parent(UUID.randomUUID())
             .build();
-        Response create_parentNotFoundResponse = OnlyTitleActions.getCreateOnlyTitleResponse(accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
@@ -58,9 +58,9 @@ public class OnlyTitleCrudTest extends BackEndTest {
         CreateOnlyTitleRequest createRequest = CreateOnlyTitleRequest.builder()
             .title(TITLE)
             .build();
-        UUID listItemId = OnlyTitleActions.createOnlyTitle(accessTokenId, createRequest);
+        UUID listItemId = OnlyTitleActions.createOnlyTitle(getServerPort(), accessTokenId, createRequest);
 
-        List<NotebookView> content = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        List<NotebookView> content = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren();
         assertThat(content).hasSize(1);
         assertThat(content.get(0).getId()).isEqualTo(listItemId);
@@ -70,21 +70,21 @@ public class OnlyTitleCrudTest extends BackEndTest {
     }
 
     private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID noCategoryParentId = TextActions.createText(accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID noCategoryParentId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
         CreateOnlyTitleRequest create_parentNotCategoryRequest = CreateOnlyTitleRequest.builder()
             .title(TITLE)
             .parent(noCategoryParentId)
             .build();
-        Response create_parentNotCategoryResponse = OnlyTitleActions.getCreateOnlyTitleResponse(accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
 
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
     private static void delete(UUID accessTokenId, UUID listItemId) {
         List<NotebookView> content;
-        ListItemActions.deleteListItem(accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
 
-        content = CategoryActions.getChildrenOfCategory(accessTokenId, null)
+        content = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
             .getChildren();
         assertThat(content).hasSize(1);
     }

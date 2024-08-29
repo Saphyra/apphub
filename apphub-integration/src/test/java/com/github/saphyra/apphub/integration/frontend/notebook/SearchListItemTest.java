@@ -38,19 +38,19 @@ public class SearchListItemTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void search() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
-        NotebookUtils.newLink(driver, LINK_TITLE, LINK_URL);
-        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_CONTENT);
-        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)));
-        NotebookUtils.newTable(driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
-        NotebookUtils.newChecklistTable(driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(false, List.of(CHECKLIST_TABLE_CONTENT))));
-        NotebookUtils.newOnlyTitle(driver, ONLY_TITLE_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
+        NotebookUtils.newLink(getServerPort(), driver, LINK_TITLE, LINK_URL);
+        NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, TEXT_CONTENT);
+        NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)));
+        NotebookUtils.newTable(getServerPort(), driver, TABLE_TITLE, List.of(TABLE_HEAD), List.of(List.of(TABLE_CONTENT)));
+        NotebookUtils.newChecklistTable(getServerPort(), driver, CHECKLIST_TABLE_TITLE, List.of(CHECKLIST_TABLE_HEAD), List.of(new BiWrapper<>(false, List.of(CHECKLIST_TABLE_CONTENT))));
+        NotebookUtils.newOnlyTitle(getServerPort(), driver, ONLY_TITLE_TITLE);
 
         search(driver, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
         search(driver, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
@@ -71,13 +71,13 @@ public class SearchListItemTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void itemsShouldBeUnique() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_TITLE);
+        NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, TEXT_TITLE);
 
         search(driver, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
     }
@@ -85,15 +85,15 @@ public class SearchListItemTest extends SeleniumTest {
     @Test(groups = {"fe", "notebook"})
     public void openParentOfSearchResult() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(driver, ModuleLocation.NOTEBOOK);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
 
-        NotebookUtils.newCategory(driver, CATEGORY_TITLE);
-        NotebookUtils.newText(driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE);
-        NotebookUtils.newChecklist(driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)), CATEGORY_TITLE);
+        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
+        NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, TEXT_CONTENT, CATEGORY_TITLE);
+        NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_CONTENT, false)), CATEGORY_TITLE);
 
         NotebookActions.search(driver, TEXT_TITLE);
 

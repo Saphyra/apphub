@@ -17,20 +17,20 @@ public class SkyXploreContactsRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
     public void contactsRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getFriendCandidatesResponse(accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getCreateFriendRequestResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getSentFriendRequestsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getIncomingFriendRequestsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getCancelFriendRequestResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getAcceptFriendRequestResponse(accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getFriendsResponse(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getRemoveFriendResponse(accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getFriendCandidatesResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getSentFriendRequestsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getIncomingFriendRequestsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getCancelFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getFriendsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreFriendActions.getRemoveFriendResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

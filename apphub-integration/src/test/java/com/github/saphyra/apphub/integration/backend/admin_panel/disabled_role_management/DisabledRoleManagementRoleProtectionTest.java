@@ -17,16 +17,16 @@ public class DisabledRoleManagementRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel"})
     public void disabledRoleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(userData);
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getGetDisabledRoles(accessTokenId));
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getEnableRoleResponse(accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getDisableRoleResponse(accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getGetDisabledRoles(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getEnableRoleResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
     }
 
     @DataProvider(parallel = true)

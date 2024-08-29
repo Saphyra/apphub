@@ -17,7 +17,7 @@ public class SelectLanguageTest extends SeleniumTest {
     @Test(groups = {"fe", "index"})
     public void selectLanguageOnIndexPage() {
         WebDriver driver = extractDriver();
-        Navigation.toIndexPage(driver);
+        Navigation.toIndexPage(getServerPort(), driver);
 
         Arrays.stream(Language.values())
             .forEach(language -> verify(driver, language));

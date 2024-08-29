@@ -3,6 +3,7 @@ const ToolboxTab = {
     NEW: "NEW",
     SCRAPPED: "SCRAPPED",
     INVENTORY: "INVENTORY",
+    MANAGE: "MANAGE",
 }
 
 export default ToolboxTab;
