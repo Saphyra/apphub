@@ -10,7 +10,9 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.CreateToolService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.DeleteToolService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.SetToolStatusService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.StorageBoxService;
 import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.ToolQueryService;
+import com.github.saphyra.apphub.service.custom.villany_atesz.toolbox.service.ToolTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +31,9 @@ import static org.mockito.BDDMockito.then;
 class ToolboxControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID TOOL_ID = UUID.randomUUID();
+    private static final String NAME = "name";
+    private static final UUID TOOL_TYPE_ID = UUID.randomUUID();
+    private static final UUID STORAGE_BOX_ID = UUID.randomUUID();
 
     @Mock
     private ToolQueryService toolQueryService;
@@ -41,6 +46,12 @@ class ToolboxControllerImplTest {
 
     @Mock
     private DeleteToolService deleteToolService;
+
+    @Mock
+    private ToolTypeService toolTypeService;
+
+    @Mock
+    private StorageBoxService storageBoxService;
 
     @InjectMocks
     private ToolboxControllerImpl underTest;
@@ -111,5 +122,33 @@ class ToolboxControllerImplTest {
 
         assertThat(underTest.getStorageBoxes(accessTokenHeader))
             .containsExactly(storageBoxModel);
+    }
+
+    @Test
+    void editToolType() {
+        underTest.editToolType(new OneParamRequest<>(NAME), TOOL_TYPE_ID, accessTokenHeader);
+
+        then(toolTypeService).should().edit(TOOL_TYPE_ID, NAME);
+    }
+
+    @Test
+    void deleteToolType() {
+        underTest.deleteToolType(TOOL_TYPE_ID, accessTokenHeader);
+
+        then(toolTypeService).should().delete(USER_ID, TOOL_TYPE_ID);
+    }
+
+    @Test
+    void editStorageBox() {
+        underTest.editStorageBox(new OneParamRequest<>(NAME), STORAGE_BOX_ID, accessTokenHeader);
+
+        then(storageBoxService).should().edit(STORAGE_BOX_ID, NAME);
+    }
+
+    @Test
+    void deleteStorageBox() {
+        underTest.deleteStorageBox(STORAGE_BOX_ID, accessTokenHeader);
+
+        then(storageBoxService).should().delete(USER_ID, STORAGE_BOX_ID);
     }
 }

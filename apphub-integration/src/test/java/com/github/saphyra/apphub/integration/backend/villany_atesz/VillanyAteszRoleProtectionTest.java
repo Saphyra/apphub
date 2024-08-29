@@ -101,6 +101,10 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getDeleteResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getToolTypesResponse(getServerPort(), accessTokenId));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getStorageBoxesResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getEditToolTypeResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getEditStorageBoxResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getDeleteToolTypeResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxActions.getDeleteStorageBoxResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
 
         //Toolbox inventory
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditStorageBoxResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new StorageBoxModel()));

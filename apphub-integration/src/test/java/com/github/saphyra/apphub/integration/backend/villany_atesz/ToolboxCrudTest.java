@@ -28,6 +28,8 @@ public class ToolboxCrudTest extends BackEndTest {
     private static final LocalDate WARRANTY_EXPIRES_AT = LocalDate.now().plusDays(4);
     private static final String STORAGE_BOX_NAME = "storage-box-name";
     private static final String TOOL_TYPE_NAME = "tool-type-name";
+    private static final String NEW_TOOL_TYPE_NAME = "new-tool-type-name";
+    private static final String NEW_STORAGE_BOX_NAME = "new-storage-box-name";
 
     @Test(groups = {"be", "villany-atesz"})
     public void toolboxCrud() {
@@ -52,7 +54,51 @@ public class ToolboxCrudTest extends BackEndTest {
 
         delete(accessTokenId, toolResponse.getToolId());
 
-        create_existingStorageBoxAndToolType(accessTokenId, toolResponse.getStorageBox().getStorageBoxId(), toolResponse.getToolType().getToolTypeId());
+        UUID toolTypeId = toolResponse.getToolType().getToolTypeId();
+        UUID storageBoxId = toolResponse.getStorageBox().getStorageBoxId();
+        create_existingStorageBoxAndToolType(accessTokenId, storageBoxId, toolTypeId);
+
+        editToolType_blankName(accessTokenId, toolTypeId);
+        editToolType(accessTokenId, toolTypeId);
+        deleteToolType(accessTokenId, toolTypeId);
+
+        editStorageBox_blankName(accessTokenId, storageBoxId);
+        editStorageBox(accessTokenId, storageBoxId);
+        deleteStorageBox(accessTokenId, storageBoxId);
+    }
+
+    private void deleteStorageBox(UUID accessTokenId, UUID storageBoxId) {
+        VillanyAteszToolboxActions.deleteStorageBox(getServerPort(), accessTokenId, storageBoxId);
+
+        assertThat(VillanyAteszToolboxActions.getStorageBoxes(getServerPort(), accessTokenId)).isEmpty();
+    }
+
+    private void editStorageBox(UUID accessTokenId, UUID storageBoxId) {
+        VillanyAteszToolboxActions.editStorageBox(getServerPort(), accessTokenId, storageBoxId, NEW_STORAGE_BOX_NAME);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getStorageBoxes(getServerPort(), accessTokenId))
+            .returns(NEW_STORAGE_BOX_NAME, StorageBoxModel::getName);
+    }
+
+    private void editStorageBox_blankName(UUID accessTokenId, UUID storageBoxId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getEditStorageBoxResponse(getServerPort(), accessTokenId, storageBoxId, " "), "name", "must not be null or blank");
+    }
+
+    private void deleteToolType(UUID accessTokenId, UUID toolTypeId) {
+        VillanyAteszToolboxActions.deleteToolType(getServerPort(), accessTokenId, toolTypeId);
+
+        assertThat(VillanyAteszToolboxActions.getToolTypes(getServerPort(), accessTokenId)).isEmpty();
+    }
+
+    private void editToolType(UUID accessTokenId, UUID toolTypeId) {
+        VillanyAteszToolboxActions.editToolType(getServerPort(), accessTokenId, toolTypeId, NEW_TOOL_TYPE_NAME);
+
+        CustomAssertions.singleListAssertThat(VillanyAteszToolboxActions.getToolTypes(getServerPort(), accessTokenId))
+            .returns(NEW_TOOL_TYPE_NAME, ToolTypeModel::getName);
+    }
+
+    private void editToolType_blankName(UUID accessTokenId, UUID toolTypeId) {
+        ResponseValidator.verifyInvalidParam(VillanyAteszToolboxActions.getEditToolTypeResponse(getServerPort(), accessTokenId, toolTypeId, " "), "name", "must not be null or blank");
     }
 
     private void create_existingStorageBoxAndToolType(UUID accessTokenId, UUID storageBoxId, UUID toolTypeId) {

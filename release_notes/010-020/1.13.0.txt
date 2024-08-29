@@ -4,6 +4,8 @@
     Login by both e-mail or username
     Integration
         Configurable browser startup limit
+    VillanyAtesz
+        Edit and delete toolType and storageBox
 
 ===BUGFIXES===
     Notebook
@@ -11,6 +13,7 @@
         Only list of category is scrollable
         Use textarea for custom table text type
     Integration
+        Parallel WebDriver creation during "preCreateDrivers"
         Connection cache to avoid timeout during minikube test
 
 ===PLATFORM CHANGES===

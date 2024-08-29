@@ -63,4 +63,24 @@ class StorageBoxRepositoryTest {
 
         assertThat(underTest.getByUserId(USER_ID_1)).containsExactly(entity1);
     }
+
+    @Test
+    @Transactional
+    void deleteByUserIdAndStorageBoxId() {
+        StorageBoxEntity entity1 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        StorageBoxEntity entity2 = StorageBoxEntity.builder()
+            .storageBoxId(STORAGE_BOX_ID_2)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity2);
+
+        underTest.deleteByUserIdAndStorageBoxId(USER_ID_1, STORAGE_BOX_ID_1);
+
+        assertThat(underTest.findAll()).containsExactly(entity2);
+    }
 }

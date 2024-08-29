@@ -8,4 +8,6 @@ interface ToolTypeRepository extends CrudRepository<ToolTypeEntity, String> {
     void deleteByUserId(String userId);
 
     List<ToolTypeEntity> getByUserId(String userId);
+
+    void deleteByUserIdAndToolTypeId(String userId, String toolTypeId);
 }

@@ -8,4 +8,6 @@ interface StorageBoxRepository extends CrudRepository<StorageBoxEntity, String> 
     void deleteByUserId(String userId);
 
     List<StorageBoxEntity> getByUserId(String userId);
+
+    void deleteByUserIdAndStorageBoxId(String userId, String storageBoxId);
 }

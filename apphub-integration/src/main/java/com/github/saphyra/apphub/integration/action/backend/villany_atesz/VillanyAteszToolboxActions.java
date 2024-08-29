@@ -95,4 +95,42 @@ public class VillanyAteszToolboxActions {
 
         return Arrays.asList(response.getBody().as(ToolTypeModel[].class));
     }
+
+    public static void editToolType(int serverPort, UUID accessTokenId, UUID toolTypeId, String name) {
+        assertThat(getEditToolTypeResponse(serverPort, accessTokenId, toolTypeId, name).getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditToolTypeResponse(int serverPort, UUID accessTokenId, UUID toolTypeId, String name) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(name))
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE, "toolTypeId", toolTypeId));
+    }
+
+    public static void deleteToolType(int serverPort, UUID accessTokenId, UUID toolTypeId) {
+        assertThat(getDeleteToolTypeResponse(serverPort, accessTokenId, toolTypeId).getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getDeleteToolTypeResponse(int serverPort, UUID accessTokenId, UUID toolTypeId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE, "toolTypeId", toolTypeId));
+    }
+
+    public static void editStorageBox(int serverPort, UUID accessTokenId, UUID storageBoxId, String name) {
+        assertThat(getEditStorageBoxResponse(serverPort, accessTokenId, storageBoxId, name).getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getEditStorageBoxResponse(int serverPort, UUID accessTokenId, UUID storageBoxId, String name) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(name))
+            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX, "storageBoxId", storageBoxId));
+    }
+
+    public static void deleteStorageBox(int serverPort, UUID accessTokenId, UUID storageBoxId) {
+        assertThat(getDeleteStorageBoxResponse(serverPort, accessTokenId, storageBoxId).getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getDeleteStorageBoxResponse(int serverPort, UUID accessTokenId, UUID storageBoxId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX, "storageBoxId", storageBoxId));
+    }
 }

@@ -1,0 +1,50 @@
+{
+    "tool-types": {
+        "en": "Tool types",
+        "hu": "Szerszám típusok"
+    },
+    "name": {
+        "en": "Name",
+        "hu": "Megnevezés"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "discard": {
+        "en": "Discard",
+        "hu": "Elvetés"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "delete-tool-type-confirmation-title": {
+        "en": "Delete tool type?",
+        "hu": "Szerszám típus törlése?"
+    },
+    "delete-tool-type-confirmation-detail":{
+        "en": "Are you sure you want to delete tool type {name}?",
+        "hu": "Biztosan törölni szeretnéd a {name} szerszám típust?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "storage-boxes": {
+        "en": "Storage boxes",
+        "hu": "Tárolók"
+    },
+    "delete-storage-box-confirmation-title": {
+        "en": "Delete storage box?",
+        "hu": "Tároló törlése?"
+    },
+    "delete-storage-box-confirmation-detail":{
+        "en": "Are you sure you want to delete storage box {name}?",
+        "hu": "Biztosan törölni szeretnéd a {name} tárolót?"
+    }
+}

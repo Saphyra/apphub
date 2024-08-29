@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.core.driver;
 
+import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
@@ -8,6 +9,7 @@ import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,14 +49,17 @@ public class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         DRIVER_POOL_CONFIG.setTestOnBorrow(true);
     }
 
-
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(TestConfiguration.BROWSER_STARTUP_LIMIT);
     private static final GenericObjectPool<WebDriverWrapper> DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(), DRIVER_POOL_CONFIG);
 
     public static synchronized List<WebDriverWrapper> getDrivers(int serverPort, int driverCount) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        List<WebDriverWrapper> result = Stream.generate(() -> getDriver(serverPort))
+        List<FutureWrapper<WebDriverWrapper>> futures = Stream.generate(() -> TestBase.EXECUTOR_SERVICE.asyncProcess(() -> getDriver(serverPort)))
             .limit(driverCount)
+            .toList();
+
+        List<WebDriverWrapper> result = futures.stream()
+            .map(webDriverWrapperFutureWrapper -> webDriverWrapperFutureWrapper.get().getOrThrow())
             .collect(Collectors.toList());
         stopwatch.stop();
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);

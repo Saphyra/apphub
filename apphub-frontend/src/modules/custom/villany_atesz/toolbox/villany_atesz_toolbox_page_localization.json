@@ -26,5 +26,9 @@
     "inventory": {
         "en": "Inventory",
         "hu": "Leltár"
+    },
+    "manage": {
+        "en": "Manage",
+        "hu": "Kezelés"
     }
 }

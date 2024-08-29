@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,11 +77,11 @@ class ToolQueryServiceTest {
         given(tool.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
         given(tool.isInventoried()).willReturn(true);
 
-        given(toolTypeDao.findByIdValidated(TOOL_TYPE_ID)).willReturn(toolType);
+        given(toolTypeDao.findById(TOOL_TYPE_ID)).willReturn(Optional.of(toolType));
         given(toolType.getToolTypeId()).willReturn(TOOL_TYPE_ID);
         given(toolType.getName()).willReturn(TOOL_TYPE_NAME);
 
-        given(storageBoxDao.findByIdValidated(STORAGE_BOX_ID)).willReturn(storageBox);
+        given(storageBoxDao.findById(STORAGE_BOX_ID)).willReturn(Optional.of(storageBox));
         given(storageBox.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
         given(storageBox.getName()).willReturn(STORAGE_BOX_NAME);
 
@@ -88,6 +89,40 @@ class ToolQueryServiceTest {
             .returns(TOOL_ID, ToolResponse::getToolId)
             .returns(ToolTypeModel.builder().toolTypeId(TOOL_TYPE_ID).name(TOOL_TYPE_NAME).build(), ToolResponse::getToolType)
             .returns(StorageBoxModel.builder().storageBoxId(STORAGE_BOX_ID).name(STORAGE_BOX_NAME).build(), ToolResponse::getStorageBox)
+            .returns(BRAND, ToolResponse::getBrand)
+            .returns(NAME, ToolResponse::getName)
+            .returns(COST, ToolResponse::getCost)
+            .returns(ACQUIRED_AT, ToolResponse::getAcquiredAt)
+            .returns(WARRANTY_EXPIRES_AT, ToolResponse::getWarrantyExpiresAt)
+            .returns(ToolStatus.DEFAULT, ToolResponse::getStatus)
+            .returns(SCRAPPED_AT, ToolResponse::getScrappedAt)
+            .returns(true, ToolResponse::getInventoried);
+    }
+
+    @Test
+    void getTools_noToolTypeAndStorageBox() {
+        given(toolDao.getByUserId(USER_ID)).willReturn(List.of(tool));
+
+        given(tool.getToolId()).willReturn(TOOL_ID);
+        given(tool.getBrand()).willReturn(BRAND);
+        given(tool.getName()).willReturn(NAME);
+        given(tool.getCost()).willReturn(COST);
+        given(tool.getAcquiredAt()).willReturn(ACQUIRED_AT);
+        given(tool.getWarrantyExpiresAt()).willReturn(WARRANTY_EXPIRES_AT);
+        given(tool.getStatus()).willReturn(ToolStatus.DEFAULT);
+        given(tool.getScrappedAt()).willReturn(SCRAPPED_AT);
+        given(tool.getToolTypeId()).willReturn(TOOL_TYPE_ID);
+        given(tool.getStorageBoxId()).willReturn(STORAGE_BOX_ID);
+        given(tool.isInventoried()).willReturn(true);
+
+        given(toolTypeDao.findById(TOOL_TYPE_ID)).willReturn(Optional.empty());
+
+        given(storageBoxDao.findById(STORAGE_BOX_ID)).willReturn(Optional.empty());
+
+        CustomAssertions.singleListAssertThat(underTest.getTools(USER_ID))
+            .returns(TOOL_ID, ToolResponse::getToolId)
+            .returns(null, ToolResponse::getToolType)
+            .returns(null, ToolResponse::getStorageBox)
             .returns(BRAND, ToolResponse::getBrand)
             .returns(NAME, ToolResponse::getName)
             .returns(COST, ToolResponse::getCost)

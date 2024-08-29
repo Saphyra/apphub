@@ -82,4 +82,14 @@ class StorageBoxDaoTest {
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
     }
+
+    @Test
+    void deleteByUserIdAndStorageBoxId() {
+        given(uuidConverter.convertDomain(STORAGE_BOX_ID)).willReturn(STORAGE_BOX_ID_STRING);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserIdAndStorageBoxId(USER_ID, STORAGE_BOX_ID);
+
+        then(repository).should().deleteByUserIdAndStorageBoxId(USER_ID_STRING, STORAGE_BOX_ID_STRING);
+    }
 }

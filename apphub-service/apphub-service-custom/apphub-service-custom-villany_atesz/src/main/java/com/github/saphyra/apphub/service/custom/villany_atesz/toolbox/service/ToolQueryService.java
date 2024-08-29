@@ -45,7 +45,7 @@ public class ToolQueryService {
 
     public ToolTypeModel getToolType(UUID toolTypeId) {
         return Optional.ofNullable(toolTypeId)
-            .map(uuid -> toolTypeDao.findByIdValidated(toolTypeId))
+            .flatMap(uuid -> toolTypeDao.findById(toolTypeId))
             .map(storageBox -> ToolTypeModel.builder()
                 .toolTypeId(storageBox.getToolTypeId())
                 .name(storageBox.getName())
@@ -55,7 +55,7 @@ public class ToolQueryService {
 
     public StorageBoxModel getStorageBox(UUID storageBoxId) {
         return Optional.ofNullable(storageBoxId)
-            .map(uuid -> storageBoxDao.findByIdValidated(storageBoxId))
+            .flatMap(uuid -> storageBoxDao.findById(storageBoxId))
             .map(storageBox -> StorageBoxModel.builder()
                 .storageBoxId(storageBox.getStorageBoxId())
                 .name(storageBox.getName())

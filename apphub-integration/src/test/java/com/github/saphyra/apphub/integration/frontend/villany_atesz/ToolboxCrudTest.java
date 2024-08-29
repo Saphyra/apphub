@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.frontend.villany_atesz;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.villany_atesz.VillanyAteszNavigation;
+import com.github.saphyra.apphub.integration.action.frontend.villany_atesz.VillanyAteszToolboxManagePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.villany_atesz.VillanyAteszToolboxPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
@@ -17,10 +18,14 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolStatus;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ScrappedTool;
 import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ToolOverviewItem;
+import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ToolboxManagedStorageBox;
+import com.github.saphyra.apphub.integration.structure.view.villany_atesz.ToolboxManagedToolType;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ToolboxCrudTest extends SeleniumTest {
     private static final String BRAND = "brand";
@@ -28,6 +33,8 @@ public class ToolboxCrudTest extends SeleniumTest {
     private static final String NAME = "name";
     private static final String TOOL_TYPE_NAME = "tool-type-name";
     private static final String STORAGE_BOX_NAME = "storage-box-name";
+    private static final String NEW_TOOL_TYPE_NAME = "new-tool-type-name";
+    private static final String NEW_STORAGE_BOX_NAME = "new-storage-box-name";
 
     @Test(groups = {"fe", "villany-atesz"})
     public void toolboxCrud() {
@@ -54,6 +61,54 @@ public class ToolboxCrudTest extends SeleniumTest {
         descrapTool(driver);
 
         deleteTool(driver);
+
+        VillanyAteszNavigation.openToolboxManage(driver);
+        editToolType(driver);
+        deleteToolType(driver);
+
+        editStorageBox(driver);
+        deleteStorageBox(driver);
+    }
+
+    private void deleteStorageBox(WebDriver driver) {
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> VillanyAteszToolboxManagePageActions.getStorageBoxes(driver))
+            .delete(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> VillanyAteszToolboxManagePageActions.getStorageBoxes(driver).isEmpty())
+            .assertTrue("StorageBox is not deleted.");
+    }
+
+    private void editStorageBox(WebDriver driver) {
+        ToolboxManagedStorageBox storageBox = AwaitilityWrapper.getSingleItemFromListWithWait(() -> VillanyAteszToolboxManagePageActions.getStorageBoxes(driver));
+        storageBox.edit(NEW_STORAGE_BOX_NAME);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !storageBox.editingEnabled())
+            .assertTrue("EditingEnables id still true.");
+
+
+        assertThat(storageBox.getName()).isEqualTo(NEW_STORAGE_BOX_NAME);
+    }
+
+    private void deleteToolType(WebDriver driver) {
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> VillanyAteszToolboxManagePageActions.getToolTypes(driver))
+            .delete(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> VillanyAteszToolboxManagePageActions.getToolTypes(driver).isEmpty())
+            .assertTrue("ToolType is not deleted.");
+    }
+
+    private void editToolType(WebDriver driver) {
+        ToolboxManagedToolType toolType = AwaitilityWrapper.getSingleItemFromListWithWait(() -> VillanyAteszToolboxManagePageActions.getToolTypes(driver));
+        toolType.edit(NEW_TOOL_TYPE_NAME);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !toolType.editingEnabled())
+            .assertTrue("EditingEnables id still true.");
+
+        assertThat(toolType.getName()).isEqualTo(NEW_TOOL_TYPE_NAME);
     }
 
     private void deleteTool(WebDriver driver) {

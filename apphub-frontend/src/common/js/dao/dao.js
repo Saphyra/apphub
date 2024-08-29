@@ -425,6 +425,10 @@ const Endpoints = {
     VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/tool-type"),
     VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/{toolId}/storage-box"),
     VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/inventory/reset-inventoried"),
+    VILLANY_ATESZ_DELETE_TOOL_TYPE: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/tool-type/{toolTypeId}"),
+    VILLANY_ATESZ_EDIT_TOOL_TYPE: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/tool-type/{toolTypeId}"),
+    VILLANY_ATESZ_DELETE_STORAGE_BOX: new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/storage-box/{storageBoxId}"),
+    VILLANY_ATESZ_EDIT_STORAGE_BOX: new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/storage-box/{storageBoxId}"),
 }
 
 export default Endpoints;

@@ -64,4 +64,24 @@ class ToolTypeRepositoryTest {
 
         assertThat(underTest.getByUserId(USER_ID_1)).containsExactly(entity1);
     }
+
+    @Test
+    @Transactional
+    void deleteByUserIdAndToolTypeId() {
+        ToolTypeEntity entity1 = ToolTypeEntity.builder()
+            .toolTypeId(TOOL_TYPE_ID_1)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        ToolTypeEntity entity2 = ToolTypeEntity.builder()
+            .toolTypeId(TOOL_TYPE_ID_2)
+            .userId(USER_ID_1)
+            .build();
+        underTest.save(entity2);
+
+        underTest.deleteByUserIdAndToolTypeId(USER_ID_1, TOOL_TYPE_ID_1);
+
+        assertThat(underTest.findAll()).containsExactly(entity2);
+    }
 }
