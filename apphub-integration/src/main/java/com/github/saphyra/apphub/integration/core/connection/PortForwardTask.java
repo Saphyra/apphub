@@ -14,7 +14,6 @@ public class PortForwardTask {
         log.debug("Forwarding port {} of service {} in namespace {} to local port {}", TestConfiguration.SERVER_PORT, Constants.SERVICE_NAME_MAIN_GATEWAY, TestConfiguration.NAMESPACE_NAME, localPort);
 
         new ProcessBuilder("kubectl", "port-forward", "deployment/%s".formatted(Constants.SERVICE_NAME_MAIN_GATEWAY), "%s:%s".formatted(localPort, TestConfiguration.SERVER_PORT), "-n", TestConfiguration.NAMESPACE_NAME)
-            .inheritIO()
             .start();
     }
 
