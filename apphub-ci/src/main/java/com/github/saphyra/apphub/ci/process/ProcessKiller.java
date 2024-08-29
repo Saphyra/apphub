@@ -28,6 +28,11 @@ public class ProcessKiller {
 
     @SneakyThrows
     public void killByPort(int port) {
+        if (port == 5432) {
+            log.error("This port must not be terminated.", new RuntimeException());
+            return;
+        }
+
         try {
             Process process = Runtime.getRuntime().exec("cmd /c netstat -ano | findstr :" + port);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

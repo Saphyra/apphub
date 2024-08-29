@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.core.connection;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -51,17 +52,27 @@ public class ServerPortConnectionFactory implements PooledObjectFactory<CacheIte
         Integer port = pooledObject.getObject()
             .getItem();
         log.debug("Validating port {}", port);
-        try {
-            Response response = RequestFactory.createRequest()
-                .get(UrlFactory.create(port, Endpoints.INDEX_PAGE));
 
-            log.debug("Response status of port {}: {}", port, response.getStatusCode());
+        Exception exception = null;
 
-            return response.getStatusCode() == 200;
-        } catch (Exception e) {
-            log.warn("ServerPort {} is invalid", port, e);
-            return false;
+        for (int i = 0; i < 5; i++) {
+            try {
+                Response response = RequestFactory.createRequest()
+                    .get(UrlFactory.create(port, Endpoints.INDEX_PAGE));
+
+                log.debug("Response status of port {}: {}", port, response.getStatusCode());
+
+                return response.getStatusCode() == 200;
+            } catch (Exception e) {
+                log.debug("ServerPort {} is invalid", port, e);
+                exception = e;
+            }
+
+            SleepUtil.sleep(1000);
         }
+
+        log.error("ServerPort {} is invalid", port, exception);
+        return false;
     }
 
     @Override

@@ -29,7 +29,8 @@ public class RunTestsTask {
                 "",
                 testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount(),
                 false,
-                false
+                false,
+                ""
             );
         } finally {
             killChromeDriverTask.run();
@@ -49,7 +50,8 @@ public class RunTestsTask {
                 "",
                 testGroups.length() > 0 ? 0 : propertyDao.getRemoteRunPreCreateDriverCount(),
                 true,
-                true
+                true,
+                namespaceNameProvider.getNamespaceName()
             );
         } finally {
             killChromeDriverTask.run();
@@ -68,7 +70,8 @@ public class RunTestsTask {
                 String.join(",", platformProperties.getProdDisabledTestGroups()),
                 propertyDao.getRemoteRunPreCreateDriverCount(),
                 true,
-                false
+                false,
+                "production"
             );
         } finally {
             killChromeDriverTask.run();
@@ -84,7 +87,8 @@ public class RunTestsTask {
         String disabledGroups,
         Integer preCreateDrivers,
         boolean serverConnectionCacheEnabled,
-        boolean databaseConnectionCacheEnabled
+        boolean databaseConnectionCacheEnabled,
+        String namespace
     ) {
         List<String> command = List.of(
             "cmd",
@@ -106,7 +110,7 @@ public class RunTestsTask {
             "-DenabledGroups=%s".formatted(enabledGroups),
             "-DdisabledGroups=%s".formatted(disabledGroups),
             "-DpreCreateWebDrivers=%s".formatted(preCreateDrivers),
-            "-DnamespaceName=%s".formatted(namespaceNameProvider.getNamespaceName()),
+            "-DnamespaceName=%s".formatted(namespace),
             "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
             "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
             "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),

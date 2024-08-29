@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.core.connection;
 
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
@@ -61,16 +62,27 @@ public class DatabasePortConnectionFactory implements PooledObjectFactory<BiWrap
 
     @Override
     public boolean validateObject(PooledObject<BiWrapper<Connection, Integer>> p) {
-        try {
-            Connection connection = p.getObject()
-                .getEntity1();
-            validateConnection(connection);
+        Exception exception = null;
 
-            return true;
-        } catch (Exception e) {
-            log.warn("DatabasePort {} is invalid", p.getObject().getEntity2(), e);
-            return false;
+        for (int i = 0; i < 5; i++) {
+            try {
+                Connection connection = p.getObject()
+                    .getEntity1();
+                validateConnection(connection);
+
+                return true;
+            } catch (Exception e) {
+                log.debug("DatabasePort {} is invalid", p.getObject().getEntity2(), e);
+                exception = e;
+            }
+
+            SleepUtil.sleep(1000);
         }
+
+
+        log.error("DatabasePort {} is invalid", p.getObject().getEntity2(), exception);
+
+        return false;
     }
 
     private static void validateConnection(Connection connection) throws SQLException {

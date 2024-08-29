@@ -89,6 +89,15 @@ public abstract class TestBase {
             System.exit(1);
         }
 
+        try {
+            CacheItemWrapper<Integer> serverPort = ConnectionProvider.getServerPort();
+            ConnectionProvider.releaseServerPort(serverPort);
+            log.info("API connection successfully tested");
+        } catch (Exception e) {
+            log.error("API check failed", e);
+            System.exit(0);
+        }
+
         for (ITestNGMethod method : context.getAllTestMethods()) {
             method.getXmlTest()
                 .getSuite()
