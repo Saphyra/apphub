@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Display startup time of services
 
 ===BUGFIXES===
 
