@@ -92,6 +92,9 @@ endpoint:
       errorPage:
         pattern: /web/error
         method: GET
+      bannedDetails:
+        pattern: /api/user/ban/details
+        method: POST
 logging:
   level:
     root: info

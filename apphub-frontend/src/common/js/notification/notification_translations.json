@@ -110,5 +110,9 @@
     "INCORRECT_PASSWORD": {
         "en": "Incorrect password.",
         "hu": "Hibás jelszó."
+    },
+    "UNKNOWN_ERROR": {
+        "en": "Unknown error",
+        "hu": "Ismeretlen hiba"
     }
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
-import com.github.saphyra.apphub.api.user.model.request.ChangeEmailRequest;
+import com.github.saphyra.apphub.api.user.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;

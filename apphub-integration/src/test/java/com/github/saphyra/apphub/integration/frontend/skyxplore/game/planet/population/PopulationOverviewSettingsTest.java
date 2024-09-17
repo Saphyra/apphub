@@ -70,8 +70,10 @@ public class PopulationOverviewSettingsTest extends SeleniumTest {
         //Check if planet defaults loaded
         SkyXplorePlanetActions.openPopulationOverview(driver);
 
-        assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_AIMING)).isFalse();
-        assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_BUILDING)).isFalse();
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_AIMING)).isFalse();
+            assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_BUILDING)).isFalse();
+        });
 
         //Delete planet defaults
         SkyXplorePopulationOverviewActions.deleteHiddenPlanetDefault(driver);
@@ -139,9 +141,11 @@ public class PopulationOverviewSettingsTest extends SeleniumTest {
         //Check if planet setting loaded
         SkyXplorePlanetActions.openPopulationOverview(driver);
 
-        assertThat(SkyXplorePopulationOverviewActions.getSelectedOrder(driver)).isEqualTo(CitizenOrder.DESCENDING);
-        assertThat(SkyXplorePopulationOverviewActions.getOrderType(driver)).isEqualTo(OrderType.BY_SKILL);
-        assertThat(SkyXplorePopulationOverviewActions.getSelectedSkill(driver)).isEqualTo(SkillType.MELEE_FIGHTING);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXplorePopulationOverviewActions.getSelectedOrder(driver)).isEqualTo(CitizenOrder.DESCENDING);
+            assertThat(SkyXplorePopulationOverviewActions.getOrderType(driver)).isEqualTo(OrderType.BY_SKILL);
+            assertThat(SkyXplorePopulationOverviewActions.getSelectedSkill(driver)).isEqualTo(SkillType.MELEE_FIGHTING);
+        });
 
         //Delete planet default
         SkyXplorePopulationOverviewActions.deleteOrderPlanetDefault(driver);

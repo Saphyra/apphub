@@ -365,6 +365,7 @@ const Endpoints = {
     ACCOUNT_UNMARK_FOR_DELETION: new Endpoint(RequestMethod.POST, "/api/user/ban/{userId}/mark-for-deletion"),
     ACCOUNT_BAN_USER: new Endpoint(RequestMethod.PUT, "/api/user/ban"),
     ACCOUNT_REVOKE_BAN: new Endpoint(RequestMethod.DELETE, "/api/user/ban/{banId}"),
+    ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE: new Endpoint(RequestMethod.POST, "/api/user/ban/details"),
 
     //VillanyAtesz
     VILLANY_ATESZ_CREATE_CONTACT: new Endpoint(RequestMethod.PUT, "/api/villany-atesz/contact"),

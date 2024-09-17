@@ -21,9 +21,4 @@ public class CommonPageController {
         mav.addObject("userId", accessTokenHeader.getUserId());
         return mav;
     }
-
-    @GetMapping(Endpoints.NOTEBOOK_PAGE)
-    String notebook() {
-        return "notebook/notebook";
-    }
 }

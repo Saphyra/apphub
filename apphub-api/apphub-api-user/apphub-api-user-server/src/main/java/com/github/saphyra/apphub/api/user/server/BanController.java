@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.api.user.server;
 
-import com.github.saphyra.apphub.api.user.model.request.BanRequest;
-import com.github.saphyra.apphub.api.user.model.request.MarkUserForDeletionRequest;
-import com.github.saphyra.apphub.api.user.model.response.BanResponse;
-import com.github.saphyra.apphub.api.user.model.response.BanSearchResponse;
+import com.github.saphyra.apphub.api.user.model.ban.BanRequest;
+import com.github.saphyra.apphub.api.user.model.ban.BannedDetailsRequest;
+import com.github.saphyra.apphub.api.user.model.ban.BannedDetailsResponse;
+import com.github.saphyra.apphub.api.user.model.ban.MarkUserForDeletionRequest;
+import com.github.saphyra.apphub.api.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.api.user.model.ban.BanSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -56,4 +58,8 @@ public interface BanController {
 
     @PostMapping(Endpoints.ACCOUNT_BAN_SEARCH)
     List<BanSearchResponse> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(Endpoints.ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE)
+    BannedDetailsResponse getBannedDetails(@RequestBody BannedDetailsRequest request);
+
 }

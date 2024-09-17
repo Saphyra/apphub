@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
-import com.github.saphyra.apphub.api.user.model.response.UserRoleResponse;
+import com.github.saphyra.apphub.api.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;

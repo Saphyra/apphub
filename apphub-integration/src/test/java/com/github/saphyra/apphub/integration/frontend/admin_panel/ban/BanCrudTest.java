@@ -41,7 +41,7 @@ public class BanCrudTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
@@ -80,7 +80,7 @@ public class BanCrudTest extends SeleniumTest {
             .assertTrue("TestUser is not banned.");
 
         new WebDriverWait(testDriver, Duration.ofSeconds(5))
-            .until(ExpectedConditions.presenceOfElementLocated(By.id("message-content")));
+            .until(ExpectedConditions.presenceOfElementLocated(By.id("error-details")));
 
         BanActions.getCurrentBans(adminDriver)
             .stream()

@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
-import com.github.saphyra.apphub.integration.structure.api.ErrorMessageElement;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -109,8 +108,7 @@ public class RedirectionTest extends SeleniumTest {
 
         assertThat(driver.getCurrentUrl()).startsWith(UrlFactory.create(getServerPort(), Endpoints.ERROR_PAGE));
 
-        ErrorMessageElement errorMessageElement = ErrorPageActions.getErrorMessage(driver);
-        assertThat(errorMessageElement.getErrorCode()).isEqualTo(ErrorCode.MISSING_ROLE.name());
-        assertThat(errorMessageElement.getErrorMessage()).isEqualTo(LocalizedText.ERROR_MISSING_ROLE.getText());
+        assertThat(ErrorPageActions.getErrorCode(driver)).isEqualTo(ErrorCode.MISSING_ROLE.name());
+        assertThat(ErrorPageActions.getErrorMessage(driver)).isEqualTo(LocalizedText.ERROR_MISSING_ROLE.getText());
     }
 }

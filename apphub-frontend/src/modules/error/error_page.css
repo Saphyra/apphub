@@ -1,0 +1,17 @@
+#error main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#error main>* {
+    text-align: center;
+}
+
+#error-title {
+    font-size: 32px;
+}
+
+#error-details {
+    font-size: 20px;
+}

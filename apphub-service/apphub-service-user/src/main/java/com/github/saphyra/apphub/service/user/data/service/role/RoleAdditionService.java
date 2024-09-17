@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.role;
 
-import com.github.saphyra.apphub.api.user.model.request.RoleRequest;
+import com.github.saphyra.apphub.api.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;

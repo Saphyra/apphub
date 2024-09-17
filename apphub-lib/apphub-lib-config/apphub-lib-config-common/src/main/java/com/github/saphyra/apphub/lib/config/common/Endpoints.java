@@ -26,7 +26,6 @@ public class Endpoints {
     //PLATFORM
     public static final String HEALTH = "/platform/health";
     public static final String TRANSLATE_ERROR_CODE = "/internal/localization/error-code";
-    public static final String TRANSLATE_KEY = "/internal/localization/key";
 
     public static final String REGISTER_PROCESSOR = "/platform/event-gateway";
     public static final String HEARTBEAT = "/platform/event-gateway/{serviceName}";
@@ -105,6 +104,7 @@ public class Endpoints {
     public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
     public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
     public static final String ACCOUNT_BAN_SEARCH = "/api/user/ban/search";
+    public static final String ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE = "/api/user/ban/details";
 
     //USER-DATA
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";

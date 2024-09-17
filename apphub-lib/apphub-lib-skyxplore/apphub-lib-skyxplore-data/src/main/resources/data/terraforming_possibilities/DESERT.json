@@ -4,9 +4,9 @@
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {
-        "stone": 200,
-        "water": 200,
-        "energy": 200
+        "stone": 100,
+        "water": 100,
+        "energy": 100
       }
     }
   },

@@ -19,6 +19,7 @@ spring:
         - "Path=\
             /,\
             /web,\
+            /web/error,\
             /web/modules,\
             /web/skyxplore,\
             /web/skyxplore/character,\
@@ -63,10 +64,6 @@ spring:
         uri: http://web-content:8080
         predicates:
         - Path=/web/community, /web/calendar
-      - id: error-page
-        uri: http://web-content:8080
-        predicates:
-        - Path=/web/error
       - id: training-pages
         uri: http://training:8080
         predicates:
@@ -177,6 +174,8 @@ role:
     - pattern: /api/user/authentication/session
       method: GET
     - pattern: /api/user
+      method: POST
+    - pattern: /api/user/ban/details
       method: POST
   #Training
   - pattern: /web/training/**

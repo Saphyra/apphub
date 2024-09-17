@@ -30,9 +30,9 @@
     "2": {
       "requiredWorkPoints": 15000,
       "requiredResources": {
-        "energy": 500,
-        "ore": 200,
-        "water": 500
+        "energy": 100,
+        "ore": 100,
+        "water": 100
       }
     }
   }

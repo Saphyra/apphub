@@ -8,10 +8,10 @@ import Favorites from "./modules_page/Favorites";
 import Modules from "./modules_page/Modules";
 import Footer from "../../common/component/Footer";
 import Button from "../../common/component/input/Button";
-import logout from "./controller/LogoutController";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
 import { ToastContainer } from "react-toastify";
+import logout from "../../common/js/LogoutController";
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

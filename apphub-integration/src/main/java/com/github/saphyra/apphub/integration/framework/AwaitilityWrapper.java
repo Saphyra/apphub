@@ -126,6 +126,15 @@ public class AwaitilityWrapper {
         return assertThat(item);
     }
 
+    public static void awaitAssert(Runnable assertions) {
+        createDefault()
+            .until(() -> {
+                assertions.run();
+                return true;
+            })
+            .assertTrue("Assertions failed.");
+    }
+
     public static <T> void awaitAssert(Supplier<T> supplier, Consumer<T> assertions) {
         createDefault()
             .until(() -> {

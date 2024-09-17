@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
-import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
+import com.github.saphyra.apphub.api.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;

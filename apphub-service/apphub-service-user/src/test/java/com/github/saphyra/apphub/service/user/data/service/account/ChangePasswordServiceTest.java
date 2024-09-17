@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
-import com.github.saphyra.apphub.api.user.model.request.ChangePasswordRequest;
+import com.github.saphyra.apphub.api.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;

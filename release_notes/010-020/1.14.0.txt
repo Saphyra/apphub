@@ -5,6 +5,7 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+    Error Page react migration
 
 ===TECHNICAL DEBTS===
 

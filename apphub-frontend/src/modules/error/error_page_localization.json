@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Error occurred",
+        "hu": "Hiba történt"
+    },
+    "page-title": {
+        "en": "Error - Apphub",
+        "hu": "Hiba - Apphub"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "logout": {
+        "en": "Logout",
+        "hu": "Kijelentkezés"
+    },
+    "permanently-banned": {
+        "en": "You are permanently banned. Please contact support if you have any questions.",
+        "hu": "Véglegesen ki lettél tiltva. Ha bármi kérdésed van, fordulj az ügyfélszolgálathoz."
+    },
+    "temporarily-banned": {
+        "en": "You are banned until {expiration}. Please contact support if you have any questions.",
+        "hu": "Ki lettél tiltva {expiration}-ig. Ha bármi kérdésed van, fordulj az ügyfélszolgálathoz."
+    }
+}

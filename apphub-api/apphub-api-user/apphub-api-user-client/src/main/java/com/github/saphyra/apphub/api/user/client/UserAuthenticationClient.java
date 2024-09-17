@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.user.client;
 
-import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -3,6 +3,7 @@ import Utils from "../Utils";
 const fromEpochSeconds = (epoch) => {
     const d = new Date(0);
     d.setUTCSeconds(epoch);
+    console.log(epoch, d);
     return new LocalDateTimeObj(d);
 }
 
@@ -76,6 +77,7 @@ class LocalDateTimeObj {
     }
 
     toString() {
+        console.log(this.date)
         return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + "T" + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
     }
 }

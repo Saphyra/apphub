@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.common;
 
 import com.github.saphyra.apphub.api.user.client.AccountClient;
-import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
+import com.github.saphyra.apphub.api.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
