@@ -15,3 +15,4 @@
     Notebook
         Mark content of archived category archived
         Order archived items to the end of the list
+        Pressing tab in Textarea (Text, Table types) enters 4 spaces instead of tabbing out

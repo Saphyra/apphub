@@ -24,6 +24,16 @@ const TextColumn = ({
                             className={"notebook-table-column-input resizable" + (custom ? " notebook-table-column-input" : "")}
                             onchangeCallback={updateContent}
                             value={columnData.data}
+                            onKeyDownCallback={e => {
+                                if (e.key === "Tab") {
+                                    e.preventDefault();
+    
+                                    const start = e.target.selectionStart;
+                                    const end = e.target.selectionEnd;
+                                    e.target.value = e.target.value.substring(0, start) + "    " + e.target.value.substring(end);
+                                    e.target.selectionStart = e.target.selectionEnd = start + 4;
+                                }
+                            }}
                         />
                     </div>
 
