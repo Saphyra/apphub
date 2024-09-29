@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -9,7 +10,6 @@ import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,6 +48,9 @@ public class NotebookViewFactoryTest {
     @Mock
     private StorageProxy storageProxy;
 
+    @Mock
+    private IsParentArchivedService isParentArchivedService;
+
     @InjectMocks
     private NotebookViewFactory underTest;
 
@@ -72,11 +75,12 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.CATEGORY)
             .title(TITLE)
             .pinned(true)
-            .archived(true)
+            .archived(false)
             .build();
 
         given(listItemDao.findByIdValidated(PARENT)).willReturn(parentListItem);
         given(parentListItem.getTitle()).willReturn(PARENT_TITLE);
+        given(isParentArchivedService.isAnyOfParentsArchived(PARENT)).willReturn(true);
 
         NotebookView result = underTest.create(listItem);
 
@@ -127,10 +131,12 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.LINK)
             .title(TITLE)
             .pinned(true)
+            .archived(false)
             .build();
 
         given(contentDao.findByParentValidated(LIST_ITEM_ID)).willReturn(content);
         given(content.getContent()).willReturn(VALUE);
+        given(isParentArchivedService.isAnyOfParentsArchived(PARENT)).willReturn(false);
 
         NotebookView result = underTest.create(listItem);
 
@@ -139,6 +145,7 @@ public class NotebookViewFactoryTest {
         assertThat(result.getType()).isEqualTo(ListItemType.LINK.name());
         assertThat(result.getValue()).isEqualTo(VALUE);
         assertThat(result.isPinned()).isTrue();
+        assertThat(result.isArchived()).isFalse();
 
         verifyNoInteractions(storageProxy);
     }
@@ -152,6 +159,7 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.IMAGE)
             .title(TITLE)
             .pinned(true)
+            .archived(true)
             .build();
 
         given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
@@ -179,6 +187,7 @@ public class NotebookViewFactoryTest {
             .type(ListItemType.FILE)
             .title(TITLE)
             .pinned(true)
+            .archived(true)
             .build();
 
         given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);

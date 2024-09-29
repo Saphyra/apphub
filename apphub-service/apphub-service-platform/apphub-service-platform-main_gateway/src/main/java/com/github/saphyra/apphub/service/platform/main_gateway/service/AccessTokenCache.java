@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service;
 
 import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.AbstractCache;
+import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.google.common.cache.CacheBuilder;
 import org.springframework.stereotype.Component;

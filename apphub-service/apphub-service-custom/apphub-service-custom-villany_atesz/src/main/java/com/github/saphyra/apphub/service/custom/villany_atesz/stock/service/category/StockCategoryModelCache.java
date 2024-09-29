@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.service.category;
 
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockCategoryModel;
-import com.github.saphyra.apphub.lib.common_util.AbstractCache;
+import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.category.StockCategoryDao;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;

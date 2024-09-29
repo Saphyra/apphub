@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Display startup time of services
+    Notebook
+        Mark archived content of archived category
 
 ===BUGFIXES===
     Notebook

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.cache;
 
 import com.google.common.cache.Cache;
 import lombok.NonNull;

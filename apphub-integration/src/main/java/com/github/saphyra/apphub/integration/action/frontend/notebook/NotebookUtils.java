@@ -20,6 +20,7 @@ import com.github.saphyra.apphub.integration.structure.view.notebook.table.colum
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.saphyra.apphub.integration.core.TestBase.OBJECT_MAPPER_WRAPPER;
@@ -209,10 +210,12 @@ public class NotebookUtils {
         }
     }
 
-    public static void newOnlyTitle(int serverPort, WebDriver driver, String title) {
+    public static void newOnlyTitle(int serverPort, WebDriver driver, String title, String... parents) {
         NotebookActions.newListItem(serverPort, driver);
         NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.ONLY_TITLE);
 
+        Arrays.stream(parents)
+            .forEach(parent -> ParentSelectorActions.selectParent(driver, parent));
         NewOnlyTitleActions.fillTitle(driver, title);
         NewOnlyTitleActions.submit(driver);
 

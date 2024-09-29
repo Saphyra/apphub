@@ -47,7 +47,7 @@ public class ListItem {
             .contains("pinned");
     }
 
-    public void archive(WebDriver driver) {
+    public ListItem archive(WebDriver driver) {
         if (isArchived()) {
             throw new IllegalStateException("ListItem is already archived.");
         }
@@ -60,6 +60,8 @@ public class ListItem {
         AwaitilityWrapper.createDefault()
             .until(() -> NotebookActions.findListItemByTitleValidated(driver, title).isArchived())
             .assertTrue("ListItem is not archived");
+
+        return this;
     }
 
     public boolean isArchived() {
