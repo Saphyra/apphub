@@ -5,10 +5,10 @@ import CitizenOrder from "./order/CitizenOrder";
 import CitizenSortMethodSelector from "./method/CitizenSortMethodSelector";
 import Order from "./Order";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
 import { SettingType } from "../../../../common/hook/Setting";
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import { CitizenComparatorName } from "./CitizenComparator";
+import { hasValue } from "../../../../../../../common/js/Utils";
 
 const SortCitizens = ({
     citizenComparator,
@@ -25,9 +25,9 @@ const SortCitizens = ({
     useEffect(() => setCitizenComparator(citizenComparator.withOrder(order)), [order]);
 
     const getDeleteSettingButton = () => {
-        if (!Utils.hasValue(orderSetting)) {
+        if (!hasValue(orderSetting)) {
             return;
-        } else if (!Utils.hasValue(orderSetting.location)) {
+        } else if (!hasValue(orderSetting.location)) {
             return <Button
                 id="skyxplore-game-population-order-delete-global-default-button"
                 label={localizationHandler.get("delete-global-default")}

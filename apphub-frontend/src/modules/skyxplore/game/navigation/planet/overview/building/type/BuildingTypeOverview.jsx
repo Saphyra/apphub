@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../../../common/component/input/Button";
 import BuildingTypeOverviewDetails from "./details/BuildingTypeOverviewDetails";
-import Utils from "../../../../../../../../common/js/Utils";
+import { isTrue } from "../../../../../../../../common/js/Utils";
 
 const BuildingTypeOverview = ({ surfaceType, surfaceTypeDetails, surfaceLocalizationHandler, tabSettings, updateTabSettings }) => {
     const [displayDetails, setDisplayDetails] = useState(false);
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.building[surfaceType]));
+            setDisplayDetails(isTrue(tabSettings.building[surfaceType]));
         },
         [tabSettings]
     );

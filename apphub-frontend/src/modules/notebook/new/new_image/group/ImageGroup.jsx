@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Utils from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import FileInput from "../../../../../common/component/input/FileInput";
 import "./image_group.css";
+import { copyAndSet } from "../../../../../common/js/Utils";
 
 const ImageGroup = ({ imageGroup, imageGroups, setImageGroups }) => {
     const [files, setFiles] = useState([]);
@@ -26,7 +26,7 @@ const ImageGroup = ({ imageGroup, imageGroups, setImageGroups }) => {
 
         imageGroup.files = file;
 
-        Utils.copyAndSet(imageGroups, setImageGroups);
+        copyAndSet(imageGroups, setImageGroups);
     }
 
     const getFileData = () => {

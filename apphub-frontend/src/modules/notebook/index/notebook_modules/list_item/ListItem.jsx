@@ -1,6 +1,5 @@
 import React from "react";
 import OpenedPageType from "../../../common/OpenedPageType";
-import Utils from "../../../../../common/js/Utils";
 import "./list_item.css";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
@@ -11,6 +10,7 @@ import Constants from "../../../../../common/js/Constants";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import moveListItem from "../../../common/MoveListItemService";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { throwException } from "../../../../../common/js/Utils";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData }) => {
     const handleOnclick = () => {
@@ -36,7 +36,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case OpenedPageType.ONLY_TITLE:
                 break;
             default:
-                Utils.throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
+                throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
         }
     }
 

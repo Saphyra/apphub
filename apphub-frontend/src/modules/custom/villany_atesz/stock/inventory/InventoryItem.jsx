@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Utils from "../../../../../common/js/Utils";
 import Endpoints from "../../../../../common/js/dao/dao";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
 import MapStream from "../../../../../common/js/collection/MapStream";
@@ -10,6 +9,7 @@ import { validateOverviewAmount } from "../../validation/VillanyAteszValidation"
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import NumberInput from "../../../../../common/component/input/NumberInput";
 import ScheduledInputField from "../../../../../common/component/input/ScheduledInputField";
+import { copyAndSet, isBlank } from "../../../../../common/js/Utils";
 
 const InventoryItem = ({ localizationHandler, item, items, categories, setItems, setConfirmationDialogData }) => {
     const [amount, setAmount] = useState(0);
@@ -17,7 +17,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
     const updateProperty = (property, newValue) => {
         item[property] = newValue;
 
-        Utils.copyAndSet(items, setItems);
+        copyAndSet(items, setItems);
     }
 
     const sendRequest = (endpoint, newValue, validation = () => true) => {
@@ -201,7 +201,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("name")}
                         value={item.name}
                         onchangeCallback={(newValue) => updateProperty("name", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME, newValue, nw => !Utils.isBlank(nw))}
+                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME, newValue, nw => !isBlank(nw))}
                         style={{ width: 8 * item.name.length + "px" }}
                     />
                 </td>

@@ -6,9 +6,9 @@ import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
 import useWebSocket from "react-use-websocket";
-import Utils from "../../../../../common/js/Utils";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     //Planet data
@@ -37,7 +37,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     useEffect(() => sendPlanetId(), [sendMessage]);
 
     const sendPlanetId = () => {
-        if (!Utils.hasValue(sendMessage)) {
+        if (!hasValue(sendMessage)) {
             return;
         }
 
@@ -83,26 +83,26 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     useEffect(() => handleEvent(), [lastEvent]);
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 
         switch (lastEvent.eventName) {
             case WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED:
                 const payload = lastEvent.payload;
-                if (Utils.hasValue(payload.queue)) {
+                if (hasValue(payload.queue)) {
                     setQueue(payload.queue);
                 }
-                if (Utils.hasValue(payload.storage)) {
+                if (hasValue(payload.storage)) {
                     setStorage(payload.storage);
                 }
-                if (Utils.hasValue(payload.surfaces)) {
+                if (hasValue(payload.surfaces)) {
                     setSurfaces(payload.surfaces);
                 }
-                if (Utils.hasValue(payload.population)) {
+                if (hasValue(payload.population)) {
                     setPopulation(payload.population);
                 }
-                if (Utils.hasValue(payload.buildings)) {
+                if (hasValue(payload.buildings)) {
                     setBuildings(payload.buildings);
                 }
                 break;

@@ -1,5 +1,5 @@
-import Utils from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
+import { copyAndSet } from "../../../../../../../common/js/Utils";
 import TableRow from "../../../../../common/table/row/TableRow";
 import TableHead from "../../../../../common/table/table_head/TableHead";
 import { moveColumn, removeColumn } from "./TableColumnCrudService";
@@ -14,7 +14,7 @@ export const getTableHeads = (tableHeads, localizationHandler, editingEnabled, s
                 key={tableHead.tableHeadId}
                 localizationHandler={localizationHandler}
                 tableHeadData={tableHead}
-                updateTableHead={() => Utils.copyAndSet(tableHeads, setTableHeads)}
+                updateTableHead={() => copyAndSet(tableHeads, setTableHeads)}
                 moveColumn={(tableHead, moveDirection) => moveColumn(tableHead, moveDirection, tableHeads, setTableHeads, rows, setRows)}
                 removeColumn={tableHead => removeColumn(tableHead, tableHeads, setTableHeads, rows, setRows)}
                 editingEnabled={editingEnabled}
@@ -30,7 +30,7 @@ export const getTableRows = (rows, checklist, editingEnabled, setRows, custom, a
             <TableRow
                 key={row.rowId}
                 rowData={row}
-                updateRow={() => Utils.copyAndSet(rows, setRows)}
+                updateRow={() => copyAndSet(rows, setRows)}
                 updateChecked={row => updateChecked(row, rows, setRows, editingEnabled)}
                 removeRow={row => removeRow(row, rows, setRows)}
                 moveRow={(row, moveDirection) => moveRow(row, moveDirection, rows, setRows)}

@@ -3,11 +3,11 @@ import localizationData from "./planet_header_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../../common/component/input/Button";
 import InputField from "../../../../../../common/component/input/InputField";
-import Utils from "../../../../../../common/js/Utils";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import PlanetConstants from "../PlanetConstants";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import "./planet_header.css";
+import { isBlank } from "../../../../../../common/js/Utils";
 
 const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -18,7 +18,7 @@ const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
     useEffect(() => setModifiedName(planetName), [planetName]);
 
     const changeName = async () => {
-        if (Utils.isBlank(modifiedName)) {
+        if (isBlank(modifiedName)) {
             NotificationService.showError(localizationHandler.get("planet-name-blank"));
             return;
         }

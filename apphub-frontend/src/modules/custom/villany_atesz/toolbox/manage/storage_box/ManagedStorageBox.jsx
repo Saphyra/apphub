@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../common/component/input/InputField";
 import Button from "../../../../../../common/component/input/Button";
-import Utils from "../../../../../../common/js/Utils";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { copyAndSet, isBlank, removeAndSet } from "../../../../../../common/js/Utils";
 
 const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, storageBox, storageBoxes, setStorageBoxes }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -17,7 +17,7 @@ const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, sto
 
         storageBox.name = newName;
 
-        Utils.copyAndSet(storageBoxes, setStorageBoxes);
+        copyAndSet(storageBoxes, setStorageBoxes);
         setEditingEnabled(false);
     }
 
@@ -52,7 +52,7 @@ const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, sto
         await Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX.createRequest(null, { storageBoxId: storageBox.storageBoxId })
             .send();
 
-        Utils.removeAndSet(storageBoxes, sb => sb.storageBoxId === storageBox.storageBoxId, setStorageBoxes);
+        removeAndSet(storageBoxes, sb => sb.storageBoxId === storageBox.storageBoxId, setStorageBoxes);
 
         setConfirmationDialogData(null);
     }
@@ -75,7 +75,7 @@ const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, sto
                     <Button
                         className={"villany-atesz-toolbox-manage-storage-box-save-button"}
                         onclick={save}
-                        disabled={Utils.isBlank(newName)}
+                        disabled={isBlank(newName)}
                         label="_"
                         title={localizationHandler.get("save")}
                     />

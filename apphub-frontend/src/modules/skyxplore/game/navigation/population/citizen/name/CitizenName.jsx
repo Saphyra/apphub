@@ -5,8 +5,8 @@ import InputField from "../../../../../../../common/component/input/InputField";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import localizationData from "./citizen_name_localization.json";
 import Endpoints from "../../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../../common/js/Utils";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../../../common/js/Utils";
 
 const CitizenName = ({ citizenId, name }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -17,7 +17,7 @@ const CitizenName = ({ citizenId, name }) => {
     useEffect(() => setModifiedName(name), [name]);
 
     const renameCitizen = async () => {
-        if (Utils.isBlank(modifiedName)) {
+        if (isBlank(modifiedName)) {
             NotificationService.showError(localizationHandler.get("citizen-name-blank"));
             return;
         }

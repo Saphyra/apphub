@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Stream from "../../../../common/js/collection/Stream";
 import NavigationHistoryItem from "./NavigationHistoryItem";
 import PageName from "./PageName";
-import Utils from "../../../../common/js/Utils";
 import Map from "./map/Map";
 import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
@@ -11,13 +10,14 @@ import "./navigation.css";
 import ModifySurface from "./modify_surface/ModifySurface";
 import Population from "./population/Population";
 import Storage from "./storage/Storage";
+import { addAndSet, removeAndSet, throwException } from "../../../../common/js/Utils";
 
 const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
     useEffect(() => { sessionStorage.skyXplorePageHistory = JSON.stringify(history) }, [history]);
 
     const openPage = (page) => {
-        Utils.addAndSet(history, page, setHistory);
+        addAndSet(history, page, setHistory);
     }
 
     const closePage = () => {
@@ -25,7 +25,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
             .last()
             .orElseThrow("IllegalState", "History is empty.");
 
-        Utils.removeAndSet(history, (item) => item === lastPage, setHistory);
+        removeAndSet(history, (item) => item === lastPage, setHistory);
     }
 
     const lastPage = new Stream(history)
@@ -87,7 +87,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 setConfirmationDialogData={setConfirmationDialogData}
             />
         default:
-            Utils.throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);
+            throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);
     }
 }
 

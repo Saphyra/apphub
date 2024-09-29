@@ -13,7 +13,7 @@ import NumberInput from "../../../../../../../common/component/input/NumberInput
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import RangeInput from "../../../../../../../common/component/input/RangeInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
+import { isBlank } from "../../../../../../../common/js/Utils";
 
 const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -110,7 +110,7 @@ const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }
                     id="skyxplore-game-storage-setting-create-button"
                     label={localizationHandler.get("create")}
                     onclick={createStorageSetting}
-                    disabled={availableCommodities.length === 0 || Utils.isBlank(commodity)}
+                    disabled={availableCommodities.length === 0 || isBlank(commodity)}
                 />
             </div>
         </div>

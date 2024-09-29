@@ -1,5 +1,5 @@
 import Constants from "../../../common/js/Constants";
-import Utils from "../../../common/js/Utils";
+import { getBrowserLanguage } from "../../../common/js/Utils";
 import getDefaultErrorHandler from "../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../common/js/dao/dao";
 
@@ -12,7 +12,7 @@ const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => 
         body: formData,
         headers: {
             'Cache-Control': "no-cache",
-            "BrowserLanguage": Utils.getBrowserLanguage(),
+            "BrowserLanguage": getBrowserLanguage(),
             "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
         }
     }

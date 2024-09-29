@@ -13,7 +13,7 @@ import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import useLoadSetting, { SettingType } from "../../common/hook/Setting";
-import Utils from "../../../../../common/js/Utils";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const Population = ({ footer, closePage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -25,7 +25,7 @@ const Population = ({ footer, closePage, planetId }) => {
     const [orderSetting, setOrderSetting] = useState(null);
 
     const updateHidden = (o) => {
-        if (Utils.hasValue(o)) {
+        if (hasValue(o)) {
             setHiddenProperties(o.data);
         }
 
@@ -33,7 +33,7 @@ const Population = ({ footer, closePage, planetId }) => {
     }
 
     const updateOrder = (o) => {
-        if (Utils.hasValue(o)) {
+        if (hasValue(o)) {
             setCitizenComparator(fromComparatorData(o.data));
         }
 

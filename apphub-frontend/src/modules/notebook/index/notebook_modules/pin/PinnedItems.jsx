@@ -7,8 +7,8 @@ import ListItemMode from "../list_item/ListItemMode";
 import UserSettings from "../../../common/UserSettings";
 import useHasFocus from "../../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
-import Utils from "../../../../../common/js/Utils";
 import PinGroups from "./groups/PinGroups";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [pinnedItems, setPinnedItems] = useState([]);
@@ -50,7 +50,7 @@ const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, l
             const response = await Endpoints.NOTEBOOK_GET_PINNED_ITEMS.createRequest(
                 null,
                 {},
-                Utils.hasValue(pinGroupId) && pinGroupId !== "null" ? { pinGroupId: pinGroupId } : {}
+                hasValue(pinGroupId) && pinGroupId !== "null" ? { pinGroupId: pinGroupId } : {}
             )
                 .send();
             setPinnedItems(response);
@@ -59,7 +59,7 @@ const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, l
     }
 
     const updatePinGroupId = (newId) => {
-        if (Utils.hasValue(newId)) {
+        if (hasValue(newId)) {
             sessionStorage.pinGroupId = newId;
         } else {
             delete sessionStorage.pinGroupId;

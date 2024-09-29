@@ -3,9 +3,9 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./file.css";
-import Utils from "../../../../../../common/js/Utils";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
 import OpenedListItemHeader from "../OpenedListItemHeader";
+import { formatFileSize } from "../../../../../../common/js/Utils";
 
 const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
@@ -65,7 +65,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
                             </tr>
                             <tr>
                                 <td id="notebook-content-file-size-label">{localizationHandler.get("file-size")}</td>
-                                <td id="notebook-content-file-size">{Utils.formatFileSize(fileMetadata.size)}</td>
+                                <td id="notebook-content-file-size">{formatFileSize(fileMetadata.size)}</td>
                             </tr>
                             <tr>
                                 <td id="notebook-content-file-created-at-label">{localizationHandler.get("created-at")}</td>

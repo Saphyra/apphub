@@ -1,10 +1,10 @@
 import "../collection/MapStream";
 import MapStream from "../collection/MapStream";
 import Constants from "../Constants";
-import Utils from "../Utils";
 import Stream from "../collection/Stream";
 import getDefaultErrorHandler from "./DefaultErrorHandler";
 import Response from "./Response";
+import { getBrowserLanguage, hasValue } from "../Utils";
 
 const Endpoint = class {
     constructor(requestMethod, url) {
@@ -110,11 +110,11 @@ const Request = class {
         xhr.open(this.requestMethod, this.url, true);
 
         new MapStream(this.headers)
-            .filter((name, value) => Utils.hasValue(value))
+            .filter((name, value) => hasValue(value))
             .forEach((name, value) => xhr.setRequestHeader(name, value));
 
         xhr.setRequestHeader("Cache-Control", "no-cache");
-        xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, Utils.getBrowserLanguage());
+        xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
         xhr.setRequestHeader(Constants.HEADER_REQUEST_TYPE_NAME, Constants.HEADER_REQUEST_TYPE_VALUE);
 
         return new Promise((resolve, reject) => {

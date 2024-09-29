@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Utils from "../../../../../common/js/Utils";
 import InputField from "../../../../../common/component/input/InputField";
 import ScheduledInputField from "../../../../../common/component/input/ScheduledInputField";
 import Endpoints from "../../../../../common/js/dao/dao";
@@ -9,6 +8,7 @@ import Button from "../../../../../common/component/input/Button";
 import DataListInputField, { DataListInputEntry } from "../../../../../common/component/input/DataListInputField";
 import Optional from "../../../../../common/js/collection/Optional";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { copyAndSet, isBlank } from "../../../../../common/js/Utils";
 
 const ToolboxInventoryItem = ({
     tool,
@@ -30,7 +30,7 @@ const ToolboxInventoryItem = ({
     const updateProperty = (property, value) => {
         tool[property] = value;
 
-        Utils.copyAndSet(tools, setTools);
+        copyAndSet(tools, setTools);
     }
 
     const editInventoried = async (inventoried) => {
@@ -41,7 +41,7 @@ const ToolboxInventoryItem = ({
     }
 
     const editAcquiredAt = async (acquiredAt) => {
-        if (!Utils.isBlank(acquiredAt)) {
+        if (!isBlank(acquiredAt)) {
             await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT.createRequest({ value: acquiredAt }, { toolId: tool.toolId })
                 .send();
         }
@@ -239,7 +239,7 @@ const ToolboxInventoryItem = ({
                             Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
                             newValue,
                             nw => { return { value: nw } },
-                            nw => !Utils.isBlank(nw)
+                            nw => !isBlank(nw)
                         )}
                         style={{ width: 8 * tool.name.length + "px" }}
                     />
@@ -269,14 +269,14 @@ const ToolboxInventoryItem = ({
                             Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
                             newValue,
                             nw => { return { value: nw } },
-                            nw => !Utils.isBlank(nw)
+                            nw => !isBlank(nw)
                         )}
                     />
                 </td>
                 <td>
                     <InputField
                         type="date"
-                        className={"villany-atesz-toolbox-inventory-item-acquired-at" + (Utils.isBlank(tool.acquiredAt) ? " scheduled" : "")}
+                        className={"villany-atesz-toolbox-inventory-item-acquired-at" + (isBlank(tool.acquiredAt) ? " scheduled" : "")}
                         placeholder={localizationHandler.get("acquired-at")}
                         value={tool.acquiredAt}
                         onchangeCallback={editAcquiredAt}

@@ -9,9 +9,9 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import EventName from "../../../../../../common/js/event/EventName";
 import { useUpdateEffect } from "react-use";
-import Utils from "../../../../../../common/js/Utils";
 import Event from "../../../../../../common/js/event/Event";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,7 +21,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
 
     useEffect(() => processEvent(), [lastEvent]);
     useUpdateEffect(() => {
-        if (!Utils.hasValue(pinGroupId)) {
+        if (!hasValue(pinGroupId)) {
             return;
         }
 
@@ -76,7 +76,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
     }
 
     const setOpened = async (pinGroupId) => {
-        if (Utils.hasValue(pinGroupId)) {
+        if (hasValue(pinGroupId)) {
             const response = await Endpoints.NOTEBOOK_PIN_GROUP_OPENED.createRequest(null, { pinGroupId: pinGroupId })
                 .send();
             setPinGroups(response);
@@ -110,7 +110,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
 const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName, setLastEvent }) => {
     //Drag & Drop
     const handleOnDragOver = (e) => {
-        if (Utils.hasValue(pinGroupId)) {
+        if (hasValue(pinGroupId)) {
             e.preventDefault();
         }
     }

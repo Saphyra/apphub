@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Utils from "../../../../../common/js/Utils";
 import NumberInput from "../../../../../common/component/input/NumberInput";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
 import { validateOverviewAmount } from "../../validation/VillanyAteszValidation";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart, setSearch }) => {
     const [amount, setAmount] = useState(1);
@@ -39,7 +39,7 @@ const OverviewItem = ({ localizationHandler, item, activeCart, setItems, setCart
             <td className="villany-atesz-stock-overview-item-in-storage selectable">{inStorage}</td>
             <td className="villany-atesz-stock-overview-item-price selectable">{item.price} Ft</td>
             <td className="villany-atesz-stock-overview-item-stock-value selectable">{item.price * (item.inCar + item.inStorage)} Ft</td>
-            {!Utils.isBlank(activeCart) &&
+            {!isBlank(activeCart) &&
                 <td className="villany-atesz-stock-overview-item-stock-operations">
                     <NumberInput
                         className="villany-atesz-stock-overview-item-add-to-cart-amount"

@@ -1,8 +1,8 @@
 import React from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
 import Endpoints from "../../../../../../../common/js/dao/dao";
+import { isTrue } from "../../../../../../../common/js/Utils";
 
 const CheckboxColumn = ({
     columnData,
@@ -28,7 +28,7 @@ const CheckboxColumn = ({
                     <InputField
                         type="checkbox"
                         onchangeCallback={updateData}
-                        checked={Utils.isTrue(columnData.data)}
+                        checked={isTrue(columnData.data)}
                     />
                 </div>
 

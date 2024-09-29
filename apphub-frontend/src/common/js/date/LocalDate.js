@@ -1,4 +1,4 @@
-import Utils from "../Utils";
+import { hasValue, throwException } from "../Utils";
 
 Date.isLeapYear = function (year) {
     return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
@@ -60,12 +60,12 @@ const extractYear = (date) => {
 
 class LocalDateObj {
     constructor(date) {
-        if (!Utils.hasValue(date)) {
-            Utils.throwException("IllegalArgument", "date must not be null");
+        if (!hasValue(date)) {
+            throwException("IllegalArgument", "date must not be null");
         }
 
         if (!(date instanceof Date)) {
-            Utils.throwException("IllegalArgument", "Date is not a Date");
+            throwException("IllegalArgument", "Date is not a Date");
         }
         this.date = date;
     }
@@ -97,14 +97,14 @@ class LocalDateObj {
 
     isSameMonth(obj) {
         if (!obj instanceof LocalDateObj) {
-            Utils.throwException("IllegalArgument", "obj is not a LocalDateObj");
+            throwException("IllegalArgument", "obj is not a LocalDateObj");
         }
 
         return this.getYear() == obj.getYear() && this.getMonth() == obj.getMonth();
     }
 
     equals(obj) {
-        if (!Utils.hasValue(obj)) {
+        if (!hasValue(obj)) {
             return false;
         }
 

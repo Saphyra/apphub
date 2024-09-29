@@ -1,13 +1,13 @@
 import Constants from "../../../../common/js/Constants";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import Utils from "../../../../common/js/Utils";
+import { hasValue } from "../../../../common/js/Utils";
 import ValidationResult from "../../../../common/js/validation/ValidationResult";
 import localizationData from "./validation_localization.json";
 
 const validateFile = (fileData) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    if(!Utils.hasValue(fileData)){
+    if(!hasValue(fileData)){
         return new ValidationResult(false, localizationHandler.get("file-not-selected"));
     }
 

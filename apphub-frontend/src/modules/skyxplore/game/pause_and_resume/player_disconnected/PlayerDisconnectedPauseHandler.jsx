@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Utils from "../../../../../common/js/Utils";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import localizationData from "./player_disconnected_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const PlayerDisconnectedPauseHandler = ({ lastEvent, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const PlayerDisconnectedPauseHandler = ({ lastEvent, setConfirmationDialogData }
     }
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 

@@ -11,12 +11,12 @@ import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
 import OpenedListItem from "./notebook_modules/OpenedListItem";
 import OpenedPageType from "../common/OpenedPageType";
-import Utils from "../../../common/js/Utils";
 import UserSettings from "../common/UserSettings";
 import Endpoints from "../../../common/js/dao/dao";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import PinnedItems from "./notebook_modules/pin/PinnedItems";
+import { throwException } from "../../../common/js/Utils";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -30,11 +30,11 @@ const NotebookPage = () => {
 
     const setOpenedListItem = (newListItem) => {
         if (!newListItem) {
-            Utils.throwException("IllegalArgument", "newListItem is null");
+            throwException("IllegalArgument", "newListItem is null");
         }
 
         if (!newListItem.type) {
-            Utils.throwException("IllegalArgument", "newListItem.type is null");
+            throwException("IllegalArgument", "newListItem.type is null");
         }
 
         sessionStorage.openedListItem = JSON.stringify(newListItem);

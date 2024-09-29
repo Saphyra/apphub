@@ -5,8 +5,8 @@ import MapStream from "../../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import surfaceLocalizationData from "../../../../common/localization/surface_localization.json";
 import BuildingTypeOverview from "./type/BuildingTypeOverview";
-import Utils from "../../../../../../../common/js/Utils";
 import Button from "../../../../../../../common/component/input/Button";
+import { isTrue } from "../../../../../../../common/js/Utils";
 
 const BuildingOverview = ({ buildings, planetSize, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -16,7 +16,7 @@ const BuildingOverview = ({ buildings, planetSize, tabSettings, updateTabSetting
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.tabs.buildings));
+            setDisplayDetails(isTrue(tabSettings.tabs.buildings));
         },
         [tabSettings]
     );

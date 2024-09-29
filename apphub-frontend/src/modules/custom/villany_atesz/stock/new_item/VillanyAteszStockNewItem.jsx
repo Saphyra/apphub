@@ -10,8 +10,8 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
 import NumberInput from "../../../../../common/component/input/NumberInput";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const VillanyAteszStockNewItem = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -41,12 +41,12 @@ const VillanyAteszStockNewItem = ({ }) => {
     }
 
     const create = async () => {
-        if (Utils.isBlank(stockCategoryId)) {
+        if (isBlank(stockCategoryId)) {
             NotificationService.showError(localizationHandler.get("choose-category"));
             return;
         }
 
-        if (Utils.isBlank(name)) {
+        if (isBlank(name)) {
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }

@@ -3,7 +3,6 @@ import Button from "../../../../../common/component/input/Button";
 import loclaizationData from "./villany_atesz_stock_acquisition_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_acquisition.css";
-import Utils from "../../../../../common/js/Utils";
 import AcquiredItemData from "./AcquiredItemData";
 import Stream from "../../../../../common/js/collection/Stream";
 import AcquiredItem from "./AcquiredItem";
@@ -15,11 +14,12 @@ import useCache from "../../../../../common/hook/Cache";
 import LocalDate from "../../../../../common/js/date/LocalDate";
 import InputField from "../../../../../common/component/input/InputField";
 import VillanyAteszStockAcquisitionHistory from "./history/VillanyAteszStockAcquisitionHistory";
+import { addAndSet, hasValue } from "../../../../../common/js/Utils";
 
 const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(loclaizationData);
 
-    const [items, setItems] = useState(Utils.hasValue(sessionStorage.stockItems) ? JSON.parse(sessionStorage.stockItems) : []);
+    const [items, setItems] = useState(hasValue(sessionStorage.stockItems) ? JSON.parse(sessionStorage.stockItems) : []);
     const [acquiredAt, setAcquiredAt] = useState(LocalDate.now().toString());
     const [displayHistory, setDisplayHistory] = useState(false);
 
@@ -102,7 +102,7 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
                 <Button
                     id="villany-atesz-stock-acquisition-new-item-button"
                     label={localizationHandler.get("new-item")}
-                    onclick={() => Utils.addAndSet(items, new AcquiredItemData(), updateItems)}
+                    onclick={() => addAndSet(items, new AcquiredItemData(), updateItems)}
                 />
 
                 <div>

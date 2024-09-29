@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "./WebSocketEventName";
-import Utils from "../../js/Utils";
+import { hasValue } from "../../js/Utils";
 
 const useConnectToWebSocket = (
     endpoint,
@@ -36,7 +36,7 @@ const useConnectToWebSocket = (
     }
 
     const afterConnected = () => {
-        if (!Utils.hasValue(sendMessage)) {
+        if (!hasValue(sendMessage)) {
             return;
         }
 
@@ -44,7 +44,7 @@ const useConnectToWebSocket = (
     }
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 

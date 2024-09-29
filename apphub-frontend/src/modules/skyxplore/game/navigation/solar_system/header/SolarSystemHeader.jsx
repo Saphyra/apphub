@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Utils from "../../../../../../common/js/Utils";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import SolarSystemConstants from "../SolarSystemConstants";
 import Endpoints from "../../../../../../common/js/dao/dao";
@@ -8,6 +7,7 @@ import InputField from "../../../../../../common/component/input/InputField";
 import localizationData from "./solar_system_header_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./solar_system_header.css";
+import { isBlank } from "../../../../../../common/js/Utils";
 
 const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolarSystemName }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -18,7 +18,7 @@ const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolar
     useEffect(() => setModifiedName(solarSystemName), [solarSystemName]);
 
     const changeName = async () => {
-        if (Utils.isBlank(modifiedName)) {
+        if (isBlank(modifiedName)) {
             NotificationService.showError(localizationHandler.get("solar-system-name-blank"));
             return;
         }

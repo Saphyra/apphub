@@ -12,11 +12,11 @@ import Footer from "../../../../common/component/Footer";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
-import Utils from "../../../../common/js/Utils";
 import BanUserInfo from "./user_info/BanUserInfo";
 import BanUserDeletion from "./deletion/BanUserDeletion";
 import BanUserRole from "./role/BanUserRole";
 import BanUserBannedRoles from "./table/BanUserBannedRoles";
+import { hasValue } from "../../../../common/js/Utils";
 
 const BanDetailsPage = () => {
     const { userId } = useParams();
@@ -34,7 +34,7 @@ const BanDetailsPage = () => {
         <div id="ban-details" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
 
-            {Utils.hasValue(userData) &&
+            {hasValue(userData) &&
                 <main>
                     <BanUserInfo
                         userData={userData}
@@ -69,7 +69,7 @@ const BanDetailsPage = () => {
                 ]}
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

@@ -1,14 +1,14 @@
-import Utils from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../../../common/MoveDirection";
 import TableColumnData from "../../../../../common/table/row/column/TableColumnData";
 import TableHeadData from "../../../../../common/table/table_head/TableHeadData";
 import ColumnType from "../../../../../common/table/row/column/type/ColumnType";
+import { copyAndSet, generateRandomId, throwException } from "../../../../../../../common/js/Utils";
 
 export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange, custom) => {
     const columnIndex = indexRange(tableHeads);
 
-    const newTableHead = new TableHeadData(columnIndex, "", Utils.generateRandomId());
+    const newTableHead = new TableHeadData(columnIndex, "", generateRandomId());
     const copy = new Stream(tableHeads)
         .add(newTableHead)
         .toList();
@@ -20,7 +20,7 @@ export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange, 
             row.columns.push(newColumn);
         });
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }
 
 export const moveColumn = (tableHead, moveDirection, tableHeads, setTableHeads, rows, setRows) => {
@@ -39,7 +39,7 @@ export const moveColumn = (tableHead, moveDirection, tableHeads, setTableHeads, 
             otherTableHeadIndex = tableHeadIndex + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherTableHead = orderedItems[otherTableHeadIndex];
@@ -55,7 +55,7 @@ export const moveColumn = (tableHead, moveDirection, tableHeads, setTableHeads, 
     tableHead.columnIndex = newColumnIndex;
     otherTableHead.columnIndex = originalColumnIndex;
 
-    Utils.copyAndSet(tableHeads, setTableHeads);
+    copyAndSet(tableHeads, setTableHeads);
 
     new Stream(rows)
         .forEach(row => {
@@ -73,7 +73,7 @@ export const moveColumn = (tableHead, moveDirection, tableHeads, setTableHeads, 
             otherColumn.columnIndex = originalColumnIndex;
         });
     
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }
 
 export const removeColumn = (tableHead, tableHeads, setTableHeads, rows, setRows) => {
@@ -90,5 +90,5 @@ export const removeColumn = (tableHead, tableHeads, setTableHeads, rows, setRows
             row.columns = columns;
         });
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }

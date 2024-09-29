@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
+import { copyAndSet, throwException } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import MoveDirection from "../../../../../common/MoveDirection";
@@ -18,11 +18,11 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
                     .send();
                 break;
             default:
-                Utils.throwException("IllegalArgument", "Unsupported updateType: " + updateType);
+                throwException("IllegalArgument", "Unsupported updateType: " + updateType);
         }
     }
 
-    Utils.copyAndSet(items, setItems);
+    copyAndSet(items, setItems);
 }
 
 export const removeItem = async (item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler) => {
@@ -79,7 +79,7 @@ export const moveItem = (item, moveDirection, items, setItems) => {
             newIndex = itemIndex + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherItem = orderedItems[newIndex];
@@ -95,5 +95,5 @@ export const moveItem = (item, moveDirection, items, setItems) => {
     item.index = newOrder;
     otherItem.index = originalOrder;
 
-    Utils.copyAndSet(items, setItems);
+    copyAndSet(items, setItems);
 }

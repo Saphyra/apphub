@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import Utils from "../js/Utils";
+import { hasValue } from "../js/Utils";
 
 const useCache = (key, request, mapper, enabled = true) => {
     const { data, refetch } = useQuery(
@@ -17,7 +17,7 @@ const useCache = (key, request, mapper, enabled = true) => {
 
     useEffect(
         () => {
-            if (Utils.hasValue(data)) {
+            if (hasValue(data)) {
                 mapper(data);
             }
         },

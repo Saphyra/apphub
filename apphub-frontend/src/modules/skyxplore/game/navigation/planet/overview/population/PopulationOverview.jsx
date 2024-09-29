@@ -4,8 +4,8 @@ import localizationData from "./population_overview_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import NavigationHistoryItem from "../../../NavigationHistoryItem";
 import PageName from "../../../PageName";
-import Utils from "../../../../../../../common/js/Utils";
 import Button from "../../../../../../../common/component/input/Button";
+import { isTrue } from "../../../../../../../common/js/Utils";
 
 const PopulationOverview = ({ population, capacity, openPage, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -14,7 +14,7 @@ const PopulationOverview = ({ population, capacity, openPage, planetId, tabSetti
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.tabs.population));
+            setDisplayDetails(isTrue(tabSettings.tabs.population));
         },
         [tabSettings]
     );

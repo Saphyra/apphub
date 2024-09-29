@@ -3,20 +3,20 @@ import "./error_report_list_item.css";
 import localizationData from "./error_report_list_item_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Utils from "../../../../../../common/js/Utils";
 import Button from "../../../../../../common/component/input/Button";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import InputField from "../../../../../../common/component/input/InputField";
 import ErrorReportStatus from "../../../ErrorReportStatus";
+import { addAndSet, removeAndSet } from "../../../../../../common/js/Utils";
 
 const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErrorReports, refreshCallback, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const setCheckedStatus = (checked) => {
         if (checked) {
-            Utils.addAndSet(selectedErrorReports, errorReport.id, setSelectedErrorReports);
+            addAndSet(selectedErrorReports, errorReport.id, setSelectedErrorReports);
         } else {
-            Utils.removeAndSet(selectedErrorReports, id => id === errorReport.id, setSelectedErrorReports);
+            removeAndSet(selectedErrorReports, id => id === errorReport.id, setSelectedErrorReports);
         }
     }
 

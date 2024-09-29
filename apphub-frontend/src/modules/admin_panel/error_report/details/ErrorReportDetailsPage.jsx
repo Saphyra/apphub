@@ -6,7 +6,6 @@ import sessionChecker from "../../../../common/js/SessionChecker";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import Header from "../../../../common/component/Header";
 import Footer from "../../../../common/component/Footer";
-import Utils from "../../../../common/js/Utils";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import useLoader from "../../../../common/hook/Loader";
@@ -17,6 +16,7 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import ErrorReportStatus from "../ErrorReportStatus";
+import { hasValue } from "../../../../common/js/Utils";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();
@@ -91,7 +91,7 @@ const ErrorReportDetailsPage = () => {
                     <div className="error-report-details-value">{errorReport.responseBody}</div>
                 </fieldset>
 
-                {Utils.hasValue(errorReport.exception) &&
+                {hasValue(errorReport.exception) &&
                     <div>
                         <fieldset>
                             <legend>{localizationHandler.get("thread")}</legend>
@@ -160,7 +160,7 @@ const ErrorReportDetailsPage = () => {
                 ]}
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

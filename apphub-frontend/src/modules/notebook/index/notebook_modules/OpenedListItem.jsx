@@ -1,7 +1,6 @@
 import React from "react";
 import OpenedPageType from "../../common/OpenedPageType";
 import Category from "./opened_item/category/Category";
-import Utils from "../../../../common/js/Utils";
 import Text from "./opened_item/text/Text";
 import "./opened_item/opened_list_item.css";
 import Checklist from "./opened_item/checklist/Checklist";
@@ -10,6 +9,7 @@ import Image from "./opened_item/image/Image";
 import File from "./opened_item/file/File";
 import Search from "./opened_item/category/Search";
 import PinGroupManager from "./opened_item/manage_pin_groups/PinGroupManager";
+import { throwException } from "../../../../common/js/Utils";
 
 const OpenedListItem = ({
     localizationHandler,
@@ -115,7 +115,7 @@ const OpenedListItem = ({
                     lastEvent={lastEvent}
                 />
             default:
-                Utils.throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);
+                throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);
         }
     }
 

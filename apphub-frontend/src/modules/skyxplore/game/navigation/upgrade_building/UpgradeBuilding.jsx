@@ -7,9 +7,9 @@ import buildingLocalizationData from "../../common/localization/building_localiz
 import itemDescriptionData from "../../common/localization/item_description.json";
 import { useQuery } from "react-query";
 import Endpoints from "../../../../../common/js/dao/dao";
-import Utils from "../../../../../common/js/Utils";
 import BuildingEffectTable from "../../common/component/building_effect/BuildingEffectTable";
 import ConstructionCost from "../../common/component/construction_cost/ConstructionCost";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType, planetId, buildingId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -32,7 +32,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
 
     useEffect(
         () => {
-            if (Utils.hasValue(data)) {
+            if (hasValue(data)) {
                 setItemData(data);
             }
         },
@@ -73,7 +73,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
                         {itemDesctiptionLocalizationHandler.get(dataId)}
                     </div>
 
-                    {Utils.hasValue(itemData) &&
+                    {hasValue(itemData) &&
                         <BuildingEffectTable
                             id="skyxplore-game-upgrade-building-effect"
                             itemData={itemData}
@@ -82,7 +82,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
                         />
                     }
 
-                    {Utils.hasValue(itemData) &&
+                    {hasValue(itemData) &&
                         <ConstructionCost
                             id="skyxplore-game-upgrade-building-construction-cost"
                             constructionRequirements={itemData.constructionRequirements[currentLevel + 1]}

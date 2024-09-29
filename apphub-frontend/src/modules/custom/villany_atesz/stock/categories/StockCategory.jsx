@@ -3,8 +3,8 @@ import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../../../common/js/dao/dao";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const StockCategory = ({ localizationHandler, category, setCategories, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -59,7 +59,7 @@ const StockCategory = ({ localizationHandler, category, setCategories, setConfir
     }
 
     const save = async () => {
-        if(Utils.isBlank(modifiedName)){
+        if(isBlank(modifiedName)){
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }

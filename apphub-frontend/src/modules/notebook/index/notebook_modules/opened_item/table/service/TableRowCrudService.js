@@ -1,10 +1,10 @@
-import Utils from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../../../common/MoveDirection";
 import TableRowData from "../../../../../common/table/row/TableRowData";
 import TableColumnData from "../../../../../common/table/row/column/TableColumnData";
 import ColumnType from "../../../../../common/table/row/column/type/ColumnType";
 import RowIndexRange from "../../../../../common/table/row/RowIndexRange";
+import { copyAndSet, throwException } from "../../../../../../../common/js/Utils";
 
 export const newRow = (rows, tableHeads, setRows, indexRange, custom) => {
     const rowIndex = indexRange(rows);
@@ -66,7 +66,7 @@ export const moveRow = (row, moveDirection, rows, setRows) => {
             otherRowPosition = rowPosition + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherRow = orderedItems[otherRowPosition];
@@ -82,7 +82,7 @@ export const moveRow = (row, moveDirection, rows, setRows) => {
     row.rowIndex = newRowIndex;
     otherRow.rowIndex = originalRowIndex;
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }
 
 export const removeRow = (row, rows, setRows) => {

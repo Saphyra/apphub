@@ -2,7 +2,7 @@ import React from "react";
 import ByStatOptions from "./ByStatOptions";
 import BySkillOptions from "./BySkillOptions";
 import { CitizenComparatorName } from "../../CitizenComparator";
-import Utils from "../../../../../../../../../common/js/Utils";
+import { throwException } from "../../../../../../../../../common/js/Utils";
 
 const ComparatorMethodOptions = ({
     citizenComparator,
@@ -29,7 +29,7 @@ const ComparatorMethodOptions = ({
                 setSelectedSkill={setSelectedSkill}
             />
         default:
-            Utils.throwException("IllegalArgument", "Unhandled CitizenComparator " + citizenComparator.name);
+            throwException("IllegalArgument", "Unhandled CitizenComparator " + citizenComparator.name);
     }
 }
 

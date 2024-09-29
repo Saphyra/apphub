@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Endpoints from "../../../../../../common/js/dao/dao";
 import { useQuery } from "react-query";
-import Utils from "../../../../../../common/js/Utils";
 import Stream from "../../../../../../common/js/collection/Stream";
 import AvailableBuilding from "./available_building/AvailableBuilding";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [availableBuildings, setAvailableBuildings] = useState([]);
@@ -22,7 +22,7 @@ const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => 
 
     useEffect(
         () => {
-            if (Utils.hasValue(buildingsData)) {
+            if (hasValue(buildingsData)) {
                 setAvailableBuildings(buildingsData);
             }
         },

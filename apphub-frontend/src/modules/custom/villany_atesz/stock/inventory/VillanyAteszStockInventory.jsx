@@ -5,11 +5,11 @@ import InputField from "../../../../../common/component/input/InputField";
 import localizationData from "./villany_atesz_stock_inventory_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_inventory.css";
-import Utils from "../../../../../common/js/Utils";
 import InventoryItem from "./InventoryItem";
 import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -32,7 +32,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const getItems = () => {
         return new Stream(items)
             .filter(item => {
-                return Utils.isBlank(search) ||
+                return isBlank(search) ||
                     new Stream([categories[item.stockCategoryId], item.name, item.serialNumber, item.inCar, item.inStorage])
                         .join("")
                         .toLowerCase()

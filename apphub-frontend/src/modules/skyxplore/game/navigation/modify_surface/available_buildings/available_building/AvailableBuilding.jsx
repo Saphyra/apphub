@@ -6,10 +6,10 @@ import itemDescriptionLocalizationData from "../../../../common/localization/ite
 import BuildingEffectTable from "../../../../common/component/building_effect/BuildingEffectTable";
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import { useQuery } from "react-query";
-import Utils from "../../../../../../../common/js/Utils";
 import ConstructionCost from "../../../../common/component/construction_cost/ConstructionCost";
 import Button from "../../../../../../../common/component/input/Button";
 import localizationData from "./available_building_localization.json";
+import { hasValue } from "../../../../../../../common/js/Utils";
 
 const AvailableBuilding = ({ buildingDataId, surfaceType, constructCallback }) => {
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
@@ -32,7 +32,7 @@ const AvailableBuilding = ({ buildingDataId, surfaceType, constructCallback }) =
 
     useEffect(
         () => {
-            if (Utils.hasValue(data)) {
+            if (hasValue(data)) {
                 setBuildingData(data);
             }
         },
@@ -55,7 +55,7 @@ const AvailableBuilding = ({ buildingDataId, surfaceType, constructCallback }) =
 
             <div className="skyxplore-game-available-building-table-wrapper">
 
-                {Utils.hasValue(buildingData) &&
+                {hasValue(buildingData) &&
                     <BuildingEffectTable
                         className="skyxplore-game-available-building-effect"
                         surfaceType={surfaceType}
@@ -64,7 +64,7 @@ const AvailableBuilding = ({ buildingDataId, surfaceType, constructCallback }) =
                     />
                 }
 
-                {Utils.hasValue(buildingData) &&
+                {hasValue(buildingData) &&
                     <ConstructionCost
                         className="skyxplore-game-available-building-construction-requirements"
                         constructionRequirements={buildingData.constructionRequirements[1]}

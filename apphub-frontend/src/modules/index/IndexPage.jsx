@@ -13,7 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import Constants from "../../common/js/Constants";
 import Footer from "../../common/component/Footer";
 import LanguageSelector from "../../common/component/language_selector/LanguageSelector";
-import Utils from "../../common/js/Utils";
+import { setCookie } from "../../common/js/Utils";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -55,7 +55,7 @@ const IndexPage = () => {
                 centerButtons={<LanguageSelector
                     currentLanguage={localizationHandler.getLocale()}
                     updateCallback={(locale) => {
-                        Utils.setCookie(Constants.COOKIE_LOCALE, locale);
+                        setCookie(Constants.COOKIE_LOCALE, locale);
                         window.location.reload();
                     }}
                 />}

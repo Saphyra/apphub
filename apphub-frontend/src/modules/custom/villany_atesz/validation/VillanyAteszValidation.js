@@ -1,5 +1,5 @@
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import Utils from "../../../../common/js/Utils"
+import { isBlank } from "../../../../common/js/Utils";
 import Stream from "../../../../common/js/collection/Stream";
 import ValidationResult from "../../../../common/js/validation/ValidationResult"
 import localizationData from "./villany_atesz_validation_localization.json";
@@ -7,7 +7,7 @@ import localizationData from "./villany_atesz_validation_localization.json";
 const localizationHandler = new LocalizationHandler(localizationData);
 
 export const validateContact = (contact) => {
-    if (Utils.isBlank(contact.name)) {
+    if (isBlank(contact.name)) {
         return new ValidationResult(false, localizationHandler.get("blank-name"))
     }
 
@@ -15,11 +15,11 @@ export const validateContact = (contact) => {
 }
 
 export const validateAcquiredItems = (items) => {
-    if (validateList(items, item => Utils.isBlank(item.stockCategoryId))) {
+    if (validateList(items, item => isBlank(item.stockCategoryId))) {
         return new ValidationResult(false, localizationHandler.get("no-category-selected"));
     }
 
-    if (validateList(items, item => Utils.isBlank(item.stockItemId))) {
+    if (validateList(items, item => isBlank(item.stockItemId))) {
         return new ValidationResult(false, localizationHandler.get("no-item-selected"));
     }
 

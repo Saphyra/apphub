@@ -3,7 +3,7 @@ import ConstructionHeader from "./ConstructionHeader";
 import DeconstructionHeader from "./DeconstructionHeader";
 import TerraformationHeader from "./TerraformationHeader";
 import QueueItemType from "../../../../../common/constants/QueueItemType";
-import Utils from "../../../../../../../../common/js/Utils";
+import { throwException } from "../../../../../../../../common/js/Utils";
 
 const QueueItemHeader = ({ queueItem, localizationHandler }) => {
     switch (queueItem.type) {
@@ -23,7 +23,7 @@ const QueueItemHeader = ({ queueItem, localizationHandler }) => {
                 localizationHandler={localizationHandler}
             />
         default:
-            Utils.throwException("IllegalArgument", "Unhandled QueueItemType " + queueItem.type);
+            throwException("IllegalArgument", "Unhandled QueueItemType " + queueItem.type);
     }
 }
 

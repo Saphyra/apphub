@@ -9,8 +9,8 @@ import Endpoints from "../../../../../common/js/dao/dao";
 import useLoader from "../../../../../common/hook/Loader";
 import Stream from "../../../../../common/js/collection/Stream";
 import StockCategory from "./StockCategory";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const VillanyAteszStockCategories = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,7 +23,7 @@ const VillanyAteszStockCategories = ({ setConfirmationDialogData }) => {
     useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
 
     const create = async () => {
-        if(Utils.isBlank(newCategoryName)){
+        if(isBlank(newCategoryName)){
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }

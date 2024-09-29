@@ -2,8 +2,8 @@ import React from "react";
 import ToolStatus from "../ToolStatus";
 import Button from "../../../../../common/component/input/Button";
 import Endpoints from "../../../../../common/js/dao/dao";
-import Utils from "../../../../../common/js/Utils";
 import Optional from "../../../../../common/js/collection/Optional";
+import { copyAndSet } from "../../../../../common/js/Utils";
 
 const StatusMapping = {};
 StatusMapping[ToolStatus.DEFAULT] = "";
@@ -15,7 +15,7 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
         const response = await Endpoints.VILLANY_ATESZ_SET_TOOL_STATUS.createRequest({ value: status }, { toolId: tool.toolId })
             .send();
 
-        Utils.copyAndSet(response, setTools);
+        copyAndSet(response, setTools);
     }
 
     return (

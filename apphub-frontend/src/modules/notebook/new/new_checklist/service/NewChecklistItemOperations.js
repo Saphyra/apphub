@@ -1,4 +1,4 @@
-import Utils from "../../../../../common/js/Utils";
+import { throwException } from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import ChecklistItemData from "../../../common/checklist_item/ChecklistItemData";
@@ -37,7 +37,7 @@ export const moveItem = (item, moveDirection, items, updateItem) => {
             newIndex = itemIndex + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unhandled MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unhandled MoveDirection: " + moveDirection);
     }
 
     const otherItem = orderedItems[newIndex];

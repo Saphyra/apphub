@@ -1,5 +1,5 @@
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import Utils from "../../../../common/js/Utils";
+import { isBlank } from "../../../../common/js/Utils";
 import Stream from "../../../../common/js/collection/Stream";
 import ValidationResult from "../../../../common/js/validation/ValidationResult";
 import ColumnType from "../table/row/column/type/ColumnType";
@@ -19,7 +19,7 @@ const validateColumnData = (rows) => {
 const validateColumn = (column, localizationHandler) => {
     switch (column.columnType) {
         case ColumnType.LINK:
-            if(Utils.isBlank(column.data.label)){
+            if(isBlank(column.data.label)){
                 return new ValidationResult(false, localizationHandler.get("link-label-blank"));
             }
         default:

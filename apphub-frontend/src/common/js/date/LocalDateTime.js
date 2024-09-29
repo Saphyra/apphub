@@ -1,4 +1,4 @@
-import Utils from "../Utils";
+import { hasValue, throwException } from "../Utils";
 
 const fromEpochSeconds = (epoch) => {
     const d = new Date(0);
@@ -17,12 +17,12 @@ const now = () => {
 
 class LocalDateTimeObj {
     constructor(date) {
-        if (!Utils.hasValue(date)) {
-            Utils.throwException("IllegalArgument", "date must not be null");
+        if (!hasValue(date)) {
+            throwException("IllegalArgument", "date must not be null");
         }
 
         if (!(date instanceof Date)) {
-            Utils.throwException("IllegalArgument", "Date is not a Date");
+            throwException("IllegalArgument", "Date is not a Date");
         }
 
         this.date = date;
@@ -61,7 +61,7 @@ class LocalDateTimeObj {
     }
 
     equals(obj) {
-        if (!Utils.hasValue(obj)) {
+        if (!hasValue(obj)) {
             return false;
         }
 

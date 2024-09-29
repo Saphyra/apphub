@@ -1,4 +1,4 @@
-import Utils from "../Utils";
+import { hasValue, throwException } from "../Utils";
 
 const Optional = class {
     constructor(value) {
@@ -24,7 +24,7 @@ const Optional = class {
     }
 
     isPresent() {
-        return Utils.hasValue(this.value);
+        return hasValue(this.value);
     }
 
     map(mapper) {
@@ -53,7 +53,7 @@ const Optional = class {
 
     orElseThrow(exceptionType, exceptionMessage) {
         if (!this.isPresent()) {
-            Utils.throwException(exceptionType, exceptionMessage);
+            throwException(exceptionType, exceptionMessage);
         }
 
         return this.value;

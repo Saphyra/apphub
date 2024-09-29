@@ -3,11 +3,11 @@ import localizationData from "./villany_atesz_stock_acquisition_history_localiza
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import useLoader from "../../../../../../common/hook/Loader";
 import Endpoints from "../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../common/js/Utils";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../../common/js/collection/Stream";
 import AcquisitionHistoryItem from "./AcquisitionHistoryItem";
 import "./villany_atesz_stock_acquisition_history.css";
+import { hasValue, isBlank, numberOfDigits } from "../../../../../../common/js/Utils";
 
 const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -22,7 +22,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     useEffect(() => setDefaultSelectedDate(), [dates]);
 
     const loadAcquisitions = () => {
-        if (Utils.isBlank(selectedDate)) {
+        if (isBlank(selectedDate)) {
             return;
         }
 
@@ -35,7 +35,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     }
 
     const setDefaultSelectedDate = () => {
-        if (!Utils.isBlank(selectedDate)) {
+        if (!isBlank(selectedDate)) {
             return;
         }
 
@@ -61,7 +61,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const getContentForSelectedDate = () => {
         const padding = new Stream(acquisitions)
             .map(item => item.amount)
-            .max(Utils.numberOfDigits)
+            .max(numberOfDigits)
             .orElse(0);
 
 
@@ -89,7 +89,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
                 />
             </fieldset>
 
-            {Utils.hasValue(selectedDate) &&
+            {hasValue(selectedDate) &&
                 <ul>
                     {getContentForSelectedDate()}
                 </ul>

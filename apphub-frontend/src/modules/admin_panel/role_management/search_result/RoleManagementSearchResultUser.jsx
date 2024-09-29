@@ -6,9 +6,9 @@ import Stream from "../../../../common/js/collection/Stream";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import InputField from "../../../../common/component/input/InputField";
-import Utils from "../../../../common/js/Utils";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import Endpoints from "../../../../common/js/dao/dao";
+import { hasValue } from "../../../../common/js/Utils";
 
 const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setUsers, query }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
@@ -126,7 +126,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
             <td className="role-management-search-result-user-granted-roles">
                 {getGrantedRoles()}
 
-                {Utils.hasValue(roleToGrant) &&
+                {hasValue(roleToGrant) &&
                     <ConfirmationDialog
                         id={"role-management-grant-role-confirmation"}
                         title={localizationHandler.get("grant-role")}
@@ -158,7 +158,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
             <td className="role-management-search-result-user-available-roles">
                 {getAvailableRoles()}
 
-                {Utils.hasValue(roleToRevoke) &&
+                {hasValue(roleToRevoke) &&
                     <ConfirmationDialog
                         id={"role-management-revoke-role-confirmation"}
                         title={localizationHandler.get("revoke-role")}

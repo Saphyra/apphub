@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./villany_atesz_stock_overview_cart_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_overview_cart.css";
-import Utils from "../../../../../../common/js/Utils";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../../common/js/collection/Stream";
@@ -12,6 +11,7 @@ import Endpoints from "../../../../../../common/js/dao/dao";
 import CartItem from "./CartItem";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
 import MapStream from "../../../../../../common/js/collection/MapStream";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -135,7 +135,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                 />
             </div>
 
-            {Utils.hasValue(cart) &&
+            {hasValue(cart) &&
                 <div id="villany-atesz-stock-overview-cart-details">
                     <fieldset>
                         <legend>{localizationHandler.get("operations")}</legend>

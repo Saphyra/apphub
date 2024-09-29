@@ -7,7 +7,6 @@ import ErrorReportStatus from "../ErrorReportStatus";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../../common/js/SessionChecker";
 import NotificationService from "../../../../common/js/notification/NotificationService";
-import Utils from "../../../../common/js/Utils";
 import Endpoints from "../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../common/component/input/Button";
@@ -19,6 +18,7 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 import { ToastContainer } from "react-toastify";
 import useHasFocus from "../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import { hasValue, nullIfEmpty } from "../../../../common/js/Utils";
 
 const ErrorReportOverviewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -52,14 +52,14 @@ const ErrorReportOverviewPage = () => {
     const load = () => {
         const fetch = async () => {
             const payload = {
-                message: Utils.nullIfEmpty(filterData.message),
-                statusCode: Utils.nullIfEmpty(filterData.statusCode),
-                startTime: Utils.nullIfEmpty(filterData.startTime),
-                endTime: Utils.nullIfEmpty(filterData.endTime),
+                message: nullIfEmpty(filterData.message),
+                statusCode: nullIfEmpty(filterData.statusCode),
+                startTime: nullIfEmpty(filterData.startTime),
+                endTime: nullIfEmpty(filterData.endTime),
                 pageSize: filterData.pageSize,
                 page: filterData.page,
-                status: Utils.nullIfEmpty(filterData.status),
-                service: Utils.nullIfEmpty(filterData.service),
+                status: nullIfEmpty(filterData.status),
+                service: nullIfEmpty(filterData.service),
             }
 
             const response = await Endpoints.ADMIN_PANEL_GET_ERROR_REPORTS.createRequest(payload)
@@ -250,7 +250,7 @@ const ErrorReportOverviewPage = () => {
                 ]}
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

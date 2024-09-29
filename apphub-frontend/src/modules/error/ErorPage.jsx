@@ -11,10 +11,10 @@ import logout from "../../common/js/LogoutController";
 import Endpoints, { ResponseStatus } from "../../common/js/dao/dao";
 import ErrorHandler from "../../common/js/dao/ErrorHandler";
 import Optional from "../../common/js/collection/Optional";
-import Utils from "../../common/js/Utils";
 import LocalDateTime from "../../common/js/date/LocalDateTime";
 import "./error_page.css";
 import useLoader from "../../common/hook/Loader";
+import { hasValue } from "../../common/js/Utils";
 
 const ErrorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -38,7 +38,7 @@ const ErrorPage = () => {
         Endpoints.ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
         setBannedDetails,
         [userId, requiredRoles],
-        () => Utils.hasValue(userId) && Utils.hasValue(requiredRoles)
+        () => hasValue(userId) && hasValue(requiredRoles)
     );
 
     const checkUserLoggedIn = () => {
@@ -68,7 +68,7 @@ const ErrorPage = () => {
     }
 
     const getErrorDetails = () => {
-        if (!Utils.hasValue(userId) || !Utils.hasValue(requiredRoles) || !Utils.hasValue(bannedDetails) || !Utils.hasValue(bannedDetails.permanent)) {
+        if (!hasValue(userId) || !hasValue(requiredRoles) || !hasValue(bannedDetails) || !hasValue(bannedDetails.permanent)) {
             return;
         }
 

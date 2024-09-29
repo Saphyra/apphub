@@ -1,5 +1,5 @@
 import Constants from "../../../../../common/js/Constants";
-import Utils from "../../../../../common/js/Utils";
+import { getBrowserLanguage } from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../../../common/js/dao/dao";
@@ -70,7 +70,7 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
         body: formData,
         headers: {
             'Cache-Control': "no-cache",
-            "BrowserLanguage": Utils.getBrowserLanguage(),
+            "BrowserLanguage": getBrowserLanguage(),
             "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
         }
     }

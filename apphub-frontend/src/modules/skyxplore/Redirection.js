@@ -1,6 +1,6 @@
 import Constants from "../../common/js/Constants";
-import Utils from "../../common/js/Utils";
 import Endpoints from "../../common/js/dao/dao";
+import { hasValue } from "../../common/js/Utils";
 
 const redirectToCharacterIfNotPresent = async () => {
     const response = await Endpoints.SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
@@ -33,7 +33,7 @@ const redirectToGameIfInOne = async () => {
     const response = await Endpoints.SKYXPLORE_GAME_GET_GAME_ID.createRequest()
         .send()
 
-    if (Utils.hasValue(response.value)) {
+    if (hasValue(response.value)) {
         window.location.href = Constants.SKYXPLORE_GAME_PAGE;
     }
 }
@@ -42,7 +42,7 @@ const redirectToMainMenuIfNotInGame = async () => {
     const response = await Endpoints.SKYXPLORE_GAME_GET_GAME_ID.createRequest()
         .send()
 
-    if (!Utils.hasValue(response.value)) {
+    if (!hasValue(response.value)) {
         window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
     }
 }

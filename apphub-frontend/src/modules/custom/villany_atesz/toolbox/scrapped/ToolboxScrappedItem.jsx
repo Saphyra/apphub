@@ -1,17 +1,17 @@
 import React from "react";
 import Endpoints from "../../../../../common/js/dao/dao";
-import Utils from "../../../../../common/js/Utils";
 import ToolStatus from "../ToolStatus";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Optional from "../../../../../common/js/collection/Optional";
+import { copyAndSet } from "../../../../../common/js/Utils";
 
 const ToolboxScrappedItem = ({ localizationHandler, tool, setTools, setConfirmationDialogData }) => {
     const descrap = async () => {
         const response = await Endpoints.VILLANY_ATESZ_SET_TOOL_STATUS.createRequest({ value: ToolStatus.DEFAULT }, { toolId: tool.toolId })
             .send();
 
-        Utils.copyAndSet(response, setTools);
+        copyAndSet(response, setTools);
     }
 
     const confirmDeletion = () => {
@@ -41,7 +41,7 @@ const ToolboxScrappedItem = ({ localizationHandler, tool, setTools, setConfirmat
         const response = await Endpoints.VILLANY_ATESZ_DELETE_TOOL.createRequest(null, { toolId: tool.toolId })
             .send();
 
-        Utils.copyAndSet(response, setTools);
+        copyAndSet(response, setTools);
 
         setConfirmationDialogData(null);
     }

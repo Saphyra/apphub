@@ -15,8 +15,8 @@ import "./new_file.css";
 import Stream from "../../../../common/js/collection/Stream";
 import FileGroup from "./group/FileGroup";
 import FileGroupData from "./group/FileGroupData";
-import Utils from "../../../../common/js/Utils";
 import create from "./NewFileSaver";
+import { addAndSet } from "../../../../common/js/Utils";
 
 const NewFilesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -85,7 +85,7 @@ const NewFilesPage = () => {
                         key="add-group"
                         id="notebook-new-files"
                         label={localizationHandler.get("add-group")}
-                        onclick={() => Utils.addAndSet(fileGroups, new FileGroupData(), setFileGroups)}
+                        onclick={() => addAndSet(fileGroups, new FileGroupData(), setFileGroups)}
                     />
                 ]}
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
 import Endpoints from "../../../../../../../common/js/dao/dao";
 import downloadFile from "../../../../FileDownloader";
+import { hasValue } from "../../../../../../../common/js/Utils";
 
 const ImageColumn = ({
     columnData,
@@ -21,7 +21,7 @@ const ImageColumn = ({
     useEffect(() => displayPreview(), [columnData.data]);
     useEffect(
         () => {
-            if (overwriteFile && Utils.hasValue(columnData.data)) {
+            if (overwriteFile && hasValue(columnData.data)) {
                 columnData.data.storedFileId = null;
             }
         },
@@ -38,13 +38,13 @@ const ImageColumn = ({
             } else {
                 setPreview(null);
             }
-        } else if (Utils.hasValue(columnData.data) && Utils.hasValue(columnData.data.storedFileId)) {
+        } else if (hasValue(columnData.data) && hasValue(columnData.data.storedFileId)) {
             setPreview(Endpoints.STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: columnData.data.storedFileId }));
         }
     }
 
     const updateData = () => {
-        if (Utils.hasValue(columnData.data) && Utils.hasValue(columnData.data.storedFileId)) {
+        if (hasValue(columnData.data) && hasValue(columnData.data.storedFileId)) {
             return;
         }
 

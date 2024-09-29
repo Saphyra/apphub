@@ -6,12 +6,12 @@ import InputField from "../../../../../common/component/input/InputField";
 import "./villany_atesz_toolbox_new.css";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import Button from "../../../../../common/component/input/Button";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import Endpoints from "../../../../../common/js/dao/dao";
 import useLoader from "../../../../../common/hook/Loader";
 import Stream from "../../../../../common/js/collection/Stream";
 import DataListInputField, { DataListInputEntry } from "../../../../../common/component/input/DataListInputField";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const VillanyAteszToolboxNew = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -32,12 +32,12 @@ const VillanyAteszToolboxNew = ({ }) => {
     useLoader(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), result => setStorageBoxes(new Stream(result).map(item => new DataListInputEntry(item.storageBoxId, item.name)).toList()), [uploadCounter]);
 
     const create = async () => {
-        if (Utils.isBlank(name)) {
+        if (isBlank(name)) {
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }
 
-        if (Utils.isBlank(acquiredAt)) {
+        if (isBlank(acquiredAt)) {
             NotificationService.showError(localizationHandler.get("empty-acquired-at"));
             return;
         }

@@ -1,5 +1,5 @@
-import Utils from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
+import { copyAndSet, generateRandomId, throwException } from "../../../../../common/js/Utils";
 import MoveDirection from "../../../common/MoveDirection";
 import TableColumnData from "../../../common/table/row/column/TableColumnData";
 import ColumnType from "../../../common/table/row/column/type/ColumnType";
@@ -8,7 +8,7 @@ import TableHeadData from "../../../common/table/table_head/TableHeadData";
 export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange, custom) => {
     const columnIndex = indexRange(tableHeads);
 
-    const newTableHead = new TableHeadData(columnIndex, "", Utils.generateRandomId());
+    const newTableHead = new TableHeadData(columnIndex, "", generateRandomId());
     const copy = new Stream(tableHeads)
         .add(newTableHead)
         .toList();
@@ -20,7 +20,7 @@ export const newColumn = (tableHeads, setTableHeads, rows, setRows, indexRange, 
             row.columns.push(newColumn);
         });
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }
 
 export const moveColumn = (tableHead, moveDirection, tableHeads, updateTableHead, rows, updateRow) => {
@@ -39,7 +39,7 @@ export const moveColumn = (tableHead, moveDirection, tableHeads, updateTableHead
             otherTableHeadIndex = tableHeadIndex + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherTableHead = orderedItems[otherTableHeadIndex];

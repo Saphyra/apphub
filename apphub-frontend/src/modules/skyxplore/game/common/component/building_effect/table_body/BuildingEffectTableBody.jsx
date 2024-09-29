@@ -1,9 +1,9 @@
 import React from "react";
 import BuildingType from "../../../constants/BuildingType";
-import Utils from "../../../../../../../common/js/Utils";
 import ProductionTableBody from "./ProductionTableBody";
 import StorageTableBody from "./StorageTableBody";
 import MiscellaneousBuildingEffectTableBody from "./miscellaneous/MiscellaneousBuildingEffectTableBody";
+import { throwException } from "../../../../../../../common/js/Utils";
 
 const BuildingEffectTableBody = ({ itemData, surfaceType, localizationHandler, currentLevel }) => {
     switch (itemData.buildingType) {
@@ -28,7 +28,7 @@ const BuildingEffectTableBody = ({ itemData, surfaceType, localizationHandler, c
             />
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unhandled buildingType " + itemData.buildingType);
+            throwException("IllegalArgument", "Unhandled buildingType " + itemData.buildingType);
     }
 }
 

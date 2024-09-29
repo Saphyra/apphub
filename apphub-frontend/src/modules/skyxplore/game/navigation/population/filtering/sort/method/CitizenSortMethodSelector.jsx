@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Utils from "../../../../../../../../common/js/Utils";
 import { ByNameCitizenComparator, BySkillCitizenComparator, ByStatCitizenComparator, CitizenComparatorName } from "../CitizenComparator";
 import localizationData from "./citizen_sort_method_selector_localization.json";
 import LocalizationHandler from "../../../../../../../../common/js/LocalizationHandler";
@@ -9,6 +8,7 @@ import useCache from "../../../../../../../../common/hook/Cache";
 import CacheKey from "../../../../../common/constants/CacheKey";
 import MethodSelect from "./MethodSelect";
 import ComparatorMethodOptions from "./options/ComparatorMethodOptions";
+import { hasValue, throwException } from "../../../../../../../../common/js/Utils";
 
 const CitizenSortMethodSelector = ({
     citizenComparator,
@@ -22,7 +22,7 @@ const CitizenSortMethodSelector = ({
 
     useEffect(
         () => {
-            if (Utils.hasValue(citizenComparator.stat)) {
+            if (hasValue(citizenComparator.stat)) {
                 setSelectedStat(citizenComparator.stat);
             }
         },
@@ -30,7 +30,7 @@ const CitizenSortMethodSelector = ({
     );
     useEffect(
         () => {
-            if (Utils.hasValue(citizenComparator.skill)) {
+            if (hasValue(citizenComparator.skill)) {
                 setSelectedSkill(citizenComparator.skill);
             }
         },
@@ -64,7 +64,7 @@ const CitizenSortMethodSelector = ({
             case CitizenComparatorName.BY_SKILL:
                 return new BySkillCitizenComparator(order, selectedSkill);
             default:
-                Utils.throwException("IllegalArgument", "Unhandled comparatorName " + comparatorName);
+                throwException("IllegalArgument", "Unhandled comparatorName " + comparatorName);
         }
     }
 

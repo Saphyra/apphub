@@ -5,8 +5,8 @@ import MapStream from "../../../../../../../common/js/collection/MapStream";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../../../../../common/component/input/NumberInput";
 import Endpoints from "../../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../../common/js/Utils";
 import Button from "../../../../../../../common/component/input/Button";
+import { isTrue } from "../../../../../../../common/js/Utils";
 
 const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -15,7 +15,7 @@ const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, up
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.tabs.priorities));
+            setDisplayDetails(isTrue(tabSettings.tabs.priorities));
         },
         [tabSettings]
     );

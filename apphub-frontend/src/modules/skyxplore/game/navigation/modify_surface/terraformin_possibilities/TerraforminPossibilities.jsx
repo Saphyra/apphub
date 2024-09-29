@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import Endpoints from "../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../common/js/Utils";
 import Stream from "../../../../../../common/js/collection/Stream";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);
@@ -22,7 +22,7 @@ const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage
 
     useEffect(
         () => {
-            if (Utils.hasValue(terraformingData)) {
+            if (hasValue(terraformingData)) {
                 setTerraformingPossibilities(terraformingData);
             }
         },

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Utils from "../../js/Utils";
 import Stream from "../../js/collection/Stream";
+import { generateRandomId } from "../../js/Utils";
 
 const DataListInputField = ({
     id,
@@ -10,7 +10,7 @@ const DataListInputField = ({
     options = [],
     placeholder
 }) => {
-    const [dataListId] = useState(Utils.generateRandomId());
+    const [dataListId] = useState(generateRandomId());
 
     const updateValue = (v) => {
         const input = v.target.value;

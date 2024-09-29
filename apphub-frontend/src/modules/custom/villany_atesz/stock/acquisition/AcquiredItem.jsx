@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Endpoints, { ResponseStatus } from "../../../../../common/js/dao/dao";
 import useCache from "../../../../../common/hook/Cache";
-import Utils from "../../../../../common/js/Utils";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../common/js/collection/Stream";
@@ -11,6 +10,7 @@ import InputField from "../../../../../common/component/input/InputField";
 import useFocus from "../../../../../common/hook/UseFocus";
 import ErrorHandler from "../../../../../common/js/dao/ErrorHandler";
 import PostLabeledInputField from "../../../../../common/component/input/PostLabeledInputField";
+import { copyAndSet, isBlank, removeAndSet } from "../../../../../common/js/Utils";
 
 const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     const [barCode, setBarCode] = useState("");
@@ -29,7 +29,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
         item.stockCategoryId,
         Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY.createRequest(null, { stockCategoryId: item.stockCategoryId }),
         setStockItems,
-        !Utils.isBlank(item.stockCategoryId)
+        !isBlank(item.stockCategoryId)
     );
 
     useEffect(() => setFocus(), []);
@@ -38,7 +38,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     useEffect(() => setBarCode(""), [item.stockCategoryId]);
 
     const scheduleSearch = () => {
-        if (Utils.isBlank(barCode)) {
+        if (isBlank(barCode)) {
             return;
         }
 
@@ -63,7 +63,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     }
 
     const loadBarCode = () => {
-        if (Utils.isBlank(item.stockItemId)) {
+        if (isBlank(item.stockItemId)) {
             return;
         }
 
@@ -83,7 +83,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
             item.stockItemId = "";
         }
 
-        Utils.copyAndSet(items, setItems);
+        copyAndSet(items, setItems);
     }
 
     const getCategoryOptions = () => {
@@ -107,12 +107,12 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     }
 
     const remove = () => {
-        Utils.removeAndSet(items, i => i.id === item.id, setItems);
+        removeAndSet(items, i => i.id === item.id, setItems);
     }
 
     return (
         <div className="villany-atesz-stock-acquisition-item">
-            {Utils.isBlank(item.stockCategoryId) &&
+            {isBlank(item.stockCategoryId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("bar-code")}
                     input={<InputField
@@ -135,7 +135,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />}
             />
 
-            {!Utils.isBlank(item.stockCategoryId) &&
+            {!isBlank(item.stockCategoryId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("item")}
                     input={<SelectInput
@@ -147,7 +147,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />
             }
 
-            {!Utils.isBlank(item.stockItemId) &&
+            {!isBlank(item.stockItemId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("to-car")}
                     input={<NumberInput
@@ -159,7 +159,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />
             }
 
-            {!Utils.isBlank(item.stockItemId) &&
+            {!isBlank(item.stockItemId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("to-storage")}
                     input={<NumberInput
@@ -171,7 +171,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />
             }
 
-            {!Utils.isBlank(item.stockItemId) &&
+            {!isBlank(item.stockItemId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("price")}
                     input={<NumberInput
@@ -183,7 +183,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />
             }
 
-            {!Utils.isBlank(item.stockItemId) &&
+            {!isBlank(item.stockItemId) &&
                 <PreLabeledInputField
                     label={localizationHandler.get("bar-code")}
                     input={<InputField
@@ -195,7 +195,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
                 />
             }
 
-            {!Utils.isBlank(item.stockItemId) &&
+            {!isBlank(item.stockItemId) &&
                 <PostLabeledInputField
                     label={localizationHandler.get("force-update-price")}
                     input={<InputField

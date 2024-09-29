@@ -4,10 +4,10 @@ import RoomSelector from "./room_selector/RoomSelector";
 import Messages from "./messages/Messages";
 import MessageInput from "./message_input/MessageInput";
 import ChatConstants from "./ChatConstants";
-import Utils from "../../../../common/js/Utils";
 import MapStream from "../../../../common/js/collection/MapStream";
 import ChatRoomCreator from "./room_creator/ChatRoomCreator";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import { hasValue } from "../../../../common/js/Utils";
 
 const CHAT_EVENTS = [
     WebSocketEventName.SKYXPLORE_GAME_USER_JOINED,
@@ -35,7 +35,7 @@ const Chat = ({
     useEffect(() => setMessageStatus(currentChatRoom, false), [displayChat]);
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 
@@ -61,7 +61,7 @@ const Chat = ({
     }
 
     const updateUnreadMessage = () => {
-        if (!Utils.hasValue(lastEvent) || !Utils.hasValue(lastEvent.payload) || !Utils.hasValue(lastEvent.payload.room)) {
+        if (!hasValue(lastEvent) || !hasValue(lastEvent.payload) || !hasValue(lastEvent.payload.room)) {
             return;
         }
 

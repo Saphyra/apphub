@@ -6,10 +6,10 @@ import BuildingOverview from "./building/BuildingOverview";
 import PriorityOverview from "./priority/PriorityOverview";
 import useLoadSetting, { SettingType } from "../../../common/hook/Setting";
 import Endpoints from "../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../common/js/Utils";
 import Button from "../../../../../../common/component/input/Button";
 import localizationData from "./planet_overview_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const PlanetOverview = ({
     planetId,
@@ -55,7 +55,7 @@ const PlanetOverview = ({
         SettingType.PLANET_OVERVIEW_TAB,
         planetId,
         (setting) => {
-            if (Utils.hasValue(setting)) {
+            if (hasValue(setting)) {
                 setTabSettings(setting.data);
             }
         }

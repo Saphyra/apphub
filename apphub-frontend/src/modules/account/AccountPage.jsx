@@ -11,13 +11,13 @@ import EmailChanger from "./email_changer/EmailChanger";
 import { ToastContainer } from "react-toastify";
 import UsernameChanger from "./username_changer/UsernameChanger";
 import PasswordChanger from "./password_changer/PasswordChanger";
-import Utils from "../../common/js/Utils";
 import ConfirmationDialog from "../../common/component/confirmation_dialog/ConfirmationDialog";
 import AccountDeleter from "./account_deleter/AccountDeleter";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
 import useLoader from "../../common/hook/Loader";
 import Endpoints from "../../common/js/dao/dao";
+import { hasValue } from "../../common/js/Utils";
 
 const AccountPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -62,7 +62,7 @@ const AccountPage = () => {
                 }
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

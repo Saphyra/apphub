@@ -12,10 +12,10 @@ import ImageGroupData from "./group/ImageGroupData";
 import ImageGroup from "./group/ImageGroup";
 import Footer from "../../../../common/component/Footer";
 import Button from "../../../../common/component/input/Button";
-import Utils from "../../../../common/js/Utils";
 import { ToastContainer } from "react-toastify";
 import Spinner from "../../../../common/component/Spinner";
 import Stream from "../../../../common/js/collection/Stream";
+import { addAndSet } from "../../../../common/js/Utils";
 
 const NewImagesPage = ()  => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -84,7 +84,7 @@ const NewImagesPage = ()  => {
                         key="add-group"
                         id="notebook-new-files"
                         label={localizationHandler.get("add-group")}
-                        onclick={() => Utils.addAndSet(imageGroups, new ImageGroupData(), setImageGroups)}
+                        onclick={() => addAndSet(imageGroups, new ImageGroupData(), setImageGroups)}
                     />
                 ]}
 

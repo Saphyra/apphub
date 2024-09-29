@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Button from "../../../../../../../../common/component/input/Button";
 import StatusBar from "./status_bar/StatusBar";
 import StorageOverviewDetails from "./details/StorageOverviewDetails";
-import Utils from "../../../../../../../../common/js/Utils";
+import { isTrue } from "../../../../../../../../common/js/Utils";
 
 const StorageTypeOverview = ({ storageType, localizationHandler, data, tabSettings, updateTabSettings }) => {
     const [displayDetails, setDisplayDetails] = useState(false);
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.storage[storageType]));
+            setDisplayDetails(isTrue(tabSettings.storage[storageType]));
         },
         [tabSettings]
     );

@@ -1,7 +1,7 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
 import Constants from "../../../../../../../common/js/Constants";
-import Utils from "../../../../../../../common/js/Utils";
+import { copyAndSet, getBrowserLanguage } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../../../common/js/dao/DefaultErrorHandler";
 import Endpoints from "../../../../../../../common/js/dao/dao";
@@ -92,7 +92,7 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
         body: formData,
         headers: {
             'Cache-Control': "no-cache",
-            "BrowserLanguage": Utils.getBrowserLanguage(),
+            "BrowserLanguage": getBrowserLanguage(),
             "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
         }
     }
@@ -148,5 +148,5 @@ export const updateChecked = (row, rows, setRows, editingEnabled) => {
             .send();
     }
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }

@@ -7,7 +7,7 @@ import InputField from "../../../../../common/component/input/InputField";
 import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import Utils from "../../../../../common/js/Utils";
+import { isBlank } from "../../../../../common/js/Utils";
 
 const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -86,7 +86,7 @@ const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     }
 
     const create = async () => {
-        if (Utils.isBlank(roomId)) {
+        if (isBlank(roomId)) {
             NotificationService.showError(localizationHandler.get("room-name-blank"));
             return;
         }

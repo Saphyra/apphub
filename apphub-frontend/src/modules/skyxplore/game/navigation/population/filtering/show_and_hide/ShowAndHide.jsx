@@ -6,10 +6,10 @@ import citizenLocalizationData from "../../../../common/localization/citizen_loc
 import Stream from "../../../../../../../common/js/collection/Stream";
 import PostLabeledInputField from "../../../../../../../common/component/input/PostLabeledInputField";
 import InputField from "../../../../../../../common/component/input/InputField";
-import Utils from "../../../../../../../common/js/Utils";
 import Button from "../../../../../../../common/component/input/Button";
 import { SettingType } from "../../../../common/hook/Setting";
 import Endpoints from "../../../../../../../common/js/dao/dao";
+import { addAndSet, hasValue, removeAndSet } from "../../../../../../../common/js/Utils";
 
 const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -37,16 +37,16 @@ const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updat
 
     const updateStatus = (property, checked) => {
         if (!checked) {
-            Utils.addAndSet(hiddenProperties, property, setHiddenProperties);
+            addAndSet(hiddenProperties, property, setHiddenProperties);
         } else {
-            Utils.removeAndSet(hiddenProperties, p => p === property, setHiddenProperties);
+            removeAndSet(hiddenProperties, p => p === property, setHiddenProperties);
         }
     }
 
     const getDeleteSettingButton = () => {
-        if (!Utils.hasValue(hideSetting)) {
+        if (!hasValue(hideSetting)) {
             return;
-        } else if (!Utils.hasValue(hideSetting.location)) {
+        } else if (!hasValue(hideSetting.location)) {
             return <Button
                 id="skyxplore-game-population-hide-delete-global-default-button"
                 label={localizationHandler.get("delete-global-default")}

@@ -4,17 +4,17 @@ import LocalizationHandler from "../../../../../../../common/js/LocalizationHand
 import "./storage_overview.css";
 import StorageTypeOverview from "./type/StorageTypeOverview";
 import StorageType from "./StorageType";
-import Utils from "../../../../../../../common/js/Utils";
 import NavigationHistoryItem from "../../../NavigationHistoryItem";
 import PageName from "../../../PageName";
 import Button from "../../../../../../../common/component/input/Button";
+import { hasValue, isTrue } from "../../../../../../../common/js/Utils";
 
 const StorageOverview = ({ storage, openPage, planetId, tabSettings, updateTabSettings }) => {
     const [displayDetails, setDisplayDetails] = useState(true);
 
     useEffect(
         () => {
-            setDisplayDetails(Utils.isTrue(tabSettings.tabs.storageOverview));
+            setDisplayDetails(isTrue(tabSettings.tabs.storageOverview));
         },
         [tabSettings]
     );
@@ -26,7 +26,7 @@ const StorageOverview = ({ storage, openPage, planetId, tabSettings, updateTabSe
         setDisplayDetails(newValue);
     }
 
-    if (!Utils.hasValue(storage)) {
+    if (!hasValue(storage)) {
         return null;
     }
 

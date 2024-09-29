@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../common/component/input/InputField";
 import Button from "../../../../../../common/component/input/Button";
-import Utils from "../../../../../../common/js/Utils";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Endpoints from "../../../../../../common/js/dao/dao";
+import { copyAndSet, isBlank, removeAndSet } from "../../../../../../common/js/Utils";
 
 const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolType, toolTypes, setToolTypes }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -17,7 +17,7 @@ const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolT
 
         toolType.name = newName;
 
-        Utils.copyAndSet(toolTypes, setToolTypes);
+        copyAndSet(toolTypes, setToolTypes);
         setEditingEnabled(false);
     }
 
@@ -52,7 +52,7 @@ const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolT
         await Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE.createRequest(null, { toolTypeId: toolType.toolTypeId })
             .send();
 
-        Utils.removeAndSet(toolTypes, tt => tt.toolTypeId === toolType.toolTypeId, setToolTypes);
+        removeAndSet(toolTypes, tt => tt.toolTypeId === toolType.toolTypeId, setToolTypes);
 
         setConfirmationDialogData(null);
     }
@@ -74,7 +74,7 @@ const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolT
                     <Button
                         className={"villany-atesz-toolbox-manage-tool-type-save-button"}
                         onclick={save}
-                        disabled={Utils.isBlank(newName)}
+                        disabled={isBlank(newName)}
                         label="_"
                         title={localizationHandler.get("save")}
                     />
