@@ -12,6 +12,7 @@ import moveListItem from "../../../../common/MoveListItemService";
 import UserSettings from "../../../../common/UserSettings";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import compareListItems from "./ListItemComparator";
 
 const Category = ({
     localizationHandler,
@@ -75,28 +76,8 @@ const Category = ({
             );
         }
 
-        const compare = (a, b) => {
-            if (a.type === b.type) {
-                return compareByTitle(a, b);
-            }
-
-            if (a.type === OpenedPageType.CATEGORY) {
-                return -1;
-            }
-
-            if (b.type === OpenedPageType.CATEGORY) {
-                return 1;
-            }
-
-            return compareByTitle(a, b);
-
-            function compareByTitle(a, b) {
-                return a.title.localeCompare(b.title);
-            }
-        }
-
         return new Stream(openedCategoryContent.children)
-            .sorted((a, b) => compare(a, b))
+            .sorted((a, b) => compareListItems(a, b))
             .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
             .map(child =>
                 <ListItem
