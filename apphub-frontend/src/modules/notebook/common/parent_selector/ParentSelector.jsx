@@ -50,6 +50,7 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
         }
 
         return new Stream(currentCategoryData.children)
+            .sorted((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
             .map(child =>
                 <Child
                     key={child.id}

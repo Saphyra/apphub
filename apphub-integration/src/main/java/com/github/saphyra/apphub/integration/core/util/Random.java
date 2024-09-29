@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.integration.core.util;
 
 public class Random {
+    public static final Random RANDOM = new Random();
+
     public int randInt(int min, int max) {
         double rand = Math.floor(randDouble() * (max - min + 1) + min);
         return (int) rand;

@@ -3,6 +3,8 @@
         Display startup time of services
 
 ===BUGFIXES===
+    Notebook
+        Parent Selector displays categories sorted
 
 ===PLATFORM CHANGES===
     Error Page react migration
