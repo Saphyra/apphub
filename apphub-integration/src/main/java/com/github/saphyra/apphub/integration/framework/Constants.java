@@ -44,11 +44,9 @@ public class Constants {
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
-    public final String DATA_ID_BATTERY = "battery";
     public final String DATA_ID_WATER_PUMP = "water_pump";
     public final String DATA_ID_CAMP = "camp";
     public final String DATA_ID_ORE = "ore";
-    public static final String DATA_ID_DEPOT = "depot";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
     //QueueTypes
@@ -69,9 +67,6 @@ public class Constants {
     //VillanyAtesz
     public static final String FT_SUFFIX = " Ft";
     public static final Double CART_DEFAULT_MARGIN = 1.2;
-
-    //OpenedPageType
-    public final String PAGE_TYPE_PLANET = "PLANET";
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";

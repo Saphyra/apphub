@@ -33,6 +33,9 @@ public class DatabaseUtil {
     private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed) VALUES ('%s', '%s', '%s');";
     private static final String DELETE_MIGRATION_TASK_BY_EVENT = "DELETE FROM admin_panel.migration_task WHERE event='%s'";
     private static final String GET_ROLE_COUNT = "SELECT count(*) from apphub_user.apphub_role WHERE apphub_role='%s'";
+    private static final String GET_ENCRYPTED_DATA_FROM_CHECKED_ITEM = "SELECT checked FROM notebook.checked_item WHERE user_id='%s' LIMIT 1";
+    private static final String INJECT_ENCRYPTED_DATA_TO_MODULES = "UPDATE modules.favorite SET favorite='%s' WHERE user_id='%s'";
+    private static final String GET_ROW_COUNT_BY_USER_ID = "SELECT count(*) from %s.%s WHERE %s='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {
         Class.forName(JDBC_DRIVER);
@@ -233,6 +236,54 @@ public class DatabaseUtil {
             execute(sql);
         } catch (Exception e) {
             throw new RuntimeException("Failed unlocking user.", e);
+        }
+    }
+
+    public static String getEncryptedDataFromCheckedItem(UUID userId) {
+        String sql = GET_ENCRYPTED_DATA_FROM_CHECKED_ITEM.formatted(userId);
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return rs.getString("checked");
+                    }
+
+                    throw new IllegalStateException("No checked item found by userId " + userId);
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying encrypted data from checked_item", e);
+        }
+    }
+
+    public static void injectEncryptedDataToModules(UUID userId, String data) {
+        String sql = INJECT_ENCRYPTED_DATA_TO_MODULES.formatted(data, userId);
+
+        try {
+            execute(sql);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed injecting data to modules.", e);
+        }
+    }
+
+    public static Integer getRowCountByValue(UUID userId, String schema, String tableName, String column) {
+        String sql = GET_ROW_COUNT_BY_USER_ID.formatted(schema, tableName, column, userId);
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+
+                    throw new IllegalStateException("Failed querying row count from table %s.%s for user_id %s".formatted(schema, tableName, userId));
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying row count from table %s.%s for user_id %s".formatted(schema, tableName, userId), e);
         }
     }
 
