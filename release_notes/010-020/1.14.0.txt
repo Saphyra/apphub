@@ -5,6 +5,7 @@
 ===BUGFIXES===
     Notebook
         Parent Selector displays categories sorted
+    Missing waits in SkyXplore tests
 
 ===PLATFORM CHANGES===
     Error Page react migration
@@ -17,6 +18,7 @@
         Mark content of archived category archived
         Order archived items to the end of the list
         Pressing tab in Textarea (Text, Table types) enters 4 spaces instead of tabbing out
+        Autofill list item name of image and file when file selected
     Integration
         Row swapping protection test
         Test for checking if all the user's data is deleted with the account

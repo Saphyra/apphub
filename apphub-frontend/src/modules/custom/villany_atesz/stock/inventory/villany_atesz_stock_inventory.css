@@ -31,4 +31,5 @@
 
 .villany-atesz-stock-inventory-item-name {
     min-width: 100%;
+    max-width: 350px;
 }

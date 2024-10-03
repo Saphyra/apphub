@@ -120,8 +120,7 @@ public class TerraformationTest extends SeleniumTest {
 
         SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_CONCRETE);
 
-        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
-        assertThat(surface.isTerraformationInProgress()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId)).returns(true, Surface::isTerraformationInProgress));
 
         SkyXploreGameActions.resumeGame(driver);
 

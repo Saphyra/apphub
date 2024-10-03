@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.skyxplore.characte
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -38,6 +39,7 @@ public class SkyXploreCharacterActions {
     }
 
     public synchronized static void createCharacter(WebDriver driver) {
+        SleepUtil.sleep(1000);
         submitForm(driver);
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))

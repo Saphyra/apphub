@@ -15,6 +15,8 @@ import FileInput from "../../../../common/component/input/FileInput";
 import "./new_image.css";
 import Spinner from "../../../../common/component/Spinner";
 import create from "./NewImageSaver";
+import Optional from "../../../../common/js/collection/Optional";
+import { hasValue, isBlank } from "../../../../common/js/Utils";
 
 const NewImagePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -30,6 +32,19 @@ const NewImagePage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => displayPreview(), [image]);
+    useEffect(() => updaetListItemTitle(), [image]);
+
+    const updaetListItemTitle = () => {
+        if(!hasValue(image)){
+            return;
+        }
+
+        if (!isBlank(listItemTitle)) {
+            return;
+        }
+
+        setListItemTitle(image.fileName);
+    }
 
     const displayPreview = () => {
         if (!image) {
