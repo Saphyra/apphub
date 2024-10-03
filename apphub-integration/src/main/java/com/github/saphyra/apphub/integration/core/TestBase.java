@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.core;
 
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
-import com.github.saphyra.apphub.integration.core.driver.WebDriverFactory;
+import com.github.saphyra.apphub.integration.core.driver.WebDriverProvider;
 import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
@@ -122,7 +122,7 @@ public abstract class TestBase {
 
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite(ITestContext context) {
-        WebDriverFactory.stopDrivers();
+        WebDriverProvider.stopDrivers();
         ConnectionProvider.shutdownCaches();
 
         StatusLogger.logTestStartOrder();

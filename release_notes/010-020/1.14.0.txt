@@ -22,3 +22,4 @@
     Integration
         Row swapping protection test
         Test for checking if all the user's data is deleted with the account
+        Dedicated cache for headed WebDrivers
