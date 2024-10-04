@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useLoader from "../../../../../common/hook/Loader";
-import Endpoints from "../../../../../common/js/dao/dao";
 import InputField from "../../../../../common/component/input/InputField";
 import localizationData from "./villany_atesz_stock_inventory_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
@@ -10,6 +9,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_GET_STOCK_CATEGORIES, VILLANY_ATESZ_RESET_INVENTORIED, VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -18,8 +18,8 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const [items, setItems] = useState([]);
     const [categories, setCategories] = useState({});
 
-    useLoader(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), setItems);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), (c) => mapCategories(c));
+    useLoader(VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), setItems);
+    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), (c) => mapCategories(c));
 
     const mapCategories = (c) => {
         const mapped = new Stream(c)
@@ -33,7 +33,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
         return new Stream(items)
             .filter(item => {
                 return isBlank(search) ||
-                    new Stream([categories[item.stockCategoryId], item.name, item.serialNumber, item.inCar, item.inStorage])
+                    new Stream([categories[item.stockCategoryId], item.name, item.serialNumber, item.inCar, item.inStorage, item.barCode])
                         .join("")
                         .toLowerCase()
                         .indexOf(search.toLocaleLowerCase()) > -1;
@@ -82,7 +82,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     }
 
     const resetInventoried = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_RESET_INVENTORIED.createRequest()
+        const response = await VILLANY_ATESZ_RESET_INVENTORIED.createRequest()
             .send();
 
         setItems(response);

@@ -6,7 +6,6 @@ import localizationData from "./page_localization.json";
 import Redirection from "../Redirection";
 import Header from "../../../common/component/Header"
 import Footer from "../../../common/component/Footer"
-import Endpoints from "../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
@@ -18,6 +17,8 @@ import validate from "../../../common/js/validation/Validator";
 import "../skyxplore.css";
 import NotificationKey from "../../../common/js/notification/NotificationKey";
 import InputField from "../../../common/component/input/InputField";
+import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { USER_DATA_GET_USERNAME } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -40,7 +41,7 @@ const SkyXploreCharacterPage = () => {
 
     const fetchCharacterExistence = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
+            const response = await SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
                 .send();
             setHasCharacter(response.value);
         }
@@ -49,12 +50,12 @@ const SkyXploreCharacterPage = () => {
 
     const prefillCharacterName = () => {
         const fetchCharacterName = async () => {
-            const response = await Endpoints.SKYXPLORE_GET_CHARACTER_NAME.createRequest()
+            const response = await SKYXPLORE_GET_CHARACTER_NAME.createRequest()
                 .send();
             setCharacterName(response.value);
         }
         const fetchUsername = async () => {
-            const response = await Endpoints.USER_DATA_GET_USERNAME.createRequest()
+            const response = await USER_DATA_GET_USERNAME.createRequest()
                 .send();
             setCharacterName(response.value);
         }
@@ -77,7 +78,7 @@ const SkyXploreCharacterPage = () => {
             name: characterName
         }
 
-        await Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER.createRequest(request)
+        await SKYXPLORE_CREATE_OR_UPDATE_CHARACTER.createRequest(request)
             .send();
 
         sessionStorage.successCode = NotificationKey.SKYXPLORE_CHARACTER_SAVED;

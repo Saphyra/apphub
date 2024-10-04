@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import EventName from "../../../../../../common/js/event/EventName";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Event from "../../../../../../common/js/event/Event";
@@ -11,6 +10,7 @@ import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Stream from "../../../../../../common/js/collection/Stream";
 import PinnedItem from "./PinnedItem";
+import { NOTEBOOK_DELETE_PIN_GROUP, NOTEBOOK_GET_PINNED_ITEMS, NOTEBOOK_RENAME_PIN_GROUP } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent, setConfirmationDialogData, setPinGroups, lastEvent }) => {
     const [contentEditingEnabled, setContentEditingEnabled] = useState(false);
@@ -25,7 +25,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
         }
 
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_PINNED_ITEMS.createRequest(null, null, { pinGroupId: pinGroupId })
+            const response = await NOTEBOOK_GET_PINNED_ITEMS.createRequest(null, null, { pinGroupId: pinGroupId })
                 .send();
             setItems(response);
         }
@@ -74,7 +74,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
     }
 
     const deleteGroup = async () => {
-        const response = await Endpoints.NOTEBOOK_DELETE_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId })
+        const response = await NOTEBOOK_DELETE_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId })
             .send();
 
         setPinGroups(response);
@@ -89,7 +89,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
             return;
         }
 
-        const response = await Endpoints.NOTEBOOK_RENAME_PIN_GROUP.createRequest({ value: newPinGroupName }, { pinGroupId: pinGroupId })
+        const response = await NOTEBOOK_RENAME_PIN_GROUP.createRequest({ value: newPinGroupName }, { pinGroupId: pinGroupId })
             .send();
 
         setPinGroups(response);

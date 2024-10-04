@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./category.css"
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import ListItem from "../../list_item/ListItem";
@@ -13,6 +12,7 @@ import UserSettings from "../../../../common/UserSettings";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import compareListItems from "./ListItemComparator";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const Category = ({
     localizationHandler,
@@ -56,7 +56,7 @@ const Category = ({
             const listItemId = openedListItem.id;
 
             const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
-            const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
+            const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
 
             if (openedListItem.id === listItemId) {

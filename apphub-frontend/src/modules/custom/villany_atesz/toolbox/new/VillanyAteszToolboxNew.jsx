@@ -7,11 +7,11 @@ import "./villany_atesz_toolbox_new.css";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import Button from "../../../../../common/component/input/Button";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import Endpoints from "../../../../../common/js/dao/dao";
 import useLoader from "../../../../../common/hook/Loader";
 import Stream from "../../../../../common/js/collection/Stream";
 import DataListInputField, { DataListInputEntry } from "../../../../../common/component/input/DataListInputField";
 import { isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_CREATE_TOOL, VILLANY_ATESZ_GET_STORAGE_BOXES, VILLANY_ATESZ_GET_TOOL_TYPES } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszToolboxNew = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,8 +28,8 @@ const VillanyAteszToolboxNew = ({ }) => {
     const [storageBoxes, setStorageBoxes] = useState([]);
     const [uploadCounter, setUploadCounter] = useState(0);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), result => setToolTypes(new Stream(result).map(item => new DataListInputEntry(item.toolTypeId, item.name)).toList()), [uploadCounter]);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), result => setStorageBoxes(new Stream(result).map(item => new DataListInputEntry(item.storageBoxId, item.name)).toList()), [uploadCounter]);
+    useLoader(VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), result => setToolTypes(new Stream(result).map(item => new DataListInputEntry(item.toolTypeId, item.name)).toList()), [uploadCounter]);
+    useLoader(VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), result => setStorageBoxes(new Stream(result).map(item => new DataListInputEntry(item.storageBoxId, item.name)).toList()), [uploadCounter]);
 
     const create = async () => {
         if (isBlank(name)) {
@@ -58,7 +58,7 @@ const VillanyAteszToolboxNew = ({ }) => {
             warrantyExpiresAt: warrantyExpiresAt
         };
 
-        await Endpoints.VILLANY_ATESZ_CREATE_TOOL.createRequest(payload)
+        await VILLANY_ATESZ_CREATE_TOOL.createRequest(payload)
             .send();
 
         setBrand("");

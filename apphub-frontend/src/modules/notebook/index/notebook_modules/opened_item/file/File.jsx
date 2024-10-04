@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./file.css";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import { formatFileSize } from "../../../../../../common/js/Utils";
+import { NOTEBOOK_GET_LIST_ITEM } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import { STORAGE_DOWNLOAD_FILE, STORAGE_GET_METADATA } from "../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
 const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
@@ -18,7 +19,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
     const loadListItem = () => {
         const fetch = async () => {
-            const listItemData = await Endpoints.NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
+            const listItemData = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
                 .send();
 
             setTitle(listItemData.title);
@@ -34,7 +35,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
         }
 
         const fetch = async () => {
-            const response = await Endpoints.STORAGE_GET_METADATA.createRequest(null, { storedFileId: storedFileId })
+            const response = await STORAGE_GET_METADATA.createRequest(null, { storedFileId: storedFileId })
                 .send();
             setFileMetadata(response);
         }
@@ -42,7 +43,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     }
 
     const download = () => {
-        window.open(Endpoints.STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId }));
+        window.open(STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId }));
     }
 
     return (

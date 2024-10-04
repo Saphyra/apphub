@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.StockCategoryModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.VillanyAteszEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StockCategoryController {
-    @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY)
+    @PutMapping(VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY)
     List<StockCategoryModel> createStockCategory(@RequestBody StockCategoryModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY)
+    @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY)
     List<StockCategoryModel> editStockCategory(@RequestBody StockCategoryModel request, @PathVariable("stockCategoryId") UUID stockCategoryId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY)
+    @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY)
     List<StockCategoryModel> deleteStockCategory(@PathVariable("stockCategoryId") UUID stockCategoryId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES)
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES)
     List<StockCategoryModel> getStockCategories(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import InputField from "../../../common/component/input/InputField";
 import Button from "../../../common/component/input/Button";
-import Endpoints from "../../../common/js/dao/dao";
+import { USER_DATA_GET_USER_ROLES } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const RoleManagementSearch = ({ localizationHandler, query, setQuery, setUsers }) => {
     const search = async () => {
@@ -9,7 +9,7 @@ const RoleManagementSearch = ({ localizationHandler, query, setQuery, setUsers }
             return;
         }
 
-        const response = await Endpoints.USER_DATA_GET_USER_ROLES.createRequest({ value: query }, {}, { includeSelf: true })
+        const response = await USER_DATA_GET_USER_ROLES.createRequest({ value: query }, {}, { includeSelf: true })
             .send();
 
         setUsers(response);

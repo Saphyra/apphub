@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Endpoints, { ResponseStatus } from "../../../../../common/js/dao/dao";
+import { ResponseStatus } from "../../../../../common/js/dao/dao";
 import useCache from "../../../../../common/hook/Cache";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
@@ -11,6 +11,7 @@ import useFocus from "../../../../../common/hook/UseFocus";
 import ErrorHandler from "../../../../../common/js/dao/ErrorHandler";
 import PostLabeledInputField from "../../../../../common/component/input/PostLabeledInputField";
 import { copyAndSet, isBlank, removeAndSet } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID, VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE, VILLANY_ATESZ_GET_STOCK_CATEGORIES, VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     const [barCode, setBarCode] = useState("");
@@ -21,13 +22,13 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
 
     useCache(
         "stock-categories",
-        Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(),
+        VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(),
         setCategories
     );
 
     useCache(
         item.stockCategoryId,
-        Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY.createRequest(null, { stockCategoryId: item.stockCategoryId }),
+        VILLANY_ATESZ_GET_STOCK_ITEMS_FOR_CATEGORY.createRequest(null, { stockCategoryId: item.stockCategoryId }),
         setStockItems,
         !isBlank(item.stockCategoryId)
     );
@@ -50,7 +51,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
     }
 
     const searchByBarCode = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE.createRequest({ value: barCode })
+        const response = await VILLANY_ATESZ_FIND_STOCK_ITEM_BY_BAR_CODE.createRequest({ value: barCode })
             .addErrorHandler(new ErrorHandler(
                 response => response.status == ResponseStatus.NOT_FOUND,
                 () => { }
@@ -68,7 +69,7 @@ const AcquiredItem = ({ item, localizationHandler, items, setItems }) => {
         }
 
         const fetch = async () => {
-            const response = await Endpoints.VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID.createRequest(null, { stockItemId: item.stockItemId })
+            const response = await VILLANY_ATESZ_FIND_BAR_CODE_BY_STOCK_ITEM_ID.createRequest(null, { stockItemId: item.stockItemId })
                 .send();
 
             set("barCode", response.value);

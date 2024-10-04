@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -133,10 +133,10 @@ public class WebDriverProvider {
             }
 
             driver.switchTo().window(handles.get(0));
-            driver.navigate().to(UrlFactory.create(serverPort.getItem(), Endpoints.ERROR_PAGE));
+            driver.navigate().to(UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
 
             AwaitilityWrapper.createDefault()
-                .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ERROR_PAGE))
+                .until(() -> driver.getCurrentUrl().endsWith(GenericEndpoints.ERROR_PAGE))
                 .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
             driver.manage()
                 .deleteAllCookies();

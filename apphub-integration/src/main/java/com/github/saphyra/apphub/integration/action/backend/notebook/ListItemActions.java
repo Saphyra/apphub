@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.notebook;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditListItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
@@ -23,7 +23,7 @@ public class ListItemActions {
 
     public static Response getDeleteListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", listItemId));
+            .delete(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_DELETE_LIST_ITEM, "listItemId", listItemId));
     }
 
     public static void editListItem(int serverPort, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
@@ -34,18 +34,18 @@ public class ListItemActions {
     public static Response getEditListItemResponse(int serverPort, UUID accessTokenId, EditListItemRequest editListItemRequest, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editListItemRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM, "listItemId", listItemId));
     }
 
     public static Response getCloneListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CLONE_LIST_ITEM, "listItemId", listItemId));
     }
 
     public static Response getSearchResponse(int serverPort, UUID accessTokenId, String searchText) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(searchText))
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_SEARCH));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_SEARCH));
     }
 
     public static List<NotebookView> search(int serverPort, UUID accessTokenId, String search) {
@@ -65,17 +65,17 @@ public class ListItemActions {
     public static Response getArchiveResponse(int serverPort, UUID accessTokenId, UUID listItemId, Boolean archived) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(archived))
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_ARCHIVE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_ARCHIVE_ITEM, "listItemId", listItemId));
     }
 
     public static Response getFindListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_LIST_ITEM, "listItemId", listItemId));
+            .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_LIST_ITEM, "listItemId", listItemId));
     }
 
     public static Response getMoveListItemResponse(int serverPort, UUID accessTokenId, UUID listItemId, UUID parent) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(parent))
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_MOVE_LIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_MOVE_LIST_ITEM, "listItemId", listItemId));
     }
 }

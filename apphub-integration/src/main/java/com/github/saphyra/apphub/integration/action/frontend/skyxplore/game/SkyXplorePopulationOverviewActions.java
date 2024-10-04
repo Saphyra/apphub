@@ -28,7 +28,7 @@ public class SkyXplorePopulationOverviewActions {
     }
 
     public static Citizen findCitizenValidated(WebDriver driver, String name) {
-        return findCitizen(driver, name)
+        return AwaitilityWrapper.getOptionalWithWait(() -> findCitizen(driver, name))
             .orElseThrow(() -> new RuntimeException("Citizen not found with name " + name));
     }
 

@@ -9,6 +9,7 @@
 
 ===PLATFORM CHANGES===
     Error Page react migration
+    Split Endpoints by modules
 
 ===TECHNICAL DEBTS===
     Refactor Utils.js, and export each function individually

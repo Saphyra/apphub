@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockItemResponse;
 import io.restassured.response.Response;
 
@@ -23,12 +23,12 @@ public class VillanyAteszIndexActions {
 
     public static Response getTotalStockValueResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE));
     }
 
     public static Response getStockItemsMarkedForAcquisitionResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION));
     }
 
     public static List<StockItemResponse> getStockItemsMarkedForAcquisition(int serverPort, UUID accessTokenId) {
@@ -49,6 +49,6 @@ public class VillanyAteszIndexActions {
 
     public static Response getTotalToolboxValueResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE));
     }
 }

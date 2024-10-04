@@ -10,7 +10,6 @@ import ConfirmationDialog from "../../../common/component/confirmation_dialog/Co
 import ExitGameButton from "./exit_game/ExitGameButton";
 import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
 import Chat from "./chat/Chat";
-import Endpoints from "../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import Navigation from "./navigation/Navigation";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
@@ -18,6 +17,8 @@ import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
 import PlayerDisconnectedPauseHandler from "./pause_and_resume/player_disconnected/PlayerDisconnectedPauseHandler";
 import Spinner from "../../../common/component/Spinner";
+import { GET_OWN_USER_ID } from "../../../common/js/dao/endpoints/GenericEndpoints";
+import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_SAVE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -39,7 +40,7 @@ const SkyXploreGamePage = () => {
 
     const fetchUserId = () => {
         const fetch = async () => {
-            const response = await Endpoints.GET_OWN_USER_ID.createRequest()
+            const response = await GET_OWN_USER_ID.createRequest()
                 .send();
             setUserId(response.value);
         }
@@ -48,7 +49,7 @@ const SkyXploreGamePage = () => {
 
     const fetchIsHost = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GAME_IS_HOST.createRequest()
+            const response = await SKYXPLORE_GAME_IS_HOST.createRequest()
                 .send();
             setIsHost(response.value);
         }
@@ -97,7 +98,7 @@ const SkyXploreGamePage = () => {
     const save = async () => {
         setDisplaySpinner(true);
 
-        await Endpoints.SKYXPLORE_GAME_SAVE.createRequest()
+        await SKYXPLORE_GAME_SAVE.createRequest()
             .send();
 
         setDisplaySpinner(false);

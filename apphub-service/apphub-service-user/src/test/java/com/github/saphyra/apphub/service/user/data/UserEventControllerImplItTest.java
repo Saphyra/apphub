@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
@@ -97,7 +97,7 @@ public class UserEventControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sendEventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
+            .post(UrlFactory.create(serverPort, GenericEndpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

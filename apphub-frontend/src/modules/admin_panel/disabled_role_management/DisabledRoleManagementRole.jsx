@@ -5,7 +5,7 @@ import InputField from "../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Button from "../../../common/component/input/Button";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import Endpoints from "../../../common/js/dao/dao";
+import { USER_DATA_DISABLE_ROLE, USER_DATA_ENABLE_ROLE } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRoles }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
@@ -30,7 +30,7 @@ const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRol
 
         setPassword("");
 
-        const response = await Endpoints.USER_DATA_ENABLE_ROLE.createRequest({ value: password }, { role: role })
+        const response = await USER_DATA_ENABLE_ROLE.createRequest({ value: password }, { role: role })
             .send();
 
         setRoles(response);
@@ -46,7 +46,7 @@ const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRol
 
         setPassword("");
 
-        const response = await Endpoints.USER_DATA_DISABLE_ROLE.createRequest({ value: password }, { role: role })
+        const response = await USER_DATA_DISABLE_ROLE.createRequest({ value: password }, { role: role })
             .send();
 
         setRoles(response);

@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.integration.core.driver;
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.DestroyMode;
@@ -53,7 +53,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
         return p.getObject()
             .getDriver()
             .getCurrentUrl()
-            .contains(Endpoints.ERROR_PAGE);
+            .contains(GenericEndpoints.ERROR_PAGE);
     }
 
     @Override
@@ -102,7 +102,7 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                     driver = new ChromeDriver(options);
                     log.debug("Driver created: {}", driver);
                     SleepUtil.sleep(1000);
-                    Navigation.toUrl(driver, UrlFactory.create(serverPort.getItem(), Endpoints.ERROR_PAGE));
+                    Navigation.toUrl(driver, UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
                     numberOfDriversCreated++;
                     return driver;
                 } catch (Exception e) {

@@ -10,10 +10,10 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -132,7 +132,7 @@ public class ChecklistCrudTest extends SeleniumTest {
         NewChecklistActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Checklist was not created.");
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Button from "../../../../common/component/input/Button";
 import InputField from "../../../../common/component/input/InputField";
 import Stream from "../../../../common/js/collection/Stream";
-import Endpoints from "../../../../common/js/dao/dao";
 import "./contacts/contacts.css"
 import ContactsListItem from "./contacts/ContactsListItem";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import { SKYXPLORE_ACCEPT_FRIEND_REQUEST, SKYXPLORE_ADD_FRIEND, SKYXPLORE_CANCEL_FRIEND_REQUEST, SKYXPLORE_GET_FRIENDS, SKYXPLORE_GET_INCOMING_FRIEND_REQUEST, SKYXPLORE_GET_SENT_FRIEND_REQUEST, SKYXPLORE_REMOVE_FRIEND, SKYXPLORE_SEARCH_FOR_FRIENDS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 
 const Contacts = ({ localizationHandler, lastEvent }) => {
     const [friendQuery, setFriendQuery] = useState("");
@@ -55,7 +55,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
         const timeout = setTimeout(
             () => {
                 const fetch = async () => {
-                    const result = await Endpoints.SKYXPLORE_SEARCH_FOR_FRIENDS.createRequest({ value: friendQuery })
+                    const result = await SKYXPLORE_SEARCH_FOR_FRIENDS.createRequest({ value: friendQuery })
                         .send();
 
                     setFriendCandidates(result);
@@ -73,7 +73,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     const loadIncomingFriendRequests = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_GET_INCOMING_FRIEND_REQUEST.createRequest()
+            const result = await SKYXPLORE_GET_INCOMING_FRIEND_REQUEST.createRequest()
                 .send();
             setIncomingFriendRequests(result);
         }
@@ -82,7 +82,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     const loadSentFriendRequests = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_GET_SENT_FRIEND_REQUEST.createRequest()
+            const result = await SKYXPLORE_GET_SENT_FRIEND_REQUEST.createRequest()
                 .send();
             setSentFriendRequests(result);
         }
@@ -91,7 +91,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     const loadFriendships = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_GET_FRIENDS.createRequest()
+            const result = await SKYXPLORE_GET_FRIENDS.createRequest()
                 .send();
             setFriendships(result);
         }
@@ -100,7 +100,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     //Operations
     const sendFriendRequest = async (characterId) => {
-        const newSentFriendRequest = await Endpoints.SKYXPLORE_ADD_FRIEND.createRequest({ value: characterId })
+        const newSentFriendRequest = await SKYXPLORE_ADD_FRIEND.createRequest({ value: characterId })
             .send();
 
         sentFriendRequests.push(newSentFriendRequest);
@@ -110,13 +110,13 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
     }
 
     const cancelFriendRequest = async (friendRequestId) => {
-        await Endpoints.SKYXPLORE_CANCEL_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
+        await SKYXPLORE_CANCEL_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
             .send();
         removeFriendRequest(friendRequestId)
     }
 
     const acceptFriendRequest = async (friendRequestId) => {
-        const newFriendship = await Endpoints.SKYXPLORE_ACCEPT_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
+        const newFriendship = await SKYXPLORE_ACCEPT_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
             .send();
 
         friendships.push(newFriendship);
@@ -132,7 +132,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
     }
 
     const cancelFriendship = async (friendshipId) => {
-        await Endpoints.SKYXPLORE_REMOVE_FRIEND.createRequest(null, { friendshipId: friendshipId })
+        await SKYXPLORE_REMOVE_FRIEND.createRequest(null, { friendshipId: friendshipId })
             .send();
         removeFriendship(friendshipId);
         setRemoveFriendConfirmationDialogSettings({ shouldDisplay: false });

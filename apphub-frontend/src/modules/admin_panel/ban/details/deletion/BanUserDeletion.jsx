@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import localizationData from "./ban_user_deletion_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./ban_user_deletion.css";
@@ -6,8 +6,8 @@ import InputField from "../../../../../common/component/input/InputField";
 import Button from "../../../../../common/component/input/Button";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import ConfirmationDialog from "../../../../../common/component/confirmation_dialog/ConfirmationDialog";
-import Endpoints from "../../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { ACCOUNT_MARK_FOR_DELETION, ACCOUNT_UNMARK_FOR_DELETION } from "../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -38,7 +38,7 @@ const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) =
             markForDeletionAt: markForDeletionAt
         }
 
-        const response = await Endpoints.ACCOUNT_MARK_FOR_DELETION.createRequest(payload, { userId: userData.userId })
+        const response = await ACCOUNT_MARK_FOR_DELETION.createRequest(payload, { userId: userData.userId })
             .send();
 
         setUserData(response);
@@ -95,7 +95,7 @@ const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) =
     }
 
     const cancelDeletion = async () => {
-        const response = await Endpoints.ACCOUNT_UNMARK_FOR_DELETION.createRequest(null, { userId: userData.userId })
+        const response = await ACCOUNT_UNMARK_FOR_DELETION.createRequest(null, { userId: userData.userId })
             .send();
 
         setUserData(response);

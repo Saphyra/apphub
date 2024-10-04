@@ -12,8 +12,8 @@ import InputField from "../../../../../common/component/input/InputField";
 import Textarea from "../../../../../common/component/input/Textarea";
 import Button from "../../../../../common/component/input/Button";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import Endpoints from "../../../../../common/js/dao/dao";
 import { isBlank } from "../../../../../common/js/Utils";
+import { ACCOUNT_BAN_USER } from "../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanUserRole = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -64,7 +64,7 @@ const BanUserRole = ({ userData, setUserData }) => {
             password: password
         }
 
-        const response = await Endpoints.ACCOUNT_BAN_USER.createRequest(payload)
+        const response = await ACCOUNT_BAN_USER.createRequest(payload)
             .send();
 
         setRoleToBan("");

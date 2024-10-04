@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.community;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendshipResponse;
@@ -27,7 +27,7 @@ public class FriendRequestActions {
     public static Response getCreateFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendUserId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(friendUserId))
-            .put(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_CREATE));
+            .put(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_FRIEND_REQUEST_CREATE));
     }
 
     public static List<FriendRequestResponse> getSentFriendRequests(int serverPort, UUID accessTokenId) {
@@ -40,7 +40,7 @@ public class FriendRequestActions {
 
     public static Response getSentFriendRequestsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
+            .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_SENT_FRIEND_REQUESTS));
     }
 
     public static List<FriendRequestResponse> getReceivedFriendRequests(int serverPort, UUID accessTokenId) {
@@ -53,12 +53,12 @@ public class FriendRequestActions {
 
     public static Response getReceivedFriendRequeestsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
+            .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
     }
 
     public static FriendshipResponse acceptFriendRequest(int serverPort, UUID accessToken, UUID friendRequestId) {
         Response response = RequestFactory.createAuthorizedRequest(accessToken)
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -76,7 +76,7 @@ public class FriendRequestActions {
     public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_FRIEND_REQUEST_SEARCH));
     }
 
     public static void deleteFriendRequest(int serverPort, UUID accessTokenId, UUID friendRequestId) {
@@ -87,11 +87,11 @@ public class FriendRequestActions {
 
     public static Response getDeleteFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_DELETE, "friendRequestId", friendRequestId));
+            .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_FRIEND_REQUEST_DELETE, "friendRequestId", friendRequestId));
     }
 
     public static Response getAcceptFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_FRIEND_REQUEST_ACCEPT, "friendRequestId", friendRequestId));
     }
 }

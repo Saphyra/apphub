@@ -3,13 +3,13 @@ import localizationData from "./villany_atesz_stock_overview_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_overview.css";
 import useLoader from "../../../../../common/hook/Loader";
-import Endpoints from "../../../../../common/js/dao/dao";
 import InputField from "../../../../../common/component/input/InputField";
 import Stream from "../../../../../common/js/collection/Stream";
 import OverviewItem from "./OverviewItem";
 import VillanyAteszStockOverviewCart from "./cart/VillanyAteszStockOverviewCart";
 import useFocus from "../../../../../common/hook/UseFocus";
 import { hasValue, isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_GET_CART, VILLANY_ATESZ_GET_CARTS, VILLANY_ATESZ_GET_STOCK_ITEMS } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,9 +21,9 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const [carts, setCarts] = useState([]);
     const [inputRef, setInputFocus] = useFocus();
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !isBlank(activeCart));
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
+    useLoader(VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
+    useLoader(VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !isBlank(activeCart));
+    useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
 
     useEffect(() => focus(), [search]);
 

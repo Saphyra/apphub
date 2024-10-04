@@ -7,10 +7,11 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -59,7 +60,7 @@ public class DeleteAccountTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         AwaitilityWrapper.create(20, 3)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, Endpoints.INDEX_PAGE, Endpoints.ACCOUNT_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, UserEndpoints.ACCOUNT_PAGE)))
             .assertTrue("User not logged out");
 
     }
@@ -68,18 +69,18 @@ public class DeleteAccountTest extends SeleniumTest {
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ACCOUNT_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(UserEndpoints.ACCOUNT_PAGE))
             .assertTrue("Account page is not opened");
 
         DeleteAccountActions.fillDeleteAccountForm(getServerPort(), driver, DataConstants.VALID_PASSWORD);
         DeleteAccountActions.deleteAccount(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(getServerPort(), Endpoints.INDEX_PAGE)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE)));
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_DELETED);
 
         IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.INDEX_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 }

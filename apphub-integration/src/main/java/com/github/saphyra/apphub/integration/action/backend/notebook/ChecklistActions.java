@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.notebook;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.AddChecklistItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
@@ -25,7 +25,7 @@ public class ChecklistActions {
     public static Response getCreateChecklistItemResponse(int serverPort, UUID accessTokenId, CreateChecklistRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CHECKLIST_ITEM));
+            .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CREATE_CHECKLIST));
     }
 
     public static ChecklistResponse getChecklist(int serverPort, UUID accessTokenId, UUID listItemId) {
@@ -37,7 +37,7 @@ public class ChecklistActions {
 
     public static Response getChecklistResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHECKLIST_ITEM, "listItemId", listItemId));
+            .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_CHECKLIST, "listItemId", listItemId));
     }
 
     public static void editChecklist(int serverPort, UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
@@ -49,7 +49,7 @@ public class ChecklistActions {
     public static Response getEditChecklistResponse(int serverPort, UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(editRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_CHECKLIST, "listItemId", listItemId));
     }
 
     public static void updateChecklistItemStatus(int serverPort, UUID accessTokenId, UUID checklistItemId, boolean status) {
@@ -61,22 +61,22 @@ public class ChecklistActions {
     public static Response getUpdateChecklistItemStatusResponse(int serverPort, UUID accessTokenId, UUID checklistItemId, boolean status) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
     }
 
     public static Response getDeleteCheckedChecklistItemsResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_CHECKED_ITEMS_FROM_CHECKLIST, "listItemId", listItemId));
+            .delete(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED, "listItemId", listItemId));
     }
 
     public static Response getOrderItemsResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }
 
     public static Response getDeleteChecklistItemResponse(int serverPort, UUID accessTokenId, UUID checklistItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
+            .delete(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
 
     public static void editChecklistItem(int serverPort, UUID accessTokenId, UUID checklistItemId, String content) {
@@ -88,7 +88,7 @@ public class ChecklistActions {
     public static Response getEditChecklistItemResponse(int serverPort, UUID accessTokenId, UUID checklistItemId, String content) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(content))
-            .post(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, "checklistItemId", checklistItemId));
+            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
 
     public static void addChecklistItem(int serverPort, UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
@@ -100,6 +100,6 @@ public class ChecklistActions {
     public static Response getAddChecklistItemResponse(int serverPort, UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_ADD_CHECKLIST_ITEM, "listItemId", listItemId));
+            .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_ADD_CHECKLIST_ITEM, "listItemId", listItemId));
     }
 }

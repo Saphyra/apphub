@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../../../../../common/component/input/InputField";
 import ScheduledInputField from "../../../../../common/component/input/ScheduledInputField";
-import Endpoints from "../../../../../common/js/dao/dao";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
 import ToolStatus from "../ToolStatus";
 import Button from "../../../../../common/component/input/Button";
@@ -9,6 +8,19 @@ import DataListInputField, { DataListInputEntry } from "../../../../../common/co
 import Optional from "../../../../../common/js/collection/Optional";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { copyAndSet, isBlank } from "../../../../../common/js/Utils";
+import {
+    VILLANY_ATESZ_DELETE_TOOL,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STATUS,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE,
+    VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_WARRANTY_EXPIRES_AT
+} from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const ToolboxInventoryItem = ({
     tool,
@@ -34,7 +46,7 @@ const ToolboxInventoryItem = ({
     }
 
     const editInventoried = async (inventoried) => {
-        await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED.createRequest({ value: inventoried }, { toolId: tool.toolId })
+        await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_INVENTORIED.createRequest({ value: inventoried }, { toolId: tool.toolId })
             .send();
 
         updateProperty("inventoried", inventoried);
@@ -42,7 +54,7 @@ const ToolboxInventoryItem = ({
 
     const editAcquiredAt = async (acquiredAt) => {
         if (!isBlank(acquiredAt)) {
-            await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT.createRequest({ value: acquiredAt }, { toolId: tool.toolId })
+            await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_ACQUIRED_AT.createRequest({ value: acquiredAt }, { toolId: tool.toolId })
                 .send();
         }
 
@@ -50,21 +62,21 @@ const ToolboxInventoryItem = ({
     }
 
     const editWarrantyExpiresAt = async (warrantyExpiresAt) => {
-        await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_WARRANTY_EXPIRES_AT.createRequest({ value: warrantyExpiresAt }, { toolId: tool.toolId })
+        await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_WARRANTY_EXPIRES_AT.createRequest({ value: warrantyExpiresAt }, { toolId: tool.toolId })
             .send();
 
         updateProperty("warrantyExpiresAt", warrantyExpiresAt);
     }
 
     const editScrappedAt = async (scrappedAt) => {
-        await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT.createRequest({ value: scrappedAt }, { toolId: tool.toolId })
+        await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_SCRAPPED_AT.createRequest({ value: scrappedAt }, { toolId: tool.toolId })
             .send();
 
         updateProperty("scrappedAt", scrappedAt);
     }
 
     const editStatus = async (status) => {
-        await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STATUS.createRequest({ value: status }, { toolId: tool.toolId })
+        await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STATUS.createRequest({ value: status }, { toolId: tool.toolId })
             .send();
 
         updateProperty("status", status);
@@ -76,7 +88,7 @@ const ToolboxInventoryItem = ({
             name: toolType.value
         };
 
-        const response = await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE.createRequest(payload, { toolId: tool.toolId })
+        const response = await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_TOOL_TYPE.createRequest(payload, { toolId: tool.toolId })
             .send();
 
         updateProperty("toolType", response);
@@ -89,7 +101,7 @@ const ToolboxInventoryItem = ({
             name: storageBox.value
         };
 
-        const response = await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX.createRequest(payload, { toolId: tool.toolId })
+        const response = await VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_STORAGE_BOX.createRequest(payload, { toolId: tool.toolId })
             .send();
 
         updateProperty("storageBox", response);
@@ -134,7 +146,7 @@ const ToolboxInventoryItem = ({
     }
 
     const deleteTool = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_TOOL.createRequest(null, { toolId: tool.toolId })
+        const response = await VILLANY_ATESZ_DELETE_TOOL.createRequest(null, { toolId: tool.toolId })
             .send();
 
         setTools(response);
@@ -222,7 +234,7 @@ const ToolboxInventoryItem = ({
                         value={tool.brand}
                         onchangeCallback={(newValue) => updateProperty("brand", newValue)}
                         scheduledCallback={(newValue) => sendRequest(
-                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
+                            VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
                             newValue
                         )}
                         style={{ width: 8 * tool.name.length + "px" }}
@@ -236,7 +248,7 @@ const ToolboxInventoryItem = ({
                         value={tool.name}
                         onchangeCallback={(newValue) => updateProperty("name", newValue)}
                         scheduledCallback={(newValue) => sendRequest(
-                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
+                            VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_NAME,
                             newValue,
                             nw => { return { value: nw } },
                             nw => !isBlank(nw)
@@ -266,7 +278,7 @@ const ToolboxInventoryItem = ({
                         value={tool.cost}
                         onchangeCallback={(newValue) => updateProperty("cost", newValue)}
                         scheduledCallback={(newValue) => sendRequest(
-                            Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
+                            VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_COST,
                             newValue,
                             nw => { return { value: nw } },
                             nw => !isBlank(nw)

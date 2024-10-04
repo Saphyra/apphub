@@ -5,11 +5,11 @@ import PopulationOverview from "./population/PopulationOverview";
 import BuildingOverview from "./building/BuildingOverview";
 import PriorityOverview from "./priority/PriorityOverview";
 import useLoadSetting, { SettingType } from "../../../common/hook/Setting";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
 import localizationData from "./planet_overview_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import { hasValue } from "../../../../../../common/js/Utils";
+import { SKYXPLORE_DATA_CREATE_SETTING } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 
 const PlanetOverview = ({
     planetId,
@@ -47,7 +47,7 @@ const PlanetOverview = ({
             data: settings
         };
 
-        Endpoints.SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
+        SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
             .send();
     }
 

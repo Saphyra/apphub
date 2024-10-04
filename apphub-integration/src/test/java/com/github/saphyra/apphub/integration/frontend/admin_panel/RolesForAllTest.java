@@ -8,11 +8,12 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -84,7 +85,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         Integer serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
 
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
@@ -95,7 +96,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
             .assertTrue("User is not logged in");
     }
 
@@ -143,7 +144,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         Integer serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, Endpoints.INDEX_PAGE, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
 
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
@@ -154,7 +155,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
             .assertTrue("User is not logged in");
     }
 }

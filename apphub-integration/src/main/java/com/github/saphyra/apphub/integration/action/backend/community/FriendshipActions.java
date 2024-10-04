@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.community;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendshipResponse;
 import io.restassured.response.Response;
 
@@ -23,7 +23,7 @@ public class FriendshipActions {
 
     public static Response getFriendshipsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_FRIENDS));
+            .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_FRIENDS));
     }
 
     public static void deleteFriendship(int serverPort, UUID accessTokenId, UUID friendshipId) {
@@ -34,6 +34,6 @@ public class FriendshipActions {
 
     public static Response getDeleteFriendshipResponse(int serverPort, UUID accessTokenId, UUID friendshipId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.COMMUNITY_DELETE_FRIENDSHIP, "friendshipId", friendshipId));
+            .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_DELETE_FRIENDSHIP, "friendshipId", friendshipId));
     }
 }

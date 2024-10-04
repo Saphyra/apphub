@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../common/component/input/InputField";
 import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import { copyAndSet, isBlank, removeAndSet } from "../../../../../../common/js/Utils";
+import { VILLANY_ATESZ_DELETE_TOOL_TYPE, VILLANY_ATESZ_EDIT_TOOL_TYPE } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolType, toolTypes, setToolTypes }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -12,7 +12,7 @@ const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolT
     useEffect(() => setNewName(toolType.name), [toolType.name]);
 
     const save = async () => {
-        await Endpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE.createRequest({ value: newName }, { toolTypeId: toolType.toolTypeId })
+        await VILLANY_ATESZ_EDIT_TOOL_TYPE.createRequest({ value: newName }, { toolTypeId: toolType.toolTypeId })
             .send();
 
         toolType.name = newName;
@@ -49,7 +49,7 @@ const ManagedToolType = ({ setConfirmationDialogData, localizationHandler, toolT
     }
 
     const confirmDeletion = async () => {
-        await Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE.createRequest(null, { toolTypeId: toolType.toolTypeId })
+        await VILLANY_ATESZ_DELETE_TOOL_TYPE.createRequest(null, { toolTypeId: toolType.toolTypeId })
             .send();
 
         removeAndSet(toolTypes, tt => tt.toolTypeId === toolType.toolTypeId, setToolTypes);

@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.integration.action.frontend.index;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.EmailValidationResult;
@@ -33,7 +34,7 @@ public class IndexPageActions {
     }
 
     public static void verifyRegistrationForm(WebDriver driver, RegistrationValidationResult validationResult) {
-        assertThat(driver.getCurrentUrl()).endsWith(Endpoints.INDEX_PAGE);
+        assertThat(driver.getCurrentUrl()).endsWith(GenericEndpoints.INDEX_PAGE);
 
         verifyInvalidFieldState(
             IndexPage.emailValid(driver),
@@ -63,7 +64,7 @@ public class IndexPageActions {
     }
 
     public static void registerUser(WebDriver driver, RegistrationParameters registrationParameters) {
-        registerUser(driver, registrationParameters, () -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE));
+        registerUser(driver, registrationParameters, () -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE));
     }
 
     public static void registerUser(WebDriver driver, RegistrationParameters registrationParameters, Callable<Boolean> verification) {
@@ -96,6 +97,6 @@ public class IndexPageActions {
     }
 
     public static boolean isLoginPageLoaded(int serverPort, WebDriver driver) {
-        return driver.getCurrentUrl().split("\\?")[0].equals(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE));
+        return driver.getCurrentUrl().split("\\?")[0].equals(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE));
     }
 }

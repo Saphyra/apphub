@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.action.backend.calendar;
 
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EditOccurrenceRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ReferenceDate;
@@ -26,7 +26,7 @@ public class OccurrenceActions {
     public static Response getEditOccurrenceResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, EditOccurrenceRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_EDIT, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_EDIT, "occurrenceId", occurrenceId));
     }
 
     public static List<CalendarResponse> markOccurrenceDone(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
@@ -40,7 +40,7 @@ public class OccurrenceActions {
     public static Response getMarkOccurrenceDoneResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_DONE, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_DONE, "occurrenceId", occurrenceId));
     }
 
     public static List<CalendarResponse> markOccurrenceSnoozed(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
@@ -54,7 +54,7 @@ public class OccurrenceActions {
     public static Response getMarkOccurrenceSnoozedResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_SNOOZED, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_SNOOZED, "occurrenceId", occurrenceId));
     }
 
     public static List<CalendarResponse> markOccurrenceDefault(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
@@ -68,6 +68,6 @@ public class OccurrenceActions {
     public static Response getMarkOccurrenceDefaultResponse(int serverPort, UUID accessTokenId, UUID occurrenceId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_OCCURRENCE_DEFAULT, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_DEFAULT, "occurrenceId", occurrenceId));
     }
 }

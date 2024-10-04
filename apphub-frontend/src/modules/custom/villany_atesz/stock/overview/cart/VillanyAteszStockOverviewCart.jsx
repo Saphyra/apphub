@@ -7,11 +7,11 @@ import SelectInput, { SelectOption } from "../../../../../../common/component/in
 import Stream from "../../../../../../common/js/collection/Stream";
 import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import CartItem from "./CartItem";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import { hasValue } from "../../../../../../common/js/Utils";
+import { VILLANY_ATESZ_CART_EDIT_MARGIN, VILLANY_ATESZ_DELETE_CART, VILLANY_ATESZ_FINALIZE_CART } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -86,7 +86,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
     }
 
     const finalizeCart = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_FINALIZE_CART.createRequest(null, { cartId: cart.cartId })
+        const response = await VILLANY_ATESZ_FINALIZE_CART.createRequest(null, { cartId: cart.cartId })
             .send();
 
         setCarts(response.carts);
@@ -98,7 +98,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
     }
 
     const deleteCart = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_CART.createRequest(null, { cartId: cart.cartId })
+        const response = await VILLANY_ATESZ_DELETE_CART.createRequest(null, { cartId: cart.cartId })
             .send();
 
         setCarts(response.carts);
@@ -114,7 +114,7 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
             return;
         }
 
-        await Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN.createRequest({ value: margin }, { cartId: cart.cartId })
+        await VILLANY_ATESZ_CART_EDIT_MARGIN.createRequest({ value: margin }, { cartId: cart.cartId })
             .send();
 
         setCart(new MapStream(cart).add("margin", margin).toObject())

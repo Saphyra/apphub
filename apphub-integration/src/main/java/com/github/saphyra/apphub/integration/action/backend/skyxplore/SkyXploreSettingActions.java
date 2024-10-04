@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.setting.SettingIdentifier;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.setting.SettingModel;
@@ -17,19 +17,19 @@ public class SkyXploreSettingActions {
     public static Response getCreateOrUpdateSettingResponse(int serverPort, UUID accessTokenId, SettingModel settingModel) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(settingModel)
-            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_DATA_CREATE_SETTING));
+            .put(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_CREATE_SETTING));
     }
 
     public static Response getSettingResponse(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(settingIdentifier)
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_DATA_GET_SETTING));
+            .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_GET_SETTING));
     }
 
     public static Response getDeleteResponse(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(settingIdentifier)
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_DATA_DELETE_SETTING));
+            .delete(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_DELETE_SETTING));
     }
 
     public static void createOrUpdate(int serverPort, UUID accessTokenId, SettingModel settingModel) {

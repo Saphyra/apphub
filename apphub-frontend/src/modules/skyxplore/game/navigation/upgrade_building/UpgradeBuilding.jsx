@@ -6,10 +6,11 @@ import "./upgrade_building.css";
 import buildingLocalizationData from "../../common/localization/building_localization.json";
 import itemDescriptionData from "../../common/localization/item_description.json";
 import { useQuery } from "react-query";
-import Endpoints from "../../../../../common/js/dao/dao";
 import BuildingEffectTable from "../../common/component/building_effect/BuildingEffectTable";
 import ConstructionCost from "../../common/component/construction_cost/ConstructionCost";
 import { hasValue } from "../../../../../common/js/Utils";
+import { SKYXPLORE_GET_ITEM_DATA } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_BUILDING_UPGRADE } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType, planetId, buildingId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,7 +22,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
     const { data } = useQuery(
         dataId,
         async () => {
-            return await Endpoints.SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: dataId })
+            return await SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: dataId })
                 .send()
         },
         {
@@ -40,7 +41,7 @@ const UpgradeBuilding = ({ closePage, footer, dataId, currentLevel, surfaceType,
     );
 
     const upgradeBuilding = async () => {
-        await Endpoints.SKYXPLORE_BUILDING_UPGRADE.createRequest(null, { planetId: planetId, buildingId: buildingId })
+        await SKYXPLORE_BUILDING_UPGRADE.createRequest(null, { planetId: planetId, buildingId: buildingId })
             .send();
 
         closePage();

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 
@@ -33,7 +34,7 @@ public class CommonUtils {
     public static void verifyMissingRole(int serverPort, String uri) {
         ParsedUri parsedUri = parseUri(uri);
 
-        assertThat(parsedUri.getUri()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ERROR_PAGE));
+        assertThat(parsedUri.getUri()).isEqualTo(UrlFactory.create(serverPort, GenericEndpoints.ERROR_PAGE));
         assertThat(parsedUri.getQueryParams()).containsEntry("error_code", ErrorCode.MISSING_ROLE.name());
     }
 

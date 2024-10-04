@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.event;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -58,7 +58,7 @@ public class SkyXploreGameAccountDeletedEventControllerTest {
 
         underTest.deleteAccountEvent(SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build());
 
-        then(webSocketHandler).should().sendEvent(List.of(USER_ID), WebSocketEventName.REDIRECT, Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        then(webSocketHandler).should().sendEvent(List.of(USER_ID), WebSocketEventName.REDIRECT, GenericSkyXploreEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
 
         verify(gameDao).delete(game);
     }

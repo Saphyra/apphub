@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
 
@@ -22,7 +22,7 @@ public class SkyXploreBuildingActions {
     public static Response getConstructNewBuildingResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId, String dataId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(dataId))
-            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_BUILDING_CONSTRUCT_NEW, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
+            .put(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CONSTRUCT_NEW, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
     }
 
     public static void upgradeBuilding(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
@@ -33,7 +33,7 @@ public class SkyXploreBuildingActions {
 
     public static Response getUpgradeBuildingResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_BUILDING_UPGRADE, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_BUILDING_UPGRADE, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 
     public static void cancelConstruction(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
@@ -44,7 +44,7 @@ public class SkyXploreBuildingActions {
 
     public static Response getCancelConstructionResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+            .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 
     public static void deconstructBuilding(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
@@ -55,7 +55,7 @@ public class SkyXploreBuildingActions {
 
     public static Response getDeconstructBuildingResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_BUILDING_DECONSTRUCT, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_BUILDING_DECONSTRUCT, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 
     public static void cancelDeconstruction(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
@@ -66,6 +66,6 @@ public class SkyXploreBuildingActions {
 
     public static Response getCancelDeconstructionResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID buildingId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
+            .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("buildingId", buildingId))));
     }
 }

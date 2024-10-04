@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useCache from "../../../../../../../common/hook/Cache";
 import CacheKey from "../../../../common/constants/CacheKey";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import "./storage_setting_creator.css";
 import localizationData from "./storage_setting_creator_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
@@ -14,6 +13,8 @@ import LabelWrappedInputField from "../../../../../../../common/component/input/
 import RangeInput from "../../../../../../../common/component/input/RangeInput";
 import Button from "../../../../../../../common/component/input/Button";
 import { isBlank } from "../../../../../../../common/js/Utils";
+import { SKYXPLORE_DATA_RESOURCES } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_PLANET_CREATE_STORAGE_SETTING } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -26,7 +27,7 @@ const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }
     const [commodities, setCommodities] = useState([]);
     const [availableCommodities, setAvailableCommodities] = useState([]);
 
-    useCache(CacheKey.RESOURCE_DATA_IDS, Endpoints.SKYXPLORE_DATA_RESOURCES.createRequest(), setCommodities);
+    useCache(CacheKey.RESOURCE_DATA_IDS, SKYXPLORE_DATA_RESOURCES.createRequest(), setCommodities);
 
     useEffect(() => getAvailableCommodities(), [commodities, storageSettings]);
 
@@ -61,7 +62,7 @@ const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }
             priority: priority
         }
 
-        const response = await Endpoints.SKYXPLORE_PLANET_CREATE_STORAGE_SETTING.createRequest(paylaod, { planetId: planetId })
+        const response = await SKYXPLORE_PLANET_CREATE_STORAGE_SETTING.createRequest(paylaod, { planetId: planetId })
             .send();
         setStorageSettings(response);
     }

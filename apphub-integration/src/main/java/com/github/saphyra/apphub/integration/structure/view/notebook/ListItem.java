@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.integration.structure.view.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +89,7 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
             .assertTrue("Edit ListItem page is not opened");
     }
 

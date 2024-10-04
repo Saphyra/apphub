@@ -4,10 +4,10 @@ import localizationData from "./chat_room_creator_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import { isBlank } from "../../../../../common/js/Utils";
+import { SKYXPLORE_GAME_CREATE_CHAT_ROOM, SKYXPLORE_GAME_GET_PLAYERS } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -19,7 +19,7 @@ const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
 
     const loadPlayers = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GAME_GET_PLAYERS.createRequest(null, null, { excludeSelf: true })
+            const response = await SKYXPLORE_GAME_GET_PLAYERS.createRequest(null, null, { excludeSelf: true })
                 .send();
             setPlayers(response);
         }
@@ -100,7 +100,7 @@ const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
             members: members
         }
 
-        await Endpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM.createRequest(payload)
+        await SKYXPLORE_GAME_CREATE_CHAT_ROOM.createRequest(payload)
             .send();
 
         setDisplayRoomCreator(false);

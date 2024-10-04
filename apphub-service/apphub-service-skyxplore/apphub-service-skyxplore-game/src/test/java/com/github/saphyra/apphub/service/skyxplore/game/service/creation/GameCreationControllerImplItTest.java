@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.SkyXploreGameApplication;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.CharacterProxy;
@@ -112,7 +112,7 @@ public class GameCreationControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -162,7 +162,7 @@ public class GameCreationControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
+            .put(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_CREATE_GAME));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

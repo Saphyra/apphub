@@ -5,9 +5,9 @@ import Button from "../../../../../../common/component/input/Button";
 import InputField from "../../../../../../common/component/input/InputField";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import PlanetConstants from "../PlanetConstants";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import "./planet_header.css";
 import { isBlank } from "../../../../../../common/js/Utils";
+import { SKYXPLORE_PLANET_RENAME } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
             return;
         }
 
-        await Endpoints.SKYXPLORE_PLANET_RENAME.createRequest({ value: modifiedName }, { planetId: planetId })
+        await SKYXPLORE_PLANET_RENAME.createRequest({ value: modifiedName }, { planetId: planetId })
             .send();
 
         setPlanetName(modifiedName);

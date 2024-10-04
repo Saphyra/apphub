@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.StorageEndpoints;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,21 +23,21 @@ public interface StorageController {
     /**
      * Creating a database record as a placeholder, what represents the new file to be uploaded
      */
-    @PutMapping(Endpoints.STORAGE_INTERNAL_CREATE_FILE)
+    @PutMapping(StorageEndpoints.STORAGE_INTERNAL_CREATE_FILE)
     UUID createFile(@RequestBody CreateFileRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
      * Receiving the actual file data to the placeholder created before
      */
-    @PutMapping(value = Endpoints.STORAGE_UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = StorageEndpoints.STORAGE_UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     void uploadFile(@PathVariable("storedFileId") UUID storedFileId, MultipartFile file, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) throws IOException;
 
-    @DeleteMapping(Endpoints.STORAGE_INTERNAL_DELETE_FILE)
+    @DeleteMapping(StorageEndpoints.STORAGE_INTERNAL_DELETE_FILE)
     void deleteFile(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.STORAGE_DOWNLOAD_FILE)
+    @GetMapping(StorageEndpoints.STORAGE_DOWNLOAD_FILE)
     ResponseEntity<StreamingResponseBody> downloadFile(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.STORAGE_GET_METADATA)
+    @GetMapping(StorageEndpoints.STORAGE_GET_METADATA)
     StoredFileResponse getFileMetadata(@PathVariable("storedFileId") UUID storedFileId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

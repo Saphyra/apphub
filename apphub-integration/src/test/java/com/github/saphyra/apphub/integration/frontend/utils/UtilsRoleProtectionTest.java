@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
@@ -25,8 +25,8 @@ public class UtilsRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.UTILS_BASE64_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.UTILS_JSON_FORMATTER_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, GenericEndpoints.UTILS_BASE64_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, GenericEndpoints.UTILS_JSON_FORMATTER_PAGE);
     }
 
     @DataProvider(parallel = true)

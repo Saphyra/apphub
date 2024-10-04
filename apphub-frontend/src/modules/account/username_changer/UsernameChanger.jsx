@@ -6,9 +6,9 @@ import { validateFilled, validateUsername } from "../validation/AccountInputVali
 import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
 import ValidatedInputField from "../../../common/component/input/ValidatedInputField";
 import Button from "../../../common/component/input/Button";
-import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import InputField from "../../../common/component/input/InputField";
+import { ACCOUNT_CHANGE_USERNAME } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const UsernameChanger = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,7 +23,7 @@ const UsernameChanger = ({ userData, setUserData }) => {
     useEffect(() => setPassswordValidationResult(validateFilled(password)), [password]);
 
     const changeUsername = async () => {
-        const response = await Endpoints.ACCOUNT_CHANGE_USERNAME.createRequest({ username: newUsername, password: password })
+        const response = await ACCOUNT_CHANGE_USERNAME.createRequest({ username: newUsername, password: password })
             .send();
 
         setNewUsername("");

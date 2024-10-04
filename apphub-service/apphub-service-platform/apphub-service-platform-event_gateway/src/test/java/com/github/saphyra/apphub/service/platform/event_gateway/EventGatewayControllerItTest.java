@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationCli
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -155,7 +155,7 @@ public class EventGatewayControllerItTest {
         EventProcessor processor = registerProcessor();
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.HEARTBEAT), SERVICE_NAME)
+            .get(UrlFactory.create(serverPort, GenericEndpoints.HEARTBEAT), SERVICE_NAME)
             .andReturn();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -223,7 +223,7 @@ public class EventGatewayControllerItTest {
     private Response sendRegisterProcessorRequest(RegisterProcessorRequest request) throws Exception {
         return RequestFactory.createRequest()
             .body(objectMapper.writeValueAsString(request))
-            .put(UrlFactory.create(serverPort, Endpoints.REGISTER_PROCESSOR))
+            .put(UrlFactory.create(serverPort, GenericEndpoints.REGISTER_PROCESSOR))
             .thenReturn();
     }
 
@@ -257,7 +257,7 @@ public class EventGatewayControllerItTest {
     private Response getSendEventResponse(SendEventRequest<TestEvent> request) throws JsonProcessingException {
         return RequestFactory.createRequest()
             .body(objectMapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoints.SEND_EVENT));
+            .post(UrlFactory.create(serverPort, GenericEndpoints.SEND_EVENT));
     }
 
     @Data

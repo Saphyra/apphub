@@ -5,9 +5,11 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
@@ -25,10 +27,10 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_CHARACTER_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_LOBBY_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.SKYXPLORE_GAME_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE);
     }
 
     @DataProvider(parallel = true)

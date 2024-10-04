@@ -8,7 +8,7 @@ import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import InputField from "../../../../../../common/component/input/InputField";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
-import Endpoints from "../../../../../../common/js/dao/dao";
+import { ACCOUNT_REVOKE_BAN } from "../../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanUserBannedRole = ({ userData, ban, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -71,7 +71,7 @@ const BanUserBannedRole = ({ userData, ban, setUserData }) => {
 
         setPassword("");
 
-        const response = await Endpoints.ACCOUNT_REVOKE_BAN.createRequest({ value: password }, { banId: ban.id })
+        const response = await ACCOUNT_REVOKE_BAN.createRequest({ value: password }, { banId: ban.id })
             .send();
 
         setUserData(response);

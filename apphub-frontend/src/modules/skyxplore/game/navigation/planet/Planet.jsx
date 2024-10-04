@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PlanetHeader from "./header/PlanetHeader";
-import Endpoints from "../../../../../common/js/dao/dao";
 import "./planet.css";
 import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
@@ -9,6 +8,7 @@ import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import { hasValue } from "../../../../../common/js/Utils";
+import { SKYXPLORE_PLANET_GET_OVERVIEW } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     //Planet data
@@ -66,7 +66,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     //Data handling
     const loadPlanet = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_PLANET_GET_OVERVIEW.createRequest(null, { planetId: planetId })
+            const response = await SKYXPLORE_PLANET_GET_OVERVIEW.createRequest(null, { planetId: planetId })
                 .send();
 
             setPlanetName(response.planetName);

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../../common/js/dao/dao";
 import "./solar_system.css";
 import SolarSystemConstants from "./SolarSystemConstants";
 import Stream from "../../../../../common/js/collection/Stream";
 import NavigationHistoryItem from "../NavigationHistoryItem";
 import PageName from "../PageName";
 import SolarSystemHeader from "./header/SolarSystemHeader";
+import { SKYXPLORE_GET_SOLAR_SYSTEM } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
     const [solarSystemName, setSolarSystemName] = useState("");
@@ -17,7 +17,7 @@ const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
 
     const loadSolarSystem = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GET_SOLAR_SYSTEM.createRequest(null, { solarSystemId: solarSystemId })
+            const response = await SKYXPLORE_GET_SOLAR_SYSTEM.createRequest(null, { solarSystemId: solarSystemId })
                 .send();
 
             setSolarSystemName(response.systemName);

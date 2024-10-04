@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
 import { hasValue } from "../../../../../../common/js/Utils";
+import { SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);
@@ -11,7 +12,7 @@ const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage
     const { data: terraformingData } = useQuery(
         "terraforming-possibility-" + surfaceType,
         async () => {
-            return await Endpoints.SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES.createRequest(null, { surfaceType: surfaceType })
+            return await SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES.createRequest(null, { surfaceType: surfaceType })
                 .send()
         },
         {
@@ -30,7 +31,7 @@ const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage
     );
 
     const terraform = async (targetSurfaceType) => {
-        await Endpoints.SKYXPLORE_GAME_TERRAFORM_SURFACE.createRequest({ value: targetSurfaceType }, { planetId: planetId, surfaceId: surfaceId })
+        await SKYXPLORE_GAME_TERRAFORM_SURFACE.createRequest({ value: targetSurfaceType }, { planetId: planetId, surfaceId: surfaceId })
             .send();
 
         closePage();

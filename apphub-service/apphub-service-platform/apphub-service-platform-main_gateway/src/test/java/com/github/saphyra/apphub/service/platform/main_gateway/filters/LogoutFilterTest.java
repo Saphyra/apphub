@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenIdConverter;
@@ -68,7 +68,7 @@ public class LogoutFilterTest {
     @Test
     public void shouldNotRun() throws URISyntaxException {
         given(exchange.getRequest()).willReturn(request);
-        given(request.getURI()).willReturn(new URI(Endpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
+        given(request.getURI()).willReturn(new URI(UserEndpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
         given(request.getMethod()).willReturn(HttpMethod.POST);
         given(filterChain.filter(exchange)).willReturn(mono);
 
@@ -82,7 +82,7 @@ public class LogoutFilterTest {
     @Test
     public void invalidateAccessToken() throws URISyntaxException {
         given(exchange.getRequest()).willReturn(request);
-        given(request.getURI()).willReturn(new URI(Endpoints.LOGOUT));
+        given(request.getURI()).willReturn(new URI(UserEndpoints.LOGOUT));
         given(request.getMethod()).willReturn(HttpMethod.POST);
         given(filterChain.filter(exchange)).willReturn(mono);
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());

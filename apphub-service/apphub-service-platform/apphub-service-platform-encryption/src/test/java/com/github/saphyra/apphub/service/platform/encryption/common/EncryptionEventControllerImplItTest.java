@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
@@ -82,7 +82,7 @@ public class EncryptionEventControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sendEventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
+            .post(UrlFactory.create(serverPort, GenericEndpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

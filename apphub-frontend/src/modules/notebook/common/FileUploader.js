@@ -1,7 +1,7 @@
 import Constants from "../../../common/js/Constants";
 import { getBrowserLanguage } from "../../../common/js/Utils";
 import getDefaultErrorHandler from "../../../common/js/dao/DefaultErrorHandler";
-import Endpoints from "../../../common/js/dao/dao";
+import { STORAGE_UPLOAD_FILE } from "../../../common/js/dao/endpoints/StorageEndpoints";
 
 const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => {
     const formData = new FormData();
@@ -17,7 +17,7 @@ const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => 
         }
     }
 
-    return fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileId }), options)
+    return fetch(STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: storedFileId }), options)
         .then(r => {
             setDisplaySpinner(false);
 

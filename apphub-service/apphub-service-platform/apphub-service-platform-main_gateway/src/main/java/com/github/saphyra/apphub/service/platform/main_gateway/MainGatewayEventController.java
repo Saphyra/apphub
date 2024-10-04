@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class MainGatewayEventController {
     private final AccessTokenCache accessTokenCache;
 
-    @PostMapping(Endpoints.EVENT_ACCESS_TOKEN_INVALIDATED)
+    @PostMapping(UserEndpoints.EVENT_ACCESS_TOKEN_INVALIDATED)
     void accessTokenInvalidated(@RequestBody SendEventRequest<List<UUID>> sendEventRequest) {
         sendEventRequest.getPayload()
             .forEach(accessTokenCache::invalidate);

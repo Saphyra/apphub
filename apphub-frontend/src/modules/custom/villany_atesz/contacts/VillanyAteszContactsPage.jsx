@@ -13,7 +13,6 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../../common/component/input/InputField";
-import Endpoints from "../../../../common/js/dao/dao";
 import Stream from "../../../../common/js/collection/Stream";
 import Contact from "./Contact";
 import useLoader from "../../../../common/hook/Loader";
@@ -21,6 +20,7 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 import ContactOrder from "./ContactOrder";
 import { validateContact } from "../validation/VillanyAteszValidation";
 import { hasValue, isBlank } from "../../../../common/js/Utils";
+import { VILLANY_ATESZ_CREATE_CONTACT, VILLANY_ATESZ_DELETE_CONTACT, VILLANY_ATESZ_EDIT_CONTACT, VILLANY_ATESZ_GET_CONTACTS } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszContactsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -56,7 +56,7 @@ const VillanyAteszContactsPage = () => {
         [editedContact]
     );
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CONTACTS.createRequest(), setContacts);
+    useLoader(VILLANY_ATESZ_GET_CONTACTS.createRequest(), setContacts);
 
     const resetInputFields = () => {
         setCode("");
@@ -104,12 +104,12 @@ const VillanyAteszContactsPage = () => {
         }
 
         if (hasValue(editedContact)) {
-            const response = await Endpoints.VILLANY_ATESZ_EDIT_CONTACT.createRequest(payload, { contactId: editedContact.contactId })
+            const response = await VILLANY_ATESZ_EDIT_CONTACT.createRequest(payload, { contactId: editedContact.contactId })
                 .send();
 
             setContacts(response);
         } else {
-            const response = await Endpoints.VILLANY_ATESZ_CREATE_CONTACT.createRequest(payload)
+            const response = await VILLANY_ATESZ_CREATE_CONTACT.createRequest(payload)
                 .send();
 
             setContacts(response);
@@ -118,7 +118,7 @@ const VillanyAteszContactsPage = () => {
     }
 
     const deleteContact = async (contactId) => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_CONTACT.createRequest(null, { contactId: contactId })
+        const response = await VILLANY_ATESZ_DELETE_CONTACT.createRequest(null, { contactId: contactId })
             .send();
 
         setContacts(response);

@@ -8,10 +8,10 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTextActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -64,7 +64,7 @@ public class TextCrudTest extends SeleniumTest {
         NewTextActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Text not found"))

@@ -3,8 +3,8 @@ import roleLocalizationData from "../../../../role_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./ban_user.css";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import localizationData from "./ban_user_localization.json";
+import { ADMIN_PANEL_BAN_DETAILS_PAGE } from "../../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanUser = ({ user }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
@@ -18,7 +18,7 @@ const BanUser = ({ user }) => {
     }
 
     return (
-        <tr className="ban-user" onClick={() => window.open(Endpoints.ADMIN_PANEL_BAN_DETAILS_PAGE.assembleUrl({ userId: user.userId }))}>
+        <tr className="ban-user" onClick={() => window.open(ADMIN_PANEL_BAN_DETAILS_PAGE.assembleUrl({ userId: user.userId }))}>
             <td className="ban-user-user-id">{user.userId}</td>
             <td className="ban-user-username">{user.username}</td>
             <td className="ban-user-email"> {user.email}</td>

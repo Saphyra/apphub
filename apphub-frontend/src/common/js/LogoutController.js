@@ -1,9 +1,9 @@
 import Constants from "./Constants";
-import Endpoints from "./dao/dao";
+import { LOGOUT } from "./dao/endpoints/UserEndpoints";
 import NotificationKey from "./notification/NotificationKey";
 
 const logout = async () => {
-    await Endpoints.LOGOUT.createRequest()
+    await LOGOUT.createRequest()
         .send();
 
     sessionStorage.successCode = NotificationKey.SUCCEESSFUL_LOGOUT;

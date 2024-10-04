@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 
@@ -26,7 +26,7 @@ public class SkyXploreLobbyCreationFlow {
 
         Stream<WebDriver> playersStream = Stream.concat(Stream.of(hostDriver), Arrays.stream(players).map(BiWrapper::getEntity1));
         AwaitilityWrapper.createDefault()
-            .until(() -> playersStream.allMatch(driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)))
+            .until(() -> playersStream.allMatch(driver -> driver.getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE)))
             .assertTrue("Not all players loaded the MainMenu page.");
 
         Arrays.stream(players)

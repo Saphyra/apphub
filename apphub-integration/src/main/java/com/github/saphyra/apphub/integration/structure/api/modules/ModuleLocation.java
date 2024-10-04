@@ -1,6 +1,14 @@
 package com.github.saphyra.apphub.integration.structure.api.modules;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.TrainingEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
@@ -10,29 +18,29 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
-    VILLANY_ATESZ("custom", "villanyatesz", Endpoints.VILLANY_ATESZ_PAGE, "VillanyAtesz"),
-    COMMUNITY("community", "community", Endpoints.COMMUNITY_PAGE, "Közösség"),
-    CALENDAR("office", "calendar", Endpoints.CALENDAR_PAGE, "Határidőnapló"),
-    BAN("admin-panel", "ban", Endpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
-    DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
-    ROLES_FOR_ALL("admin-panel", "roles-for-all", Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE, "Jogosultság mindenkinek"),
-    ROLE_MANAGEMENT("admin-panel", "role-management", Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
-    MEMORY_MONITORING("admin-panel", "memory-monitoring", Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
-    MIGRATION_TASKS("admin-panel", "migration-tasks", Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),
-    MANAGE_ACCOUNT("accounts", "account", Endpoints.ACCOUNT_PAGE, "Fiók kezelése"),
-    NOTEBOOK("office", "notebook", Endpoints.NOTEBOOK_PAGE, "Jegyztefüzet"),
+    VILLANY_ATESZ("custom", "villanyatesz", VillanyAteszEndpoints.VILLANY_ATESZ_PAGE, "VillanyAtesz"),
+    COMMUNITY("community", "community", CommunityEndpoints.COMMUNITY_PAGE, "Közösség"),
+    CALENDAR("office", "calendar", CalendarEndpoints.CALENDAR_PAGE, "Határidőnapló"),
+    BAN("admin-panel", "ban", AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
+    DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
+    ROLES_FOR_ALL("admin-panel", "roles-for-all", AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE, "Jogosultság mindenkinek"),
+    ROLE_MANAGEMENT("admin-panel", "role-management", AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
+    MEMORY_MONITORING("admin-panel", "memory-monitoring", AdminPanelEndpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
+    MIGRATION_TASKS("admin-panel", "migration-tasks", AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),
+    MANAGE_ACCOUNT("accounts", "account", UserEndpoints.ACCOUNT_PAGE, "Fiók kezelése"),
+    NOTEBOOK("office", "notebook", NotebookEndpoints.NOTEBOOK_PAGE, "Jegyztefüzet"),
     SKYXPLORE(
         "game",
         "skyxplore",
-        Endpoints.SKYXPLORE_CHARACTER_PAGE,
+        SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_PAGE,
         "SkyXplore",
-        driver -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_CHARACTER_PAGE) || driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE)
+        driver -> driver.getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_PAGE) || driver.getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE)
     ),
-    HTML("training", "html", Endpoints.TRAINING_HTML_PAGE, "HTML"),
-    CSS("training", "css", Endpoints.TRAINING_CSS_PAGE, "CSS"),
-    BASICS_OF_PROGRAMMING("training", "basics-of-programming", Endpoints.TRAINING_BASICS_OF_PROGRAMMING_PAGE, "A programozás alapja"),
-    JAVASCRIPT("training", "javascript", Endpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript"),
-    UTILS_BASE_64("development-utils", "base64", Endpoints.UTILS_BASE64_PAGE, "Base64 Encoder"),
+    HTML("training", "html", TrainingEndpoints.TRAINING_HTML_PAGE, "HTML"),
+    CSS("training", "css", TrainingEndpoints.TRAINING_CSS_PAGE, "CSS"),
+    BASICS_OF_PROGRAMMING("training", "basics-of-programming", TrainingEndpoints.TRAINING_BASICS_OF_PROGRAMMING_PAGE, "A programozás alapja"),
+    JAVASCRIPT("training", "javascript", TrainingEndpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript"),
+    UTILS_BASE_64("development-utils", "base64", GenericEndpoints.UTILS_BASE64_PAGE, "Base64 Encoder"),
     ;
 
     private final String categoryId;

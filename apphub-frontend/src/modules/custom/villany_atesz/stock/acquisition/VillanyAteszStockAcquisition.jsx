@@ -7,7 +7,6 @@ import AcquiredItemData from "./AcquiredItemData";
 import Stream from "../../../../../common/js/collection/Stream";
 import AcquiredItem from "./AcquiredItem";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import { validateAcquiredItems } from "../../validation/VillanyAteszValidation";
 import useCache from "../../../../../common/hook/Cache";
@@ -15,6 +14,7 @@ import LocalDate from "../../../../../common/js/date/LocalDate";
 import InputField from "../../../../../common/component/input/InputField";
 import VillanyAteszStockAcquisitionHistory from "./history/VillanyAteszStockAcquisitionHistory";
 import { addAndSet, hasValue } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_GET_STOCK_CATEGORIES, VILLANY_ATESZ_STOCK_ACQUIRE } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(loclaizationData);
@@ -25,7 +25,7 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
 
     const refetchCategories = useCache(
         "stock-categories",
-        Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(),
+        VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(),
         (categories) => { }
     );
 
@@ -75,7 +75,7 @@ const VillanyAteszStockAcquisition = ({ setConfirmationDialogData }) => {
             acquiredAt: acquiredAt
         }
 
-        await Endpoints.VILLANY_ATESZ_STOCK_ACQUIRE.createRequest(payload)
+        await VILLANY_ATESZ_STOCK_ACQUIRE.createRequest(payload)
             .send();
 
         updateItems([]);

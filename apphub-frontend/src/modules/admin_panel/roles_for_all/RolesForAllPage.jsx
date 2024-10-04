@@ -8,13 +8,13 @@ import Constants from "../../../common/js/Constants";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import useLoader from "../../../common/hook/Loader";
-import Endpoints from "../../../common/js/dao/dao";
 import Stream from "../../../common/js/collection/Stream";
 import roles from "../roles.json";
 import RolesForAllRow from "./RolesForAllRow";
 import "./roles_for_all.css";
 import roleLocalizationData from "../role_localization.json";
 import { ToastContainer } from "react-toastify";
+import { USER_DATA_ROLES_FOR_ALL_RESTRICTED } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const RolesForAllPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -26,7 +26,7 @@ const RolesForAllPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(Endpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), setRestrictedRoles);
+    useLoader(USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), setRestrictedRoles);
 
     const getRoles = () => {
         return new Stream(roles)

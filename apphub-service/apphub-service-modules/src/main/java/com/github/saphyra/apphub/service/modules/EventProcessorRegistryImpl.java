@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.modules;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
             RegisterProcessorRequest.builder()
                 .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.EVENT_DELETE_ACCOUNT)
+                .url(GenericEndpoints.EVENT_DELETE_ACCOUNT)
                 .build()
         );
     }

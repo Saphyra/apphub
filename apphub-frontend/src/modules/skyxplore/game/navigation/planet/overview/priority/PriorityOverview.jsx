@@ -4,9 +4,9 @@ import LocalizationHandler from "../../../../../../../common/js/LocalizationHand
 import MapStream from "../../../../../../../common/js/collection/MapStream";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../../../../../common/component/input/NumberInput";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import Button from "../../../../../../../common/component/input/Button";
 import { isTrue } from "../../../../../../../common/js/Utils";
+import { SKYXPLORE_PLANET_UPDATE_PRIORITY } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, up
     }
 
     const setValue = async (priorityType, newPriority) => {
-        await Endpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, priorityType: priorityType })
+        await SKYXPLORE_PLANET_UPDATE_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, priorityType: priorityType })
             .send();
 
         const copy = new MapStream(priorities)

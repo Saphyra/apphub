@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.monitoring;
 
 import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class MemoryMonitoringEventController {
         this.serviceName = serviceName;
     }
 
-    @PostMapping(Endpoints.EVENT_MEMORY_MONITORING)
+    @PostMapping(AdminPanelEndpoints.EVENT_MEMORY_MONITORING)
     public void sendMemoryStatus() {
         log.debug("Reporting memory status...");
         monitoringClient.reportMemoryStatus(memoryStatusModelFactory.create(serviceName), commonConfigProperties.getDefaultLocale());

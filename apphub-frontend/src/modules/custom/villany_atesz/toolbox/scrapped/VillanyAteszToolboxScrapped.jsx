@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import localizationData from "./villany_atesz_toolbox_scrapped_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
-import Endpoints from "../../../../../common/js/dao/dao";
 import useLoader from "../../../../../common/hook/Loader";
 import ToolStatus from "../ToolStatus";
 import ToolboxScrappedItem from "./ToolboxScrappedItem";
@@ -10,6 +9,7 @@ import Stream from "../../../../../common/js/collection/Stream";
 import "./villany_atesz_toolbox_scrapped.css";
 import filterTool from "../ToolFilter";
 import sortTools from "../ToolSorter";
+import { VILLANY_ATESZ_GET_TOOLS } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszToolboxScrapped = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -17,7 +17,7 @@ const VillanyAteszToolboxScrapped = ({ setConfirmationDialogData }) => {
     const [search, setSearch] = useState("");
     const [tools, setTools] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
+    useLoader(VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
 
     const getTools = () => {
         return new Stream(tools)

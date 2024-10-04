@@ -16,8 +16,8 @@ import AccountDeleter from "./account_deleter/AccountDeleter";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
 import useLoader from "../../common/hook/Loader";
-import Endpoints from "../../common/js/dao/dao";
 import { hasValue } from "../../common/js/Utils";
+import { ACCOUNT_GET_USER } from "../../common/js/dao/endpoints/UserEndpoints";
 
 const AccountPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -29,7 +29,7 @@ const AccountPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(Endpoints.ACCOUNT_GET_USER.createRequest(), setUserData);
+    useLoader(ACCOUNT_GET_USER.createRequest(), setUserData);
 
     return (
         <div className="main-page">

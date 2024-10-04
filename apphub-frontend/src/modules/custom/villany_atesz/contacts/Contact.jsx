@@ -1,8 +1,8 @@
 import React from "react";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
+import { VILLANY_ATESZ_CREATE_CART } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteContact, localizationHandler }) => {
     const openConfirmDeletionDialog = () => {
@@ -28,7 +28,7 @@ const Contact = ({ contact, setEditedContact, setConfirmationDialogData, deleteC
     }
 
     const createCart = async () => {
-        const cartId = await Endpoints.VILLANY_ATESZ_CREATE_CART.createRequest({ value: contact.contactId })
+        const cartId = await VILLANY_ATESZ_CREATE_CART.createRequest({ value: contact.contactId })
             .send();
 
         sessionStorage.activeCart = cartId;

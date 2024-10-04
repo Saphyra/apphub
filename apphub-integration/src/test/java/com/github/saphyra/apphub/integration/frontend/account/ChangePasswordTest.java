@@ -6,10 +6,11 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -88,7 +89,7 @@ public class ChangePasswordTest extends SeleniumTest {
 
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.builder().userIdentifier(userData.getEmail()).password(changeParameters.getNewPassword()).build());
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)))
             .assertTrue();
     }
 
@@ -149,12 +150,12 @@ public class ChangePasswordTest extends SeleniumTest {
         ChangePasswordActions.changePassword(driver1);
 
         AwaitilityWrapper.create(20, 3)
-            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.INDEX_PAGE))
+            .until(() -> driver1.getCurrentUrl().endsWith(GenericEndpoints.INDEX_PAGE))
             .assertTrue("Secondary session is not invalidated.");
         ToastMessageUtil.verifySuccessToast(driver1, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
 
         AwaitilityWrapper.create(20, 3)
-            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE + "?redirect=" + Endpoints.MODULES_PAGE)))
+            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE + "?redirect=" + ModulesEndpoints.MODULES_PAGE)))
             .assertTrue("Secondary session is not invalidated. PageUrl: " + driver2.getCurrentUrl());
     }
 

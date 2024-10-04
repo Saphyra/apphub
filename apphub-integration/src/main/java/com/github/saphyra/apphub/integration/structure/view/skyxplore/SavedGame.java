@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
 import lombok.Data;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,6 +13,6 @@ public class SavedGame {
     public void load(WebDriver driver) {
         webElement.click();
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE));
+            .until(() -> driver.getCurrentUrl().endsWith(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_PAGE));
     }
 }

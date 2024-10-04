@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import downloadFile from "../../../../FileDownloader";
 import { hasValue } from "../../../../../../../common/js/Utils";
+import { STORAGE_DOWNLOAD_FILE } from "../../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
 const ImageColumn = ({
     columnData,
@@ -39,7 +39,7 @@ const ImageColumn = ({
                 setPreview(null);
             }
         } else if (hasValue(columnData.data) && hasValue(columnData.data.storedFileId)) {
-            setPreview(Endpoints.STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: columnData.data.storedFileId }));
+            setPreview(STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: columnData.data.storedFileId }));
         }
     }
 

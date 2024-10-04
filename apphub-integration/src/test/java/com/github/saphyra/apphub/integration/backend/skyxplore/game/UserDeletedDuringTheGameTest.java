@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -47,7 +47,7 @@ public class UserDeletedDuringTheGameTest extends BackEndTest {
         WebSocketEvent event = memberClient.awaitForEvent(WebSocketEventName.REDIRECT)
             .orElseThrow(() -> new RuntimeException("Redirect event not arrived"));
 
-        assertThat(event.getPayload()).isEqualTo(Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+        assertThat(event.getPayload()).isEqualTo(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
 
         ApphubWsClient.cleanUpConnections();
     }

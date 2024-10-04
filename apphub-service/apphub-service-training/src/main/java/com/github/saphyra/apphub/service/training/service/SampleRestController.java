@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.training.service;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.TrainingEndpoints;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class SampleRestController {
     private final SleepService sleepService;
 
-    @GetMapping(Endpoints.TRAINING_SAMPLE_REST_ENDPOINT)
+    @GetMapping(TrainingEndpoints.TRAINING_SAMPLE_REST_ENDPOINT)
     public Map<String, String> getEndpoint(HttpServletRequest request) {
         sleepService.sleep(5000);
         return Arrays.stream(request.getQueryString().split("&"))

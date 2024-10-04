@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway;
 import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
 import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import io.restassured.response.Response;
@@ -39,7 +39,7 @@ public class RootControllerTest {
     @Test
     void getOwnUserId_nullAccessToken() {
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.GET_OWN_USER_ID));
+            .get(UrlFactory.create(serverPort, GenericEndpoints.GET_OWN_USER_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
@@ -50,7 +50,7 @@ public class RootControllerTest {
 
         Response response = RequestFactory.createRequest()
             .cookie(Constants.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_ID)
-            .get(UrlFactory.create(serverPort, Endpoints.GET_OWN_USER_ID));
+            .get(UrlFactory.create(serverPort, GenericEndpoints.GET_OWN_USER_ID));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 

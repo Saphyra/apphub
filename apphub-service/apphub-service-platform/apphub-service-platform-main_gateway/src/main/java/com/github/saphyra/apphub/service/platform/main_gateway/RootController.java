@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway;
 import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class RootController {
     private final AccessTokenQueryService accessTokenQueryService;
 
-    @GetMapping(Endpoints.GET_OWN_USER_ID)
+    @GetMapping(GenericEndpoints.GET_OWN_USER_ID)
     ResponseEntity<OneParamResponse<UUID>> getOwnUserId(@CookieValue(value = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessTokenId) {
         return accessTokenQueryService.getAccessToken(accessTokenId)
             .map(InternalAccessTokenResponse::getUserId)

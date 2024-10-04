@@ -1,5 +1,5 @@
 import Constants from "../../../common/js/Constants";
-import Endpoints from "../../../common/js/dao/dao";
+import { LOGIN } from "../../../common/js/dao/endpoints/UserEndpoints";
 import NotificationKey from "../../../common/js/notification/NotificationKey";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { getQueryParam, setCookie } from "../../../common/js/Utils";
@@ -16,7 +16,7 @@ const login = async (userIdentifier, password, rememberMe) => {
         rememberMe: rememberMe
     }
 
-    const loginResponse = await Endpoints.LOGIN.createRequest(body)
+    const loginResponse = await LOGIN.createRequest(body)
         .send();
 
     setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);

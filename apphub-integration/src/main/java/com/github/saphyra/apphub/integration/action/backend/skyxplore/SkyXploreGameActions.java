@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
 
@@ -20,7 +20,7 @@ public class SkyXploreGameActions {
     public static Response getPauseGameResponse(int serverPort, UUID accessTokenId, boolean isPaused) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(isPaused))
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_PAUSE));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_PAUSE));
     }
 
     public static boolean isHost(int serverPort, UUID accessTokenId) {
@@ -35,7 +35,7 @@ public class SkyXploreGameActions {
 
     public static Response getIsHostResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_IS_HOST));
+            .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_IS_HOST));
     }
 
     public static void saveGame(int serverPort, UUID accessTokenId) {
@@ -46,7 +46,7 @@ public class SkyXploreGameActions {
 
     public static Response getSaveGameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_SAVE));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_SAVE));
     }
 
     public static void exit(int serverPort, UUID accessTokenId) {
@@ -57,11 +57,11 @@ public class SkyXploreGameActions {
 
     public static Response getExitResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_EXIT_GAME));
+            .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_EXIT_GAME));
     }
 
     public static Response getIsUserInGameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_IS_USER_IN_GAME));
+            .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER));
     }
 }

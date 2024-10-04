@@ -2,7 +2,8 @@ import Constants from "../../../../../common/js/Constants";
 import { getBrowserLanguage } from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../common/js/dao/DefaultErrorHandler";
-import Endpoints from "../../../../../common/js/dao/dao";
+import { NOTEBOOK_CREATE_TABLE } from "../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import { STORAGE_UPLOAD_FILE } from "../../../../../common/js/dao/endpoints/StorageEndpoints";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import OpenedPageType from "../../../common/OpenedPageType";
 import validateColumnData from "../../../common/validator/ColumnDataValidator";
@@ -36,7 +37,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
         rows: rows
     }
 
-    const fileUploadResponse = await Endpoints.NOTEBOOK_CREATE_TABLE.createRequest(payload)
+    const fileUploadResponse = await NOTEBOOK_CREATE_TABLE.createRequest(payload)
         .send();
 
     if (fileUploadResponse.length > 0) {
@@ -75,7 +76,7 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
         }
     }
 
-    await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: fileUpload.storedFileId }), options)
+    await fetch(STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: fileUpload.storedFileId }), options)
         .then(r => {
             if (!r.ok) {
                 setDisplaySpinner(false);

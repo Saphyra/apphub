@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.*;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.GameChatMessage;
@@ -63,7 +64,7 @@ public class GameChatTest extends SeleniumTest {
                 ModulesPageActions.openModule(serverPort, biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
                 AwaitilityWrapper.createDefault()
-                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE))
                     .assertTrue();
             }))
             .map(FutureWrapper::get)

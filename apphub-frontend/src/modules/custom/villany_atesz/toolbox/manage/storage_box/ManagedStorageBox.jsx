@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../../../../../../common/component/input/InputField";
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { copyAndSet, isBlank, removeAndSet } from "../../../../../../common/js/Utils";
+import { VILLANY_ATESZ_DELETE_STORAGE_BOX, VILLANY_ATESZ_EDIT_STORAGE_BOX } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, storageBox, storageBoxes, setStorageBoxes }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -12,7 +12,7 @@ const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, sto
     useEffect(() => setNewName(storageBox.name), [storageBox.name]);
 
     const save = async () => {
-        await Endpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX.createRequest({ value: newName }, { storageBoxId: storageBox.storageBoxId })
+        await VILLANY_ATESZ_EDIT_STORAGE_BOX.createRequest({ value: newName }, { storageBoxId: storageBox.storageBoxId })
             .send();
 
         storageBox.name = newName;
@@ -49,7 +49,7 @@ const ManagedStorageBox = ({ setConfirmationDialogData, localizationHandler, sto
     }
 
     const confirmDeletion = async () => {
-        await Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX.createRequest(null, { storageBoxId: storageBox.storageBoxId })
+        await VILLANY_ATESZ_DELETE_STORAGE_BOX.createRequest(null, { storageBoxId: storageBox.storageBoxId })
             .send();
 
         removeAndSet(storageBoxes, sb => sb.storageBoxId === storageBox.storageBoxId, setStorageBoxes);

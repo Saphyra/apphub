@@ -10,17 +10,17 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableHead;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.TableRow;
+import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -200,7 +200,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         NewTableActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE));
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE));
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .open(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE).isPresent());

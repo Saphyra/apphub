@@ -3,7 +3,6 @@ import "./villany_atesz_toolbox_inventory.css";
 import localizationData from "./villany_atesz_toolbox_inventory_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import useLoader from "../../../../../common/hook/Loader";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import filterTool from "../ToolFilter";
 import sortTools from "../ToolSorter";
@@ -12,6 +11,7 @@ import InputField from "../../../../../common/component/input/InputField";
 import { DataListInputEntry } from "../../../../../common/component/input/DataListInputField";
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { VILLANY_ATESZ_GET_STORAGE_BOXES, VILLANY_ATESZ_GET_TOOL_TYPES, VILLANY_ATESZ_GET_TOOLS, VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,13 +21,13 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     const [toolTypes, setToolTypes] = useState([]);
     const [storageBoxes, setStorageBoxes] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
+    useLoader(VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
     useEffect(() => loadToolTypes(), []);
     useEffect(() => loadStorageBoxes(), []);
 
     const loadToolTypes = () => {
         const fetch = async () => {
-            const response = await Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES.createRequest()
+            const response = await VILLANY_ATESZ_GET_TOOL_TYPES.createRequest()
                 .send();
 
             const entries = new Stream(response)
@@ -41,7 +41,7 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
 
     const loadStorageBoxes = () => {
         const fetch = async () => {
-            const response = await Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest()
+            const response = await VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest()
                 .send();
 
             const entries = new Stream(response)
@@ -76,7 +76,7 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     }
 
     const resetInventoried = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED.createRequest()
+        const response = await VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED.createRequest()
             .send();
 
         setTools(response);

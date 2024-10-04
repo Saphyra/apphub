@@ -12,7 +12,7 @@ import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
 import { ToastContainer } from "react-toastify";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Endpoints from "../../../../common/js/dao/dao";
+import { NOTEBOOK_CREATE_CATEGORY } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const NewCategoryPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -37,7 +37,7 @@ const NewCategoryPage = () => {
             parent: parentId,
             title: listItemTitle
         }
-        await Endpoints.NOTEBOOK_CREATE_CATEGORY.createRequest(payload)
+        await NOTEBOOK_CREATE_CATEGORY.createRequest(payload)
             .send();
 
         window.location.href = Constants.NOTEBOOK_PAGE;

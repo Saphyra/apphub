@@ -2,7 +2,7 @@ import ConfirmationDialogData from "../../../../../../../common/component/confir
 import Button from "../../../../../../../common/component/input/Button";
 import { copyAndSet, throwException } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
-import Endpoints from "../../../../../../../common/js/dao/dao";
+import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS } from "../../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 import MoveDirection from "../../../../../common/MoveDirection";
 import UpdateType from "../../../../../common/checklist_item/UpdateType";
 
@@ -10,11 +10,11 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
     if (!editingEnabled) {
         switch (updateType) {
             case UpdateType.TOGGLE_CHECKED:
-                Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
+                NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
                     .send();
                 break;
             case UpdateType.CONTENT_MODIFIED:
-                Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
+                NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
                     .send();
                 break;
             default:
@@ -44,7 +44,7 @@ export const removeItem = async (item, items, setItems, editingEnabled, setConfi
                     id="notebook-content-checklist-item-deletion-confirm-button"
                     label={localizationHandler.get("delete")}
                     onclick={async () => {
-                        await Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
+                        await NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
                             .send();
                         setConfirmationDialogData(null);
                         doRemoveItem(item);

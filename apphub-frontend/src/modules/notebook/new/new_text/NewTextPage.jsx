@@ -13,7 +13,6 @@ import ParentSelector from "../../common/parent_selector/ParentSelector";
 import Textarea from "../../../../common/component/input/Textarea";
 import "./new_text.css";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Endpoints from "../../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import create from "./NewTextSaver";
 

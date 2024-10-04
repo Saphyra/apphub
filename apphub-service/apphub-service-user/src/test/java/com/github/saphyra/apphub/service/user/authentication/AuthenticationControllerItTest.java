@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
-import com.github.saphyra.apphub.api.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.user.model.login.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -13,7 +13,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
@@ -136,7 +136,7 @@ public class AuthenticationControllerItTest {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS));
+            .post(UrlFactory.create(serverPort, UserEndpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -161,7 +161,7 @@ public class AuthenticationControllerItTest {
 
         Response response = RequestFactory.createRequest()
             .body(objectMapperWrapper.writeValueAsString(request))
-            .post(UrlFactory.create(serverPort, Endpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION));
+            .post(UrlFactory.create(serverPort, UserEndpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(accessTokenDao.findById(ACCESS_TOKEN_ID_1.toString()).get().getLastAccess()).isAfter(referenceDate);
@@ -235,7 +235,7 @@ public class AuthenticationControllerItTest {
         return RequestFactory.createRequest()
             .header(Constants.LOCALE_HEADER, LOCALE)
             .body(objectMapperWrapper.writeValueAsString(loginRequest))
-            .post(UrlFactory.create(serverPort, Endpoints.LOGIN));
+            .post(UrlFactory.create(serverPort, UserEndpoints.LOGIN));
     }
 
     @Test
@@ -257,7 +257,7 @@ public class AuthenticationControllerItTest {
 
         Response response = RequestFactory.createRequest()
             .header(Constants.ACCESS_TOKEN_HEADER, base64Encoder.encode(objectMapperWrapper.writeValueAsString(accessTokenHeader)))
-            .post(UrlFactory.create(serverPort, Endpoints.LOGOUT));
+            .post(UrlFactory.create(serverPort, UserEndpoints.LOGOUT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
@@ -321,6 +321,6 @@ public class AuthenticationControllerItTest {
         Map<String, Object> uriParams = new HashMap<>();
         uriParams.put("accessTokenId", ACCESS_TOKEN_ID_1.toString());
         return RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID, uriParams));
+            .get(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID, uriParams));
     }
 }

@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.ToolTypeModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.VillanyAteszEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,33 +21,33 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ToolboxController {
-    @GetMapping(Endpoints.VILLANY_ATESZ_GET_TOOLS)
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_GET_TOOLS)
     List<ToolResponse> getTools(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PutMapping(Endpoints.VILLANY_ATESZ_CREATE_TOOL)
+    @PutMapping(VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_TOOL)
     void createTool(@RequestBody CreateToolRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.VILLANY_ATESZ_SET_TOOL_STATUS)
+    @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_SET_TOOL_STATUS)
     List<ToolResponse> setToolStatus(@RequestBody OneParamRequest<ToolStatus> status, @PathVariable("toolId") UUID toolId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_TOOL)
+    @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_TOOL)
     List<ToolResponse> deleteTool(@PathVariable("toolId") UUID toolId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES)
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_GET_TOOL_TYPES)
     List<ToolTypeModel> getToolTypes(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES)
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_GET_STORAGE_BOXES)
     List<StorageBoxModel> getStorageBoxes(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE)
+    @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE)
     void editToolType(@RequestBody OneParamRequest<String> name, @PathVariable("toolTypeId") UUID toolTypeId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE)
+    @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE)
     void deleteToolType(@PathVariable("toolTypeId") UUID toolTypeId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX)
+    @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX)
     void editStorageBox(@RequestBody OneParamRequest<String> name, @PathVariable("storageBoxId") UUID storageBoxId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX)
+    @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX)
     void deleteStorageBox(@PathVariable("storageBoxId") UUID storageBoxId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

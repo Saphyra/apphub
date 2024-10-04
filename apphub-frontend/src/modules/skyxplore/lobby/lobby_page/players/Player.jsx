@@ -2,8 +2,8 @@ import React from "react";
 import "./player/player.css"
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField"
 import Stream from "../../../../../common/js/collection/Stream";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Constants from "../../../../../common/js/Constants";
+import { SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Player = ({ player, localizationHandler, alliances, isHost, lobbyType }) => {
     const statusClass = "skyxplore-lobby-player-status-" + player.status.toLowerCase();
@@ -11,7 +11,7 @@ const Player = ({ player, localizationHandler, alliances, isHost, lobbyType }) =
     const setAlliance = (event) => {
         const allianceValue = event.target.value;
 
-        Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER.createRequest({ value: allianceValue }, { userId: player.userId })
+        SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER.createRequest({ value: allianceValue }, { userId: player.userId })
             .send();
     }
 

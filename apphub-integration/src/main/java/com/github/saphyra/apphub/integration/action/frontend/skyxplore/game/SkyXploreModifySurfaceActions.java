@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
 
@@ -33,10 +34,7 @@ public class SkyXploreModifySurfaceActions {
     }
 
     public static void startTerraformation(WebDriver driver, String surfaceType) {
-        driver.findElements(By.className("skyxplore-game-terraforming-possibility"))
-            .stream()
-            .filter(webElement -> webElement.getAttribute("id").equals("skyxplore-game-terraforming-possibility-" + surfaceType.toLowerCase()))
-            .findFirst()
+        AwaitilityWrapper.getOptionalWithWait(() -> findTerraformingPossibility(driver, surfaceType))
             .orElseThrow(() -> new RuntimeException("TerraformingPossibility not found with surfaceType " + surfaceType))
             .findElement(By.className("skyxplore-game-terraform-button"))
             .click();
@@ -44,5 +42,12 @@ public class SkyXploreModifySurfaceActions {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.isLoaded(driver))
             .assertTrue("Planet is not loaded.");
+    }
+
+    private static Optional<WebElement> findTerraformingPossibility(WebDriver driver, String surfaceType) {
+        return driver.findElements(By.className("skyxplore-game-terraforming-possibility"))
+            .stream()
+            .filter(webElement -> webElement.getAttribute("id").equals("skyxplore-game-terraforming-possibility-" + surfaceType.toLowerCase()))
+            .findFirst();
     }
 }

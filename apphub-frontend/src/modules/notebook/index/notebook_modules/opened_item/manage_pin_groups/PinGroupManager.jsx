@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import OpenedListItemHeader from "../OpenedListItemHeader";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import useLoader from "../../../../../../common/hook/Loader";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../../../../common/component/input/InputField";
@@ -14,6 +13,7 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import PinGroup from "./PinGroup";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import { NOTEBOOK_CREATE_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, lastEvent }) => {
     const [pinGroups, setPinGroups] = useState([]);
@@ -27,7 +27,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
         }
     }, [isInFocus]);
 
-    useLoader(Endpoints.NOTEBOOK_GET_PIN_GROUPS.createRequest(), setPinGroups, [loadPinGroupsTrigger]);
+    useLoader(NOTEBOOK_GET_PIN_GROUPS.createRequest(), setPinGroups, [loadPinGroupsTrigger]);
 
     const createPinGroup = async () => {
         const validationResult = validatePinGroupName(newPinGroupName);
@@ -36,7 +36,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
             return;
         }
 
-        const response = await Endpoints.NOTEBOOK_CREATE_PIN_GROUP.createRequest({ value: newPinGroupName })
+        const response = await NOTEBOOK_CREATE_PIN_GROUP.createRequest({ value: newPinGroupName })
             .send();
 
         setNewPinGroupName("");

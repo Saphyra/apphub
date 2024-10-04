@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ class RedirectUrlProvider {
             .collect(Collectors.joining(","));
         return String.format(
             "%s?error_code=%s&user_id=%s&required_roles=%s",
-            Endpoints.ERROR_PAGE,
+            GenericEndpoints.ERROR_PAGE,
             ErrorCode.MISSING_ROLE.name(),
             accessTokenHeader.getUserId(),
             missingRoles

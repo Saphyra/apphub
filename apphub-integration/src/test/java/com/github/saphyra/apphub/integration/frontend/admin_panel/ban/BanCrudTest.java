@@ -9,10 +9,11 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -76,7 +77,7 @@ public class BanCrudTest extends SeleniumTest {
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
-            .until(() -> testDriver.getCurrentUrl().contains(Endpoints.ERROR_PAGE))
+            .until(() -> testDriver.getCurrentUrl().contains(GenericEndpoints.ERROR_PAGE))
             .assertTrue("TestUser is not banned.");
 
         new WebDriverWait(testDriver, Duration.ofSeconds(5))
@@ -106,9 +107,9 @@ public class BanCrudTest extends SeleniumTest {
         revokeBan(adminDriver, adminUserData);
 
         testDriver.navigate()
-            .to(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
+            .to(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE));
         AwaitilityWrapper.createDefault()
-            .until(() -> testDriver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .until(() -> testDriver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
             .assertTrue("TestUser is still banned.");
     }
 

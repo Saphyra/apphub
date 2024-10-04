@@ -4,9 +4,9 @@ import Button from "../../../../../../../common/component/input/Button";
 import InputField from "../../../../../../../common/component/input/InputField";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import localizationData from "./citizen_name_localization.json";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
 import { isBlank } from "../../../../../../../common/js/Utils";
+import { SKYXPLORE_PLANET_RENAME_CITIZEN } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const CitizenName = ({ citizenId, name }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -27,7 +27,7 @@ const CitizenName = ({ citizenId, name }) => {
             return;
         }
 
-        await Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN.createRequest({ value: modifiedName }, { citizenId: citizenId })
+        await SKYXPLORE_PLANET_RENAME_CITIZEN.createRequest({ value: modifiedName }, { citizenId: citizenId })
             .send();
 
         setEditingEnabled(false);

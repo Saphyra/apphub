@@ -7,9 +7,9 @@ import PreLabeledInputField from "../../../common/component/input/PreLabeledInpu
 import ValidatedInputField from "../../../common/component/input/ValidatedInputField";
 import Button from "../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../common/js/dao/dao";
 import Constants from "../../../common/js/Constants";
 import InputField from "../../../common/component/input/InputField";
+import { ACCOUNT_DELETE_ACCOUNT } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const AccountDeleter = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -45,7 +45,7 @@ const AccountDeleter = ({ setConfirmationDialogData }) => {
 
     const deleteAccount = async () => {
         try {
-            await Endpoints.ACCOUNT_DELETE_ACCOUNT.createRequest({ value: password })
+            await ACCOUNT_DELETE_ACCOUNT.createRequest({ value: password })
                 .send();
 
             sessionStorage.successText = localizationHandler.get("account-deleted");

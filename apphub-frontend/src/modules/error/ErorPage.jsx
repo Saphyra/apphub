@@ -8,13 +8,15 @@ import Constants from "../../common/js/Constants";
 import { useSearchParams } from "react-router-dom";
 import errorCodeLocalizationData from "../../common/js/notification/notification_translations.json";
 import logout from "../../common/js/LogoutController";
-import Endpoints, { ResponseStatus } from "../../common/js/dao/dao";
+import { ResponseStatus } from "../../common/js/dao/dao";
 import ErrorHandler from "../../common/js/dao/ErrorHandler";
 import Optional from "../../common/js/collection/Optional";
 import LocalDateTime from "../../common/js/date/LocalDateTime";
 import "./error_page.css";
 import useLoader from "../../common/hook/Loader";
 import { hasValue } from "../../common/js/Utils";
+import { ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE } from "../../common/js/dao/endpoints/UserEndpoints";
+import { CHECK_SESSION } from "../../common/js/dao/endpoints/GenericEndpoints";
 
 const ErrorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -35,7 +37,7 @@ const ErrorPage = () => {
     useEffect(() => checkUserLoggedIn(), []);
 
     useLoader(
-        Endpoints.ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
+        ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
         setBannedDetails,
         [userId, requiredRoles],
         () => hasValue(userId) && hasValue(requiredRoles)
@@ -43,7 +45,7 @@ const ErrorPage = () => {
 
     const checkUserLoggedIn = () => {
         const fetch = async () => {
-            await Endpoints.CHECK_SESSION.createRequest()
+            await CHECK_SESSION.createRequest()
                 .addErrorHandler(new ErrorHandler(
                     response => response.status === ResponseStatus.UNAUTHORIZED,
                     () => setUserLoggedIn(false)

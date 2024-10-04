@@ -1,8 +1,8 @@
 import React from "react";
 import InputField from "../../../../../../../common/component/input/InputField";
 import Button from "../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import { isTrue } from "../../../../../../../common/js/Utils";
+import { NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS } from "../../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const CheckboxColumn = ({
     columnData,
@@ -13,7 +13,7 @@ const CheckboxColumn = ({
 }) => {
     const updateData = (checked) => {
         if(!editingEnabled){
-            Endpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({value: checked}, {columnId: columnData.columnId})
+            NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({value: checked}, {columnId: columnData.columnId})
                 .send();
         }
 

@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
 
@@ -24,7 +24,7 @@ public class SkyXplorePlanetQueueActions {
             .body(new OneParamRequest<>(priority))
             .post(UrlFactory.create(
                 serverPort,
-                Endpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY,
+                SkyXploreGameEndpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY,
                 CollectionUtils.toMap(
                     new BiWrapper<>("planetId", planetId),
                     new BiWrapper<>("type", type),
@@ -43,7 +43,7 @@ public class SkyXplorePlanetQueueActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(
                 serverPort,
-                Endpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM,
+                SkyXploreGameEndpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM,
                 CollectionUtils.toMap(
                     new BiWrapper<>("planetId", planetId),
                     new BiWrapper<>("type", type),

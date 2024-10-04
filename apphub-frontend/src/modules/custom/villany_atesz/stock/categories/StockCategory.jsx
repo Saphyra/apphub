@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../../common/js/dao/dao";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import { isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_DELETE_STOCK_CATEGORY, VILLANY_ATESZ_EDIT_STOCK_CATEGORY } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const StockCategory = ({ localizationHandler, category, setCategories, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -64,7 +64,7 @@ const StockCategory = ({ localizationHandler, category, setCategories, setConfir
             return;
         }
 
-        const response = await Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY.createRequest({ name: modifiedName, measurement: modifiedMeasurement }, { stockCategoryId: category.stockCategoryId })
+        const response = await VILLANY_ATESZ_EDIT_STOCK_CATEGORY.createRequest({ name: modifiedName, measurement: modifiedMeasurement }, { stockCategoryId: category.stockCategoryId })
             .send();
 
         setEditingEnabled(false);
@@ -72,7 +72,7 @@ const StockCategory = ({ localizationHandler, category, setCategories, setConfir
     }
 
     const deleteCategory = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY.createRequest(null, { stockCategoryId: category.stockCategoryId })
+        const response = await VILLANY_ATESZ_DELETE_STOCK_CATEGORY.createRequest(null, { stockCategoryId: category.stockCategoryId })
             .send();
 
         setCategories(response);

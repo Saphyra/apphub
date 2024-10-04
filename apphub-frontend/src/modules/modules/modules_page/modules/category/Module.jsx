@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../../../../common/component/input/Button";
-import Endpoints from "../../../../../common/js/dao/dao";
+import { MODULES_SET_FAVORITE } from "../../../../../common/js/dao/endpoints/ModulesEndpoints";
 
 const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
     const favoriteClassName = module.favorite ? "favorite" : "non-favorite"
@@ -15,7 +15,7 @@ const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
             module: module.name
         };
 
-        const newModules = await Endpoints.MODULES_SET_FAVORITE.createRequest(body, pathVariables)
+        const newModules = await MODULES_SET_FAVORITE.createRequest(body, pathVariables)
             .send();
 
         updateModules(newModules);

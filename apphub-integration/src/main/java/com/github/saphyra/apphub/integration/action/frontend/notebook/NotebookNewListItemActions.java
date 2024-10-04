@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +19,7 @@ public class NotebookNewListItemActions {
         );
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_NEW_LIST_ITEM_PAGE, pathVariables)))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_NEW_LIST_ITEM_PAGE, pathVariables)))
             .assertTrue("New " + type.getSelector() + " page is not opened");
     }
 }

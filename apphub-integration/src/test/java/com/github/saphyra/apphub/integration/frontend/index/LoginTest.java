@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -50,7 +50,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
             .assertTrue("Login failed.");
     }
 
@@ -79,7 +79,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
             .assertTrue("Login failed.");
         return loginParameters;
     }
@@ -105,7 +105,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
             .assertTrue("Login failed.");
     }
 

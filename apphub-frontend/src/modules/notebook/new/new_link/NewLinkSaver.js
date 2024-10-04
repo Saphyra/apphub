@@ -1,5 +1,5 @@
 import Constants from "../../../../common/js/Constants";
-import Endpoints from "../../../../common/js/dao/dao";
+import { NOTEBOOK_CREATE_LINK } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateUrl from "../../common/validator/UrlValidator";
@@ -22,7 +22,7 @@ const create = async (listItemTitle, url, parent) => {
         title: listItemTitle,
         url: url
     }
-    await Endpoints.NOTEBOOK_CREATE_LINK.createRequest(payload)
+    await NOTEBOOK_CREATE_LINK.createRequest(payload)
         .send();
 
     window.location.href = Constants.NOTEBOOK_PAGE;

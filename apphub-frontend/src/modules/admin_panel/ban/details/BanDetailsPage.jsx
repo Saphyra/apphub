@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ban_details.css";
 import localizationData from "./ban_details_localization.json";
-import Endpoints from "../../../../common/js/dao/dao";
 import { useParams } from "react-router";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../../common/js/SessionChecker";
@@ -17,6 +16,7 @@ import BanUserDeletion from "./deletion/BanUserDeletion";
 import BanUserRole from "./role/BanUserRole";
 import BanUserBannedRoles from "./table/BanUserBannedRoles";
 import { hasValue } from "../../../../common/js/Utils";
+import { ACCOUNT_GET_BANS } from "../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanDetailsPage = () => {
     const { userId } = useParams();
@@ -28,7 +28,7 @@ const BanDetailsPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader(Endpoints.ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), setUserdata);
+    useLoader(ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), setUserdata);
 
     return (
         <div id="ban-details" className="main-page">

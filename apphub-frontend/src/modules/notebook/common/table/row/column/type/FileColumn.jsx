@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import downloadFile from "../../../../FileDownloader";
 import { formatFileSize, hasValue } from "../../../../../../../common/js/Utils";
+import { STORAGE_GET_METADATA } from "../../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
 const FileColumn = ({
     columnData,
@@ -34,7 +34,7 @@ const FileColumn = ({
         }
 
         const fetch = async () => {
-            const response = await Endpoints.STORAGE_GET_METADATA.createRequest(null, { storedFileId: columnData.data.storedFileId })
+            const response = await STORAGE_GET_METADATA.createRequest(null, { storedFileId: columnData.data.storedFileId })
                 .send();
             setFileMetadata(response);
         }

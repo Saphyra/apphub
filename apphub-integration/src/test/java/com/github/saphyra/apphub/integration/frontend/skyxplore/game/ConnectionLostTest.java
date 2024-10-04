@@ -9,11 +9,12 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.By;
@@ -47,7 +48,7 @@ public class ConnectionLostTest extends SeleniumTest {
 
         assertThat(SkyXploreGameActions.isPaused(driver1)).isTrue();
 
-        Navigation.toUrl(driver2, UrlFactory.create(getServerPort(), Endpoints.SKYXPLORE_GAME_PAGE));
+        Navigation.toUrl(driver2, UrlFactory.create(getServerPort(), SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE));
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPlayerReconnectedDialogOpened(driver1))
@@ -94,7 +95,7 @@ public class ConnectionLostTest extends SeleniumTest {
                 ModulesPageActions.openModule(serverPort, biWrapper.getEntity1(), ModuleLocation.SKYXPLORE);
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
                 AwaitilityWrapper.createDefault()
-                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+                    .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE))
                     .assertTrue();
             }))
             .map(FutureWrapper::get)

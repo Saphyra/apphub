@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,6 +55,6 @@ public class AuthenticationFailedWebHandlerTest {
         assertThat(result).isEqualTo(Mono.empty());
 
         verify(response).setStatusCode(HttpStatus.TEMPORARY_REDIRECT);
-        verify(httpHeaders).add(HttpHeaders.LOCATION, Endpoints.INDEX_PAGE + "?redirect=" + requestPath.toString());
+        verify(httpHeaders).add(HttpHeaders.LOCATION, GenericEndpoints.INDEX_PAGE + "?redirect=" + requestPath);
     }
 }

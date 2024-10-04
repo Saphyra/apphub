@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.admin_panel;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.MigrationTasksResponse;
 import io.restassured.response.Response;
 
@@ -36,7 +36,7 @@ public class MigrationTasksActions {
 
     public static Response getGetMigrationTasksResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.ADMIN_PANEL_MIGRATION_GET_TASKS));
+            .get(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_GET_TASKS));
     }
 
     public static void triggerTask(int serverPort, UUID accessTokenId, String event) {
@@ -47,7 +47,7 @@ public class MigrationTasksActions {
 
     public static Response getTriggerTaskResponse(int serverPort, UUID accessTokenId, String event) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.ADMIN_PANEL_MIGRATION_TRIGGER_TASK, "event", event));
+            .post(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TRIGGER_TASK, "event", event));
     }
 
     public static void deleteTask(int serverPort, UUID accessTokenId, String event) {
@@ -58,6 +58,6 @@ public class MigrationTasksActions {
 
     public static Response getDeleteTaskResponse(int serverPort, UUID accessTokenId, String event) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK, "event", event));
+            .delete(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK, "event", event));
     }
 }

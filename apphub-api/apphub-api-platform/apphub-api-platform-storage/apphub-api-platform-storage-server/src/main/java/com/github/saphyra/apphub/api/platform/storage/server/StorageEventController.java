@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.api.platform.storage.server;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.StorageEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface StorageEventController {
-    @PostMapping(path = Endpoints.EVENT_DELETE_ACCOUNT)
+    @PostMapping(path = GenericEndpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
     /**
      * Evicting records from the database what has no file uploaded for a long time
      */
-    @PostMapping(Endpoints.EVENT_CLEAN_UP_STORED_FILES)
+    @PostMapping(StorageEndpoints.EVENT_CLEAN_UP_STORED_FILES)
     void cleanUpStoredFiles();
 }

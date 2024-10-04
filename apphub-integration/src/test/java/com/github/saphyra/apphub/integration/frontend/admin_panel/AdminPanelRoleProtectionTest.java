@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
@@ -26,12 +26,12 @@ public class AdminPanelRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_BAN_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE);
     }
 
     @DataProvider(parallel = true)

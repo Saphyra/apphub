@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.MapResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.MapSolarSystemResponse;
 import io.restassured.response.Response;
@@ -22,7 +22,7 @@ public class SkyXploreMapActions {
 
     public static Response getMapResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GAME_MAP));
+            .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_MAP));
     }
 
     public static MapSolarSystemResponse getSolarSystem(int serverPort, UUID accessTokenId) {

@@ -8,9 +8,10 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import lombok.extern.slf4j.Slf4j;
@@ -67,16 +68,16 @@ public class BanExpirationTest extends SeleniumTest {
         SleepUtil.sleep(3000);
         testDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
-            .until(() -> testDriver.getCurrentUrl().contains(Endpoints.ERROR_PAGE))
+            .until(() -> testDriver.getCurrentUrl().contains(GenericEndpoints.ERROR_PAGE))
             .assertTrue("TestUser is not banned.");
 
         AwaitilityWrapper.create(180, 10)
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
                 testDriver.navigate()
-                    .to(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
+                    .to(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE));
                 return AwaitilityWrapper.create(5, 1)
-                    .until(() -> testDriver.getCurrentUrl().endsWith(Endpoints.MODULES_PAGE))
+                    .until(() -> testDriver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
                     .isResult();
             })
             .assertTrue("TestUser is not unbanned.");

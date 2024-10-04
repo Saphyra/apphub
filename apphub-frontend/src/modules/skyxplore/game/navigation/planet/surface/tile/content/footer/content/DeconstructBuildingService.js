@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../../../../common/js/dao/dao";
+import { SKYXPLORE_BUILDING_DECONSTRUCT } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const confirmDeconstructBuilding = (
     localizationHandler,
@@ -33,7 +33,7 @@ const confirmDeconstructBuilding = (
 }
 
 const deconstructBuilding = async (planetId, surface, setConfirmationDialogData) => {
-    await Endpoints.SKYXPLORE_BUILDING_DECONSTRUCT.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+    await SKYXPLORE_BUILDING_DECONSTRUCT.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
         .send();
 
     setConfirmationDialogData(null);

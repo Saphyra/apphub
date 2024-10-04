@@ -3,12 +3,12 @@ import { ByNameCitizenComparator, BySkillCitizenComparator, ByStatCitizenCompara
 import localizationData from "./citizen_sort_method_selector_localization.json";
 import LocalizationHandler from "../../../../../../../../common/js/LocalizationHandler";
 import "./citizen_sort_method_selector.css";
-import Endpoints from "../../../../../../../../common/js/dao/dao";
 import useCache from "../../../../../../../../common/hook/Cache";
 import CacheKey from "../../../../../common/constants/CacheKey";
 import MethodSelect from "./MethodSelect";
 import ComparatorMethodOptions from "./options/ComparatorMethodOptions";
 import { hasValue, throwException } from "../../../../../../../../common/js/Utils";
+import { SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS } from "../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 
 const CitizenSortMethodSelector = ({
     citizenComparator,
@@ -44,7 +44,7 @@ const CitizenSortMethodSelector = ({
 
     useCache(
         CacheKey.CITIZEN_STATS_AND_SKILLS,
-        Endpoints.SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS.createRequest(),
+        SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS.createRequest(),
         response => {
             setStats(response.stats);
             setSkills(response.skills);

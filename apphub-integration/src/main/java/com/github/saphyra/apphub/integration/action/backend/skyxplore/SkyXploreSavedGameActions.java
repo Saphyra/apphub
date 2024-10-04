@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SavedGameResponse;
 import io.restassured.response.Response;
 
@@ -23,7 +23,7 @@ public class SkyXploreSavedGameActions {
 
     public static Response getSavedGamesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_GAMES));
+            .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_GAMES));
     }
 
     public static void deleteGame(int serverPort, UUID accessTokenId, UUID gameId) {
@@ -34,6 +34,6 @@ public class SkyXploreSavedGameActions {
 
     public static Response getDeleteGameResponse(int serverPort, UUID accessTokenId, UUID gameId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_DELETE_GAME, "gameId", gameId));
+            .delete(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DELETE_GAME, "gameId", gameId));
     }
 }

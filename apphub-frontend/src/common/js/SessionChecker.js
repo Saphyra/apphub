@@ -1,13 +1,14 @@
 import getDefaultErrorHandler from "./dao/DefaultErrorHandler";
 import ErrorHandler from "./dao/ErrorHandler";
-import Endpoints, { ResponseStatus } from "./dao/dao";
+import { ResponseStatus } from "./dao/dao";
+import { CHECK_SESSION } from "./dao/endpoints/GenericEndpoints";
 
 const sessionChecker = () => {
     setInterval(checkSession, 10000);
 }
 
 const checkSession = () => {
-    Endpoints.CHECK_SESSION.createRequest()
+    CHECK_SESSION.createRequest()
         .addErrorHandler(new ErrorHandler(
             response => response.status === ResponseStatus.UNAUTHORIZED,
             response => getDefaultErrorHandler().handle(response)

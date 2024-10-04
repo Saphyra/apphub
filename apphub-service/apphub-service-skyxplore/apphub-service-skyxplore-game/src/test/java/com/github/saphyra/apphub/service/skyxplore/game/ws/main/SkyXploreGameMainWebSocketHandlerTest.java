@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws.main;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.main.handler.WebSocketEventHandler;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.main.service.PlayerConnectedService;
@@ -54,7 +54,7 @@ class SkyXploreGameMainWebSocketHandlerTest {
 
     @Test
     void getEndpoint() {
-        assertThat(underTest.getEndpoint()).isEqualTo(Endpoints.WS_CONNECTION_SKYXPLORE_GAME);
+        assertThat(underTest.getEndpoint()).isEqualTo(GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME);
     }
 
     @Test

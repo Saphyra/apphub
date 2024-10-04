@@ -4,10 +4,10 @@ import localizationData from "./error_report_list_item_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import InputField from "../../../../../../common/component/input/InputField";
 import ErrorReportStatus from "../../../ErrorReportStatus";
 import { addAndSet, removeAndSet } from "../../../../../../common/js/Utils";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../../../../../common/js/dao/endpoints/AdminPanelEndpoints";
 
 const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErrorReports, refreshCallback, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -43,7 +43,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
     }
 
     const deleteErrorReport = async () => {
-        await Endpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReport.id])
+        await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReport.id])
             .send();
 
         refreshCallback();
@@ -51,7 +51,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
     }
 
     const mark = async (status) => {
-        await Endpoints.ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReport.id], { status: status })
+        await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReport.id], { status: status })
             .send();
 
         refreshCallback();
@@ -106,7 +106,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
                     className="error-report-list-item-open"
                     label={localizationHandler.get("open")}
                     onclick={() => {
-                        window.open(Endpoints.ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({id: errorReport.id}));
+                        window.open(ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({id: errorReport.id}));
                         setTimeout(() => refreshCallback(), 1000);
                     }}
                 />

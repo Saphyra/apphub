@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.view.notebook.CategoryTreeLeaf;
 import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.By;
@@ -19,7 +19,7 @@ public class NotebookActions {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_NEW_PAGE, "parent", "")))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_NEW_PAGE, "parent", "")))
             .assertTrue("New ListItem page is not opened");
     }
 

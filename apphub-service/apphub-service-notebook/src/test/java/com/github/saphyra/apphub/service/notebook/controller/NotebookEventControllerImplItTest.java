@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
@@ -148,7 +148,7 @@ public class NotebookEventControllerImplItTest {
         SendEventRequest<DeleteAccountEvent> eventRequest = SendEventRequest.<DeleteAccountEvent>builder().payload(new DeleteAccountEvent(USER_ID)).build();
         Response response = RequestFactory.createRequest()
             .body(eventRequest)
-            .post(UrlFactory.create(serverPort, Endpoints.EVENT_DELETE_ACCOUNT));
+            .post(UrlFactory.create(serverPort, GenericEndpoints.EVENT_DELETE_ACCOUNT));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

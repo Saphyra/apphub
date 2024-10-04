@@ -8,10 +8,12 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewTableActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
@@ -30,8 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CustomTableLinkTest extends SeleniumTest {
     private static final String TITLE = "title";
     private static final String TABLE_HEAD_CONTENT = "table-head-content";
-    private static final String URL = Endpoints.ACCOUNT_PAGE;
-    private static final String NEW_URL = Endpoints.MODULES_PAGE;
+    private static final String URL = UserEndpoints.ACCOUNT_PAGE;
+    private static final String NEW_URL = ModulesEndpoints.MODULES_PAGE;
     private static final String LABEL = "label";
     private static final String NEW_LABEL = "new-label";
 
@@ -70,7 +72,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         column.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
@@ -93,7 +95,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         column.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
@@ -113,7 +115,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         NewTableActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Notebook page is not opened.");
     }
 

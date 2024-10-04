@@ -12,8 +12,8 @@ import NotificationService from "../../../common/js/notification/NotificationSer
 import VillanyAteszNavigation from "./navigation/VillanyAteszNavigation";
 import VillanyAteszPage from "./navigation/VillanyAteszPage";
 import useLoader from "../../../common/hook/Loader";
-import Endpoints from "../../../common/js/dao/dao";
 import Stream from "../../../common/js/collection/Stream";
+import { VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION, VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE, VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE } from "../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszIndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,9 +23,9 @@ const VillanyAteszIndexPage = () => {
     const [totalToolboxValue, setTotalToolboxValue] = useState(0);
     const [items, setItems] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE.createRequest(), (response) => setTotalStockValue(response.value));
-    useLoader(Endpoints.VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE.createRequest(), (response) => setTotalToolboxValue(response.value));
-    useLoader(Endpoints.VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION.createRequest(), setItems);
+    useLoader(VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE.createRequest(), (response) => setTotalStockValue(response.value));
+    useLoader(VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE.createRequest(), (response) => setTotalToolboxValue(response.value));
+    useLoader(VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION.createRequest(), setItems);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);

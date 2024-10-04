@@ -4,8 +4,8 @@ import ConfirmationDialogData from "../../../../../common/component/confirmation
 import localizationData from "./player_disconnected_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
-import Endpoints from "../../../../../common/js/dao/dao";
 import { hasValue } from "../../../../../common/js/Utils";
+import { SKYXPLORE_GAME_PAUSE } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const PlayerDisconnectedPauseHandler = ({ lastEvent, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,7 +23,7 @@ const PlayerDisconnectedPauseHandler = ({ lastEvent, setConfirmationDialogData }
         setDialogDisplayed(false);
         setConfirmationDialogData(null);
 
-        Endpoints.SKYXPLORE_GAME_PAUSE.createRequest({ value: false })
+        SKYXPLORE_GAME_PAUSE.createRequest({ value: false })
             .send();
     }
 
