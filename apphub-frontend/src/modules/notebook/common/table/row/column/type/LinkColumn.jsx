@@ -23,8 +23,8 @@ const LinkColumn = ({
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <PreLabeledInputField
                             label={localizationHandler.get("label") + ":"}
                             input={<InputField
@@ -60,7 +60,7 @@ const LinkColumn = ({
         return (
             <td className="table-column">
                 <div
-                    className="table-column-wrapper button"
+                    className="notebook-table-column-wrapper button"
                     onClick={() => window.open(columnData.data.url)}
                 >
                     {columnData.data.label}

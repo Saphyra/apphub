@@ -15,8 +15,8 @@ const MonthColumn = ({
     }
     return (
         <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-            <div className="table-column-wrapper">
-                <div className="table-column-content">
+            <div className="notebook-table-column-wrapper">
+                <div className="notebook-table-column-content">
                     <InputField
                         type="month"
                         onchangeCallback={updateContent}

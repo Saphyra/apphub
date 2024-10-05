@@ -5,6 +5,7 @@
 ===BUGFIXES===
     Notebook
         Parent Selector displays categories sorted
+        Order text content of table to the left
     Missing waits in SkyXplore tests
 
 ===PLATFORM CHANGES===

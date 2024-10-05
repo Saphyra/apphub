@@ -18,8 +18,8 @@ const DateTimeColumn = ({
         return (
 
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <InputField
                             type="datetime-local"
                             onchangeCallback={updateContent}
@@ -39,7 +39,7 @@ const DateTimeColumn = ({
     } else {
         return (
             <td className="table-column">
-                <div className="table-column-wrapper">
+                <div className="notebook-table-column-wrapper">
                     {columnData.data.replace("T", " ")}
                 </div>
             </td >

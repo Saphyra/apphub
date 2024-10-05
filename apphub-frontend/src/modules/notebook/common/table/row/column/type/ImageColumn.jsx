@@ -65,8 +65,8 @@ const ImageColumn = ({
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         {overwriteFile &&
                             <FileInput
                                 onchangeCallback={setFile}
@@ -103,8 +103,8 @@ const ImageColumn = ({
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
                 {preview &&
-                    <div className="table-column-wrapper">
-                        <div className="table-column-content">
+                    <div className="notebook-table-column-wrapper">
+                        <div className="notebook-table-column-content">
                             <img
                                 className="notebook-table-image-preview"
                                 src={preview}

@@ -54,8 +54,8 @@ const RangeColumn = ({
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <LabelWrappedInputField
                             preLabel={localizationHandler.get("value")}
                             postLabel={columnData.data.value}
@@ -125,8 +125,8 @@ const RangeColumn = ({
     } else {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <PostLabeledInputField
                             label={columnData.data.value}
                             input={

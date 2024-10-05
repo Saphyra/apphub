@@ -1,0 +1,26 @@
+import { Endpoint, RequestMethod } from "../../dao";
+
+export const SKYXPLORE_CREATE_LOBBY = new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby");
+export const SKYXPLORE_LOBBY_IS_IN_LOBBY = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby");
+export const SKYXPLORE_LOBBY_VIEW_FOR_PAGE = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/page");
+export const SKYXPLORE_LOBBY_GET_ALLIANCES = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/alliances");
+export const SKYXPLORE_LOBBY_GET_PLAYERS = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/players");
+export const SKYXPLORE_LOBBY_EXIT = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby");
+export const SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/player/{userId}");
+export const SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/alliance/ai/{userId}");
+export const SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/friends/active");
+export const SKYXPLORE_INVITE_TO_LOBBY = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/invite/{friendId}");
+export const SKYXPLORE_LOBBY_ACCEPT_INVITATION = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/join/{invitorId}");
+export const SKYXPLORE_LOBBY_GET_AIS = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/ai");
+export const SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI = new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby/ai");
+export const SKYXPLORE_LOBBY_REMOVE_AI = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/lobby/ai/{userId}");
+export const SKYXPLORE_LOBBY_GET_SETTINGS = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby/settings");
+export const SKYXPLORE_LOBBY_EDIT_SETTINGS = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/settings");
+export const SKYXPLORE_LOBBY_START_GAME = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/start");
+export const SKYXPLORE_LOBBY_LOAD_GAME = new Endpoint(RequestMethod.POST, "/api/skyxplore/lobby/load-game/{gameId}");
+export const SKYXPLORE_DELETE_GAME = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/saved-game/{gameId}");
+export const SKYXPLORE_BUILDING_CONSTRUCT_NEW = new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/building/{planetId}/{surfaceId}");
+export const SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = new Endpoint(RequestMethod.POST, "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority");
+export const SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/{planetId}/{type}/{itemId}");
+export const SKYXPLORE_GAME_TERRAFORM_SURFACE = new Endpoint(RequestMethod.POST, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform");
+export const SKYXPLORE_GAME_CANCEL_TERRAFORMATION = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform");

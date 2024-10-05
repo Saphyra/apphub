@@ -23,8 +23,8 @@ const CheckboxColumn = ({
 
     return (
         <td className={"table-column notebook-table-column-type-" + columnData.columnType.toLowerCase() + (editingEnabled ? " editable" : "")}>
-            <div className="table-column-wrapper">
-                <div className="table-column-content">
+            <div className="notebook-table-column-wrapper">
+                <div className="notebook-table-column-content">
                     <InputField
                         type="checkbox"
                         onchangeCallback={updateData}
