@@ -10,7 +10,7 @@ public class LinkTableColumn extends TableColumn{
     }
 
     public void open() {
-        webElement.findElement(By.cssSelector(".table-column-wrapper.button"))
+        webElement.findElement(By.cssSelector(".notebook-table-column-wrapper.button"))
             .click();
     }
 
@@ -23,7 +23,7 @@ public class LinkTableColumn extends TableColumn{
     }
 
     public String getLabel() {
-        return webElement.findElement(By.className("table-column-wrapper"))
+        return webElement.findElement(By.className("notebook-table-column-wrapper"))
             .getText();
     }
 }

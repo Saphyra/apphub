@@ -8,6 +8,8 @@ import com.github.saphyra.apphub.ci.utils.ApplicationContextProxy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 class MinikubeEditBuildThreadCountMenuOption implements MenuOption {
@@ -15,7 +17,12 @@ class MinikubeEditBuildThreadCountMenuOption implements MenuOption {
 
     @Override
     public Menu getMenu() {
-        return Menu.MINIKUBE_EDIT_CONFIGURATION_MENU;
+        throw new UnsupportedOperationException("This should not be called");
+    }
+
+    @Override
+    public List<Menu> getMenus() {
+        return List.of(Menu.MINIKUBE_EDIT_CONFIGURATION_MENU, Menu.PREPROD_EDIT_CONFIGURATION_MENU);
     }
 
     @Override

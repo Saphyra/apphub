@@ -1,5 +1,4 @@
 import React from "react";
-import Utils from "../../js/Utils";
 
 const InputField = ({
     id,

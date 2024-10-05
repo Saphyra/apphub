@@ -54,6 +54,8 @@ public class WebDriverProvider {
         config.setMaxTotal(1);
         config.setMaxIdle(1);
         config.setTestOnBorrow(true);
+        config.setMinEvictableIdleTimeMillis(10000);
+        config.setTimeBetweenEvictionRunsMillis(1000);
 
         return config;
     }

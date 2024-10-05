@@ -51,6 +51,7 @@ public enum LocalizedText implements LocalizationProvider {
     CONFIRM_DELETE_NAMESPACE("Biztosan torlod %s kornyezetet?", "Are you sure you want to delete namespace %s?"),
     PRODUCTION("Prod szerver", "Production server"),
     PRODUCTION_RELEASE("Telepítes prod szerverre", "Production release"),
+    PREPROD_RELEASE("Telepítes preprod szerverre", "Preprod release"),
     DOCKER_HUB_USERNAME("DockerHub felhasznalonev:", "DockerHub username:"),
     DOCKER_HUB_PASSWORD("DockerHub jelszo:", "DockerHub password:"),
     MUST_NOT_BE_BLANK("Nem lehet ures!", "Must not be blank."),
@@ -69,6 +70,7 @@ public enum LocalizedText implements LocalizationProvider {
     BASH_FILE_LOCATION("bash.exe helye:", "Place of bash.exe:"),
     BROWSER_STARTUP_LIMIT_MENU_OPTION_LABEL("Bongeszo inditas limit (%s)", "Browser startup limit (%s)"),
     BROWSER_STARTUP_LIMIT("Hany bongeszo induljon egyszerre?", "How many browsers can be started at once?"),
+    PREPROD("Preprod szerver", "Preprod server"),
     ;
 
     private final String hu;

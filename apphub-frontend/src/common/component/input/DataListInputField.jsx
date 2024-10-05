@@ -16,7 +16,7 @@ const DataListInputField = ({
         const input = v.target.value;
 
         const maybePreDefinedValue = new Stream(options)
-            .filter(option => option.value == input)
+            .filter(option => option.value === input)
             .findFirst();
 
         const result = new DataListInputEntry(

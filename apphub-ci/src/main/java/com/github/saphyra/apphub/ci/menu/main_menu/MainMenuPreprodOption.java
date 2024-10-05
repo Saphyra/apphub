@@ -1,16 +1,17 @@
 package com.github.saphyra.apphub.ci.menu.main_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
-import com.github.saphyra.apphub.ci.menu.settings.SettingsMenu;
+import com.github.saphyra.apphub.ci.menu.preprod.PreprodMenu;
 import com.github.saphyra.apphub.ci.utils.ApplicationContextProxy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class MainMenuSettingsMenuOption implements MenuOption {
+public class MainMenuPreprodOption implements MenuOption {
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -20,17 +21,18 @@ class MainMenuSettingsMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "5";
+        return "3";
     }
 
     @Override
-    public LocalizedText getName() {
-        return LocalizedText.SETTINGS;
+    public LocalizationProvider getName() {
+        return LocalizedText.PREPROD;
     }
 
     @Override
     public boolean process() {
-        applicationContextProxy.getBean(SettingsMenu.class).enter();
+        applicationContextProxy.getBean(PreprodMenu.class)
+            .enter();
 
         return false;
     }

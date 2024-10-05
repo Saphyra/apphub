@@ -1,37 +1,36 @@
-package com.github.saphyra.apphub.ci.menu.main_menu;
+package com.github.saphyra.apphub.ci.menu.preprod;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
-import com.github.saphyra.apphub.ci.menu.production.ProductionMenu;
-import com.github.saphyra.apphub.ci.utils.ApplicationContextProxy;
+import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodStartProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class MainMenuProductionMenuOption implements MenuOption {
-    private final ApplicationContextProxy applicationContextProxy;
+class PreprodStartMenuOption implements MenuOption {
+    private final PreprodStartProcess preprodStartProcess;
 
     @Override
     public Menu getMenu() {
-        return Menu.MAIN_MENU;
+        return Menu.PREPROD_MENU;
     }
 
     @Override
     public String getCommand() {
-        return "4";
+        return "1";
     }
 
     @Override
     public LocalizationProvider getName() {
-        return LocalizedText.PRODUCTION;
+        return LocalizedText.MINIKUBE_START;
     }
 
     @Override
     public boolean process() {
-        applicationContextProxy.getBean(ProductionMenu.class).enter();
+        preprodStartProcess.startServer();
 
         return false;
     }

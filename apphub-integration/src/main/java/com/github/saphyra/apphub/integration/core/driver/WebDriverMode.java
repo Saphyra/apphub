@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum WebDriverMode {
+    //True == Headless
     HEADLESS(() -> true),
     HEADED(() -> false),
     DEFAULT(() -> TestConfiguration.WEB_DRIVER_HEADLESS_MODE),

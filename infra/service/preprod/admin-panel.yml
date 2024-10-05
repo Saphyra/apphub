@@ -1,52 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: admin-panel
   labels:
-    app: frontend
+    app: admin-panel
     type: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: frontend
+      name: admin-panel
   template:
     metadata:
       labels:
-        name: frontend
+        serviceType: spring-app
+        name: admin-panel
     spec:
       containers:
-      - name: frontend
-        image: saphyra/apphub-frontend:latest
+      - name: admin-panel
+        image: saphyra/apphub-service-admin_panel:latest
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server,preprod
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
         imagePullPolicy: Never
         livenessProbe:
           httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 30
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 60
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /
-            port: 3000
+            path: /platform/health
+            port: 8080
           initialDelaySeconds: 10
           periodSeconds: 10
           failureThreshold: 3
         resources:
           limits:
-            memory: 200Mi
+            memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: admin-panel
   labels:
-    app: frontend
+    app: admin-panel
 spec:
   type: ClusterIP
   ports:
-  - port: 3000
+  - port: 8080
   selector:
-    name: frontend
+    name: admin-panel

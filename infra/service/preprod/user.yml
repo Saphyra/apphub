@@ -1,52 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: user
   labels:
-    app: frontend
+    app: user
     type: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: frontend
+      name: user
   template:
     metadata:
       labels:
-        name: frontend
+        serviceType: spring-app
+        name: user
     spec:
       containers:
-      - name: frontend
-        image: saphyra/apphub-frontend:latest
+      - name: user
+        image: saphyra/apphub-service-user:latest
+        env:
+          - name: SPRING_ACTIVE_PROFILE
+            value: server,preprod
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
         imagePullPolicy: Never
         livenessProbe:
           httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 30
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 60
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 10
+            path: /platform/health
+            port: 8080
+          initialDelaySeconds: 30
           periodSeconds: 10
           failureThreshold: 3
         resources:
           limits:
-            memory: 200Mi
+            memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: user
   labels:
-    app: frontend
+    app: user
 spec:
   type: ClusterIP
   ports:
-  - port: 3000
+  - port: 8080
   selector:
-    name: frontend
+    name: user

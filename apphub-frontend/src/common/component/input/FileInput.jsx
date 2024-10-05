@@ -1,5 +1,4 @@
 import React from "react";
-import MapStream from "../../js/collection/MapStream";
 
 const FileInput = ({ id, className, onchangeCallback, accept, multiple = false }) => {
     const onchange = (e) => {
