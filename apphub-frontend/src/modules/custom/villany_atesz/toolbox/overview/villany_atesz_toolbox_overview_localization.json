@@ -13,7 +13,7 @@
     },
     "cost": {
         "en": "Cost",
-        "hu": "Beszerzési ár"
+        "hu": "💵"
     },
     "acquired-at": {
         "en": "Acquired at",
@@ -21,7 +21,7 @@
     },
     "warranty-expires-at": {
         "en": "Warranty expires at",
-        "hu": "Garancia lejár"
+        "hu": "Garancia"
     },
     "set-status-to-default": {
         "en": "Everything is fine",
@@ -29,15 +29,27 @@
     },
     "set-status-to-damaged": {
         "en": "Tool is damaged",
+        "hu": "🩹"
+    },
+    "set-status-to-damaged-title": {
+        "en": "Tool is damaged",
         "hu": "A szerszám sérült"
     },
     "set-status-to-scrapped": {
         "en": "Scrap tool",
-        "hu": "Leselejtezés"
+        "hu": "⚠️"
+    },
+    "set-status-to-scrapped-title": {
+        "en": "Scrap tool",
+        "hu": "Szerszám leselejtezése"
     },
     "set-status-to-lost": {
         "en": "I lost this tool",
-        "hu": "Elhagytam a szerszámot"
+        "hu": "👻"
+    },
+    "set-status-to-lost-title": {
+        "en": "I lost this tool",
+        "hu": "Elvesztettem a szerszámot"
     },
     "tool-type": {
         "en": "Type",

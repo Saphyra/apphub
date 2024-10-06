@@ -22,7 +22,16 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const [inputRef, setInputFocus] = useFocus();
 
     useLoader(VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !isBlank(activeCart));
+    useLoader(
+        VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }),
+        setCart,
+        [activeCart], () => !isBlank(activeCart),
+        undefined,
+        new ErrorHandler(
+            response => response.status == ResponseStatus.NOT_FOUND,
+            () => updateActiveCart("")
+        )
+    );
     useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
 
     useEffect(() => focus(), [search]);

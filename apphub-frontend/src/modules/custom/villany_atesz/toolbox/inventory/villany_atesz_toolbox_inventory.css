@@ -17,10 +17,6 @@
     margin: 10px auto;
 }
 
-#villany-atesz-toolbox-inventory .formatted-table td {
-    text-align: center;
-}
-
 .villany-atesz-toolbox-inventory-item input.scheduled {
     border-color: orange;
 }
@@ -32,6 +28,7 @@
 .villany-atesz-toolbox-inventory-item-name,
 .villany-atesz-toolbox-inventory-item-brand {
     min-width: 100%;
+    max-width: 350px;
 }
 
 .villany-atesz-toolbox-inventory-item input[type=number] {

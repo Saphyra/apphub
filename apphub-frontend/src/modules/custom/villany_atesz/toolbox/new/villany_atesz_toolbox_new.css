@@ -1,12 +1,16 @@
 .villany-atesz-toolbox-new-fieldset-wrapper {
-    margin: 30px;
-}
-
-.villany-atesz-toolbox-new-fieldset-wrapper fieldset {
-    display: inline-block;
+    margin: 10px;
 }
 
 .villany-atesz-toolbox-new-fieldset-wrapper fieldset label {
     display: block;
     text-align: center;
+}
+
+#villany-atesz-toolbox-new{
+    text-align: center;
+}
+
+#villany-atesz-toolbox-new fieldset{
+    display: inline;
 }

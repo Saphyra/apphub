@@ -14,15 +14,19 @@
 }
 
 #villany-atesz-stock-inventory-items-table {
-    margin: auto;
+    margin: 0px;
 }
 
 .villany-atesz-stock-inventory-item td {
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
     text-align: center;
 }
 
 .villany-atesz-stock-inventory-item input.scheduled {
-    border-color: orange;
+    border-color: #FF9800;
+    ;
 }
 
 .villany-atesz-stock-inventory-item-inventoried,
@@ -31,10 +35,19 @@
 }
 
 .villany-atesz-stock-inventory-item input[type=number] {
-    width: 75px;
+    width: 50px;
+}
+
+.villany-atesz-stokc-inventory-item-name-cell {
+    text-align: left !important;
 }
 
 .villany-atesz-stock-inventory-item-name {
     min-width: 100%;
-    max-width: 350px;
+    max-width: 400px;
+
+}
+
+.villany-atesz-stock-inventory-item-operations-cell {
+    white-space: nowrap;
 }

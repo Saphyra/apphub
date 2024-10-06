@@ -101,7 +101,7 @@ const VillanyAteszStockPage = () => {
     }
 
     return (
-        <div id="villany-atesz-stock" className="main-page">
+        <div id="villany-atesz-stock" className="main-page villany-atesz-main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>
