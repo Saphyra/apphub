@@ -65,7 +65,8 @@ const Constants = {
     //Settings
     SETTINGS_CATEGORY_VILLANY_ATESZ: "villany-atesz",
 
-    SETTINGS_KEY_STOCK_LAST_INVENTORIED: "stock-last-inventoried",
+    SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR: "stock-last-inventoried-car",
+    SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE: "stock-last-inventoried-storage",
     SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED: "toolbox-last-inventoried",
 }
 

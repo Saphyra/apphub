@@ -19,23 +19,30 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const [search, setSearch] = useState("");
     const [items, setItems] = useState([]);
     const [categories, setCategories] = useState({});
-    const [lastInventoried, setLastInventoried] = useState("");
+    const [lastInventoriedCar, setLastInventoriedCar] = useState("");
+    const [lastInventoriedStorage, setLastInventoriedStorage] = useState("");
 
     useLoader(VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), setItems);
     useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), (c) => mapCategories(c));
-    useLoader(GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }), (s) => setLastInventoried(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED]));
+    useLoader(
+        GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }),
+        (s) => {
+            setLastInventoriedCar(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR])
+            setLastInventoriedStorage(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE])
+        }
+    );
 
-    const updateLastInventoried = async (newValue) => {
+    const updateLastInventoried = async (key, newValue, callback) => {
         const payload = {
             category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ,
-            key: Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED,
+            key: key,
             value: newValue
         }
 
         await SET_USER_SETTINGS.createRequest(payload)
             .send();
 
-        setLastInventoried(newValue);
+        callback(newValue);
     }
 
     const mapCategories = (c) => {
@@ -117,13 +124,27 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
                     onchangeCallback={setSearch}
                 />
 
-                <InputField
-                    id="villany-atesz-stock-inventory-last-inventoried"
-                    type="date"
-                    value={lastInventoried}
-                    title={localizationHandler.get("last-inventoried")}
-                    onchangeCallback={updateLastInventoried}
-                />
+                <label>
+                    <span>{localizationHandler.get("car")}</span>
+                    <InputField
+                        id="villany-atesz-stock-inventory-last-inventoried-car"
+                        type="date"
+                        value={lastInventoriedCar}
+                        title={localizationHandler.get("last-inventoried")}
+                        onchangeCallback={newValue => updateLastInventoried(Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR, newValue, setLastInventoriedCar)}
+                    />
+                </label>
+
+                <label>
+                    <span>{localizationHandler.get("storage")}</span>
+                    <InputField
+                        id="villany-atesz-stock-inventory-last-inventoried-storage"
+                        type="date"
+                        value={lastInventoriedStorage}
+                        title={localizationHandler.get("last-inventoried")}
+                        onchangeCallback={newValue => updateLastInventoried(Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE, newValue, setLastInventoriedStorage)}
+                    />
+                </label>
             </div>
 
             <table id="villany-atesz-stock-inventory-items-table" className="formatted-table">

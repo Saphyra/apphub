@@ -237,7 +237,7 @@ const ToolboxInventoryItem = ({
                             VILLANY_ATESZ_TOOLBOX_INVENTORY_EDIT_BRAND,
                             newValue
                         )}
-                        style={{ width: 8 * tool.name.length + "px" }}
+                        style={{ width: 8 * tool.brand.length + "px" }}
                     />
                 </td>
                 <td>

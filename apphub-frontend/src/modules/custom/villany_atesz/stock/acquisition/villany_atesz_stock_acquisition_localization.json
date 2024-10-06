@@ -21,15 +21,15 @@
     },
     "to-car": {
         "en": "To car",
-        "hu": "Autóba"
+        "hu": "🚗"
     },
     "to-storage": {
         "en": "To storage",
-        "hu": "Raktárba"
+        "hu": "📦"
     },
     "price": {
         "en": "Price",
-        "hu": "Ár"
+        "hu": "💵"
     },
     "add-to-stock-confirmation-title": {
         "en": "Add to stock?",

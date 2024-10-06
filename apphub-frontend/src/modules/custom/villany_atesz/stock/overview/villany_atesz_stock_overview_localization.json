@@ -13,23 +13,23 @@
     },
     "in-car": {
         "en": "In car",
-        "hu": "Autóban"
+        "hu": "🚗"
     },
     "in-cart": {
         "en": "In cart",
-        "hu": "Kosárban"
+        "hu": "🧺"
     },
     "in-storage": {
         "en": "In storage",
-        "hu": "Raktárban"
+        "hu": "📦"
     },
     "price": {
         "en": "Price",
-        "hu": "Ár"
+        "hu": "💵"
     },
     "stock-value": {
         "en": "Stock price",
-        "hu": "Készlet érték"
+        "hu": "💰"
     },
     "serial-number": {
         "en": "Serial No.",
@@ -41,15 +41,15 @@
     },
     "add-to-cart": {
         "en": "Add to cart",
-        "hu": "Kosárba"
+        "hu": "🧺"
     },
     "move-to-car": {
         "en": "To car",
-        "hu": "Autóba"
+        "hu": "A"
     },
     "move-to-storage": {
         "en": "To storage",
-        "hu": "Raktárba"
+        "hu": "R"
     },
     "bar-code": {
         "en": "Bar code",
