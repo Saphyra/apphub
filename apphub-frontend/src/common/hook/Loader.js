@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import Utils from "../js/Utils";
+import { hasValue } from "../js/Utils";
 
 const useLoader = (request, mapper, listener = [], condition = () => true, alternativeResult = null, errorHandler) => {
     useEffect(() => loader(), listener);
 
     const loader = () => {
         if (condition()) {
-            if(Utils.hasValue(errorHandler)){
-                console.log(request)
+            if (hasValue(errorHandler)) {
                 request.addErrorHandler(errorHandler)
             }
             const fetch = async () => {
