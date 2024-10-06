@@ -65,17 +65,12 @@ public class DataDeletedWithUserTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
     private static final String CONTENT = "content";
 
-    private static final Map<String, String> TABLES = CollectionUtils.toMap(
+    private static final Map<String, String> GENERIC_TABLES = CollectionUtils.toMap(
         new BiWrapper<>("apphub_user", "access_token"),
         new BiWrapper<>("apphub_user", "apphub_role"),
         new BiWrapper<>("apphub_user", "apphub_user"),
         new BiWrapper<>("calendar", "event"),
         new BiWrapper<>("calendar", "occurrence"),
-        new BiWrapper<>("community", "blacklist"),
-        new BiWrapper<>("community", "community_group"),
-        new BiWrapper<>("community", "community_group_member"),
-        new BiWrapper<>("community", "friend_request"),
-        new BiWrapper<>("community", "friendship"),
         new BiWrapper<>("modules", "favorite"),
         new BiWrapper<>("notebook", "checked_item"),
         new BiWrapper<>("notebook", "column_type"),
@@ -85,7 +80,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("notebook", "pin_group"),
         new BiWrapper<>("notebook", "pin_mapping"),
         new BiWrapper<>("notebook", "table_head"),
-        new BiWrapper<>("skyxplore", "character"),
         new BiWrapper<>("villany_atesz", "acquisition"),
         new BiWrapper<>("villany_atesz", "cart"),
         new BiWrapper<>("villany_atesz", "cart_item"),
@@ -98,6 +92,18 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("villany_atesz", "tool_type")
     );
 
+    private static final Map<String, String> COMMUNITY_TABLES = CollectionUtils.toMap(
+        new BiWrapper<>("community", "blacklist"),
+        new BiWrapper<>("community", "community_group"),
+        new BiWrapper<>("community", "community_group_member"),
+        new BiWrapper<>("community", "friend_request"),
+        new BiWrapper<>("community", "friendship")
+    );
+
+    private static final Map<String, String> SKYXPLORE_TABLES = CollectionUtils.toMap(
+        new BiWrapper<>("skyxplore", "character")
+    );
+
     @Test(groups = {"be", "misc"})
     public void dataDeletedWithTheUser() {
         //apphub_user.access_token
@@ -108,13 +114,54 @@ public class DataDeletedWithUserTest extends BackEndTest {
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, SkyXploreCharacterModel.valid());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         UUID adminAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+
+        createRecords(accessTokenId, userId, adminUserData, adminAccessTokenId);
+
+        verifyRecords(GENERIC_TABLES, userId, rowCount -> rowCount > 0);
+
+        AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
+
+        AwaitilityWrapper.awaitAssert(() -> verifyRecords(GENERIC_TABLES, userId, integer -> integer == 0));
+    }
+
+    @Test(groups = {"be", "community"})
+    public void communityDataDeletedWithTheUser() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+
+        RegistrationParameters adminUserData = RegistrationParameters.validParameters();
+        IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
         UUID adminUserId = DatabaseUtil.getUserIdByEmail(adminUserData.getEmail());
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), adminAccessTokenId, SkyXploreCharacterModel.valid());
+        DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+
+        RegistrationParameters userData2 = RegistrationParameters.validParameters();
+        IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+
+        RegistrationParameters userData3 = RegistrationParameters.validParameters();
+        UUID accessTokenId3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
+        UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
+
+        communityTables(accessTokenId, adminUserId, userId2, accessTokenId3, userId3);
+
+        verifyRecords(COMMUNITY_TABLES, userId, rowCount -> rowCount > 0);
+
+        AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
+
+        AwaitilityWrapper.awaitAssert(() -> verifyRecords(COMMUNITY_TABLES, userId, integer -> integer == 0));
+    }
+
+    @Test(groups = {"be", "skyxplore"})
+    public void skyXploreDataDeletedWithTheUser() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
@@ -126,29 +173,31 @@ public class DataDeletedWithUserTest extends BackEndTest {
         UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId3, SkyXploreCharacterModel.valid());
 
-        createRecords(accessTokenId, userId, adminUserData, adminAccessTokenId, adminUserId, userId2, accessTokenId3, userId3);
+        skyXploreTables(accessTokenId, userId2, accessTokenId3, userId3);
 
-        verifyRecords(userId, rowCount -> rowCount > 0);
+        verifySkyXploreRecords(userId, rowCount -> rowCount > 0);
 
         AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
 
-        AwaitilityWrapper.awaitAssert(() -> verifyRecords(userId, integer -> integer == 0));
+        AwaitilityWrapper.awaitAssert(() -> verifySkyXploreRecords(userId, integer -> integer == 0));
     }
 
-    private void verifyRecords(UUID userId, Predicate<Integer> validator) {
-        TABLES.forEach((schema, tableName) -> assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, schema, tableName, "user_id"))).isTrue());
+    private void verifyRecords(Map<String, String> tables, UUID userId, Predicate<Integer> validator) {
+        tables.forEach((schema, tableName) -> assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, schema, tableName, "user_id"))).isTrue());
+    }
+
+    private void verifySkyXploreRecords(UUID userId, Predicate<Integer> validator) {
+        SKYXPLORE_TABLES.forEach((schema, tableName) -> assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, schema, tableName, "user_id"))).isTrue());
 
         assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, "skyxplore", "friendship", "friend_2"))).isTrue();
         assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, "skyxplore", "friend_request", "sender_id"))).isTrue();
     }
 
-    private void createRecords(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId, UUID adminUserId, UUID userId2, UUID accessTokenId3, UUID userId3) {
+    private void createRecords(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId) {
         apphubUserTables(accessTokenId, userId, adminUserData, adminAccessTokenId);
         calendarTables(accessTokenId);
-        communityTables(accessTokenId, adminUserId, userId2, accessTokenId3, userId3);
         modulesTables(accessTokenId);
         notebookTables(accessTokenId);
-        skyXploreTables(accessTokenId, userId2, accessTokenId3, userId3);
         villanyAteszTables(accessTokenId);
     }
 

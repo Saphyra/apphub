@@ -25,8 +25,10 @@ public class WebElementUtils {
     }
 
     public static void clearAndFill(WebElement webElement, String text) {
-        webElement.clear();
-        webElement.sendKeys(text);
+        for(int i = 0; i < 3 && !webElement.getAttribute("value").equals(text); i++){
+            webElement.clear();
+            webElement.sendKeys(text);
+        }
     }
 
     public static void clearAndFillNotLooseFocus(WebElement webElement, String text, int oldTextLength) {
