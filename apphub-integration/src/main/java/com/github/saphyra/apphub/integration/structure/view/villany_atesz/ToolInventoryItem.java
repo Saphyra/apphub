@@ -19,7 +19,9 @@ public class ToolInventoryItem {
     }
 
     public void editBrand(String newBrand) {
-        WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-brand")), newBrand);
+        for (int i = 0; i < 5 && !getBrand().equals(newBrand); i++) {
+            WebElementUtils.clearAndFill(webElement.findElement(By.className("villany-atesz-toolbox-inventory-item-brand")), newBrand);
+        }
     }
 
     public void editName(String newName) {
