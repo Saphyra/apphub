@@ -9,7 +9,6 @@ import "./lobby_resources/lobby.css";
 import { ToastContainer } from "react-toastify";
 import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
-import Endpoints from "../../../common/js/dao/dao";
 import Button from "../../../common/component/input/Button";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import Chat from "./lobby_page/Chat";
@@ -23,6 +22,7 @@ import Stream from "../../../common/js/collection/Stream";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
+import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -60,7 +60,7 @@ const SkyXploreLobbyPage = () => {
     //Load
     const loadLobbyData = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE.createRequest()
+            const response = await SKYXPLORE_LOBBY_VIEW_FOR_PAGE.createRequest()
                 .send();
             setLobbyData(response);
         }
@@ -69,7 +69,7 @@ const SkyXploreLobbyPage = () => {
 
     const loadAlliances = () => {
         const fecth = async () => {
-            const result = await Endpoints.SKYXPLORE_LOBBY_GET_ALLIANCES.createRequest()
+            const result = await SKYXPLORE_LOBBY_GET_ALLIANCES.createRequest()
                 .send();
             setAlliances(result);
         }
@@ -124,7 +124,7 @@ const SkyXploreLobbyPage = () => {
             return;
         }
 
-        const response = await Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
+        const response = await SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
             .send();
 
         if (response.length > 0) {
@@ -135,7 +135,7 @@ const SkyXploreLobbyPage = () => {
     }
 
     const sendStartGameRequest = () => {
-        Endpoints.SKYXPLORE_LOBBY_START_GAME.createRequest()
+        SKYXPLORE_LOBBY_START_GAME.createRequest()
             .send();
     }
 
@@ -151,7 +151,7 @@ const SkyXploreLobbyPage = () => {
     }
 
     const exit = async () => {
-        await Endpoints.SKYXPLORE_LOBBY_EXIT.createRequest()
+        await SKYXPLORE_LOBBY_EXIT.createRequest()
             .send();
 
         window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;

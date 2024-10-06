@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.delete_account.DeleteAccountPasswordValidationResult;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -25,7 +25,7 @@ public class DeleteAccountActions {
     }
 
     public static void fillDeleteAccountForm(int serverPort, WebDriver driver, String password) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_PAGE));
 
         clearAndFillContentEditable(driver, By.id("account-delete-account-password-input"), password);
     }

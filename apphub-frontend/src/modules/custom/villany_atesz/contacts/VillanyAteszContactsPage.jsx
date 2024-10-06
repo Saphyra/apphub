@@ -13,15 +13,14 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../../common/component/input/InputField";
-import Utils from "../../../../common/js/Utils";
-import Endpoints from "../../../../common/js/dao/dao";
 import Stream from "../../../../common/js/collection/Stream";
 import Contact from "./Contact";
 import useLoader from "../../../../common/hook/Loader";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import ContactOrder from "./ContactOrder";
 import { validateContact } from "../validation/VillanyAteszValidation";
-import { calculateNewValue } from "@testing-library/user-event/dist/utils";
+import { hasValue, isBlank } from "../../../../common/js/Utils";
+import { VILLANY_ATESZ_CREATE_CONTACT, VILLANY_ATESZ_DELETE_CONTACT, VILLANY_ATESZ_EDIT_CONTACT, VILLANY_ATESZ_GET_CONTACTS } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszContactsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -44,7 +43,7 @@ const VillanyAteszContactsPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => {
-        if (!Utils.hasValue(editedContact)) {
+        if (!hasValue(editedContact)) {
             resetInputFields();
         } else {
             setCode(editedContact.code);
@@ -57,7 +56,7 @@ const VillanyAteszContactsPage = () => {
         [editedContact]
     );
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_CONTACTS.createRequest(), setContacts);
+    useLoader(VILLANY_ATESZ_GET_CONTACTS.createRequest(), setContacts);
 
     const resetInputFields = () => {
         setCode("");
@@ -70,7 +69,7 @@ const VillanyAteszContactsPage = () => {
     const tableContent = () => {
         return new Stream(contacts)
             .filter(contact => {
-                return Utils.isBlank(search) ||
+                return isBlank(search) ||
                     new Stream([contact.code, contact.name, contact.phone, contact.address, contact.note])
                         .join("")
                         .toLowerCase()
@@ -104,13 +103,13 @@ const VillanyAteszContactsPage = () => {
             return;
         }
 
-        if (Utils.hasValue(editedContact)) {
-            const response = await Endpoints.VILLANY_ATESZ_EDIT_CONTACT.createRequest(payload, { contactId: editedContact.contactId })
+        if (hasValue(editedContact)) {
+            const response = await VILLANY_ATESZ_EDIT_CONTACT.createRequest(payload, { contactId: editedContact.contactId })
                 .send();
 
             setContacts(response);
         } else {
-            const response = await Endpoints.VILLANY_ATESZ_CREATE_CONTACT.createRequest(payload)
+            const response = await VILLANY_ATESZ_CREATE_CONTACT.createRequest(payload)
                 .send();
 
             setContacts(response);
@@ -119,11 +118,11 @@ const VillanyAteszContactsPage = () => {
     }
 
     const deleteContact = async (contactId) => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_CONTACT.createRequest(null, { contactId: contactId })
+        const response = await VILLANY_ATESZ_DELETE_CONTACT.createRequest(null, { contactId: contactId })
             .send();
 
         setContacts(response);
-        if (Utils.hasValue(editedContact) && editedContact.contactId === contactId) {
+        if (hasValue(editedContact) && editedContact.contactId === contactId) {
             setEditedContact(null);
         }
 
@@ -174,7 +173,7 @@ const VillanyAteszContactsPage = () => {
 
                     <div id="villany-atesz-contacts-inputs-wrapper">
                         <div id="villany-atesz-contacts-inputs-title">
-                            {localizationHandler.get(Utils.hasValue(editedContact) ? "edit-contact" : "new-contact")}
+                            {localizationHandler.get(hasValue(editedContact) ? "edit-contact" : "new-contact")}
                         </div>
 
                         <div id="villany-atesz-contacts-inputs">

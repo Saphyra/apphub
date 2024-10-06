@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
-import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
+import com.github.saphyra.apphub.api.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;

@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
@@ -25,19 +25,19 @@ public class NotebookRoleProtectionTest extends SeleniumTest {
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/category/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/text/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/link/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/only-title/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/checklist/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/table/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/custom-table/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/checklist-table/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/image/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/new/file/:parent");
-        CommonUtils.verifyMissingRole(getServerPort(), driver, Endpoints.NOTEBOOK_PAGE + "/edit/:listItemId");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/category/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/text/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/link/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/only-title/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/checklist/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/table/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/custom-table/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/checklist-table/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/image/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/new/file/:parent");
+        CommonUtils.verifyMissingRole(getServerPort(), driver, NotebookEndpoints.NOTEBOOK_PAGE + "/edit/:listItemId");
     }
 
     @DataProvider(parallel = true)

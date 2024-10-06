@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.integration.action.frontend.admin_panel;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.admin_panel.RoleForAllRow;
 import io.restassured.response.Response;
@@ -58,7 +58,7 @@ public class RolesForAllActions {
         UUID accessToken = IndexPageActions.login(serverPort, registrationParameters.toLoginRequest());
 
         Response response = RequestFactory.createAuthorizedRequest(accessToken)
-            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
+            .get(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

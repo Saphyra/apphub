@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import FileInput from "../../../../../../../common/component/input/FileInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import downloadFile from "../../../../FileDownloader";
+import { formatFileSize, hasValue } from "../../../../../../../common/js/Utils";
+import { STORAGE_GET_METADATA } from "../../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
 const FileColumn = ({
     columnData,
@@ -21,7 +21,7 @@ const FileColumn = ({
     useEffect(() => loadFileMetadata(), [columnData.data]);
     useEffect(
         () => {
-            if (overwriteFile && Utils.hasValue(columnData.data)) {
+            if (overwriteFile && hasValue(columnData.data)) {
                 columnData.data.storedFileId = null;
             }
         },
@@ -29,12 +29,12 @@ const FileColumn = ({
     );
 
     const loadFileMetadata = () => {
-        if (!Utils.hasValue(columnData.data) || !Utils.hasValue(columnData.data.storedFileId)) {
+        if (!hasValue(columnData.data) || !hasValue(columnData.data.storedFileId)) {
             return;
         }
 
         const fetch = async () => {
-            const response = await Endpoints.STORAGE_GET_METADATA.createRequest(null, { storedFileId: columnData.data.storedFileId })
+            const response = await STORAGE_GET_METADATA.createRequest(null, { storedFileId: columnData.data.storedFileId })
                 .send();
             setFileMetadata(response);
         }
@@ -42,7 +42,7 @@ const FileColumn = ({
     }
 
     const updateData = () => {
-        if (Utils.hasValue(columnData.data) && Utils.hasValue(columnData.data.storedFileId)) {
+        if (hasValue(columnData.data) && hasValue(columnData.data.storedFileId)) {
             return;
         }
 
@@ -63,8 +63,8 @@ const FileColumn = ({
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         {overwriteFile &&
                             <FileInput
                                 onchangeCallback={setFile}
@@ -103,8 +103,8 @@ const FileColumn = ({
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
                 {fileMetadata &&
-                    <div className="table-column-wrapper">
-                        <div className="table-column-content">
+                    <div className="notebook-table-column-wrapper">
+                        <div className="notebook-table-column-content">
                             <FileMetadataTable
                                 fileMetadata={fileMetadata}
                                 localizationHandler={localizationHandler}
@@ -138,7 +138,7 @@ const FileMetadataTable = ({ fileMetadata, localizationHandler, editingEnabled, 
                 </tr>
                 <tr>
                     <td >{localizationHandler.get("file-size")}</td>
-                    <td >{Utils.formatFileSize(fileMetadata.size)}</td>
+                    <td >{formatFileSize(fileMetadata.size)}</td>
                 </tr>
             </tbody>
         </table>

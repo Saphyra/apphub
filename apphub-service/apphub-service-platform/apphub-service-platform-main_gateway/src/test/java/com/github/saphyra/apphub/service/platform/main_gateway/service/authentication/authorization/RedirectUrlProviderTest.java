@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -36,7 +36,7 @@ class RedirectUrlProviderTest {
 
         assertThat(result).isEqualTo(String.format(
             "%s?error_code=%s&user_id=%s&required_roles=%s",
-            Endpoints.ERROR_PAGE,
+            GenericEndpoints.ERROR_PAGE,
             ErrorCode.MISSING_ROLE.name(),
             USER_ID,
             ROLE

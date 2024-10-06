@@ -4,8 +4,8 @@ import PanelTitle from "./PanelTitle";
 import Setting from "./settings/Setting";
 import Constants from "../../../../common/js/Constants";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
-import Endpoints from "../../../../common/js/dao/dao";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import { SKYXPLORE_LOBBY_EDIT_SETTINGS, SKYXPLORE_LOBBY_GET_SETTINGS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Settings = ({ localizationHandler, isHost, lastEvent }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);
@@ -24,7 +24,7 @@ const Settings = ({ localizationHandler, isHost, lastEvent }) => {
     //Loader
     const loadSettings = () => {
         const fetch = async () => {
-            const settings = await Endpoints.SKYXPLORE_LOBBY_GET_SETTINGS.createRequest()
+            const settings = await SKYXPLORE_LOBBY_GET_SETTINGS.createRequest()
                 .send();
 
             updateAll(settings);
@@ -178,7 +178,7 @@ const Settings = ({ localizationHandler, isHost, lastEvent }) => {
             }
         }
 
-        Endpoints.SKYXPLORE_LOBBY_EDIT_SETTINGS.createRequest(request)
+        SKYXPLORE_LOBBY_EDIT_SETTINGS.createRequest(request)
             .send();
 
         setShouldSendToServer(false);

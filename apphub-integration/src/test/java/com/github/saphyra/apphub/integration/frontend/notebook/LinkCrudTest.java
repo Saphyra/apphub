@@ -10,10 +10,12 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSele
 import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewLinkActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -70,13 +72,13 @@ public class LinkCrudTest extends SeleniumTest {
     }
 
     private static void create(WebDriver driver) {
-        NewLinkActions.fillUrl(driver, UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
+        NewLinkActions.fillUrl(driver, UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         ParentSelectorActions.selectParent(driver, CATEGORY);
 
         NewLinkActions.submit(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Link is not created");
     }
 
@@ -88,7 +90,7 @@ public class LinkCrudTest extends SeleniumTest {
             .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }
@@ -113,13 +115,13 @@ public class LinkCrudTest extends SeleniumTest {
     }
 
     private static void edit(WebDriver driver) {
-        EditListItemActions.fillValue(driver, UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
+        EditListItemActions.fillValue(driver, UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         ParentSelectorActions.up(driver);
 
         EditListItemActions.submitForm(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Modifications are not saved.");
     }
 
@@ -131,7 +133,7 @@ public class LinkCrudTest extends SeleniumTest {
             .open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }

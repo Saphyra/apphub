@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import Stream from "../../../../common/js/collection/Stream";
-import Endpoints from "../../../../common/js/dao/dao";
 import Ai from "./ais/Ai";
 import PanelTitle from "./PanelTitle";
 import ValidatedInputField from "../../../../common/component/input/ValidatedInputField";
@@ -11,6 +10,7 @@ import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import InputField from "../../../../common/component/input/InputField";
+import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
     const [ais, setAis] = useState([]);
@@ -34,7 +34,7 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
 
     const loadAis = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_LOBBY_GET_AIS.createRequest()
+            const result = await SKYXPLORE_LOBBY_GET_AIS.createRequest()
                 .send();
             setAis(result);
         }
@@ -94,7 +94,7 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
     }
 
     const createAi = async () => {
-        await Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest({ name: aiName })
+        await SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest({ name: aiName })
             .send();
 
         setAiName("");

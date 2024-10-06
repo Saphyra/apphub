@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Stream from "../../../../common/js/collection/Stream";
-import Endpoints from "../../../../common/js/dao/dao";
 import PanelTitle from "./PanelTitle";
 import "./friends/friends.css"
 import Button from "../../../../common/component/input/Button";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import { SKYXPLORE_INVITE_TO_LOBBY, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Friends = ({ localizationHandler, lastEvent }) => {
     const [friends, setFriends] = useState([]);
@@ -14,7 +14,7 @@ const Friends = ({ localizationHandler, lastEvent }) => {
 
     const loadFriends = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
+            const result = await SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
                 .send();
             setFriends(result);
         }
@@ -39,7 +39,7 @@ const Friends = ({ localizationHandler, lastEvent }) => {
     }
 
     const inviteFriend = (friendId) => {
-        Endpoints.SKYXPLORE_INVITE_TO_LOBBY.createRequest(null, { friendId: friendId })
+        SKYXPLORE_INVITE_TO_LOBBY.createRequest(null, { friendId: friendId })
             .send();
     }
 

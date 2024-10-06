@@ -26,7 +26,7 @@ class BashFileLocationSelectorMenuOption implements MenuOption {
 
     @Override
     public List<Menu> getMenus() {
-        return List.of(Menu.MINIKUBE_MENU, Menu.PRODUCTION_MENU);
+        return List.of(Menu.MINIKUBE_MENU, Menu.PRODUCTION_MENU, Menu.PREPROD_MENU);
     }
 
     @Override

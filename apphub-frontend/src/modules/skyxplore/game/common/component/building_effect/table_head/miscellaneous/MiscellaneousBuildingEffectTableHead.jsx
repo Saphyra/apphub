@@ -1,7 +1,7 @@
 import React from "react";
 import DataId from "../../../../constants/DataId";
-import Utils from "../../../../../../../../common/js/Utils";
 import ProductionTableHead from "../ProductionTableHead";
+import { throwException } from "../../../../../../../../common/js/Utils";
 
 const MiscellaneousBuildingEffectTableHead = ({ dataId, localizationHandler }) => {
     switch (dataId) {
@@ -10,7 +10,7 @@ const MiscellaneousBuildingEffectTableHead = ({ dataId, localizationHandler }) =
                 localizationHandler={localizationHandler}
             />
         default:
-            Utils.throwException("IllegalArgument", "Unhandles MiscellaneousBuilding: " + dataId);
+            throwException("IllegalArgument", "Unhandles MiscellaneousBuilding: " + dataId);
     }
 }
 

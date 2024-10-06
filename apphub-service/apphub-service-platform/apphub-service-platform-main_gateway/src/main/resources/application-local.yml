@@ -12,6 +12,7 @@ spring:
         - "Path=\
             /,\
             /web,\
+            /web/error,\
             /web/modules,\
             /web/skyxplore,\
             /web/skyxplore/character,\
@@ -52,10 +53,6 @@ spring:
         uri: http://localhost:8083
         predicates:
         - Path=/web/community, /web/calendar
-      - id: error-page
-        uri: http://localhost:8083
-        predicates:
-        - Path=/web/error
       - id: training-pages
         uri: http://localhost:8086
         predicates:

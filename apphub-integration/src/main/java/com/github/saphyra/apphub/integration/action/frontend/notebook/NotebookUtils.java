@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewTextActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
@@ -20,6 +20,7 @@ import com.github.saphyra.apphub.integration.structure.view.notebook.table.colum
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.saphyra.apphub.integration.core.TestBase.OBJECT_MAPPER_WRAPPER;
@@ -61,7 +62,7 @@ public class NotebookUtils {
 
     public static void waitForNotebookPageOpened(WebDriver driver) {
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Notebook page is not opened");
     }
 
@@ -209,10 +210,12 @@ public class NotebookUtils {
         }
     }
 
-    public static void newOnlyTitle(int serverPort, WebDriver driver, String title) {
+    public static void newOnlyTitle(int serverPort, WebDriver driver, String title, String... parents) {
         NotebookActions.newListItem(serverPort, driver);
         NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.ONLY_TITLE);
 
+        Arrays.stream(parents)
+            .forEach(parent -> ParentSelectorActions.selectParent(driver, parent));
         NewOnlyTitleActions.fillTitle(driver, title);
         NewOnlyTitleActions.submit(driver);
 

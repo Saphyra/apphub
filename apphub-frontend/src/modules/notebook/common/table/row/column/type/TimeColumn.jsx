@@ -18,8 +18,8 @@ const TimeColumn = ({
         return (
 
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <InputField
                             type="time"
                             onchangeCallback={updateContent}
@@ -39,7 +39,7 @@ const TimeColumn = ({
     } else {
         return (
             <td className="table-column">
-                <div className="table-column-wrapper">
+                <div className="notebook-table-column-wrapper">
                     {columnData.data}
                 </div>
             </td >

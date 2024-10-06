@@ -1,4 +1,4 @@
-import Utils from "../../../../../../../common/js/Utils";
+import { throwException } from "../../../../../../../common/js/Utils";
 import { fromName } from "./Order";
 
 export const fromComparatorData = (comparatorData) => {
@@ -12,7 +12,7 @@ export const fromComparatorData = (comparatorData) => {
         case CitizenComparatorName.BY_SKILL:
             return new BySkillCitizenComparator(order, comparatorData.skill);
         default:
-            Utils.throwException("IllegalArgument", "Unhandled CitizenComparatorName " + comparatorData.type);
+            throwException("IllegalArgument", "Unhandled CitizenComparatorName " + comparatorData.type);
     }
 }
 
@@ -23,7 +23,7 @@ export const CitizenComparatorName = {
 }
 
 export const ByNameCitizenComparator = class {
-    constructor(order = Utils.throwException("IllegalArgument", "Order must be specified.")) {
+    constructor(order = throwException("IllegalArgument", "Order must be specified.")) {
         this.order = order;
         this.name = CitizenComparatorName.BY_NAME;
     }
@@ -47,8 +47,8 @@ export const ByNameCitizenComparator = class {
 
 export const ByStatCitizenComparator = class {
     constructor(
-        order = Utils.throwException("IllegalArgument", "Order must be specified."),
-        stat = Utils.throwException("IllegalArgument", "Stat must be specified.")
+        order = throwException("IllegalArgument", "Order must be specified."),
+        stat = throwException("IllegalArgument", "Stat must be specified.")
     ) {
         this.order = order;
         this.stat = stat;
@@ -74,8 +74,8 @@ export const ByStatCitizenComparator = class {
 
 export const BySkillCitizenComparator = class {
     constructor(
-        order = Utils.throwException("IllegalArgument", "Order must be specified."),
-        skill = Utils.throwException("IllegalArgument", "Skill must be specified.")
+        order = throwException("IllegalArgument", "Order must be specified."),
+        skill = throwException("IllegalArgument", "Skill must be specified.")
     ) {
         this.order = order;
         this.skill = skill;

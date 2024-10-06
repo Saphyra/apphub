@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import "./image.css";
 import OpenedListItemHeader from "../OpenedListItemHeader";
+import { NOTEBOOK_GET_LIST_ITEM } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import { STORAGE_DOWNLOAD_FILE } from "../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
 const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const [title, setTitle] = useState("");
@@ -14,7 +15,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
     const loadListItem = () => {
         const fetch = async () => {
-            const listItemData = await Endpoints.NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
+            const listItemData = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
                 .send();
 
             setTitle(listItemData.title);
@@ -25,7 +26,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     }
 
     const download = () => {
-        window.open(Endpoints.STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId }));
+        window.open(STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId }));
     }
 
     return (
@@ -42,7 +43,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
                 {storedFileId &&
                     <img
                         id="notebook-content-image-src"
-                        src={Endpoints.STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId })}
+                        src={STORAGE_DOWNLOAD_FILE.assembleUrl({ storedFileId: storedFileId })}
                     />}
             </div>
 

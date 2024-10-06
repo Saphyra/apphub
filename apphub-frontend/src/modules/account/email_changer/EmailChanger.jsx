@@ -6,9 +6,9 @@ import ValidatedInputField from "../../../common/component/input/ValidatedInputF
 import { validateEmail, validateFilled } from "../validation/AccountInputValidator";
 import ValidationResult from "../../../common/js/validation/ValidationResult";
 import Button from "../../../common/component/input/Button";
-import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import InputField from "../../../common/component/input/InputField";
+import { ACCOUNT_CHANGE_EMAIL } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const EmailChanger = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,7 +23,7 @@ const EmailChanger = ({ userData, setUserData }) => {
     useEffect(() => setPassswordValidationResult(validateFilled(password)), [password]);
 
     const changeEmail = async () => {
-        const response = await Endpoints.ACCOUNT_CHANGE_EMAIL.createRequest({ email: newEmail, password: password })
+        const response = await ACCOUNT_CHANGE_EMAIL.createRequest({ email: newEmail, password: password })
             .send();
 
         setNewEmail("");

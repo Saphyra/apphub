@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.IncomingFriendRequest;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.SentFriendRequest;
@@ -20,11 +20,11 @@ public class SkyXploreFriendshipActions {
     public static void setUpFriendship(WebDriver driver1, WebDriver driver2, String username1, String username2) {
         log.debug("Setting up friendship between {} and {}", username1, username2);
         AwaitilityWrapper.createDefault()
-            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+            .until(() -> driver1.getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Lobby page is not opened.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_MAIN_MENU_PAGE))
+            .until(() -> driver2.getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE))
             .assertTrue("Lobby page is not opened.");
 
         fillSearchCharacterForm(driver1, username2);

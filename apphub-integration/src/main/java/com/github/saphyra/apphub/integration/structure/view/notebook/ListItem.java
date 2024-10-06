@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.integration.structure.view.notebook;
 
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ListItem {
             .contains("pinned");
     }
 
-    public void archive(WebDriver driver) {
+    public ListItem archive(WebDriver driver) {
         if (isArchived()) {
             throw new IllegalStateException("ListItem is already archived.");
         }
@@ -60,6 +60,8 @@ public class ListItem {
         AwaitilityWrapper.createDefault()
             .until(() -> NotebookActions.findListItemByTitleValidated(driver, title).isArchived())
             .assertTrue("ListItem is not archived");
+
+        return this;
     }
 
     public boolean isArchived() {
@@ -87,7 +89,7 @@ public class ListItem {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
             .assertTrue("Edit ListItem page is not opened");
     }
 

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.training;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class TrainingApplicationTest {
     @Test
     public void startup() {
         int statusCode = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.HEALTH))
+            .get(UrlFactory.create(serverPort, GenericEndpoints.HEALTH))
             .getStatusCode();
 
         assertThat(statusCode).isEqualTo(HttpStatus.OK.value());

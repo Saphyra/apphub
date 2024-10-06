@@ -146,7 +146,8 @@ public class ConstructionTest extends SeleniumTest {
 
         SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
 
-        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
+        surface = AwaitilityWrapper.getOptionalWithWait(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId), Optional::isPresent)
+            .orElseThrow(() -> new RuntimeException("Surface not found by id " + surfaceId));
         assertThat(surface.isEmpty()).isFalse();
         assertThat(surface.getBuildingDataId()).contains(Constants.DATA_ID_CAMP);
         assertThat(surface.getBuildingLevel()).isZero();

@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../../../../common/js/dao/dao";
+import { SKYXPLORE_GAME_CANCEL_TERRAFORMATION } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const confirmCancelTerraformation = (
     localizationHandler,
@@ -33,7 +33,7 @@ const confirmCancelTerraformation = (
 }
 
 const cancelTerraformation = async (planetId, surface, setConfirmationDialogData) => {
-    await Endpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION.createRequest(null, { planetId: planetId, surfaceId: surface.surfaceId })
+    await SKYXPLORE_GAME_CANCEL_TERRAFORMATION.createRequest(null, { planetId: planetId, surfaceId: surface.surfaceId })
         .send();
 
     setConfirmationDialogData(null);

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.integration.core.connection;
 
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.PooledObject;
@@ -58,7 +58,7 @@ public class ServerPortConnectionFactory implements PooledObjectFactory<CacheIte
         for (int i = 0; i < 5; i++) {
             try {
                 Response response = RequestFactory.createRequest()
-                    .get(UrlFactory.create(port, Endpoints.INDEX_PAGE));
+                    .get(UrlFactory.create(port, GenericEndpoints.INDEX_PAGE));
 
                 log.debug("Response status of port {}: {}", port, response.getStatusCode());
 

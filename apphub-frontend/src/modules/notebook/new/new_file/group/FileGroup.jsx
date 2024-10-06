@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import FileInput from "../../../../../common/component/input/FileInput";
-import Utils from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import "./file_group.css";
+import { copyAndSet, formatFileSize } from "../../../../../common/js/Utils";
 
 const FileGroup = ({ fileGroup, fileGroups, setFileGroups }) => {
     const [files, setFiles] = useState(null);
@@ -12,7 +12,7 @@ const FileGroup = ({ fileGroup, fileGroups, setFileGroups }) => {
 
         fileGroup.files = file;
 
-        Utils.copyAndSet(fileGroups, setFileGroups);
+        copyAndSet(fileGroups, setFileGroups);
     }
 
     const getFileData = () => {
@@ -20,7 +20,7 @@ const FileGroup = ({ fileGroup, fileGroups, setFileGroups }) => {
             .map(fileData => (
                 <tr key={fileData.fileName}>
                     <td>{fileData.fileName}</td>
-                    <td>{Utils.formatFileSize(fileData.size)}</td>
+                    <td>{formatFileSize(fileData.size)}</td>
                 </tr>
             ))
             .toList();

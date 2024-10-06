@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.integration.core.connection;
 
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
+import com.github.saphyra.apphub.integration.core.util.CheckedExceptionUtil;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
@@ -12,7 +13,6 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import java.net.ServerSocket;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -45,9 +45,10 @@ public class DatabasePortConnectionFactory implements PooledObjectFactory<BiWrap
         return new DefaultPooledObject<>(new BiWrapper<>(connection, port));
     }
 
-    public static Connection getConnection(Integer port) throws SQLException {
+    public static Connection getConnection(Integer port) {
         String databaseUrl = String.format(DB_URL, port, TestConfiguration.DATABASE_NAME);
-        return DriverManager.getConnection(databaseUrl, "postgres", "postgres");
+        return AwaitilityWrapper.getWithWait(() -> CheckedExceptionUtil.getConnection(databaseUrl, "postgres", "postgres"), connection -> validateObject(connection, port))
+            .orElseThrow(() -> new IllegalStateException("Failed creating database connection with port " + port));
     }
 
     @Override
@@ -62,27 +63,18 @@ public class DatabasePortConnectionFactory implements PooledObjectFactory<BiWrap
 
     @Override
     public boolean validateObject(PooledObject<BiWrapper<Connection, Integer>> p) {
-        Exception exception = null;
+        return validateObject(p.getObject().getEntity1(), p.getObject().getEntity2());
+    }
 
-        for (int i = 0; i < 5; i++) {
-            try {
-                Connection connection = p.getObject()
-                    .getEntity1();
-                validateConnection(connection);
+    private static boolean validateObject(Connection connection, Integer port) {
+        try {
+            validateConnection(connection);
 
-                return true;
-            } catch (Exception e) {
-                log.debug("DatabasePort {} is invalid", p.getObject().getEntity2(), e);
-                exception = e;
-            }
-
-            SleepUtil.sleep(1000);
+            return true;
+        } catch (Exception e) {
+            log.error("DatabasePort {} is invalid", port, e);
+            return false;
         }
-
-
-        log.error("DatabasePort {} is invalid", p.getObject().getEntity2(), exception);
-
-        return false;
     }
 
     private static void validateConnection(Connection connection) throws SQLException {

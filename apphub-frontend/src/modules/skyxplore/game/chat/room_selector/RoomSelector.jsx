@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./room_selector.css";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import ChatRoom from "./room/ChatRoom";
-import Utils from "../../../../../common/js/Utils";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import { addAndSet, hasValue, removeAndSet } from "../../../../../common/js/Utils";
+import { SKYXPLORE_GAME_GET_CHAT_ROOMS, SKYXPLORE_GAME_LEAVE_CHAT_ROOM } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, lastEvent }) => {
     const [chatRooms, setChatRooms] = useState([]);
@@ -12,18 +12,18 @@ const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, set
     useEffect(() => handleEvent(), [lastEvent]);
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 
         if (lastEvent.eventName == WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED) {
-            Utils.addAndSet(chatRooms, lastEvent.payload, setChatRooms);
+            addAndSet(chatRooms, lastEvent.payload, setChatRooms);
         }
     }
 
     const loadChatRooms = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS.createRequest()
+            const response = await SKYXPLORE_GAME_GET_CHAT_ROOMS.createRequest()
                 .send();
             setChatRooms(response);
         }
@@ -31,10 +31,10 @@ const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, set
     }
 
     const exitChatRoom = async (roomId) => {
-        await Endpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM.createRequest(null, { roomId: roomId })
+        await SKYXPLORE_GAME_LEAVE_CHAT_ROOM.createRequest(null, { roomId: roomId })
             .send();
 
-        Utils.removeAndSet(chatRooms, (chatRoom) => chatRoom.roomId === roomId, setChatRooms);
+        removeAndSet(chatRooms, (chatRoom) => chatRoom.roomId === roomId, setChatRooms);
     }
 
     const getChatRooms = () => {

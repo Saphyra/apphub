@@ -13,10 +13,10 @@ import com.github.saphyra.apphub.integration.core.HeadedSeleniumTest;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -56,7 +56,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Category not found"))
@@ -94,7 +94,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Category not found"))
@@ -128,7 +128,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CHECKLIST_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
@@ -164,7 +164,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
@@ -199,7 +199,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), Endpoints.NOTEBOOK_PAGE));
+        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))

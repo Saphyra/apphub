@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../common/component/input/Button";
-import Endpoints from "../../../../common/js/dao/dao";
 import Stream from "../../../../common/js/collection/Stream";
 import Constants from "../../../../common/js/Constants";
 import SavedGame from "./saved_game/SavedGame";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
+import { SKYXPLORE_GET_GAMES } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DELETE_GAME } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);
@@ -15,7 +16,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
 
     const loadSavedGames = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GET_GAMES.createRequest()
+            const response = await SKYXPLORE_GET_GAMES.createRequest()
                 .send();
 
             setSavedGames(response);
@@ -28,7 +29,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
     }
 
     const deleteGame = async () => {
-        await Endpoints.SKYXPLORE_DELETE_GAME.createRequest(null, { gameId: gameToDelete.gameId })
+        await SKYXPLORE_DELETE_GAME.createRequest(null, { gameId: gameToDelete.gameId })
             .send();
 
         const copy = new Stream(savedGames)

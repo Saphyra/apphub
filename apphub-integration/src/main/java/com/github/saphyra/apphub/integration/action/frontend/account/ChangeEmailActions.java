@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.change_email.ChEmailPasswordValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.change_email.ChangeEmailParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.change_email.ChangeEmailValidationResult;
@@ -22,7 +22,7 @@ public class ChangeEmailActions {
     }
 
     public static void fillChangeEmailForm(int serverPort, WebDriver driver, ChangeEmailParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-email-email-input")), parameters.getEmail());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-email-password-input")), parameters.getPassword());

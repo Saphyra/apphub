@@ -2,13 +2,13 @@ import React from "react";
 import localizationData from "./account_language_selector_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import LanguageSelector from "../../../common/component/language_selector/LanguageSelector";
-import Endpoints from "../../../common/js/dao/dao";
+import { ACCOUNT_CHANGE_LANGUAGE } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const AccountLanguageSelector = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const setLanguage = async (language) => {
-        await Endpoints.ACCOUNT_CHANGE_LANGUAGE.createRequest({ value: language })
+        await ACCOUNT_CHANGE_LANGUAGE.createRequest({ value: language })
             .send();
 
         window.location.reload();

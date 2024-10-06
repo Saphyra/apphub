@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
+import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,8 @@ class ServiceStarter {
 
         log.info("The following services are disabled, they won't start: {}", disabledServices);
 
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
         services.getServices()
             .stream()
             .filter(service -> !disabledServices.contains(service.getName()))
@@ -47,6 +51,9 @@ class ServiceStarter {
             .stream()
             .sorted(Comparator.comparingInt(Map.Entry::getKey))
             .forEach(entry -> startServices(entry.getKey(), entry.getValue()));
+
+        stopwatch.stop();
+        log.info("Services started up in {}s", stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d);
     }
 
     private void startServices(Integer group, List<Service> groupMembers) {

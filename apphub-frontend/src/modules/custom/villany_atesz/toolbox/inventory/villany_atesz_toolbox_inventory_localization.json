@@ -86,5 +86,9 @@
     "deletion-confirmation-content": {
         "en": "Are you sure you want to delete tool {name}?",
         "hu": "Biztosan törölni szeretnéd a {name} szerszámot?"
+    },
+    "last-inventoried": {
+        "en": "Last inventoried",
+        "hu": "Utoljára leltárazva"
     }
 }

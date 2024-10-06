@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.training.service;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.TrainingEndpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Controller
 @Slf4j
 public class SampleController {
-    @PostMapping(Endpoints.TRAINING_SAMPLE_ENDPOINT)
+    @PostMapping(TrainingEndpoints.TRAINING_SAMPLE_ENDPOINT)
     public ModelAndView htmlFormSample(
         @RequestBody String body
     ) {

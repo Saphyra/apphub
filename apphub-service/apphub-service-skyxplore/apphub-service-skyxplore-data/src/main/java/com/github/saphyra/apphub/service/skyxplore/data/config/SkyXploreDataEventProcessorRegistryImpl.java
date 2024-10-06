@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
@@ -27,12 +28,12 @@ public class SkyXploreDataEventProcessorRegistryImpl implements EventProcessorRe
             RegisterProcessorRequest.builder()
                 .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
-                .url(Endpoints.EVENT_DELETE_ACCOUNT)
+                .url(GenericEndpoints.EVENT_DELETE_ACCOUNT)
                 .build(),
             RegisterProcessorRequest.builder()
                 .host(host)
                 .eventName(EmptyEvent.SKYXPLORE_GAME_DELETION_EVENT_NAME)
-                .url(Endpoints.EVENT_SKYXPLORE_DELETE_GAMES)
+                .url(GenericSkyXploreEndpoints.EVENT_SKYXPLORE_DELETE_GAMES)
                 .build()
         );
     }

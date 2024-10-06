@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.StringStringMap;
 import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import io.restassured.response.Response;
@@ -23,7 +23,7 @@ public class UserSettingsActions {
 
     public static Response getQueryUserSettingsResponse(int serverPort, UUID accessTokenId, String category) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.GET_USER_SETTINGS, "category", category));
+            .get(UrlFactory.create(serverPort, UserEndpoints.GET_USER_SETTINGS, "category", category));
     }
 
     public static Map<String, String> setUserSetting(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
@@ -37,6 +37,6 @@ public class UserSettingsActions {
     public static Response getUpdateUserSettingsResponse(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.SET_USER_SETTINGS));
+            .post(UrlFactory.create(serverPort, UserEndpoints.SET_USER_SETTINGS));
     }
 }

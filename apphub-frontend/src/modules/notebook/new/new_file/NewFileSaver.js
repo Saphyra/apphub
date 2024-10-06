@@ -1,4 +1,4 @@
-import Endpoints from "../../../../common/js/dao/dao";
+import { NOTEBOOK_CREATE_FILE } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import uploadFile from "../../common/FileUploader";
 import validateFile from "../../common/validator/FileValidator";
@@ -28,7 +28,7 @@ const create = async (listItemTitle, file, parent, setDisplaySpinner) => {
         }
     }
 
-    const storedFileResponse = await Endpoints.NBOTEBOOK_CREATE_FILE.createRequest(payload)
+    const storedFileResponse = await NOTEBOOK_CREATE_FILE.createRequest(payload)
         .send();
 
     return uploadFile(file, storedFileResponse.value, setDisplaySpinner);

@@ -1,8 +1,8 @@
 import Constants from "../../../common/js/Constants";
-import Endpoints from "../../../common/js/dao/dao";
+import { LOGIN } from "../../../common/js/dao/endpoints/UserEndpoints";
 import NotificationKey from "../../../common/js/notification/NotificationKey";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import Utils from "../../../common/js/Utils";
+import { getQueryParam, setCookie } from "../../../common/js/Utils";
 
 const login = async (userIdentifier, password, rememberMe) => {
     if (userIdentifier.length === 0 || password.length === 0) {
@@ -16,16 +16,16 @@ const login = async (userIdentifier, password, rememberMe) => {
         rememberMe: rememberMe
     }
 
-    const loginResponse = await Endpoints.LOGIN.createRequest(body)
+    const loginResponse = await LOGIN.createRequest(body)
         .send();
 
-    Utils.setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);
+    setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);
     //Clear sessionStorage so stored values of a different user does not cause problems
     if (sessionStorage.userIdentifier !== userIdentifier) {
         sessionStorage.clear();
     }
     sessionStorage.userIdentifier = userIdentifier;
-    window.location.href = Utils.getQueryParam("redirect") || Constants.MODULES_PAGE;
+    window.location.href = getQueryParam("redirect") || Constants.MODULES_PAGE;
 }
 
 export default login;

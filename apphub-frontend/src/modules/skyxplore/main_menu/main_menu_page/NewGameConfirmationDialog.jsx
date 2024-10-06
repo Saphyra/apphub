@@ -3,11 +3,11 @@ import PreLabeledInputField from "../../../../common/component/input/PreLabeledI
 import ValidatedInputField from "../../../../common/component/input/ValidatedInputField";
 import ValidatedField from "../../../../common/js/validation/ValidatedField"
 import validate from "../../../../common/js/validation/Validator";
-import Endpoints from "../../../../common/js/dao/dao";
 import Constants from "../../../../common/js/Constants";
 import Button from "../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import InputField from "../../../../common/component/input/InputField";
+import { SKYXPLORE_CREATE_LOBBY } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 
 const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
@@ -28,7 +28,7 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
     }
 
     const createLobby = async () => {
-        await Endpoints.SKYXPLORE_CREATE_LOBBY.createRequest({ value: gameName })
+        await SKYXPLORE_CREATE_LOBBY.createRequest({ value: gameName })
             .send();
 
         window.location.href = Constants.SKYXPLORE_LOBBY_PAGE;

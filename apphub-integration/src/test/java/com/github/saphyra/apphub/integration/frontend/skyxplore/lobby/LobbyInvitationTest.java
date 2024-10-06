@@ -8,14 +8,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.OnlineFriend;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -63,7 +63,7 @@ public class LobbyInvitationTest extends SeleniumTest {
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE))
+            .until(() -> driver2.getCurrentUrl().endsWith(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_PAGE))
             .assertTrue("Invited member was not redirected to lobby.");
 
         AwaitilityWrapper.createDefault()

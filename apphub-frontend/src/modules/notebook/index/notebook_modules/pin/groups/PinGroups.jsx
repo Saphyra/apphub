@@ -4,14 +4,14 @@ import localizationData from "./pin_groups_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../../common/component/input/Button";
 import useLoader from "../../../../../../common/hook/Loader";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import EventName from "../../../../../../common/js/event/EventName";
 import { useUpdateEffect } from "react-use";
-import Utils from "../../../../../../common/js/Utils";
 import Event from "../../../../../../common/js/event/Event";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import { hasValue } from "../../../../../../common/js/Utils";
+import { NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS, NOTEBOOK_PIN_GROUP_OPENED } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,7 +21,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
 
     useEffect(() => processEvent(), [lastEvent]);
     useUpdateEffect(() => {
-        if (!Utils.hasValue(pinGroupId)) {
+        if (!hasValue(pinGroupId)) {
             return;
         }
 
@@ -39,7 +39,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
         }
     }, [isInFocus]);
 
-    useLoader(Endpoints.NOTEBOOK_GET_PIN_GROUPS.createRequest(), setPinGroups, [loadPinGroupsTrigger]);
+    useLoader(NOTEBOOK_GET_PIN_GROUPS.createRequest(), setPinGroups, [loadPinGroupsTrigger]);
 
     const processEvent = () => {
         if (lastEvent === null) {
@@ -76,8 +76,8 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
     }
 
     const setOpened = async (pinGroupId) => {
-        if (Utils.hasValue(pinGroupId)) {
-            const response = await Endpoints.NOTEBOOK_PIN_GROUP_OPENED.createRequest(null, { pinGroupId: pinGroupId })
+        if (hasValue(pinGroupId)) {
+            const response = await NOTEBOOK_PIN_GROUP_OPENED.createRequest(null, { pinGroupId: pinGroupId })
                 .send();
             setPinGroups(response);
         }
@@ -110,7 +110,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
 const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName, setLastEvent }) => {
     //Drag & Drop
     const handleOnDragOver = (e) => {
-        if (Utils.hasValue(pinGroupId)) {
+        if (hasValue(pinGroupId)) {
             e.preventDefault();
         }
     }
@@ -118,7 +118,7 @@ const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName,
     const handleOnDrop = async (e) => {
         const pinnedItemId = e.dataTransfer.getData("id");
 
-        const response = await Endpoints.NOTEBOOK_ADD_ITEM_TO_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId, listItemId: pinnedItemId })
+        const response = await NOTEBOOK_ADD_ITEM_TO_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId, listItemId: pinnedItemId })
             .send();
 
         setLastEvent(new Event(

@@ -1,8 +1,8 @@
-import Endpoints from "../../../../common/js/dao/dao";
+import { NOTEBOOK_GET_LIST_ITEM } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const loadItemData = (listItemId, setDataFromResponse) => {
     const fetch = async () => {
-        const response = await Endpoints.NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: listItemId })
+        const response = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: listItemId })
             .send();
 
         setDataFromResponse(response);

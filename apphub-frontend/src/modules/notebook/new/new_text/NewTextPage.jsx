@@ -13,7 +13,6 @@ import ParentSelector from "../../common/parent_selector/ParentSelector";
 import Textarea from "../../../../common/component/input/Textarea";
 import "./new_text.css";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Endpoints from "../../../../common/js/dao/dao";
 import { ToastContainer } from "react-toastify";
 import create from "./NewTextSaver";
 
@@ -29,8 +28,6 @@ const NewTextPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
-
 
     return (
         <div id="notebook-new-text" className="main-page">
@@ -55,6 +52,16 @@ const NewTextPage = () => {
                         onchangeCallback={setContent}
                         placeholder={localizationHandler.get("content")}
                         value={content}
+                        onKeyDownCallback={e => {
+                            if (e.key === "Tab") {
+                                e.preventDefault();
+
+                                const start = e.target.selectionStart;
+                                const end = e.target.selectionEnd;
+                                e.target.value = e.target.value.substring(0, start) + "    " + e.target.value.substring(end);
+                                e.target.selectionStart = e.target.selectionEnd = start + 4;
+                            }
+                        }}
                     />
                 </div>
             </main>

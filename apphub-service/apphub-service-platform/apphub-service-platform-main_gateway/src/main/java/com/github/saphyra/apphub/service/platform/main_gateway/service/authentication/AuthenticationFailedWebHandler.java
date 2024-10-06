@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authentication;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ public class AuthenticationFailedWebHandler implements AuthResultHandler {
         exchange.getResponse().setStatusCode(HttpStatus.TEMPORARY_REDIRECT);
         exchange.getResponse()
             .getHeaders()
-            .add(HttpHeaders.LOCATION, Endpoints.INDEX_PAGE + "?redirect=" + exchange.getRequest().getPath());
+            .add(HttpHeaders.LOCATION, GenericEndpoints.INDEX_PAGE + "?redirect=" + exchange.getRequest().getPath());
         return Mono.empty();
     }
 }

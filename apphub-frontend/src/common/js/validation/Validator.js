@@ -1,8 +1,8 @@
 import MapStream from "../collection/MapStream";
 import ValidatedField from "./ValidatedField";
 import Constants from "../Constants";
-import Utils from "../Utils";
 import ValidationResult from "./ValidationResult"
+import { throwException } from "../Utils";
 
 const validate = (fields, localizationHandler) => {
     return new MapStream(fields)
@@ -25,7 +25,7 @@ const validateField = (field, value, fields, localizationHandler) => {
             case ValidatedField.GAME_NAME:
                 return validateGameName(value, localizationHandler);
         default:
-            Utils.throwException("IllegalArgument", field + " is not a validated field.");
+            throwException("IllegalArgument", field + " is not a validated field.");
     }
 }
 

@@ -21,7 +21,7 @@ class MainMenuProductionMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "3";
+        return "4";
     }
 
     @Override

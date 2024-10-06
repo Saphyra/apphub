@@ -1,13 +1,13 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../common/js/dao/dao";
+import { NOTEBOOK_ADD_CHECKLIST_ITEM, NOTEBOOK_CHECKLIST_DELETE_CHECKED, NOTEBOOK_EDIT_CHECKLIST, NOTEBOOK_GET_CHECKLIST, NOTEBOOK_ORDER_CHECKLIST_ITEMS } from "../../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "../../../../../../../common/js/event/EventName";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
 import validateListItemTitle from "../../../../../common/validator/ListItemTitleValidator";
 
 export const loadChecklist = (listItemId, setDataFromResponse) => {
     const fetch = async () => {
-        const response = await Endpoints.NOTEBOOK_GET_CHECKLIST.createRequest(null, { listItemId: listItemId })
+        const response = await NOTEBOOK_GET_CHECKLIST.createRequest(null, { listItemId: listItemId })
             .send();
 
         setDataFromResponse(response);
@@ -27,7 +27,7 @@ export const save = async (title, items, openedListItem, setEditingEnabled, setL
         items: items
     }
 
-    const response = await Endpoints.NOTEBOOK_EDIT_CHECKLIST.createRequest(payload, { listItemId: openedListItem.id })
+    const response = await NOTEBOOK_EDIT_CHECKLIST.createRequest(payload, { listItemId: openedListItem.id })
         .send();
 
     setEditingEnabled(false);
@@ -57,7 +57,7 @@ export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHan
     ));
 
     const deleteChecked = async (setDataFromResponse, setConfirmationDialogData) => {
-        const response = await Endpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
+        const response = await NOTEBOOK_CHECKLIST_DELETE_CHECKED.createRequest(null, { listItemId: openedListItem.id })
             .send();
 
         setDataFromResponse(response);
@@ -66,7 +66,7 @@ export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHan
 }
 
 export const orderItems = async (listItemId, setDataFromResponse) => {
-    const response = await Endpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS.createRequest(null, { listItemId: listItemId })
+    const response = await NOTEBOOK_ORDER_CHECKLIST_ITEMS.createRequest(null, { listItemId: listItemId })
         .send();
 
     setDataFromResponse(response);
@@ -78,7 +78,7 @@ export const addItemToTheEdge = async (listItemId, index, content, setDataFromRe
         content: content
     }
 
-    const response = await Endpoints.NOTEBOOK_ADD_CHECKLIST_ITEM.createRequest(body, { listItemId: listItemId })
+    const response = await NOTEBOOK_ADD_CHECKLIST_ITEM.createRequest(body, { listItemId: listItemId })
         .send();
 
     setDataFromResponse(response);

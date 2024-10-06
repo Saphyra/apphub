@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.admin_panel.ws;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
+import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class MemoryMonitoringWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING;
+        return AdminPanelEndpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING;
     }
 
     public boolean hasConnectedClient() {

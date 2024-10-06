@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.integration.action.frontend.modules;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.Category;
 import com.github.saphyra.apphub.integration.structure.api.modules.Favorite;
@@ -25,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class ModulesPageActions {
     public static void logout(int serverPort, WebDriver driver) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE));
 
         ModulesPage.logoutButton(driver).click();
-        AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, Endpoints.INDEX_PAGE)));
+        AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE)));
 
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.INDEX_SUCCESSFULLY_LOGGED_OUT);
     }
@@ -62,7 +63,7 @@ public class ModulesPageActions {
     public static void openModule(int serverPort, WebDriver driver, ModuleLocation moduleLocation) {
         log.debug("Opening module {}", moduleLocation);
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)))
             .assertTrue("Modules page is not loaded.");
 
         getModule(driver, moduleLocation)

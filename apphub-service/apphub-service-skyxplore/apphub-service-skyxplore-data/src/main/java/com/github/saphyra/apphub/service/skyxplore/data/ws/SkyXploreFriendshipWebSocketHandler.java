@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.ws;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import org.springframework.stereotype.Component;
@@ -13,6 +13,6 @@ public class SkyXploreFriendshipWebSocketHandler extends AbstractWebSocketHandle
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU;
+        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU;
     }
 }

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Utils from "../../../../../common/js/Utils";
-import Endpoints from "../../../../../common/js/dao/dao";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
 import MapStream from "../../../../../common/js/collection/MapStream";
 import InputField from "../../../../../common/component/input/InputField";
@@ -10,6 +8,20 @@ import { validateOverviewAmount } from "../../validation/VillanyAteszValidation"
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import NumberInput from "../../../../../common/component/input/NumberInput";
 import ScheduledInputField from "../../../../../common/component/input/ScheduledInputField";
+import { copyAndSet, isBlank } from "../../../../../common/js/Utils";
+import {
+    VILLANY_ATESZ_DELETE_STOCK_ITEM,
+    VILLANY_ATESZ_MOVE_STOCK_TO_CAR,
+    VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME,
+    VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER
+} from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const InventoryItem = ({ localizationHandler, item, items, categories, setItems, setConfirmationDialogData }) => {
     const [amount, setAmount] = useState(0);
@@ -17,7 +29,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
     const updateProperty = (property, newValue) => {
         item[property] = newValue;
 
-        Utils.copyAndSet(items, setItems);
+        copyAndSet(items, setItems);
     }
 
     const sendRequest = (endpoint, newValue, validation = () => true) => {
@@ -38,19 +50,19 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
     const updateCategory = async (newCategory) => {
         updateProperty("stockCategoryId", newCategory);
 
-        sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY, newCategory);
+        sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_CATEGORY, newCategory);
     }
 
     const updateInventoried = async (inventoried) => {
         updateProperty("inventoried", inventoried);
 
-        sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED, inventoried);
+        sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_INVENTORIED, inventoried);
     }
 
     const updateMarkedForAcquisition = async (markedForAcquisition) => {
         updateProperty("markedForAcquisition", markedForAcquisition);
 
-        sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION, markedForAcquisition);
+        sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_MARKED_FOR_ACQUISITION, markedForAcquisition);
     }
 
     const getCategoryOptions = () => {
@@ -83,7 +95,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
     }
 
     const deleteItem = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_DELETE_STOCK_ITEM.createRequest(null, { stockItemId: item.stockItemId })
+        const response = await VILLANY_ATESZ_DELETE_STOCK_ITEM.createRequest(null, { stockItemId: item.stockItemId })
             .send();
 
         setItems(response);
@@ -98,7 +110,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
             return;
         }
 
-        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_CAR.createRequest({ value: amount }, { stockItemId: item.stockItemId })
+        const response = await VILLANY_ATESZ_MOVE_STOCK_TO_CAR.createRequest({ value: amount }, { stockItemId: item.stockItemId })
             .send();
 
         setItems(response);
@@ -112,7 +124,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
             return;
         }
 
-        const response = await Endpoints.VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE.createRequest({ value: amount }, { stockItemId: item.stockItemId })
+        const response = await VILLANY_ATESZ_MOVE_STOCK_TO_STORAGE.createRequest({ value: amount }, { stockItemId: item.stockItemId })
             .send();
 
         setItems(response);
@@ -201,7 +213,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("name")}
                         value={item.name}
                         onchangeCallback={(newValue) => updateProperty("name", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME, newValue, nw => !Utils.isBlank(nw))}
+                        scheduledCallback={(newValue) => sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_NAME, newValue, nw => !isBlank(nw))}
                         style={{ width: 8 * item.name.length + "px" }}
                     />
                 </td>
@@ -212,7 +224,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("serial-number")}
                         value={item.serialNumber}
                         onchangeCallback={(newValue) => updateProperty("serialNumber", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER, newValue)}
+                        scheduledCallback={(newValue) => sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_SERIAL_NUMBER, newValue)}
                     />
                 </td>
                 <td>
@@ -222,7 +234,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("bar-code")}
                         value={item.barCode}
                         onchangeCallback={(newValue) => updateProperty("barCode", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE, newValue)}
+                        scheduledCallback={(newValue) => sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_BAR_CODE, newValue)}
                     />
                 </td>
                 <td>
@@ -240,7 +252,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("in-car")}
                         value={item.inCar}
                         onchangeCallback={(newValue) => updateProperty("inCar", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR, newValue)}
+                        scheduledCallback={(newValue) => sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_CAR, newValue)}
                         disabled={item.inCart}
                     />
                 </td>
@@ -251,7 +263,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         placeholder={localizationHandler.get("in-storage")}
                         value={item.inStorage}
                         onchangeCallback={(newValue) => updateProperty("inStorage", newValue)}
-                        scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE, newValue)}
+                        scheduledCallback={(newValue) => sendRequest(VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE, newValue)}
                     />
                 </td>
                 <td>

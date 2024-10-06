@@ -1,4 +1,4 @@
-#villany-atesz-stock-inventory-items-search {
+#villany-atesz-stock-inventory-header {
     display: block;
     width: 90%;
     margin: 5px auto;
@@ -6,6 +6,11 @@
     position: sticky;
     top: 5px;
     z-index: 2;
+    display: flex;
+}
+
+#villany-atesz-stock-inventory-items-search {
+    flex-grow: 2;
 }
 
 #villany-atesz-stock-inventory-items-table {
@@ -31,4 +36,5 @@
 
 .villany-atesz-stock-inventory-item-name {
     min-width: 100%;
+    max-width: 350px;
 }

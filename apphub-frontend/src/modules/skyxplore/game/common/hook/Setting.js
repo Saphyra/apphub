@@ -1,5 +1,5 @@
 import useLoader from "../../../../../common/hook/Loader";
-import Endpoints from "../../../../../common/js/dao/dao";
+import { SKYXPLORE_DATA_GET_SETTING } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 
 const useLoadSetting = (type, location, callback) => {
     const payload = {
@@ -8,7 +8,7 @@ const useLoadSetting = (type, location, callback) => {
     }
 
     useLoader(
-        Endpoints.SKYXPLORE_DATA_GET_SETTING.createRequest(payload),
+        SKYXPLORE_DATA_GET_SETTING.createRequest(payload),
         response => callback(response.value)
     );
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.user.model.request.BanRequest;
+import com.github.saphyra.apphub.api.user.model.ban.BanRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;

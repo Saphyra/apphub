@@ -8,9 +8,9 @@ import localizationData from "./storage_setting_localization.json";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import RangeInput from "../../../../../../../common/component/input/RangeInput";
 import Button from "../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
+import { SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, SKYXPLORE_PLANET_EDIT_STORAGE_SETTING } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -35,7 +35,7 @@ const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDia
             priority: priority
         }
 
-        const response = await Endpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING.createRequest(payload)
+        const response = await SKYXPLORE_PLANET_EDIT_STORAGE_SETTING.createRequest(payload)
             .send();
 
         setStorageSettings(response);
@@ -68,7 +68,7 @@ const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDia
     }
 
     const deleteStorageSetting = async () => {
-        const response = await Endpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING.createRequest(null, { storageSettingId: storageSetting.storageSettingId })
+        const response = await SKYXPLORE_PLANET_DELETE_STORAGE_SETTING.createRequest(null, { storageSettingId: storageSetting.storageSettingId })
             .send();
         setStorageSettings(response);
         setConfirmationDialogData(null);

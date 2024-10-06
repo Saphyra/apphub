@@ -1,8 +1,8 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
-import Utils from "../../../../../../../common/js/Utils";
+import { copyAndSet, throwException } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
-import Endpoints from "../../../../../../../common/js/dao/dao";
+import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS } from "../../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 import MoveDirection from "../../../../../common/MoveDirection";
 import UpdateType from "../../../../../common/checklist_item/UpdateType";
 
@@ -10,19 +10,19 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
     if (!editingEnabled) {
         switch (updateType) {
             case UpdateType.TOGGLE_CHECKED:
-                Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
+                NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
                     .send();
                 break;
             case UpdateType.CONTENT_MODIFIED:
-                Endpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
+                NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
                     .send();
                 break;
             default:
-                Utils.throwException("IllegalArgument", "Unsupported updateType: " + updateType);
+                throwException("IllegalArgument", "Unsupported updateType: " + updateType);
         }
     }
 
-    Utils.copyAndSet(items, setItems);
+    copyAndSet(items, setItems);
 }
 
 export const removeItem = async (item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler) => {
@@ -44,7 +44,7 @@ export const removeItem = async (item, items, setItems, editingEnabled, setConfi
                     id="notebook-content-checklist-item-deletion-confirm-button"
                     label={localizationHandler.get("delete")}
                     onclick={async () => {
-                        await Endpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
+                        await NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
                             .send();
                         setConfirmationDialogData(null);
                         doRemoveItem(item);
@@ -79,7 +79,7 @@ export const moveItem = (item, moveDirection, items, setItems) => {
             newIndex = itemIndex + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherItem = orderedItems[newIndex];
@@ -95,5 +95,5 @@ export const moveItem = (item, moveDirection, items, setItems) => {
     item.index = newOrder;
     otherItem.index = originalOrder;
 
-    Utils.copyAndSet(items, setItems);
+    copyAndSet(items, setItems);
 }

@@ -1,12 +1,12 @@
 import React from "react";
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import EventName from "../../../../../../common/js/event/EventName";
 import Event from "../../../../../../common/js/event/Event";
+import { NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const PinnedItem = ({ listItem, localizationHandler, setLastEvent, pinGroupId, setItems }) => {
     const remove = async () => {
-        const response = await Endpoints.NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId, listItemId: listItem.id })
+        const response = await NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId, listItemId: listItem.id })
             .send();
 
         setItems(response);

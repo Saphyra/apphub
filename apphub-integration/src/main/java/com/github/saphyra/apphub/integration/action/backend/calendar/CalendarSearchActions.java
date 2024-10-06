@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.calendar;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventSearchResponse;
 import io.restassured.response.Response;
@@ -25,6 +25,6 @@ public class CalendarSearchActions {
     public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(serverPort, Endpoints.CALENDAR_SEARCH));
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_SEARCH));
     }
 }

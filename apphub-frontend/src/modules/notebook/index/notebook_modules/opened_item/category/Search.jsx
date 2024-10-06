@@ -4,13 +4,14 @@ import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./search.css";
 import EventName from "../../../../../../common/js/event/EventName";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ListItem from "../../list_item/ListItem";
 import ListItemMode from "../../list_item/ListItemMode";
 import UserSettings from "../../../../common/UserSettings";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import compareListItems from "./ListItemComparator";
+import { NOTEBOOK_SEARCH } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const Search = ({
     localizationHandler,
@@ -36,7 +37,7 @@ const Search = ({
 
     const loadSearchResult = () => {
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_SEARCH.createRequest({ value: openedListItem.id })
+            const response = await NOTEBOOK_SEARCH.createRequest({ value: openedListItem.id })
                 .send();
 
             setSearchResult(response);
@@ -68,24 +69,8 @@ const Search = ({
             );
         }
 
-        const compare = (a, b) => {
-            if (a.type === b.type) {
-                return compareByTitle(a, b);
-            }
-
-            if (a.type === OpenedPageType.CATEGORY) {
-                return -1;
-            }
-
-            return 1;
-
-            function compareByTitle(a, b) {
-                return a.title.localeCompare(b.title);
-            }
-        }
-
         return new Stream(searchResult)
-            .sorted((a, b) => compare(a, b))
+            .sorted((a, b) => compareListItems(a, b))
             .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
             .map(child =>
                 <ListItem

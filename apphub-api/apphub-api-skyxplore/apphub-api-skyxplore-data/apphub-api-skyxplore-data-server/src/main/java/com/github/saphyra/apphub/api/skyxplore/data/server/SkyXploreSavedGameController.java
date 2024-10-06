@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCre
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreDataEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,21 +19,21 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SkyXploreSavedGameController {
-    @PostMapping(Endpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
+    @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
     void saveGameData(@RequestBody List<Object> items);
 
-    @DeleteMapping(Endpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
+    @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
     void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items);
 
-    @GetMapping(Endpoints.SKYXPLORE_GET_GAMES)
+    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_GAMES)
     List<SavedGameResponse> getSavedGames(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @DeleteMapping(Endpoints.SKYXPLORE_DELETE_GAME)
+    @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_DELETE_GAME)
     void deleteGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
+    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
     GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(Endpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
+    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
     GameModel getGameModel(@PathVariable("gameId") UUID gameId);
 }

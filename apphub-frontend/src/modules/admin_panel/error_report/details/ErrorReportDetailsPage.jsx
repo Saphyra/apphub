@@ -6,17 +6,17 @@ import sessionChecker from "../../../../common/js/SessionChecker";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import Header from "../../../../common/component/Header";
 import Footer from "../../../../common/component/Footer";
-import Utils from "../../../../common/js/Utils";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import useLoader from "../../../../common/hook/Loader";
-import Endpoints from "../../../../common/js/dao/dao";
 import "./error_report_details.css";
 import StackTraceException from "./stack_trace/StackTraceException";
 import Button from "../../../../common/component/input/Button";
 import Constants from "../../../../common/js/Constants";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import ErrorReportStatus from "../ErrorReportStatus";
+import { hasValue } from "../../../../common/js/Utils";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../../../common/js/dao/endpoints/AdminPanelEndpoints";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();
@@ -28,7 +28,7 @@ const ErrorReportDetailsPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader(Endpoints.ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), setErrorReport);
+    useLoader(ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), setErrorReport);
 
     const openDeleteConfirmation = () => {
         setConfirmationDialogData(new ConfirmationDialogData(
@@ -53,14 +53,14 @@ const ErrorReportDetailsPage = () => {
     }
 
     const deleteErrorReport = async () => {
-        await Endpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReportId])
+        await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReportId])
             .send();
 
         window.close();
     }
 
     const mark = async (status) => {
-        await Endpoints.ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReportId], { status: status })
+        await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReportId], { status: status })
             .send();
 
         NotificationService.showSuccess(localizationHandler.get("error-report-updated"))
@@ -91,7 +91,7 @@ const ErrorReportDetailsPage = () => {
                     <div className="error-report-details-value">{errorReport.responseBody}</div>
                 </fieldset>
 
-                {Utils.hasValue(errorReport.exception) &&
+                {hasValue(errorReport.exception) &&
                     <div>
                         <fieldset>
                             <legend>{localizationHandler.get("thread")}</legend>
@@ -160,7 +160,7 @@ const ErrorReportDetailsPage = () => {
                 ]}
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

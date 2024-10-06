@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../../../common/component/input/Button";
-import Utils from "../../../../../common/js/Utils";
-import Endpoints from "../../../../../common/js/dao/dao";
 import localizationData from "./pause_and_resume_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./pause_and_resume.css";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import { hasValue, isTrue } from "../../../../../common/js/Utils";
+import { SKYXPLORE_GAME_PAUSE } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const PauseAndResumeGameButton = ({ lastEvent, isHost }) => {
     const localizationHandler = new LocalizationHandler(localizationData)
@@ -14,17 +14,17 @@ const PauseAndResumeGameButton = ({ lastEvent, isHost }) => {
     useEffect(() => handleEvent(), [lastEvent]);
 
     const handleEvent = () => {
-        if (!Utils.hasValue(lastEvent)) {
+        if (!hasValue(lastEvent)) {
             return;
         }
 
         if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_GAME_PAUSED) {
-            setPaused(Utils.isTrue(lastEvent.payload));
+            setPaused(isTrue(lastEvent.payload));
         }
     }
 
     const updatePaused = (newStatus) => {
-        Endpoints.SKYXPLORE_GAME_PAUSE.createRequest({ value: newStatus })
+        SKYXPLORE_GAME_PAUSE.createRequest({ value: newStatus })
             .send();
     }
 

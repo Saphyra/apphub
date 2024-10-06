@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import EventName from "../../../../../common/js/event/EventName";
 import ListItem from "../list_item/ListItem";
@@ -7,8 +6,9 @@ import ListItemMode from "../list_item/ListItemMode";
 import UserSettings from "../../../common/UserSettings";
 import useHasFocus from "../../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
-import Utils from "../../../../../common/js/Utils";
 import PinGroups from "./groups/PinGroups";
+import { hasValue } from "../../../../../common/js/Utils";
+import { NOTEBOOK_GET_PINNED_ITEMS } from "../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [pinnedItems, setPinnedItems] = useState([]);
@@ -47,10 +47,10 @@ const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, l
 
     const loadPinnedItems = () => {
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_PINNED_ITEMS.createRequest(
+            const response = await NOTEBOOK_GET_PINNED_ITEMS.createRequest(
                 null,
                 {},
-                Utils.hasValue(pinGroupId) && pinGroupId !== "null" ? { pinGroupId: pinGroupId } : {}
+                hasValue(pinGroupId) && pinGroupId !== "null" ? { pinGroupId: pinGroupId } : {}
             )
                 .send();
             setPinnedItems(response);
@@ -59,7 +59,7 @@ const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, l
     }
 
     const updatePinGroupId = (newId) => {
-        if (Utils.hasValue(newId)) {
+        if (hasValue(newId)) {
             sessionStorage.pinGroupId = newId;
         } else {
             delete sessionStorage.pinGroupId;

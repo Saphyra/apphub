@@ -6,7 +6,8 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
@@ -63,7 +64,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createAdminPanelMonitoring(int serverPort, Language language, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(serverPort, language, Endpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
+            return new ApphubWsClient(serverPort, language, AdminPanelEndpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +72,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreMainMenu(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -79,7 +80,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreLobby(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -87,7 +88,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     public static ApphubWsClient createSkyXploreGameMain(int serverPort, UUID accessTokenId, Object name) {
         try {
-            return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_MAIN, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +96,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     @SneakyThrows
     public static ApphubWsClient createSkyXploreLobbyInvitation(int serverPort, UUID accessTokenId, Object name) {
-        return new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
+        return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
     }
 
     public static List<WebSocketClient> getClients() {
@@ -104,7 +105,7 @@ public class ApphubWsClient extends WebSocketClient {
 
     @SneakyThrows
     public static ApphubWsClient createSkyXploreGamePlanet(int serverPort, UUID accessTokenId, UUID planetId) {
-        ApphubWsClient client = new ApphubWsClient(serverPort, Endpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
+        ApphubWsClient client = new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED)

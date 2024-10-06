@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.api.user.model.ban.BanResponse;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;

@@ -14,10 +14,13 @@ public class SkyXploreBuildingFlow {
 
         SkyXploreModifySurfaceActions.constructBuilding(driver, dataId);
 
-        surface = SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId);
-        assertThat(surface.isEmpty()).isFalse();
-        assertThat(surface.getBuildingDataId()).contains(dataId);
-        assertThat(surface.isConstructionInProgress()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId))
+                .returns(false, Surface::isEmpty)
+                .returns(true, Surface::isConstructionInProgress)
+                .extracting(surface1 -> surface1.getBuildingDataId().orElseThrow())
+                .isEqualTo(dataId);
+        });
 
         SkyXploreGameActions.resumeGame(driver);
 

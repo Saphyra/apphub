@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Textarea from "../../../../../../common/component/input/Textarea";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./text.css";
@@ -12,6 +11,7 @@ import ConfirmationDialogData from "../../../../../../common/component/confirmat
 import { useUpdateEffect } from "react-use";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import { NOTEBOOK_EDIT_TEXT, NOTEBOOK_GET_TEXT } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -30,7 +30,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
 
     const loadText = () => {
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_TEXT.createRequest(null, { listItemId: openedListItem.id })
+            const response = await NOTEBOOK_GET_TEXT.createRequest(null, { listItemId: openedListItem.id })
                 .send();
             setTitle(response.title);
             setContent(response.content);
@@ -77,7 +77,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
             content: content
         }
 
-        const response = await Endpoints.NOTEBOOK_EDIT_TEXT.createRequest(payload, { listItemId: openedListItem.id })
+        const response = await NOTEBOOK_EDIT_TEXT.createRequest(payload, { listItemId: openedListItem.id })
             .send();
 
         setEditingEnabled(false);
@@ -132,6 +132,16 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
                 value={content}
                 disabled={!editingEnabled}
                 onchangeCallback={setContent}
+                onKeyDownCallback={e => {
+                    if (e.key === "Tab") {
+                        e.preventDefault();
+
+                        const start = e.target.selectionStart;
+                        const end = e.target.selectionEnd;
+                        e.target.value = e.target.value.substring(0, start) + "    " + e.target.value.substring(end);
+                        e.target.selectionStart = e.target.selectionEnd = start + 4;
+                    }
+                }}
             />
 
             <div className="notebook-content-buttons">

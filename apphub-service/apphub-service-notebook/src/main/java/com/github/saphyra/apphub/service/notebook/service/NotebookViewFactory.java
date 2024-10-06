@@ -22,6 +22,7 @@ public class NotebookViewFactory {
     private final FileDao fileDao;
     private final UuidConverter uuidConverter;
     private final StorageProxy storageProxy;
+    private final IsParentArchivedService isParentArchivedService;
 
     public NotebookView create(ListItem listItem) {
         String value = extractValue(listItem);
@@ -32,14 +33,13 @@ public class NotebookViewFactory {
             .map(ListItem::getTitle)
             .orElse(null);
 
-
         return NotebookView.builder()
             .id(listItem.getListItemId())
             .title(listItem.getTitle())
             .type(listItem.getType().name())
             .value(value)
             .pinned(listItem.isPinned())
-            .archived(listItem.isArchived())
+            .archived(listItem.isArchived() || isParentArchivedService.isAnyOfParentsArchived(listItem.getParent()))
             .parentId(parentId)
             .parentTitle(parentTitle)
             .enabled(fetchEnabled(listItem))
@@ -48,30 +48,33 @@ public class NotebookViewFactory {
 
     private boolean fetchEnabled(ListItem listItem) {
         switch (listItem.getType()) {
-            case FILE:
-            case IMAGE:
+            case FILE, IMAGE -> {
                 UUID storedFileId = fileDao.findByParentValidated(listItem.getListItemId())
                     .getStoredFileId();
                 return storageProxy.getFileMetadata(storedFileId)
                     .getFileUploaded();
-            default:
+            }
+            default -> {
                 return true;
+            }
         }
     }
 
     private String extractValue(ListItem listItem) {
         switch (listItem.getType()) {
-            case LINK:
+            case LINK -> {
                 return contentDao.findByParentValidated(listItem.getListItemId())
                     .getContent();
-            case IMAGE:
-            case FILE:
+            }
+            case IMAGE, FILE -> {
                 UUID fileId = fileDao.findByParentValidated(listItem.getListItemId())
                     .getStoredFileId();
                 return uuidConverter.convertDomain(fileId);
-            default:
+            }
+            default -> {
                 log.debug("No value for listItemType {}", listItem.getType());
                 return null;
+            }
         }
     }
 }

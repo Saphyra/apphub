@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
-import com.github.saphyra.apphub.api.user.model.request.ChangeUsernameRequest;
+import com.github.saphyra.apphub.api.user.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;

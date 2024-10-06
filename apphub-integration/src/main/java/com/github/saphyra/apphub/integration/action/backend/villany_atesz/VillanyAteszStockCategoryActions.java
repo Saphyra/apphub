@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCategoryModel;
 import io.restassured.response.Response;
 
@@ -16,7 +16,7 @@ public class VillanyAteszStockCategoryActions {
     public static Response getCreateResponse(int serverPort, UUID accessTokenId, StockCategoryModel request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY));
+            .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY));
     }
 
     public static List<StockCategoryModel> create(int serverPort, UUID accessTokenId, StockCategoryModel request) {
@@ -37,13 +37,13 @@ public class VillanyAteszStockCategoryActions {
 
     public static Response getStockCategoriesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES));
     }
 
     public static Response getEditResponse(int serverPort, UUID accessTokenId, UUID stockCategoryId, StockCategoryModel request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 
     public static List<StockCategoryModel> edit(int serverPort, UUID accessTokenId, UUID stockCategoryId, StockCategoryModel request) {
@@ -64,6 +64,6 @@ public class VillanyAteszStockCategoryActions {
 
     public static Response getDeleteResponse(int serverPort, UUID accessTokenId, UUID stockCategoryId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 }

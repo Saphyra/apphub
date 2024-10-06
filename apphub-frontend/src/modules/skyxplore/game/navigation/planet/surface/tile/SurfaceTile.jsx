@@ -1,18 +1,18 @@
 import React from "react";
 import "./surface_tile.css";
-import Utils from "../../../../../../../common/js/Utils";
 import Button from "../../../../../../../common/component/input/Button";
 import localizationData from "./surface_tile_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import SurfaceTileContent from "./content/SurfaceTileContent";
 import NavigationHistoryItem from "../../../NavigationHistoryItem";
 import PageName from "../../../PageName";
+import { hasValue } from "../../../../../../../common/js/Utils";
 
 const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const isEmpty = () => {
-        return !Utils.hasValue(surface.building) && !Utils.hasValue(surface.terraformation);
+        return !hasValue(surface.building) && !hasValue(surface.terraformation);
     }
 
     const getContent = () => {

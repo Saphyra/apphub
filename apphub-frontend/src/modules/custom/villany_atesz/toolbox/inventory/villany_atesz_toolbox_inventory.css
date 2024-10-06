@@ -1,4 +1,4 @@
-#villany-atesz-stock-toolbox-items-search {
+#villany-atesz-toolbox-inventory-header {
     display: block;
     width: 90%;
     margin: 5px auto;
@@ -6,6 +6,11 @@
     position: sticky;
     top: 5px;
     z-index: 2;
+    display: flex;
+}
+
+#villany-atesz-stock-toolbox-items-search {
+    flex-grow: 2;
 }
 
 #villany-atesz-toolbox-inventory .formatted-table {
@@ -33,14 +38,14 @@
     width: 75px;
 }
 
-.villany-atesz-toolbox-inventory-item-data-list-cell{
+.villany-atesz-toolbox-inventory-item-data-list-cell {
     white-space: nowrap;
 }
 
-.villany-atesz-toolbox-inventory-item-data-list-cell button{
+.villany-atesz-toolbox-inventory-item-data-list-cell button {
     background-image: url("../../../../../common/style/img/save.png");
     background-size: cover;
     width: 26px;
     height: 26px;
-    
+
 }

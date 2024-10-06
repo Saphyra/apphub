@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.MapSolarSystemResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
@@ -36,13 +36,13 @@ public class SkyXploreSolarSystemActions {
 
     public static Response getSolarSystemResponse(int serverPort, UUID accessTokenId, UUID solarSystemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_SOLAR_SYSTEM, "solarSystemId", solarSystemId));
+            .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GET_SOLAR_SYSTEM, "solarSystemId", solarSystemId));
     }
 
     public static Response getRenameSolarSystemResponse(int serverPort, UUID accessTokenId, UUID solarSystemId, String solarSystemName) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(solarSystemName))
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_SOLAR_SYSTEM_RENAME, "solarSystemId", solarSystemId));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_SOLAR_SYSTEM_RENAME, "solarSystemId", solarSystemId));
     }
 
     public static void renameSolarSystem(int serverPort, UUID accessTokenId, UUID solarSystemId, String solarSystemName) {

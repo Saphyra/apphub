@@ -2,9 +2,10 @@ package com.github.saphyra.apphub.integration.action.backend;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.ModulesResponse;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
@@ -25,7 +26,7 @@ public class ModulesActions {
 
     public static Response getLogoutResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.LOGOUT));
+            .post(UrlFactory.create(serverPort, UserEndpoints.LOGOUT));
     }
 
     public static Map<String, List<ModulesResponse>> getModules(int serverPort, UUID accessTokenId) {
@@ -40,7 +41,7 @@ public class ModulesActions {
 
     public static Response getModulesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.MODULES_GET_MODULES_OF_USER));
+            .get(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_GET_MODULES_OF_USER));
     }
 
     public static Map<String, List<ModulesResponse>> setAsFavorite(int serverPort, UUID accessTokenId, String module, Boolean favorite) {
@@ -59,6 +60,6 @@ public class ModulesActions {
 
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(favorite))
-            .post(UrlFactory.create(serverPort, Endpoints.MODULES_SET_FAVORITE, pathVariables));
+            .post(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_SET_FAVORITE, pathVariables));
     }
 }

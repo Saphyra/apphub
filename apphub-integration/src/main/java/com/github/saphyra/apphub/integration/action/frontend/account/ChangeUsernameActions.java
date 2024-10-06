@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChUsernamePasswordValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChangeUsernameParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.change_username.ChangeUsernameValidationResult;
@@ -25,7 +25,7 @@ public class ChangeUsernameActions {
     }
 
     public static void fillChangeUsernameForm(int serverPort, WebDriver driver, ChangeUsernameParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-username-username-input")), parameters.getUsername());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-username-password-input")), parameters.getPassword());

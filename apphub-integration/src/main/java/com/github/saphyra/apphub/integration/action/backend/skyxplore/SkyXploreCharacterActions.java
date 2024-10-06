@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import io.restassured.response.Response;
 
@@ -19,7 +19,7 @@ public class SkyXploreCharacterActions {
     public static Response getCreateCharacterResponse(int serverPort, UUID accessTokenId, SkyXploreCharacterModel model) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(model)
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
+            .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
     }
 
     public static String getCharacterName(String email) {
@@ -29,11 +29,11 @@ public class SkyXploreCharacterActions {
 
     public static Response getCharacterNameResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_GET_CHARACTER_NAME));
+            .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_CHARACTER_NAME));
     }
 
     public static Response getExistsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_CHARACTER_EXISTS));
+            .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_EXISTS));
     }
 }

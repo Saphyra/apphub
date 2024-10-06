@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -97,7 +97,7 @@ public class ChangeEmailTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.builder().userIdentifier(changeParameters.getEmail()).password(userData.getPassword()).build());
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, Endpoints.MODULES_PAGE)))
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)))
             .assertTrue();
     }
 

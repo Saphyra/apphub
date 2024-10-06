@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Endpoints from "../../../../../../common/js/dao/dao";
+import { VILLANY_ATESZ_REMOVE_FROM_CART } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const CartItem = ({ cartId, item, setConfirmationDialogData, localizationHandler, setItems, setCart }) => {
     const openRemoveConfirmation = () => {
@@ -27,7 +27,7 @@ const CartItem = ({ cartId, item, setConfirmationDialogData, localizationHandler
     }
 
     const removeItem = async () => {
-        const response = await Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART.createRequest(null, { cartId: cartId, stockItemId: item.stockItemId })
+        const response = await VILLANY_ATESZ_REMOVE_FROM_CART.createRequest(null, { cartId: cartId, stockItemId: item.stockItemId })
             .send();
 
         setCart(response.cart);

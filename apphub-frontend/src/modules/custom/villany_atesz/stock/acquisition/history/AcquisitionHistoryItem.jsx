@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import Utils from "../../../../../../common/js/Utils";
+import React from "react";
+import { numberOfDigits } from "../../../../../../common/js/Utils";
 
 const AcquisitionHistoryItem = ({ item, padding }) => {
     let extraSpaces = "";
-    for (let i = Utils.numberOfDigits(item.amount); i < padding; i++) {
+    for (let i = numberOfDigits(item.amount); i < padding; i++) {
         extraSpaces += " ";
     }
-
-    console.log(padding, extraSpaces.length);
 
     return (
         <li className="villany-atesz-stock-acquisition-history-item selectable">

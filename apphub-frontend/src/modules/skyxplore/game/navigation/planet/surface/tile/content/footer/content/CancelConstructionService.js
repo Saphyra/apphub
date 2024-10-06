@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../../../../../common/js/dao/dao";
+import { SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const confirmCancelConstruction = (
     localizationHandler,
@@ -33,7 +33,7 @@ const confirmCancelConstruction = (
 }
 
 const cancelConstruction = async (planetId, surface, setConfirmationDialogData) => {
-    await Endpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+    await SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
         .send();
 
     setConfirmationDialogData(null);

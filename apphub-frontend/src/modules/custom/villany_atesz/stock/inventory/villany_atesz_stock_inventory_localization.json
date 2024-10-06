@@ -70,5 +70,9 @@
     "marked-for-acquisition": {
         "en": "Marked for acquisition",
         "hu": "Beszerzésre jelölve"
+    },
+    "last-inventoried": {
+        "en": "Last inventoried",
+        "hu": "Utoljára leltárazva"
     }
 }

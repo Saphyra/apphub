@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.ws.planet;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -32,7 +32,7 @@ public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandle
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET;
+        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET;
     }
 
     @Override

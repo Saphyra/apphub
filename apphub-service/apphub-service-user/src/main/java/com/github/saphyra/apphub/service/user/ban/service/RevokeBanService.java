@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.user.model.response.BanResponse;
+import com.github.saphyra.apphub.api.user.model.ban.BanResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;

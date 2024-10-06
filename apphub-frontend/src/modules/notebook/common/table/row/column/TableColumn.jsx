@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ColumnType from "./type/ColumnType";
 import TextColumn from "./type/TextColumn";
-import Utils from "../../../../../../common/js/Utils";
 import localizationData from "./table_column_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./table_column.css";
@@ -19,6 +18,7 @@ import LinkColumn from "./type/LinkColumn";
 import RangeColumn from "./type/RangeColumn";
 import FileColumn from "./type/FileColumn";
 import ImageColumn from "./type/ImageColumn";
+import { throwException } from "../../../../../../common/js/Utils";
 
 const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -151,7 +151,7 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
                 addFileToColum={addFileToColum}
             />
         default:
-            Utils.throwException("IllegalArgument", "Undhandled columnType " + columnData.columnType);
+            throwException("IllegalArgument", "Undhandled columnType " + columnData.columnType);
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
-import Utils from "../../js/Utils";
+import { hasValue } from "../../js/Utils";
 
 const ScheduledInputField = ({
     className,
@@ -15,7 +15,7 @@ const ScheduledInputField = ({
     const [schedule, setSchedule] = useState(null);
 
     const scheduleCallback = (newValue) => {
-        if (Utils.hasValue(schedule)) {
+        if (hasValue(schedule)) {
             clearTimeout(schedule);
         }
 
@@ -32,7 +32,7 @@ const ScheduledInputField = ({
 
     return <InputField
         type={type}
-        className={className + (Utils.hasValue(schedule) ? " scheduled" : "")}
+        className={className + (hasValue(schedule) ? " scheduled" : "")}
         onchangeCallback={scheduleCallback}
         value={value}
         placeholder={placeholder}

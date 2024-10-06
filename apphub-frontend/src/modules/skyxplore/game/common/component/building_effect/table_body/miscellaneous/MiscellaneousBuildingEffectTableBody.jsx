@@ -1,7 +1,7 @@
 import React from "react";
 import DataId from "../../../../constants/DataId";
-import Utils from "../../../../../../../../common/js/Utils";
 import ProductionTableBody from "../ProductionTableBody";
+import { throwException } from "../../../../../../../../common/js/Utils";
 
 const MiscellaneousBuildingEffectTableBody = ({ itemData, localizationHandler, surfaceType, currentLevel }) => {
     switch (itemData.id) {
@@ -14,7 +14,7 @@ const MiscellaneousBuildingEffectTableBody = ({ itemData, localizationHandler, s
                 currentLevel={currentLevel}
             />
         default:
-            Utils.throwException("IllegalArgument", "Unhandled miscellaneous building: " + itemData.id);
+            throwException("IllegalArgument", "Unhandled miscellaneous building: " + itemData.id);
     }
 }
 

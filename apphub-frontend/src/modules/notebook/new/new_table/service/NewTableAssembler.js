@@ -1,4 +1,3 @@
-import Utils from "../../../../../common/js/Utils"
 import Stream from "../../../../../common/js/collection/Stream"
 import TableRow from "../../../common/table/row/TableRow"
 import TableHead from "../../../common/table/table_head/TableHead"
@@ -8,6 +7,7 @@ import { moveRow, newRow, removeRow } from "./NewTableRowCrudService"
 import TableHeadIndexRange from "../../../common/table/table_head/TableHeadIndexRange"
 import AddRowButton from "../../../common/table/row/AddRowButton"
 import RowIndexRange from "../../../common/table/row/RowIndexRange"
+import { copyAndSet } from "../../../../../common/js/Utils"
 
 const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile) => {
     return (
@@ -41,11 +41,11 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
 
 const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom) => {
     const updateTableHeads = () => {
-        Utils.copyAndSet(tableHeads, setTableHeads);
+        copyAndSet(tableHeads, setTableHeads);
     }
 
     const updateRows = () => {
-        Utils.copyAndSet(rows, setRows);
+        copyAndSet(rows, setRows);
     }
 
     return (
@@ -99,7 +99,7 @@ const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads
 
 const getTableRows = (rows, setRows, checklist, custom, addFile) => {
     const updateRows = () => {
-        Utils.copyAndSet(rows, setRows);
+        copyAndSet(rows, setRows);
     }
 
     return new Stream(rows)

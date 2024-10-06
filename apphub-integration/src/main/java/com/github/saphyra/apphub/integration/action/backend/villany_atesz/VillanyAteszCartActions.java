@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToCartRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CartDeletedResponse;
@@ -22,7 +22,7 @@ public class VillanyAteszCartActions {
     public static Response getCreateResponse(int serverPort, UUID accessTokenId, UUID contactId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(contactId))
-            .put(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CREATE_CART));
+            .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_CART));
     }
 
     public static UUID create(int serverPort, UUID accessTokenId, UUID contactId) {
@@ -43,13 +43,13 @@ public class VillanyAteszCartActions {
 
     public static Response getCartsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_CARTS));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_CARTS));
     }
 
     public static Response getAddToCartResponse(int serverPort, UUID accessTokenId, AddToCartRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_ADD_TO_CART));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_ADD_TO_CART));
     }
 
     public static CartModifiedResponse addToCart(int serverPort, UUID accessTokenId, AddToCartRequest request) {
@@ -70,7 +70,7 @@ public class VillanyAteszCartActions {
 
     public static Response getRemoveFromCartResponse(int serverPort, UUID accessTokenId, UUID cartId, UUID stockItemId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_REMOVE_FROM_CART, Map.of("cartId", cartId, "stockItemId", stockItemId)));
     }
 
     public static CartDeletedResponse finalize(int serverPort, UUID accessTokenId, UUID cartId) {
@@ -83,7 +83,7 @@ public class VillanyAteszCartActions {
 
     public static Response getFinalizeCartResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_FINALIZE_CART, "cartId", cartId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_FINALIZE_CART, "cartId", cartId));
     }
 
     public static CartDeletedResponse delete(int serverPort, UUID accessTokenId, UUID cartId) {
@@ -96,7 +96,7 @@ public class VillanyAteszCartActions {
 
     public static Response getDeleteResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_CART, "cartId", cartId));
     }
 
     public static CartView getCart(int serverPort, UUID accessTokenId, UUID cartId) {
@@ -109,13 +109,13 @@ public class VillanyAteszCartActions {
 
     public static Response getCartResponse(int serverPort, UUID accessTokenId, UUID cartId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_CART, "cartId", cartId));
     }
 
     public static Response getEditMarginResponse(int serverPort, UUID accessTokenId, UUID cartId, Double margin) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(margin))
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CART_EDIT_MARGIN, "cartId", cartId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CART_EDIT_MARGIN, "cartId", cartId));
     }
 
     public static void editMargin(int serverPort, UUID accessTokenId, UUID cartId, Double margin) {

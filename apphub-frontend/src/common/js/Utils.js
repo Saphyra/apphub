@@ -1,7 +1,17 @@
 import Constants from "./Constants";
 import Stream from "./collection/Stream";
 
-const getCookie = (key) => {
+export const spinnerWrappedOperation = (setDisplaySpinner, call) => {
+    setDisplaySpinner(true);
+
+    try {
+        call();
+    } finally {
+        setDisplaySpinner(false);
+    }
+}
+
+export const getCookie = (key) => {
     const cookies = document.cookie.split('; ');
     for (let cIndex in cookies) {
         const cookie = cookies[cIndex].split("=");
@@ -12,7 +22,7 @@ const getCookie = (key) => {
     return null;
 }
 
-const setCookie = (key, value, expirationDays) => {
+export const setCookie = (key, value, expirationDays) => {
     let cookieString = key + "=" + value;
     if (expirationDays !== null && expirationDays !== undefined) {
         const date = new Date();
@@ -24,37 +34,37 @@ const setCookie = (key, value, expirationDays) => {
     window.document.cookie = cookieString;
 };
 
-const getBrowserLanguage = () => {
+export const getBrowserLanguage = () => {
     return navigator.language.toLowerCase().split("-")[0];
 }
 
-const throwException = (name, message) => {
+export const throwException = (name, message) => {
     name = name === undefined ? "" : name;
     message = message === undefined ? "" : message;
     console.error(name + " - " + message);
     throw { name: name, message: message, stackTrace: (new Error()).stack };
 }
 
-const getQueryParam = (paramName) => {
+export const getQueryParam = (paramName) => {
     return new URLSearchParams(window.location.search).get(paramName);
 }
 
-const isBlank = (str) => {
+export const isBlank = (str) => {
     return "&nbsp;" == str || (!str || /^\s*$/.test(str));
 }
 
-const generateRandomId = () => {
+export const generateRandomId = () => {
     var S4 = function () {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     };
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
-const hasValue = (value) => {
+export const hasValue = (value) => {
     return value !== null && value !== undefined;
 }
 
-const formatFileSize = (bytes) => {
+export const formatFileSize = (bytes) => {
     if (bytes > Constants.GIGABYTES) {
         return limitDecimals(bytes / Constants.GIGABYTES, 1) + " GB";
     }
@@ -79,13 +89,13 @@ const formatFileSize = (bytes) => {
     }
 }
 
-const copyAndSet = (items, set) => {
+export const copyAndSet = (items, set) => {
     const copy = new Stream(items)
         .toList();
     set(copy);
 }
 
-const addAndSet = (items, item, set) => {
+export const addAndSet = (items, item, set) => {
     const copy = new Stream(items)
         .add(item)
         .toList();
@@ -93,18 +103,18 @@ const addAndSet = (items, item, set) => {
 }
 
 //Remove item if remove() == true
-const removeAndSet = (items, remove, set) => {
+export const removeAndSet = (items, remove, set) => {
     const copy = new Stream(items)
         .remove(remove)
         .toList();
     set(copy);
 }
 
-const bytesToMegabytes = (bytes) => {
+export const bytesToMegabytes = (bytes) => {
     return Math.round(bytes / 1024 / 1024);
 }
 
-const isTrue = (b) => {
+export const isTrue = (b) => {
     if (typeof b === "boolean") {
         return b;
     }
@@ -116,7 +126,7 @@ const isTrue = (b) => {
     return false;
 }
 
-const nullIfEmpty = (input) => {
+export const nullIfEmpty = (input) => {
     if (!hasValue(input) || input.length === 0) {
         return null;
     }
@@ -124,7 +134,7 @@ const nullIfEmpty = (input) => {
     return input;
 }
 
-const isJsonString = (input) => {
+export const isJsonString = (input) => {
     try {
         JSON.parse(input);
 
@@ -134,28 +144,6 @@ const isJsonString = (input) => {
     }
 }
 
-const numberOfDigits = (input) => {
+export const numberOfDigits = (input) => {
     return Math.floor(Math.log(Math.abs(input)) * Math.LOG10E + 1 | 0);
 }
-
-const Utils = {
-    getCookie: getCookie,
-    setCookie: setCookie,
-    getBrowserLanguage: getBrowserLanguage,
-    throwException: throwException,
-    getQueryParam: getQueryParam,
-    isBlank: isBlank,
-    generateRandomId: generateRandomId,
-    hasValue: hasValue,
-    formatFileSize: formatFileSize,
-    bytesToMegabytes: bytesToMegabytes,
-    copyAndSet: copyAndSet,
-    addAndSet: addAndSet,
-    removeAndSet: removeAndSet,
-    isTrue: isTrue,
-    nullIfEmpty: nullIfEmpty,
-    isJsonString: isJsonString,
-    numberOfDigits: numberOfDigits,
-}
-
-export default Utils;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.core;
 
-import com.github.saphyra.apphub.integration.core.driver.WebDriverFactory;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
+import com.github.saphyra.apphub.integration.core.driver.WebDriverProvider;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverWrapper;
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
@@ -43,7 +43,7 @@ public abstract class SeleniumTest extends TestBase {
 
         extractDrivers(TestConfiguration.PRE_CREATE_WEB_DRIVERS);
         driverWrappers.get()
-            .forEach(webDriverWrapper -> WebDriverFactory.release(webDriverWrapper));
+            .forEach(WebDriverProvider::release);
         log.info("Drivers created.");
     }
 
@@ -60,9 +60,9 @@ public abstract class SeleniumTest extends TestBase {
                 if (ITestResult.FAILURE == testResult.getStatus()) {
                     log.debug("Current URL: {}", driver.getCurrentUrl());
                     reportFailure(webDriverWrapper, testResult.getTestClass().getRealClass().getName(), testResult.getName(), driverIndex);
-                    WebDriverFactory.invalidate(webDriverWrapper);
+                    WebDriverProvider.invalidate(webDriverWrapper);
                 } else {
-                    WebDriverFactory.release(webDriverWrapper);
+                    WebDriverProvider.release(webDriverWrapper);
                 }
             }
         } finally {
@@ -119,7 +119,7 @@ public abstract class SeleniumTest extends TestBase {
         if (mode == WebDriverMode.DEFAULT) {
             throw new IllegalArgumentException("Use extractDriver() to extract default driver.");
         }
-        WebDriverWrapper webDriverWrapper = new WebDriverWrapper(WebDriverFactory.createDriverExternal(mode), mode);
+        WebDriverWrapper webDriverWrapper = WebDriverProvider.getDriver(mode);
         addToDrivers(webDriverWrapper);
         return webDriverWrapper.getDriver();
     }
@@ -137,7 +137,7 @@ public abstract class SeleniumTest extends TestBase {
         StopWatch stopWatch = StopWatch.createStarted();
         List<WebDriverWrapper> webDriverWrappers;
         try {
-            webDriverWrappers = WebDriverFactory.getDrivers(driverCount);
+            webDriverWrappers = WebDriverProvider.getDrivers(driverCount);
             stopWatch.stop();
         } catch (Exception e) {
             throw new RuntimeException(e);

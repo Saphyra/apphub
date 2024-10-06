@@ -18,12 +18,22 @@ const TextColumn = ({
     if (editingEnabled) {
         return (
             <td className={"table-column editable notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="table-column-wrapper">
-                    <div className="table-column-content">
+                <div className="notebook-table-column-wrapper">
+                    <div className="notebook-table-column-content">
                         <Textarea
                             className={"notebook-table-column-input resizable" + (custom ? " notebook-table-column-input" : "")}
                             onchangeCallback={updateContent}
                             value={columnData.data}
+                            onKeyDownCallback={e => {
+                                if (e.key === "Tab") {
+                                    e.preventDefault();
+    
+                                    const start = e.target.selectionStart;
+                                    const end = e.target.selectionEnd;
+                                    e.target.value = e.target.value.substring(0, start) + "    " + e.target.value.substring(end);
+                                    e.target.selectionStart = e.target.selectionEnd = start + 4;
+                                }
+                            }}
                         />
                     </div>
 
@@ -40,7 +50,7 @@ const TextColumn = ({
     } else {
         return (
             <td className="table-column">
-                <pre className="table-column-wrapper">
+                <pre className="notebook-table-column-wrapper notebook-text-column">
                     {columnData.data}
                 </pre>
             </td >

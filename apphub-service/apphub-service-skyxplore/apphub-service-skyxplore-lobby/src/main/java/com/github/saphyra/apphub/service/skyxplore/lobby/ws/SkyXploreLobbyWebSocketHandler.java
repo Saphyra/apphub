@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.ws;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.JoinToLobbyService;
@@ -34,7 +34,7 @@ public class SkyXploreLobbyWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY;
+        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY;
     }
 
     @Override

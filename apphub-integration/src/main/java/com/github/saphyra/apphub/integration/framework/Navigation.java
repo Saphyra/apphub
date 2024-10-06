@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import org.openqa.selenium.WebDriver;
 
 public class Navigation {
     public static String toIndexPage(int serverPort, WebDriver driver) {
-        String url = UrlFactory.create(serverPort, Endpoints.INDEX_PAGE);
+        String url = UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE);
         toUrl(driver, url);
         return url;
     }

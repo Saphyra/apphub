@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.frontend.villany_atesz;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ public class VillanyAteszNavigation {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.VILLANY_ATESZ_CONTACTS_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(VillanyAteszEndpoints.VILLANY_ATESZ_CONTACTS_PAGE))
             .assertTrue("Contacts are not opened");
     }
 
@@ -96,7 +96,7 @@ public class VillanyAteszNavigation {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.VILLANY_ATESZ_TOOLBOX_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(VillanyAteszEndpoints.VILLANY_ATESZ_TOOLBOX_PAGE))
             .assertTrue("Contacts are not opened");
     }
 

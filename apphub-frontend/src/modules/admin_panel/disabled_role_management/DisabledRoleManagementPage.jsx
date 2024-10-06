@@ -11,9 +11,9 @@ import NotificationService from "../../../common/js/notification/NotificationSer
 import roleLocalizationData from "../role_localization.json";
 import "./disabled_role_management.css";
 import useLoader from "../../../common/hook/Loader";
-import Endpoints from "../../../common/js/dao/dao";
 import Stream from "../../../common/js/collection/Stream";
 import DisabledRoleManagementRole from "./DisabledRoleManagementRole";
+import { USER_DATA_GET_DISABLED_ROLES } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const DisabledRoleManagement = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -25,7 +25,7 @@ const DisabledRoleManagement = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(Endpoints.USER_DATA_GET_DISABLED_ROLES.createRequest(), setRoles)
+    useLoader(USER_DATA_GET_DISABLED_ROLES.createRequest(), setRoles)
 
     const getContent = () => {
         return new Stream(roles)

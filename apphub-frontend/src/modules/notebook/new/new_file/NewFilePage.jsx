@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import Spinner from "../../../../common/component/Spinner";
 import "./new_file.css";
 import create from "./NewFileSaver";
+import { hasValue, isBlank } from "../../../../common/js/Utils";
 
 const NewFilePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,6 +29,19 @@ const NewFilePage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+    useEffect(() => updaetListItemTitle(), [file]);
+
+    const updaetListItemTitle = () => {
+        if(!hasValue(file)){
+            return;
+        }
+
+        if (!isBlank(listItemTitle)) {
+            return;
+        }
+
+        setListItemTitle(file.fileName);
+    }
 
     const save = async () => {
         const fileUploadSuccessful = await create(listItemTitle, file, parentId, setDisplaySpinner);

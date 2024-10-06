@@ -1,8 +1,8 @@
-import Utils from "../../../../../common/js/Utils";
+import { generateRandomId } from "../../../../../common/js/Utils";
 
 const AcquiredItemData = class {
     constructor() {
-        this.id = Utils.generateRandomId();
+        this.id = generateRandomId();
         this.stockCategoryId = "";
         this.stockItemId = "";
         this.inCar = 0;

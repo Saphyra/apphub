@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StorageBoxModel;
@@ -27,7 +27,7 @@ public class VillanyAteszToolboxActions {
     public static Response getCreateToolResponse(int serverPort, UUID accessTokenId, CreateToolRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_CREATE_TOOL));
+            .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_TOOL));
     }
 
     public static List<ToolResponse> getTools(int serverPort, UUID accessTokenId) {
@@ -40,13 +40,13 @@ public class VillanyAteszToolboxActions {
 
     public static Response getToolsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_TOOLS));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_TOOLS));
     }
 
     public static Response getSetToolStatusResponse(int serverPort, UUID accessTokenId, UUID toolId, ToolStatus status) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_SET_TOOL_STATUS, "toolId", toolId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_SET_TOOL_STATUS, "toolId", toolId));
     }
 
     public static List<ToolResponse> setToolStatus(int serverPort, UUID accessTokenId, UUID toolId, ToolStatus status) {
@@ -67,17 +67,17 @@ public class VillanyAteszToolboxActions {
 
     public static Response getDeleteResponse(int serverPort, UUID accessTokenId, UUID toolId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_TOOL, "toolId", toolId));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_TOOL, "toolId", toolId));
     }
 
     public static Response getToolTypesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_TOOL_TYPES));
     }
 
     public static Response getStorageBoxesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_STORAGE_BOXES));
     }
 
     public static List<StorageBoxModel> getStorageBoxes(int serverPort, UUID accessTokenId) {
@@ -103,7 +103,7 @@ public class VillanyAteszToolboxActions {
     public static Response getEditToolTypeResponse(int serverPort, UUID accessTokenId, UUID toolTypeId, String name) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(name))
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE, "toolTypeId", toolTypeId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_TOOL_TYPE, "toolTypeId", toolTypeId));
     }
 
     public static void deleteToolType(int serverPort, UUID accessTokenId, UUID toolTypeId) {
@@ -112,7 +112,7 @@ public class VillanyAteszToolboxActions {
 
     public static Response getDeleteToolTypeResponse(int serverPort, UUID accessTokenId, UUID toolTypeId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE, "toolTypeId", toolTypeId));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_TOOL_TYPE, "toolTypeId", toolTypeId));
     }
 
     public static void editStorageBox(int serverPort, UUID accessTokenId, UUID storageBoxId, String name) {
@@ -122,7 +122,7 @@ public class VillanyAteszToolboxActions {
     public static Response getEditStorageBoxResponse(int serverPort, UUID accessTokenId, UUID storageBoxId, String name) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(name))
-            .post(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX, "storageBoxId", storageBoxId));
+            .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_STORAGE_BOX, "storageBoxId", storageBoxId));
     }
 
     public static void deleteStorageBox(int serverPort, UUID accessTokenId, UUID storageBoxId) {
@@ -131,6 +131,6 @@ public class VillanyAteszToolboxActions {
 
     public static Response getDeleteStorageBoxResponse(int serverPort, UUID accessTokenId, UUID storageBoxId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX, "storageBoxId", storageBoxId));
+            .delete(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_DELETE_STORAGE_BOX, "storageBoxId", storageBoxId));
     }
 }

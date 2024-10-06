@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.action.backend.calendar;
 
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CalendarResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ReferenceDate;
@@ -26,7 +26,7 @@ public class EventActions {
     public static Response getCreateEventResponse(int serverPort, UUID accessTokenId, CreateEventRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.CALENDAR_CREATE_EVENT));
+            .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_EVENT));
     }
 
     public static List<CalendarResponse> deleteEvent(int serverPort, UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
@@ -40,6 +40,6 @@ public class EventActions {
     public static Response getDeleteEventResponse(int serverPort, UUID accessTokenId, UUID eventId, ReferenceDate referenceDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(referenceDate)
-            .delete(UrlFactory.create(serverPort, Endpoints.CALENDAR_EVENT_DELETE, "eventId", eventId));
+            .delete(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EVENT_DELETE, "eventId", eventId));
     }
 }

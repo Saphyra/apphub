@@ -13,9 +13,11 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewT
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -41,7 +43,7 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String CATEGORY_TITLE = "category-title";
     private static final String CHILD_CATEGORY_TITLE = "child-category-title";
     private static final String LINK_TITLE = "link-title";
-    private static final String LINK_URL = Endpoints.MODULES_PAGE;
+    private static final String LINK_URL = ModulesEndpoints.MODULES_PAGE;
     private static final String TEXT_TITLE = "text-title";
     private static final String TEXT_CONTENT = "text-content";
     private static final String CHECKLIST_TITLE = "checklist-title";
@@ -69,7 +71,7 @@ public class CloneListItemTest extends SeleniumTest {
         ONLY_TITLE_TITLE,
         CUSTOM_TABLE_TITLE
     );
-    private static final String CUSTOM_TABLE_LINK_URL = Endpoints.ACCOUNT_PAGE;
+    private static final String CUSTOM_TABLE_LINK_URL = UserEndpoints.ACCOUNT_PAGE;
 
     @Test(groups = {"fe", "notebook"})
     public void cloneListItem() {
@@ -123,7 +125,7 @@ public class CloneListItemTest extends SeleniumTest {
         EditListItemActions.submitForm(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.NOTEBOOK_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Category is not modified.");
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
@@ -176,7 +178,7 @@ public class CloneListItemTest extends SeleniumTest {
         linkColumn.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
@@ -255,7 +257,7 @@ public class CloneListItemTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
             .open();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), Endpoints.MODULES_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
     }

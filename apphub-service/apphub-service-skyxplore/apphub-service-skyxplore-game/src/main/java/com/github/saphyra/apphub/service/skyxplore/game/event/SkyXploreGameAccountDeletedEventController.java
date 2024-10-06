@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -23,7 +24,7 @@ class SkyXploreGameAccountDeletedEventController {
     private final GameDao gameDao;
     private final SkyXploreGameMainWebSocketHandler webSocketHandler;
 
-    @PostMapping(Endpoints.EVENT_DELETE_ACCOUNT)
+    @PostMapping(GenericEndpoints.EVENT_DELETE_ACCOUNT)
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
         log.info("Processing DeleteAccountEvent for uid {}", userId);
@@ -35,7 +36,7 @@ class SkyXploreGameAccountDeletedEventController {
             log.info("{} is the host. Deleting game {}", userId, game.getGameId());
             gameDao.delete(game);
 
-            webSocketHandler.sendEvent(game.getConnectedPlayers(), WebSocketEventName.REDIRECT, Endpoints.SKYXPLORE_MAIN_MENU_PAGE);
+            webSocketHandler.sendEvent(game.getConnectedPlayers(), WebSocketEventName.REDIRECT, GenericSkyXploreEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
         } else {
             log.info("Setting player {} to ai", userId);
             Player player = game.getPlayers().get(userId);

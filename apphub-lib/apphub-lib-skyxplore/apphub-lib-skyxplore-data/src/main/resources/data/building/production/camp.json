@@ -33,8 +33,8 @@
     "1": {
       "requiredWorkPoints": 10000,
       "requiredResources": {
-        "energy": 200,
-        "wood": 200
+        "energy": 100,
+        "wood": 100
       }
     }
   }

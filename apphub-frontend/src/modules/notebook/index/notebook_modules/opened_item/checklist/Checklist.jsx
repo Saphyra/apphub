@@ -10,8 +10,8 @@ import IndexRange from "../../../../common/checklist_item/IndexRange";
 import addItemToEdge from "./service/ChecklistAddItemToEdgeService";
 import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
-import Utils from "../../../../../../common/js/Utils";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import { hasValue } from "../../../../../../common/js/Utils";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -146,7 +146,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 }
             </div>
 
-            {Utils.hasValue(newItemIndex) && getNewItemConfirmationDialog()}
+            {hasValue(newItemIndex) && getNewItemConfirmationDialog()}
         </div>
     );
 }

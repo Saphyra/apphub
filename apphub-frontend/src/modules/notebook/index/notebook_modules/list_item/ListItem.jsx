@@ -1,9 +1,7 @@
 import React from "react";
 import OpenedPageType from "../../../common/OpenedPageType";
-import Utils from "../../../../../common/js/Utils";
 import "./list_item.css";
 import Button from "../../../../../common/component/input/Button";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Event from "../../../../../common/js/event/Event";
 import EventName from "../../../../../common/js/event/EventName";
 import ListItemMode from "./ListItemMode";
@@ -11,6 +9,8 @@ import Constants from "../../../../../common/js/Constants";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import moveListItem from "../../../common/MoveListItemService";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import { throwException } from "../../../../../common/js/Utils";
+import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData }) => {
     const handleOnclick = () => {
@@ -36,7 +36,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             case OpenedPageType.ONLY_TITLE:
                 break;
             default:
-                Utils.throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
+                throwException("IllegalArgument", "ListItemType " + data.type + " is not handled in ListItem.");
         }
     }
 
@@ -64,7 +64,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
     }
 
     const deleteListItem = async () => {
-        await Endpoints.NOTEBOOK_DELETE_LIST_ITEM.createRequest(null, { listItemId: data.id })
+        await NOTEBOOK_DELETE_LIST_ITEM.createRequest(null, { listItemId: data.id })
             .send();
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
@@ -76,7 +76,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             value: archived
         }
 
-        await Endpoints.NOTEBOOK_ARCHIVE_ITEM.createRequest(payload, { listItemId: data.id })
+        await NOTEBOOK_ARCHIVE_ITEM.createRequest(payload, { listItemId: data.id })
             .send();
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_ARCHIVED, data));
@@ -87,14 +87,14 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             value: pinned
         }
 
-        await Endpoints.NOTEBOOK_PIN_LIST_ITEM.createRequest(payload, { listItemId: data.id })
+        await NOTEBOOK_PIN_LIST_ITEM.createRequest(payload, { listItemId: data.id })
             .send();
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_PINNED, data));
     }
 
     const cloneListItem = async () => {
-        await Endpoints.NOTEBOOK_CLONE_LIST_ITEM.createRequest(null, { listItemId: data.id })
+        await NOTEBOOK_CLONE_LIST_ITEM.createRequest(null, { listItemId: data.id })
             .send();
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_CLONED, data));

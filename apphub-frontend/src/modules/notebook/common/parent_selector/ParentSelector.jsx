@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../common/js/dao/dao";
 import localizationData from "./parent_selector_localization.json";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import "./parent_selector.css";
 import Button from "../../../../common/component/input/Button";
 import Stream from "../../../../common/js/collection/Stream";
 import Child from "./Child";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
                 queryParams.exclude = listItemId;
             }
 
-            const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
+            const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
 
             if (response.listItemType !== "CATEGORY") {
@@ -50,6 +50,7 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
         }
 
         return new Stream(currentCategoryData.children)
+            .sorted((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
             .map(child =>
                 <Child
                     key={child.id}

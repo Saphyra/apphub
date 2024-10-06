@@ -6,10 +6,10 @@ import LocalizationHandler from "../../../../../../../common/js/LocalizationHand
 import localizationData from "./queue_item_localization.json";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../../../../../common/component/input/NumberInput";
-import Endpoints from "../../../../../../../common/js/dao/dao";
 import Button from "../../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import QueueItemHeader from "./header/QueueItemHeader";
+import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
@@ -20,7 +20,7 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     useEffect(() => setPriority(queueItem.ownPriority), [queueItem]);
 
     const changePriority = (newPriority) => {
-        Endpoints.SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
+        SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
             .send();
     }
 
@@ -49,7 +49,7 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     }
 
     const cancelQueueItem = async () => {
-        await Endpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM.createRequest(null, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
+        await SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM.createRequest(null, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
             .send();
 
         setConfirmationDialogData(null);

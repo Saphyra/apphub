@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import localizationData from "./villany_atesz_stock_new_item_localization.json";
 import useLoader from "../../../../../common/hook/Loader";
-import Endpoints from "../../../../../common/js/dao/dao";
 import "./villany_atesz_stock_new_item.css"
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
@@ -10,8 +9,9 @@ import Stream from "../../../../../common/js/collection/Stream";
 import Button from "../../../../../common/component/input/Button";
 import InputField from "../../../../../common/component/input/InputField";
 import NumberInput from "../../../../../common/component/input/NumberInput";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_CREATE_STOCK_ITEM, VILLANY_ATESZ_GET_STOCK_CATEGORIES } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockNewItem = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const VillanyAteszStockNewItem = ({ }) => {
 
     const [price, setPrice] = useState(0);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
+    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
 
     const getOptions = () => {
         return new Stream(categories)
@@ -41,12 +41,12 @@ const VillanyAteszStockNewItem = ({ }) => {
     }
 
     const create = async () => {
-        if (Utils.isBlank(stockCategoryId)) {
+        if (isBlank(stockCategoryId)) {
             NotificationService.showError(localizationHandler.get("choose-category"));
             return;
         }
 
-        if (Utils.isBlank(name)) {
+        if (isBlank(name)) {
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }
@@ -61,7 +61,7 @@ const VillanyAteszStockNewItem = ({ }) => {
             price: price
         }
 
-        await Endpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM.createRequest(payload)
+        await VILLANY_ATESZ_CREATE_STOCK_ITEM.createRequest(payload)
             .send();
 
         setStockCategoryId("");

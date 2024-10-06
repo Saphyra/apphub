@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.ws;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
-import com.github.saphyra.apphub.service.skyxplore.game.common.ws.SkyXploreWsClient;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.service.skyxplore.game.common.ws.ApphubWsClientFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.common.ws.SkyXploreWsClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
@@ -28,7 +28,7 @@ public class PooledSkyXploreDataWsClientFactory implements PooledObjectFactory<S
     @Override
     public PooledObject<SkyXploreWsClient> makeObject() throws Exception {
         log.info("Opening Ws connection...");
-        SkyXploreWsClient object = apphubWsClientFactory.create(skyXploreDataHost, Endpoints.WS_CONNECTION_SKYXPLORE_INTERNAL);
+        SkyXploreWsClient object = apphubWsClientFactory.create(skyXploreDataHost, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_INTERNAL);
 
         return new DefaultPooledObject<>(object);
     }

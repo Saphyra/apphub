@@ -1,10 +1,10 @@
-import Utils from "../Utils";
+import { hasValue, throwException } from "../Utils";
 import MapStream from "./MapStream";
 import Optional from "./Optional";
 
 const Stream = class {
     constructor(items) {
-        this.items = Utils.hasValue(items) ? items.slice() : [];
+        this.items = hasValue(items) ? items.slice() : [];
     }
 
     add(item) {
@@ -105,7 +105,7 @@ const Stream = class {
             const itemNumber = toIntFunction(item);
 
             if (typeof itemNumber !== "number") {
-                Utils.throwException("IllegalArgument", itemNumber + " is not a number. It is " + typeof itemNumber);
+                throwException("IllegalArgument", itemNumber + " is not a number. It is " + typeof itemNumber);
             }
 
             if (itemNumber > currentMax) {
@@ -125,7 +125,7 @@ const Stream = class {
 
         this.forEach(item => {
             if (typeof item !== "number") {
-                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+                throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
             }
 
             if (item < currentMin) {
@@ -167,7 +167,7 @@ const Stream = class {
         let result = 0;
         this.forEach(item => {
             if (typeof item !== "number") {
-                Utils.throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+                throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
             }
 
             result += item;

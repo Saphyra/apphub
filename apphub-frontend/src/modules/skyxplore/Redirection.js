@@ -1,9 +1,11 @@
 import Constants from "../../common/js/Constants";
-import Utils from "../../common/js/Utils";
-import Endpoints from "../../common/js/dao/dao";
+import { SKYXPLORE_PLATFORM_HAS_CHARACTER } from "../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_GAME_GET_GAME_ID } from "../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_LOBBY_IS_IN_LOBBY } from "../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { hasValue } from "../../common/js/Utils";
 
 const redirectToCharacterIfNotPresent = async () => {
-    const response = await Endpoints.SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
+    const response = await SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
         .send();
 
     if (!response.value) {
@@ -12,7 +14,7 @@ const redirectToCharacterIfNotPresent = async () => {
 }
 
 const redirectToLobbyIfInOne = async () => {
-    const response = await Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY.createRequest()
+    const response = await SKYXPLORE_LOBBY_IS_IN_LOBBY.createRequest()
         .send();
 
     if (response.value) {
@@ -21,7 +23,7 @@ const redirectToLobbyIfInOne = async () => {
 }
 
 const redirectToMainMenuIfNotInLobby = async () => {
-    const response = await Endpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY.createRequest()
+    const response = await SKYXPLORE_LOBBY_IS_IN_LOBBY.createRequest()
         .send();
 
     if (!response.value) {
@@ -30,19 +32,19 @@ const redirectToMainMenuIfNotInLobby = async () => {
 }
 
 const redirectToGameIfInOne = async () => {
-    const response = await Endpoints.SKYXPLORE_GAME_GET_GAME_ID.createRequest()
+    const response = await SKYXPLORE_GAME_GET_GAME_ID.createRequest()
         .send()
 
-    if (Utils.hasValue(response.value)) {
+    if (hasValue(response.value)) {
         window.location.href = Constants.SKYXPLORE_GAME_PAGE;
     }
 }
 
 const redirectToMainMenuIfNotInGame = async () => {
-    const response = await Endpoints.SKYXPLORE_GAME_GET_GAME_ID.createRequest()
+    const response = await SKYXPLORE_GAME_GET_GAME_ID.createRequest()
         .send()
 
-    if (!Utils.hasValue(response.value)) {
+    if (!hasValue(response.value)) {
         window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
     }
 }

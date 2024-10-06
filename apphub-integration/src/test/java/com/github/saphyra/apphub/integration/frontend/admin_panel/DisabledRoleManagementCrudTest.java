@@ -7,10 +7,10 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.DisabledRole;
@@ -75,7 +75,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");
     }
 
@@ -118,7 +118,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(Endpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
+            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");
     }
 

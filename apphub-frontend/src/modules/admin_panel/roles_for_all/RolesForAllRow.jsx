@@ -5,7 +5,7 @@ import Button from "../../../common/component/input/Button";
 import InputField from "../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import Endpoints from "../../../common/js/dao/dao";
+import { USER_DATA_ADD_ROLE_TO_ALL, USER_DATA_REMOVE_ROLE_FROM_ALL } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const RolesForAllRow = ({ localizationHandler, role }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
@@ -22,7 +22,7 @@ const RolesForAllRow = ({ localizationHandler, role }) => {
 
         setPassword("");
 
-        await Endpoints.USER_DATA_ADD_ROLE_TO_ALL.createRequest({ value: password }, { role: role })
+        await USER_DATA_ADD_ROLE_TO_ALL.createRequest({ value: password }, { role: role })
             .send();
 
         NotificationService.showSuccess(localizationHandler.get("role-added-to-all"));
@@ -37,7 +37,7 @@ const RolesForAllRow = ({ localizationHandler, role }) => {
 
         setPassword("");
 
-        await Endpoints.USER_DATA_REMOVE_ROLE_FROM_ALL.createRequest({ value: password }, { role: role })
+        await USER_DATA_REMOVE_ROLE_FROM_ALL.createRequest({ value: password }, { role: role })
             .send();
 
         NotificationService.showSuccess(localizationHandler.get("role-revoked-from-all"));

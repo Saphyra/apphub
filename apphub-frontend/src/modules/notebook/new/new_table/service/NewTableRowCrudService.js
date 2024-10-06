@@ -1,4 +1,4 @@
-import Utils from "../../../../../common/js/Utils";
+import { throwException } from "../../../../../common/js/Utils";
 import Stream from "../../../../../common/js/collection/Stream";
 import MoveDirection from "../../../common/MoveDirection";
 import TableRowData from "../../../common/table/row/TableRowData";
@@ -55,7 +55,7 @@ export const moveRow = (row, moveDirection, rows, updateRows) => {
             otherRowPosition = rowPosition + 1;
             break;
         default:
-            Utils.throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
+            throwException("IllegalArgument", "Unknown MoveDirection: " + moveDirection);
     }
 
     const otherRow = orderedItems[otherRowPosition];

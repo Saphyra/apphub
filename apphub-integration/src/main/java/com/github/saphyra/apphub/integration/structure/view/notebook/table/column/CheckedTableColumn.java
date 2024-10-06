@@ -21,6 +21,6 @@ public class CheckedTableColumn extends TableColumn {
     }
 
     private WebElement getCheckbox() {
-        return webElement.findElement(By.cssSelector(".table-column-content input"));
+        return webElement.findElement(By.cssSelector(".notebook-table-column-content input"));
     }
 }

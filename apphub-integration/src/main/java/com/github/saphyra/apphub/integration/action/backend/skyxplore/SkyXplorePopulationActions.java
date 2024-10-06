@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenResponse;
 import io.restassured.response.Response;
@@ -26,7 +26,7 @@ public class SkyXplorePopulationActions {
 
     public static Response getPopulationResponse(int serverPort, UUID accessTokenId, UUID planetId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_GET_POPULATION, "planetId", planetId));
+            .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_GET_POPULATION, "planetId", planetId));
     }
 
     public static void renameCitizen(int serverPort, UUID accessTokenId, UUID citizenId, String newName) {
@@ -38,6 +38,6 @@ public class SkyXplorePopulationActions {
     public static Response getRenameCitizenResponse(int serverPort, UUID accessTokenId, UUID citizenId, String newName) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(newName))
-            .post(UrlFactory.create(serverPort, Endpoints.SKYXPLORE_PLANET_RENAME_CITIZEN, "citizenId", citizenId));
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_RENAME_CITIZEN, "citizenId", citizenId));
     }
 }

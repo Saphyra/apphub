@@ -45,10 +45,15 @@ import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
 import VillanyAteszToolboxPage from './modules/custom/villany_atesz/toolbox/VillanyAteszToolboxPage';
 import Constants from './common/js/Constants';
 import Redirection from './Redirection';
+import ErrorPage from './modules/error/ErorPage';
 
 
 
 const router = createBrowserRouter([
+  {
+    path: "/web/error",
+    element: <ErrorPage />,
+  },
   {
     path: "/",
     element: <Redirection url={Constants.INDEX_PAGE} />,

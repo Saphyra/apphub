@@ -20,7 +20,7 @@ class MainMenuSettingsMenuOption implements MenuOption {
 
     @Override
     public String getCommand() {
-        return "4";
+        return "5";
     }
 
     @Override

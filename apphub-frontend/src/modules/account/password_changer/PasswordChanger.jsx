@@ -6,10 +6,10 @@ import { validateConfirmPassword, validateFilled, validatePassword } from "../va
 import ValidatedInputField from "../../../common/component/input/ValidatedInputField";
 import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
 import Button from "../../../common/component/input/Button";
-import Endpoints from "../../../common/js/dao/dao";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import InputField from "../../../common/component/input/InputField";
 import Constants from "../../../common/js/Constants";
+import { ACCOUNT_CHANGE_PASSWORD } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const PasswordChanger = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -34,7 +34,7 @@ const PasswordChanger = () => {
             deactivateAllSessions: deactivateAllSessions
         }
 
-        await Endpoints.ACCOUNT_CHANGE_PASSWORD.createRequest(payload)
+        await ACCOUNT_CHANGE_PASSWORD.createRequest(payload)
             .send();
 
         const successMessage = localizationHandler.get("password-changed");

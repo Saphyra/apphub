@@ -1,10 +1,11 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
 import Constants from "../../../../../../../common/js/Constants";
-import Utils from "../../../../../../../common/js/Utils";
+import { copyAndSet, getBrowserLanguage } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../../../common/js/dao/DefaultErrorHandler";
-import Endpoints from "../../../../../../../common/js/dao/dao";
+import { NOTEBOOK_EDIT_TABLE, NOTEBOOK_GET_TABLE, NOTEBOOK_TABLE_DELETE_CHECKED, NOTEBOOK_TABLE_SET_ROW_STATUS } from "../../../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import { STORAGE_UPLOAD_FILE } from "../../../../../../../common/js/dao/endpoints/StorageEndpoints";
 import EventName from "../../../../../../../common/js/event/EventName";
 import NotificationService from "../../../../../../../common/js/notification/NotificationService";
 import validateColumnData from "../../../../../common/validator/ColumnDataValidator";
@@ -13,7 +14,7 @@ import validateTableHeadNames from "../../../../../common/validator/TableHeadNam
 
 export const loadTable = (listItemId, setDataFromResponse) => {
     const fetch = async () => {
-        const response = await Endpoints.NOTEBOOK_GET_TABLE.createRequest(null, { listItemId: listItemId })
+        const response = await NOTEBOOK_GET_TABLE.createRequest(null, { listItemId: listItemId })
             .send();
 
         setDataFromResponse(response);
@@ -56,7 +57,7 @@ export const save = async (
         rows: rows
     }
 
-    const response = await Endpoints.NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: listItemId })
+    const response = await NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: listItemId })
         .send();
 
     if (response.fileUpload.length > 0) {
@@ -92,12 +93,12 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
         body: formData,
         headers: {
             'Cache-Control': "no-cache",
-            "BrowserLanguage": Utils.getBrowserLanguage(),
+            "BrowserLanguage": getBrowserLanguage(),
             "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
         }
     }
 
-    await fetch(Endpoints.STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: fileUpload.storedFileId }), options)
+    await fetch(STORAGE_UPLOAD_FILE.assembleUrl({ storedFileId: fileUpload.storedFileId }), options)
         .then(r => {
             setDisplaySpinner(false);
 
@@ -135,7 +136,7 @@ export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHan
 }
 
 const deleteChecked = async (listItemId, setDataFromResponse, setConfirmationDialogData) => {
-    const response = await Endpoints.NOTEBOOK_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: listItemId })
+    const response = await NOTEBOOK_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: listItemId })
         .send();
 
     setDataFromResponse(response);
@@ -144,9 +145,9 @@ const deleteChecked = async (listItemId, setDataFromResponse, setConfirmationDia
 
 export const updateChecked = (row, rows, setRows, editingEnabled) => {
     if (!editingEnabled) {
-        Endpoints.NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
+        NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
             .send();
     }
 
-    Utils.copyAndSet(rows, setRows);
+    copyAndSet(rows, setRows);
 }

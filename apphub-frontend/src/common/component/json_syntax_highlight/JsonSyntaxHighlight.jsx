@@ -1,8 +1,8 @@
 import React from "react";
-import Utils from "../../js/Utils";
 import "./json_syntax_highlight.css";
 import localizationData from "./json_syntax_highlight_localization.json";
 import LocalizationHandler from "../../js/LocalizationHandler";
+import { isJsonString } from "../../js/Utils";
 
 const JsonSyntaxHighlight = ({ id, jsonString }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -28,7 +28,7 @@ const JsonSyntaxHighlight = ({ id, jsonString }) => {
             });
     }
 
-    if (!Utils.isJsonString(jsonString)) {
+    if (!isJsonString(jsonString)) {
         return (
             <pre
                 className="selectable"

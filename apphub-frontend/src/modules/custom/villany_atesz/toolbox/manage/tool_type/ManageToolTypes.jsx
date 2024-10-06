@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import useLoader from "../../../../../../common/hook/Loader";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ManagedToolType from "./ManagedToolType";
+import { VILLANY_ATESZ_GET_TOOL_TYPES } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const ManageToolTypes = ({ setConfirmationDialogData, localizationHandler }) => {
     const [toolTypes, setToolTypes] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), setToolTypes);
+    useLoader(VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), setToolTypes);
 
     const getItems = () => {
         return new Stream(toolTypes)

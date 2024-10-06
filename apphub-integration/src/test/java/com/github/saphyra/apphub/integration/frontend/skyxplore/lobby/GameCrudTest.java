@@ -8,12 +8,13 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
-import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -73,7 +74,7 @@ public class GameCrudTest extends SeleniumTest {
         SkyXploreMainMenuActions.submitGameCreationForm(driver1);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_LOBBY_PAGE))
+            .until(() -> driver1.getCurrentUrl().endsWith(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_PAGE))
             .assertTrue("SkyXplore Lobby page is not loaded.");
     }
 
@@ -97,11 +98,11 @@ public class GameCrudTest extends SeleniumTest {
 
         SkyXploreLobbyActions.startGameCreation(driver1);
         AwaitilityWrapper.create(60, 1)
-            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE))
+            .until(() -> driver1.getCurrentUrl().endsWith(SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE))
             .assertTrue("SkyXplore Game page is not loaded for host.");
 
         AwaitilityWrapper.create(60, 1)
-            .until(() -> driver2.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE))
+            .until(() -> driver2.getCurrentUrl().endsWith(SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE))
             .assertTrue("SkyXplore Game page is not loaded for member.");
     }
 
@@ -142,6 +143,6 @@ public class GameCrudTest extends SeleniumTest {
         SkyXploreLobbyActions.startGameWithMissingPlayers(driver1);
 
         AwaitilityWrapper.create(120, 5)
-            .until(() -> driver1.getCurrentUrl().endsWith(Endpoints.SKYXPLORE_GAME_PAGE));
+            .until(() -> driver1.getCurrentUrl().endsWith(SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE));
     }
 }

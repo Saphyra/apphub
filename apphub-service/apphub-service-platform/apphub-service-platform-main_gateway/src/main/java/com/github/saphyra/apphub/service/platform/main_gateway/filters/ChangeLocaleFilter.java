@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.UserSettingLocaleResolver;
@@ -31,7 +31,7 @@ public class ChangeLocaleFilter implements GlobalFilter, Ordered {
             String uri = request
                 .getURI()
                 .getPath();
-            if (antPathMatcher.match(Endpoints.ACCOUNT_CHANGE_LANGUAGE, uri)) {
+            if (antPathMatcher.match(UserEndpoints.ACCOUNT_CHANGE_LANGUAGE, uri)) {
                 userSettingLocaleResolver.invalidate(request.getCookies());
             }
         } catch (Exception e) {

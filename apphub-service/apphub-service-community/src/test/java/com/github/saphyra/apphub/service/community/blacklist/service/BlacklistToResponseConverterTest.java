@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.blacklist.service;
 
 import com.github.saphyra.apphub.api.community.model.response.blacklist.BlacklistResponse;
-import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
+import com.github.saphyra.apphub.api.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.service.community.blacklist.dao.Blacklist;
 import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import org.junit.jupiter.api.Test;

@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -22,7 +23,12 @@ class MinikubeEditIntegrationTestCountMenuOption implements MenuOption {
 
     @Override
     public Menu getMenu() {
-        return Menu.MINIKUBE_EDIT_CONFIGURATION_MENU;
+        throw new UnsupportedOperationException("This should not be called");
+    }
+
+    @Override
+    public List<Menu> getMenus() {
+        return List.of(Menu.MINIKUBE_EDIT_CONFIGURATION_MENU, Menu.PREPROD_EDIT_CONFIGURATION_MENU);
     }
 
     @Override

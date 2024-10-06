@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.group.service.group_member;
 
 import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
-import com.github.saphyra.apphub.api.user.model.response.AccountResponse;
+import com.github.saphyra.apphub.api.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import com.github.saphyra.apphub.service.community.common.AccountResponseToSearchResultItemConverter;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;

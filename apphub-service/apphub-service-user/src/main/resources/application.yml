@@ -43,6 +43,9 @@ add-role-to-all:
 settings:
   notebook:
     show-archived: true
+  villany-atesz:
+    stock-last-inventoried: ""
+    toolbox-last-inventoried: ""
 
 maxNumberOfUsersFound: 100
 deleteAccountBatchCount: 10

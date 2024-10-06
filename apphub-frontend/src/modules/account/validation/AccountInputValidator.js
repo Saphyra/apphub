@@ -1,13 +1,13 @@
 import Constants from "../../../common/js/Constants";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
-import Utils from "../../../common/js/Utils";
+import { isBlank } from "../../../common/js/Utils";
 import ValidationResult from "../../../common/js/validation/ValidationResult";
 import localizationData from "./account_validation_localization.json";
 
 export const validateEmail = (email) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    if (Utils.isBlank(email)) {
+    if (isBlank(email)) {
         return new ValidationResult(false, localizationHandler.get("must-not-be-blank"));
     }
 
@@ -21,7 +21,7 @@ export const validateEmail = (email) => {
 export const validateFilled = (value) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    if (Utils.isBlank(value)) {
+    if (isBlank(value)) {
         return new ValidationResult(false, localizationHandler.get("must-not-be-blank"));
     }
 

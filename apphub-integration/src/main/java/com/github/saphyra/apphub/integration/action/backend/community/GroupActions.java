@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.integration.action.backend.community;
 
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupListResponse;
@@ -31,7 +31,7 @@ public class GroupActions {
     public static Response getCreateGroupResponse(int serverPort, UUID accessTokenId, String groupName) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(groupName))
-            .put(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_CREATE));
+            .put(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_CREATE));
     }
 
     public static GroupListResponse renameGroup(int serverPort, UUID accessTokenId, UUID groupId, String groupName) {
@@ -45,7 +45,7 @@ public class GroupActions {
     public static Response getRenameGroupResponse(int serverPort, UUID accessTokenId, UUID groupId, String groupName) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(groupName))
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_RENAME, "groupId", groupId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_RENAME, "groupId", groupId));
     }
 
     public static GroupMemberResponse createMember(int serverPort, UUID accessTokenId, UUID groupId, UUID userId) {
@@ -59,7 +59,7 @@ public class GroupActions {
     public static Response getCreateGroupMemberResponse(int serverPort, UUID accessTokenId, UUID groupId, UUID userId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(userId))
-            .put(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_CREATE_MEMBER, "groupId", groupId));
+            .put(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_CREATE_MEMBER, "groupId", groupId));
     }
 
     public static GroupListResponse changeInvitationType(int serverPort, UUID accessTokenId, UUID groupId, GroupInvitationType invitationType) {
@@ -73,7 +73,7 @@ public class GroupActions {
     public static Response getChangeInvitationTypeResponse(int serverPort, UUID accessTokenId, UUID groupId, GroupInvitationType invitationType) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(invitationType))
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_CHANGE_INVITATION_TYPE, "groupId", groupId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_CHANGE_INVITATION_TYPE, "groupId", groupId));
     }
 
     public static void changeOwner(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId) {
@@ -85,7 +85,7 @@ public class GroupActions {
     public static Response getChangeOwnerResponse(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(groupMemberId))
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_CHANGE_OWNER, "groupId", groupId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_CHANGE_OWNER, "groupId", groupId));
     }
 
     public static List<GroupMemberResponse> getMembers(int serverPort, UUID accessTokenId, UUID groupId) {
@@ -98,7 +98,7 @@ public class GroupActions {
 
     public static Response getMembersResponse(int serverPort, UUID accessTokenId, UUID groupId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_GET_MEMBERS, "groupId", groupId));
+            .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_GET_MEMBERS, "groupId", groupId));
     }
 
     public static List<GroupListResponse> getGroups(int serverPort, UUID accessTokenId) {
@@ -111,7 +111,7 @@ public class GroupActions {
 
     public static Response getGroupsResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GET_GROUPS));
+            .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_GROUPS));
     }
 
     public static void deleteGroup(int serverPort, UUID accessTokenId, UUID groupId) {
@@ -122,7 +122,7 @@ public class GroupActions {
 
     public static Response getDeleteGroupResponse(int serverPort, UUID accessTokenId, UUID groupId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_DELETE, "groupId", groupId));
+            .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_DELETE, "groupId", groupId));
     }
 
     public static List<SearchResultItem> search(int serverPort, UUID accessTokenId, UUID groupId, String query) {
@@ -136,7 +136,7 @@ public class GroupActions {
     public static Response getSearchResponse(int serverPort, UUID accessTokenId, UUID groupId, String query) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(query))
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES, "groupId", groupId));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES, "groupId", groupId));
     }
 
     public static GroupMemberResponse modifyRoles(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId, GroupMemberRoleRequest request) {
@@ -150,7 +150,7 @@ public class GroupActions {
     public static Response getModifyRolesResponse(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId, GroupMemberRoleRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .post(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_MEMBER_ROLES, CollectionUtils.toMap(new BiWrapper<>("groupId", groupId), new BiWrapper<>("groupMemberId", groupMemberId))));
+            .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_MEMBER_ROLES, CollectionUtils.toMap(new BiWrapper<>("groupId", groupId), new BiWrapper<>("groupMemberId", groupMemberId))));
     }
 
     public static void deleteGroupMember(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId) {
@@ -161,6 +161,6 @@ public class GroupActions {
 
     public static Response getDeleteGroupMemberResponse(int serverPort, UUID accessTokenId, UUID groupId, UUID groupMemberId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, Endpoints.COMMUNITY_GROUP_DELETE_MEMBER, CollectionUtils.toMap(new BiWrapper<>("groupId", groupId), new BiWrapper<>("groupMemberId", groupMemberId))));
+            .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GROUP_DELETE_MEMBER, CollectionUtils.toMap(new BiWrapper<>("groupId", groupId), new BiWrapper<>("groupMemberId", groupMemberId))));
     }
 }

@@ -1,5 +1,5 @@
 import Constants from "../../../../common/js/Constants";
-import Endpoints from "../../../../common/js/dao/dao";
+import { NOTEBOOK_EDIT_LIST_ITEM } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import OpenedPageType from "../../common/OpenedPageType";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
@@ -26,7 +26,7 @@ const save = async (listItemTitle, listItemType, value, parent, listItemId) => {
         value: value
     }
 
-    await Endpoints.NOTEBOOK_EDIT_LIST_ITEM.createRequest(payload, { listItemId: listItemId })
+    await NOTEBOOK_EDIT_LIST_ITEM.createRequest(payload, { listItemId: listItemId })
         .send();
 
     window.location.href = Constants.NOTEBOOK_PAGE;

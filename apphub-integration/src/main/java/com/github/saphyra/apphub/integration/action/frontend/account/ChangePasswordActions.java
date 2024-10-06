@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.change_password.ChPasswordPasswordValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.change_password.ChangePasswordParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.change_password.ChangePasswordValidationResult;
@@ -23,7 +23,7 @@ public class ChangePasswordActions {
     }
 
     public static void fillChangePasswordForm(int serverPort, WebDriver driver, ChangePasswordParameters parameters) {
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, Endpoints.ACCOUNT_PAGE));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_PAGE));
 
         clearAndFill(driver.findElement(By.id("account-change-password-new-password-input")), parameters.getNewPassword());
         clearAndFillContentEditable(driver, driver.findElement(By.id("account-change-password-confirm-password-input")), parameters.getConfirmPassword());

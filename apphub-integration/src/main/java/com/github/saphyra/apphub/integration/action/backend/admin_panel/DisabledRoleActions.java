@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.admin_panel;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.DisabledRoleResponse;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
@@ -26,18 +26,18 @@ public class DisabledRoleActions {
 
     public static Response getGetDisabledRoles(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.USER_DATA_GET_DISABLED_ROLES));
+            .get(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_GET_DISABLED_ROLES));
     }
 
     public static Response getDisableRoleResponse(int serverPort, UUID accessTokenId, String password, String role) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(password))
-            .put(UrlFactory.create(serverPort, Endpoints.USER_DATA_DISABLE_ROLE, "role", role));
+            .put(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_DISABLE_ROLE, "role", role));
     }
 
     public static Response getEnableRoleResponse(int serverPort, UUID accessTokenId, String password, String role) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(password))
-            .delete(UrlFactory.create(serverPort, Endpoints.USER_DATA_DISABLE_ROLE, "role", role));
+            .delete(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_DISABLE_ROLE, "role", role));
     }
 }

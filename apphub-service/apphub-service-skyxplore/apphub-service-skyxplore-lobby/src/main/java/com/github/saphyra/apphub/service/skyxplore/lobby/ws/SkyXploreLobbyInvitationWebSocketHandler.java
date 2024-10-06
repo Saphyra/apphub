@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.ws;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.lobby.service.active_friend.UserActiveNotificationService;
@@ -19,7 +19,7 @@ public class SkyXploreLobbyInvitationWebSocketHandler extends AbstractWebSocketH
 
     @Override
     public String getEndpoint() {
-        return Endpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION;
+        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION;
     }
 
     @Override

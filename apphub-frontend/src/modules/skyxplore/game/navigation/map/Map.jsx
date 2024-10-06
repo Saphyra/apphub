@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./map.css";
-import Endpoints from "../../../../../common/js/dao/dao";
 import MapConstants from "./MapConstants";
 import Stream from "../../../../../common/js/collection/Stream";
 import NavigationHistoryItem from "../NavigationHistoryItem";
 import PageName from "../PageName";
+import { SKYXPLORE_GAME_MAP } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const Map = ({ openPage, footer }) => {
     const [universeSize, setUniverseSize] = useState(0);
@@ -14,7 +14,7 @@ const Map = ({ openPage, footer }) => {
 
     const loadUniverse = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_GAME_MAP.createRequest()
+            const response = await SKYXPLORE_GAME_MAP.createRequest()
                 .send();
 
             setUniverseSize(response.universeSize);

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.config;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.cache.CacheConfiguration;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -32,7 +33,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableEncryption
 @Import({
     CommonConfigProperties.class,
-    AccessTokenFilterConfiguration.class
+    AccessTokenFilterConfiguration.class,
+    CacheConfiguration.class
 })
 @EnableMemoryMonitoring
 class NotebookBeanConfiguration {

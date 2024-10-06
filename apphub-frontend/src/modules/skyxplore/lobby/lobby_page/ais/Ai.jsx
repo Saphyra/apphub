@@ -3,9 +3,9 @@ import Button from "../../../../../common/component/input/Button";
 import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
 import Stream from "../../../../../common/js/collection/Stream";
 import Constants from "../../../../../common/js/Constants";
-import Endpoints from "../../../../../common/js/dao/dao";
 import "./ai/ai.css"
 import InputField from "../../../../../common/component/input/InputField";
+import { SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_REMOVE_AI } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -16,19 +16,19 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
     const setAlliance = (event) => {
         const allianceValue = event.target.value;
 
-        Endpoints.SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI.createRequest({ value: allianceValue }, { userId: ai.userId })
+        SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI.createRequest({ value: allianceValue }, { userId: ai.userId })
             .send();
     }
 
     const removeAi = () => {
-        Endpoints.SKYXPLORE_LOBBY_REMOVE_AI.createRequest(null, { userId: ai.userId })
+        SKYXPLORE_LOBBY_REMOVE_AI.createRequest(null, { userId: ai.userId })
             .send();
     }
 
     const changeAiName = () => {
         if (aiName.length >= 3) {
             ai.name = aiName;
-            Endpoints.SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest(ai)
+            SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest(ai)
                 .send();
         } else {
             setAiName(ai.name);

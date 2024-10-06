@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.LoadGameWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         log.info("Registering WebSocket handlers...");
-        registry.addHandler(loadGameWebSocketHandler, Endpoints.WS_CONNECTION_SKYXPLORE_INTERNAL);
+        registry.addHandler(loadGameWebSocketHandler, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_INTERNAL);
     }
 }

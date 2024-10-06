@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./category.css"
 import Button from "../../../../../../common/component/input/Button";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import ListItem from "../../list_item/ListItem";
@@ -12,6 +11,8 @@ import moveListItem from "../../../../common/MoveListItemService";
 import UserSettings from "../../../../common/UserSettings";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
+import compareListItems from "./ListItemComparator";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const Category = ({
     localizationHandler,
@@ -55,7 +56,7 @@ const Category = ({
             const listItemId = openedListItem.id;
 
             const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
-            const response = await Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
+            const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
 
             if (openedListItem.id === listItemId) {
@@ -75,28 +76,8 @@ const Category = ({
             );
         }
 
-        const compare = (a, b) => {
-            if (a.type === b.type) {
-                return compareByTitle(a, b);
-            }
-
-            if (a.type === OpenedPageType.CATEGORY) {
-                return -1;
-            }
-
-            if (b.type === OpenedPageType.CATEGORY) {
-                return 1;
-            }
-
-            return compareByTitle(a, b);
-
-            function compareByTitle(a, b) {
-                return a.title.localeCompare(b.title);
-            }
-        }
-
         return new Stream(openedCategoryContent.children)
-            .sorted((a, b) => compare(a, b))
+            .sorted((a, b) => compareListItems(a, b))
             .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
             .map(child =>
                 <ListItem

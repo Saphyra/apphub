@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
-import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;

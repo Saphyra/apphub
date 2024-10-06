@@ -4,9 +4,9 @@ import confirmDeconstructBuilding from "./DeconstructBuildingService";
 import buildingLocalizationData from "../../../../../../../common/localization/building_localization.json";
 import LocalizationHandler from "../../../../../../../../../../common/js/LocalizationHandler";
 import useCache from "../../../../../../../../../../common/hook/Cache";
-import Endpoints from "../../../../../../../../../../common/js/dao/dao";
 import NavigationHistoryItem from "../../../../../../NavigationHistoryItem";
 import PageName from "../../../../../../PageName";
+import { SKYXPLORE_GET_ITEM_DATA } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 
 const BuildingIdleFooter = ({ localizationHandler, surface, setConfirmationDialogData, planetId, openPage }) => {
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
@@ -17,7 +17,7 @@ const BuildingIdleFooter = ({ localizationHandler, surface, setConfirmationDialo
 
     useCache(
         building.dataId,
-        Endpoints.SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: building.dataId }),
+        SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: building.dataId }),
         (buildingData) => setMaxLevel(buildingData.maxLevel)
     )
 

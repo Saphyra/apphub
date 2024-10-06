@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import useLoader from "../../../../../../common/hook/Loader";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import Stream from "../../../../../../common/js/collection/Stream";
 import ManagedStorageBox from "./ManagedStorageBox";
+import { VILLANY_ATESZ_GET_STORAGE_BOXES } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const ManageStorageBoxes = ({ setConfirmationDialogData, localizationHandler }) => {
     const [storageBoxes, setStorageBoxes] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), setStorageBoxes);
+    useLoader(VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), setStorageBoxes);
 
     const getItems = () => {
         return new Stream(storageBoxes)

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./population_localization.json";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
-import Endpoints from "../../../../../common/js/dao/dao";
 import Stream from "../../../../../common/js/collection/Stream";
 import Citizen from "./citizen/Citizen";
 import "./population.css";
@@ -13,7 +12,8 @@ import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import useLoadSetting, { SettingType } from "../../common/hook/Setting";
-import Utils from "../../../../../common/js/Utils";
+import { hasValue } from "../../../../../common/js/Utils";
+import { SKYXPLORE_PLANET_GET_POPULATION } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const Population = ({ footer, closePage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -25,7 +25,7 @@ const Population = ({ footer, closePage, planetId }) => {
     const [orderSetting, setOrderSetting] = useState(null);
 
     const updateHidden = (o) => {
-        if (Utils.hasValue(o)) {
+        if (hasValue(o)) {
             setHiddenProperties(o.data);
         }
 
@@ -33,7 +33,7 @@ const Population = ({ footer, closePage, planetId }) => {
     }
 
     const updateOrder = (o) => {
-        if (Utils.hasValue(o)) {
+        if (hasValue(o)) {
             setCitizenComparator(fromComparatorData(o.data));
         }
 
@@ -62,7 +62,7 @@ const Population = ({ footer, closePage, planetId }) => {
 
     const loadPopulation = () => {
         const fetch = async () => {
-            const response = await Endpoints.SKYXPLORE_PLANET_GET_POPULATION.createRequest(null, { planetId: planetId })
+            const response = await SKYXPLORE_PLANET_GET_POPULATION.createRequest(null, { planetId: planetId })
                 .send();
 
             setPopulation(response);

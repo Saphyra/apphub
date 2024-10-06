@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../common/js/dao/dao";
 import "./category_tree/category_tree.css";
 import Leaf from "./category_tree/Leaf";
 import EventName from "../../../../common/js/event/EventName";
 import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../common/hook/UseHasFocus";
+import { NOTEBOOK_GET_CATEGORY_TREE } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
     const [tree, setTree] = useState([]);
@@ -42,7 +42,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLa
 
     const loadTree = () => {
         const fetch = async () => {
-            const response = await Endpoints.NOTEBOOK_GET_CATEGORY_TREE.createRequest()
+            const response = await NOTEBOOK_GET_CATEGORY_TREE.createRequest()
                 .send();
             setTree(response);
         }

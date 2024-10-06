@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AcquisitionResponse;
 import io.restassured.response.Response;
 
@@ -27,7 +27,7 @@ public class VillanyAteszAcquisitionActions {
 
     public static Response getDatesResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_ACQUISITION_DATES));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_ACQUISITION_DATES));
     }
 
     public static List<AcquisitionResponse> getAcquisitionsOnDay(int serverPort, UUID accessTokenId, LocalDate date) {
@@ -40,6 +40,6 @@ public class VillanyAteszAcquisitionActions {
 
     public static Response getAcquisitionsOnDayResponse(int serverPort, UUID accessTokenId, LocalDate date) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.VILLANY_ATESZ_GET_ACQUISITIONS, "acquiredAt", date));
+            .get(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_GET_ACQUISITIONS, "acquiredAt", date));
     }
 }

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.action.backend.notebook;
 
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -29,7 +29,7 @@ public class CategoryActions {
     public static Response getCreateCategoryResponse(int serverPort, UUID accessTokenId, CreateCategoryRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
-            .put(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_CREATE_CATEGORY));
+            .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CREATE_CATEGORY));
     }
 
     public static List<CategoryTreeView> getCategoryTree(int serverPort, UUID accessTokenId) {
@@ -43,7 +43,7 @@ public class CategoryActions {
 
     public static Response getCategoryTreeResponse(int serverPort, UUID accessTokenId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CATEGORY_TREE));
+            .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_CATEGORY_TREE));
     }
 
     public static ChildrenOfCategoryResponse getChildrenOfCategory(int serverPort, UUID accessTokenId, UUID categoryId) {
@@ -68,6 +68,6 @@ public class CategoryActions {
         queryParams.put("exclude", exclude);
 
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .get(UrlFactory.create(serverPort, Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
+            .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY, new HashMap<>(), queryParams));
     }
 }

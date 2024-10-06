@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.EncryptionEndpoints;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
 import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
 import com.github.saphyra.apphub.test.common.rest_assured.ErrorResponseValidator;
@@ -91,7 +91,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         ErrorResponseValidator.verifyInvalidParam(response, "externalId", "must not be null");
     }
@@ -107,7 +107,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         ErrorResponseValidator.verifyInvalidParam(response, "dataType", "must not be null");
     }
@@ -123,7 +123,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         ErrorResponseValidator.verifyInvalidParam(response, "sharedWith, publicData", "all values are null");
     }
@@ -139,7 +139,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         ErrorResponseValidator.verifyInvalidParam(response, "accessMode", "must not be null");
     }
@@ -155,7 +155,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         ErrorResponseValidator.verifyErrorResponse(response, HttpStatus.NOT_FOUND.value(), ErrorCode.DATA_NOT_FOUND);
     }
@@ -170,7 +170,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -181,7 +181,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -198,7 +198,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -209,7 +209,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         Map<String, Object> pathVariables = CollectionUtils.toMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
@@ -217,7 +217,7 @@ public class SharedDataControllerImplItTest {
         );
 
         Response response = RequestFactory.createRequest()
-            .get(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_GET_SHARED_DATA, pathVariables));
+            .get(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_GET_SHARED_DATA, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -238,7 +238,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
 
         ErrorResponseValidator.verifyInvalidParam(response, "externalId", "must not be null");
     }
@@ -257,7 +257,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
 
         ErrorResponseValidator.verifyInvalidParam(response, "dataType", "must not be null");
     }
@@ -272,7 +272,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -283,7 +283,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         Map<String, Object> pathVariables = CollectionUtils.toMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
@@ -297,7 +297,7 @@ public class SharedDataControllerImplItTest {
 
         Response response = RequestFactory.createRequest()
             .body(newSharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CLONE_SHARED_DATA, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -314,7 +314,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -325,14 +325,14 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         UUID sharedDataId = sharedDataDao.findAll()
             .get(0)
             .getSharedDataId();
 
         Response response = RequestFactory.createRequest()
-            .delete(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA_ENTITY, "sharedDataId", sharedDataId));
+            .delete(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA_ENTITY, "sharedDataId", sharedDataId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -349,7 +349,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createAuthorizedRequest(accessTokenHeaderConverter.convertDomain(ACCESS_TOKEN_HEADER))
             .body(encryptionKey)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_KEY, "accessMode", AccessMode.EDIT));
 
         SharedData sharedData = SharedData.builder()
             .externalId(EXTERNAL_ID_1)
@@ -360,7 +360,7 @@ public class SharedDataControllerImplItTest {
 
         RequestFactory.createRequest()
             .body(sharedData)
-            .put(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
+            .put(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_CREATE_SHARED_DATA));
 
         Map<String, Object> pathVariables = CollectionUtils.toMap(
             new BiWrapper<>("externalId", EXTERNAL_ID_1),
@@ -368,7 +368,7 @@ public class SharedDataControllerImplItTest {
         );
 
         Response response = RequestFactory.createRequest()
-            .delete(UrlFactory.create(serverPort, Endpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA, pathVariables));
+            .delete(UrlFactory.create(serverPort, EncryptionEndpoints.ENCRYPTION_INTERNAL_DELETE_SHARED_DATA, pathVariables));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

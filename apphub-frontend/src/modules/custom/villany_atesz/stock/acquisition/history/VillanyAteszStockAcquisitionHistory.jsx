@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./villany_atesz_stock_acquisition_history_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import useLoader from "../../../../../../common/hook/Loader";
-import Endpoints from "../../../../../../common/js/dao/dao";
-import Utils from "../../../../../../common/js/Utils";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../../common/js/collection/Stream";
 import AcquisitionHistoryItem from "./AcquisitionHistoryItem";
 import "./villany_atesz_stock_acquisition_history.css";
+import { hasValue, isBlank, numberOfDigits } from "../../../../../../common/js/Utils";
+import { VILLANY_ATESZ_GET_ACQUISITION_DATES, VILLANY_ATESZ_GET_ACQUISITIONS } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -16,18 +16,18 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const [selectedDate, setSelectedDate] = useState("");
     const [acquisitions, setAcquisitions] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_ACQUISITION_DATES.createRequest(), setDates);
+    useLoader(VILLANY_ATESZ_GET_ACQUISITION_DATES.createRequest(), setDates);
 
     useEffect(() => loadAcquisitions(), [selectedDate]);
     useEffect(() => setDefaultSelectedDate(), [dates]);
 
     const loadAcquisitions = () => {
-        if (Utils.isBlank(selectedDate)) {
+        if (isBlank(selectedDate)) {
             return;
         }
 
         const fetch = async () => {
-            const response = await Endpoints.VILLANY_ATESZ_GET_ACQUISITIONS.createRequest(null, { acquiredAt: selectedDate })
+            const response = await VILLANY_ATESZ_GET_ACQUISITIONS.createRequest(null, { acquiredAt: selectedDate })
                 .send();
             setAcquisitions(response);
         }
@@ -35,7 +35,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     }
 
     const setDefaultSelectedDate = () => {
-        if (!Utils.isBlank(selectedDate)) {
+        if (!isBlank(selectedDate)) {
             return;
         }
 
@@ -61,7 +61,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const getContentForSelectedDate = () => {
         const padding = new Stream(acquisitions)
             .map(item => item.amount)
-            .max(Utils.numberOfDigits)
+            .max(numberOfDigits)
             .orElse(0);
 
 
@@ -89,7 +89,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
                 />
             </fieldset>
 
-            {Utils.hasValue(selectedDate) &&
+            {hasValue(selectedDate) &&
                 <ul>
                     {getContentForSelectedDate()}
                 </ul>

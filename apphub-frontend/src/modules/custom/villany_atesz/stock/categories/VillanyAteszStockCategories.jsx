@@ -5,12 +5,12 @@ import localizationData from "./villany_atesz_stock_categories_localization.json
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_categories.css";
 import Button from "../../../../../common/component/input/Button";
-import Endpoints from "../../../../../common/js/dao/dao";
 import useLoader from "../../../../../common/hook/Loader";
 import Stream from "../../../../../common/js/collection/Stream";
 import StockCategory from "./StockCategory";
-import Utils from "../../../../../common/js/Utils";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { isBlank } from "../../../../../common/js/Utils";
+import { VILLANY_ATESZ_CREATE_STOCK_CATEGORY, VILLANY_ATESZ_GET_STOCK_CATEGORIES } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockCategories = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -20,15 +20,15 @@ const VillanyAteszStockCategories = ({ setConfirmationDialogData }) => {
 
     const [categories, setCategories] = useState([]);
 
-    useLoader(Endpoints.VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
+    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
 
     const create = async () => {
-        if(Utils.isBlank(newCategoryName)){
+        if(isBlank(newCategoryName)){
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }
 
-        const response = await Endpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY.createRequest({ name: newCategoryName, measurement: newCategoryMeasurement })
+        const response = await VILLANY_ATESZ_CREATE_STOCK_CATEGORY.createRequest({ name: newCategoryName, measurement: newCategoryMeasurement })
             .send()
 
         setNewCategoryName("");

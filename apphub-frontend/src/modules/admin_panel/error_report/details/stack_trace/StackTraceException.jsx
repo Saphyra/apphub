@@ -1,7 +1,7 @@
 import React from "react";
 import Stream from "../../../../../common/js/collection/Stream";
 import StackTraceRow from "./StackTraceRow";
-import Utils from "../../../../../common/js/Utils";
+import { hasValue } from "../../../../../common/js/Utils";
 
 const StackTraceException = ({ exception, cause = false }) => {
     const getItems = () => {
@@ -26,7 +26,7 @@ const StackTraceException = ({ exception, cause = false }) => {
             <div className="error-report-details-stack-trace-rows">
                 {getItems()}
             </div>
-            {Utils.hasValue(exception.cause) &&
+            {hasValue(exception.cause) &&
                 <StackTraceException
                     exception={exception.cause}
                     cause={true}

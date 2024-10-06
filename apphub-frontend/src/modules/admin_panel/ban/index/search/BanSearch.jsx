@@ -5,9 +5,9 @@ import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import InputField from "../../../../../common/component/input/InputField";
 import Button from "../../../../../common/component/input/Button";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
-import Endpoints from "../../../../../common/js/dao/dao";
 import useHasFocus from "../../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import { ACCOUNT_BAN_SEARCH } from "../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const BanSearch = ({ setUsers }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -34,7 +34,7 @@ const BanSearch = ({ setUsers }) => {
                 return;
             }
 
-            const response = await Endpoints.ACCOUNT_BAN_SEARCH.createRequest({ value: query }, {}, { includeMarkedForDeletion: true, includeSelf: true })
+            const response = await ACCOUNT_BAN_SEARCH.createRequest({ value: query }, {}, { includeMarkedForDeletion: true, includeSelf: true })
                 .send();
 
             setUsers(response);

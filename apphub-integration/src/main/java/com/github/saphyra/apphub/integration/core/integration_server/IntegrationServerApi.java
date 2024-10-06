@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.core.integration_server;
 
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
-import com.github.saphyra.apphub.integration.framework.Endpoints;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.IntegrationServerEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.config.DecoderConfig;
 import io.restassured.config.HttpClientConfig;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class IntegrationServerApi {
     static UUID createTestRun() {
         Response response = createRequest()
-            .put(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, Endpoints.INTEGRATION_SERVER_CREATE_TEST_RUN));
+            .put(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, IntegrationServerEndpoints.INTEGRATION_SERVER_CREATE_TEST_RUN));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -36,7 +36,7 @@ class IntegrationServerApi {
     static void completeTestRun(UUID testRunId, String status) {
         Response response = createRequest()
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, Endpoints.INTEGRATION_SERVER_FINISH_TEST_RUN, "testRunId", testRunId));
+            .post(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, IntegrationServerEndpoints.INTEGRATION_SERVER_FINISH_TEST_RUN, "testRunId", testRunId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
@@ -57,7 +57,7 @@ class IntegrationServerApi {
 
         Response response = createRequest()
             .body(request)
-            .put(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, Endpoints.INTEGRATION_SERVER_REPORT_TEST_CASE, "testRunId", testRunId));
+            .put(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, IntegrationServerEndpoints.INTEGRATION_SERVER_REPORT_TEST_CASE, "testRunId", testRunId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
@@ -65,7 +65,7 @@ class IntegrationServerApi {
     static long getAverageDuration(String methodIdentifier) {
         Response response = createRequest()
             .body(new OneParamRequest<>(methodIdentifier))
-            .post(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, Endpoints.INTEGRATION_SERVER_GET_AVERAGE_RUN_TIME));
+            .post(UrlFactory.create(TestConfiguration.INTEGRATION_SERVER_PORT, IntegrationServerEndpoints.INTEGRATION_SERVER_GET_AVERAGE_RUN_TIME));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

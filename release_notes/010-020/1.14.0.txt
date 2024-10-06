@@ -1,0 +1,30 @@
+===FEATURES===
+    ApphubCI
+        Display startup time of services
+        Preprod environment
+    VillanyAtesz
+        Last inventoried times
+
+===BUGFIXES===
+    Notebook
+        Parent Selector displays categories sorted
+        Order text content of table to the left
+    Missing waits in SkyXplore tests
+
+===PLATFORM CHANGES===
+    Error Page react migration
+    Split Endpoints by modules
+
+===TECHNICAL DEBTS===
+    Refactor Utils.js, and export each function individually
+
+===ETC===
+    Notebook
+        Mark content of archived category archived
+        Order archived items to the end of the list
+        Pressing tab in Textarea (Text, Table types) enters 4 spaces instead of tabbing out
+        Autofill list item name of image and file when file selected
+    Integration
+        Row swapping protection test
+        Test for checking if all the user's data is deleted with the account
+        Dedicated cache for headed WebDrivers

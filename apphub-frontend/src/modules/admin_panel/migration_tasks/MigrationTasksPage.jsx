@@ -7,11 +7,11 @@ import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
-import Endpoints from "../../../common/js/dao/dao";
 import Stream from "../../../common/js/collection/Stream";
 import MigrationTask from "./MigrationTask";
 import "./migration_tasks.css";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
+import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "../../../common/js/dao/endpoints/AdminPanelEndpoints";
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -26,7 +26,7 @@ const MigrationTasksPage = () => {
 
     const loadMigrationTasks = () => {
         const fetch = async () => {
-            const response = await Endpoints.ADMIN_PANEL_MIGRATION_GET_TASKS.createRequest()
+            const response = await ADMIN_PANEL_MIGRATION_GET_TASKS.createRequest()
                 .send();
 
             setMigrationTasks(response);
@@ -71,7 +71,7 @@ const MigrationTasksPage = () => {
     }
 
     const deleteTask = async (event) => {
-        const response = await Endpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK.createRequest(null, { event: event })
+        const response = await ADMIN_PANEL_MIGRATION_DELETE_TASK.createRequest(null, { event: event })
             .send();
 
         setMigrationTasks(response);
@@ -103,7 +103,7 @@ const MigrationTasksPage = () => {
     }
 
     const triggerTask = async (event) => {
-        const response = await Endpoints.ADMIN_PANEL_MIGRATION_TRIGGER_TASK.createRequest(null, { event: event })
+        const response = await ADMIN_PANEL_MIGRATION_TRIGGER_TASK.createRequest(null, { event: event })
             .send();
 
         setMigrationTasks(response);

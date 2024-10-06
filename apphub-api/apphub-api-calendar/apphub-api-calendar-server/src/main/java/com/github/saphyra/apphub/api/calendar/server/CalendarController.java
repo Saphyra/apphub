@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.calendar.model.EventSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.CalendarEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface CalendarController {
-    @GetMapping(Endpoints.CALENDAR_GET_CALENDAR)
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_CALENDAR)
     List<CalendarResponse> getCalendar(@RequestParam("date") String date, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @PostMapping(Endpoints.CALENDAR_SEARCH)
+    @PostMapping(CalendarEndpoints.CALENDAR_SEARCH)
     List<EventSearchResponse> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

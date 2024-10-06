@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.user.model.request.LoginRequest;
-import com.github.saphyra.apphub.api.user.model.response.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.api.user.model.response.LoginResponse;
+import com.github.saphyra.apphub.api.user.model.login.LoginRequest;
+import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.user.model.login.LoginResponse;
 import com.github.saphyra.apphub.api.user.server.UserAuthenticationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;

@@ -7,8 +7,6 @@ import ErrorReportStatus from "../ErrorReportStatus";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../../common/js/SessionChecker";
 import NotificationService from "../../../../common/js/notification/NotificationService";
-import Utils from "../../../../common/js/Utils";
-import Endpoints from "../../../../common/js/dao/dao";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../common/component/input/Button";
 import Header from "../../../../common/component/Header";
@@ -19,6 +17,8 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 import { ToastContainer } from "react-toastify";
 import useHasFocus from "../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import { hasValue, nullIfEmpty } from "../../../../common/js/Utils";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DELETE_ALL, ADMIN_PANEL_ERROR_REPORT_DELETE_READ, ADMIN_PANEL_GET_ERROR_REPORTS, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../../../common/js/dao/endpoints/AdminPanelEndpoints";
 
 const ErrorReportOverviewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -52,17 +52,17 @@ const ErrorReportOverviewPage = () => {
     const load = () => {
         const fetch = async () => {
             const payload = {
-                message: Utils.nullIfEmpty(filterData.message),
-                statusCode: Utils.nullIfEmpty(filterData.statusCode),
-                startTime: Utils.nullIfEmpty(filterData.startTime),
-                endTime: Utils.nullIfEmpty(filterData.endTime),
+                message: nullIfEmpty(filterData.message),
+                statusCode: nullIfEmpty(filterData.statusCode),
+                startTime: nullIfEmpty(filterData.startTime),
+                endTime: nullIfEmpty(filterData.endTime),
                 pageSize: filterData.pageSize,
                 page: filterData.page,
-                status: Utils.nullIfEmpty(filterData.status),
-                service: Utils.nullIfEmpty(filterData.service),
+                status: nullIfEmpty(filterData.status),
+                service: nullIfEmpty(filterData.service),
             }
 
-            const response = await Endpoints.ADMIN_PANEL_GET_ERROR_REPORTS.createRequest(payload)
+            const response = await ADMIN_PANEL_GET_ERROR_REPORTS.createRequest(payload)
                 .send();
             setErrorReports(response)
         }
@@ -92,7 +92,7 @@ const ErrorReportOverviewPage = () => {
     }
 
     const deleteAll = async () => {
-        await Endpoints.ADMIN_PANEL_ERROR_REPORT_DELETE_ALL.createRequest()
+        await ADMIN_PANEL_ERROR_REPORT_DELETE_ALL.createRequest()
             .send();
 
         load();
@@ -122,7 +122,7 @@ const ErrorReportOverviewPage = () => {
     }
 
     const deleteRead = async () => {
-        await Endpoints.ADMIN_PANEL_ERROR_REPORT_DELETE_READ.createRequest()
+        await ADMIN_PANEL_ERROR_REPORT_DELETE_READ.createRequest()
             .send();
 
         load();
@@ -152,7 +152,7 @@ const ErrorReportOverviewPage = () => {
     }
 
     const deleteChecked = async () => {
-        await Endpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest(selectedErrorReports)
+        await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest(selectedErrorReports)
             .send();
 
         load();
@@ -160,7 +160,7 @@ const ErrorReportOverviewPage = () => {
     }
 
     const markCheckedAs = async (status) => {
-        await Endpoints.ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest(selectedErrorReports, { status: status })
+        await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest(selectedErrorReports, { status: status })
             .send();
 
         load();
@@ -250,7 +250,7 @@ const ErrorReportOverviewPage = () => {
                 ]}
             />
 
-            {Utils.hasValue(confirmationDialogData) &&
+            {hasValue(confirmationDialogData) &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
                     title={confirmationDialogData.title}

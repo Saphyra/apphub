@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Endpoints from "../../../../../../common/js/dao/dao";
 import { useQuery } from "react-query";
-import Utils from "../../../../../../common/js/Utils";
 import Stream from "../../../../../../common/js/collection/Stream";
 import AvailableBuilding from "./available_building/AvailableBuilding";
+import { hasValue } from "../../../../../../common/js/Utils";
+import { SKYXPLORE_DATA_AVAILABLE_BUILDINGS } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_BUILDING_CONSTRUCT_NEW } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [availableBuildings, setAvailableBuildings] = useState([]);
@@ -11,7 +12,7 @@ const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => 
     const { data: buildingsData } = useQuery(
         "available-building-" + surfaceType,
         async () => {
-            return await Endpoints.SKYXPLORE_DATA_AVAILABLE_BUILDINGS.createRequest(null, { surfaceType: surfaceType })
+            return await SKYXPLORE_DATA_AVAILABLE_BUILDINGS.createRequest(null, { surfaceType: surfaceType })
                 .send()
         },
         {
@@ -22,7 +23,7 @@ const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => 
 
     useEffect(
         () => {
-            if (Utils.hasValue(buildingsData)) {
+            if (hasValue(buildingsData)) {
                 setAvailableBuildings(buildingsData);
             }
         },
@@ -30,7 +31,7 @@ const AvailableBuildings = ({ surfaceType, planetId, surfaceId, closePage }) => 
     );
 
     const construct = async (selectedBuilding) => {
-        await Endpoints.SKYXPLORE_BUILDING_CONSTRUCT_NEW.createRequest({ value: selectedBuilding }, { planetId: planetId, surfaceId: surfaceId })
+        await SKYXPLORE_BUILDING_CONSTRUCT_NEW.createRequest({ value: selectedBuilding }, { planetId: planetId, surfaceId: surfaceId })
             .send();
 
         closePage();

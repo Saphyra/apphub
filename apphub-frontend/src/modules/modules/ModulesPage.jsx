@@ -3,15 +3,15 @@ import "./modules.css";
 import LocalizationHandler from "../../common/js/LocalizationHandler";
 import localizationData from "./modules_page_localization.json";
 import Header from "../../common/component/Header";
-import Endpoints from "../../common/js/dao/dao";
 import Favorites from "./modules_page/Favorites";
 import Modules from "./modules_page/Modules";
 import Footer from "../../common/component/Footer";
 import Button from "../../common/component/input/Button";
-import logout from "./controller/LogoutController";
 import sessionChecker from "../../common/js/SessionChecker";
 import NotificationService from "../../common/js/notification/NotificationService";
 import { ToastContainer } from "react-toastify";
+import logout from "../../common/js/LogoutController";
+import { MODULES_GET } from "../../common/js/dao/endpoints/ModulesEndpoints";
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -24,7 +24,7 @@ const ModulesPage = () => {
 
     const fetchModules = () => {
         const fetch = async () => {
-            const response = await Endpoints.MODULES_GET.createRequest()
+            const response = await MODULES_GET.createRequest()
                 .send();
 
             setModules(response);

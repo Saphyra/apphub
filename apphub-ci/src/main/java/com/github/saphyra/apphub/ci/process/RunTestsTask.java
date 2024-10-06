@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,26 @@ public class RunTestsTask {
         }
     }
 
+    public void preprodRunTests() {
+        log.info("Running preprod tests. Disabled test groups: {}", platformProperties.getProdDisabledTestGroups().isEmpty() ? "None" : platformProperties.getProdDisabledTestGroups());
+        try {
+            runTests(
+                "",
+                propertyDao.getRemoteRunTestsThreadCount(),
+                platformProperties.getMinikubeTestServerPort(),
+                platformProperties.getMinikubeTestDatabasePort(),
+                platformProperties.getMinikubeDatabaseName(),
+                String.join(",", platformProperties.getProdDisabledTestGroups()),
+                propertyDao.getRemoteRunPreCreateDriverCount(),
+                true,
+                true,
+                Constants.NAMESPACE_NAME_PREPROD
+            );
+        } finally {
+            killChromeDriverTask.run();
+        }
+    }
+
     public void productionRunTests() {
         log.info("Running production tests. Disabled test groups: {}", platformProperties.getProdDisabledTestGroups().isEmpty() ? "None" : platformProperties.getProdDisabledTestGroups());
         try {
@@ -71,7 +92,7 @@ public class RunTestsTask {
                 propertyDao.getRemoteRunPreCreateDriverCount(),
                 true,
                 false,
-                "production"
+                Constants.NAMESPACE_NAME_PRODUCTION
             );
         } finally {
             killChromeDriverTask.run();

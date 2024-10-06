@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MapStream from "../../../../common/js/collection/MapStream";
 import Stream from "../../../../common/js/collection/Stream";
-import Endpoints from "../../../../common/js/dao/dao";
 import Player from "./players/Player";
 import PanelTitle from "./PanelTitle";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import { SKYXPLORE_LOBBY_GET_PLAYERS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
 const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
     const [players, setPlayers] = useState({});
@@ -51,7 +51,7 @@ const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType 
     //Load
     const loadPlayers = () => {
         const fetch = async () => {
-            const result = await Endpoints.SKYXPLORE_LOBBY_GET_PLAYERS.createRequest()
+            const result = await SKYXPLORE_LOBBY_GET_PLAYERS.createRequest()
                 .send();
             const playerMap = new Stream(result)
                 .toMap((player) => player.userId);

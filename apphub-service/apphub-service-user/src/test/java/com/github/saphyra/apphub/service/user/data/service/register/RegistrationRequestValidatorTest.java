@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
-import com.github.saphyra.apphub.api.user.model.request.RegistrationRequest;
+import com.github.saphyra.apphub.api.user.model.login.RegistrationRequest;
 import com.github.saphyra.apphub.service.user.data.service.validator.EmailValidator;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
 import com.github.saphyra.apphub.service.user.data.service.validator.UsernameValidator;

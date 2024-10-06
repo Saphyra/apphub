@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
@@ -29,8 +29,8 @@ import java.util.UUID;
 @Slf4j
 public class LogoutFilter implements GlobalFilter, Ordered {
     private static final Map<String, HttpMethod> ENDPOINT_MAP = new HashMap<>() {{
-        put(Endpoints.LOGOUT, HttpMethod.POST);
-        put(Endpoints.ACCOUNT_DELETE_ACCOUNT, HttpMethod.DELETE);
+        put(UserEndpoints.LOGOUT, HttpMethod.POST);
+        put(UserEndpoints.ACCOUNT_DELETE_ACCOUNT, HttpMethod.DELETE);
     }};
 
     private final AntPathMatcher antPathMatcher;

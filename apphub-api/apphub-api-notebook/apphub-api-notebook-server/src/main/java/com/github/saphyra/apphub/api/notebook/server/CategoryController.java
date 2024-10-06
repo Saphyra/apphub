@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.notebook.model.response.ChildrenOfCategoryR
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.config.common.Endpoints;
+import com.github.saphyra.apphub.lib.config.common.endpoints.NotebookEndpoints;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryController {
-    @PutMapping(Endpoints.NOTEBOOK_CREATE_CATEGORY)
+    @PutMapping(NotebookEndpoints.NOTEBOOK_CREATE_CATEGORY)
     OneParamResponse<UUID> createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_CATEGORY_TREE)
+    @RequestMapping(method = RequestMethod.GET, path = NotebookEndpoints.NOTEBOOK_GET_CATEGORY_TREE)
     List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     /**
@@ -31,7 +31,7 @@ public interface CategoryController {
      * @param type       Filtering for listItemType
      * @param exclude    Excluding listItems with the given listItemId. (Used by client, when editing listItems so the modified category cannot be moved to itself)
      */
-    @RequestMapping(method = RequestMethod.GET, path = Endpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY)
+    @RequestMapping(method = RequestMethod.GET, path = NotebookEndpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY)
     ChildrenOfCategoryResponse getChildrenOfCategory(
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader,
         @RequestParam(name = "categoryId", required = false) UUID categoryId,
