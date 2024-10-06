@@ -12,6 +12,8 @@ import { DataListInputEntry } from "../../../../../common/component/input/DataLi
 import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { VILLANY_ATESZ_GET_STORAGE_BOXES, VILLANY_ATESZ_GET_TOOL_TYPES, VILLANY_ATESZ_GET_TOOLS, VILLANY_ATESZ_TOOLBOX_INVENTORY_RESET_INVENTORIED } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
+import Constants from "../../../../../common/js/Constants";
+import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "../../../../../common/js/dao/endpoints/UserEndpoints";
 
 const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -20,10 +22,26 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     const [tools, setTools] = useState([]);
     const [toolTypes, setToolTypes] = useState([]);
     const [storageBoxes, setStorageBoxes] = useState([]);
+    const [lastInventoried, setLastInventoried] = useState("");
 
     useLoader(VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
+    useLoader(GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }), (s) => setLastInventoried(s[Constants.SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED]));
+
     useEffect(() => loadToolTypes(), []);
     useEffect(() => loadStorageBoxes(), []);
+
+    const updateLastInventoried = async (newValue) => {
+        const payload = {
+            category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ,
+            key: Constants.SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED,
+            value: newValue
+        }
+
+        await SET_USER_SETTINGS.createRequest(payload)
+            .send();
+
+        setLastInventoried(newValue);
+    }
 
     const loadToolTypes = () => {
         const fetch = async () => {
@@ -106,12 +124,22 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
 
     return (
         <div id="villany-atesz-toolbox-inventory">
-            <InputField
-                id="villany-atesz-stock-toolbox-items-search"
-                placeholder={localizationHandler.get("search")}
-                value={search}
-                onchangeCallback={setSearch}
-            />
+            <div id="villany-atesz-toolbox-inventory-header">
+                <InputField
+                    id="villany-atesz-stock-toolbox-items-search"
+                    placeholder={localizationHandler.get("search")}
+                    value={search}
+                    onchangeCallback={setSearch}
+                />
+
+                <InputField
+                    id="villany-atesz-toolbox-inventory-last-inventoried"
+                    type="date"
+                    value={lastInventoried}
+                    title={localizationHandler.get("last-inventoried")}
+                    onchangeCallback={updateLastInventoried}
+                />
+            </div>
 
             <table className="formatted-table">
                 <thead>

@@ -61,6 +61,12 @@ const Constants = {
     PIXEL_PER_REPORT: 3,
     GRAPH_BORDER: 5,
     GRAPH_HEIGHT: 200,
+
+    //Settings
+    SETTINGS_CATEGORY_VILLANY_ATESZ: "villany-atesz",
+
+    SETTINGS_KEY_STOCK_LAST_INVENTORIED: "stock-last-inventoried",
+    SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED: "toolbox-last-inventoried",
 }
 
 export default Constants;

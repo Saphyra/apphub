@@ -10,6 +10,8 @@ import Button from "../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import { isBlank } from "../../../../../common/js/Utils";
 import { VILLANY_ATESZ_GET_STOCK_CATEGORIES, VILLANY_ATESZ_RESET_INVENTORIED, VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
+import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "../../../../../common/js/dao/endpoints/UserEndpoints";
+import Constants from "../../../../../common/js/Constants";
 
 const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -17,9 +19,24 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const [search, setSearch] = useState("");
     const [items, setItems] = useState([]);
     const [categories, setCategories] = useState({});
+    const [lastInventoried, setLastInventoried] = useState("");
 
     useLoader(VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), setItems);
     useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), (c) => mapCategories(c));
+    useLoader(GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }), (s) => setLastInventoried(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED]));
+
+    const updateLastInventoried = async (newValue) => {
+        const payload = {
+            category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ,
+            key: Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED,
+            value: newValue
+        }
+
+        await SET_USER_SETTINGS.createRequest(payload)
+            .send();
+
+        setLastInventoried(newValue);
+    }
 
     const mapCategories = (c) => {
         const mapped = new Stream(c)
@@ -92,12 +109,22 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
 
     return (
         <div id="villany-atesz-stock-inventory">
-            <InputField
-                id="villany-atesz-stock-inventory-items-search"
-                placeholder={localizationHandler.get("search")}
-                value={search}
-                onchangeCallback={setSearch}
-            />
+            <div id="villany-atesz-stock-inventory-header">
+                <InputField
+                    id="villany-atesz-stock-inventory-items-search"
+                    placeholder={localizationHandler.get("search")}
+                    value={search}
+                    onchangeCallback={setSearch}
+                />
+
+                <InputField
+                    id="villany-atesz-stock-inventory-last-inventoried"
+                    type="date"
+                    value={lastInventoried}
+                    title={localizationHandler.get("last-inventoried")}
+                    onchangeCallback={updateLastInventoried}
+                />
+            </div>
 
             <table id="villany-atesz-stock-inventory-items-table" className="formatted-table">
                 <thead>
