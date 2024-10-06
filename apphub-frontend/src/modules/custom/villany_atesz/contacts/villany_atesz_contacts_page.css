@@ -15,7 +15,7 @@
 
 #villany-atesz-contacts-content-wrapper {
     position: absolute;
-    top: 38px;
+    top: 25px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -25,7 +25,7 @@
 
 #villany-atesz-contacts-content {
     flex-grow: 2;
-    padding: 10px;
+    padding: 4px;
     overflow: auto;
 }
 
@@ -33,12 +33,13 @@
     display: block;
     width: 90%;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     position: sticky;
     top: 0;
 }
 
 #villany-atesz-contacts-content-table {
+    width: 98%;
     margin: auto;
 }
 
@@ -48,8 +49,6 @@
 
 #villany-atesz-contacts-content-table tbody tr td {
     cursor: pointer;
-    padding: 5px;
-    font-size: 20px;
 }
 
 #villany-atesz-contacts-inputs-wrapper {

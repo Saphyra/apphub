@@ -10,6 +10,8 @@ import VillanyAteszStockOverviewCart from "./cart/VillanyAteszStockOverviewCart"
 import useFocus from "../../../../../common/hook/UseFocus";
 import { hasValue, isBlank } from "../../../../../common/js/Utils";
 import { VILLANY_ATESZ_GET_CART, VILLANY_ATESZ_GET_CARTS, VILLANY_ATESZ_GET_STOCK_ITEMS } from "../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
+import ErrorHandler from "../../../../../common/js/dao/ErrorHandler";
+import { ResponseStatus } from "../../../../../common/js/dao/dao";
 
 const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -22,7 +24,16 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const [inputRef, setInputFocus] = useFocus();
 
     useLoader(VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }), setCart, [activeCart], () => !isBlank(activeCart));
+    useLoader(
+        VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }),
+        setCart,
+        [activeCart], () => !isBlank(activeCart),
+        undefined,
+        new ErrorHandler(
+            response => response.status == ResponseStatus.NOT_FOUND,
+            () => updateActiveCart("")
+        )
+    );
     useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
 
     useEffect(() => focus(), [search]);

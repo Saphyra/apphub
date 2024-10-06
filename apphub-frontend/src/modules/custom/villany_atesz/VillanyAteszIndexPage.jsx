@@ -13,6 +13,7 @@ import VillanyAteszNavigation from "./navigation/VillanyAteszNavigation";
 import VillanyAteszPage from "./navigation/VillanyAteszPage";
 import useLoader from "../../../common/hook/Loader";
 import Stream from "../../../common/js/collection/Stream";
+import "./villany_atesz.css";
 import { VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION, VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE, VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE } from "../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszIndexPage = () => {
@@ -44,7 +45,7 @@ const VillanyAteszIndexPage = () => {
     }
 
     return (
-        <div id="villany-atesz" className="main-page">
+        <div id="villany-atesz" className="main-page villany-atesz-main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>

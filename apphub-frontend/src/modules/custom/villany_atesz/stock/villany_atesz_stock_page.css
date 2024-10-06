@@ -2,7 +2,7 @@
     padding: 0;
 }
 
-#villany-atesz-stock select{
+#villany-atesz-stock select {
     text-align: left;
 }
 
@@ -14,19 +14,15 @@
     right: 0;
 }
 
-#villany-atesz-stock #villany-atesz-navigation-defaults {
-    float: left;
-}
-
-#villany-atesz-stock #villany-atesz-navigation-customs .opened {
-    border-color: lime;
-}
-
-#villany-atesz-stock-content{
+#villany-atesz-stock-content {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 38px;
+    top: 25px;
     overflow: auto;
+}
+
+.villany-atesz-stock-overview-item-name {
+    text-align: left !important;
 }

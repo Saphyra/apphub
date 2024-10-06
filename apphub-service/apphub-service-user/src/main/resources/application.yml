@@ -44,7 +44,8 @@ settings:
   notebook:
     show-archived: true
   villany-atesz:
-    stock-last-inventoried: ""
+    stock-last-inventoried-car: ""
+    stock-last-inventoried-storage: ""
     toolbox-last-inventoried: ""
 
 maxNumberOfUsersFound: 100

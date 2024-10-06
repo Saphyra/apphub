@@ -16,7 +16,7 @@
 
 #villany-atesz-stock-overview-items-search {
     display: block;
-    width: 90%;
+    width: 95%;
     margin: auto;
     margin-bottom: 10px;
     position: sticky;
@@ -25,14 +25,15 @@
 
 #villany-atesz-stock-overview-items-table {
     margin: auto;
+    width: 95%;
 }
 
 .in-cart {
-    background-color: red;
+    background-color: rgb(51, 255, 0);
 }
 
 .villany-atesz-stock-overview-item-add-to-cart-amount {
-    width: 75px;
+    width: 35px;
 }
 
 .villany-atesz-stock-overview-item-stock-operations {

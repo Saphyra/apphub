@@ -7,4 +7,4 @@ mvn clean package -DskipTests
 
 cd ..
 
-java -Dfile.encoding=UTF-8 -jar apphub-ci/target/ci.jar
+java -Dfile.encoding=UTF-8 -jar apphub-ci/target/ci.jar $@

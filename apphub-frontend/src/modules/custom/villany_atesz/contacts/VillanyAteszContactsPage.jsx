@@ -140,7 +140,7 @@ const VillanyAteszContactsPage = () => {
     }
 
     return (
-        <div id="villany-atesz-contacts" className="main-page">
+        <div id="villany-atesz-contacts" className="main-page villany-atesz-main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>

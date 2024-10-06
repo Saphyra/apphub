@@ -14,19 +14,11 @@
     right: 0;
 }
 
-#villany-atesz-toolbox #villany-atesz-navigation-defaults {
-    float: left;
-}
-
-#villany-atesz-toolbox #villany-atesz-navigation-customs .opened {
-    border-color: lime;
-}
-
 #villany-atesz-toolbox-content {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 38px;
+    top: 25px;
     overflow: auto;
 }
