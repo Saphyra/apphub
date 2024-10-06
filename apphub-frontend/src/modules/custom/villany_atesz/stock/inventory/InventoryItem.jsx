@@ -141,7 +141,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                 <td>
                     <span className="villany-atesz-stock-inventory-item-category selectable">{getCategoryName()}</span>
                 </td>
-                <td>
+                <td className="villany-atesz-stokc-inventory-item-name-cell">
                     <span className="villany-atesz-stock-inventory-item-name selectable">{item.name}</span>
                 </td>
                 <td>
@@ -254,7 +254,7 @@ const InventoryItem = ({ localizationHandler, item, items, categories, setItems,
                         scheduledCallback={(newValue) => sendRequest(Endpoints.VILLANY_ATESZ_STOCK_INVENTORY_EDIT_IN_STORAGE, newValue)}
                     />
                 </td>
-                <td>
+                <td className="villany-atesz-stock-inventory-item-operations-cell">
                     <NumberInput
                         className="villany-atesz-stock-inventory-item-amount"
                         placeholder={localizationHandler.get("amount")}

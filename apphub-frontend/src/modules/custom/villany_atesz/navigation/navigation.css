@@ -1,7 +1,16 @@
 #villany-atesz-navigation {
-    border-bottom: 3px ridge white;
+    border-bottom: 0px ridge #FF9800;
+    height: 24px;
 }
 
-#villany-atesz-navigation-defaults .opened {
-    border-color: lime;
+#villany-atesz-navigation-defaults {
+    float: left;
+}
+
+#villany-atesz-navigation-customs {
+    float: right;
+}
+
+#villany-atesz-navigation .opened {
+    background-color: #FF9800;
 }

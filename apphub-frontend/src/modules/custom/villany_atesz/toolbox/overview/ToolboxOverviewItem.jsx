@@ -30,7 +30,7 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
             </td>
             <td className="villany-atesz-toolbox-overview-item-acquired-at selectable">{tool.acquiredAt}</td>
             <td className="villany-atesz-toolbox-overview-item-warranty-expires-at selectable">{tool.warrantyExpiresAt}</td>
-            <td>
+            <td className="villany-atesz-toolbox-overview-item-operations">
                 {tool.status !== ToolStatus.DEFAULT &&
                     <Button
                         className="villany-atesz-toolbox-overview-item-set-to-default-button"
@@ -44,6 +44,7 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
                         className="villany-atesz-toolbox-overview-item-set-to-damaged-button"
                         label={localizationHandler.get("set-status-to-damaged")}
                         onclick={() => setStatus(ToolStatus.DAMAGED)}
+                        title={localizationHandler.get("set-status-to-damaged-title")}
                     />
                 }
 
@@ -52,6 +53,7 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
                         className="villany-atesz-toolbox-overview-item-set-to-lost-button"
                         label={localizationHandler.get("set-status-to-lost")}
                         onclick={() => setStatus(ToolStatus.LOST)}
+                        title={localizationHandler.get("set-status-to-lost-title")}
                     />
                 }
 
@@ -59,6 +61,7 @@ const ToolboxOverviewItem = ({ localizationHandler, tool, setTools }) => {
                     className="villany-atesz-toolbox-overview-item-set-to-scrapped-button"
                     label={localizationHandler.get("set-status-to-scrapped")}
                     onclick={() => setStatus(ToolStatus.SCRAPPED)}
+                    title={localizationHandler.get("set-status-to-scrapped-title")}
                 />
             </td>
         </tr>

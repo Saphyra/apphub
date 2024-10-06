@@ -1,10 +1,8 @@
 .villany-atesz-stock-new-item-fieldset-wrapper {
-    margin: 30px;
+    margin: 10px;
 }
 
 #villany-atesz-sotck-new-item fieldset {
-    display: inline-block;
-    text-align: center;
 }
 
 #villany-atesz-sotck-new-item fieldset legend {
@@ -14,4 +12,12 @@
 #villany-atesz-sotck-new-item label {
     display: block;
     font-size: 20px;
+}
+
+#villany-atesz-sotck-new-item fieldset{
+    display: inline-block;
+}
+
+#villany-atesz-sotck-new-item {
+    text-align: center;
 }

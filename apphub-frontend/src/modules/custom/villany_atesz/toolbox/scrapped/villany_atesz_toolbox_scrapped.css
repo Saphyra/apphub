@@ -15,6 +15,10 @@
     top: 5px;
 }
 
-#villany-atesz-toolbox-scrapped-table{
+#villany-atesz-toolbox-scrapped-table {
     margin: auto;
+}
+
+.villany-atesz-toolbox-scrapped-item-name {
+    text-align: left !important;
 }

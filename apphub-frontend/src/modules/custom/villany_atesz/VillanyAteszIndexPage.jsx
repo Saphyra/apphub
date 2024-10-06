@@ -14,6 +14,7 @@ import VillanyAteszPage from "./navigation/VillanyAteszPage";
 import useLoader from "../../../common/hook/Loader";
 import Endpoints from "../../../common/js/dao/dao";
 import Stream from "../../../common/js/collection/Stream";
+import "./villany_atesz.css";
 
 const VillanyAteszIndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -44,7 +45,7 @@ const VillanyAteszIndexPage = () => {
     }
 
     return (
-        <div id="villany-atesz" className="main-page">
+        <div id="villany-atesz" className="main-page villany-atesz-main-page">
             <Header label={localizationHandler.get("page-title")} />
 
             <main>

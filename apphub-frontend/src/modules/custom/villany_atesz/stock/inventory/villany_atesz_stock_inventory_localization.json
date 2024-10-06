@@ -17,15 +17,15 @@
     },
     "in-car": {
         "en": "In car",
-        "hu": "Autóban"
+        "hu": "🚗"
     },
     "in-storage": {
         "en": "In storage",
-        "hu": "Raktárban"
+        "hu": "📦"
     },
     "delete": {
         "en": "Delete",
-        "hu": "Törlés"
+        "hu": "🗑️"
     },
     "confirm-deletion-title": {
         "en": "Delete item?",
@@ -45,11 +45,11 @@
     },
     "move-to-car": {
         "en": "To car",
-        "hu": "Autóba"
+        "hu": "🚗"
     },
     "move-to-storage": {
         "en": "To storage",
-        "hu": "Raktárba"
+        "hu": "📦"
     },
     "bar-code": {
         "en": "Bar code",
@@ -69,6 +69,6 @@
     },
     "marked-for-acquisition": {
         "en": "Marked for acquisition",
-        "hu": "Beszerzésre jelölve"
+        "hu": "🛒"
     }
 }

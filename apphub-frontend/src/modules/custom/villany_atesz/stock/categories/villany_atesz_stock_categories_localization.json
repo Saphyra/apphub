@@ -13,11 +13,11 @@
     },
     "delete": {
         "en": "Delete",
-        "hu": "Törlés"
+        "hu": "🗑️"
     },
     "edit": {
         "en": "Edit",
-        "hu": "Módosítás"
+        "hu": "📝"
     },
     "discard": {
         "en": "Discard",

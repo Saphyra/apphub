@@ -117,11 +117,11 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
                 <thead>
                     <tr>
                         <td>
-                            {localizationHandler.get("inventoried")}
                             <Button
                                 id="villany-atesz-stock-toolbox-reset-inventoried-button"
                                 label="X"
                                 onclick={confirmResetInventoried}
+                                title={localizationHandler.get("inventoried")}
                             />
                         </td>
                         <td>{localizationHandler.get("tool-type")}</td>

@@ -33,7 +33,7 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
         return new Stream(items)
             .filter(item => {
                 return Utils.isBlank(search) ||
-                    new Stream([categories[item.stockCategoryId], item.name, item.serialNumber, item.inCar, item.inStorage])
+                    new Stream([categories[item.stockCategoryId], item.name, item.serialNumber, item.inCar, item.inStorage, item.barCode])
                         .join("")
                         .toLowerCase()
                         .indexOf(search.toLocaleLowerCase()) > -1;
