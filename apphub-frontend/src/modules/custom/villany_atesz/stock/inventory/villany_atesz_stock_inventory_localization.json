@@ -74,5 +74,13 @@
     "last-inventoried": {
         "en": "Last inventoried",
         "hu": "Utoljára leltárazva"
+    },
+    "car": {
+        "en": "Car",
+        "hu": "Autó"
+    },
+    "storage": {
+        "en": "Storage",
+        "hu": "Raktár"
     }
 }
