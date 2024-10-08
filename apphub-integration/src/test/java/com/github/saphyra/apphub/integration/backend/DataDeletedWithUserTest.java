@@ -69,6 +69,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("apphub_user", "access_token"),
         new BiWrapper<>("apphub_user", "apphub_role"),
         new BiWrapper<>("apphub_user", "apphub_user"),
+        new BiWrapper<>("apphub_user", "settings"),
         new BiWrapper<>("calendar", "event"),
         new BiWrapper<>("calendar", "occurrence"),
         new BiWrapper<>("modules", "favorite"),
@@ -394,6 +395,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
             .key("show-archived")
             .value("true")
             .build();
-        UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessTokenId, setUserSettingsRequest);
+        UserSettingsActions.setUserSetting(getServerPort(), accessTokenId, setUserSettingsRequest);
     }
 }

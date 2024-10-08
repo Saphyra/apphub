@@ -1,6 +1,7 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    UserSettings record was not deleted with the user
 
 ===PLATFORM CHANGES===
 
