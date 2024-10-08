@@ -12,8 +12,7 @@ const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => 
         body: formData,
         headers: {
             'Cache-Control': "no-cache",
-            "BrowserLanguage": getBrowserLanguage(),
-            "Request-Type": Constants.HEADER_REQUEST_TYPE_VALUE
+            "BrowserLanguage": getBrowserLanguage()
         }
     }
 
