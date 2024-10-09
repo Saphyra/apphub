@@ -1,0 +1,10 @@
+server:
+  port: ${server_port:8999}
+  ssl:
+    key-alias: apphub
+    key-store: classpath:apphub-preprod.jks
+    key-store-type: JKS
+    key-password: password
+
+forwardedPort: 8059
+host: localhost:${forwardedPort}
