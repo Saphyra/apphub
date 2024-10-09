@@ -23,7 +23,9 @@ liquibase:
 
 platform:
   minikubeProdServerPort: 9000
+  minikubePreprodServerPort: 8999
   minikubeProdMainGatewayPort: 8060
+  minikubePreprodMainGatewayPort: 8059
   minikubeDevServerPort: 9001
   minikubeTestServerPort: 8080
   localServerPort: 8080
@@ -44,6 +46,10 @@ platform:
   productionProxy:
     name: production-proxy
     port: 9000
+    location: "./apphub-proxy/target/proxy.jar"
+  preprodProxy:
+    name: preprod-proxy
+    port: 8999
     location: "./apphub-proxy/target/proxy.jar"
 
   prodDisabledTestGroups:
@@ -77,7 +83,7 @@ services:
   port: 8080
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
   moduleName: apphub-service-platform-main_gateway
-  group: 1
+  group: 2
 - name: web-content
   port: 8083
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
@@ -88,7 +94,7 @@ services:
   port: 8082
   location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
   moduleName: apphub-service-platform-scheduler
-  group: 1
+  group: 2
 - name: admin-panel
   port: 8089
   location: "./apphub-service/apphub-service-admin_panel/target/application.jar"

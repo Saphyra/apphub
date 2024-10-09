@@ -10,7 +10,9 @@ import java.util.List;
 @ConfigurationProperties(prefix = "platform")
 @Data
 public class PlatformProperties {
+    private Integer minikubePreprodServerPort;
     private Integer minikubeProdServerPort;
+    private Integer minikubePreprodMainGatewayPort;
     private Integer minikubeProdMainGatewayPort;
     private Integer minikubeDevServerPort;
     private Integer minikubeTestServerPort;
@@ -26,6 +28,7 @@ public class PlatformProperties {
 
     private Service integrationServer;
     private Service productionProxy;
+    private Service preprodProxy;
 
     private List<String> prodDisabledTestGroups;
 }

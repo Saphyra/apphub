@@ -18,7 +18,7 @@ public class PingService {
     @Value("${host}")
     private String host;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     public void pingServer() {
         try {
             String url = "http://" + host + "/platform/health";

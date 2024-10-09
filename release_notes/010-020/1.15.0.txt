@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Preproduction proxy
 
 ===BUGFIXES===
     UserSettings record was not deleted with the user
