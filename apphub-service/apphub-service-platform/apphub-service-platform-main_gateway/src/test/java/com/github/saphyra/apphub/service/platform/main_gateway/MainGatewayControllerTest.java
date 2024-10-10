@@ -14,14 +14,14 @@ import java.util.UUID;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class MainGatewayEventControllerTest {
+class MainGatewayControllerTest {
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
 
     @Mock
     private AccessTokenCache accessTokenCache;
 
     @InjectMocks
-    private MainGatewayEventController underTest;
+    private MainGatewayController underTest;
 
     @Test
     void accessTokenInvalidated() {
