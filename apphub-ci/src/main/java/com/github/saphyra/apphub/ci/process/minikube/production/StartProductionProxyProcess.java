@@ -28,7 +28,6 @@ public class StartProductionProxyProcess {
         LocalStartTask.builder()
             .servicePinger(servicePinger)
             .service(platformProperties.getProductionProxy())
-            .protocol(Constants.PROTOCOL_SECURE)
             .build()
             .run();
     }

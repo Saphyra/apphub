@@ -47,10 +47,12 @@ platform:
     name: production-proxy
     port: 9000
     location: "./apphub-proxy/target/proxy.jar"
+    healthCheckPort: 8998
   preprodProxy:
     name: preprod-proxy
     port: 8999
     location: "./apphub-proxy/target/proxy.jar"
+    healthCheckPort: 8997
 
   prodDisabledTestGroups:
     - skyxplore

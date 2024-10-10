@@ -9,6 +9,17 @@ server:
 forwardedPort: 8060
 host: localhost:${forwardedPort}
 
+management:
+  endpoints:
+    web:
+      base-path: /platform
+      path-mapping:
+        health: /health
+  server:
+    port: 8998
+    ssl:
+      enabled: false
+
 spring:
   profiles:
     active: ${SPRING_ACTIVE_PROFILE:server}

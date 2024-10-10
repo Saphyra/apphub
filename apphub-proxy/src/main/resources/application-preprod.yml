@@ -8,3 +8,7 @@ server:
 
 forwardedPort: 8059
 host: localhost:${forwardedPort}
+
+management:
+  server:
+    port: 8997
