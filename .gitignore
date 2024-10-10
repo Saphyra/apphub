@@ -1,3 +1,4 @@
+*.log
 *.jks
 **/target/**
 **/.idea/**
