@@ -4,10 +4,9 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-
-import static com.github.saphyra.apphub.lib.common_domain.Constants.REQUEST_TYPE_HEADER;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +23,6 @@ public class UriUtils {
     }
 
     public boolean isRestCall(HttpHeaders httpHeaders) {
-        return Constants.REQUEST_TYPE_VALUE.equals(httpHeaders.getFirst(REQUEST_TYPE_HEADER));
+        return !httpHeaders.getAccept().contains(MediaType.TEXT_HTML);
     }
 }

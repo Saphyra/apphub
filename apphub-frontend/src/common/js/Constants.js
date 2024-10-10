@@ -7,8 +7,6 @@ const Constants = {
     COOKIE_LOCALE: "language",
     DEFAULT_LOCALE: "en",
     HEADER_BROWSER_LANGUAGE: "BrowserLanguage",
-    HEADER_REQUEST_TYPE_NAME: "Request-Type",
-    HEADER_REQUEST_TYPE_VALUE: "rest",
 
     //VALIDATION
     MIN_USERNAME_LENGTH: 3,

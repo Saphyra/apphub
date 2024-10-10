@@ -1,0 +1,13 @@
+===FEATURES===
+    ApphubCI
+        Preproduction proxy
+
+===BUGFIXES===
+    UserSettings record was not deleted with the user
+
+===PLATFORM CHANGES===
+    Use Accept header instead of Request-Type
+
+===TECHNICAL DEBTS===
+
+===ETC===

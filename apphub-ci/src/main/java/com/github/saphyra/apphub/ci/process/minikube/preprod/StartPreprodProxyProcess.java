@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.process.minikube.production;
+package com.github.saphyra.apphub.ci.process.minikube.preprod;
 
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
@@ -12,22 +12,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class StartProductionProxyProcess {
+public class StartPreprodProxyProcess {
     private final ProcessKiller processKiller;
     private final PlatformProperties platformProperties;
     private final ServicePinger servicePinger;
     private final PortForwardTask portForwardTask;
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
 
-    public void startProductionProxy() {
-        minikubePodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PRODUCTION);
-        processKiller.killByPort(platformProperties.getMinikubeProdServerPort());
+    public void startPreprodProxy() {
+        minikubePodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PREPROD);
+        processKiller.killByPort(platformProperties.getMinikubePreprodServerPort());
 
-        portForwardTask.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeProdMainGatewayPort(), Constants.SERVICE_PORT);
+        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodMainGatewayPort(), Constants.SERVICE_PORT);
 
         LocalStartTask.builder()
             .servicePinger(servicePinger)
-            .service(platformProperties.getProductionProxy())
+            .service(platformProperties.getPreprodProxy())
+            .activeProfiles(Constants.PROFILE_PREPROD)
             .protocol(Constants.PROTOCOL_SECURE)
             .build()
             .run();

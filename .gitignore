@@ -1,3 +1,4 @@
+*.jks
 **/target/**
 **/.idea/**
 *.iml
