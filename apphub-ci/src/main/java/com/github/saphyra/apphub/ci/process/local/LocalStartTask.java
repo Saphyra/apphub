@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,7 +33,7 @@ public class LocalStartTask implements Runnable {
         new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx512m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
             .start();
 
-        servicePinger.pingLocal(service.getPort(), protocol)
+        servicePinger.pingLocal(Optional.ofNullable(service.getHealthCheckPort()).orElse(service.getPort()), protocol)
             .ifPresent(cause -> {
                 throw new IllegalStateException(service.getName() + " failed to start.", cause);
             });

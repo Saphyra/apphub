@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MapStream from "../../../../common/js/collection/MapStream";
 import Invitaion from "./invitations/Invitation";
 import "./invitations/invitations.css"
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
+import WebSocketEndpoint from "../../../../common/hook/ws/WebSocketEndpoint";
+import useConnectToWebSocket from "../../../../common/hook/ws/WebSocketFacade";
 
-const Invitations = ({ localizationHandler, lastEvent }) => {
+const Invitations = ({ localizationHandler }) => {
     const [invitations, setInvitations] = useState({});
 
-    useEffect(() => handleEvent(), [lastEvent]);
+    useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_INVITATION,
+        event => processEvent(event)
+    )
 
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION) {
-            const invitation = lastEvent.payload;
+    const processEvent = (event) => {
+        if (event.eventName === WebSocketEventName.SKYXPLORE_MAIN_MENU_INVITATION) {
+            const invitation = event.payload;
 
             const copy = new MapStream(invitations)
                 .clone()
                 .add(invitation.senderId, invitation.senderName)
                 .toObject();
             setInvitations(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION) {
+        } else if (event.eventName === WebSocketEventName.SKYXPLORE_MAIN_MENU_CANCEL_INVITATION) {
             const copy = new MapStream(invitations)
                 .clone()
-                .filter((senderId, senderName) => senderId !== lastEvent.payload)
+                .filter((senderId, senderName) => senderId !== event.payload)
                 .toObject();
 
             setInvitations(copy);

@@ -2,37 +2,44 @@ import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "./WebSocketEventName";
 import { hasValue } from "../../js/Utils";
+import { GET_WEB_SOCKET_PROTOCOL } from "../../js/dao/endpoints/GenericEndpoints";
+import useCache from "../Cache";
 
 const useConnectToWebSocket = (
     endpoint,
-    afterConnectedCallback = () => { },
-    eventHandler = () => { }
+    eventHandler = () => { },
+    afterConnectedCallback = () => { }
 ) => {
-    const webSocketUrl = "ws://" + window.location.host + endpoint;
-    const [lastEvent, setLastEvent] = useState(null);
+    const [protocol, setProtocol] = useState(null);
+
+    useCache("ws-protocol", GET_WEB_SOCKET_PROTOCOL.createRequest(), (response) => setProtocol(response.value));
+
+    const webSocketUrl = protocol + "://" + window.location.host + endpoint;
     const { sendMessage, lastMessage } = useWebSocket(
         webSocketUrl,
         {
             share: true,
             shouldReconnect: () => true,
-        }
+        },
+        hasValue(protocol)
     );
     useEffect(() => handleMessage(), [lastMessage]);
     useEffect(() => afterConnected(), [sendMessage]);
-    useEffect(() => handleEvent(), [lastEvent]);
 
     const handleMessage = () => {
-        if (lastMessage === null) {
+        if (!hasValue(lastMessage)) {
             return;
         }
 
-        const message = JSON.parse(lastMessage.data);
+        //{eventName, payload}
+        const event = JSON.parse(lastMessage.data);
 
-        if (message.eventName === WebSocketEventName.PING) {
+        if (event.eventName === WebSocketEventName.PING) {
             sendMessage(lastMessage.data);
+            return;
         }
 
-        setLastEvent(message);
+        eventHandler(event);
     }
 
     const afterConnected = () => {
@@ -43,16 +50,7 @@ const useConnectToWebSocket = (
         afterConnectedCallback(sendMessage);
     }
 
-    const handleEvent = () => {
-        if (!hasValue(lastEvent)) {
-            return;
-        }
-
-        eventHandler(lastEvent);
-    }
-
     return {
-        lastEvent: lastEvent,
         sendMessage: sendMessage
     }
 }

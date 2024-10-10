@@ -29,7 +29,6 @@ public class StartPreprodProxyProcess {
             .servicePinger(servicePinger)
             .service(platformProperties.getPreprodProxy())
             .activeProfiles(Constants.PROFILE_PREPROD)
-            .protocol(Constants.PROTOCOL_SECURE)
             .build()
             .run();
     }

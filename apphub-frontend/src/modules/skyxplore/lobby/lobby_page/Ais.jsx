@@ -12,13 +12,11 @@ import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import InputField from "../../../../common/component/input/InputField";
 import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
-const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
-    const [ais, setAis] = useState([]);
+const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType }) => {
     const [aiName, setAiName] = useState("");
     const [validationResult, setValidationResult] = useState({});
 
     useEffect(() => loadAis(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
     useEffect(() => runValidation(), [aiName]);
 
     const runValidation = () => {
@@ -39,42 +37,6 @@ const Ais = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) =
             setAis(result);
         }
         fetch();
-    }
-
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED) {
-            const newAi = lastEvent.payload;
-
-            const copy = new Stream(ais)
-                .filter(ai => ai.userId !== newAi.userId)
-                .add(newAi)
-                .toList();
-
-            setAis(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED) {
-            const copy = new Stream(ais)
-                .filter(ai => ai.userId !== lastEvent.payload)
-                .toList();
-
-            setAis(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
-            const newAi = lastEvent.payload.ai;
-
-            if (newAi === null) {
-                return;
-            }
-
-            const copy = new Stream(ais)
-                .filter(ai => ai.userId !== newAi.userId)
-                .add(newAi)
-                .toList();
-
-            setAis(copy);
-        }
     }
 
     const getAis = () => {

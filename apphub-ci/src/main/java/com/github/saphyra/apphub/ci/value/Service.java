@@ -17,4 +17,5 @@ public class Service {
     private Integer group;
     @Builder.Default
     private Boolean optional = false;
+    private Integer healthCheckPort;
 }
