@@ -12,7 +12,7 @@
         "hu": "Megnevezés"
     },
     "cost": {
-        "en": "Cost",
+        "en": "💵",
         "hu": "💵"
     },
     "acquired-at": {
@@ -28,7 +28,7 @@
         "hu": "Minden rendben"
     },
     "set-status-to-damaged": {
-        "en": "Tool is damaged",
+        "en": "🩹",
         "hu": "🩹"
     },
     "set-status-to-damaged-title": {
@@ -36,7 +36,7 @@
         "hu": "A szerszám sérült"
     },
     "set-status-to-scrapped": {
-        "en": "Scrap tool",
+        "en": "⚠️",
         "hu": "⚠️"
     },
     "set-status-to-scrapped-title": {
@@ -44,7 +44,7 @@
         "hu": "Szerszám leselejtezése"
     },
     "set-status-to-lost": {
-        "en": "I lost this tool",
+        "en": "👻",
         "hu": "👻"
     },
     "set-status-to-lost-title": {

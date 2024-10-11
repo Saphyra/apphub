@@ -4,6 +4,7 @@
 
 ===BUGFIXES===
     UserSettings record was not deleted with the user
+    Use icons in English for VillanyAtesz
 
 ===PLATFORM CHANGES===
     Use Accept header instead of Request-Type
