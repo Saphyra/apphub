@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.value.DeployMode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +26,8 @@ class LocalRunModeSelectorSkipTestsOptionOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "2";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.SETTINGS_DEPLOY_MODE_SKIP_TESTS;
     }
 
     @Override

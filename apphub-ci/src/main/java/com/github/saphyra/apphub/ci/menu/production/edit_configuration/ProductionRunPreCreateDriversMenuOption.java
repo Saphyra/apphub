@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,8 +26,8 @@ class ProductionRunPreCreateDriversMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "6";
+    public MenuOrder getOrder() {
+        return MenuOrderEnum.SETTINGS_INTEGRATION_PRE_CREATE_DRIVERS;
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.ci.menu;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.utils.Utils;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 public interface MenuOption {
     Menu getMenu();
@@ -13,24 +13,23 @@ public interface MenuOption {
         return List.of(getMenu());
     }
 
-    String getCommand();
+    MenuOrder getOrder();
 
     LocalizationProvider getName();
 
-    default LocalizationProvider getLabel(Stream<MenuOption> options) {
+    default LocalizationProvider getLabel(int command, Collection<MenuOption> options) {
         int maxLength = getMaxLength(options);
 
-        return language -> "[%s] - %s".formatted(Utils.withLeading(getCommand(), maxLength, "0"), getName().getLocalizedText(language));
+        return language -> "[%s] - %s".formatted(Utils.withLeading(command, maxLength, "0"), getName().getLocalizedText(language));
     }
 
     /**
-     * @return true, if Menu shoud exit as well
+     * @return true, if Menu should exit as well
      */
     boolean process();
 
-    private static int getMaxLength(Stream<MenuOption> options) {
-        return options.mapToInt(option -> option.getCommand().length())
-            .max()
-            .orElse(0);
+    private static int getMaxLength(Collection<MenuOption> options) {
+        return String.valueOf(options.size())
+            .length();
     }
 }

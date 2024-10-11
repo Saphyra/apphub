@@ -51,10 +51,10 @@ public class WebDriverProvider {
     private static GenericObjectPoolConfig<WebDriverWrapper> headedDriverPoolConfig() {
         GenericObjectPoolConfig<WebDriverWrapper> config = new GenericObjectPoolConfig<>();
 
-        config.setMaxTotal(1);
-        config.setMaxIdle(1);
+        config.setMaxTotal(5);
+        config.setMaxIdle(5);
         config.setTestOnBorrow(true);
-        config.setMinEvictableIdleTimeMillis(10000);
+        config.setMinEvictableIdleTimeMillis(15000);
         config.setTimeBetweenEvictionRunsMillis(1000);
 
         return config;
