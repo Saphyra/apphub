@@ -6,11 +6,15 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.utils.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.sql.Connection;
 
 @Component
 @RequiredArgsConstructor
@@ -40,5 +44,15 @@ public class PreprodReleaseProcess {
 
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+
+        addDisabledRolesIfMissing();
+    }
+
+    @SneakyThrows
+    private void addDisabledRolesIfMissing() {
+        try (Connection connection = DatabaseUtil.getConnection(platformProperties.getMinikubeDatabasePort(), "postgres")) {
+            platformProperties.getProdDisabledRoles()
+                .forEach(role -> DatabaseUtil.insertDisabledRoleIfNotPresent(connection, role));
+        }
     }
 }

@@ -31,4 +31,5 @@ public class PlatformProperties {
     private Service preprodProxy;
 
     private List<String> prodDisabledTestGroups;
+    private List<String> prodDisabledRoles;
 }

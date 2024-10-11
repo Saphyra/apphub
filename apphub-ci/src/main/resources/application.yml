@@ -55,8 +55,12 @@ platform:
     healthCheckPort: 8997
 
   prodDisabledTestGroups:
-    - skyxplore
-    - community
+  - skyxplore
+  - community
+
+  prodDisabledRoles:
+  - SKYXPLORE
+  - COMMUNITY
 
 defaults:
   defaultLocale: ENGLISH

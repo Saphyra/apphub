@@ -13,5 +13,6 @@
 ===TECHNICAL DEBTS===
     ApphubCI
         Automatic command assignment based on order
+        Preprod release automatically disables roles
 
 ===ETC===
