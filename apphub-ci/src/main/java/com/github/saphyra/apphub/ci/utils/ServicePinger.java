@@ -66,7 +66,7 @@ public class ServicePinger {
         return Optional.of(cause);
     }
 
-    private Optional<Exception> singlePing(String url) {
+    public Optional<Exception> singlePing(String url) {
         try {
             if (REST_TEMPLATE.getForEntity(url, Void.class).getStatusCode() == HttpStatus.OK) {
                 return Optional.empty();
