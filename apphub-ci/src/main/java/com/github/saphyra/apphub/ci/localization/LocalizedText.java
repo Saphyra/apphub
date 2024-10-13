@@ -72,6 +72,7 @@ public enum LocalizedText implements LocalizationProvider {
     BROWSER_STARTUP_LIMIT_MENU_OPTION_LABEL("Bongeszo inditas limit (%s)", "Browser startup limit (%s)"),
     BROWSER_STARTUP_LIMIT("Hany bongeszo induljon egyszerre?", "How many browsers can be started at once?"),
     PREPROD("Preprod szerver", "Preprod server"),
+    SCALE_DOWN("Leállítás", "Scale down"),
     ;
 
     private final String hu;

@@ -1,6 +1,7 @@
 ===FEATURES===
     ApphubCI
         Preproduction proxy
+        Scale down preprod
     Modules
         Collapse module categories
 
