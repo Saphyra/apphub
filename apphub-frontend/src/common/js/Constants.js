@@ -66,6 +66,8 @@ const Constants = {
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR: "stock-last-inventoried-car",
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE: "stock-last-inventoried-storage",
     SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED: "toolbox-last-inventoried",
+
+    SETTINGS_KEY_COLLAPSED_MODULES: "collapsed-modules",
 }
 
 export default Constants;

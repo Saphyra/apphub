@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Preproduction proxy
+    Modules
+        Collapse module categories
 
 ===BUGFIXES===
     UserSettings record was not deleted with the user

@@ -21,7 +21,7 @@ class MinikubeLocalStartMenuOption implements MenuOption {
 
     @Override
     public MenuOrderEnum getOrder() {
-        return MenuOrderEnum.DEPLOY;
+        return MenuOrderEnum.START_VM;
     }
 
     @Override

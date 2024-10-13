@@ -127,17 +127,18 @@ public abstract class MenuBase {
     }
 
     private Optional<MenuOrder> getDuplicatedOrder() {
-        //noinspection MismatchedQueryAndUpdateOfCollection
-        Set<MenuOrder> orders = new HashSet<>();
+        Set<Integer> orders = new HashSet<>();
 
         List<MenuOption> options = getOptionsWithExitOption()
             .toList();
         for (MenuOption option : options) {
             MenuOrder order = option
                 .getOrder();
-            if (orders.contains(order)) {
+            if (orders.contains(order.getOrder())) {
                 return Optional.of(order);
             }
+
+            orders.add(order.getOrder());
         }
 
         return Optional.empty();
