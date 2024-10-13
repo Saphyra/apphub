@@ -4,6 +4,9 @@
         Scale down preprod
     Modules
         Collapse module categories
+    Notebook
+        Save checklist item modification when pressing enter
+        Add new checklist item when saving new one
 
 ===BUGFIXES===
     UserSettings record was not deleted with the user

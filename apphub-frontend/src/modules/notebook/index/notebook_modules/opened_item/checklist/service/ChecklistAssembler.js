@@ -13,7 +13,7 @@ const getItems = (items, localizationHandler, editingEnabled, setItems, setConfi
 
     return new Stream(items)
         .sorted((a, b) => a.index - b.index)
-        .map(item =>
+        .map((item, tabIndex) =>
             <ChecklistItem
                 key={item.checklistItemId}
                 localizationHandler={localizationHandler}
@@ -22,6 +22,7 @@ const getItems = (items, localizationHandler, editingEnabled, setItems, setConfi
                 removeItem={(item) => removeItem(item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler)}
                 moveItem={(item, moveDirection) => moveItem(item, moveDirection, items, setItems)}
                 editingEnabled={editingEnabled}
+                tabIndex={tabIndex + 1}
             />
         )
         .toList();

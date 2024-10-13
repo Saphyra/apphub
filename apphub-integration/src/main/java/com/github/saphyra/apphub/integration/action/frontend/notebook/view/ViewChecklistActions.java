@@ -96,4 +96,9 @@ public class ViewChecklistActions {
         driver.findElement(By.id("notebook-content-checklist-add-item-to-start"))
             .click();
     }
+
+    public static void cancelAddItem(WebDriver driver) {
+        driver.findElement(By.id("notebook-add-checklist-item-to-the-edge-cancel-button"))
+            .click();
+    }
 }
