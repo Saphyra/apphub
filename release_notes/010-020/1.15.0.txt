@@ -18,5 +18,7 @@
         Automatic command assignment based on order
         Preprod release automatically disables roles
         Check if frontend is running before starting integration tests
+    Notebook
+        Delete deprecated tables
 
 ===ETC===

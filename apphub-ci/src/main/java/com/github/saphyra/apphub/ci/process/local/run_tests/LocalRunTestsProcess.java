@@ -44,6 +44,8 @@ public class LocalRunTestsProcess {
         if (maybeFrontendFailure.isPresent()) {
             log.error("Frontend is not running. {}", maybeFrontendFailure.get().getMessage());
             return;
+        }else{
+            log.info("Frontend is running.");
         }
 
         integrationServerStarter.start();

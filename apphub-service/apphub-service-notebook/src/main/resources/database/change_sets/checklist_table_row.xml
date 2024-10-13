@@ -18,4 +18,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="checklist_table_row" columnNames="row_id" constraintName="checklist_table_row-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-checklist_table_row" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="notebook" tableName="checklist_table_row"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="checklist_table_row"/>
+    </changeSet>
 </databaseChangeLog>
