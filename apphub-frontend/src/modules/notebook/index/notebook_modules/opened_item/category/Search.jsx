@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Settings from "./settings/Settings";
-import Button from "../../../../../../common/component/input/Button";
-import OpenedPageType from "../../../../common/OpenedPageType";
 import "./search.css";
 import EventName from "../../../../../../common/js/event/EventName";
 import Stream from "../../../../../../common/js/collection/Stream";
@@ -12,6 +10,7 @@ import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import compareListItems from "./ListItemComparator";
 import { NOTEBOOK_SEARCH } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import CategoryNavigation from "./navigation/CategoryNavigation";
 
 const Search = ({
     localizationHandler,
@@ -24,6 +23,7 @@ const Search = ({
     setConfirmationDialogData
 }) => {
     const [searchResult, setSearchResult] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
 
     useEffect(() => loadSearchResult(), [openedListItem.id]);
     useEffect(() => processEvent(), [lastEvent]);
@@ -81,6 +81,8 @@ const Search = ({
                     setLastEvent={setLastEvent}
                     listItemMode={ListItemMode.SEARCH_RESULT}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
                 />
             )
             .toList();
@@ -96,15 +98,17 @@ const Search = ({
                 changeUserSettings={changeUserSettings}
             />
 
-            <div id="notebook-content-search-content-navigation">
-                <div id="notebook-content-search-content-title"> {localizationHandler.get("search-result")} </div>
-
-                <Button
-                    id="notebook-content-search-content-up-button"
-                    label={localizationHandler.get("up")}
-                    onclick={() => setOpenedListItem({ id: openedListItem.parent, type: OpenedPageType.CATEGORY })}
-                />
-            </div>
+            <CategoryNavigation
+                openedListItem={openedListItem}
+                title={localizationHandler.get("search-result")}
+                parent={openedListItem.parent}
+                setOpenedListItem={setOpenedListItem}
+                listItems={searchResult}
+                setSelectedItems={setSelectedItems}
+                selectedItems={selectedItems}
+                setLastEvent={setLastEvent}
+                setConfirmationDialogData={setConfirmationDialogData}
+            />
 
             <div id="notebook-category-content-list">
                 {getContent()}

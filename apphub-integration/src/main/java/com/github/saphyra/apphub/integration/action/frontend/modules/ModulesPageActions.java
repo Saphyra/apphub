@@ -86,4 +86,12 @@ public class ModulesPageActions {
             .filter(module -> module.getModuleId().equals(moduleLocation.getModuleId()))
             .findFirst();
     }
+
+    public static Category findCategoryByIdValidated(WebDriver driver, String categoryId) {
+        return getCategories(driver)
+            .stream()
+            .filter(category -> category.getCategoryId().equals(categoryId))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Category not found by id " + categoryId));
+    }
 }

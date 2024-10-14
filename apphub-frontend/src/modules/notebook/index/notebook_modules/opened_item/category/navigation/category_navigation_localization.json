@@ -1,0 +1,42 @@
+{
+    "up": {
+        "en": "Up",
+        "hu": "Fel"
+    },
+    "unarchive-selected": {
+        "en": "Unarchive selected",
+        "hu": "Kijelöltek archiválásának visszavonása"
+    },
+    "archive-selected": {
+        "en": "Archive selected",
+        "hu": "Kijelöltek archiválása"
+    },
+    "pin-selected": {
+        "en": "Pin selected",
+        "hu": "Kijelöltek kitűzése"
+    },
+    "unpin-selected": {
+        "en": "Unpin selected",
+        "hu": "Kijelöltek kitűzésének visszavonása"
+    },
+    "delete-selected": {
+        "en": "Delete selected",
+        "hu": "Kijelöltek törlése"
+    },
+    "root": {
+        "en": "Root",
+        "hu": "Gyökér"
+    },
+    "confirm-delete-selected-title": {
+        "en": "Delete selected items?",
+        "hu": "Kijelöltek törlése?"
+    },
+    "confirm-delete-selected-detail": {
+        "en": "Are you sure you want to delete the selected {amount} item(s)?",
+        "hu": "Biztosan törölni szeretnéd a kiválasztott {amount} elemet?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

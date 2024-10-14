@@ -46,17 +46,17 @@ const Population = ({ footer, closePage, planetId }) => {
 
     useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_POPULATION,
+        lastEvent => {
+            if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_GAME_POPULATION_MODIFIED) {
+                setPopulation(lastEvent.payload);
+            }
+        },
         sendMessage => {
             const event = {
                 eventName: WebSocketEventName.SKYXPLORE_GAME_POPULATION_OPENED,
                 payload: planetId
             };
             sendMessage(JSON.stringify(event));
-        },
-        lastEvent => {
-            if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_GAME_POPULATION_MODIFIED) {
-                setPopulation(lastEvent.payload);
-            }
         }
     );
 

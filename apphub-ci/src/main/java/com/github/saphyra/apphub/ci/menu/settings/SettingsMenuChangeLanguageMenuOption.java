@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.ci.menu.settings;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.menu.settings.change_language.ChangeLanguageMenu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,8 +20,8 @@ class SettingsMenuChangeLanguageMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "1";
+    public MenuOrder getOrder() {
+        return MenuOrderEnum.SETTINGS_CHANGE_LANGUAGE;
     }
 
     @Override

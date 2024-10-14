@@ -1,0 +1,54 @@
+#notebook-content-category-content-operations {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    padding: 0 10px;
+}
+
+#notebook-content-category-content-select-all-buttons {
+    font-size: 24px;
+}
+
+#notebook-content-category-content-select-all-buttons input {
+    width: 20px;
+    height: 20px;
+}
+
+#notebook-content-category-content-up-button {
+    display: block;
+    flex-grow: 2;
+    margin: 0;
+}
+
+#notebook-content-category-content-bulk-operations button {
+    border-width: 1px;
+    margin: 0;
+    width: 27px;
+    height: 27px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin-left: 6px;
+}
+
+#notebook-content-category-content-unarchive-selected-button {
+    background-image: url("../../../../../../../common/style/img/archive.png");
+    cursor: pointer;
+}
+
+#notebook-content-category-content-archive-selected-button {
+    background-image: url("../../../../../../../common/style/img/archive.png");
+}
+
+#notebook-content-category-content-pin-selected-button {
+    background-image: url("../../../../../../../common/style/img/pin.png");
+    background-color: green;
+}
+
+#notebook-content-category-content-unpin-selected-button {
+    background-image: url("../../../../../../../common/style/img/pin.png");
+}
+
+#notebook-content-category-content-delete-selected-button {
+    background-image: url("../../../../../../../common/style/img/delete.png");
+}

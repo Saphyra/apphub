@@ -20,9 +20,9 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [items, setItems] = useState([]);
     const [newItemIndex, setNewItemIndex] = useState(null);
     const [newItemContent, setNewItemContent] = useState("");
+    const [lastIndexRange, setLastIndexRange] = useState(null);
 
     useEffect(() => loadChecklist(openedListItem.id, setDataFromResponse), [openedListItem]);
-    useEffect(() => setNewItemContent(""), [newItemIndex]);
 
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
@@ -44,9 +44,24 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 id={id}
                 className="notebook-content-checklist-add-button"
                 label="+"
-                onclick={() => addItemToEdge(indexRange, items, editingEnabled, setItems, setNewItemIndex)}
+                onclick={() => {
+                    setLastIndexRange(() => indexRange);
+                    addItemToEdge(indexRange, items, editingEnabled, setItems, setNewItemIndex);
+                }}
             />
         );
+    }
+
+    const addItemIfEnter = (e) => {
+        if (e.which === 13) {
+            addItem();
+        }
+    }
+
+    const addItem = () => {
+        addItemToTheEdge(openedListItem.id, newItemIndex, newItemContent, setDataFromResponse);
+        addItemToEdge(lastIndexRange, items, editingEnabled, setItems, setNewItemIndex);
+        setNewItemContent("");
     }
 
     const getNewItemConfirmationDialog = () => {
@@ -61,16 +76,14 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     value={newItemContent}
                     onchangeCallback={setNewItemContent}
                     style={{ width: 8 * newItemContent.length + "px" }}
+                    onkeyupCallback={addItemIfEnter}
                 />}
                 choices={[
                     <Button
                         key="save"
                         id="notebook-add-checklist-item-to-the-edge-save-button"
                         label={localizationHandler.get("save")}
-                        onclick={() => {
-                            addItemToTheEdge(openedListItem.id, newItemIndex, newItemContent, setDataFromResponse);
-                            setNewItemIndex(null);
-                        }}
+                        onclick={addItem}
                     />,
                     <Button
                         key="cancel"

@@ -47,6 +47,15 @@ settings:
     stock-last-inventoried-car: ""
     stock-last-inventoried-storage: ""
     toolbox-last-inventoried: ""
+  collapsed-modules:
+    community: false
+    admin-panel: false
+    accounts: false
+    office: false
+    development-utils: false
+    game: false
+    training: false
+    custom: false
 
 maxNumberOfUsersFound: 100
 deleteAccountBatchCount: 10

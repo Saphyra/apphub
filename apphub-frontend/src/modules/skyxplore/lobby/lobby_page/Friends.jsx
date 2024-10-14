@@ -3,14 +3,10 @@ import Stream from "../../../../common/js/collection/Stream";
 import PanelTitle from "./PanelTitle";
 import "./friends/friends.css"
 import Button from "../../../../common/component/input/Button";
-import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import { SKYXPLORE_INVITE_TO_LOBBY, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
-const Friends = ({ localizationHandler, lastEvent }) => {
-    const [friends, setFriends] = useState([]);
-
+const Friends = ({ localizationHandler, friends, setFriends }) => {
     useEffect(() => loadFriends(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
 
     const loadFriends = () => {
         const fetch = async () => {
@@ -19,23 +15,6 @@ const Friends = ({ localizationHandler, lastEvent }) => {
             setFriends(result);
         }
         fetch();
-    }
-
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE) {
-            const copy = friends.slice();
-            copy.push(lastEvent.payload);
-            setFriends(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE) {
-            const copy = new Stream(friends)
-                .filter(friend => friend.friendId !== lastEvent.payload.friendId)
-                .toList();
-            setFriends(copy);
-        }
     }
 
     const inviteFriend = (friendId) => {

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Category {
     private static final By MODULES = By.cssSelector(".module");
+
     private final WebElement element;
 
     public List<Module> getModules() {
@@ -21,5 +22,10 @@ public class Category {
 
     public String getCategoryId() {
         return element.getAttribute("id");
+    }
+
+    public void toggleCollapse() {
+        element.findElement(By.className("modules-collapse-category-toggle-button"))
+            .click();
     }
 }

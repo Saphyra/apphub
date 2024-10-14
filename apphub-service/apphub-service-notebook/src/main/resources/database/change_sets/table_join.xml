@@ -30,4 +30,12 @@
             <column name="column_type" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-table_join" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="notebook" tableName="table_join"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="table_join"/>
+    </changeSet>
 </databaseChangeLog>

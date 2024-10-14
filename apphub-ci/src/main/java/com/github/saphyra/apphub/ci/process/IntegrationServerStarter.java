@@ -19,9 +19,12 @@ public class IntegrationServerStarter {
         log.info("Starting integration server...");
         Service integrationServer = testProperties.getIntegrationServer();
         if (servicePinger.singlePingLocal(integrationServer.getPort()).isPresent()) {
-            new LocalStartTask(servicePinger, integrationServer)
+            LocalStartTask.builder()
+                .servicePinger(servicePinger)
+                .service(integrationServer)
+                .build()
                 .run();
-        }else{
+        } else {
             log.info("Integration server is already running.");
         }
     }

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,8 @@ class ProductionEditIntegrationTestCountMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "1";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.SETTINGS_INTEGRATION_THREAD_COUNT;
     }
 
     @Override

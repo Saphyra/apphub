@@ -26,12 +26,12 @@ class BashFileLocationSelectorMenuOption implements MenuOption {
 
     @Override
     public List<Menu> getMenus() {
-        return List.of(Menu.MINIKUBE_MENU, Menu.PRODUCTION_MENU, Menu.PREPROD_MENU);
+        return List.of(Menu.MINIKUBE_EDIT_CONFIGURATION_MENU, Menu.PRODUCTION_EDIT_CONFIGURATIONS_MENU, Menu.PREPROD_EDIT_CONFIGURATION_MENU);
     }
 
     @Override
-    public String getCommand() {
-        return "99";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.SETTINGS_BASH_FILE_LOCATION;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 class ChangeLanguageMenuOption implements MenuOption {
-    private final String command;
+    private final int order;
     private final Language language;
     private final PropertyDao propertyDao;
     private final LocalizationService localizationService;
@@ -27,8 +28,8 @@ class ChangeLanguageMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return command;
+    public MenuOrder getOrder() {
+        return () -> order;
     }
 
     @Override

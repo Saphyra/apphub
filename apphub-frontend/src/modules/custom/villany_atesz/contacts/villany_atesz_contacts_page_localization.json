@@ -44,7 +44,7 @@
         "hu": "Kapcsolat módosítása"
     },
     "delete": {
-        "en": "Delete",
+        "en": "🗑️",
         "hu": "🗑️"
     },
     "delete-contact-confirmation-title": {
@@ -64,7 +64,7 @@
         "hu": "Keresés"
     },
     "create-cart": {
-        "en": "Create cart",
+        "en": "🧺",
         "hu": "🧺"
     }
 }

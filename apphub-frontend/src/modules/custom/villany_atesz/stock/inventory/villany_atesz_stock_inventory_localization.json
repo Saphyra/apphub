@@ -16,15 +16,15 @@
         "hu": "Cikkszám"
     },
     "in-car": {
-        "en": "In car",
+        "en": "🚗",
         "hu": "🚗"
     },
     "in-storage": {
-        "en": "In storage",
+        "en": "📦",
         "hu": "📦"
     },
     "delete": {
-        "en": "Delete",
+        "en": "🗑️",
         "hu": "🗑️"
     },
     "confirm-deletion-title": {
@@ -48,7 +48,7 @@
         "hu": "🚗"
     },
     "move-to-storage": {
-        "en": "To storage",
+        "en": "📦",
         "hu": "📦"
     },
     "bar-code": {
@@ -68,7 +68,7 @@
         "hu": "Biztosan vissza szeretnéd állítani az összes termék állapotát?"
     },
     "marked-for-acquisition": {
-        "en": "Marked for acquisition",
+        "en": "🛒",
         "hu": "🛒"
     },
     "last-inventoried": {
