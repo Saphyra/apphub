@@ -151,4 +151,14 @@ public class ListItem {
 
         SleepUtil.sleep(1000);
     }
+
+    public boolean isSelected() {
+        return webElement.findElement(By.className("notebook-content-category-content-list-item-selected"))
+            .isSelected();
+    }
+
+    public void toggleSelect(){
+        webElement.findElement(By.className("notebook-content-category-content-list-item-selected"))
+            .click();
+    }
 }

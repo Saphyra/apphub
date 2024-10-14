@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.structure.view.notebook.table.colum
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.LinkTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Arrays;

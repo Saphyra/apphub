@@ -9,10 +9,12 @@ import Constants from "../../../../../common/js/Constants";
 import NotificationService from "../../../../../common/js/notification/NotificationService";
 import moveListItem from "../../../common/MoveListItemService";
 import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import { throwException } from "../../../../../common/js/Utils";
+import { addAndSet, removeAndSet, throwException } from "../../../../../common/js/Utils";
 import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import InputField from "../../../../../common/component/input/InputField";
+import Stream from "../../../../../common/js/collection/Stream";
 
-const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData }) => {
+const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData, selectedItems, setSelectedItems }) => {
     const handleOnclick = () => {
         if (!data.enabled) {
             NotificationService.showError(localizationHandler.get("list-item-disabled"));
@@ -148,6 +150,16 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         moveListItem(movedItemId, data.id, setLastEvent);
     }
 
+    const toggleSelected = (checked, e) => {
+        e.stopPropagation();
+
+        if (checked) {
+            addAndSet(selectedItems, data.id, setSelectedItems);
+        } else {
+            removeAndSet(selectedItems, id => id == data.id, setSelectedItems);
+        }
+    }
+
     return (
         <div
             id={data.id}
@@ -158,6 +170,15 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
             onDragOver={handleOnDragOver}
             onClick={handleOnclick}
         >
+            {listItemMode !== ListItemMode.PINNED_ITEM &&
+                <InputField
+                    className="notebook-content-category-content-list-item-selected"
+                    type="checkbox"
+                    checked={new Stream(selectedItems).anyMatch(id => id === data.id)}
+                    onchangeCallback={toggleSelected}
+                    onclickCallback={e => e.stopPropagation()}
+                />
+            }
             <span className="notebook-content-category-content-list-item-title">{data.title}</span>
 
             <div className="notebook-content-category-content-list-item-buttons">

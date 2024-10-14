@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./category.css"
-import Button from "../../../../../../common/component/input/Button";
 import Stream from "../../../../../../common/js/collection/Stream";
-import OpenedPageType from "../../../../common/OpenedPageType";
 import ListItem from "../../list_item/ListItem";
 import Settings from "./settings/Settings";
 import EventName from "../../../../../../common/js/event/EventName";
@@ -13,6 +11,7 @@ import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import compareListItems from "./ListItemComparator";
 import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
+import CategoryNavigation from "./navigation/CategoryNavigation";
 
 const Category = ({
     localizationHandler,
@@ -25,6 +24,8 @@ const Category = ({
     setConfirmationDialogData
 }) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
+    const [selectedItems, setSelectedItems] = useState([]);
+
     useEffect(() => processEvent(), [lastEvent]);
     useEffect(() => loadCategory(), [openedListItem]);
 
@@ -88,6 +89,8 @@ const Category = ({
                     setLastEvent={setLastEvent}
                     listItemMode={ListItemMode.CATEGORY_CONTENT}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
                 />
             )
             .toList();
@@ -115,20 +118,19 @@ const Category = ({
                 changeUserSettings={changeUserSettings}
             />
 
-            <div
-                id="notebook-content-category-content-navigation"
-                onDrop={handleOnDrop}
-                onDragOver={handleOnDragOver}
-            >
-                <div id="notebook-content-category-content-title"> {openedListItem.id === null ? localizationHandler.get("root") : openedCategoryContent.title} </div>
-
-                <Button
-                    id="notebook-content-category-content-up-button"
-                    label={localizationHandler.get("up")}
-                    onclick={() => setOpenedListItem({ id: openedCategoryContent.parent, type: OpenedPageType.CATEGORY })}
-                    disabled={openedListItem.id === null}
-                />
-            </div>
+            <CategoryNavigation
+                openedListItem={openedListItem}
+                title={openedCategoryContent.title}
+                parent={openedCategoryContent.parent}
+                setOpenedListItem={setOpenedListItem}
+                listItems={openedCategoryContent.children}
+                selectedItems={selectedItems}
+                setLastEvent={setLastEvent}
+                setConfirmationDialogData={setConfirmationDialogData}
+                setSelectedItems={setSelectedItems}
+                handleOnDrop={handleOnDrop}
+                handleOnDragOver={handleOnDragOver}
+            />
 
             <div id="notebook-category-content-list">
                 {getContent()}
