@@ -46,5 +46,9 @@
     "headquarters": {
         "en": "Headquarters",
         "hu": "Parancsnokság"
+    },
+    "geothermic_power_plant": {
+        "en": "Geothermic power plant",
+        "hu": "Hőerőmű"
     }
 }
