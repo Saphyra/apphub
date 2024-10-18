@@ -1,0 +1,23 @@
+{
+  "id": "lumberyard",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "FORREST"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "log",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      }
+    }
+  ]
+}

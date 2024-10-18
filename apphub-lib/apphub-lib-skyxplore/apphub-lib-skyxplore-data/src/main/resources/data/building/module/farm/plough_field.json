@@ -1,0 +1,21 @@
+{
+  "id": "plough_field",
+  "category": "FARM",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "produces": [
+    {
+      "resourceDataId": "crop",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "water": 1
+        }
+      }
+    }
+  ]
+}

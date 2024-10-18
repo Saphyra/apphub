@@ -1,0 +1,22 @@
+{
+  "id": "small_solar_panel",
+  "category": "BASIC_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "productions": [
+    {
+      "id": "solar",
+      "energyPerBatch": 1,
+      "batchTicks": 10,
+      "fuelLastsFotTicks": 100000,
+      "constructionRequirements": {
+        "requiredWorkPoints": 0,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

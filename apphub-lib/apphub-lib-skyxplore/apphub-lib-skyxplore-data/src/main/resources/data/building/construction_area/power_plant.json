@@ -1,0 +1,19 @@
+{
+  "id": "power_plant",
+  "supportedSurfaces": [
+    "CONCRETE",
+    "DESERT",
+    "VOLCANO"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 3,
+    "LARGE_STORAGE": 1,
+    "LARGE_POWER_SUPPLY": 3,
+    "SMALL_MILITARY": 2
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  }
+}

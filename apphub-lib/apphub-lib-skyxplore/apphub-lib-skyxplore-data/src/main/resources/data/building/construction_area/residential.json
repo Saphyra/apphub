@@ -1,0 +1,17 @@
+{
+  "id": "residential",
+  "supportedSurfaces": [
+    "CONCRETE"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 3,
+    "BASIC_POWER_SUPPLY": 1,
+    "DWELLING": 4,
+    "CULTURAL": 1
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  }
+}

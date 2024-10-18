@@ -27,7 +27,7 @@
     }
   },
   {
-    "surfaceType": "MILITARY",
+    "surfaceType": "FIELD",
     "constructionRequirements": {
       "requiredWorkPoints": 1,
       "requiredResources": {

@@ -1,0 +1,22 @@
+{
+  "id": "barn",
+  "category": "FARM",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "produces": [
+    {
+      "resourceDataId": "meat",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "water": 1,
+          "crop": 1
+        }
+      }
+    }
+  ]
+}

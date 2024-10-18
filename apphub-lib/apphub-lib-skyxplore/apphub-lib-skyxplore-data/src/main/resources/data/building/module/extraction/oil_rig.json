@@ -1,0 +1,23 @@
+{
+  "id": "oil_rig",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "OIL_FIELD"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "oil",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      }
+    }
+  ]
+}

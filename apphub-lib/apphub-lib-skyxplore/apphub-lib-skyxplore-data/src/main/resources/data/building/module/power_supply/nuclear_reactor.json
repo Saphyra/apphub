@@ -1,0 +1,26 @@
+{
+  "id": "nuclear_reactor",
+  "category": "LARGE_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "CONCRETE"
+  ],
+  "productions": [
+    {
+      "id": "nuclear",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsFotTicks": 1200,
+      "constructionRequirements": {
+        "requiredWorkPoints": 0,
+        "requiredResources": {
+          "fissile_material": 1
+        }
+      }
+    }
+  ]
+}

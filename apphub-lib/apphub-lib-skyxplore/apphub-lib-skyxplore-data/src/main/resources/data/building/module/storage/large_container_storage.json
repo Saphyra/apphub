@@ -1,0 +1,12 @@
+{
+  "id": "large_container_storage",
+  "category": "LARGE_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "CONTAINER": 10000
+  }
+}

@@ -52,7 +52,7 @@ public class PlanetStorageOverviewQueryServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
 
-        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.BULK)).willReturn(bulkStorageDetailsResponse);
+        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.CONTAINER)).willReturn(bulkStorageDetailsResponse);
         given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.ENERGY)).willReturn(energyStorageDetailsResponse);
         given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.LIQUID)).willReturn(liquidStorageDetailsResponse);
 

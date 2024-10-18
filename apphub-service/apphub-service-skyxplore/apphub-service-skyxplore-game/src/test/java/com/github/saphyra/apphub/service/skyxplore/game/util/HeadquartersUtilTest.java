@@ -68,8 +68,8 @@ class HeadquartersUtilTest {
 
     @Test
     void getStores() {
-        given(miscellaneousBuilding.getData()).willReturn(Map.of("stores", Map.of(StorageType.BULK, CAPACITY)));
+        given(miscellaneousBuilding.getData()).willReturn(Map.of("stores", Map.of(StorageType.CONTAINER, CAPACITY)));
 
-        assertThat(underTest.getStores()).containsEntry(StorageType.BULK, CAPACITY);
+        assertThat(underTest.getStores()).containsEntry(StorageType.CONTAINER, CAPACITY);
     }
 }

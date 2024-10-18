@@ -1,0 +1,11 @@
+{
+  "id": "hq_barracks",
+  "category": "HQ_BARRACKS",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 10,
+  "moraleRecovery": 1
+}

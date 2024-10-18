@@ -1,0 +1,23 @@
+{
+  "id": "energy_cell_discharger",
+  "category": "BASIC_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "productions": [
+    {
+      "id": "discharge_energy_cells",
+      "energyPerBatch": 1,
+      "batchTicks": 10,
+      "fuelLastsFotTicks": 300,
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy_cell": 1
+        }
+      }
+    }
+  ]
+}

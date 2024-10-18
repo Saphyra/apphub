@@ -69,10 +69,10 @@ public class StoredResourceAmountQueryServiceTest {
         given(storedResource2.getDataId()).willReturn(DATA_ID_2);
 
         given(resourceData.getId()).willReturn(DATA_ID_1);
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData));
         given(storedResource1.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).isEqualTo(AMOUNT);
     }
@@ -84,12 +84,12 @@ public class StoredResourceAmountQueryServiceTest {
         given(storedResources.getByLocation(LOCATION)).willReturn(List.of(storedResource1, storedResource2));
 
 
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData));
         given(storedResource1.getDataId()).willReturn(DATA_ID_1);
         given(storedResource1.getAmount()).willReturn(AMOUNT);
         given(resourceData.getId()).willReturn(DATA_ID_1);
 
-        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getActualAmount(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).isEqualTo(AMOUNT);
     }

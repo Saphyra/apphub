@@ -68,8 +68,8 @@ class StorageCalculatorTest {
 
     @BeforeEach
     void setUp() {
-        given(storageBuildingService.findByStorageType(StorageType.BULK)).willReturn(storageBuildingData);
-        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.BULK, HQ_CAPACITY));
+        given(storageBuildingService.findByStorageType(StorageType.CONTAINER)).willReturn(storageBuildingData);
+        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.CONTAINER, HQ_CAPACITY));
         given(gameData.getBuildings()).willReturn(buildings);
         given(storageBuildingData.getId()).willReturn(STORAGE_BUILDING_DATA_ID);
         given(buildings.getByLocationAndDataId(LOCATION, STORAGE_BUILDING_DATA_ID)).willReturn(List.of(storageBuilding));
@@ -86,7 +86,7 @@ class StorageCalculatorTest {
         given(hqBuilding.getLevel()).willReturn(HQ_BUILDING_LEVEL);
 
 
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY);
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY);
     }
 
     @Test
@@ -97,7 +97,7 @@ class StorageCalculatorTest {
         given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
 
 
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
     }
 
     @Test
@@ -109,6 +109,6 @@ class StorageCalculatorTest {
         given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
 
 
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY + STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
+        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY + STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
     }
 }

@@ -58,13 +58,13 @@ public class PlanetStorageDetailQueryServiceTest {
 
     @Test
     public void getStorageDetails() {
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY);
-        given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.BULK)).willReturn(RESERVED_STORAGE_AMOUNT);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
-        given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ALLOCATED_AMOUNT);
-        given(resourceDetailsQueryService.getResourceDetails(gameData, LOCATION, StorageType.BULK)).willReturn(Arrays.asList(resourceDetailsResponse));
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
+        given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(RESERVED_STORAGE_AMOUNT);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ACTUAL_AMOUNT);
+        given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ALLOCATED_AMOUNT);
+        given(resourceDetailsQueryService.getResourceDetails(gameData, LOCATION, StorageType.CONTAINER)).willReturn(Arrays.asList(resourceDetailsResponse));
 
-        StorageDetailsResponse result = underTest.getStorageDetails(gameData, LOCATION, StorageType.BULK);
+        StorageDetailsResponse result = underTest.getStorageDetails(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result.getCapacity()).isEqualTo(CAPACITY);
         assertThat(result.getReservedStorageAmount()).isEqualTo(RESERVED_STORAGE_AMOUNT);

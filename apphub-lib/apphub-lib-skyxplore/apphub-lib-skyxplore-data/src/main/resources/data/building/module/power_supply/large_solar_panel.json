@@ -1,0 +1,26 @@
+{
+  "id": "large_solar_panel",
+  "category": "LARGE_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "CONCRETE",
+    "DESERT"
+  ],
+  "productions": [
+    {
+      "id": "solar",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsFotTicks": 100000,
+      "constructionRequirements": {
+        "requiredWorkPoints": 0,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "theater",
+  "category": "CULTURAL",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 3
+}

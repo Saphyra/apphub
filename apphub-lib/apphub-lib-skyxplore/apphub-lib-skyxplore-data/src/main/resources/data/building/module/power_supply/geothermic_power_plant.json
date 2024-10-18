@@ -1,0 +1,25 @@
+{
+  "id": "geothermic_power_plant",
+  "category": "LARGE_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "VOLCANO"
+  ],
+  "productions": [
+    {
+      "id": "geothermic",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsFotTicks": 100000,
+      "constructionRequirements": {
+        "requiredWorkPoints": 0,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

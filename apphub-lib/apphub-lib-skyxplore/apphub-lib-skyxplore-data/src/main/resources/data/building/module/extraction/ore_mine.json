@@ -1,0 +1,23 @@
+{
+  "id": "ore_mine",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "ORE_FIELD"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "ore",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1
+        }
+      }
+    }
+  ]
+}

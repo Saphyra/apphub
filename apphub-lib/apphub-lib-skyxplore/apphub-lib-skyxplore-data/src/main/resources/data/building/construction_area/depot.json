@@ -1,0 +1,16 @@
+{
+  "id": "depot",
+  "supportedSurfaces": [
+    "CONCRETE"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 2,
+    "LARGE_STORAGE": 4,
+    "SMALL_MILITARY": 3
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  }
+}

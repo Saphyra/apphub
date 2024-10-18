@@ -49,10 +49,10 @@ public class FreeStorageQueryServiceTest {
     @Test
     public void getFreeStorage() {
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
-        given(resourceData.getStorageType()).willReturn(StorageType.BULK);
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
-        given(reservedStorageQueryService.getReservedStorageCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(RESERVED_STORAGE);
+        given(resourceData.getStorageType()).willReturn(StorageType.CONTAINER);
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ACTUAL_AMOUNT);
+        given(reservedStorageQueryService.getReservedStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(RESERVED_STORAGE);
 
         int result = underTest.getFreeStorage(gameData, LOCATION, DATA_ID);
 

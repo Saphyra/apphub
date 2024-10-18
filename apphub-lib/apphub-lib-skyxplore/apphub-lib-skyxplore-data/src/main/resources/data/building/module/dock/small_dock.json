@@ -1,0 +1,10 @@
+{
+  "id": "small_dock",
+  "category": "DOCK",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "size": "SMALL"
+}

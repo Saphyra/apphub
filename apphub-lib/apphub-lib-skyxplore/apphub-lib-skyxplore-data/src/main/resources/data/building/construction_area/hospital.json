@@ -1,0 +1,16 @@
+{
+  "id": "hospital",
+  "supportedSurfaces": [
+    "CONCRETE"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 3,
+    "BASIC_POWER_SUPPLY": 2,
+    "HOSPITAL_BED": 4
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  }
+}

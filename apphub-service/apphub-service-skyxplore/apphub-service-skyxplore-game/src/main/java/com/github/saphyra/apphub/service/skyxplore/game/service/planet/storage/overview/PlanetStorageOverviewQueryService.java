@@ -28,7 +28,7 @@ public class PlanetStorageOverviewQueryService {
         return PlanetStorageResponse.builder()
             .energy(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.ENERGY))
             .liquid(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.LIQUID))
-            .bulk(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.BULK))
+            .bulk(planetStorageDetailQueryService.getStorageDetails(gameData, location, StorageType.CONTAINER))
             .build();
     }
 }

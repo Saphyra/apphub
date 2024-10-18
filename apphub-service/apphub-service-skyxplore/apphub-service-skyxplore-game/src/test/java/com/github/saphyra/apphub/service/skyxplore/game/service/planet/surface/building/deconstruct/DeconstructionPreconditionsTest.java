@@ -66,12 +66,12 @@ class DeconstructionPreconditionsTest {
     void hasEnoughCapacity() {
         given(building.getDataId()).willReturn(DATA_ID);
         given(storageBuildingService.get(DATA_ID)).willReturn(storageBuildingData);
-        given(storageBuildingData.getStores()).willReturn(StorageType.BULK);
+        given(storageBuildingData.getStores()).willReturn(StorageType.CONTAINER);
         given(building.getLocation()).willReturn(LOCATION);
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY);
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(TOTAL_CAPACITY);
         given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY);
 
         underTest.checkIfBuildingCanBeDeconstructed(gameData, building);
     }
@@ -80,12 +80,12 @@ class DeconstructionPreconditionsTest {
     void notEnoughCapacity() {
         given(building.getDataId()).willReturn(DATA_ID);
         given(storageBuildingService.get(DATA_ID)).willReturn(storageBuildingData);
-        given(storageBuildingData.getStores()).willReturn(StorageType.BULK);
+        given(storageBuildingData.getStores()).willReturn(StorageType.CONTAINER);
         given(building.getLocation()).willReturn(LOCATION);
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY);
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(TOTAL_CAPACITY);
         given(storageBuildingData.getCapacity()).willReturn(CAPACITY);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY + 1);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(TOTAL_CAPACITY - LEVEL * CAPACITY + 1);
 
         Throwable ex = catchThrowable(() -> underTest.checkIfBuildingCanBeDeconstructed(gameData, building));
 

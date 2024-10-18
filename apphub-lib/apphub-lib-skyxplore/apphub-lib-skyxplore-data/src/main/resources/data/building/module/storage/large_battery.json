@@ -1,0 +1,12 @@
+{
+  "id": "large_battery",
+  "category": "LARGE_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "ENERGY": 10000
+  }
+}

@@ -5,8 +5,10 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -122,6 +124,13 @@ public class ValidationUtil {
         }
     }
 
+    public static void notEmpty(Map<?, ?> map, String field) {
+        notNull(map, field);
+        if (map.isEmpty()) {
+            throw ExceptionFactory.invalidParam(field, "must not be empty");
+        }
+    }
+
     public static void contains(Object obj, List<Object> edit, String field) {
         notNull(obj, field);
 
@@ -154,8 +163,14 @@ public class ValidationUtil {
     public static void notZero(Integer value, String field) {
         notNull(value, field);
 
-        if(value == 0){
+        if (value == 0) {
             throw ExceptionFactory.invalidParam(field, "must not be zero");
+        }
+    }
+
+    public static void valid(Supplier<Boolean> test, String field, String message) {
+        if (!test.get()) {
+            throw ExceptionFactory.invalidParam(field, message);
         }
     }
 }

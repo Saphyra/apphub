@@ -1,0 +1,11 @@
+{
+  "id": "row_house",
+  "category": "DWELLING",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 10,
+  "moraleRecovery": 5
+}

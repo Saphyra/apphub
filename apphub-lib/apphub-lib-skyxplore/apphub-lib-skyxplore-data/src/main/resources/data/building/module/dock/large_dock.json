@@ -1,0 +1,10 @@
+{
+  "id": "large_dock",
+  "category": "DOCK",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "size": "LARGE"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "medium_dock",
+  "category": "DOCK",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "size": "MEDIUM"
+}

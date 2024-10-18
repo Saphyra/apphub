@@ -1,0 +1,21 @@
+{
+  "id": "hq_canteen",
+  "category": "HQ_CANTEEN",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "produces": [
+    {
+      "resourceDataId": "survival_food",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "water": 1
+        }
+      }
+    }
+  ]
+}

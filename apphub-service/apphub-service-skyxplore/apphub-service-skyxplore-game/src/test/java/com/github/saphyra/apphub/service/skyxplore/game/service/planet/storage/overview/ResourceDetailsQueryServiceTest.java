@@ -48,13 +48,13 @@ public class ResourceDetailsQueryServiceTest {
 
     @Test
     public void getResourceDetails() {
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData1, resourceData2));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData1, resourceData2));
         given(resourceDetailsResponseMapper.createResourceData(gameData, LOCATION, resourceData1)).willReturn(emptyResourceDetailsResponse);
         given(resourceDetailsResponseMapper.createResourceData(gameData, LOCATION, resourceData2)).willReturn(resourceDetailsResponse);
         given(emptyResourceDetailsResponse.valuePresent()).willReturn(false);
         given(resourceDetailsResponse.valuePresent()).willReturn(true);
 
-        List<ResourceDetailsResponse> result = underTest.getResourceDetails(gameData, LOCATION, StorageType.BULK);
+        List<ResourceDetailsResponse> result = underTest.getResourceDetails(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).containsExactly(resourceDetailsResponse);
     }

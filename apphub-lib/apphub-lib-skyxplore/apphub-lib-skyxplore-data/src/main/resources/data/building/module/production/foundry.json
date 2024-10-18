@@ -1,0 +1,31 @@
+{
+  "id": "foundry",
+  "category": "PRODUCTION",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "produces": [
+    {
+      "resourceDataId": "steel_ingot",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "ore": 1
+        }
+      }
+    },
+    {
+      "resourceDataId": "glass",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredResources": {
+          "energy": 1,
+          "sand": 1
+        }
+      }
+    }
+  ]
+}

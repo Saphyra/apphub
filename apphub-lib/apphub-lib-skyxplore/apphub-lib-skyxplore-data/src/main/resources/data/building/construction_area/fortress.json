@@ -1,0 +1,18 @@
+{
+  "id": "fortress",
+  "supportedSurfaces": [
+    "CONCRETE"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 2,
+    "LARGE_STORAGE": 1,
+    "BASIC_POWER_SUPPLY": 2,
+    "SMALL_MILITARY": 2,
+    "LARGE_MILITARY": 2
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  }
+}

@@ -63,11 +63,11 @@ public class RequiredEmptyStorageCalculatorTest {
         given(resourceDataService.get(DATA_ID_2)).willReturn(resourceData2);
 
         given(resourceData1.getStorageType()).willReturn(StorageType.CITIZEN);
-        given(resourceData2.getStorageType()).willReturn(StorageType.BULK);
+        given(resourceData2.getStorageType()).willReturn(StorageType.CONTAINER);
 
         given(reservedStorage2.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.getRequiredStorageAmount(StorageType.BULK, consumptions);
+        int result = underTest.getRequiredStorageAmount(StorageType.CONTAINER, consumptions);
 
         assertThat(result).isEqualTo(AMOUNT);
     }

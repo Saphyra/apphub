@@ -1,0 +1,12 @@
+{
+  "id": "large_liquid_tank",
+  "category": "LARGE_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "LIQUID": 10000
+  }
+}

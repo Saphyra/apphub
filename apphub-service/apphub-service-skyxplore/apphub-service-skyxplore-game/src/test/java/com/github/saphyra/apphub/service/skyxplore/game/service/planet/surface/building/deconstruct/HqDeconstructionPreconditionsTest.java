@@ -48,22 +48,22 @@ class HqDeconstructionPreconditionsTest {
 
     @Test
     void hasEnoughCapacityLeft() {
-        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.BULK, CAPACITY));
+        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.CONTAINER, CAPACITY));
         given(building.getLocation()).willReturn(LOCATION);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY * 2 + STORED_AMOUNT + 1);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(STORED_AMOUNT);
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY * 2 + STORED_AMOUNT + 1);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(STORED_AMOUNT);
 
         underTest.checkHqCanBeDeconstructed(gameData, building);
     }
 
     @Test
     void notEnoughCapacityLeft(){
-        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.BULK, CAPACITY));
+        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.CONTAINER, CAPACITY));
         given(building.getLocation()).willReturn(LOCATION);
         given(building.getLevel()).willReturn(LEVEL);
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY * 2 + STORED_AMOUNT - 1);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(STORED_AMOUNT);
+        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY * 2 + STORED_AMOUNT - 1);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(STORED_AMOUNT);
 
         Throwable ex = catchThrowable(()-> underTest.checkHqCanBeDeconstructed(gameData, building));
 

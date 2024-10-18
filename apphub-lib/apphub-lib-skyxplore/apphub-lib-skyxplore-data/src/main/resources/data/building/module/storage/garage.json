@@ -1,0 +1,12 @@
+{
+  "id": "garage",
+  "category": "LARGE_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "VEHICLE": 10
+  }
+}
