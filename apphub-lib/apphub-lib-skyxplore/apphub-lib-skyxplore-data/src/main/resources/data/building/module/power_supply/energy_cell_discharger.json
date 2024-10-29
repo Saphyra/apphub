@@ -2,7 +2,7 @@
   "id": "energy_cell_discharger",
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

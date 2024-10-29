@@ -12,7 +12,7 @@ public enum BuildingModuleCategory {
     LARGE_MILITARY,
     DWELLING,
     CULTURAL,
-    SCHOOL,
+    EDUCATION,
     HOSPITAL_BED,
     DOCK,
     HQ_STORAGE,

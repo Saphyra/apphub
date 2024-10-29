@@ -2,13 +2,14 @@
   "id": "hq_canteen",
   "category": "HQ_CANTEEN",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "produces": [
     {
       "resourceDataId": "survival_food",
+      "requiredSkill": "FARMING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

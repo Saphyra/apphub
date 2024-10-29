@@ -9,7 +9,7 @@
     "HOSPITAL_BED": 4
   },
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   }

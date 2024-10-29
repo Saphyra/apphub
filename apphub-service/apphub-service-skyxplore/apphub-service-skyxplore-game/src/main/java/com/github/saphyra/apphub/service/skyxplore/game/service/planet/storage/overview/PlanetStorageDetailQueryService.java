@@ -25,7 +25,7 @@ class PlanetStorageDetailQueryService {
 
     StorageDetailsResponse getStorageDetails(GameData gameData, UUID location, StorageType storageType) {
         return StorageDetailsResponse.builder()
-            .capacity(storageCalculator.calculateCapacity(gameData, location, storageType))
+            .capacity(storageCalculator.calculateStorageCapacity(gameData, location, storageType))
             .reservedStorageAmount(reservedStorageQueryService.getReservedAmount(gameData, location, storageType))
             .actualResourceAmount(storedResourceAmountQueryService.getActualAmount(gameData, location, storageType))
             .allocatedResourceAmount(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, location, storageType))

@@ -2,13 +2,14 @@
   "id": "foundry",
   "category": "PRODUCTION",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "produces": [
     {
       "resourceDataId": "steel_ingot",
+      "requiredSkill": "ENGINEERING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -19,6 +20,7 @@
     },
     {
       "resourceDataId": "glass",
+      "requiredSkill": "ENGINEERING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

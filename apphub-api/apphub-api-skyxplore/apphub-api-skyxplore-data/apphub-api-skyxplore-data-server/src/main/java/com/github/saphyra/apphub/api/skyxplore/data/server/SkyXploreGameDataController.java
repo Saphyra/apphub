@@ -14,6 +14,7 @@ public interface SkyXploreGameDataController {
     /**
      * Buildings can be built on given surfaceType
      */
+    @Deprecated(forRemoval = true)
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_DATA_AVAILABLE_BUILDINGS)
     List<String> getAvailableBuildings(@PathVariable("surfaceType") String surfaceType);
 

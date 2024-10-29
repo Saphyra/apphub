@@ -33,7 +33,7 @@ public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
     private final DateTimeUtil dateTimeUtil;
 
     @NonNull
-    private final long pollingInterval;
+    private final Long pollingInterval;
 
     private final Map<String, LastMessage<T>> lastMessages = new ConcurrentHashMap<>();
 

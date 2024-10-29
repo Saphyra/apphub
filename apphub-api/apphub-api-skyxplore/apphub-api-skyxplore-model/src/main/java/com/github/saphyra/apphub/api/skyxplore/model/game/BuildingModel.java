@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@Deprecated(forRemoval = true)
 public class BuildingModel extends GameItem {
     private UUID location;
     private UUID surfaceId;

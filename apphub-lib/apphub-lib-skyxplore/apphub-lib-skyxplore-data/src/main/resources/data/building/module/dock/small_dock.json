@@ -2,7 +2,7 @@
   "id": "small_dock",
   "category": "DOCK",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

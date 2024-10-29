@@ -11,16 +11,16 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 //TODO unit test
-class EducationBuildingModuleValidator implements DataValidator<Map<String, EducationBuildingModule>> {
+class EducationBuildingModuleValidator implements DataValidator<Map<String, EducationBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
     private final EducationValidator educationValidator;
 
     @Override
-    public void validate(Map<String, EducationBuildingModule> item) {
+    public void validate(Map<String, EducationBuildingModuleData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String s, EducationBuildingModule educationBuildingModule) {
+    private void validate(String s, EducationBuildingModuleData educationBuildingModule) {
         buildingModuleValidator.validate(educationBuildingModule);
         educationValidator.validate(educationBuildingModule.getEducations());
 

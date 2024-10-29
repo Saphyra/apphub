@@ -2,7 +2,7 @@
   "id": "transformer",
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
@@ -13,7 +13,7 @@
       "batchTicks": 1,
       "fuelLastsFotTicks": 1,
       "constructionRequirements": {
-        "requiredWorkPoints": 0,
+        "requiredWorkPoints": 1,
         "requiredResources": {
         }
       }

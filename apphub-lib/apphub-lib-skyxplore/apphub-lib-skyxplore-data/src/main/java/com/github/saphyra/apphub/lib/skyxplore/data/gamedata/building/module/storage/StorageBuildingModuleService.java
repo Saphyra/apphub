@@ -5,18 +5,18 @@ import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StorageBuildingModuleService extends ValidationAbstractDataService<String, StorageBuildingModule> {
+public class StorageBuildingModuleService extends ValidationAbstractDataService<String, StorageBuildingModuleData> {
     public StorageBuildingModuleService(ContentLoaderFactory contentLoaderFactory, StorageBuildingModuleValidator validator) {
         super("/data/building/module/storage", contentLoaderFactory, validator);
     }
 
     @Override
     public void init() {
-        load(StorageBuildingModule.class);
+        load(StorageBuildingModuleData.class);
     }
 
     @Override
-    public void addItem(StorageBuildingModule content, String fileName) {
+    public void addItem(StorageBuildingModuleData content, String fileName) {
         put(content.getId(), content);
     }
 }

@@ -11,6 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BuildingAllocation {
     private final UUID buildingAllocationId;
-    private final UUID buildingId;
+    private final UUID buildingId; //TODO rename to buildingModuleId
     private final UUID processId;
 }

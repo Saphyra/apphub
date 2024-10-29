@@ -58,7 +58,7 @@ public class PlanetStorageDetailQueryServiceTest {
 
     @Test
     public void getStorageDetails() {
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
+        given(storageCalculator.calculateStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
         given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(RESERVED_STORAGE_AMOUNT);
         given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ALLOCATED_AMOUNT);

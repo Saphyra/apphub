@@ -10,16 +10,16 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 //TODO unit test
-public class PowerSupplyBuildingModuleValidator implements DataValidator<Map<String, PowerSupplyBuildingModule>> {
+public class PowerSupplyBuildingModuleValidator implements DataValidator<Map<String, PowerSupplyBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
     private final EnergyProductionValidator energyProductionValidator;
 
     @Override
-    public void validate(Map<String, PowerSupplyBuildingModule> item) {
+    public void validate(Map<String, PowerSupplyBuildingModuleData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String id, PowerSupplyBuildingModule powerSupplyBuildingModule) {
+    private void validate(String id, PowerSupplyBuildingModuleData powerSupplyBuildingModule) {
         buildingModuleValidator.validate(powerSupplyBuildingModule);
         energyProductionValidator.validate(powerSupplyBuildingModule.getProductions());
     }

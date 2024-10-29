@@ -11,14 +11,14 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 //TODO unit test
-public class StorageBuildingModuleValidator implements DataValidator<Map<String, StorageBuildingModule>> {
+public class StorageBuildingModuleValidator implements DataValidator<Map<String, StorageBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
 
-    public void validate(Map<String, StorageBuildingModule> item) {
+    public void validate(Map<String, StorageBuildingModuleData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String id, StorageBuildingModule storageBuildingModule) {
+    private void validate(String id, StorageBuildingModuleData storageBuildingModule) {
         buildingModuleValidator.validate(storageBuildingModule);
 
         ValidationUtil.notEmpty(storageBuildingModule.getStores(), "stores");

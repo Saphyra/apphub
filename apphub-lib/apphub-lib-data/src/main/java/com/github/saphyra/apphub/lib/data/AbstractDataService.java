@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.data;
 
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +31,7 @@ public abstract class AbstractDataService<K, V> extends HashMap<K, V> implements
             .load();
     }
 
+    @PostConstruct
     public abstract void init();
 
     public abstract void addItem(V content, String fileName);

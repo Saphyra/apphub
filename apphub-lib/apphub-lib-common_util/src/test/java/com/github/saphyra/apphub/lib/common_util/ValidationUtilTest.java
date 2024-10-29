@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.lib.common_util;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -174,7 +175,7 @@ public class ValidationUtilTest {
 
     @Test
     public void notEmpty_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty(null, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty((Collection<?>) null, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }

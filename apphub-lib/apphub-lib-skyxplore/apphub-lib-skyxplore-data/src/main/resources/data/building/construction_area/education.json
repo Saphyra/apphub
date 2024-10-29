@@ -6,10 +6,10 @@
   "slots": {
     "SMALL_STORAGE": 4,
     "BASIC_POWER_SUPPLY": 1,
-    "SCHOOL": 3
+    "EDUCATION": 3
   },
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   }

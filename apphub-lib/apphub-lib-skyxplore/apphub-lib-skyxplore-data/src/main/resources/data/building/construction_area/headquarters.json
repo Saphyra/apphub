@@ -14,7 +14,7 @@
     "HQ_CANTEEN": 1
   },
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   }

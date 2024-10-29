@@ -2,7 +2,7 @@
   "id": "large_container_storage",
   "category": "LARGE_STORAGE",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

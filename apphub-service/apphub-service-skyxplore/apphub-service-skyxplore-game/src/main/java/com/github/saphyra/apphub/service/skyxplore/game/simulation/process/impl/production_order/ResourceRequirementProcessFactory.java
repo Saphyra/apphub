@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProducerBuildingModule;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,13 +22,12 @@ class ResourceRequirementProcessFactory {
     private final ProductionBuildingService productionBuildingService;
     private final ProductionRequirementsAllocationService productionRequirementsAllocationService;
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
-    private final HeadquartersUtil headquartersUtil;
 
-    List<ProductionOrderProcess> createResourceRequirementProcesses(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
+    List<ProductionOrderProcess> createResourceRequirementProcesses(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String resourceDataId, int amount, String producerBuildingDataId) {
         return Optional.ofNullable(productionBuildingService.get(producerBuildingDataId))
-            .map(ProductionBuildingData::getGives)
-            .map(gives -> gives.get(dataId))
-            .orElseGet(() -> headquartersUtil.getProductionData(dataId))
+            .map(ProducerBuildingModule::getProduces)
+            .flatMap(productions -> productions.stream().filter(production -> production.getResourceDataId().equals(resourceDataId)).findAny())
+            .orElseThrow(() -> ExceptionFactory.reportedException(producerBuildingDataId + " cannot produce " + resourceDataId))
             .getConstructionRequirements()
             .getRequiredResources()
             .entrySet()

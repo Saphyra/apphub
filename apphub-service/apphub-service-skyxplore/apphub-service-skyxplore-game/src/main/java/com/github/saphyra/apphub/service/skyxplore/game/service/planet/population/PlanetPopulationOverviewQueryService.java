@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
@@ -25,7 +24,7 @@ public class PlanetPopulationOverviewQueryService {
         int population = gameData.getCitizens()
             .getByLocation(planetId)
             .size();
-        int capacity = storageCalculator.calculateCapacity(gameData, planetId, StorageType.CITIZEN);
+        int capacity = storageCalculator.calculateDwellingCapacity(gameData, planetId);
 
         return PlanetPopulationOverviewResponse.builder()
             .population(population)

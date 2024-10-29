@@ -2,7 +2,7 @@
   "id": "fossil_fuel_generator",
   "category": "LARGE_POWER_SUPPLY",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
@@ -16,7 +16,7 @@
       "batchTicks": 10,
       "fuelLastsFotTicks": 600,
       "constructionRequirements": {
-        "requiredWorkPoints": 0,
+        "requiredWorkPoints": 1,
         "requiredResources": {
           "coal": 1
         }
@@ -28,7 +28,7 @@
       "batchTicks": 10,
       "fuelLastsFotTicks": 300,
       "constructionRequirements": {
-        "requiredWorkPoints": 0,
+        "requiredWorkPoints": 1,
         "requiredResources": {
           "log": 1
         }
@@ -40,7 +40,7 @@
       "batchTicks": 10,
       "fuelLastsFotTicks": 600,
       "constructionRequirements": {
-        "requiredWorkPoints": 0,
+        "requiredWorkPoints": 1,
         "requiredResources": {
           "oil": 1
         }
