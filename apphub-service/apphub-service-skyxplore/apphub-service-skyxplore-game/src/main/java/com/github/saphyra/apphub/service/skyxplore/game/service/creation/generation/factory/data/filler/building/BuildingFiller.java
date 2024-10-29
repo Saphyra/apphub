@@ -46,7 +46,7 @@ public class BuildingFiller {
 
     private void placeHeadquarters(Planet planet, GameData gameData) {
         Surface surface = emptySurfaceProvider.getEmptySurfaceForType(
-            SurfaceType.CONCRETE,
+            SurfaceType.DESERT,
             gameData.getSurfaces().getByPlanetId(planet.getPlanetId()),
             gameData
         );

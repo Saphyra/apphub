@@ -11,10 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SurfaceBuildingResponse {
-    private UUID buildingId;
+public class SurfaceConstructionAreaResponse {
+    private UUID constructionAreaId;
     private String dataId;
-    private int level;
     private ConstructionResponse construction;
     private DeconstructionResponse deconstruction;
 }

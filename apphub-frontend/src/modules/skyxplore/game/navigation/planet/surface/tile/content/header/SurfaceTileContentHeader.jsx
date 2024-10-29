@@ -2,30 +2,30 @@ import React from "react";
 import localizationData from "./surface_tile_content_header_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import TerraformationHeader from "./content/TerraformationHeader";
-import BuildingConstructionHeader from "./content/BuildingConstructionHeader";
-import BuildingDeconstructionHeader from "./content/BuildingDeconstructionHeader";
-import BuildingDefaultHeader from "./content/BuildingDefaultHeader";
+import ConstructionAreaConstructionHeader from "./content/ConstructionAreaConstructionHeader";
+import ConstructionAreaDeconstructionHeader from "./content/ConstructionAreaDeconstructionHeader";
+import ConstructionAreaDefaultHeader from "./content/ConstructionAreaDefaultHeader";
 import { hasValue, throwException } from "../../../../../../../../../common/js/Utils";
 
 const SurfaceTileContentHeader = ({ surface }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
-        if (hasValue(surface.building)) {
-            const building = surface.building;
-            if (hasValue(building.construction)) {
-                return <BuildingConstructionHeader
+        if (hasValue(surface.constructionArea)) {
+            const constructionArea = surface.constructionArea;
+            if (hasValue(constructionArea.construction)) {
+                return <ConstructionAreaConstructionHeader
                     localizationHandler={localizationHandler}
-                    building={building}
+                    constructionArea={constructionArea}
                 />
-            } else if (hasValue(building.deconstruction)) {
-                return <BuildingDeconstructionHeader
+            } else if (hasValue(constructionArea.deconstruction)) {
+                return <ConstructionAreaDeconstructionHeader
                     localizationHandler={localizationHandler}
                 />
             } else {
-                return <BuildingDefaultHeader
+                return <ConstructionAreaDefaultHeader
                     localizationHandler={localizationHandler}
-                    building={building}
+                    constructionArea={constructionArea}
                 />
             }
         } else if (hasValue(surface.terraformation)) {
@@ -33,6 +33,7 @@ const SurfaceTileContentHeader = ({ surface }) => {
                 terraformation={surface.terraformation}
             />
         } else {
+            console.log(surface);
             throwException("IllegalState", "Surface has no building or terraformation in progress. It should be an empty surface.")
         }
     }

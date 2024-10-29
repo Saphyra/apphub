@@ -2,7 +2,7 @@ import ConfirmationDialogData from "../../../../../../../../../../common/compone
 import Button from "../../../../../../../../../../common/component/input/Button";
 import { SKYXPLORE_BUILDING_DECONSTRUCT } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
-const confirmDeconstructBuilding = (
+const confirmDeconstructConstructionArea = (
     localizationHandler,
     buildingLocalizationHandler,
     surface,
@@ -11,18 +11,18 @@ const confirmDeconstructBuilding = (
 ) => {
     const dialogData = new ConfirmationDialogData(
         "skyxplore-game-planet-surface-confirm-deconstruct-building",
-        localizationHandler.get("confirm-deconstruct-building-title"),
-        localizationHandler.get("confirm-deconstruct-building-content", { buildingName: buildingLocalizationHandler.get(surface.building.dataId) }),
+        localizationHandler.get("confirm-deconstruct-construction-area-title"),
+        localizationHandler.get("confirm-deconstruct-construction-area-content", { constructionAreaName: buildingLocalizationHandler.get(surface.constructionArea.dataId) }),
         [
             <Button
                 key="deconstruct"
-                id="skyxplore-game-planet-surface-confirm-deconstruct-building-button"
+                id="skyxplore-game-planet-surface-confirm-deconstruct-construction-area-button"
                 label={localizationHandler.get("deconstruct")}
-                onclick={() => deconstructBuilding(planetId, surface, setConfirmationDialogData)}
+                onclick={() => deconstructConstructionArea(planetId, surface, setConfirmationDialogData)}
             />,
             <Button
                 key="cancel"
-                id="skyxplore-game-planet-surface-confirm-deconstruct-building-cancel-button"
+                id="skyxplore-game-planet-surface-confirm-deconstruct-construction-area-cancel-button"
                 onclick={() => setConfirmationDialogData(null)}
                 label={localizationHandler.get("cancel")}
             />
@@ -32,11 +32,12 @@ const confirmDeconstructBuilding = (
     setConfirmationDialogData(dialogData);
 }
 
-const deconstructBuilding = async (planetId, surface, setConfirmationDialogData) => {
+const deconstructConstructionArea = async (planetId, surface, setConfirmationDialogData) => {
+    //TODO update endpoint
     await SKYXPLORE_BUILDING_DECONSTRUCT.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
         .send();
 
     setConfirmationDialogData(null);
 }
 
-export default confirmDeconstructBuilding;
+export default confirmDeconstructConstructionArea;

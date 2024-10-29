@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceConstructionAreaResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 public class BuildingConverter implements GameDataToModelConverter {
     private final ConstructionConverter constructionConverter;
     private final DeconstructionConverter deconstructionConverter;
@@ -43,7 +44,7 @@ public class BuildingConverter implements GameDataToModelConverter {
         return model;
     }
 
-    public SurfaceBuildingResponse toResponse(GameData gameData, Building building) {
+    public SurfaceConstructionAreaResponse toResponse(GameData gameData, Building building) {
         ConstructionResponse constructionResponse = gameData.getConstructions()
             .findByExternalReference(building.getBuildingId())
             .map(constructionConverter::toResponse)
@@ -54,10 +55,9 @@ public class BuildingConverter implements GameDataToModelConverter {
             .map(deconstructionConverter::toResponse)
             .orElse(null);
 
-        return SurfaceBuildingResponse.builder()
-            .buildingId(building.getBuildingId())
+        return SurfaceConstructionAreaResponse.builder()
+            .constructionAreaId(building.getBuildingId())
             .dataId(building.getDataId())
-            .level(building.getLevel())
             .construction(constructionResponse)
             .deconstruction(deconstructionResponse)
             .build();

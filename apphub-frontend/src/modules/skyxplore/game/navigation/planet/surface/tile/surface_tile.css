@@ -54,6 +54,10 @@
     background-image: url("../../../../common/img/surface_type/military.png");
 }
 
+.skyxplore-game-planet-surface-tile.surface-type-field {
+    background-image: url("../../../../common/img/surface_type/field.jpg");
+}
+
 .skyxplore-game-planet-surface-footer {
     position: absolute;
     left: 0;

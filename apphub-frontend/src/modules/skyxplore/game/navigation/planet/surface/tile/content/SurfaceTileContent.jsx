@@ -4,9 +4,9 @@ import SurfaceTileContentHeader from "./header/SurfaceTileContentHeader";
 import SurfaceTileContentFooter from "./footer/SurfaceTileContentFooter";
 import { hasValue } from "../../../../../../../../common/js/Utils";
 
-const SurfaceTileContent = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
+const SurfaceTileContent = ({ surface, setConfirmationDialogData, planetId }) => {
     return (
-        <div className={"skyxplore-game-planet-surface-tile-content" + (hasValue(surface.building) ? " building-" + surface.building.dataId : "")}>
+        <div className={"skyxplore-game-planet-surface-tile-content" + (hasValue(surface.constructionArea) ? " construction-area-" + surface.constructionArea.dataId : "")}>
             <SurfaceTileContentHeader
                 surface={surface}
             />
@@ -15,7 +15,6 @@ const SurfaceTileContent = ({ surface, setConfirmationDialogData, planetId, open
                 surface={surface}
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
-                openPage={openPage}
             />
         </div>
     );
