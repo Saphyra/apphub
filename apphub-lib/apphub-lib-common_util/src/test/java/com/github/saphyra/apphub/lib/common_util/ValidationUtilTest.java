@@ -174,7 +174,7 @@ public class ValidationUtilTest {
 
     @Test
     public void notEmpty_null() {
-        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty(null, FIELD));
+        Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty((List<?>) null, FIELD));
 
         ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
     }

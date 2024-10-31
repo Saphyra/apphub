@@ -124,6 +124,7 @@ public class ValidationUtil {
         }
     }
 
+    //TODO unit test
     public static void notEmpty(Map<?, ?> map, String field) {
         notNull(map, field);
         if (map.isEmpty()) {
