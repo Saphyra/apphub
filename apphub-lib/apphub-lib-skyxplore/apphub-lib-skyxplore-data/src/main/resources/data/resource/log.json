@@ -1,0 +1,5 @@
+{
+  "id": "log",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

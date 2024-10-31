@@ -2,7 +2,7 @@
   "id": "hq_barracks",
   "category": "HQ_BARRACKS",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

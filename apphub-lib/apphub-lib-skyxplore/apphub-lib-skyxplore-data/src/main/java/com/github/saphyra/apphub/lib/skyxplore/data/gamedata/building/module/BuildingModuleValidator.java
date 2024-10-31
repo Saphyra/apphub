@@ -13,11 +13,11 @@ public class BuildingModuleValidator {
     private final GameDataItemValidator gameDataItemValidator;
     private final ConstructionRequirementsValidator constructionRequirementsValidator;
 
-    public void validate(BuildingModule buildingModule) {
-        gameDataItemValidator.validate(buildingModule);
-        constructionRequirementsValidator.validate(buildingModule.getConstructionRequirements());
+    public void validate(BuildingModuleData buildingModuleData) {
+        gameDataItemValidator.validate(buildingModuleData);
+        constructionRequirementsValidator.validate(buildingModuleData.getConstructionRequirements());
 
-        ValidationUtil.notNull(buildingModule.getCategory(), "category");
-        ValidationUtil.notNull(buildingModule.getConstructionRequirements(), "constructionRequirements");
+        ValidationUtil.notNull(buildingModuleData.getCategory(), "category");
+        ValidationUtil.notNull(buildingModuleData.getConstructionRequirements(), "constructionRequirements");
     }
 }

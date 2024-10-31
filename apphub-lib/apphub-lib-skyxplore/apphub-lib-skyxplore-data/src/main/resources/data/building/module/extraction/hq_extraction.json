@@ -2,13 +2,14 @@
   "id": "hq_extraction",
   "category": "HQ_EXTRACTION",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "produces": [
     {
       "resourceDataId": "log",
+      "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -18,6 +19,7 @@
     },
     {
       "resourceDataId": "stone",
+      "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {
@@ -27,6 +29,7 @@
     },
     {
       "resourceDataId": "water",
+      "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

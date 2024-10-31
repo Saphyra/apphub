@@ -16,6 +16,6 @@ public class SurfaceResponse {
     private UUID surfaceId;
     private Coordinate coordinate;
     private String surfaceType;
-    private SurfaceBuildingResponse building;
+    private SurfaceConstructionAreaResponse constructionArea;
     private ConstructionResponse terraformation;
 }

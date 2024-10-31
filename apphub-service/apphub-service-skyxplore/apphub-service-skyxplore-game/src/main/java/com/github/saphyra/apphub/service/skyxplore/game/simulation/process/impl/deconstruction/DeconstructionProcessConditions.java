@@ -19,7 +19,7 @@ class DeconstructionProcessConditions {
             .getExternalReference();
 
         return !gameData.getBuildingAllocations()
-            .getByBuildingId(buildingId)
+            .getByBuildingModuleId(buildingId)
             .isEmpty();
     }
 

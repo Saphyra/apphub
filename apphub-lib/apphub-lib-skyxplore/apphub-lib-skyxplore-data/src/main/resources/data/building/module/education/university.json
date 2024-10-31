@@ -1,0 +1,13 @@
+{
+  "id": "university",
+  "category": "EDUCATION",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredResources": {
+    }
+  },
+  "capacity": 5,
+  "educations": [
+
+  ]
+}

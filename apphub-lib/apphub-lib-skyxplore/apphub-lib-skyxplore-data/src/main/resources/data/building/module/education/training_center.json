@@ -1,0 +1,13 @@
+{
+  "id": "training_center",
+  "category": "EDUCATION",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredResources": {
+    }
+  },
+  "capacity": 10,
+  "educations": [
+
+  ]
+}

@@ -11,15 +11,15 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 //TODO unit test
-class DockBuildingModuleValidator implements DataValidator<Map<String, DockBuildingModule>> {
+class DockBuildingModuleValidator implements DataValidator<Map<String, DockBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
 
     @Override
-    public void validate(Map<String, DockBuildingModule> item) {
+    public void validate(Map<String, DockBuildingModuleData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String id, DockBuildingModule dockBuildingModule) {
+    private void validate(String id, DockBuildingModuleData dockBuildingModule) {
         buildingModuleValidator.validate(dockBuildingModule);
 
         ValidationUtil.notNull(dockBuildingModule.getSize(), "size");

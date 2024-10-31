@@ -7,13 +7,13 @@
         "en": "Upgrade",
         "hu": "Fejlesztés"
     },
-    "confirm-deconstruct-building-title": {
-        "en": "Deconstruct building?",
-        "hu": "Épület lerombolása?"
+    "confirm-deconstruct-construction-area-title": {
+        "en": "Deconstruct construction area?",
+        "hu": "Építési terület lerombolása?"
     },
-    "confirm-deconstruct-building-content": {
-        "en": "Are you sure you want to deconstruct a(n) {buildingName}?",
-        "hu": "Biztosan le akarsz rombolni egy {buildingName}-t?"
+    "confirm-deconstruct-construction-area-content": {
+        "en": "Are you sure you want to deconstruct a(n) {constructionAreaName}?",
+        "hu": "Biztosan le akarsz rombolni egy {constructionAreaName}-t?"
     },
     "cancel": {
         "en": "Cancel",

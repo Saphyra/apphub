@@ -10,7 +10,7 @@ import java.util.List;
 //TODO unit test
 class EducationValidator {
     public void validate(List<Education> educations) {
-        ValidationUtil.notEmpty(educations, "educations");
+        ValidationUtil.notNull(educations, "educations");
 
         educations.forEach(this::validate);
     }

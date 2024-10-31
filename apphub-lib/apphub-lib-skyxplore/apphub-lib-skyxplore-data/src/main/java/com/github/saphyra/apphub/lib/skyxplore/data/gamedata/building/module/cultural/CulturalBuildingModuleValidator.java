@@ -10,15 +10,15 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-class CulturalBuildingModuleValidator implements DataValidator<Map<String, CulturalBuildingModule>> {
+class CulturalBuildingModuleValidator implements DataValidator<Map<String, CulturalBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
 
     @Override
-    public void validate(Map<String, CulturalBuildingModule> item) {
+    public void validate(Map<String, CulturalBuildingModuleData> item) {
         item.forEach(this::validate);
     }
 
-    private void validate(String s, CulturalBuildingModule culturalBuildingModule) {
+    private void validate(String s, CulturalBuildingModuleData culturalBuildingModule) {
         buildingModuleValidator.validate(culturalBuildingModule);
 
         ValidationUtil.atLeast(culturalBuildingModule.getCapacity(), 1, "capacity");

@@ -2,7 +2,7 @@
   "id": "large_solar_panel",
   "category": "LARGE_POWER_SUPPLY",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
@@ -17,7 +17,7 @@
       "batchTicks": 10,
       "fuelLastsFotTicks": 100000,
       "constructionRequirements": {
-        "requiredWorkPoints": 0,
+        "requiredWorkPoints": 1,
         "requiredResources": {
         }
       }

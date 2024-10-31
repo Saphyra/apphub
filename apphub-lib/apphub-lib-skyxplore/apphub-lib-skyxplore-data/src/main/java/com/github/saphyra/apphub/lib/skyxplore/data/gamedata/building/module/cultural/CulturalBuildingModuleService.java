@@ -5,18 +5,18 @@ import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CulturalBuildingModuleService extends ValidationAbstractDataService<String, CulturalBuildingModule> {
+public class CulturalBuildingModuleService extends ValidationAbstractDataService<String, CulturalBuildingModuleData> {
     public CulturalBuildingModuleService(ContentLoaderFactory contentLoaderFactory, CulturalBuildingModuleValidator validator) {
         super("/data/building/module/cultural", contentLoaderFactory, validator);
     }
 
     @Override
     public void init() {
-        load(CulturalBuildingModule.class);
+        load(CulturalBuildingModuleData.class);
     }
 
     @Override
-    public void addItem(CulturalBuildingModule content, String fileName) {
+    public void addItem(CulturalBuildingModuleData content, String fileName) {
         put(content.getId(), content);
     }
 }

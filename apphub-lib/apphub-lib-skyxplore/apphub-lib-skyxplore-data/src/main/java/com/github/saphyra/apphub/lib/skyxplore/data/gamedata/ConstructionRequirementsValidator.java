@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.DataValidator;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,8 @@ import static java.util.Objects.requireNonNull;
 public class ConstructionRequirementsValidator implements DataValidator<ConstructionRequirements> {
     @Override
     public void validate(ConstructionRequirements item) {
+        ValidationUtil.notNull(item, "constructionRequirements");
+
         requireNonNull(item.getRequiredWorkPoints(), "requiredWorkPoints must not be null.");
         if (item.getRequiredWorkPoints() < 1) {
             throw new IllegalStateException("requiredWorkPoints must be higher than 0");

@@ -121,7 +121,7 @@ class WorkProcessHelperTest {
     @Test
     void allocateParentAsBuildingIfPossible_alreadyAllocated() {
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingId(EXTERNAL_REFERENCE)).willReturn(List.of(buildingAllocation));
+        given(buildingAllocations.getByBuildingModuleId(EXTERNAL_REFERENCE)).willReturn(List.of(buildingAllocation));
 
         underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
@@ -131,7 +131,7 @@ class WorkProcessHelperTest {
     @Test
     void allocateParentAsBuildingIfPossible() {
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingId(EXTERNAL_REFERENCE)).willReturn(Collections.emptyList());
+        given(buildingAllocations.getByBuildingModuleId(EXTERNAL_REFERENCE)).willReturn(Collections.emptyList());
         given(buildingAllocationFactory.create(EXTERNAL_REFERENCE, PROCESS_ID)).willReturn(buildingAllocation);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingAllocationConverter.toModel(GAME_ID, buildingAllocation)).willReturn(buildingAllocationModel);

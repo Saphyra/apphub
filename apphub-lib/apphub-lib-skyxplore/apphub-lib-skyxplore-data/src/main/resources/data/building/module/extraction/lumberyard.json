@@ -2,16 +2,17 @@
   "id": "lumberyard",
   "category": "EXTRACTION_SITE",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "supportedSurfacesRestriction": [
-    "FORREST"
+    "FOREST"
   ],
   "produces": [
     {
       "resourceDataId": "log",
+      "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

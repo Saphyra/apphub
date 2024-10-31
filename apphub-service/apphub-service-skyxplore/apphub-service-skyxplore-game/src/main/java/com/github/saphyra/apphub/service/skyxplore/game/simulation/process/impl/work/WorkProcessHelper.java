@@ -35,7 +35,7 @@ class WorkProcessHelper {
     private final UpdateTargetService updateTargetService;
 
     public void allocateParentAsBuildingIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID externalReference) {
-        if (gameData.getBuildingAllocations().getByBuildingId(externalReference).isEmpty()) {
+        if (gameData.getBuildingAllocations().getByBuildingModuleId(externalReference).isEmpty()) {
             createAndSaveBuildingAllocation(progressDiff, gameData, processId, externalReference);
         } else {
             log.debug("Someone is already working on {}", processId);

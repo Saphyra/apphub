@@ -2,7 +2,7 @@
   "id": "spa",
   "category": "CULTURAL",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

@@ -12,7 +12,7 @@
     "SMALL_MILITARY": 2
   },
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   }

@@ -2,7 +2,7 @@
   "id": "small_container_storage",
   "category": "SMALL_STORAGE",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

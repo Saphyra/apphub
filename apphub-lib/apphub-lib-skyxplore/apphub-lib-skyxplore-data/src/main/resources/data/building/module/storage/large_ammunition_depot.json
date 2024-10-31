@@ -2,7 +2,7 @@
   "id": "large_ammunition_depot",
   "category": "LARGE_STORAGE",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },

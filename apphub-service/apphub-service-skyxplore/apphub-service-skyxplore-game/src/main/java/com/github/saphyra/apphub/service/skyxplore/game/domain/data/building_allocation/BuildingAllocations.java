@@ -13,9 +13,9 @@ public class BuildingAllocations extends Vector<BuildingAllocation> {
             .findAny();
     }
 
-    public List<BuildingAllocation> getByBuildingId(UUID buildingId) {
+    public List<BuildingAllocation> getByBuildingModuleId(UUID buildingModuleId) {
         return stream()
-            .filter(buildingAllocation -> buildingAllocation.getBuildingId().equals(buildingId))
+            .filter(buildingAllocation -> buildingAllocation.getBuildingId().equals(buildingModuleId))
             .collect(Collectors.toList());
     }
 }

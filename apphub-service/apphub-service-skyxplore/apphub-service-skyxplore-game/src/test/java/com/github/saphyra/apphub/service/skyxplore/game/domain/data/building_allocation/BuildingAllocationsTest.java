@@ -49,6 +49,6 @@ class BuildingAllocationsTest {
 
         underTest.addAll(List.of(buildingAllocation1, buildingAllocation2));
 
-        assertThat(underTest.getByBuildingId(BUILDING_ID)).containsExactly(buildingAllocation1);
+        assertThat(underTest.getByBuildingModuleId(BUILDING_ID)).containsExactly(buildingAllocation1);
     }
 }

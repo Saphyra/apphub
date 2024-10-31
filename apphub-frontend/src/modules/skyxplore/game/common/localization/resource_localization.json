@@ -74,5 +74,29 @@
     "coal": {
         "en": "Coal",
         "hu": "Szén"
+    },
+    "steel_ingot": {
+        "en": "Steel ingot",
+        "hu": "Acélrúd"
+    },
+    "fissile_material": {
+        "en": "Fissile material",
+        "hu": "Hasadóanyag"
+    },
+    "log": {
+        "en": "Log",
+        "hu": "Farönk"
+    },
+    "survival_food": {
+        "en": "Survival food",
+        "hu": "Ételtartalék"
+    },
+    "meat": {
+        "en": "Meat",
+        "hu": "Hús"
+    },
+    "crop": {
+        "en": "Crop",
+        "hu": "Gabona"
     }
 }

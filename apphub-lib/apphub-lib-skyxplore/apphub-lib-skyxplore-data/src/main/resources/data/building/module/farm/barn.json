@@ -2,13 +2,14 @@
   "id": "barn",
   "category": "FARM",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "produces": [
     {
       "resourceDataId": "meat",
+      "requiredSkill": "FARMING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

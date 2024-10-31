@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
@@ -18,11 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,7 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GameDataControllerImpl implements SkyXploreGameDataController {
     private final Map<String, ? extends GameDataItem> items;
-    private final Map<String, ? extends BuildingData> buildings;
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final List<String> resources;
 
@@ -43,12 +37,6 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
             .flatMap(dataService -> dataService.values().stream())
             .collect(Collectors.toMap(GameDataItem::getId, Function.identity()));
         this.terraformingPossibilitiesService = terraformingPossibilitiesService;
-
-        this.buildings = items.values()
-            .stream()
-            .filter(gameDataItem -> gameDataItem instanceof BuildingData)
-            .map(gameDataItem -> (BuildingData) gameDataItem)
-            .collect(Collectors.toMap(GameDataItem::getId, Function.identity()));
 
         this.resources = resourceDataService.keySet()
             .stream()
@@ -65,14 +53,7 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     @Override
     public List<String> getAvailableBuildings(String surfaceTypeString) {
         log.info("Querying available buildings for surfaceType {}", surfaceTypeString);
-
-        SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
-
-        return buildings.values()
-            .stream()
-            .filter(buildingData -> buildingData.getPlaceableSurfaceTypes().contains(surfaceType))
-            .map(GameDataItem::getId)
-            .collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
     @Override

@@ -2,13 +2,14 @@
   "id": "sawmill",
   "category": "PRODUCTION",
   "constructionRequirements": {
-    "requiredWorkPoints": 0,
+    "requiredWorkPoints": 1,
     "requiredResources": {
     }
   },
   "produces": [
     {
       "resourceDataId": "plank",
+      "requiredSkill": "ENGINEERING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
         "requiredResources": {

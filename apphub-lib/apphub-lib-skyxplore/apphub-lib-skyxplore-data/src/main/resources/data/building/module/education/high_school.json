@@ -1,0 +1,13 @@
+{
+  "id": "high_school",
+  "category": "EDUCATION",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredResources": {
+    }
+  },
+  "capacity": 10,
+  "educations": [
+
+  ]
+}
