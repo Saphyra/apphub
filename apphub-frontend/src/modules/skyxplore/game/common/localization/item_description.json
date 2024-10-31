@@ -34,5 +34,9 @@
     "headquarters": {
         "en": "Center of the colony. Provides basic needs of citizens, and initial construction.",
         "hu": "A kolónia központja. Kiszolgálja a telepesek, és az elsődleges építkezések alapvető szükségleteit."
+    },
+    "geothermic_power_plant": {
+        "en": "Generates energy using heat of the planet's core",
+        "hu": "Energiát termel a bolygó magjának hőjéből"
     }
 }
