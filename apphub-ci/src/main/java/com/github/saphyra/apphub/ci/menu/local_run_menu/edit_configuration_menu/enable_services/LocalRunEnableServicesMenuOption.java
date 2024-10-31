@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.utils.Utils;
 import com.github.saphyra.apphub.ci.value.Service;
 import lombok.Builder;
@@ -27,8 +28,8 @@ public class LocalRunEnableServicesMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return String.valueOf(index);
+    public MenuOrder getOrder() {
+        return () -> index;
     }
 
     @Override

@@ -6,7 +6,7 @@ import UpdateType from "./UpdateType";
 import MoveDirection from "../MoveDirection";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 
-const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true }) => {
+const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true , tabIndex}) => {
     const [contentEditingEnabled, setContentEditingEnabled] = useState(false);
     const [modifiedContent, setModifiedContent] = useState(item.content);
 
@@ -39,6 +39,13 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
         moveItem(item, MoveDirection.DOWN);
     }
 
+    const saveIfEnter = (e) => {
+        if (e.which === 13) {
+            updateContent(modifiedContent);
+            setContentEditingEnabled(false);
+        }
+    }
+
     return (
         <div className={"notebook-checklist-item" + (item.checked ? " checked" : "") + (editingEnabled ? " editable" : "")}>
             <div className="notebook-checklist-item-checked-wrapper">
@@ -59,6 +66,7 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
                         onchangeCallback={updateContent}
                         value={item.content}
                         disabled={!editingEnabled}
+                        tabIndex={tabIndex}
                     />
                     :
                     <div
@@ -114,6 +122,7 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
                         value={modifiedContent}
                         onchangeCallback={setModifiedContent}
                         style={{ width: 8 * modifiedContent.length + "px" }}
+                        onkeyupCallback={saveIfEnter}
                     />}
                     choices={[
                         <Button

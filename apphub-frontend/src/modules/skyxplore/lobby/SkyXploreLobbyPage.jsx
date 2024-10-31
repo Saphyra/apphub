@@ -10,7 +10,6 @@ import { ToastContainer } from "react-toastify";
 import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import Chat from "./lobby_page/Chat";
 import Settings from "./lobby_page/Settings";
 import Ais from "./lobby_page/Ais";
@@ -18,17 +17,19 @@ import Players from "./lobby_page/Players";
 import Friends from "./lobby_page/Friends";
 import Constants from "../../../common/js/Constants";
 import Spinner from "../../../common/component/Spinner";
-import Stream from "../../../common/js/collection/Stream";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
-import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_GET_SETTINGS, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
+import { processAiModifiedEvent, processAiRemovedEvent, processAllianceCreatedEvent, processChatSendMessageEvent, processExitEvent, processPlayerConnectedEvent, processPlayerDisconnectedEvent, processPlayerModifiedEvent, processUserOfflineEvent, processUserOnlineEvent } from "./SkyXploreLobbyWebSocketProcessors";
+import useLoader from "../../../common/hook/Loader";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
-    const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_LOBBY;
 
+    //Platform
     const [lobbyData, setLobbyData] = useState({
         lobbyName: "",
         host: false,
@@ -36,26 +37,48 @@ const SkyXploreLobbyPage = () => {
         ownUserId: null,
         expectedPlayers: []
     });
-    const [userReady, setUserReady] = useState(false);
-    const [lastEvent, setLastEvent] = useState(null);
-    const { sendMessage, lastMessage } = useWebSocket(
-        webSocketUrl,
-        {
-            share: true,
-            shouldReconnect: () => true,
-        }
-    );
-    const [alliances, setAlliances] = useState([]);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [displayStartGameDialog, setDisplayStartGameDialog] = useState(false);
+
+    //Chat
+    const [messages, setMessages] = useState([]);
+    const [userReady, setUserReady] = useState(false);
+
+    //Players
+    const [alliances, setAlliances] = useState([]);
+    const [ais, setAis] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [players, setPlayers] = useState({});
+
+    //Settings
+    const [settings, setSettings] = useState({
+        maxPlayersPerSolarSystem: 0,
+        additionalSolarSystems: {
+            min: 0,
+            max: 0
+        },
+        planetsPerSolarSystem: {
+            min: 0,
+            max: 0
+        },
+        planetSize: {
+            min: 0,
+            max: 0
+        }
+    });
+
+    const { sendMessage } = useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_LOBBY,
+        lastEvent => handleEvent(lastEvent)
+    );
 
     useEffect(() => checkRedirection(), []);
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useEffect(() => handleMessage(), [lastMessage]);
     useEffect(() => loadLobbyData(), []);
     useEffect(() => loadAlliances(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
+
+    useLoader(SKYXPLORE_LOBBY_GET_SETTINGS.createRequest(), setSettings);
 
     //Load
     const loadLobbyData = () => {
@@ -81,39 +104,48 @@ const SkyXploreLobbyPage = () => {
         Redirection.forLobby()
     }
 
-    const handleMessage = () => {
-        if (lastMessage === null) {
-            return;
-        }
-
-        const message = JSON.parse(lastMessage.data);
-
-        if (message.eventName === WebSocketEventName.PING) {
-            sendMessage(lastMessage.data);
-        }
-
-        setLastEvent(message);
-    }
-
     //WebSocket event handlers
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
-            const copy = new Stream(alliances)
-                .add(lastEvent.payload.alliance)
-                .toList();
-            setAlliances(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED) {
-            setDisplaySpinner(true);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED) {
-            window.location.href = Constants.SKYXPLORE_GAME_PAGE;
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
-            if (lastEvent.payload.host) {
-                window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
-            }
+    const handleEvent = (event) => {
+        switch (event.eventName) {
+            case WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED:
+                processAllianceCreatedEvent(event.payload, alliances, setAlliances, ais, setAis, players, setPlayers);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED:
+                setDisplaySpinner(true);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED:
+                window.location.href = Constants.SKYXPLORE_GAME_PAGE;
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE:
+                processChatSendMessageEvent(event.payload, lobbyData.ownUserId, messages, setMessages);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_EXIT:
+                processExitEvent(event.payload, localizationHandler, messages, setMessages, players, setPlayers);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED:
+                processPlayerConnectedEvent(event.payload, localizationHandler, messages, setMessages);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_DISCONNECTED:
+                processPlayerDisconnectedEvent(event.payload, localizationHandler, messages, setMessages);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED:
+                processAiModifiedEvent(event.payload, ais, setAis);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED:
+                processAiRemovedEvent(event.payload, ais, setAis);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE:
+                processUserOnlineEvent(event.payload, friends, setFriends);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE:
+                processUserOfflineEvent(event.payload.friendId, friends, setFriends);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED:
+                processPlayerModifiedEvent(event.payload, players, setPlayers);
+                break;
+            case WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED:
+                setSettings(event.payload);
+                break;
         }
     }
 
@@ -194,9 +226,9 @@ const SkyXploreLobbyPage = () => {
                 <main>
                     <Chat
                         localizationHandler={localizationHandler}
-                        lastEvent={lastEvent}
                         sendWsMessage={sendMessage}
-                        ownUserId={lobbyData.ownUserId}
+                        messages={messages}
+                        setMessages={setMessages}
                     />
 
                     <div id="skyxplore-lobby-middle-bar">
@@ -204,29 +236,32 @@ const SkyXploreLobbyPage = () => {
                             <Settings
                                 localizationHandler={localizationHandler}
                                 isHost={lobbyData.host}
-                                lastEvent={lastEvent}
+                                settings={settings}
                             />}
                         <Ais
                             localizationHandler={localizationHandler}
                             alliances={alliances}
                             isHost={lobbyData.host}
-                            lastEvent={lastEvent}
                             lobbyType={lobbyData.lobbyType}
+                            ais={ais}
+                            setAis={setAis}
                         />
                     </div>
 
                     <div id="skyxplore-lobby-right-bar">
                         <Friends
                             localizationHandler={localizationHandler}
-                            lastEvent={lastEvent}
+                            friends={friends}
+                            setFriends={setFriends}
                         />
 
                         <Players
                             localizationHandler={localizationHandler}
                             alliances={alliances}
                             isHost={lobbyData.host}
-                            lastEvent={lastEvent}
                             lobbyType={lobbyData.lobbyType}
+                            players={players}
+                            setPlayers={setPlayers}
                         />
                     </div>
                 </main>

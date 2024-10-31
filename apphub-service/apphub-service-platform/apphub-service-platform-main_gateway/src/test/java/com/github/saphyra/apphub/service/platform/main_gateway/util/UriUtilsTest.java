@@ -7,7 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -40,8 +43,15 @@ public class UriUtilsTest {
     }
 
     @Test
+    public void isRestCall_not() {
+        given(httpHeaders.getAccept()).willReturn(List.of(MediaType.TEXT_HTML));
+
+        assertThat(underTest.isRestCall(httpHeaders)).isFalse();
+    }
+
+    @Test
     public void isRestCall() {
-        given(httpHeaders.getFirst(Constants.REQUEST_TYPE_HEADER)).willReturn(Constants.REQUEST_TYPE_VALUE);
+        given(httpHeaders.getAccept()).willReturn(List.of(MediaType.APPLICATION_JSON));
 
         assertThat(underTest.isRestCall(httpHeaders)).isTrue();
     }

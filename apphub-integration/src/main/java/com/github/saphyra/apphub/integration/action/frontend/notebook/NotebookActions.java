@@ -73,4 +73,42 @@ public class NotebookActions {
 
         SleepUtil.sleep(2000);
     }
+
+    public static void selectAll(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-select-all-button"))
+            .click();
+    }
+
+    public static void unselectAll(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-unselect-all-button"))
+            .click();
+    }
+
+    public static void archiveSelected(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-archive-selected-button"))
+            .click();
+    }
+
+    public static void unarchiveSelected(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-unarchive-selected-button"))
+            .click();
+    }
+
+    public static void pinSelected(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-pin-selected-button"))
+            .click();
+    }
+
+    public static void unpinSelected(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-unpin-selected-button"))
+            .click();
+    }
+
+    public static void deleteSelected(WebDriver driver) {
+        driver.findElement(By.id("notebook-content-category-content-delete-selected-button"))
+            .click();
+
+        driver.findElement(By.id("notebook-delete-selected-items-confirm-button"))
+            .click();
+    }
 }

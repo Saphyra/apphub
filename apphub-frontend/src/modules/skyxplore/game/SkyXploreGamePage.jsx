@@ -15,10 +15,14 @@ import Navigation from "./navigation/Navigation";
 import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint";
 import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
-import PlayerDisconnectedPauseHandler from "./pause_and_resume/player_disconnected/PlayerDisconnectedPauseHandler";
 import Spinner from "../../../common/component/Spinner";
 import { GET_OWN_USER_ID } from "../../../common/js/dao/endpoints/GenericEndpoints";
-import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_SAVE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
+import { addAndSet, hasValue, isTrue } from "../../../common/js/Utils";
+import MapStream from "../../../common/js/collection/MapStream";
+import ChatConstants from "./chat/ChatConstants";
+import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -30,13 +34,24 @@ const SkyXploreGamePage = () => {
     const [userId, setUserId] = useState("");
     const [isHost, setIsHost] = useState(false);
 
+    const [paused, setPaused] = useState(true);
+
+    //Chat
+    const [messages, setMessages] = useState({});
+    const [currentChatRoom, setCurrentChatRoom] = useState(ChatConstants.GENERAL_CHAT_ROOM);
+    const [unreadMessages, setUnreadMessages] = useState({});
+    const [chatRooms, setChatRooms] = useState([]);
+
     useEffect(() => Redirection.forGame(), []);
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => fetchUserId(), []);
     useEffect(() => fetchIsHost(), []);
 
-    const { lastEvent, sendMessage } = useConnectToWebSocket(WebSocketEndpoint.SKYXPLORE_GAME_MAIN, undefined,)
+    const { sendMessage } = useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_GAME_MAIN,
+        event => processEvent(event)
+    );
 
     const fetchUserId = () => {
         const fetch = async () => {
@@ -62,6 +77,117 @@ const SkyXploreGamePage = () => {
     const [displayChat, setDisplayChat] = useState(false);
     //===End Chat
 
+    const processEvent = (event) => {
+        switch (event.eventName) {
+            case WebSocketEventName.SKYXPLORE_GAME_PAUSED:
+                setPaused(isTrue(event.payload));
+                break;
+            case WebSocketEventName.SKYXPLORE_GAME_USER_JOINED:
+            case WebSocketEventName.SKYXPLORE_GAME_USER_LEFT:
+            case WebSocketEventName.SKYXPLORE_GAME_CHAT_SEND_MESSAGE:
+                processChatEvent(event)
+                break;
+            case WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED:
+                addAndSet(chatRooms, event.payload, setChatRooms);
+                break;
+            case WebSocketEventName.SKYXPLORE_GAME_PLAYER_DISCONNECTED:
+                isHost && processPlayerDisconnectedEvent(event);
+                break;
+            case WebSocketEventName.SKYXPLORE_GAME_PLAYER_RECONNECTED:
+                isHost && processPlayerConnectedEvent(event);
+                break;
+        }
+    }
+
+    const processChatEvent = (event) => {
+        const roomId = event.payload.room;
+
+        const room = messages[roomId] || [];
+
+        room.push(event);
+
+        messages[roomId] = room;
+
+        const newMessages = new MapStream(messages)
+            .add(roomId, room)
+            .toObject();
+
+        setMessages(newMessages);
+
+        if (hasValue(event) && hasValue(event.payload) && hasValue(event.payload.room)) {
+            if (!displayChat || event.payload.room !== currentChatRoom) {
+                setMessageStatus(event.payload.room, true);
+            }
+        }
+    }
+
+    const setMessageStatus = (roomId, status) => {
+        const copy = new MapStream(unreadMessages)
+            .add(roomId, status)
+            .toObject();
+        setUnreadMessages(copy);
+    }
+
+    const processPlayerDisconnectedEvent = (lastEvent) => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "skyxplore-game-player-disconnected-dialog",
+            localizationHandler.get("player-disconnected-title"),
+            localizationHandler.get("player-disconnected-detail", { playerName: lastEvent.payload.value }),
+            [
+                <Button
+                    key="confirm"
+                    id="skyxplore-game-player-disconnected-confirm-button"
+                    label={localizationHandler.get("confirm")}
+                    onclick={closeConfirmationDialog}
+                />,
+                <Button
+                    key="resume"
+                    id="skyxplore-game-player-disconnected-resume-button"
+                    label={localizationHandler.get("resume")}
+                    onclick={resumeGame}
+                />
+            ]
+        ));
+    }
+
+    const processPlayerConnectedEvent = (lastEvent) => {
+        if (!hasValue(confirmationDialogData)) {
+            return;
+        }
+
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "skyxplore-game-player-reconnected-dialog",
+            localizationHandler.get("player-reconnected-title"),
+            localizationHandler.get("player-reconnected-detail", { playerName: lastEvent.payload.value }),
+            [
+                <Button
+                    key="close"
+                    id="skyxplore-game-player-reconnected-close-button"
+                    label={localizationHandler.get("close")}
+                    onclick={closeConfirmationDialog}
+                />,
+                <Button
+                    key="resume"
+                    id="skyxplore-game-player-reconnected-resume-button"
+                    label={localizationHandler.get("resume")}
+                    onclick={resumeGame}
+                />
+            ]
+        ));
+    }
+
+    const closeConfirmationDialog = () => {
+        setConfirmationDialogData(null);
+    }
+
+    const resumeGame = () => {
+        setConfirmationDialogData(null);
+
+        SKYXPLORE_GAME_PAUSE.createRequest({ value: false })
+            .send();
+    }
+
+
     const footer = () => {
         return <Footer
             leftButtons={[
@@ -80,8 +206,8 @@ const SkyXploreGamePage = () => {
                 />,
                 <PauseAndResumeGameButton
                     key="pause-and-resume"
-                    lastEvent={lastEvent}
                     isHost={isHost}
+                    paused={paused}
                 />
             ]}
             centerButtons={[]}
@@ -119,9 +245,15 @@ const SkyXploreGamePage = () => {
             <Chat
                 displayChat={displayChat}
                 setHasUnreadMessage={setHasUnreadMessage}
-                lastEvent={lastEvent}
                 userId={userId}
                 sendMessage={sendMessage}
+                messages={messages}
+                setMessageStatus={setMessageStatus}
+                unreadMessages={unreadMessages}
+                currentChatRoom={currentChatRoom}
+                setCurrentChatRoom={setCurrentChatRoom}
+                chatRooms={chatRooms}
+                setChatRooms={setChatRooms}
             />
 
             {confirmationDialogData &&
@@ -130,13 +262,6 @@ const SkyXploreGamePage = () => {
                     title={confirmationDialogData.title}
                     content={confirmationDialogData.content}
                     choices={confirmationDialogData.choices}
-                />
-            }
-
-            {isHost &&
-                <PlayerDisconnectedPauseHandler
-                    lastEvent={lastEvent}
-                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             }
 

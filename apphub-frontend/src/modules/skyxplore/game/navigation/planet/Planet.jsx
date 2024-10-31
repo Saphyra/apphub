@@ -9,6 +9,7 @@ import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import { hasValue } from "../../../../../common/js/Utils";
 import { SKYXPLORE_PLANET_GET_OVERVIEW } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     //Planet data
@@ -24,44 +25,17 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     //End planet data
 
     //===WebSocket
-    const webSocketUrl = "ws://" + window.location.host + WebSocketEndpoint.SKYXPLORE_GAME_PLANET;
-    const [lastEvent, setLastEvent] = useState(null);
-    const { sendMessage, lastMessage } = useWebSocket(
-        webSocketUrl,
-        {
-            share: true,
-            shouldReconnect: () => true,
+    useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_GAME_PLANET,
+        lastEvent => handleEvent(lastEvent),
+        sendMessage => {
+            const event = {
+                eventName: WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED,
+                payload: planetId
+            };
+            sendMessage(JSON.stringify(event));
         }
-    );
-    useEffect(() => handleMessage(), [lastMessage]);
-    useEffect(() => sendPlanetId(), [sendMessage]);
-
-    const sendPlanetId = () => {
-        if (!hasValue(sendMessage)) {
-            return;
-        }
-
-        const event = {
-            eventName: WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED,
-            payload: planetId
-        };
-        sendMessage(JSON.stringify(event));
-    }
-
-    const handleMessage = () => {
-        if (lastMessage === null) {
-            return;
-        }
-
-        const message = JSON.parse(lastMessage.data);
-
-        if (message.eventName === WebSocketEventName.PING) {
-            sendMessage(lastMessage.data);
-        }
-
-        setLastEvent(message);
-    }
-    //===End WebSocket
+    )
 
     //Data handling
     const loadPlanet = () => {
@@ -80,9 +54,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
         fetch();
     }
 
-    useEffect(() => handleEvent(), [lastEvent]);
-
-    const handleEvent = () => {
+    const handleEvent = (lastEvent) => {
         if (!hasValue(lastEvent)) {
             return;
         }

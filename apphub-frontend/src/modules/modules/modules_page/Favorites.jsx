@@ -29,6 +29,7 @@ const Favorites = ({ pageLocalizationHandler, modules, updateModules }) => {
                 categoryId={entry.key}
                 modules={entry.value}
                 updateModules={updateModules}
+                favorite={true}
             />
         )
         .toList();

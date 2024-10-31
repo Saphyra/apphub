@@ -1,52 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import MapStream from "../../../../common/js/collection/MapStream";
 import Stream from "../../../../common/js/collection/Stream";
 import Player from "./players/Player";
 import PanelTitle from "./PanelTitle";
-import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import { SKYXPLORE_LOBBY_GET_PLAYERS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
-const Players = ({ localizationHandler, alliances, isHost, lastEvent, lobbyType }) => {
-    const [players, setPlayers] = useState({});
-
+const Players = ({ localizationHandler, alliances, isHost, lobbyType, players, setPlayers }) => {
     useEffect(() => loadPlayers(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
-
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED) {
-            const newPlayer = lastEvent.payload;
-
-            const copy = new MapStream(players)
-                .clone()
-                .add(newPlayer.userId, newPlayer)
-                .toObject();
-
-            setPlayers(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
-            const copy = new MapStream(players)
-                .filter(userId => userId !== lastEvent.payload.userId)
-                .toObject();
-
-            setPlayers(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED) {
-            const newPlayer = lastEvent.payload.player;
-
-            if (newPlayer === null) {
-                return;
-            }
-
-            const copy = new MapStream(players)
-                .clone()
-                .add(newPlayer.userId, newPlayer)
-                .toObject();
-
-            setPlayers(copy);
-        }
-    }
 
     //Load
     const loadPlayers = () => {

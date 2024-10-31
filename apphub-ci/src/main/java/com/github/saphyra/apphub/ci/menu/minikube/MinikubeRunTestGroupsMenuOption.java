@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ class MinikubeRunTestGroupsMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "5";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.RUN_TEST_GROUPS;
     }
 
     @Override

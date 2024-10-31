@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.menu.local_run_menu;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,8 @@ class LocalRunTestsMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "3";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.RUN_TESTS;
     }
 
     @Override

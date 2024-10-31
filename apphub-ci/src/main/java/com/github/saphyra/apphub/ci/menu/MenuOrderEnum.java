@@ -1,0 +1,54 @@
+package com.github.saphyra.apphub.ci.menu;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
+public enum MenuOrderEnum implements MenuOrder {
+    EXIT_OPTION(Integer.MIN_VALUE),
+
+    //Main menu
+    MAIN_MENU_LOCAL_RUN(1),
+    MAIN_MENU_MINIKUBE(10),
+    MAIN_MENU_PREPROD(100),
+    MAIN_MENU_PRODUCTION(1000),
+    MAIN_MENU_SETTINGS(10_000),
+
+    //Platform menu
+    START_VM(1),
+    DEPLOY(10),
+    DEPLOY_SERVICES(20),
+    RUN_TESTS(100),
+    RUN_TEST_GROUPS(101),
+    STOP_SERVICES(1000),
+    APPHUB_PROXY(10_000),
+    DELETE_NAMESPACE(100_000),
+    STOP_VM(1_000_000),
+    SETTINGS(10_000_000),
+
+    //Settings
+    SETTINGS_DEPLOY_MODE(1),
+    SETTINGS_BUILD_THREAD_COUNT(10),
+    SETTINGS_ENABLE_SERVICES(1000),
+    SETTINGS_INTEGRATION_THREAD_COUNT(10_000),
+    SETTINGS_INTEGRATION_PRE_CREATE_DRIVERS(20_000),
+    SETTINGS_MAX_SERVICE_STARTUP_COUNT(100_000),
+    SETTINGS_BASH_FILE_LOCATION(Integer.MAX_VALUE),
+
+    SETTINGS_BROWSER_STARTUP_LIMIT(1),
+    SETTINGS_CHANGE_LANGUAGE(10),
+
+    //Settings Thread count
+    SETTINGS_THREAD_COUNT_DEFAULT(1),
+    SETTINGS_THREAD_COUNT_SKIP_TESTS(10),
+
+    //Settings Deploy Mode
+    SETTINGS_DEPLOY_MODE_DEFAULT(1),
+    SETTINGS_DEPLOY_MODE_SKIP_TESTS(10),
+    SETTINGS_DEPLOY_MODE_SKIP_BUILD(100),
+
+    ;
+
+    private final int order;
+}

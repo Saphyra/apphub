@@ -1,3 +1,5 @@
+*.log
+*.jks
 **/target/**
 **/.idea/**
 *.iml

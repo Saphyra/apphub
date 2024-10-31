@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class UserSettingDaoTest {
@@ -46,5 +47,14 @@ public class UserSettingDaoTest {
         List<UserSetting> result = underTest.getByUserIdAndCategory(USER_ID, CATEGORY);
 
         assertThat(result).containsExactly(userSetting);
+    }
+
+    @Test
+    void deleteByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.deleteByUserId(USER_ID);
+
+        then(repository).should().deleteByUserId(USER_ID_STRING);
     }
 }

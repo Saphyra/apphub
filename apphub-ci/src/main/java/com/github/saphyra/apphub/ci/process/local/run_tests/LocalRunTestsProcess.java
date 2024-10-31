@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +38,14 @@ public class LocalRunTestsProcess {
             return;
         } else {
             log.info("Services are running.");
+        }
+
+        Optional<Exception> maybeFrontendFailure = servicePinger.singlePing("http://localhost:3000/");
+        if (maybeFrontendFailure.isPresent()) {
+            log.error("Frontend is not running. {}", maybeFrontendFailure.get().getMessage());
+            return;
+        }else{
+            log.info("Frontend is running.");
         }
 
         integrationServerStarter.start();

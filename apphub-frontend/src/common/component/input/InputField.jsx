@@ -15,7 +15,8 @@ const InputField = ({
     onfocusOutCallback = () => { },
     onclickCallback = () => { },
     inputRef,
-    style
+    style,
+    tabIndex
 }) => {
     const onchange = (e) => {
         if (onchangeCallback) {
@@ -47,6 +48,7 @@ const InputField = ({
             onClick={onclickCallback}
             ref={inputRef}
             style={style}
+            tabIndex={tabIndex}
         />
     )
 }

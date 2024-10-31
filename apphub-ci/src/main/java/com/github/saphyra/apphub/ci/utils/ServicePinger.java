@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.ci.utils;
 
+import com.github.saphyra.apphub.ci.value.Constants;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -13,15 +15,24 @@ import static java.util.Objects.isNull;
 @Component
 @Slf4j
 public class ServicePinger {
-    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
+    private static final RestTemplate REST_TEMPLATE = restTemplate();
 
-    public Optional<Exception> pingLocal(int port) {
-        return pingService(60, () -> singlePingLocal(port));
+    @SneakyThrows
+    public static RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    public Optional<Exception> pingLocal(int port, String protocol) {
+        return pingService(60, () -> singlePingLocal(port, protocol));
     }
 
     public Optional<Exception> singlePingLocal(int port) {
-        log.debug("Pinging local port {}", port);
-        return singlePing("http://localhost:%s/platform/health".formatted(port));
+        return singlePingLocal(port, Constants.PROTOCOL_UNSECURE);
+    }
+
+    public Optional<Exception> singlePingLocal(int port, String protocol) {
+        String url = "%s://localhost:%s/platform/health".formatted(protocol, port);
+        return singlePing(url);
     }
 
     public Optional<Exception> pingRemote(int port, int timeoutSeconds) {
@@ -55,7 +66,7 @@ public class ServicePinger {
         return Optional.of(cause);
     }
 
-    private Optional<Exception> singlePing(String url) {
+    public Optional<Exception> singlePing(String url) {
         try {
             if (REST_TEMPLATE.getForEntity(url, Void.class).getStatusCode() == HttpStatus.OK) {
                 return Optional.empty();

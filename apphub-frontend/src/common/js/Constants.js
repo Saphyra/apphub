@@ -7,8 +7,6 @@ const Constants = {
     COOKIE_LOCALE: "language",
     DEFAULT_LOCALE: "en",
     HEADER_BROWSER_LANGUAGE: "BrowserLanguage",
-    HEADER_REQUEST_TYPE_NAME: "Request-Type",
-    HEADER_REQUEST_TYPE_VALUE: "rest",
 
     //VALIDATION
     MIN_USERNAME_LENGTH: 3,
@@ -68,6 +66,8 @@ const Constants = {
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR: "stock-last-inventoried-car",
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE: "stock-last-inventoried-storage",
     SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED: "toolbox-last-inventoried",
+
+    SETTINGS_KEY_COLLAPSED_MODULES: "collapsed-modules",
 }
 
 export default Constants;

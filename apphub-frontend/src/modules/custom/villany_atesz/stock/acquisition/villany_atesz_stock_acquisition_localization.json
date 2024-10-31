@@ -20,15 +20,15 @@
         "hu": "Tétel"
     },
     "to-car": {
-        "en": "To car",
+        "en": "🚗",
         "hu": "🚗"
     },
     "to-storage": {
-        "en": "To storage",
+        "en": "📦",
         "hu": "📦"
     },
     "price": {
-        "en": "Price",
+        "en": "💵",
         "hu": "💵"
     },
     "add-to-stock-confirmation-title": {

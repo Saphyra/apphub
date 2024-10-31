@@ -10,5 +10,33 @@
     "game-saved": {
         "en": "Game saved.",
         "hu": "Játék elmentve."
+    },
+    "player-disconnected-title": {
+        "en": "Player disconnected",
+        "hu": "Kapcsolat megszakadt"
+    },
+    "player-disconnected-detail": {
+        "en": "{playerName} disconnected. Game is paused.",
+        "hu": "A kapcsolat {playerName} megszakadt. A játék szünetel."
+    },
+    "confirm": {
+        "en": "Confirm",
+        "hu": "Értettem"
+    },
+    "resume": {
+        "en": "Resume game",
+        "hu": "Játék folytatása"
+    },
+    "player-reconnected-title": {
+        "en": "Player reconnected",
+        "hu": "Kapcsolat helyreállt"
+    },
+    "player-reconnected-detail": {
+        "en": "{playerName} reconnected.",
+        "hu": "A kapcsolat {playerName} játékossal helyreállt."
+    },
+    "close": {
+        "en": "Close",
+        "hu": "Bezárás"
     }
 }
