@@ -1,0 +1,3 @@
+TODO add to release notes
+TODO block construction of constructionArea if there are resources left on the given surface
+TODO remove building related FE code

@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
@@ -17,7 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,12 +33,13 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     private final Map<String, ? extends GameDataItem> items;
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final List<String> resources;
+    private final ConstructionAreaDataService constructionAreaDataService;
 
     public GameDataControllerImpl(
         List<AbstractDataService<?, ? extends GameDataItem>> dataServices,
         TerraformingPossibilitiesService terraformingPossibilitiesService,
-        ResourceDataService resourceDataService
-    ) {
+        ResourceDataService resourceDataService,
+        ConstructionAreaDataService constructionAreaDataService) {
         this.items = dataServices.stream()
             .flatMap(dataService -> dataService.values().stream())
             .collect(Collectors.toMap(GameDataItem::getId, Function.identity()));
@@ -41,6 +48,7 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
         this.resources = resourceDataService.keySet()
             .stream()
             .toList();
+        this.constructionAreaDataService = constructionAreaDataService;
     }
 
     @Override
@@ -62,6 +70,17 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
 
         return new ArrayList<>(terraformingPossibilitiesService.getOptional(surfaceType)
             .orElse(new TerraformingPossibilities()));
+    }
+
+    @Override
+    //TODO unit test
+    public List<Object> getAvailableConstructionAreas(String surfaceTypeString) {
+        SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
+
+        return constructionAreaDataService.values()
+            .stream()
+            .filter(constructionAreaData -> constructionAreaData.getSupportedSurfaces().contains(surfaceType))
+            .collect(Collectors.toList());
     }
 
     @Override

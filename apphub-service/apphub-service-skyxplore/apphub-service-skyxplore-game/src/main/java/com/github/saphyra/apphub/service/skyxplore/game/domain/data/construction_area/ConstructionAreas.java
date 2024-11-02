@@ -17,9 +17,13 @@ public class ConstructionAreas extends Vector<ConstructionArea> {
     }
 
     public ConstructionArea findByConstructionAreaIdValidated(UUID constructionAreaId) {
+        return findByConstructionAreaId(constructionAreaId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ConstructionArea not found by id " + constructionAreaId));
+    }
+
+    public Optional<ConstructionArea> findByConstructionAreaId(UUID constructionAreaId) {
         return stream()
             .filter(constructionArea -> constructionArea.getConstructionAreaId().equals(constructionAreaId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ConstructionArea not found by id " + constructionAreaId));
+            .findAny();
     }
 }

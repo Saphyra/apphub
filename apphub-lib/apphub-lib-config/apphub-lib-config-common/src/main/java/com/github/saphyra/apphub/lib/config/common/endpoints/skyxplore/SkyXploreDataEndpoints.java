@@ -28,9 +28,11 @@ public class SkyXploreDataEndpoints {
 
     //SKYXPLORE-DATA RESOURCES
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
+    @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_DATA_AVAILABLE_BUILDINGS = "/api/skyxplore/data/data/{surfaceType}/buildings";
     public static final String SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS = "/api/skyxplore/data/citizen/stats-and-skills";
     public static final String SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES = "/api/skyxplore/data/{surfaceType}/terraforming-possibilities";
+    public static final String SKYXPLORE_DATA_CONSTRUCTION_AREAS = "/api/skyxplore/data/{surfaceType}/construction-area";
     public static final String SKYXPLORE_DATA_RESOURCES = "/api/skyxplore/data/resources";
 
     //SKYXPLORE-DATA-SETTINGS

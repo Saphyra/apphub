@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGamePlanetOverviewController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.planet.SkyXplorePlanetOverviewController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class PlanetOverviewControllerImpl implements SkyXploreGamePlanetOverviewController {
+public class PlanetOverviewControllerImpl implements SkyXplorePlanetOverviewController {
     private final PlanetOverviewQueryService planetOverviewQueryService;
     private final RenamePlanetService renamePlanetService;
 

@@ -4,7 +4,7 @@ import confirmCancelDeconstruction from "./CancelDeconstructionService";
 import buildingLocalizationData from "../../../../../../../common/localization/building_localization.json";
 import LocalizationHandler from "../../../../../../../../../../common/js/LocalizationHandler";
 
-const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData, planetId }) => {
+const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData }) => {
     const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
 
     const constructionArea = surface.constructionArea;
@@ -16,10 +16,8 @@ const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, se
         title={localizationHandler.get("cancel-deconstruction")}
         cancelCallback={() => confirmCancelDeconstruction(
             localizationHandler,
-            buildingLocalizationHandler,
-            surface,
-            setConfirmationDialogData,
-            planetId
+            constructionArea,
+            setConfirmationDialogData
         )}
     />
 }

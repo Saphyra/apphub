@@ -1,14 +1,13 @@
 import React from "react";
+import constructionAreaLocalizationData from "../../../../../../../common/localization/construction_area_localization.json";
+import LocalizationHandler from "../../../../../../../../../../common/js/LocalizationHandler";
 
-const ConstructionAreaConstructionHeader = ({ constructionArea, localizationHandler }) => {
-    //TODO update content
+const ConstructionAreaConstructionHeader = ({ constructionArea }) => {
+    const localizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
+    
     return (
         <div>
-            <span>{localizationHandler.get("level")}</span>
-            <span>: </span>
-            <span className="skyxplore-planet-surface-header-building-level">{constructionArea.level}</span>
-            <span>{" => "}</span>
-            <span className="skyxplore-planet-surface-header-building-new-level">{constructionArea.level + 1}</span>
+            {localizationHandler.get(constructionArea.dataId)}
         </div>
     );
 }

@@ -4,7 +4,7 @@ import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../common/component/input/Button";
 import "./modify_surface.css";
 import TerraformingPossibilities from "./terraformin_possibilities/TerraforminPossibilities";
-import AvailableBuildings from "./available_buildings/AvaialableBuildings";
+import ConstructionAreas from "./construction_area/ConstructionAreas";
 
 const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,9 +23,8 @@ const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) 
             </header>
 
             <main id="skyxplore-game-modify-surface">
-                <AvailableBuildings
+                <ConstructionAreas
                     surfaceType={surfaceType}
-                    planetId={planetId}
                     surfaceId={surfaceId}
                     closePage={closePage}
                 />

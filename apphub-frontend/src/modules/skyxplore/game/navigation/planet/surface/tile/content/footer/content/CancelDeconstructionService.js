@@ -1,24 +1,26 @@
 import ConfirmationDialogData from "../../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../../../../common/component/input/Button";
-import { SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import LocalizationHandler from "../../../../../../../../../../common/js/LocalizationHandler";
+import constructionAreaLocalizationData from "../../../../../../../common/localization/construction_area_localization.json";
 
 const confirmCancelDeconstruction = (
     localizationHandler,
-    buildingLocalizationHandler,
-    surface,
-    setConfirmationDialogData,
-    planetId
+    constructionArea,
+    setConfirmationDialogData
 ) => {
+    const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
+
     const confirmationDialogData = new ConfirmationDialogData(
         "skyxplore-game-planet-confirm-cancel-deconstruction",
-        localizationHandler.get("cancel-deconstruction-title"),
-        localizationHandler.get("cancel-deconstruction-content", { buildingName: buildingLocalizationHandler.get(surface.building.dataId) }),
+        localizationHandler.get("cancel-construction-area-deconstruction-title"),
+        localizationHandler.get("cancel-construction-area-deconstruction-content", { constructionArea: constructionAreaLocalizationHandler.get(constructionArea.dataId) }),
         [
             <Button
-                key="cancel-cdeonstruction"
+                key="cancel-deconstruction"
                 id="skyxplore-game-planet-cancel-deconstruction-button"
                 label={localizationHandler.get("cancel-deconstruction")}
-                onclick={() => cancelDeconstruction(planetId, surface, setConfirmationDialogData)}
+                onclick={() => cancelDeconstruction(constructionArea.deconstruction.deconstructionId, setConfirmationDialogData)}
             />,
             <Button
                 key="continue-construction"
@@ -32,8 +34,8 @@ const confirmCancelDeconstruction = (
     setConfirmationDialogData(confirmationDialogData);
 }
 
-const cancelDeconstruction = async (planetId, surface, setConfirmationDialogData) => {
-    await SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION.createRequest(null, { planetId: planetId, buildingId: surface.building.buildingId })
+const cancelDeconstruction = async (deconstructionId, setConfirmationDialogData) => {
+    await SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { deconstructionId: deconstructionId })
         .send();
 
     setConfirmationDialogData(null);

@@ -30,7 +30,7 @@ public class QueueFacadeTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final UUID ITEM_ID = UUID.randomUUID();
-    private static final Integer PRIORITY = 2354;
+    private static final Integer PRIORITY = 2;
 
     @Mock
     private GameDao gameDao;
@@ -90,6 +90,20 @@ public class QueueFacadeTest {
     }
 
     @Test
+    public void setPriority_tooLow() {
+        Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, 0));
+
+        ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
+    }
+
+    @Test
+    public void setPriority_tooHigh() {
+        Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, 11));
+
+        ExceptionValidator.validateInvalidParam(ex, "priority", "too high");
+    }
+
+    @Test
     void setPriority_forbiddenOperation() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -97,7 +111,7 @@ public class QueueFacadeTest {
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(UUID.randomUUID());
 
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, PRIORITY));
     }
 
     @Test

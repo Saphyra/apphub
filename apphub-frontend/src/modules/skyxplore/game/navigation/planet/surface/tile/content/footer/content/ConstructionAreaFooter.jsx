@@ -12,21 +12,18 @@ const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationD
             surface={surface}
             localizationHandler={localizationHandler}
             setConfirmationDialogData={setConfirmationDialogData}
-            planetId={planetId}
         />
     } else if (hasValue(constructionArea.deconstruction)) {
         return <ConstructionAreaDeconstructionFooter
             surface={surface}
             localizationHandler={localizationHandler}
             setConfirmationDialogData={setConfirmationDialogData}
-            planetId={planetId}
         />
     } else {
         return <ConstructionAreeaIdleFooter
             localizationHandler={localizationHandler}
             surface={surface}
             setConfirmationDialogData={setConfirmationDialogData}
-            planetId={planetId}
         />
     }
 }

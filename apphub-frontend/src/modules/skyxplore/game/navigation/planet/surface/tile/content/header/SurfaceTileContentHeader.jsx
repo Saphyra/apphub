@@ -15,7 +15,6 @@ const SurfaceTileContentHeader = ({ surface }) => {
             const constructionArea = surface.constructionArea;
             if (hasValue(constructionArea.construction)) {
                 return <ConstructionAreaConstructionHeader
-                    localizationHandler={localizationHandler}
                     constructionArea={constructionArea}
                 />
             } else if (hasValue(constructionArea.deconstruction)) {
@@ -24,7 +23,6 @@ const SurfaceTileContentHeader = ({ surface }) => {
                 />
             } else {
                 return <ConstructionAreaDefaultHeader
-                    localizationHandler={localizationHandler}
                     constructionArea={constructionArea}
                 />
             }

@@ -73,7 +73,6 @@ class TerraformationService {
             surfaceTypeString
         );
 
-
         game.getEventLoop()
             .processWithWait(() -> {
                 GameProgressDiff progressDiff = game.getProgressDiff();

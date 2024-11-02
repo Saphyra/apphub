@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
@@ -38,6 +39,9 @@ public class GameDataControllerImplTest {
     @Mock
     private ResourceDataService resourceDataService;
 
+    @Mock
+    private ConstructionAreaDataService constructionAreaDataService;
+
     private GameDataControllerImpl underTest;
 
     @Mock
@@ -52,7 +56,7 @@ public class GameDataControllerImplTest {
         dataService.put(DATA_ID, gameDataItem);
         given(resourceDataService.keySet()).willReturn(Set.of(RESOURCE_DATA_ID));
 
-        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService, resourceDataService);
+        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService, resourceDataService, constructionAreaDataService);
     }
 
     @Test

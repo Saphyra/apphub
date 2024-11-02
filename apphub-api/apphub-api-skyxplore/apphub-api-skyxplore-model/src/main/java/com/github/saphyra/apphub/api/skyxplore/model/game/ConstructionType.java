@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.api.skyxplore.model.game;
 
 public enum ConstructionType {
-    CONSTRUCTION, TERRAFORMATION
+    CONSTRUCTION_AREA,
+    @Deprecated(forRemoval = true)
+    CONSTRUCTION,
+    TERRAFORMATION
 }

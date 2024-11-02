@@ -41,14 +41,24 @@ public class SkyXploreGameEndpoints {
     //Building
     @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
+    @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";
+    @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION = "/api/skyxplore/game/building/{planetId}/{buildingId}";
+    @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_BUILDING_DECONSTRUCT = "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct";
+    @Deprecated(forRemoval = true)
     public static final String SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION = "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct";
 
     //Terraformation
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
+
+    //Construction Area
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/{surfaceId}/construction-area";
+    public static final String SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION = "/api/skyxplore/game/surface/construction-area/{constructionId}/cancel-construction";
+    public static final String SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/construction-area/{constructionAreaId}";
+    public static final String SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/construction-area/{deconstructionId}/cancel-deconstruction";
 
     //Queue
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";

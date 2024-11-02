@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.map;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameMapController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.game.SkyXploreGameMapController;
 import com.github.saphyra.apphub.api.skyxplore.response.game.map.MapResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.game.service.map.query.MapQueryService;

@@ -132,11 +132,20 @@ public class ValidationUtil {
         }
     }
 
-    public static void contains(Object obj, List<Object> edit, String field) {
+    public static void contains(Object obj, Collection<Object> collection, String field) {
         notNull(obj, field);
 
-        if (!edit.contains(obj)) {
-            throw ExceptionFactory.invalidParam(field, "must be one of " + edit);
+        if (!collection.contains(obj)) {
+            throw ExceptionFactory.invalidParam(field, "must be one of " + collection);
+        }
+    }
+
+    //TODO unit test
+    public static <T> void contains(T obj, Map<T, ?> map, String field) {
+        notNull(obj, field);
+
+        if (!map.containsKey(obj)) {
+            throw ExceptionFactory.invalidParam(field, "invalid value");
         }
     }
 

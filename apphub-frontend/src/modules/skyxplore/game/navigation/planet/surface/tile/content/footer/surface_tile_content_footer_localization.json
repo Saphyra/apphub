@@ -66,5 +66,25 @@
     "continue-terraformation": {
         "en": "Continue terraformation",
         "hu": "Terraformálás folytatása"
+    },
+    "cancel-construction-area-construction": {
+        "en": "Cancel construction area construction",
+        "hu": "Építési terület építésének visszavonása"
+    },
+    "cancel-construction-area-construction-title": {
+        "en": "Cancel construction area construction?",
+        "hu": "Építési terület építésének visszavonása?"
+    },
+    "cancel-construction-area-construction-detail": {
+        "en": "Are you sure you want to cancel construction of construction area {constructionArea}?",
+        "hu": "Biztosan vissza akarod vonni {constructionArea} építési terület építését?"
+    },
+    "cancel-construction-area-deconstruction-title": {
+        "en": "Cancel deconstruction?",
+        "hu": "Lerombolás megszakítása?"
+    },
+    "cancel-construction-area-deconstruction-content": {
+        "en": "Are you sure you want to cancel deconstruction of construction area {constructionArea}?",
+        "hu": "Biztosan meg akarod szakítani a(z) {constructionArea} építési terület lerombolását?"
     }
 }

@@ -22,6 +22,7 @@ public interface SkyXploreGameBuildingController {
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_UPGRADE)
     void upgradeBuilding(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @Deprecated(forRemoval = true)
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION)
     void cancelConstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
@@ -29,6 +30,7 @@ public interface SkyXploreGameBuildingController {
     @Deprecated(forRemoval = true)
     void deconstructBuilding(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @Deprecated(forRemoval = true)
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION)
     void cancelDeconstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

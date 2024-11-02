@@ -28,14 +28,14 @@ public class ConstructionAreaConverter implements GameDataToModelConverter {
             .toList();
     }
 
-    private ConstructionAreaModel convert(UUID gameId, ConstructionArea buildingModule) {
+    public ConstructionAreaModel convert(UUID gameId, ConstructionArea constructionArea) {
         ConstructionAreaModel model = new ConstructionAreaModel();
-        model.setId(buildingModule.getConstructionAreaId());
+        model.setId(constructionArea.getConstructionAreaId());
         model.setGameId(gameId);
         model.setType(GameItemType.CONSTRUCTION_AREA);
-        model.setLocation(buildingModule.getLocation());
-        model.setSurfaceId(buildingModule.getSurfaceId());
-        model.setDataId(buildingModule.getDataId());
+        model.setLocation(constructionArea.getLocation());
+        model.setSurfaceId(constructionArea.getSurfaceId());
+        model.setDataId(constructionArea.getDataId());
         return model;
     }
 

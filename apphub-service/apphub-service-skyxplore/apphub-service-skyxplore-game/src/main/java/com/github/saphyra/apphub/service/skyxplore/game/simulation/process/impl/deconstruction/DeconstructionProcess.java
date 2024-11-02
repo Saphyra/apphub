@@ -24,6 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
+@Deprecated(forRemoval = true)
 public class DeconstructionProcess implements Process {
     @Getter
     @NonNull

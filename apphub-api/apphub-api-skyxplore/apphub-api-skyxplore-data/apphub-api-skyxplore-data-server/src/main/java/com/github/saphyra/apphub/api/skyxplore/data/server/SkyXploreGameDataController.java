@@ -19,10 +19,17 @@ public interface SkyXploreGameDataController {
     List<String> getAvailableBuildings(@PathVariable("surfaceType") String surfaceType);
 
     /**
-     * SurfaceTypes the given surface can be terraformed to
+     * @return TerraformingPossibilities
      */
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES)
     List<Object> getTerraformingPossibilities(@PathVariable("surfaceType") String surfaceType);
+
+    /**
+     * @return ConstructionAreaData
+     */
+    //TODO API test
+    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_DATA_CONSTRUCTION_AREAS)
+    List<Object> getAvailableConstructionAreas(@PathVariable("surfaceType") String surfaceType);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS)
     CitizenStatsAndSkills getStatsAndSkills();
