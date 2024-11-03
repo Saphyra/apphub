@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-@Deprecated(forRemoval = true)
-public class PlanetBuildingOverviewResponse {
-    private List<PlanetBuildingOverviewDetailedResponse> buildingDetails;
-    private int slots;
-    private int usedSlots;
+public class ConstructionAreaOverviewResponse {
+    private String dataId;
+    private Map<String, BuildingModuleOverviewResponse> buildingModules; //Map<Slot, BuildingModuleOverviewResponse>
 }

@@ -18,4 +18,10 @@ public class BuildingModules extends Vector<BuildingModule> {
             .filter(buildingModule -> buildingModule.getDataId().equals(dataId))
             .toList();
     }
+
+    public List<BuildingModule> getByConstructionAreaId(UUID constructionAreaId) {
+        return stream()
+            .filter(buildingModule -> buildingModule.getConstructionAreaId().equals(constructionAreaId))
+            .toList();
+    }
 }

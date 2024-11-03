@@ -1,11 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.*;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -17,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.populatio
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingsSummaryQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +37,7 @@ public class PlanetOverviewQueryServiceTest {
     private static final String STORAGE_TYPE = "storage-type";
     private static final String PRIORITY_TYPE = "priority-type";
     private static final Integer PRIORITY_VALUE = 24;
+    private static final String SURFACE_TYPE = "surface-type";
 
     @Mock
     private GameDao gameDao;
@@ -62,6 +59,9 @@ public class PlanetOverviewQueryServiceTest {
 
     @Mock
     private QueueFacade queueFacade;
+
+    @Mock
+    private BuildingsSummaryQueryService buildingsSummaryQueryService;
 
     @InjectMocks
     private PlanetOverviewQueryService underTest;
@@ -90,6 +90,9 @@ public class PlanetOverviewQueryServiceTest {
     @Mock
     private QueueResponse queueResponse;
 
+    @Mock
+    private ConstructionAreaOverviewResponse constructionAreaOverviewResponse;
+
     @BeforeEach
     public void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -102,6 +105,7 @@ public class PlanetOverviewQueryServiceTest {
         given(planetBuildingOverviewQueryService.getBuildingOverview(USER_ID, PLANET_ID)).willReturn(Map.of(STORAGE_TYPE, buildingResponse));
         given(priorityQueryService.getPriorities(USER_ID, PLANET_ID)).willReturn(Map.of(PRIORITY_TYPE, PRIORITY_VALUE));
         given(queueFacade.getQueueOfPlanet(USER_ID, PLANET_ID)).willReturn(List.of(queueResponse));
+        given(buildingsSummaryQueryService.getBuildingsSummary(USER_ID, PLANET_ID)).willReturn(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));
     }
 
     @Test
@@ -118,6 +122,7 @@ public class PlanetOverviewQueryServiceTest {
         assertThat(result.getBuildings()).containsEntry(STORAGE_TYPE, buildingResponse);
         assertThat(result.getPriorities()).containsEntry(PRIORITY_TYPE, PRIORITY_VALUE);
         assertThat(result.getQueue()).containsExactly(queueResponse);
+        assertThat(result.getBuildingsSummary()).isEqualTo(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));
     }
 
     @Test
@@ -133,5 +138,6 @@ public class PlanetOverviewQueryServiceTest {
         assertThat(result.getBuildings()).containsEntry(STORAGE_TYPE, buildingResponse);
         assertThat(result.getPriorities()).containsEntry(PRIORITY_TYPE, PRIORITY_VALUE);
         assertThat(result.getQueue()).containsExactly(queueResponse);
+        assertThat(result.getBuildingsSummary()).isEqualTo(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));
     }
 }

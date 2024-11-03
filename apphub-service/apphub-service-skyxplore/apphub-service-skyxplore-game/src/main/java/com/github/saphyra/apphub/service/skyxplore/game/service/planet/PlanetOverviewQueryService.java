@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.populatio
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.priority.PriorityQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingsSummaryQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ class PlanetOverviewQueryService {
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
     private final PriorityQueryService priorityQueryService;
     private final QueueFacade queueFacade;
+    private final BuildingsSummaryQueryService buildingsSummaryQueryService;
 
     PlanetOverviewResponse getOverview(UUID userId, UUID planetId) {
         Planet planet = gameDao.findByUserIdValidated(userId)
@@ -39,6 +41,7 @@ class PlanetOverviewQueryService {
             .storage(planetStorageOverviewQueryService.getStorage(userId, planetId))
             .population(planetPopulationOverviewQueryService.getPopulationOverview(userId, planetId))
             .buildings(planetBuildingOverviewQueryService.getBuildingOverview(userId, planetId))
+            .buildingsSummary(buildingsSummaryQueryService.getBuildingsSummary(userId, planetId))
             .priorities(priorityQueryService.getPriorities(userId, planetId))
             .queue(queueFacade.getQueueOfPlanet(userId, planetId))
             .build();

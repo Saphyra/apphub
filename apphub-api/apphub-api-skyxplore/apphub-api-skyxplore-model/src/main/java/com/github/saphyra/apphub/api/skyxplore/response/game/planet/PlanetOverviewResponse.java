@@ -17,7 +17,9 @@ public class PlanetOverviewResponse {
     private List<SurfaceResponse> surfaces;
     private PlanetStorageResponse storage;
     private PlanetPopulationOverviewResponse population;
+    @Deprecated(forRemoval = true)
     private Map<String, PlanetBuildingOverviewResponse> buildings;
+    private Map<String, List<ConstructionAreaOverviewResponse>> buildingsSummary; //Map<SurfaceType, List<ConstructionAreasOnGivenSurfaceType>>
     private Map<String, Integer> priorities;
     private List<QueueResponse> queue;
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
+@Deprecated(forRemoval = true)
 public class PlanetBuildingOverviewDetailedResponse {
     private String dataId;
     private int levelSum;
