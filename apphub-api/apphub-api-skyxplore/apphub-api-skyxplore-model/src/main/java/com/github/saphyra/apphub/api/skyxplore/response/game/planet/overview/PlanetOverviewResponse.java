@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview;
 
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionAreaOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
