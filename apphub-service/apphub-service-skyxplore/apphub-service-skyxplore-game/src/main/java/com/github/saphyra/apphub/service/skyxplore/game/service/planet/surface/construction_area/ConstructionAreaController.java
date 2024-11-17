@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,6 +19,7 @@ class ConstructionAreaController implements SkyXplorePlanetSurfaceConstructionAr
     private final CancelConstructionAreaConstructionService cancelConstructionAreaConstructionService;
     private final DeconstructConstructionAreaService deconstructConstructionAreaService;
     private final CancelDeconstructConstructionAreaService cancelDeconstructConstructionAreaService;
+    private final AvailableBuildingModulesService availableBuildingModulesService;
 
     @Override
     public void constructConstructionArea(OneParamRequest<String> constructionAreaDataId, UUID surfaceId, AccessTokenHeader accessTokenHeader) {
@@ -45,5 +47,12 @@ class ConstructionAreaController implements SkyXplorePlanetSurfaceConstructionAr
         log.info("{} wants to cancel deconstruction {}", accessTokenHeader.getUserId(), deconstructionId);
 
         cancelDeconstructConstructionAreaService.cancelDeconstruction(accessTokenHeader.getUserId(), deconstructionId);
+    }
+
+    @Override
+    public List<String> getAvailableBuildingModules(UUID constructionAreaId, String buildingModuleCategory, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know which buildings they can build in the {} slot of constructionArea {}", accessTokenHeader.getUserId(), buildingModuleCategory, constructionAreaId);
+
+        return availableBuildingModulesService.getAvailableBuildings(accessTokenHeader.getUserId(), constructionAreaId, buildingModuleCategory);
     }
 }

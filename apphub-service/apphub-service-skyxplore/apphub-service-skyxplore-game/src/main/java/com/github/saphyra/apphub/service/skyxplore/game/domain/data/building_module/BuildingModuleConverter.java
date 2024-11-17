@@ -20,7 +20,7 @@ public class BuildingModuleConverter implements GameDataToModelConverter {
             .toList();
     }
 
-    private BuildingModuleModel convert(UUID gameId, BuildingModule buildingModule) {
+    public BuildingModuleModel convert(UUID gameId, BuildingModule buildingModule) {
         BuildingModuleModel model = new BuildingModuleModel();
         model.setId(buildingModule.getBuildingModuleId());
         model.setGameId(gameId);

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.planet.SkyXplorePlanetOverviewController;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetOverviewResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;

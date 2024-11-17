@@ -29,6 +29,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
                 surface={surface}
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
+                openPage={openPage}
             />
         }
     }

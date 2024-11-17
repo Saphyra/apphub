@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruct
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.DeconstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.junit.jupiter.api.Test;

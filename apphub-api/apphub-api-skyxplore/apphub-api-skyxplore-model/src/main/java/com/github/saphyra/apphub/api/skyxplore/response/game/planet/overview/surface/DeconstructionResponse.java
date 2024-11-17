@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.response.game.planet;
+package com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ConstructionResponse {
-    private UUID constructionId;
+public class DeconstructionResponse {
+    private UUID deconstructionId;
     private Integer requiredWorkPoints;
     private Integer currentWorkPoints;
-    private String data;
 }

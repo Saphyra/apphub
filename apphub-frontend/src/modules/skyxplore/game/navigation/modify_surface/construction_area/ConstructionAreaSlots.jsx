@@ -2,18 +2,18 @@ import React from "react";
 import localizationData from "./construction_area_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import MapStream from "../../../../../../common/js/collection/MapStream";
-import slotLocalization from "../../../common/localization/construction_area_slot_localization.json";
+import buildingModuleCategoryLocalizationData from "../../../common/localization/building_module_category_localization.json";
 
 const ConstructionAreaSlots = ({ slots }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
-    const slotLocalizationHandler = new LocalizationHandler(slotLocalization);
+    const buildingModuleCategoryLocalizationHandler = new LocalizationHandler(buildingModuleCategoryLocalizationData);
 
     const getSlots = () => {
         return new MapStream(slots)
-            .sorted((a, b) => slotLocalizationHandler.get(a.key).localeCompare(slotLocalizationHandler.get(b.key)))
+            .sorted((a, b) => buildingModuleCategoryLocalizationHandler.get(a.key).localeCompare(buildingModuleCategoryLocalizationHandler.get(b.key)))
             .map((slot, amount) => (
                 <tr key={slot}>
-                    <td>{slotLocalizationHandler.get(slot)}</td>
+                    <td>{buildingModuleCategoryLocalizationHandler.get(slot)}</td>
                     <td>{amount}</td>
                 </tr>
             ))

@@ -5,7 +5,7 @@ import ConstructionAreaFooter from "./content/ConstructionAreaFooter";
 import TerraformationFooter from "./content/TerraformationFooter";
 import { hasValue, throwException } from "../../../../../../../../../common/js/Utils";
 
-const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId }) => {
+const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
@@ -14,7 +14,7 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                 surface={surface}
                 localizationHandler={localizationHandler}
                 setConfirmationDialogData={setConfirmationDialogData}
-                planetId={planetId}
+                openPage={openPage}
             />
         } else if (hasValue(surface.terraformation)) {
             return <TerraformationFooter

@@ -83,7 +83,6 @@ class ConstructConstructionAreaService {
             planetId,
             constructionRequirements.getRequiredWorkPoints()
         );
-
         log.info("{} created.", construction);
 
         game.getEventLoop()

@@ -1,3 +1,6 @@
 TODO add to release notes
 TODO block construction of constructionArea if there are resources left on the given surface
+TODO block construction of buildingModule if there are resources left on the given constructionArea
 TODO remove building related FE code
+TODO periodic update for new building details
+TODO cancel in progress constructions and deconstruct buildings before deconstructing construction area

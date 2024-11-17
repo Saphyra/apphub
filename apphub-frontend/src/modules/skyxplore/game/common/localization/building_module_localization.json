@@ -1,0 +1,46 @@
+{
+    "hq_barracks": {
+        "en": "Barracks",
+        "hu": "Barakk"
+    },
+    "hamster_wheel": {
+        "en": "Hamster wheel",
+        "hu": "Mókuskerék"
+    },
+    "hq_canteen": {
+        "en": "Canteen",
+        "hu": "Kantin"
+    },
+    "hq_extraction": {
+        "en": "Headquarters extraction",
+        "hu": "Parancsnokság kitermelés"
+    },
+    "hq_storage": {
+        "en": "Headquarters storage",
+        "hu": "Parancsnokság raktár"
+    },
+    "sawmill": {
+        "en": "Sawmill",
+        "hu": "Fűrészmalom"
+    },
+    "foundry": {
+        "en": "Foundry",
+        "hu": "Öntöde"
+    },
+    "energy_cell_discharger": {
+        "en": "Energy cell discharger",
+        "hu": "Energiacella kisülésvezérlő"
+    },
+    "transformer": {
+        "en": "Transformer",
+        "hu": "Transzformátor"
+    },
+    "small_solar_panel": {
+        "en": "Small solar panel",
+        "hu": "Kis napelem"
+    },
+    "water_pump": {
+        "en": "Water pump",
+        "hu": "Vízpumpa"
+    }
+}

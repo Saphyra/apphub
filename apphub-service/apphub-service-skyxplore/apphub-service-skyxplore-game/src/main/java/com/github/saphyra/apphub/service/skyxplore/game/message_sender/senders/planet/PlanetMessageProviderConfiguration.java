@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetPopulationOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetStorageResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;

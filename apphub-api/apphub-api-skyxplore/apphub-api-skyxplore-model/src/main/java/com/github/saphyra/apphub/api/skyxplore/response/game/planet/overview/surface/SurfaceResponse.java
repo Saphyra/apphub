@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.response.game.planet;
+package com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface;
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import lombok.AllArgsConstructor;

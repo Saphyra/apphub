@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceConstructionAreaResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;

@@ -4,7 +4,7 @@ import ConstructionAreaDeconstructionFooter from "./ConstructionAreaDeconstructi
 import ConstructionAreeaIdleFooter from "./ConstructionAreeaIdleFooter";
 import { hasValue } from "../../../../../../../../../../common/js/Utils";
 
-const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationDialogData, planetId }) => {
+const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationDialogData, openPage }) => {
     const constructionArea = surface.constructionArea;
 
     if (hasValue(constructionArea.construction)) {
@@ -22,8 +22,9 @@ const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationD
     } else {
         return <ConstructionAreeaIdleFooter
             localizationHandler={localizationHandler}
-            surface={surface}
+            constructionArea={surface.constructionArea}
             setConfirmationDialogData={setConfirmationDialogData}
+            openPage={openPage}
         />
     }
 }

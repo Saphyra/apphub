@@ -78,3 +78,14 @@
     margin: 2px;
     border-radius: 0;
 }
+
+.skyxplore-game-planet-surface-construction-area-open-button {
+    background-position: center;
+    background-size: cover;
+    border-width: 1px;
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    height: 16px;
+    width: 16px;
+    margin: 2px;
+    border-radius: 0;
+}

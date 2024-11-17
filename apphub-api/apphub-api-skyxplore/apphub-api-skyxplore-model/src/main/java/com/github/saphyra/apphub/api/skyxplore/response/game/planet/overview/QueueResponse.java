@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.skyxplore.response.game.planet;
+package com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
