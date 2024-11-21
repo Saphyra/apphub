@@ -1,23 +1,21 @@
 {
-  "id": "ore_mine",
-  "category": "EXTRACTION_SITE",
+  "id": "assembly_line",
+  "category": "PRODUCTION",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
     "requiredEnergy": 0,
     "requiredResources": {
     }
   },
-  "supportedSurfacesRestriction": [
-    "MOUNTAIN"
-  ],
   "produces": [
     {
-      "resourceDataId": "stone",
-      "requiredSkill": "MINING",
+      "resourceDataId": "energy_cell",
+      "requiredSkill": "ENGINEERING",
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
+        "requiredWorkPoints": 500,
+        "requiredEnergy": 100,
         "requiredResources": {
+          "steel_ingot": 1
         }
       }
     }

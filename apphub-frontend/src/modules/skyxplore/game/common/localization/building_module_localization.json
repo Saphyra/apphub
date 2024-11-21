@@ -42,5 +42,9 @@
     "water_pump": {
         "en": "Water pump",
         "hu": "Vízpumpa"
+    },
+    "assembly_line": {
+        "en": "Assembly line",
+        "hu": "Összeszerelő üzem"
     }
 }

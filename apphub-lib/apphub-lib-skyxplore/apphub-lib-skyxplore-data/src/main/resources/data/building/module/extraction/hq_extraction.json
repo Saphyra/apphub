@@ -3,6 +3,7 @@
   "category": "HQ_EXTRACTION",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -12,8 +13,8 @@
       "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
         "requiredResources": {
-          "energy": 1
         }
       }
     },
@@ -22,8 +23,8 @@
       "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
         "requiredResources": {
-          "energy": 1
         }
       }
     },
@@ -32,8 +33,18 @@
       "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
         "requiredResources": {
-          "energy": 1
+        }
+      }
+    },
+    {
+      "resourceDataId": "ore",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
         }
       }
     }

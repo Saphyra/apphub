@@ -3,6 +3,7 @@
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -11,12 +12,9 @@
       "id": "transform",
       "energyPerBatch": 1,
       "batchTicks": 1,
-      "fuelLastsFotTicks": 1,
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredResources": {
-        }
-      }
+      "fuelLastsForTicks": 1,
+      "fuelStorage": 0,
+      "fuel": null
     }
   ]
 }

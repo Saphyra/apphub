@@ -3,6 +3,7 @@
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -11,12 +12,9 @@
       "id": "solar",
       "energyPerBatch": 1,
       "batchTicks": 10,
-      "fuelLastsFotTicks": 100000,
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredResources": {
-        }
-      }
+      "fuelLastsForTicks": 100000,
+      "fuelStorage": 0,
+      "fuel": null
     }
   ]
 }

@@ -3,6 +3,7 @@
   "category": "FARM",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -12,8 +13,8 @@
       "requiredSkill": "FARMING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
         "requiredResources": {
-          "energy": 1,
           "water": 1,
           "crop": 1
         }

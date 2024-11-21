@@ -11,6 +11,7 @@
   },
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   }

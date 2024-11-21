@@ -183,4 +183,11 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(field, message);
         }
     }
+
+    //TODO unit test
+    public static void doesNotContainNull(Map<?, ?> value, String field) {
+        notNull(value, field);
+
+        value.forEach((key, v) -> notNull(v, "%s.%s".formatted(field, key)));
+    }
 }

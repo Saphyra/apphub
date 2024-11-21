@@ -13,5 +13,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class ConstructionRequirements {
     private Integer requiredWorkPoints;
+    private Integer requiredEnergy;
     private Map<String, Integer> requiredResources;
 }

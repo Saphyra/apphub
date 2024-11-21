@@ -3,6 +3,7 @@
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -11,13 +12,9 @@
       "id": "discharge_energy_cells",
       "energyPerBatch": 1,
       "batchTicks": 10,
-      "fuelLastsFotTicks": 300,
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredResources": {
-          "energy_cell": 1
-        }
-      }
+      "fuelLastsForTicks": 1000,
+      "fuelStorage": 10,
+      "fuel": "energy_cell"
     }
   ]
 }

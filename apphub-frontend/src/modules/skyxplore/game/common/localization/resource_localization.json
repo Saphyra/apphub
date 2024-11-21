@@ -98,5 +98,9 @@
     "crop": {
         "en": "Crop",
         "hu": "Gabona"
+    },
+    "energy_cell": {
+        "en": "Energy cell",
+        "hu": "Energiacella"
     }
 }

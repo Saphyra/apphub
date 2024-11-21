@@ -29,7 +29,8 @@ public class BuildingFiller {
         "hq_barracks",
         "hq_canteen",
         "hq_storage",
-        "hq_extraction"
+        "hq_extraction",
+        "assembly_line"
     );
 
     private final EmptySurfaceProvider emptySurfaceProvider;

@@ -2,25 +2,22 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.DataValidator;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
-
 @Component
+//TODO unit test
 public class ConstructionRequirementsValidator implements DataValidator<ConstructionRequirements> {
     @Override
     public void validate(ConstructionRequirements item) {
         ValidationUtil.notNull(item, "constructionRequirements");
 
-        requireNonNull(item.getRequiredWorkPoints(), "requiredWorkPoints must not be null.");
-        if (item.getRequiredWorkPoints() < 1) {
-            throw new IllegalStateException("requiredWorkPoints must be higher than 0");
-        }
+        ValidationUtil.atLeast(item.getRequiredWorkPoints(), 0, "requiredWorkPoints");
+        ValidationUtil.atLeast(item.getRequiredEnergy(), 0, "requiredEnergy");
+        ValidationUtil.doesNotContainNull(item.getRequiredResources(), "requiredResources");
 
-        requireNonNull(item.getRequiredResources(), "RequiredResources must not be null.");
-        if (item.getRequiredResources().entrySet().stream().anyMatch(e -> isNull(e.getValue()))) {
-            throw new NullPointerException("RequiredResources must not contain null.");
+        if (item.getRequiredResources().containsKey("energy")) {
+            throw ExceptionFactory.invalidParam("energy", "must not be present");
         }
     }
 }

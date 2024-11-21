@@ -3,6 +3,7 @@
   "category": "EXTRACTION_SITE",
   "constructionRequirements": {
     "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
     "requiredResources": {
     }
   },
@@ -15,8 +16,8 @@
       "requiredSkill": "MINING",
       "constructionRequirements": {
         "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
         "requiredResources": {
-          "energy": 1
         }
       }
     }
