@@ -2,7 +2,7 @@
   {
     "surfaceType": "CONCRETE",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }
@@ -11,7 +11,7 @@
   {
     "surfaceType": "FOREST",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }
@@ -20,7 +20,7 @@
   {
     "surfaceType": "DESERT",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }
@@ -29,7 +29,7 @@
   {
     "surfaceType": "FIELD",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }

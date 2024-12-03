@@ -46,5 +46,21 @@
     "assembly_line": {
         "en": "Assembly line",
         "hu": "Összeszerelő üzem"
+    },
+    "small_battery": {
+        "en": "Small battery",
+        "hu": "Kis akkumulátor"
+    },
+    "small_ammunition_depot": {
+        "en": "Small ammunition depot",
+        "hu": "Kis lőszerraktár"
+    },
+    "small_liquid_tank": {
+        "en": "Small liquid tank",
+        "hu": "Kis tartály"
+    },
+    "small_container_storage": {
+        "en": "Small container storage",
+        "hu": "Kis konténer raktár"
     }
 }

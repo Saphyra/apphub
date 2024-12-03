@@ -1,19 +1,20 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
@@ -21,7 +22,6 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PauseGameTest extends BackEndTest {
@@ -31,59 +31,64 @@ public class PauseGameTest extends BackEndTest {
     public void pauseAndResumeGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
+        int serverPort = getServerPort();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId, userId1))
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(serverPort, GAME_NAME, new Player(accessTokenId, userId1))
             .get(accessTokenId);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
             .getPlanetId();
-        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(getServerPort(), accessTokenId, planetId);
+        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(serverPort, accessTokenId, planetId);
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_FOREST);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         //Create construction
         planetWsClient.clearMessages();
-        SkyXploreBuildingActions.constructNewBuilding(getServerPort(), accessTokenId, planetId, surfaceId, Constants.DATA_ID_CAMP);
-        planetWsClient.awaitForEvent(
-                WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED,
-                webSocketEvent -> SkyXplorePlanetActions.findSurfaceBySurfaceId(
-                        webSocketEvent.getPayloadAs(PlanetOverviewResponse.class).getSurfaces(),
-                        surfaceId
-                    )
-                    .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
-                    .isPresent()
-            )
-            .orElseThrow(() -> new RuntimeException("Construction was not created."));
+        SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_FOREST);
+
+        AwaitilityWrapper.awaitAssert(
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            surfaceResponse -> assertThat(surfaceResponse)
+                .extracting(SurfaceResponse::getTerraformation)
+                .isNotNull()
+        );
 
         //Resume game
-        gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         //Check if game is running
-        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
+        AwaitilityWrapper.create(120, 1)
+            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > 0)
+            .assertTrue("Terraformation work is not started.");
 
         //Pause game
-        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not paused"));
 
         //Check if game is not running
-        planetWsClient.clearMessages();
+        int progress = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+            .getTerraformation()
+            .getCurrentWorkPoints();
 
-        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED, 15)).isEmpty();
+        SleepUtil.sleep(10000);
+
+        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints()).isEqualTo(progress);
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(getServerPort(), accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         //Check if game is running again
-        assertThat(planetWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)).isPresent();
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > progress)
+            .assertTrue("Progress is not increased.");
     }
 }

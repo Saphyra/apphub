@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.integration.action.backend.skyxplore;
+package com.github.saphyra.apphub.integration.action.backend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;

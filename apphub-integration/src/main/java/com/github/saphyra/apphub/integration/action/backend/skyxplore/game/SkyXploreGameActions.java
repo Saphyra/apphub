@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.action.backend.skyxplore;
+package com.github.saphyra.apphub.integration.action.backend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;

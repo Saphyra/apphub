@@ -80,12 +80,12 @@ public class DeconstructConstructionAreaProcess implements Process {
         GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.initiateDeconstructModules();
+            helper.initiateDeconstructModules(game, deconstructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        if (!conditions.modulesDeconstructed(gameData, processId)) {
+        if (!conditions.modulesDeconstructed(gameData, findDeconstruction().getExternalReference())) {
             log.info("Modules are being deconstructed");
             return;
         }

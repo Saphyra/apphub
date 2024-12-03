@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class DeconstructBuildingModuleService {
+public class DeconstructBuildingModuleService {
     private final GameDao gameDao;
     private final DeconstructionFactory deconstructionFactory;
     private final DeconstructionConverter deconstructionConverter;
@@ -47,24 +47,26 @@ class DeconstructBuildingModuleService {
             throw ExceptionFactory.forbiddenOperation("BuildingModule " + buildingModuleId + " is already being deconstructed");
         }
 
-        Deconstruction deconstruction = deconstructionFactory.create(buildingModuleId, planetId);
-
-
         game.getEventLoop()
-            .processWithWait(() -> {
-                GameProgressDiff progressDiff = game.getProgressDiff();
-
-                gameData.getDeconstructions()
-                    .add(deconstruction);
-                progressDiff.save(deconstructionConverter.toModel(gameData.getGameId(), deconstruction));
-
-                DeconstructBuildingModuleProcess process = deconstructBuildingModuleProcessFactory.create(game, deconstruction);
-                gameData.getProcesses()
-                    .add(process);
-                progressDiff.save(process.toModel());
-            })
+            .processWithWait(() -> deconstructBuildingModule(game, planetId, buildingModuleId))
             .getOrThrow();
 
         return buildingModule.getConstructionAreaId();
+    }
+
+    public void deconstructBuildingModule(Game game, UUID planetId, UUID buildingModuleId) {
+        GameProgressDiff progressDiff = game.getProgressDiff();
+        GameData gameData = game.getData();
+
+        Deconstruction deconstruction = deconstructionFactory.create(buildingModuleId, planetId);
+
+        gameData.getDeconstructions()
+            .add(deconstruction);
+        progressDiff.save(deconstructionConverter.toModel(gameData.getGameId(), deconstruction));
+
+        DeconstructBuildingModuleProcess process = deconstructBuildingModuleProcessFactory.create(game, deconstruction);
+        gameData.getProcesses()
+            .add(process);
+        progressDiff.save(process.toModel());
     }
 }

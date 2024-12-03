@@ -1,12 +1,12 @@
-package com.github.saphyra.apphub.integration.action.backend.skyxplore;
+package com.github.saphyra.apphub.integration.action.backend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetStorageResponse;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetOverviewResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetStorageResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
 import io.restassured.response.Response;
 
 import java.util.List;
@@ -52,25 +52,30 @@ public class SkyXplorePlanetActions {
             .getStorage();
     }
 
+    public static SurfaceResponse findSurfaceBySurfaceId(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId) {
+        return findSurfaceBySurfaceId(getSurfaces(serverPort, accessTokenId, planetId), surfaceId)
+            .orElseThrow(() -> new RuntimeException("Surface %s not found on planet %s".formatted(surfaceId, planetId)));
+    }
+
     public static Optional<SurfaceResponse> findSurfaceBySurfaceId(List<SurfaceResponse> surfaces, UUID surfaceId) {
         return Optional.ofNullable(surfaces)
             .flatMap(surfaceResponses -> surfaceResponses.stream().filter(surfaceResponse -> surfaceResponse.getSurfaceId().equals(surfaceId)).findAny());
     }
 
-    public static Optional<SurfaceResponse> findSurfaceByBuildingId(List<SurfaceResponse> surfaces, UUID buildingId) {
-        return Optional.ofNullable(surfaces)
-            .flatMap(surfaceResponses -> surfaceResponses.stream()
-                .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
-                .filter(surfaceResponse -> surfaceResponse.getBuilding().getBuildingId().equals(buildingId))
-                .findAny()
-            );
-    }
-
     public static UUID findEmptySurface(int serverPort, UUID accessTokenId, UUID planetId, String surfaceType) {
         return SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId)
             .stream()
-            .filter(surfaceResponse -> isNull(surfaceResponse.getBuilding()))
+            .filter(surfaceResponse -> isNull(surfaceResponse.getConstructionArea()))
             .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(surfaceType))
+            .findFirst()
+            .map(SurfaceResponse::getSurfaceId)
+            .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
+    }
+
+    public static UUID findOccupiedSurfaceId(int serverPort, UUID accessTokenId, UUID planetId) {
+        return SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId)
+            .stream()
+            .filter(surfaceResponse -> !isNull(surfaceResponse.getConstructionArea()))
             .findFirst()
             .map(SurfaceResponse::getSurfaceId)
             .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));

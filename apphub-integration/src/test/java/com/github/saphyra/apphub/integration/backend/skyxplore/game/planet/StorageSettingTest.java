@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreStorageSettingActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreStorageSettingActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -81,7 +81,7 @@ public class StorageSettingTest extends BackEndTest {
         StorageSettingModel created;
         List<StorageSettingModel> createModels = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
-            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .toList();
 
         assertThat(createModels).hasSize(1);
@@ -99,7 +99,7 @@ public class StorageSettingTest extends BackEndTest {
     private UUID edit_validation(UUID accessTokenId1, PlanetLocationResponse planet) {
         UUID storageSettingId = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
-            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("StorageSetting not found."))
             .getStorageSettingId();
@@ -133,7 +133,7 @@ public class StorageSettingTest extends BackEndTest {
 
         List<StorageSettingModel> editModels = SkyXploreStorageSettingActions.getStorageSettings(getServerPort(), accessTokenId1, planet.getPlanetId())
             .stream()
-            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_ORE))
+            .filter(storageSettingModel -> storageSettingModel.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .toList();
         assertThat(editModels).hasSize(1);
         edited = editModels.get(0);

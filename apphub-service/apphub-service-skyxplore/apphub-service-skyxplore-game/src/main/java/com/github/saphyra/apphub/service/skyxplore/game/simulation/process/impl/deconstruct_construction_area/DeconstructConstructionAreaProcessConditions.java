@@ -14,11 +14,10 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 class DeconstructConstructionAreaProcessConditions {
-    boolean modulesDeconstructed(GameData gameData, UUID processId) {
-        return gameData.getProcesses()
-            .getByExternalReferenceAndType(processId, ProcessType.DECONSTRUCT_BUILDING_MODULE)
-            .stream()
-            .allMatch(process -> process.getStatus() == ProcessStatus.DONE);
+    boolean modulesDeconstructed(GameData gameData, UUID constructionAreaId) {
+        return gameData.getBuildingModules()
+            .getByConstructionAreaId(constructionAreaId)
+            .isEmpty();
     }
 
     boolean hasWorkProcess(GameData gameData, UUID processId) {

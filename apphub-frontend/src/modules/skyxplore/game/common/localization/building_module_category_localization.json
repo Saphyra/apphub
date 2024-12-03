@@ -38,5 +38,37 @@
     "HQ_CANTEEN": {
         "en": "Canteen",
         "hu": "Kantin"
+    },
+    "FARM": {
+        "en": "Farm",
+        "hu": "Farm"
+    },
+    "LARGE_STORAGE": {
+        "en": "Large storage",
+        "hu": "Nagy raktár"
+    },
+    "LARGE_POWER_SUPPLY": {
+        "en": "Advanced power supply",
+        "hu": "Fejlett energiaellátás"
+    },
+    "EDUCATION": {
+        "en": "Education",
+        "hu": "Oktatás"
+    },
+    "DWELLING": {
+        "en": "Dwelling",
+        "hu": "Lakóépület"
+    },
+    "CULTURAL": {
+        "en": "Cultural",
+        "hu": "Kultúra"
+    },
+    "DOCK": {
+        "en": "Dock",
+        "hu": "Dokk"
+    },
+    "HOSPITAL_BED": {
+        "en": "Hospital bed",
+        "hu": "Kórházi ágy"
     }
 }

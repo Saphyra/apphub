@@ -2,7 +2,7 @@
   {
     "surfaceType": "CONCRETE",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
         "stone": 100,
@@ -13,7 +13,7 @@
   {
     "surfaceType": "FOREST",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }
@@ -22,7 +22,7 @@
   {
     "surfaceType": "LAKE",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }
@@ -31,7 +31,7 @@
   {
     "surfaceType": "FIELD",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
       }

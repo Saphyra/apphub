@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.api.skyxplore.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

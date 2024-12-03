@@ -40,7 +40,6 @@ public class Constants {
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String SURFACE_TYPE_FOREST = "FOREST";
     public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
-    public static final String SURFACE_TYPE_MILITARY = "MILITARY";
 
     //DataIds
     public final String DATA_ID_SOLAR_PANEL = "solar_panel";
@@ -48,10 +47,9 @@ public class Constants {
     public final String DATA_ID_CAMP = "camp";
     public final String DATA_ID_ORE = "ore";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
+    public static final String DATA_ID_STEEL_INGOT = "steel_ingot";
 
     //QueueTypes
-    public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
-    public final String QUEUE_TYPE_DECONSTRUCTION = "DECONSTRUCTION";
     public final String QUEUE_TYPE_TERRAFORMATION = "TERRAFORMATION";
 
     //Etc
@@ -109,4 +107,6 @@ public class Constants {
     //SkyXplore skills
     public static final String SKILL_AIMING = "AIMING";
     public static final String SKILL_BUILDING = "BUILDING";
+    public static final String CONSTRUCTION_AREA_DEPOT = "depot";
+    public static final String CONSTRUCTION_AREA_EXTRACTOR = "extractor";
 }

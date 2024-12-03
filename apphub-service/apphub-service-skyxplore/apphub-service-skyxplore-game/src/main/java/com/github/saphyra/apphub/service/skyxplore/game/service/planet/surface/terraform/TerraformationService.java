@@ -50,7 +50,7 @@ class TerraformationService {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "Terraformation already in progress on surface " + surfaceId);
         }
 
-        if (gameData.getBuildings().findBySurfaceId(surfaceId).isPresent()) {
+        if (gameData.getConstructionAreas().findBySurfaceId(surfaceId).isPresent()) {
             throw ExceptionFactory.forbiddenOperation("There is already a building on surface " + surfaceId);
         }
 

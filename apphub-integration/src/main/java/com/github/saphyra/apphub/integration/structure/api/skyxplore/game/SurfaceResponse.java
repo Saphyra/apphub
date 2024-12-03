@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.structure.api.skyxplore;
+package com.github.saphyra.apphub.integration.structure.api.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.structure.api.Coordinate;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ public class SurfaceResponse {
     private UUID surfaceId;
     private Coordinate coordinate;
     private String surfaceType;
-    private SurfaceBuildingResponse building;
+    private SurfaceConstructionAreaResponse constructionArea;
     private ConstructionResponse terraformation;
 }

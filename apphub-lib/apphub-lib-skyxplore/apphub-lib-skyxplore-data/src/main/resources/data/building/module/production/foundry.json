@@ -12,10 +12,10 @@
       "resourceDataId": "steel_ingot",
       "requiredSkill": "ENGINEERING",
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
+        "requiredWorkPoints": 500,
+        "requiredEnergy": 20,
         "requiredResources": {
-          "ore": 1
+          "ore": 5
         }
       }
     },
