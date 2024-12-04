@@ -1,10 +1,10 @@
-package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.planet;
+package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.construction_area;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.util.MessageSenderUtil;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionConstructionAreaIdMapping;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,8 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 @Slf4j
 @Builder
-public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
+//TODO unit test
+public class DefaultConstructionAreaMessageProvider<T> implements ConstructionAreaMessageProvider {
     @NonNull
     private final MessageSenderUtil messageSenderUtil;
 
@@ -39,7 +40,7 @@ public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
     private final Map<String, LastMessage<T>> lastMessages = new ConcurrentHashMap<>();
 
     @Override
-    public void clearDisconnectedUserData(List<WsSessionPlanetIdMapping> connectedUsers) {
+    public void clearDisconnectedUserData(List<WsSessionConstructionAreaIdMapping> connectedUsers) {
         messageSenderUtil.clearDisconnectedUserData(connectedUsers, lastMessages);
     }
 

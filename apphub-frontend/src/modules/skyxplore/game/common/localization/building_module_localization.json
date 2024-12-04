@@ -62,5 +62,9 @@
     "small_container_storage": {
         "en": "Small container storage",
         "hu": "Kis konténer raktár"
+    },
+    "sand_mine": {
+        "en": "Sand mine",
+        "hu": "Homokbánya"
     }
 }

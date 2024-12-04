@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.planet;
+package com.github.saphyra.apphub.service.skyxplore.game.message_sender;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 @Data
-public class PlanetUpdateItem {
+public class UpdateItem {
     private String key;
     private Object value;
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 //TODO role protection test
 public interface SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleController {
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES)

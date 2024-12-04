@@ -15,6 +15,7 @@ game:
     planetPopulation: 5000
     planetBuilding: 1000
     population: 1000
+    constructionAreaBuildingModules: 100
   deconstruction:
     requiredWorkPoints: 20000
   itemSaverMaxChunkSize: 500

@@ -12,13 +12,16 @@ import ConstructionAreaSlots from "./slot/ConstructionAreaSlots";
 import useLoader from "../../../../../common/hook/Loader";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "../../../../../common/js/collection/Stream";
+import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
+import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
+import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade";
 
 const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
     const buildingModuleCategoryLocalizationHandler = new LocalizationHandler(buildingModuleCategoryLocalizationData);
 
-    const [buildings, setBuildings] = useState([]);
+    const [buildingModules, setBuildingModules] = useState([]);
     const [constructionAreaData, setConstructionAreaData] = useState(null);
 
     useCache(
@@ -26,7 +29,34 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
         SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: constructionArea.dataId }),
         setConstructionAreaData
     );
-    useLoader(SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId }), setBuildings);
+    useLoader(SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId }), setBuildingModules);
+
+    useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_GAME_CONSTRUCTION_AREA,
+        lastEvent => handleEvent(lastEvent),
+        sendMessage => {
+            const event = {
+                eventName: WebSocketEventName.SKYXPLORE_GAME_CONSTRUCTION_AREA_OPENED,
+                payload: constructionArea.constructionAreaId
+            };
+            sendMessage(JSON.stringify(event));
+        }
+    )
+
+    const handleEvent = (lastEvent) => {
+        if (!hasValue(lastEvent)) {
+            return;
+        }
+
+        switch (lastEvent.eventName) {
+            case WebSocketEventName.SKYXPLORE_GAME_CONSTRUCTION_AREA_MODIFIED:
+                const payload = lastEvent.payload;
+                if (hasValue(payload.buildingModules)) {
+                    setBuildingModules(payload.buildingModules);
+                }
+                break;
+        }
+    }
 
     const getContent = () => {
         if (!hasValue(constructionAreaData)) {
@@ -41,8 +71,8 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
                 buildingModuleCategory={buildingModulecategory}
                 amount={amount}
                 constructionArea={constructionArea}
-                buildings={new Stream(buildings).filter(building => building.buildingModuleCategory === buildingModulecategory).toList()}
-                setBuildings={setBuildings}
+                buildings={new Stream(buildingModules).filter(building => building.buildingModuleCategory === buildingModulecategory).toList()}
+                setBuildings={setBuildingModules}
                 setConfirmationDialogData={setConfirmationDialogData}
             />)
             .toList();

@@ -2,7 +2,7 @@
   "id": "hamster_wheel",
   "category": "BASIC_POWER_SUPPLY",
   "constructionRequirements": {
-    "requiredWorkPoints": 1,
+    "requiredWorkPoints": 10000,
     "requiredEnergy": 0,
     "requiredResources": {
     }

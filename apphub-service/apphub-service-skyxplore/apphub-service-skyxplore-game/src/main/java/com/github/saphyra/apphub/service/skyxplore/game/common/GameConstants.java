@@ -24,4 +24,5 @@ public class GameConstants {
     public static final String ITEM_KEY_POPULATION = "population";
 
     public static final String CITIZEN_ASSIGNMENT_TYPE_IDLE = "IDLE";
+    public static final String ITEM_KEY_BUILDING_MODULES = "buildingModules";
 }

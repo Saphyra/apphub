@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class BuildingModuleQueryService {
+public class BuildingModuleQueryService {
     private final BuildingModuleDataService buildingModuleDataService;
     private final GameDao gameDao;
     private final ConstructionConverter constructionConverter;
     private final DeconstructionConverter deconstructionConverter;
 
-    List<BuildingModuleResponse> getBuildingModulesOfConstructionArea(UUID userId, UUID constructionAreaId) {
+    public List<BuildingModuleResponse> getBuildingModulesOfConstructionArea(UUID userId, UUID constructionAreaId) {
         GameData gameData = gameDao.findByUserIdValidated(userId)
             .getData();
 

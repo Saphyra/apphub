@@ -4,7 +4,6 @@ import "./planet.css";
 import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
-import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import { hasValue } from "../../../../../common/js/Utils";

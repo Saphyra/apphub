@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSk
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionConstructionAreaIdMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
-public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandler {
+//TODO unit test
+public class SkyXploreGameConstructionAreaWebSocketHandler extends AbstractWebSocketHandler {
     private final UuidConverter uuidConverter;
     private final GameDao gameDao;
 
-    private final Map<String, UUID> openedPlanetIds = new ConcurrentHashMap<>();
+    private final Map<String, UUID> openedConstructionAreas = new ConcurrentHashMap<>();
 
-    public SkyXploreGamePlanetWebSocketHandler(WebSocketHandlerContext context, GameDao gameDao, UuidConverter uuidConverter) {
+    public SkyXploreGameConstructionAreaWebSocketHandler(WebSocketHandlerContext context, UuidConverter uuidConverter, GameDao gameDao) {
         super(context);
         this.uuidConverter = uuidConverter;
         this.gameDao = gameDao;
@@ -32,33 +33,33 @@ public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandle
 
     @Override
     public String getEndpoint() {
-        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET;
+        return GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_CONSTRUCTION_AREA;
     }
 
     @Override
     protected void afterDisconnection(UUID userId, String sessionId) {
-        openedPlanetIds.remove(sessionId);
+        openedConstructionAreas.remove(sessionId);
     }
 
     @Override
     protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
         if (event.getEventName() == WebSocketEventName.PING) {
             log.info("Ping arrived from {} to {}", userId, getEndpoint());
-        } else if (event.getEventName() == WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED) {
-            UUID planetId = uuidConverter.convertEntity(event.getPayload().toString());
-            log.info("{} opened planet {}", userId, planetId);
+        } else if (event.getEventName() == WebSocketEventName.SKYXPLORE_GAME_CONSTRUCTION_AREA_OPENED) {
+            UUID constructionAreaId = uuidConverter.convertEntity(event.getPayload().toString());
+            log.info("{} opened constructionArea {}", userId, constructionAreaId);
 
             gameDao.findByUserId(userId)
-                .ifPresent(game -> openedPlanetIds.put(sessionId, planetId));
+                .ifPresent(game -> openedConstructionAreas.put(sessionId, constructionAreaId));
         }
     }
 
-    public List<WsSessionPlanetIdMapping> getConnectedUsers() {
-        return openedPlanetIds.entrySet()
+    public List<WsSessionConstructionAreaIdMapping> getConnectedUsers() {
+        return openedConstructionAreas.entrySet()
             .stream()
-            .map(entry -> WsSessionPlanetIdMapping.builder()
+            .map(entry -> WsSessionConstructionAreaIdMapping.builder()
                 .sessionId(entry.getKey())
-                .planetId(entry.getValue())
+                .constructionAreaId(entry.getValue())
                 .userId(getUserId(entry.getKey()))
                 .build())
             .toList();

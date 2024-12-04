@@ -4,4 +4,5 @@ TODO Integration test TC: Deconstructing construction area deconstructs Building
 TODO fix population details while deconstructing
 TODO BE test for deconstruct constructionArea queue
 TODO BE test for deconstruct buildingModule queue
-TODO BE test for construct buildingModule
+TODO FE test for deconstruct constructionArea queue
+TODO FE test for deconstruct buildingModule queue

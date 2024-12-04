@@ -41,6 +41,7 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
 
+        construct_nullDataId(accessTokenId, planetId);
         construct_surfaceNotEmpty(accessTokenId, planetId);
         construct_unsupportedType(accessTokenId, planetId);
         construct_terraformationInProgress(accessTokenId, planetId);
@@ -52,6 +53,12 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         deconstruct_alreadyUnderDeconstruction(accessTokenId, planetId, surfaceId);
         deconstruct_cancel(accessTokenId, planetId, surfaceId);
         deconstruct_finish(accessTokenId, planetId, surfaceId);
+    }
+
+    private void construct_nullDataId(UUID accessTokenId, UUID planetId) {
+        UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessTokenId, planetId);
+
+        ResponseValidator.verifyInvalidParam(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, surfaceId, null), "dataId", "must not be null");
     }
 
     private static void deconstruct_finish(UUID accessTokenId, UUID planetId, UUID surfaceId) {

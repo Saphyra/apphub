@@ -42,10 +42,6 @@ public class Constants {
     public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
 
     //DataIds
-    public final String DATA_ID_SOLAR_PANEL = "solar_panel";
-    public final String DATA_ID_WATER_PUMP = "water_pump";
-    public final String DATA_ID_CAMP = "camp";
-    public final String DATA_ID_ORE = "ore";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
     public static final String DATA_ID_STEEL_INGOT = "steel_ingot";
 
@@ -109,4 +105,9 @@ public class Constants {
     public static final String SKILL_BUILDING = "BUILDING";
     public static final String CONSTRUCTION_AREA_DEPOT = "depot";
     public static final String CONSTRUCTION_AREA_EXTRACTOR = "extractor";
+
+    //Building Modules
+    public static final String BUILDING_MODULE_GARAGE = "garage";
+    public static final String BUILDING_MODULE_HAMSTER_WHEEL = "hamster_wheel";
+    public static final String BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY = "BASIC_POWER_SUPPLY";
 }

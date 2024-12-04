@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.planet;
+package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.construction_area;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.MessageSender;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionConstructionAreaIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGameConstructionAreaWebSocketHandler;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,46 +25,47 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class PlanetMessageSender implements MessageSender {
-    private final List<PlanetMessageProvider> messageProviders;
+//TODO unit test
+public class ConstructionAreaMessageSender implements MessageSender {
+    private final SkyXploreGameConstructionAreaWebSocketHandler constructionAreaWebSocketHandler;
+    private final List<ConstructionAreaMessageProvider> messageProviders;
     private final ExecutorServiceBean executorServiceBean;
-    private final SkyXploreGamePlanetWebSocketHandler planetWebSocketHandler;
     private final ErrorReporterService errorReporterService;
 
     @Override
     public List<Future<ExecutionResult<Boolean>>> sendMessages() {
-        List<WsSessionPlanetIdMapping> connectedUsers = planetWebSocketHandler.getConnectedUsers();
+        List<WsSessionConstructionAreaIdMapping> connectedUsers = constructionAreaWebSocketHandler.getConnectedUsers();
 
         messageProviders.forEach(planetMessageProvider -> planetMessageProvider.clearDisconnectedUserData(connectedUsers));
 
         return connectedUsers.stream()
-            .map(mapping -> sendMessage(mapping.getSessionId(), mapping.getUserId(), mapping.getPlanetId()))
+            .map(mapping -> sendMessage(mapping.getSessionId(), mapping.getUserId(), mapping.getConstructionAreaId()))
             .toList();
     }
 
-    private Future<ExecutionResult<Boolean>> sendMessage(String sessionId, UUID userId, UUID planetId) {
+    private Future<ExecutionResult<Boolean>> sendMessage(String sessionId, UUID userId, UUID constructionAreaId) {
         return executorServiceBean.asyncProcess(() -> {
             try {
                 Map<String, Object> payload = messageProviders.stream()
-                    .map(planetMessageProvider -> planetMessageProvider.getMessage(sessionId, userId, planetId))
+                    .map(messageProvider -> messageProvider.getMessage(sessionId, userId, constructionAreaId))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toMap(UpdateItem::getKey, UpdateItem::getValue));
 
                 if (payload.isEmpty()) {
-                    log.debug("No messages to send to user {} for planet {}", userId, planetId);
+                    log.debug("No messages to send to user {} for constructionArea {}", userId, constructionAreaId);
                     return false;
                 }
 
                 WebSocketEvent event = WebSocketEvent.builder()
-                    .eventName(WebSocketEventName.SKYXPLORE_GAME_PLANET_MODIFIED)
+                    .eventName(WebSocketEventName.SKYXPLORE_GAME_CONSTRUCTION_AREA_MODIFIED)
                     .payload(payload)
                     .build();
-                planetWebSocketHandler.sendEventToSession(sessionId, event);
+                constructionAreaWebSocketHandler.sendEventToSession(sessionId, event);
 
                 return true;
             } catch (Exception e) {
-                String errorMessage = String.format("Failed sending PlanetOverview update for user %s to planet %s", userId, planetId);
+                String errorMessage = String.format("Failed sending ConstructionArea update for user %s to ConstructionArea %s", userId, constructionAreaId);
                 log.error(errorMessage, e);
                 errorReporterService.report(errorMessage, e);
                 return false;
