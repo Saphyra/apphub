@@ -1,0 +1,54 @@
+#skyxplore-game-construction-area-slots {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px;
+}
+
+.skyxplore-game-construction-area-slots {
+    width: calc(50% - 10px);
+    min-width: 400px;
+    max-width: 610px;
+}
+
+.skyxplore-game-construction-area-slots legend {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.skyxplore-game-construction-area-slot-building {
+    margin: 10px;
+    border: 1px solid white;
+}
+
+.skyxplore-game-construction-area-slot-title {
+    padding: 3px;
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
+    border: 1px solid white;
+    border-top: none;
+    border-left: none;
+}
+
+.skyxplore-game-construction-area-slot-content {
+    padding: 5px;
+    position: relative;
+}
+
+.skyxplore-game-construction-area-building-module-deconstruct-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.skyxplore-game-construction-area-slot-content .progress-bar button{
+    border-width: 1px;
+    border-radius: 0;
+    font-size: 10px;
+    margin: 0;
+    padding: 3px;
+}

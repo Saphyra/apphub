@@ -14,7 +14,6 @@ public class GameConstants {
 
     //DataIds
     public static final String DATA_ID_RAW_FOOD = "raw_food";
-    public static final String DATA_ID_EXCAVATOR = "excavator";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
     //Message Sender item keys
@@ -25,4 +24,5 @@ public class GameConstants {
     public static final String ITEM_KEY_POPULATION = "population";
 
     public static final String CITIZEN_ASSIGNMENT_TYPE_IDLE = "IDLE";
+    public static final String ITEM_KEY_BUILDING_MODULES = "buildingModules";
 }

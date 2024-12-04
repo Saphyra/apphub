@@ -65,14 +65,14 @@ public class AllocatedResourceAmountQueryServiceTest {
         given(gameData.getAllocatedResources()).willReturn(allocatedResources);
         given(allocatedResources.getByLocation(LOCATION)).willReturn(List.of(allocatedResource1, allocatedResource2));
 
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData));
         given(resourceData.getId()).willReturn(DATA_ID_1);
 
         given(allocatedResource1.getDataId()).willReturn(DATA_ID_1);
         given(allocatedResource2.getDataId()).willReturn(DATA_ID_2);
         given(allocatedResource1.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.getAllocatedResourceAmount(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getAllocatedResourceAmount(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).isEqualTo(AMOUNT);
     }

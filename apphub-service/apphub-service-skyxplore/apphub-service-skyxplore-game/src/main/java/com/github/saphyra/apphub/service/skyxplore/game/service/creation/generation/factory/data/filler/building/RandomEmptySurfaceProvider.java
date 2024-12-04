@@ -13,10 +13,10 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Slf4j
 class RandomEmptySurfaceProvider {
-    Surface getRandomEmptySurface(Collection<Surface> surfaces, GameData gameData) {
+    Surface getEmptyDesertSurface(Collection<Surface> surfaces, GameData gameData) {
         return surfaces.stream()
             .filter(surface -> surface.getSurfaceType().equals(SurfaceType.DESERT))
-            .filter(surface -> gameData.getBuildings().findBySurfaceId(surface.getSurfaceId()).isEmpty())
+            .filter(surface -> gameData.getConstructionAreas().findBySurfaceId(surface.getSurfaceId()).isEmpty())
             .findAny()
             .orElseThrow(() -> new IllegalStateException("There are no empty surfaces left."));
     }

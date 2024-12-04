@@ -60,7 +60,7 @@ public class PauseGameTest extends SeleniumTest {
         Surface surface = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_FOREST);
         surface.openModifySurfaceWindow(driver);
 
-        SkyXploreModifySurfaceActions.constructBuilding(driver, Constants.DATA_ID_CAMP);
+        SkyXploreModifySurfaceActions.startTerraformation(driver, Constants.SURFACE_TYPE_DESERT);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXplorePlanetActions.getQueue(driver).size() == 1)

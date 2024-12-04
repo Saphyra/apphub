@@ -14,12 +14,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
@@ -93,7 +93,7 @@ public class TerraformationServiceTest {
     private Surface surface;
 
     @Mock
-    private Building building;
+    private ConstructionArea constructionArea;
 
     @Mock
     private Construction terraformation;
@@ -123,7 +123,7 @@ public class TerraformationServiceTest {
     private Constructions constructions;
 
     @Mock
-    private Buildings buildings;
+    private ConstructionAreas constructionAreas;
 
     @Mock
     private GameProgressDiff progressDiff;
@@ -177,8 +177,8 @@ public class TerraformationServiceTest {
     public void surfaceNotEmpty() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -189,8 +189,8 @@ public class TerraformationServiceTest {
     public void surfaceTypeCannotBeTerraformed() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.empty());
         given(gameData.getSurfaces()).willReturn(surfaces);
@@ -205,8 +205,8 @@ public class TerraformationServiceTest {
     public void surfaceCannotBeTerraformedToGivenType() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities()));
         given(gameData.getSurfaces()).willReturn(surfaces);
@@ -221,8 +221,8 @@ public class TerraformationServiceTest {
     public void terraform() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities(List.of(terraformingPossibility))));
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);

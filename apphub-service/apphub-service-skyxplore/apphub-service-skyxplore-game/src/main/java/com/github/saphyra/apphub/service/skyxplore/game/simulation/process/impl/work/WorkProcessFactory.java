@@ -3,13 +3,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
-import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -17,14 +18,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -37,7 +36,6 @@ public class WorkProcessFactory implements ProcessFactory {
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
     private final GameDao gameDao;
-    private final HeadquartersUtil headquartersUtil;
 
     @Override
     public ProcessType getType() {
@@ -61,17 +59,20 @@ public class WorkProcessFactory implements ProcessFactory {
         );
     }
 
-    public List<WorkProcess> createForProduction(GameData gameData, UUID processId, UUID location, String producerBuildingDataId, String dataId, Integer amount) {
+    public List<WorkProcess> createForProduction(GameData gameData, UUID processId, UUID location, String producerBuildingDataId, String resourceDataId, Integer amount) {
         log.info("Creating WorkPointProcesses...");
 
-        ProductionData productionData = Optional.ofNullable(productionBuildingService.get(producerBuildingDataId))
-            .map(productionBuildingData -> productionBuildingData.getGives().get(dataId))
-            .orElseGet(() -> headquartersUtil.getProductionData(dataId));
+        Production production = productionBuildingService.get(producerBuildingDataId)
+            .getProduces()
+            .stream()
+            .filter(p -> p.getResourceDataId().equals(resourceDataId))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.reportedException("ProducerBuildingModule not found by resourceDataId " + resourceDataId));
+        ConstructionRequirements constructionRequirements = production.getConstructionRequirements();
 
-        ConstructionRequirements constructionRequirements = productionData.getConstructionRequirements();
         int requiredWorkPoints = amount * constructionRequirements.getRequiredWorkPoints();
 
-        return createNews(gameData, processId, location, producerBuildingDataId, productionData.getRequiredSkill(), requiredWorkPoints, WorkProcessType.OTHER, null);
+        return createNews(gameData, processId, location, producerBuildingDataId, production.getRequiredSkill(), requiredWorkPoints, WorkProcessType.OTHER, null);
     }
 
     public List<WorkProcess> createForDeconstruction(GameData gameData, UUID processId, UUID deconstructionId, UUID location) {

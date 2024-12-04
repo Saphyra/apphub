@@ -54,6 +54,10 @@
     background-image: url("../../../../common/img/surface_type/military.png");
 }
 
+.skyxplore-game-planet-surface-tile.surface-type-field {
+    background-image: url("../../../../common/img/surface_type/field.jpg");
+}
+
 .skyxplore-game-planet-surface-footer {
     position: absolute;
     left: 0;
@@ -65,6 +69,17 @@
 }
 
 .skyxplore-game-planet-surface-modify-button {
+    background-position: center;
+    background-size: cover;
+    border-width: 1px;
+    background-image: url("../../../../../../../common/style/img/edit.png");
+    height: 16px;
+    width: 16px;
+    margin: 2px;
+    border-radius: 0;
+}
+
+.skyxplore-game-planet-surface-construction-area-open-button {
     background-position: center;
     background-size: cover;
     border-width: 1px;

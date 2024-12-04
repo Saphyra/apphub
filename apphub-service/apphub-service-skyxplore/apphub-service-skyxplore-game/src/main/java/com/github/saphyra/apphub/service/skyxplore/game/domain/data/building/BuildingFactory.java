@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 public class BuildingFactory {
     private final IdGenerator idGenerator;
 

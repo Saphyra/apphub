@@ -1,0 +1,22 @@
+.progress-bar {
+    border: 1px solid white;
+    position: relative;
+}
+
+.progress-bar-progress {
+    position: absolute;
+    background-color: green;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.progress-bar-content {
+    position: relative;
+    padding: 3px;
+}
+
+.progress-bar-content-percentage {
+    float: right;
+    margin-right: 3px;
+}

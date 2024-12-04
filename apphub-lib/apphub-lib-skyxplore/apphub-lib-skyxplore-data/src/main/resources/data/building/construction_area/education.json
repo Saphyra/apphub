@@ -1,0 +1,17 @@
+{
+  "id": "education",
+  "supportedSurfaces": [
+    "CONCRETE"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 4,
+    "BASIC_POWER_SUPPLY": 1,
+    "EDUCATION": 3
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  }
+}

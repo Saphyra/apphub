@@ -63,6 +63,13 @@ public class AwaitilityWrapper {
         return helper.getResult();
     }
 
+    /**
+     * Returns an instance invalidated.
+     */
+    public static <T> Optional<T> getWithWait(Supplier<T> supplier) {
+        return getWithWait(supplier, t -> true);
+    }
+
     public static <T> Optional<T> getWithWait(Supplier<T> supplier, Predicate<T> predicate) {
         GetWithWaitHelper<T> helper = new GetWithWaitHelper<>(supplier, predicate);
         createDefault()
@@ -144,6 +151,12 @@ public class AwaitilityWrapper {
             .assertTrue("Assertions failed.");
     }
 
+    /**
+     * Waints until the provided condition returns true, or timeout happens
+     *
+     * @param callable provided condition
+     * @return The result of the waiting process
+     */
     public AwaitResult until(Callable<Boolean> callable) {
         ObjectWrapper<Throwable> exception = new ObjectWrapper<>();
 

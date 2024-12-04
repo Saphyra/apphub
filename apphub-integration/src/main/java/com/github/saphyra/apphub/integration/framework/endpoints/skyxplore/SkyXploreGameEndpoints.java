@@ -48,6 +48,20 @@ public class SkyXploreGameEndpoints {
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
 
+    //Construction Area
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/{surfaceId}/construction-area";
+    public static final String SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION = "/api/skyxplore/game/surface/construction-area/{constructionId}/cancel-construction";
+    public static final String SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/construction-area/{constructionAreaId}";
+    public static final String SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA = "/api/skyxplore/game/surface/construction-area/{deconstructionId}/cancel-deconstruction";
+
+    //Building Module
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES = "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-module";
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE = "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-module";
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE = "/api/skyxplore/game/surface/construction-area/building-module/{constructionId}/cancel-construction";
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE = "/api/skyxplore/game/surface/construction-area/building-module/{buildingModuleId}/deconstruct";
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE = "/api/skyxplore/game/surface/construction-area/building-module/{deconstructionId}/cancel-deconstruction";
+    public static final String SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES = "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-modules/{buildingModuleCategory}";
+
     //Queue
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
     public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
