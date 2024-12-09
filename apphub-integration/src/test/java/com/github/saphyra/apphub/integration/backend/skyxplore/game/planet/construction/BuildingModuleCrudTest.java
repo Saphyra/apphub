@@ -16,8 +16,6 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceConstructionAreaResponse;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.building.BuildingModuleResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -42,7 +40,7 @@ public class BuildingModuleCrudTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
         UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
-        UUID constructionAreaId = constructConstructionArea(accessTokenId, planetId, surfaceId);
+        UUID constructionAreaId = SkyXploreConstructionAreaActions.constructConstructionArea(getServerPort(), accessTokenId, planetId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
 
         construct_nullDataId(accessTokenId, constructionAreaId);
         construct_noSlotAvailable(accessTokenId, constructionAreaId);
@@ -140,32 +138,5 @@ public class BuildingModuleCrudTest extends BackEndTest {
 
     private static void construct_nullDataId(UUID accessTokenId, UUID constructionAreaId) {
         ResponseValidator.verifyInvalidParam(SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessTokenId, constructionAreaId, null), "buildingModuleDataId", "must not be null");
-    }
-
-    private static UUID constructConstructionArea(UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        int serverPort = getServerPort();
-
-        SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
-
-        AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
-            surfaceResponse -> assertThat(surfaceResponse)
-                .extracting(SurfaceResponse::getConstructionArea)
-                .returns(Constants.CONSTRUCTION_AREA_EXTRACTOR, SurfaceConstructionAreaResponse::getDataId)
-                .extracting(SurfaceConstructionAreaResponse::getConstruction)
-                .isNotNull()
-        );
-
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
-
-        AwaitilityWrapper.create(120, 1)
-            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getConstructionArea().getConstruction()))
-            .assertTrue("ConstructionArea is not finished");
-
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
-
-        return SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
-            .getConstructionArea()
-            .getConstructionAreaId();
     }
 }

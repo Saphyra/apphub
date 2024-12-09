@@ -108,6 +108,8 @@ public class Constants {
 
     //Building Modules
     public static final String BUILDING_MODULE_GARAGE = "garage";
+    public static final String BUILDING_MODULE_SMALL_BATTERY = "small_battery";
     public static final String BUILDING_MODULE_HAMSTER_WHEEL = "hamster_wheel";
     public static final String BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY = "BASIC_POWER_SUPPLY";
+    public static final String BUILDING_MODULE_CATEGORY_SMALL_STORAGE = "SMALL_STORAGE";
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
@@ -11,9 +12,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreBuildingModuleActions {
+    public static void constructBuildingModules(int serverPort, UUID accessTokenId, UUID constructionAreaId, String... dataIds) {
+        Arrays.stream(dataIds)
+            .forEach(dataId -> constructBuildingModule(serverPort, accessTokenId, constructionAreaId, dataId));
+
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+
+        AwaitilityWrapper.create(180, 5)
+            .until(() -> getBuildingModules(serverPort, accessTokenId, constructionAreaId).stream().allMatch(buildingModuleResponse -> isNull(buildingModuleResponse.getConstruction())))
+            .assertTrue("BuildingModule construction is not finished.");
+
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+    }
+
     public static List<BuildingModuleResponse> constructBuildingModule(int serverPort, UUID accessTokenId, UUID constructionAreaId, String dataId) {
         Response response = getConstructBuildingModuleResponse(serverPort, accessTokenId, constructionAreaId, dataId);
 

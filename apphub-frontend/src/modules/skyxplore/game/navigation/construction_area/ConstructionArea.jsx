@@ -10,11 +10,13 @@ import { hasValue } from "../../../../../common/js/Utils";
 import buildingModuleCategoryLocalizationData from "../../common/localization/building_module_category_localization.json";
 import ConstructionAreaSlots from "./slot/ConstructionAreaSlots";
 import useLoader from "../../../../../common/hook/Loader";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES, SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "../../../../../common/js/collection/Stream";
 import WebSocketEndpoint from "../../../../../common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
 import useConnectToWebSocket from "../../../../../common/hook/ws/WebSocketFacade";
+import "./construction_area.css";
+import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
 const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -78,6 +80,34 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
             .toList();
     }
 
+    const openDeconstructConfirmation = () => {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "skyxplore-game-construction-area-deconstruction-confirmation",
+            localizationHandler.get("deconstruct-construction-area-confirmation-title"),
+            localizationHandler.get("deconstruct-construction-area-confirmation-detail", { name: constructionAreaLocalizationHandler.get(constructionArea.dataId) }),
+            [
+                <Button
+                    id="skyxplore-game-construction-area-deconstruction-confirm-button"
+                    label={localizationHandler.get("deconstruct")}
+                    onclick={deconstruct}
+                />,
+                <Button
+                    id="skyxplore-game-construction-area-deconstruction-cancel-button"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ))
+    }
+
+    const deconstruct = async () => {
+        await SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId })
+            .send();
+
+        setConfirmationDialogData(null);
+        closePage();
+    }
+
     return (
         <div>
             <header id="skyxplore-game-construction-area-header">
@@ -95,8 +125,12 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
                 <div id="skyxplore-game-construction-area-slots">
                     {getContent()}
                 </div>
-                <div>
-                    TODO deconstruct surface
+                <div id="skyxplore-game-construction-area-deconstruct-button-wrapper">
+                    <Button
+                        id="skyxplore-game-construction-area-deconstruct-button"
+                        label={localizationHandler.get("deconstruct-construction-area", { name: constructionAreaLocalizationHandler.get(constructionArea.dataId) })}
+                        onclick={openDeconstructConfirmation}
+                    />
                 </div>
             </main>
 

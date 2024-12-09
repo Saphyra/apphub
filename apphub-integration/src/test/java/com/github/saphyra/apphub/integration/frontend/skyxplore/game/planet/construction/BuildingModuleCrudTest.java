@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet;
+package com.github.saphyra.apphub.integration.frontend.skyxplore.game.planet.construction;
 
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreConstructionAreaActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
@@ -55,7 +54,7 @@ public class BuildingModuleCrudTest extends SeleniumTest {
         String surfaceId = SkyXplorePlanetActions.findEmptySurface(driver, Constants.SURFACE_TYPE_DESERT)
             .getSurfaceId();
 
-        constructConstructionArea(driver, surfaceId);
+        SkyXploreConstructionAreaActions.constructConstructionArea(driver, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
 
         SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId)
             .openConstructionArea();
@@ -125,23 +124,5 @@ public class BuildingModuleCrudTest extends SeleniumTest {
         CustomAssertions.singleListAssertThat(SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
             .returns(Constants.BUILDING_MODULE_HAMSTER_WHEEL, BuildingModule::getDataId)
             .returns(true, BuildingModule::isConstructionInProgress);
-    }
-
-    private static void constructConstructionArea(WebDriver driver, String surfaceId) {
-        SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId)
-            .openModifySurfaceWindow(driver);
-
-        SkyXploreModifySurfaceActions.constructConstructionArea(driver, Constants.CONSTRUCTION_AREA_EXTRACTOR);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isConstructionInProgress())
-            .assertTrue("Construction is not started.");
-
-        SkyXploreGameActions.resumeGame(driver);
-
-        AwaitilityWrapper.create(120, 5)
-            .until(() -> !SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isConstructionInProgress())
-            .assertTrue("Construction is not finished.");
-        SkyXploreGameActions.pauseGame(driver);
     }
 }
