@@ -23,18 +23,18 @@ class EmptySurfaceProvider {
         List<Surface> surfacesWithMatchingType = matchingSurfaceTypeFilter.getSurfacesWithMatchingType(surfaces, surfaceType);
 
         if (surfacesWithMatchingType.isEmpty()) {
-            log.debug("There is no surface with type {}", surfaceType);
-            Surface randomEmptySurface = randomEmptySurfaceProvider.getRandomEmptySurface(surfaces, gameData);
+            log.debug("There is no surface with type {}. Converting one...", surfaceType);
+            Surface randomEmptySurface = randomEmptySurfaceProvider.getEmptyDesertSurface(surfaces, gameData);
             randomEmptySurface.setSurfaceType(surfaceType);
             return randomEmptySurface;
         }
 
-        Optional<Surface> emptySurfaceWithMatchingType = surfacesWithMatchingType.stream()
-            .filter(surface -> gameData.getBuildings().findBySurfaceId(surface.getSurfaceId()).isEmpty())
+        Optional<Surface> maybeEmptySurfaceWithMatchingType = surfacesWithMatchingType.stream()
+            .filter(surface -> gameData.getConstructionAreas().findBySurfaceId(surface.getSurfaceId()).isEmpty())
             .findFirst();
-        if (emptySurfaceWithMatchingType.isPresent()) {
-            log.debug("Empty surface found for surfaceType {}: {}", surfaceType, emptySurfaceWithMatchingType);
-            return emptySurfaceWithMatchingType.get();
+        if (maybeEmptySurfaceWithMatchingType.isPresent()) {
+            log.debug("Empty surface found for surfaceType {}: {}", surfaceType, maybeEmptySurfaceWithMatchingType);
+            return maybeEmptySurfaceWithMatchingType.get();
         }
 
         Surface randomEmptySurfaceNextToType = adjacentRandomEmptySurfaceProvider.getRandomEmptySurfaceNextTo(surfacesWithMatchingType, surfaces, gameData);

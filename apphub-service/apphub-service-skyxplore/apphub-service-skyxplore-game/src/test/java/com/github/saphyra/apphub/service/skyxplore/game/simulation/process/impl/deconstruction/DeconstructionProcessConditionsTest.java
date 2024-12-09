@@ -55,7 +55,7 @@ class DeconstructionProcessConditionsTest {
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
         given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingId(BUILDING_ID)).willReturn(List.of(buildingAllocation));
+        given(buildingAllocations.getByBuildingModuleId(BUILDING_ID)).willReturn(List.of(buildingAllocation));
 
         assertThat(underTest.buildingUtilized(gameData, DECONSTRUCTION_ID)).isTrue();
     }

@@ -3,14 +3,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProducerBuildingModule;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
-import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
@@ -78,10 +78,10 @@ class WorkProcessFactoryTest {
     private ProcessModel model;
 
     @Mock
-    private ProductionBuildingData productionBuildingData;
+    private ProducerBuildingModule producerBuildingModule;
 
     @Mock
-    private ProductionData productionData;
+    private Production production;
 
     @Mock
     private ConstructionRequirements constructionRequirements;
@@ -123,14 +123,15 @@ class WorkProcessFactoryTest {
 
     @Test
     void createForProduction() {
-        given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(productionBuildingData);
-        given(productionBuildingData.getGives()).willReturn(Map.of(RESOURCE_DATA_ID, productionData));
-        given(productionData.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(producerBuildingModule);
+        given(producerBuildingModule.getProduces()).willReturn(List.of(production));
+        given(production.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
+        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(WORK_POINTS_PER_RESOURCE);
         given(gameProperties.getCitizen()).willReturn(citizenProperties);
         given(citizenProperties.getMaxWorkPointsBatch()).willReturn(MAX_WORK_POINT_BATCH);
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
-        given(productionData.getRequiredSkill()).willReturn(SkillType.AIMING);
+        given(production.getRequiredSkill()).willReturn(SkillType.AIMING);
         given(gameDao.findById(GAME_ID)).willReturn(game);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(game.getData()).willReturn(gameData);

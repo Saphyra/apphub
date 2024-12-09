@@ -1,0 +1,11 @@
+{
+  "id": "workshop",
+  "category": "CULTURAL",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 1
+}

@@ -1,0 +1,14 @@
+{
+    "slot-name": {
+        "en": "Slot",
+        "hu": "Hely"
+    },
+    "slot-amount": {
+        "en": "Amount",
+        "hu": "Darabszám"
+    },
+    "construct": {
+        "en": "Construct",
+        "hu": "Megépít"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "construct-building": {
+        "en": "Construct building",
+        "hu": "Épület építése"
+    },
+    "deconstruct": {
+        "en": "Deconstruct",
+        "hu": "Lerombol"
+    },
+    "deconstruct-building-title": {
+        "en": "Deconstruct building?",
+        "hu": "Épület lerombolása?"
+    },
+    "deconstruct-building-detail": {
+        "en": "Are you sure you want to deconstruct a(n) {building}?",
+        "hu": "Biztosan le akarod rombolni a(z) {building} épóletet?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "deconstructing": {
+        "en": "Deconstructing...",
+        "hu": "Lerombolás..."
+    },
+    "cancel-deconstruction": {
+        "en": "Cancel deconstruction",
+        "hu": "Lerombolás megszakítása"
+    },
+    "constructing": {
+        "en": "Constructing...",
+        "hu": "Építés..."
+    },
+    "cancel-construction": {
+        "en": "Cancel construction",
+        "hu": "Építkezés visszavonása"
+    }
+}

@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Deprecated(forRemoval = true)
 public class Building {
     @NonNull
     private final UUID buildingId;

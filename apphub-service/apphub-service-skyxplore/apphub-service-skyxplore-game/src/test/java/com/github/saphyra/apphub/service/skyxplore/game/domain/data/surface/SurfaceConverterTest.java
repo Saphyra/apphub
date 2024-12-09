@@ -2,18 +2,18 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreaConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class SurfaceConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private BuildingConverter buildingConverter;
+    private ConstructionAreaConverter constructionAreaConverter;
 
     @Mock
     private ConstructionConverter constructionConverter;
@@ -49,13 +49,13 @@ class SurfaceConverterTest {
     private Coordinate coordinate;
 
     @Mock
-    private Building building;
+    private ConstructionArea constructionArea;
 
     @Mock
-    private Buildings buildings;
+    private ConstructionAreas constructionAreas;
 
     @Mock
-    private SurfaceBuildingResponse buildingResponse;
+    private SurfaceConstructionAreaResponse constructionAreaResponse;
 
     @Mock
     private Constructions constructions;
@@ -97,9 +97,9 @@ class SurfaceConverterTest {
         given(gameData.getCoordinates()).willReturn(coordinates);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
 
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
-        given(buildingConverter.toResponse(gameData, building)).willReturn(buildingResponse);
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));
+        given(constructionAreaConverter.toResponse(gameData, constructionArea)).willReturn(constructionAreaResponse);
 
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(terraformation));
@@ -110,7 +110,7 @@ class SurfaceConverterTest {
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);
         assertThat(result.getSurfaceType()).isEqualTo(SurfaceType.CONCRETE.name());
-        assertThat(result.getBuilding()).isEqualTo(buildingResponse);
+        assertThat(result.getConstructionArea()).isEqualTo(constructionAreaResponse);
         assertThat(result.getTerraformation()).isEqualTo(terraformationResponse);
     }
 }

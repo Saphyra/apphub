@@ -95,12 +95,12 @@ public class ResourceAllocationServiceTest {
     @BeforeEach
     public void setUp() {
         given(consumptionCalculator.calculate(gameData, PLANET_ID, EXTERNAL_REFERENCE, DATA_ID, REQUIRED_AMOUNT)).willReturn(consumptionResult);
-        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.BULK, CollectionUtils.singleValueMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
+        given(requiredEmptyStorageCalculator.getRequiredStorageAmount(StorageType.CONTAINER, CollectionUtils.singleValueMap(DATA_ID, consumptionResult))).willReturn(REQUIRED_STORAGE);
     }
 
     @Test
     public void notEnoughStorage() {
-        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE - 1);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.CONTAINER)).willReturn(REQUIRED_STORAGE - 1);
 
         Throwable ex = catchThrowable(() -> underTest.processResourceRequirements(progressDiff, gameData, PLANET_ID, EXTERNAL_REFERENCE, CollectionUtils.singleValueMap(DATA_ID, REQUIRED_AMOUNT)));
 
@@ -109,14 +109,14 @@ public class ResourceAllocationServiceTest {
             HttpStatus.BAD_REQUEST,
             ErrorCode.NOT_ENOUGH_STORAGE,
             "storageType",
-            StorageType.BULK.name()
+            StorageType.CONTAINER.name()
         );
     }
 
     @Test
     public void processResourceRequirements() {
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.BULK)).willReturn(REQUIRED_STORAGE);
+        given(freeStorageQueryService.getFreeStorage(gameData, PLANET_ID, StorageType.CONTAINER)).willReturn(REQUIRED_STORAGE);
         given(consumptionResult.getAllocation()).willReturn(allocatedResource);
         given(consumptionResult.getReservation()).willReturn(reservedStorage);
 

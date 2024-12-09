@@ -2,6 +2,7 @@ import ConfirmationDialogData from "../../../../../../../../../../common/compone
 import Button from "../../../../../../../../../../common/component/input/Button";
 import { SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
+//TODO remove
 const confirmCancelConstruction = (
     localizationHandler,
     buildingLocalizationHandler,

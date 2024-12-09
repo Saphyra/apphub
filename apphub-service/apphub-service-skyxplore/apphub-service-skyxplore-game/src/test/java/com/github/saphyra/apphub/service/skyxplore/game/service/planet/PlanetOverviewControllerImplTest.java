@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetOverviewResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;

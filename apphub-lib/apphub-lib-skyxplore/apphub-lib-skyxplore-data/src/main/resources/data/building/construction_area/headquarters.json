@@ -1,0 +1,22 @@
+{
+  "id": "headquarters",
+  "supportedSurfaces": [
+    "DESERT"
+  ],
+  "slots": {
+    "HQ_STORAGE": 1,
+    "BASIC_POWER_SUPPLY": 1,
+    "HQ_EXTRACTION": 1,
+    "PRODUCTION": 3,
+    "HQ_BARRACKS": 1,
+    "SMALL_MILITARY": 1,
+    "LARGE_MILITARY": 1,
+    "HQ_CANTEEN": 1
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  }
+}
