@@ -4,6 +4,7 @@ public enum ProcessType {
     CONSTRUCT_CONSTRUCTION_AREA,
     DECONSTRUCT_CONSTRUCTION_AREA,
     CONSTRUCT_BUILDING_MODULE,
+    DECONSTRUCT_BUILDING_MODULE,
     @Deprecated(forRemoval = true)
     CONSTRUCTION,
     @Deprecated(forRemoval = true)
@@ -13,5 +14,4 @@ public enum ProcessType {
     WORK,
     STORAGE_SETTING,
     REST,
-    DECONSTRUCT_BUILDING_MODULE,
 }

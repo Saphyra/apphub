@@ -12,20 +12,20 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Deprecated(forRemoval = true)
-class ConstructionCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
+//TODO unit test
+class ConstructConstructionAreaCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
     @Override
     public ProcessType getType() {
-        return ProcessType.CONSTRUCTION;
+        return ProcessType.CONSTRUCT_CONSTRUCTION_AREA;
     }
 
     @Override
     public Object getData(GameData gameData, Process process) {
-        UUID buildingId = gameData.getConstructions()
+        UUID constructionAreaId = gameData.getConstructions()
             .findByConstructionIdValidated(process.getExternalReference())
             .getExternalReference();
-        return gameData.getBuildings()
-            .findByBuildingId(buildingId)
+        return gameData.getConstructionAreas()
+            .findByConstructionAreaIdValidated(constructionAreaId)
             .getDataId();
     }
 }

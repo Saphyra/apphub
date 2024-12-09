@@ -1,6 +1,5 @@
 TODO add to release notes
 TODO remove building related FE code
-TODO fix population details while deconstructing
 TODO BE test for deconstruct constructionArea queue
 TODO BE test for deconstruct buildingModule queue
 TODO FE test for deconstruct constructionArea queue
