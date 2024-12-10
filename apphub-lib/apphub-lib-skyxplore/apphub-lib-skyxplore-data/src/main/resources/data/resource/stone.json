@@ -1,5 +1,5 @@
 {
   "id": "stone",
-  "storageType": "bulk",
+  "storageType": "container",
   "maxProductionBatchSize": 50
 }

@@ -8,12 +8,12 @@
         "hu": "Tétlen"
     },
     "construction": {
-        "en": "Constructs {building}",
-        "hu": "Épít: {building}"
+        "en": "Constructs {item}",
+        "hu": "Épít: {item}"
     },
     "deconstruction": {
-        "en": "Deconstructs {building}",
-        "hu": "Lerombol: {building}"
+        "en": "Deconstructs {item}",
+        "hu": "Lerombol: {item}"
     },
     "rest": {
         "en": "Resting: {status}%",

@@ -3,10 +3,11 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.citi
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePopulationActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePopulationActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -40,7 +41,7 @@ public class MoraleRecoveryTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
             .getPlanetId();
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 

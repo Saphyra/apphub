@@ -7,8 +7,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum QueueItemType {
+    CONSTRUCT_BUILDING_MODULE(PriorityType.CONSTRUCTION),
+    DECONSTRUCT_BUILDING_MODULE(PriorityType.CONSTRUCTION),
+    CONSTRUCT_CONSTRUCTION_AREA(PriorityType.CONSTRUCTION),
+    DECONSTRUCT_CONSTRUCTION_AREA(PriorityType.CONSTRUCTION),
     TERRAFORMATION(PriorityType.CONSTRUCTION),
+    @Deprecated(forRemoval = true)
     CONSTRUCTION(PriorityType.CONSTRUCTION),
+    @Deprecated(forRemoval = true)
     DECONSTRUCTION(PriorityType.CONSTRUCTION),
     ;
 

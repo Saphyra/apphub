@@ -3,21 +3,21 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.terr
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.SurfaceResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -58,7 +58,7 @@ public class TerraformTest extends BackEndTest {
     }
 
     private void surfaceNotEmpty(UUID accessTokenId, UUID planetId) {
-        UUID occupiedSurfaceId = findOccupiedMilitary(accessTokenId, planetId);
+        UUID occupiedSurfaceId = findOccupied(accessTokenId, planetId);
 
         Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
 
@@ -111,7 +111,7 @@ public class TerraformTest extends BackEndTest {
     public void finishTerraformation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
@@ -121,7 +121,7 @@ public class TerraformTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
             .getPlanetId();
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
@@ -138,13 +138,12 @@ public class TerraformTest extends BackEndTest {
         return surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_CONCRETE) && isNull(surfaceResponse.getTerraformation());
     }
 
-    private UUID findOccupiedMilitary(UUID accessTokenId, UUID planetId) {
+    private UUID findOccupied(UUID accessTokenId, UUID planetId) {
         return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
             .stream()
-            .filter(surfaceResponse -> !isNull(surfaceResponse.getBuilding()))
-            .filter(surfaceResponse -> surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_MILITARY))
+            .filter(surfaceResponse -> !isNull(surfaceResponse.getConstructionArea()))
             .findFirst()
             .map(SurfaceResponse::getSurfaceId)
-            .orElseThrow(() -> new RuntimeException("Occupied Military not found on planet " + planetId));
+            .orElseThrow(() -> new RuntimeException("Occupied surface not found on planet " + planetId));
     }
 }

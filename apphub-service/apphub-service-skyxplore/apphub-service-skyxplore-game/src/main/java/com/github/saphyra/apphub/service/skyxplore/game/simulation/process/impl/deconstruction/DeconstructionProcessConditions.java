@@ -12,6 +12,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class DeconstructionProcessConditions {
     boolean buildingUtilized(GameData gameData, UUID deconstructionId) {
         UUID buildingId = gameData.getDeconstructions()
@@ -19,7 +20,7 @@ class DeconstructionProcessConditions {
             .getExternalReference();
 
         return !gameData.getBuildingAllocations()
-            .getByBuildingId(buildingId)
+            .getByBuildingModuleId(buildingId)
             .isEmpty();
     }
 

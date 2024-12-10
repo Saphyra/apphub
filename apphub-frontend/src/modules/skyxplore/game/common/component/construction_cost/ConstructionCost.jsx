@@ -4,7 +4,7 @@ import LocalizationHandler from "../../../../../../common/js/LocalizationHandler
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import resourceLocalizationData from "../../localization/resource_localization.json";
 
-const ConstructionCost = ({ id, className,  constructionRequirements }) => {
+const ConstructionCost = ({ id, className, constructionRequirements }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
@@ -28,6 +28,14 @@ const ConstructionCost = ({ id, className,  constructionRequirements }) => {
             </thead>
             <tbody>
                 {getResourceRequirements()}
+
+                {constructionRequirements.requiredEnergy > 0 &&
+                    <tr>
+                        <td>{localizationHandler.get("required-energy")}</td>
+                        <td>{constructionRequirements.requiredEnergy}</td>
+                    </tr>
+                }
+
                 <tr>
                     <td>{localizationHandler.get("required-work-points")}</td>
                     <td>{constructionRequirements.requiredWorkPoints}</td>

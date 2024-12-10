@@ -12,6 +12,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class DeconstructionCitizenAssignmentDataProvider implements CitizenAssignmentDataProvider {
     @Override
     public ProcessType getType() {

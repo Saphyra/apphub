@@ -1,0 +1,18 @@
+{
+  "id": "agricultural",
+  "supportedSurfaces": [
+    "FIELD"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 4,
+    "BASIC_POWER_SUPPLY": 1,
+    "FARM": 3,
+    "SMALL_MILITARY": 1
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  }
+}

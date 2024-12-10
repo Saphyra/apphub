@@ -1,0 +1,10 @@
+{
+    "title": {
+        "en": "Construct building of category {buildingModuleCategory}",
+        "hu": "{buildingModuleCategory} épület építése"
+    },
+    "construct": {
+        "en": "Construct",
+        "hu": "Megépít"
+    }
+}

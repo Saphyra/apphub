@@ -24,7 +24,7 @@ public class FreeStorageQueryService {
     }
 
     public int getFreeStorage(GameData gameData, UUID location, StorageType storageType) {
-        return storageCalculator.calculateCapacity(gameData, location, storageType)
+        return storageCalculator.calculateStorageCapacity(gameData, location, storageType)
             - storedResourceAmountQueryService.getActualAmount(gameData, location, storageType)
             - reservedStorageQueryService.getReservedStorageCapacity(gameData, location, storageType);
     }

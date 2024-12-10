@@ -50,7 +50,9 @@ public enum WebSocketEventName {
 
     //SkyXplore Game Planet
     SKYXPLORE_GAME_PLANET_OPENED("skyxplore-game-planet-opened"),
+    SKYXPLORE_GAME_CONSTRUCTION_AREA_OPENED("skyxplore-game-construction-area-opened"),
     SKYXPLORE_GAME_PLANET_MODIFIED("skyxplore-game-planet-modified"),
+    SKYXPLORE_GAME_CONSTRUCTION_AREA_MODIFIED("skyxplore-game-construction-area-modified"),
 
     //SkyXplore Game Population
     SKYXPLORE_GAME_POPULATION_OPENED("skyxplore-game-population-opened"),

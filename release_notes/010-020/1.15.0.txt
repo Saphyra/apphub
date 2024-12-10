@@ -8,6 +8,8 @@
         Save checklist item modification when pressing enter
         Add new checklist item when saving new one
         Bulk operations
+    SkyXplore
+        ConstructionAreas and BuildingModules
 
 ===BUGFIXES===
     UserSettings record was not deleted with the user

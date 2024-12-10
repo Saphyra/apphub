@@ -1,0 +1,12 @@
+{
+  "id": "skyscraper",
+  "category": "DWELLING",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 20,
+  "moraleRecovery": 3
+}

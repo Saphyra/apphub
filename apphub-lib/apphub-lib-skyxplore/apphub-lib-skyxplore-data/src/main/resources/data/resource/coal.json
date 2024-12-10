@@ -1,5 +1,5 @@
 {
   "id": "coal",
-  "storageType": "bulk",
+  "storageType": "container",
   "maxProductionBatchSize": 50
 }

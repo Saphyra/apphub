@@ -14,6 +14,7 @@ public class GenericSkyXploreEndpoints {
     public static final String WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION = "/api/ws/skyxplore-lobby/invitation";
     public static final String WS_CONNECTION_SKYXPLORE_GAME = "/api/ws/skyxplore-game/game";
     public static final String WS_CONNECTION_SKYXPLORE_GAME_PLANET = "/api/ws/skyxplore-game/game/planet";
+    public static final String WS_CONNECTION_SKYXPLORE_GAME_CONSTRUCTION_AREA = "/api/ws/skyxplore-game/game/construction-area";
     public static final String WS_CONNECTION_SKYXPLORE_GAME_POPULATION = "/api/ws/skyxplore-game/game/population";
     public static final String WS_CONNECTION_SKYXPLORE_INTERNAL = "/allowed-internal/skyxplore";
 }

@@ -1,5 +1,5 @@
 {
   "id": "plastic",
-  "storageType": "bulk",
+  "storageType": "container",
   "maxProductionBatchSize": 10
 }

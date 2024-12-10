@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetStorageResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetStorageResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.StorageDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -52,7 +52,7 @@ public class PlanetStorageOverviewQueryServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
 
-        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.BULK)).willReturn(bulkStorageDetailsResponse);
+        given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.CONTAINER)).willReturn(bulkStorageDetailsResponse);
         given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.ENERGY)).willReturn(energyStorageDetailsResponse);
         given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.LIQUID)).willReturn(liquidStorageDetailsResponse);
 

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

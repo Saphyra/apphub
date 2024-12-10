@@ -1,0 +1,25 @@
+{
+  "id": "coal_mine",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "COAL_FIELD"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "coal",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

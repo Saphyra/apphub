@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

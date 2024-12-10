@@ -6,5 +6,9 @@
     "required-work-points": {
         "en": "Work points",
         "hu": "Munkapontok"
+    },
+    "required-energy": {
+        "en": "Eenergy",
+        "hu": "Energia"
     }
 }

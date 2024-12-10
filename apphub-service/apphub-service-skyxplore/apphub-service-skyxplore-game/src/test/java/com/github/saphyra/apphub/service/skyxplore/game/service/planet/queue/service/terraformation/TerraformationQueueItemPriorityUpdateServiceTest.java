@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -20,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -65,20 +63,6 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
 
     @Mock
     private ConstructionModel constructionModel;
-
-    @Test
-    public void priorityTooLow() {
-        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, CONSTRUCTION_ID, 0));
-
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
-    }
-
-    @Test
-    public void priorityTooHigh() {
-        Throwable ex = catchThrowable(() -> underTest.updatePriority(USER_ID, CONSTRUCTION_ID, 11));
-
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too high");
-    }
 
     @Test
     public void updatePriority() {

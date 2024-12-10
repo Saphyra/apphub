@@ -25,7 +25,7 @@ public class PriorityControllerImplTest {
     private PriorityUpdateService priorityUpdateService;
 
     @InjectMocks
-    private PriorityControllerImpl underTest;
+    private PlanetPriorityControllerImpl underTest;
 
     @Mock
     private AccessTokenHeader accessTokenHeader;

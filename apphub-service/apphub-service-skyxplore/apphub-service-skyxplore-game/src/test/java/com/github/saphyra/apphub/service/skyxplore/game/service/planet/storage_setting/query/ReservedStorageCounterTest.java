@@ -45,11 +45,11 @@ public class ReservedStorageCounterTest {
         given(resourceDataService.get(DATA_ID_2)).willReturn(resourceData2);
         given(reservedStorage1.getDataId()).willReturn(DATA_ID_1);
         given(reservedStorage2.getDataId()).willReturn(DATA_ID_2);
-        given(resourceData1.getStorageType()).willReturn(StorageType.CITIZEN);
-        given(resourceData2.getStorageType()).willReturn(StorageType.BULK);
+        given(resourceData1.getStorageType()).willReturn(StorageType.LIQUID);
+        given(resourceData2.getStorageType()).willReturn(StorageType.CONTAINER);
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
 
-        int result = underTest.countReservedStorage(StorageType.CITIZEN, Arrays.asList(reservedStorage1, reservedStorage2));
+        int result = underTest.countReservedStorage(StorageType.LIQUID, Arrays.asList(reservedStorage1, reservedStorage2));
 
         assertThat(result).isEqualTo(AMOUNT);
     }
