@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetStorageResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
@@ -79,5 +80,10 @@ public class SkyXplorePlanetActions {
             .findFirst()
             .map(SurfaceResponse::getSurfaceId)
             .orElseThrow(() -> new RuntimeException("Empty Desert not found on planet " + planetId));
+    }
+
+    public static List<QueueResponse> getQueue(int serverPort, UUID accessTokenId, UUID planetId) {
+        return getPlanetOverview(serverPort, accessTokenId, planetId)
+            .getQueue();
     }
 }

@@ -5,7 +5,6 @@ import PageName from "./PageName";
 import Map from "./map/Map";
 import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
-import UpgradeBuilding from "./upgrade_building/UpgradeBuilding";
 import "./navigation.css";
 import ModifySurface from "./modify_surface/ModifySurface";
 import Population from "./population/Population";
@@ -56,16 +55,6 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 closePage={closePage}
                 openPage={openPage}
                 setConfirmationDialogData={setConfirmationDialogData}
-            />
-        case PageName.UPGRADE_BUILDING:
-            return <UpgradeBuilding
-                closePage={closePage}
-                footer={footer}
-                dataId={data.dataId}
-                currentLevel={data.currentLevel}
-                surfaceType={data.surfaceType}
-                planetId={data.planetId}
-                buildingId={data.buildingId}
             />
         case PageName.MODIFY_SURFACE:
             return <ModifySurface
