@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class BuildingModuleValidator {
     private final GameDataItemValidator gameDataItemValidator;
     private final ConstructionRequirementsValidator constructionRequirementsValidator;
@@ -18,6 +17,5 @@ public class BuildingModuleValidator {
         constructionRequirementsValidator.validate(buildingModuleData.getConstructionRequirements());
 
         ValidationUtil.notNull(buildingModuleData.getCategory(), "category");
-        ValidationUtil.notNull(buildingModuleData.getConstructionRequirements(), "constructionRequirements");
     }
 }

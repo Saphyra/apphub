@@ -9,7 +9,6 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class MilitaryBuildingModuleValidator implements DataValidator<Map<String, MilitaryBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
 

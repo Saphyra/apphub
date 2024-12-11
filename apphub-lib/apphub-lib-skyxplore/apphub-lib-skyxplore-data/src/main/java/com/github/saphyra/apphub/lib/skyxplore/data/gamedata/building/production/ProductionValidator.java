@@ -10,7 +10,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class ProductionValidator {
     private final ConstructionRequirementsValidator constructionRequirementsValidator;
     private final ResourceDataService resourceDataService;
@@ -26,7 +25,7 @@ public class ProductionValidator {
         ValidationUtil.atLeast(production.getAmount(), 1, "amount");
 
         ValidationUtil.notBlank(production.getResourceDataId(), "resourceDataId");
-        ValidationUtil.valid(() -> resourceDataService.containsKey(production.getResourceDataId()), "resourceDataId", "Resource not found by id " + production.getResourceDataId());
+        ValidationUtil.containsKey(production.getResourceDataId(), resourceDataService, "resourceDataId=%s".formatted(production.getResourceDataId()));
         ValidationUtil.notNull(production.getRequiredSkill(), "requiredSkill");
     }
 }

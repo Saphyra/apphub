@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,6 +15,8 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ValidationUtilTest {
     private static final String FIELD = "field";
+    private static final String KEY = "key";
+    private static final String VALUE = "value";
 
     @Test
     public void notNull_null() {
@@ -314,6 +318,56 @@ public class ValidationUtilTest {
     @Test
     void notZero_zero() {
         ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(0, FIELD)), FIELD, "must not be zero");
+    }
+
+    @Test
+    void notEmpty_map_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty((Map<String, String>) null, FIELD), FIELD, "must not be null");
+    }
+
+    @Test
+    void notEmpty_map_empty() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty(Map.of(), FIELD), FIELD, "must not be empty");
+    }
+
+    @Test
+    void notEmpty_map() {
+        ValidationUtil.notEmpty(Map.of(KEY, VALUE), FIELD);
+    }
+
+    @Test
+    void containsKey_nullKey() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(null, Map.of(KEY, VALUE), FIELD), "key", "must not be null");
+    }
+
+    @Test
+    void containsKey_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(KEY, null, FIELD), FIELD, "must not be null");
+    }
+
+    @Test
+    void containsKey_doesNotContain() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(KEY, Map.of(VALUE, KEY), FIELD), FIELD, "invalid value");
+    }
+
+    @Test
+    void containsKey() {
+        ValidationUtil.containsKey(KEY, Map.of(KEY, VALUE), FIELD);
+    }
+
+    @Test
+    void doesNotContainNull_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(null, FIELD), FIELD, "must not be null");
+    }
+
+    @Test
+    void doesNotContainNull_containsNull() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.singleValueMap(KEY, null), FIELD), "%s.%s".formatted(FIELD, KEY), "must not be null");
+    }
+
+    @Test
+    void doesNotContainNull() {
+        ValidationUtil.doesNotContainNull(Map.of(KEY, VALUE), FIELD);
     }
 
     enum TestEnum {

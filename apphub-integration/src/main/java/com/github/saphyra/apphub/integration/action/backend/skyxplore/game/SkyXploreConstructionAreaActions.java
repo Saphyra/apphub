@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.Surfac
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceResponse;
 import io.restassured.response.Response;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -65,10 +66,18 @@ public class SkyXploreConstructionAreaActions {
     }
 
     public static void cancelConstructionAreaConstruction(int serverPort, UUID accessTokenId, UUID constructionId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
-            .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION, "constructionId", constructionId));
+        Response response = getCancelConstructionAreaConstructionResponse(serverPort, accessTokenId, constructionId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getCancelConstructionAreaConstructionResponse(int serverPort, UUID accessTokenId, UUID constructionId) {
+        return getCancelDeconstructionOfConstructionAreaResponse(serverPort, accessTokenId, constructionId);
+    }
+
+    public static Response getCancelDeconstructionOfConstructionAreaResponse(int serverPort, UUID accessTokenId, UUID constructionId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION, "constructionId", constructionId));
     }
 
     public static void cancelDeconstructionOfConstructionArea(int serverPort, UUID accessTokenId, UUID deconstructionId) {
@@ -76,5 +85,17 @@ public class SkyXploreConstructionAreaActions {
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA, "deconstructionId", deconstructionId));
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getAvailableBuildingsResponse(int serverPort, UUID accessTokenId, UUID constructionAreaId, String buildingModuleCategory) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(
+                serverPort,
+                SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES,
+                Map.of(
+                    "constructionAreaId", constructionAreaId,
+                    "buildingModuleCategory", buildingModuleCategory
+                )
+            ));
     }
 }

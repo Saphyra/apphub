@@ -73,7 +73,6 @@ public class GameDataControllerImpl implements SkyXploreGameDataController {
     }
 
     @Override
-    //TODO unit test
     public List<Object> getAvailableConstructionAreas(String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
 

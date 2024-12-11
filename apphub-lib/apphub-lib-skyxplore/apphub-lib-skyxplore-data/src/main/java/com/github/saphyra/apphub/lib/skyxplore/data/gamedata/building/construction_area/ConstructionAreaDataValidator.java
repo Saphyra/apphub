@@ -11,7 +11,6 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class ConstructionAreaDataValidator implements DataValidator<Map<String, ConstructionAreaData>> {
     private final GameDataItemValidator gameDataItemValidator;
     private final ConstructionRequirementsValidator constructionRequirementsValidator;

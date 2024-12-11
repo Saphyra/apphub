@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "../../../../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../../../../common/component/input/Button";
-import {  SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "../../../../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const confirmDeconstructConstructionArea = (
     localizationHandler,
@@ -32,7 +32,6 @@ const confirmDeconstructConstructionArea = (
 }
 
 const deconstructConstructionArea = async (constructionAreaId, setConfirmationDialogData) => {
-    //TODO update endpoint
     await SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { constructionAreaId: constructionAreaId })
         .send();
 

@@ -27,7 +27,6 @@ public interface SkyXploreGameDataController {
     /**
      * @return ConstructionAreaData
      */
-    //TODO API test
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_DATA_CONSTRUCTION_AREAS)
     List<Object> getAvailableConstructionAreas(@PathVariable("surfaceType") String surfaceType);
 

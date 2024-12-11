@@ -43,7 +43,7 @@ class ConstructConstructionAreaService {
     private final ConstructionAreaConverter constructionAreaConverter;
 
     void constructConstructionArea(UUID userId, UUID surfaceId, String constructionAreaDataId) {
-        ValidationUtil.contains(constructionAreaDataId, constructionAreaDataService, "dataId");
+        ValidationUtil.containsKey(constructionAreaDataId, constructionAreaDataService, "dataId");
 
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();

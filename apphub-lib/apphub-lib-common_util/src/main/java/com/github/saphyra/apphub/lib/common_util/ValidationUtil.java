@@ -124,7 +124,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void notEmpty(Map<?, ?> map, String field) {
         notNull(map, field);
         if (map.isEmpty()) {
@@ -140,11 +139,11 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
-    public static <T> void contains(T obj, Map<T, ?> map, String field) {
-        notNull(obj, field);
+    public static <T> void containsKey(T key, Map<T, ?> map, String field) {
+        notNull(key, "key");
+        notNull(map, field);
 
-        if (!map.containsKey(obj)) {
+        if (!map.containsKey(key)) {
             throw ExceptionFactory.invalidParam(field, "invalid value");
         }
     }
@@ -184,7 +183,6 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
     public static void doesNotContainNull(Map<?, ?> value, String field) {
         notNull(value, field);
 

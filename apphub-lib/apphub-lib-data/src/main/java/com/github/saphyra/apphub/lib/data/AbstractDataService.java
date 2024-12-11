@@ -20,6 +20,12 @@ public abstract class AbstractDataService<K, V> extends HashMap<K, V> implements
     @Getter
     private final String jarPath;
 
+    public AbstractDataService() {
+        this.contentLoaderFactory = null;
+        this.path = null;
+        this.jarPath = null;
+    }
+
     public AbstractDataService(String path, ContentLoaderFactory contentLoaderFactory) {
         this.path = BASE_DIR + path;
         jarPath = BASE_DIR;

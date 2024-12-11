@@ -1,15 +1,19 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.power_supply;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EnergyProductionValidator {
+    private final ResourceDataService resourceDataService;
+
     public void validate(List<EnergyProduction> productions) {
         ValidationUtil.notNull(productions, "productions");
 
@@ -21,9 +25,11 @@ class EnergyProductionValidator {
         ValidationUtil.atLeast(energyProduction.getEnergyPerBatch(), 0, "energyPerBatch");
         ValidationUtil.atLeast(energyProduction.getBatchTicks(), 0, "batchTicks");
         ValidationUtil.atLeast(energyProduction.getFuelLastsForTicks(), 0, "fuelLastsForTicks");
-        ValidationUtil.notNull(energyProduction.getFuelStorage(), "fuelStorage");
+        ValidationUtil.atLeast(energyProduction.getFuelStorage(), 0,"fuelStorage");
         ValidationUtil.notNull(energyProduction.getHumanPowered(), "humanPowered");
 
-        //TODO check if resource exists if fuel is set
+        if (nonNull(energyProduction.getFuel())) {
+            ValidationUtil.containsKey(energyProduction.getFuel(), resourceDataService, "fuel=%s".formatted(energyProduction.getFuel()));
+        }
     }
 }

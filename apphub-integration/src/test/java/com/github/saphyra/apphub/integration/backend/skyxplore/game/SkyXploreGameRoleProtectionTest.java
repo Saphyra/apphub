@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreBuildingModuleActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreConstructionAreaActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreMapActions;
@@ -79,6 +81,20 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId, new CreateChatRoomRequest()));
         CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId, ""));
         CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getChatRoomsResponse(getServerPort(), accessTokenId));
+
+        //Building module
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getBuildingModulesResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getDeconstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelDeconstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+
+        //Construction area
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelConstructionAreaConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelDeconstructionOfConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
     }
 
     @DataProvider(parallel = true)

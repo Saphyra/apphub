@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-//TODO unit test
 public class Production {
     private String resourceDataId;
     @Builder.Default

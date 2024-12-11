@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-//TODO unit test
 class EducationValidator {
     public void validate(List<Education> educations) {
         ValidationUtil.notNull(educations, "educations");
@@ -22,6 +21,6 @@ class EducationValidator {
         Range<Integer> levelLimit = education.getLevelLimit();
         ValidationUtil.notNull(levelLimit, "education.levelLimit");
         ValidationUtil.atLeast(levelLimit.getMin(), 0, "education.levelLimit.min");
-        ValidationUtil.atLeast(levelLimit.getMax(), levelLimit.getMax() + 1, "education.levelLimit.max");
+        ValidationUtil.atLeast(levelLimit.getMax(), levelLimit.getMin() + 1, "education.levelLimit.max");
     }
 }

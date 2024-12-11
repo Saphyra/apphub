@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
@@ -49,6 +50,12 @@ public class GameDataControllerImplTest {
 
     @Mock
     private TerraformingPossibility terraformingPossibility;
+
+    @Mock
+    private ConstructionAreaData constructionAreaData1;
+
+    @Mock
+    private ConstructionAreaData constructionAreaData2;
 
     @BeforeEach
     public void setUp() {
@@ -102,6 +109,21 @@ public class GameDataControllerImplTest {
     @Test
     void getResourceDataIds() {
         assertThat(underTest.getResourceDataIds()).containsExactly(RESOURCE_DATA_ID);
+    }
+
+    @Test
+    void getAvailableConstructionAreas_invalidSurfaceType() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableConstructionAreas("asd"), "surfaceType", "invalid value");
+    }
+
+    @Test
+    void getAvailableConstructionAreas() {
+        given(constructionAreaDataService.values()).willReturn(List.of(constructionAreaData1, constructionAreaData2));
+        given(constructionAreaData1.getSupportedSurfaces()).willReturn(List.of(SurfaceType.CONCRETE));
+        given(constructionAreaData2.getSupportedSurfaces()).willReturn(List.of(SurfaceType.DESERT, SurfaceType.FIELD));
+
+        assertThat(underTest.getAvailableConstructionAreas(SurfaceType.DESERT.name()))
+            .containsExactly(constructionAreaData2);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

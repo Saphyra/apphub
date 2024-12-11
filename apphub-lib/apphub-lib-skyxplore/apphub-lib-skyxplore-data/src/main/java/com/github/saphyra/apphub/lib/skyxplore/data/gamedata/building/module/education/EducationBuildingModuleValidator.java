@@ -10,7 +10,6 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EducationBuildingModuleValidator implements DataValidator<Map<String, EducationBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
     private final EducationValidator educationValidator;

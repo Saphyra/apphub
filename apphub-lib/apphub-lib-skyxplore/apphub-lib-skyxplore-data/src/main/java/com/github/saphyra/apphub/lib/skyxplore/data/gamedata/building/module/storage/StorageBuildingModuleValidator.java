@@ -10,7 +10,6 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class StorageBuildingModuleValidator implements DataValidator<Map<String, StorageBuildingModuleData>> {
     private final BuildingModuleValidator buildingModuleValidator;
 
@@ -22,5 +21,6 @@ public class StorageBuildingModuleValidator implements DataValidator<Map<String,
         buildingModuleValidator.validate(storageBuildingModule);
 
         ValidationUtil.notEmpty(storageBuildingModule.getStores(), "stores");
+        ValidationUtil.doesNotContainNull(storageBuildingModule.getStores(), "stores");
     }
 }
