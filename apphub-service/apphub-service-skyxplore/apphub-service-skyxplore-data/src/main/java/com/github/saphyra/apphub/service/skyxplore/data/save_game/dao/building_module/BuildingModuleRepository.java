@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO unit test
 interface BuildingModuleRepository extends CrudRepository<BuildingModuleEntity, String> {
     @Modifying
     @Query("DELETE FROM BuildingModuleEntity e WHERE e.gameId = :gameId")

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ConstructionAreaDao extends AbstractDao<ConstructionAreaEntity, ConstructionAreaModel, String, ConstructionAreaRepository> {
     private final UuidConverter uuidConverter;
 

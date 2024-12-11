@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingModuleService implements GameItemService {
     private final BuildingModuleDao dao;
 
@@ -46,7 +45,7 @@ public class BuildingModuleService implements GameItemService {
     }
 
     @Override
-    public List<? extends GameItem> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+    public List<BuildingModuleModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
         return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

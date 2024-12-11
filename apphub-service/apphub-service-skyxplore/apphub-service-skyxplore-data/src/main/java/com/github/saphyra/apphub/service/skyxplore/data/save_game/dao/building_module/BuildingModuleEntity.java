@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Table(schema = "skyxplore_game", name = "building_module")
-public class BuildingModuleEntity {
+class BuildingModuleEntity {
     @Id
     private String buildingModuleId;
     private String gameId;

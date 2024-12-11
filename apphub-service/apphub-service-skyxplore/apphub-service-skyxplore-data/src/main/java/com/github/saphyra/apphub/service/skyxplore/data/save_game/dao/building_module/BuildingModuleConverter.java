@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class BuildingModuleConverter extends ConverterBase<BuildingModuleEntity, BuildingModuleModel> {
     private final UuidConverter uuidConverter;
 
