@@ -6,16 +6,16 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-public class BuildingAllocations extends Vector<BuildingAllocation> {
-    public Optional<BuildingAllocation> findByProcessId(UUID processId) {
+public class BuildingModuleAllocations extends Vector<BuildingModuleAllocation> {
+    public Optional<BuildingModuleAllocation> findByProcessId(UUID processId) {
         return stream()
             .filter(buildingAllocation -> buildingAllocation.getProcessId().equals(processId))
             .findAny();
     }
 
-    public List<BuildingAllocation> getByBuildingModuleId(UUID buildingModuleId) {
+    public List<BuildingModuleAllocation> getByBuildingModuleId(UUID buildingModuleId) {
         return stream()
-            .filter(buildingAllocation -> buildingAllocation.getBuildingId().equals(buildingModuleId))
+            .filter(buildingAllocation -> buildingAllocation.getBuildingModuleId().equals(buildingModuleId))
             .collect(Collectors.toList());
     }
 }

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
@@ -35,7 +35,7 @@ class WorkProcessHelper {
     private final UpdateTargetService updateTargetService;
 
     public void allocateParentAsBuildingIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID externalReference) {
-        if (gameData.getBuildingAllocations().getByBuildingModuleId(externalReference).isEmpty()) {
+        if (gameData.getBuildingModuleAllocations().getByBuildingModuleId(externalReference).isEmpty()) {
             createAndSaveBuildingAllocation(progressDiff, gameData, processId, externalReference);
         } else {
             log.debug("Someone is already working on {}", processId);
@@ -55,12 +55,12 @@ class WorkProcessHelper {
     }
 
     private void createAndSaveBuildingAllocation(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID buildingId) {
-        BuildingAllocation buildingAllocation = buildingAllocationFactory.create(buildingId, processId);
+        BuildingModuleAllocation buildingModuleAllocation = buildingAllocationFactory.create(buildingId, processId);
 
-        gameData.getBuildingAllocations()
-            .add(buildingAllocation);
+        gameData.getBuildingModuleAllocations()
+            .add(buildingModuleAllocation);
 
-        progressDiff.save(buildingAllocationConverter.toModel(gameData.getGameId(), buildingAllocation));
+        progressDiff.save(buildingAllocationConverter.toModel(gameData.getGameId(), buildingModuleAllocation));
     }
 
     void allocateCitizenIfPossible(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, SkillType requiredSkill, int requestedWorkPoints) {
@@ -96,10 +96,10 @@ class WorkProcessHelper {
     }
 
     public void releaseBuildingAndCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
-        gameData.getBuildingAllocations()
+        gameData.getBuildingModuleAllocations()
             .findByProcessId(processId)
             .ifPresent(allocation -> {
-                gameData.getBuildingAllocations()
+                gameData.getBuildingModuleAllocations()
                     .remove(allocation);
 
                 progressDiff.delete(allocation.getBuildingAllocationId(), GameItemType.BUILDING_ALLOCATION);

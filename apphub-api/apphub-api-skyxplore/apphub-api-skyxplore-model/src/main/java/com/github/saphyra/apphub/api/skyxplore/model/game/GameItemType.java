@@ -31,7 +31,7 @@ public enum GameItemType {
     DURABILITY(DurabilityModel.class),
     PROCESS(ProcessModel.class),
     CITIZEN_ALLOCATION(CitizenAllocationModel.class),
-    BUILDING_ALLOCATION(BuildingAllocationModel.class),
+    BUILDING_ALLOCATION(BuildingModuleAllocationModel.class),
     ;
 
     private final Class<? extends GameItem> modelType;

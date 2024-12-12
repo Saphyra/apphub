@@ -139,12 +139,16 @@ public class ValidationUtil {
         }
     }
 
-    public static <T> void containsKey(T key, Map<T, ?> map, String field) {
-        notNull(key, "key");
-        notNull(map, field);
+    public static <T> void containsKey(T key, Map<T, ?> map, String valueField) {
+        containsKey(key, map, "key", valueField);
+    }
+
+    public static <T> void containsKey(T key, Map<T, ?> map, String keyField, String valueField) {
+        notNull(key, keyField);
+        notNull(map, valueField);
 
         if (!map.containsKey(key)) {
-            throw ExceptionFactory.invalidParam(field, "invalid value");
+            throw ExceptionFactory.invalidParam(valueField, "invalid value");
         }
     }
 

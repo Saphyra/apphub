@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.data.ValidationAbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -15,7 +16,8 @@ import java.util.stream.Collectors;
 @Component
 @NoArgsConstructor
 public class ResourceDataService extends ValidationAbstractDataService<String, ResourceData> {
-    public ResourceDataService(ContentLoaderFactory contentLoaderFactory, ResourceValidator resourceValidator) {
+    @Autowired
+    ResourceDataService(ContentLoaderFactory contentLoaderFactory, ResourceValidator resourceValidator) {
         super("/data/resource", contentLoaderFactory, resourceValidator);
     }
 

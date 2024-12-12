@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
@@ -38,10 +38,10 @@ class DeconstructionProcessConditionsTest {
     private Deconstruction deconstruction;
 
     @Mock
-    private BuildingAllocations buildingAllocations;
+    private BuildingModuleAllocations buildingModuleAllocations;
 
     @Mock
-    private BuildingAllocation buildingAllocation;
+    private BuildingModuleAllocation buildingModuleAllocation;
 
     @Mock
     private Processes processes;
@@ -54,8 +54,8 @@ class DeconstructionProcessConditionsTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_ID);
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingModuleId(BUILDING_ID)).willReturn(List.of(buildingAllocation));
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.getByBuildingModuleId(BUILDING_ID)).willReturn(List.of(buildingModuleAllocation));
 
         assertThat(underTest.buildingUtilized(gameData, DECONSTRUCTION_ID)).isTrue();
     }

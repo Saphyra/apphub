@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-public class BuildingAllocationModel extends GameItem {
-    private UUID buildingId;
+public class BuildingModuleAllocationModel extends GameItem {
+    private UUID buildingModuleId;
     private UUID processId;
 }

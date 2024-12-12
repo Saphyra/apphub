@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
@@ -39,10 +39,10 @@ class BuildingCapacityCalculatorTest {
     private Deconstruction deconstruction;
 
     @Mock
-    private BuildingAllocation buildingAllocation;
+    private BuildingModuleAllocation buildingModuleAllocation;
 
     @Mock
-    private BuildingAllocations buildingAllocations;
+    private BuildingModuleAllocations buildingModuleAllocations;
 
     @Test
     void isAvailable_buildingDeconstructed() {
@@ -58,8 +58,8 @@ class BuildingCapacityCalculatorTest {
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(List.of(buildingAllocation));
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.getByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(List.of(buildingModuleAllocation));
 
         assertThat(underTest.isAvailable(gameData, buildingModule)).isFalse();
     }
@@ -69,8 +69,8 @@ class BuildingCapacityCalculatorTest {
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(List.of());
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.getByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(List.of());
 
         assertThat(underTest.isAvailable(gameData, buildingModule)).isTrue();
     }

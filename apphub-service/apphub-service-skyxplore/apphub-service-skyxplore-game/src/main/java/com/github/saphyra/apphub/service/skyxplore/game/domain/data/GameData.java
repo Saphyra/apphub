@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
@@ -80,7 +80,7 @@ public class GameData {
     @Builder.Default
     private final Processes processes = new Processes();
     @Builder.Default
-    private final BuildingAllocations buildingAllocations = new BuildingAllocations();
+    private final BuildingModuleAllocations buildingModuleAllocations = new BuildingModuleAllocations();
     @Builder.Default
     private final CitizenAllocations citizenAllocations = new CitizenAllocations();
 }

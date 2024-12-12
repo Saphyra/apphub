@@ -17,7 +17,7 @@ public class BuildingCapacityCalculator {
             return false;
         }
 
-        return gameData.getBuildingAllocations()
+        return gameData.getBuildingModuleAllocations()
             .getByBuildingModuleId(buildingModule.getBuildingModuleId())
             .isEmpty();
     }

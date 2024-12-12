@@ -9,8 +9,8 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
-public class BuildingAllocation {
+public class BuildingModuleAllocation {
     private final UUID buildingAllocationId;
-    private final UUID buildingId; //TODO rename to buildingModuleId
+    private final UUID buildingModuleId;
     private final UUID processId;
 }

@@ -43,7 +43,7 @@ class ConstructConstructionAreaService {
     private final ConstructionAreaConverter constructionAreaConverter;
 
     void constructConstructionArea(UUID userId, UUID surfaceId, String constructionAreaDataId) {
-        ValidationUtil.containsKey(constructionAreaDataId, constructionAreaDataService, "dataId");
+        ValidationUtil.containsKey(constructionAreaDataId, constructionAreaDataService, "dataId", "dataId");
 
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();
@@ -101,7 +101,7 @@ class ConstructConstructionAreaService {
                 log.info("{} created.", process);
 
                 gameData.getConstructionAreas()
-                        .add(constructionArea);
+                    .add(constructionArea);
                 gameData.getConstructions()
                     .add(construction);
                 gameData.getProcesses()

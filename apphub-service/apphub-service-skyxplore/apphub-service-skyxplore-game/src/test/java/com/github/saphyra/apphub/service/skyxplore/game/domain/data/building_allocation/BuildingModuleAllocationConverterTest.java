@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BuildingAllocationConverterTest {
+class BuildingModuleAllocationConverterTest {
     private static final UUID BUILDING_ALLOCATION_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
@@ -18,18 +18,18 @@ class BuildingAllocationConverterTest {
 
     @Test
     void convert() {
-        BuildingAllocation buildingAllocation = BuildingAllocation.builder()
+        BuildingModuleAllocation buildingModuleAllocation = BuildingModuleAllocation.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID)
-            .buildingId(BUILDING_ID)
+            .buildingModuleId(BUILDING_ID)
             .processId(PROCESS_ID)
             .build();
 
-        BuildingAllocationModel result = underTest.toModel(GAME_ID, buildingAllocation);
+        BuildingModuleAllocationModel result = underTest.toModel(GAME_ID, buildingModuleAllocation);
 
         assertThat(result.getId()).isEqualTo(BUILDING_ALLOCATION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.BUILDING_ALLOCATION);
-        assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID);
+        assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
     }
 }

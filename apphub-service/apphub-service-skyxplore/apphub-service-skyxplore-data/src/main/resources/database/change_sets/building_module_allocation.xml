@@ -17,4 +17,20 @@
 
         <addPrimaryKey schemaName="skyxplore_game" tableName="building_allocation" columnNames="building_allocation_id" constraintName="building_allocation-pk"/>
     </changeSet>
+
+    <changeSet id="rename-table_building_allocation-to-building_module_allocation" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="building_allocation"/>
+        </preConditions>
+
+        <renameTable schemaName="skyxplore_game" oldTableName="building_allocation" newTableName="building_module_allocation"/>
+    </changeSet>
+
+    <changeSet id="rename-building_id-to-building_module_id-in-building_module_allocation" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="building_module_allocation" columnName="building_id"/>
+        </preConditions>
+
+        <renameColumn schemaName="skyxplore_game" tableName="building_module_allocation" oldColumnName="building_id" newColumnName="building_module_id"/>
+    </changeSet>
 </databaseChangeLog>

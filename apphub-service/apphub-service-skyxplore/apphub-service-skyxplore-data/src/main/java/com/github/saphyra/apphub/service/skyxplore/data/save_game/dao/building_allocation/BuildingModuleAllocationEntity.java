@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-@Table(schema = "skyxplore_game", name = "building_allocation")
-class BuildingAllocationEntity {
+@Table(schema = "skyxplore_game", name = "building_module_allocation")
+class BuildingModuleAllocationEntity {
     @Id
     private String buildingAllocationId;
     private String gameId;
-    private String buildingId;
+    private String buildingModuleId;
     private String processId;
 }

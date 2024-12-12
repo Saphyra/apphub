@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class BuildingAllocationLoaderTest {
+class BuildingModuleAllocationLoaderTest {
     private static final UUID BUILDING_ALLOCATION_ID = UUID.randomUUID();
     private static final UUID BUILDING_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
@@ -29,19 +29,19 @@ class BuildingAllocationLoaderTest {
     private GameItemLoader gameItemLoader;
 
     @InjectMocks
-    private BuildingAllocationLoader underTest;
+    private BuildingModuleAllocationLoader underTest;
 
     @Mock
     private GameData gameData;
 
     @Mock
-    private BuildingAllocations buildingAllocations;
+    private BuildingModuleAllocations buildingModuleAllocations;
 
     @Mock
-    private BuildingAllocation buildingAllocation;
+    private BuildingModuleAllocation buildingModuleAllocation;
 
     @Mock
-    private BuildingAllocationModel model;
+    private BuildingModuleAllocationModel model;
 
     @Test
     void getGameItemType() {
@@ -50,28 +50,28 @@ class BuildingAllocationLoaderTest {
 
     @Test
     void getArrayClass() {
-        assertThat(underTest.getArrayClass()).isEqualTo(BuildingAllocationModel[].class);
+        assertThat(underTest.getArrayClass()).isEqualTo(BuildingModuleAllocationModel[].class);
     }
 
     @Test
     void addToGameData() {
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
 
-        underTest.addToGameData(gameData, List.of(buildingAllocation));
+        underTest.addToGameData(gameData, List.of(buildingModuleAllocation));
 
-        verify(buildingAllocations).addAll(List.of(buildingAllocation));
+        verify(buildingModuleAllocations).addAll(List.of(buildingModuleAllocation));
     }
 
     @Test
     void convert() {
         given(model.getId()).willReturn(BUILDING_ALLOCATION_ID);
-        given(model.getBuildingId()).willReturn(BUILDING_ID);
+        given(model.getBuildingModuleId()).willReturn(BUILDING_ID);
         given(model.getProcessId()).willReturn(PROCESS_ID);
 
-        BuildingAllocation result = underTest.convert(model);
+        BuildingModuleAllocation result = underTest.convert(model);
 
         assertThat(result.getBuildingAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID);
-        assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID);
+        assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
     }
 }
