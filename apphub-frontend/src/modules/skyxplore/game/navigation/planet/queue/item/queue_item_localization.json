@@ -12,7 +12,7 @@
         "hu": "Mégse"
     },
     "deconstruct": {
-        "en": "Deconstruct",
+        "en": "Deconstructing",
         "hu": "Lerombolás"
     },
     "confirm-cancel-queue-item-title": {
@@ -34,5 +34,9 @@
     "terraformation": {
         "en": "Terraforming",
         "hu": "Terraformálás"
+    },
+    "construct": {
+        "en": "Constructing",
+        "hu": "Épül"
     }
 }

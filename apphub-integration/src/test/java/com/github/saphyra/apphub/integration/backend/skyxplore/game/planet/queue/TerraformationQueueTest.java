@@ -3,15 +3,15 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.queu
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetQueueActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetQueueActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetOverviewResponse;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.PlanetOverviewResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -40,7 +40,7 @@ public class TerraformationQueueTest extends BackEndTest {
         UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
             .getPlanetId();
 
-        UUID surfaceId = SkyXploreSurfaceActions.findEmptySurfaceId(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
 
         SkyXploreSurfaceActions.terraform(getServerPort(), accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_LAKE);
 

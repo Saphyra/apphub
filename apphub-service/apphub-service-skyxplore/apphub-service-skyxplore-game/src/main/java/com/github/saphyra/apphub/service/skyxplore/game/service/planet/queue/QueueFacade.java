@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -44,6 +44,9 @@ public class QueueFacade {
 
     public void setPriority(UUID userId, UUID planetId, String type, UUID itemId, Integer priority) {
         QueueItemType itemType = ValidationUtil.convertToEnumChecked(type, QueueItemType::valueOf, "type");
+
+        ValidationUtil.atLeast(priority, 1, "priority");
+        ValidationUtil.maximum(priority, 10, "priority");
 
         if (!userId.equals(gameDao.findByUserIdValidated(userId).getData().getPlanets().findByIdValidated(planetId).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot set priority of QueueItem on planet " + planetId);

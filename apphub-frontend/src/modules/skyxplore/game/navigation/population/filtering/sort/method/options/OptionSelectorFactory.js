@@ -1,19 +1,19 @@
 import SelectInput, { SelectOption } from "../../../../../../../../../common/component/input/SelectInput";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
 import Stream from "../../../../../../../../../common/js/collection/Stream";
-import citizenLocalizationData from "../../../../../../common/localization/citizen_localization.json";
+import skillTypeLocalizationData from "../../../../../../common/localization/skill_type_localization.json";
 
 const getSelector = (id, value, source, onchangeCallback) => {
-    const citizenLocalizationHandler = new LocalizationHandler(citizenLocalizationData);
+    const skillTypeLocalizationHandler = new LocalizationHandler(skillTypeLocalizationData);
 
     return (
         <SelectInput
             id={id}
             value={value}
             options={new Stream(source)
-                .sorted((a, b) => citizenLocalizationHandler.get(a).localeCompare(citizenLocalizationHandler.get(b)))
+                .sorted((a, b) => skillTypeLocalizationHandler.get(a).localeCompare(skillTypeLocalizationHandler.get(b)))
                 .map(item => new SelectOption(
-                    citizenLocalizationHandler.get(item),
+                    skillTypeLocalizationHandler.get(item),
                     item
                 ))
                 .toList()

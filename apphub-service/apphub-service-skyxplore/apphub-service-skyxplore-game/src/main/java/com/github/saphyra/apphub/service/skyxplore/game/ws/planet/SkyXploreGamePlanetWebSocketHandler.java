@@ -40,6 +40,7 @@ public class SkyXploreGamePlanetWebSocketHandler extends AbstractWebSocketHandle
         openedPlanetIds.remove(sessionId);
     }
 
+    @Override
     protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
         if (event.getEventName() == WebSocketEventName.PING) {
             log.info("Ping arrived from {} to {}", userId, getEndpoint());

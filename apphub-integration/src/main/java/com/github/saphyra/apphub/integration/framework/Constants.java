@@ -40,19 +40,17 @@ public class Constants {
     public final String SURFACE_TYPE_LAKE = "LAKE";
     public final String SURFACE_TYPE_FOREST = "FOREST";
     public final String SURFACE_TYPE_CONCRETE = "CONCRETE";
-    public static final String SURFACE_TYPE_MILITARY = "MILITARY";
 
     //DataIds
-    public final String DATA_ID_SOLAR_PANEL = "solar_panel";
-    public final String DATA_ID_WATER_PUMP = "water_pump";
-    public final String DATA_ID_CAMP = "camp";
-    public final String DATA_ID_ORE = "ore";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
+    public static final String DATA_ID_STEEL_INGOT = "steel_ingot";
 
     //QueueTypes
-    public final String QUEUE_TYPE_CONSTRUCTION = "CONSTRUCTION";
-    public final String QUEUE_TYPE_DECONSTRUCTION = "DECONSTRUCTION";
     public final String QUEUE_TYPE_TERRAFORMATION = "TERRAFORMATION";
+    public static final String QUEUE_TYPE_CONSTRUCT_CONSTRUCTION_AREA = "CONSTRUCT_CONSTRUCTION_AREA";
+    public static final String QUEUE_TYPE_DECONSTRUCT_CONSTRUCTION_AREA = "DECONSTRUCT_CONSTRUCTION_AREA";
+    public static final String QUEUE_TYPE_CONSTRUCT_BUILDING_MODULE = "CONSTRUCT_BUILDING_MODULE";
+    public static final String QUEUE_TYPE_DECONSTRUCT_BUILDING_MODULE = "DECONSTRUCT_BUILDING_MODULE";
 
     //Etc
     public final int DEFAULT_PRIORITY = 5;
@@ -109,4 +107,13 @@ public class Constants {
     //SkyXplore skills
     public static final String SKILL_AIMING = "AIMING";
     public static final String SKILL_BUILDING = "BUILDING";
+    public static final String CONSTRUCTION_AREA_DEPOT = "depot";
+    public static final String CONSTRUCTION_AREA_EXTRACTOR = "extractor";
+
+    //Building Modules
+    public static final String BUILDING_MODULE_GARAGE = "garage";
+    public static final String BUILDING_MODULE_SMALL_BATTERY = "small_battery";
+    public static final String BUILDING_MODULE_HAMSTER_WHEEL = "hamster_wheel";
+    public static final String BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY = "BASIC_POWER_SUPPLY";
+    public static final String BUILDING_MODULE_CATEGORY_SMALL_STORAGE = "SMALL_STORAGE";
 }

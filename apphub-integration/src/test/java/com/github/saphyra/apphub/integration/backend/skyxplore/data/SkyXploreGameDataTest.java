@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.data;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameDataActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
@@ -29,8 +30,8 @@ public class SkyXploreGameDataTest extends BackEndTest {
     }
 
     private static void get(UUID accessTokenId) {
-        Response getResponse = SkyXploreGameDataActions.getGameDateResponse(getServerPort(), accessTokenId, "community_center");
+        Response getResponse = SkyXploreGameDataActions.getGameDateResponse(getServerPort(), accessTokenId, Constants.DATA_ID_HEADQUARTERS);
         assertThat(getResponse.getStatusCode()).isEqualTo(200);
-        assertThat(getResponse.getBody().jsonPath().getString("id")).isEqualTo("community_center");
+        assertThat(getResponse.getBody().jsonPath().getString("id")).isEqualTo(Constants.DATA_ID_HEADQUARTERS);
     }
 }

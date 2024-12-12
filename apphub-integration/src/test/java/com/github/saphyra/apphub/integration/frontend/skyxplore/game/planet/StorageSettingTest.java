@@ -65,18 +65,18 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static StorageSetting createStorageSettingForCrud(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, 10, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_STEEL_INGOT, 10, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> storageSettings.size() == 2)
             .stream()
-            .filter(ss -> ss.getDataId().equals(Constants.DATA_ID_ORE))
+            .filter(ss -> ss.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .findAny()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
 
         assertThat(storageSetting.getAmount()).isEqualTo(10);
         assertThat(storageSetting.getPriority()).isEqualTo(3);
 
-        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_ORE);
+        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).doesNotContain(Constants.DATA_ID_STEEL_INGOT);
 
         return storageSetting;
     }
@@ -88,9 +88,10 @@ public class StorageSettingTest extends SeleniumTest {
 
         StorageSetting editedSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> storageSettings.size() == 2)
             .stream()
+            .filter(ss -> ss.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(editedSetting.getResourceName()).isEqualTo("Ore");
+        assertThat(editedSetting.getResourceName()).isEqualTo("Steel ingot");
         assertThat(editedSetting.getAmount()).isEqualTo(20);
         assertThat(editedSetting.getPriority()).isEqualTo(8);
         return editedSetting;
@@ -103,7 +104,7 @@ public class StorageSettingTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver).size() == 1)
             .assertTrue("StorageSetting not deleted.");
 
-        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_ORE);
+        assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_STEEL_INGOT);
     }
 
     @Test(groups = {"fe", "skyxplore"})
@@ -146,13 +147,14 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static void createStorageSetting(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_ORE, AMOUNT, 3);
+        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_STEEL_INGOT, AMOUNT, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()
+            .filter(ss->ss.getDataId().equals(Constants.DATA_ID_STEEL_INGOT))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Storage Setting not found."));
-        assertThat(storageSetting.getResourceName()).isEqualTo("Ore");
+        assertThat(storageSetting.getResourceName()).isEqualTo("Steel ingot");
 
         SkyXplorePlanetActions.closeStorageSettingsWindow(driver);
 

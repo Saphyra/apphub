@@ -2,7 +2,7 @@ import React from "react";
 import localizationData from "./show_and_hide_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import "./show_and_hide.css";
-import citizenLocalizationData from "../../../../common/localization/citizen_localization.json";
+import skillTypeLocalizationData from "../../../../common/localization/skill_type_localization.json";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import PostLabeledInputField from "../../../../../../../common/component/input/PostLabeledInputField";
 import InputField from "../../../../../../../common/component/input/InputField";
@@ -13,7 +13,7 @@ import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "..
 
 const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
-    const citizenLocalizationHandler = new LocalizationHandler(citizenLocalizationData);
+    const citizenLocalizationHandler = new LocalizationHandler(skillTypeLocalizationData);
 
     const getProperties = () => {
         return new Stream(citizenLocalizationHandler.getKeys())

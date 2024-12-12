@@ -1,0 +1,5 @@
+{
+  "id": "fissile_material",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

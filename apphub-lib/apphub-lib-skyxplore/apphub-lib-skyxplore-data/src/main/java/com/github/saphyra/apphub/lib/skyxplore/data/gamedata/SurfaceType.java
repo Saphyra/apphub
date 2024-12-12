@@ -10,11 +10,11 @@ public enum SurfaceType {
     DESERT,
     FOREST,
     LAKE,
+    FIELD,
     MOUNTAIN,
     OIL_FIELD,
     ORE_FIELD,
     VOLCANO,
-    MILITARY,
     ;
 
     @JsonCreator

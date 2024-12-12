@@ -25,6 +25,7 @@ public class SkyXploreDataEndpoints {
 
     //SKYXPLORE-DATA RESOURCES
     public static final String SKYXPLORE_GET_ITEM_DATA = "/api/skyxplore/data/data/{dataId}";
+    public static final String SKYXPLORE_DATA_CONSTRUCTION_AREAS = "/api/skyxplore/data/{surfaceType}/construction-area";
 
     //SKYXPLORE-DATA-SETTINGS
     public static final String SKYXPLORE_DATA_CREATE_SETTING = "/api/skyxplore/data/setting";

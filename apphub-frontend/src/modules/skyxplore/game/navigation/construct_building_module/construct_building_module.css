@@ -1,0 +1,22 @@
+.skyxplore-game-construct-building-module-available-building {
+    border: 3px ridge white;
+    margin: 10px;
+    text-align: center;
+}
+
+.skyxplore-game-construct-building-module-available-building-title {
+    border-bottom: 3px ridge white;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.skyxplore-game-construct-building-module-available-building table {
+    margin: 10px auto;
+}
+
+.skyxplore-game-construct-building-module-button {
+    display: block;
+    margin: 10px auto;
+    width: 50%;
+}

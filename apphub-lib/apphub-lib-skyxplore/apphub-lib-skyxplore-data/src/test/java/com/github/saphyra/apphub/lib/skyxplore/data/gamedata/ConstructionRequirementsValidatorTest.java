@@ -1,79 +1,80 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ConstructionRequirementsValidatorTest {
-    private static final Integer REQUIRED_WORK_POINTS = 32;
-    private static final String REQUIRED_RESOURCE = "required-resource";
+class ConstructionRequirementsValidatorTest {
+    private static final String RESOURCE_DATA_ID = "resource-data-id";
+
+    @Spy
+    private final ResourceDataService resourceDataService = new ResourceDataService();
 
     @InjectMocks
     private ConstructionRequirementsValidator underTest;
 
-    @Test
-    public void nullRequiredWorkPoints() {
-        ConstructionRequirements constructionRequirements = validConstructionRequirements()
-            .toBuilder()
-            .requiredWorkPoints(null)
-            .build();
+    @Mock
+    private ConstructionRequirements constructionRequirements;
 
-        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
+    @Mock
+    private ResourceData resourceData;
+
+    @Test
+    void nullConstructionRequirements() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "constructionRequirements", "must not be null");
     }
 
     @Test
-    public void tooLowRequiredWorkPoints() {
-        ConstructionRequirements constructionRequirements = validConstructionRequirements()
-            .toBuilder()
-            .requiredWorkPoints(0)
-            .build();
+    void tooLowRequiredWorkPoints() {
+        given(constructionRequirements.getRequiredWorkPoints()).willReturn(-1);
 
-        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(IllegalStateException.class);
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredWorkPoints", "too low");
     }
 
     @Test
-    public void nullRequiredResources() {
-        ConstructionRequirements constructionRequirements = validConstructionRequirements()
-            .toBuilder()
-            .requiredResources(null)
-            .build();
+    void tooLowRequiredEnergy() {
+        given(constructionRequirements.getRequiredWorkPoints()).willReturn(0);
+        given(constructionRequirements.getRequiredEnergy()).willReturn(-1);
 
-        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredEnergy", "too low");
     }
 
     @Test
-    public void requiredResourcesContainsNull() {
-        Map<String, Integer> requiredResources = new HashMap<>() {{
-            put(REQUIRED_RESOURCE, null);
-        }};
-        ConstructionRequirements constructionRequirements = validConstructionRequirements()
-            .toBuilder()
-            .requiredResources(requiredResources)
-            .build();
+    void nullInRequiredResources() {
+        given(constructionRequirements.getRequiredWorkPoints()).willReturn(0);
+        given(constructionRequirements.getRequiredEnergy()).willReturn(0);
+        given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, null));
 
-        assertThat(catchThrowable(() -> underTest.validate(constructionRequirements))).isInstanceOf(NullPointerException.class);
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredResources.%s".formatted(RESOURCE_DATA_ID), "must not be null");
     }
 
     @Test
-    public void valid() {
-        underTest.validate(validConstructionRequirements());
+    void resourceDataIdDoesNotExist() {
+        given(constructionRequirements.getRequiredWorkPoints()).willReturn(0);
+        given(constructionRequirements.getRequiredEnergy()).willReturn(0);
+        given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, 3));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredResource=%s".formatted(RESOURCE_DATA_ID), "invalid value");
     }
 
-    private ConstructionRequirements validConstructionRequirements() {
-        HashMap<String, Integer> requiredResources = new HashMap<>() {{
-            put(REQUIRED_RESOURCE, 0);
-        }};
-        return ConstructionRequirements.builder()
-            .requiredWorkPoints(REQUIRED_WORK_POINTS)
-            .requiredResources(requiredResources)
-            .build();
+    @Test
+    void valid() {
+        given(constructionRequirements.getRequiredWorkPoints()).willReturn(0);
+        given(constructionRequirements.getRequiredEnergy()).willReturn(0);
+        given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, 3));
+
+        resourceDataService.put(RESOURCE_DATA_ID, resourceData);
+
+        underTest.validate(constructionRequirements);
     }
 }

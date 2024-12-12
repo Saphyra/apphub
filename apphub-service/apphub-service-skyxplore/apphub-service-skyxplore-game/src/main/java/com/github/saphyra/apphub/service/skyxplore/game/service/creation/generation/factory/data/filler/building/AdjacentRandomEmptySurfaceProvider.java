@@ -29,6 +29,6 @@ class AdjacentRandomEmptySurfaceProvider {
         }
 
         //If no empty surface left next to any surfaces, return a random empty surface
-        return randomEmptySurfaceProvider.getRandomEmptySurface(surfaces, gameData);
+        return randomEmptySurfaceProvider.getEmptyDesertSurface(surfaces, gameData);
     }
 }

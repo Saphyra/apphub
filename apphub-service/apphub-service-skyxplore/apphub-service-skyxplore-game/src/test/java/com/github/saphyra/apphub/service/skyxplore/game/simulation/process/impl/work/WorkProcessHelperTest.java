@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
@@ -8,9 +8,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
@@ -92,13 +92,13 @@ class WorkProcessHelperTest {
     private GameProgressDiff progressDiff;
 
     @Mock
-    private BuildingAllocations buildingAllocations;
+    private BuildingModuleAllocations buildingModuleAllocations;
 
     @Mock
-    private BuildingAllocation buildingAllocation;
+    private BuildingModuleAllocation buildingModuleAllocation;
 
     @Mock
-    private BuildingAllocationModel buildingAllocationModel;
+    private BuildingModuleAllocationModel buildingModuleAllocationModel;
 
     @Mock
     private CitizenAllocations citizenAllocations;
@@ -120,8 +120,8 @@ class WorkProcessHelperTest {
 
     @Test
     void allocateParentAsBuildingIfPossible_alreadyAllocated() {
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingId(EXTERNAL_REFERENCE)).willReturn(List.of(buildingAllocation));
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.getByBuildingModuleId(EXTERNAL_REFERENCE)).willReturn(List.of(buildingModuleAllocation));
 
         underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
@@ -130,30 +130,30 @@ class WorkProcessHelperTest {
 
     @Test
     void allocateParentAsBuildingIfPossible() {
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.getByBuildingId(EXTERNAL_REFERENCE)).willReturn(Collections.emptyList());
-        given(buildingAllocationFactory.create(EXTERNAL_REFERENCE, PROCESS_ID)).willReturn(buildingAllocation);
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.getByBuildingModuleId(EXTERNAL_REFERENCE)).willReturn(Collections.emptyList());
+        given(buildingAllocationFactory.create(EXTERNAL_REFERENCE, PROCESS_ID)).willReturn(buildingModuleAllocation);
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(buildingAllocationConverter.toModel(GAME_ID, buildingAllocation)).willReturn(buildingAllocationModel);
+        given(buildingAllocationConverter.toModel(GAME_ID, buildingModuleAllocation)).willReturn(buildingModuleAllocationModel);
 
         underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
-        verify(buildingAllocations).add(buildingAllocation);
-        verify(progressDiff).save(buildingAllocationModel);
+        verify(buildingModuleAllocations).add(buildingModuleAllocation);
+        verify(progressDiff).save(buildingModuleAllocationModel);
     }
 
     @Test
     void allocateBuildingIfPossible() {
         given(productionBuildingFinder.findSuitableProductionBuilding(gameData, LOCATION, BUILDING_DATA_ID)).willReturn(Optional.of(BUILDING_ID));
-        given(buildingAllocationFactory.create(BUILDING_ID, PROCESS_ID)).willReturn(buildingAllocation);
+        given(buildingAllocationFactory.create(BUILDING_ID, PROCESS_ID)).willReturn(buildingModuleAllocation);
         given(gameData.getGameId()).willReturn(GAME_ID);
-        given(buildingAllocationConverter.toModel(GAME_ID, buildingAllocation)).willReturn(buildingAllocationModel);
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
+        given(buildingAllocationConverter.toModel(GAME_ID, buildingModuleAllocation)).willReturn(buildingModuleAllocationModel);
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
 
         underTest.allocateBuildingIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, BUILDING_DATA_ID);
 
-        verify(buildingAllocations).add(buildingAllocation);
-        verify(progressDiff).save(buildingAllocationModel);
+        verify(buildingModuleAllocations).add(buildingModuleAllocation);
+        verify(progressDiff).save(buildingModuleAllocationModel);
     }
 
     @Test
@@ -192,9 +192,9 @@ class WorkProcessHelperTest {
 
     @Test
     void releaseBuildingAndCitizen() {
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingAllocation));
-        given(buildingAllocation.getBuildingAllocationId()).willReturn(BUILDING_ALLOCATION_ID);
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingModuleAllocation));
+        given(buildingModuleAllocation.getBuildingAllocationId()).willReturn(BUILDING_ALLOCATION_ID);
 
         given(gameData.getCitizenAllocations()).willReturn(citizenAllocations);
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
@@ -202,7 +202,7 @@ class WorkProcessHelperTest {
 
         underTest.releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
 
-        verify(buildingAllocations).remove(buildingAllocation);
+        verify(buildingModuleAllocations).remove(buildingModuleAllocation);
         verify(progressDiff).delete(BUILDING_ALLOCATION_ID, GameItemType.BUILDING_ALLOCATION);
 
         verify(citizenAllocations).remove(citizenAllocation);

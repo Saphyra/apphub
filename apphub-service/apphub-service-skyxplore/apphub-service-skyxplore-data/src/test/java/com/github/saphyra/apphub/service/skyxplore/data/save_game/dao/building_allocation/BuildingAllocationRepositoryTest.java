@@ -37,11 +37,11 @@ class BuildingAllocationRepositoryTest {
     @Test
     @Transactional
     void deleteByGameId() {
-        BuildingAllocationEntity entity1 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity1 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_1)
             .gameId(GAME_ID_1)
             .build();
-        BuildingAllocationEntity entity2 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity2 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_2)
             .gameId(GAME_ID_2)
             .build();
@@ -54,19 +54,19 @@ class BuildingAllocationRepositoryTest {
 
     @Test
     void getByGameId() {
-        BuildingAllocationEntity entity1 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity1 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_1)
             .gameId(GAME_ID_1)
             .build();
-        BuildingAllocationEntity entity2 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity2 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_2)
             .gameId(GAME_ID_1)
             .build();
-        BuildingAllocationEntity entity3 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity3 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_3)
             .gameId(GAME_ID_1)
             .build();
-        BuildingAllocationEntity entity4 = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity4 = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_4)
             .gameId(GAME_ID_2)
             .build();

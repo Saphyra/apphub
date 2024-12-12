@@ -1,13 +1,14 @@
 import React from "react";
 import localizationData from "./building_type_overview_details_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
-import buildingLocalizationData from "../../../../../../common/localization/building_localization.json";
 import "./building_type_overview_details.css";
 import Stream from "../../../../../../../../../common/js/collection/Stream";
 
 const BuildingTypeOverviewDetails = ({ buildingDetails }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
-    const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
+    const buildingLocalizationHandler = {
+        get: (key) => key
+    };
 
     const getBuildings = () => {
         return new Stream(buildingDetails)
