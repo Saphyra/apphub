@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructConstructionAreaQueueService implements QueueService {
     private final GameDao gameDao;
     private final ConstructionConverter constructionConverter;

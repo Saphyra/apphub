@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingsSummaryQueryService {
     private final GameDao gameDao;
     private final ConstructionAreaOverviewQueryService constructionAreaOverviewQueryService;

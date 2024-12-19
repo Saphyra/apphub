@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-//TODO unit test
 class BuildingModuleLoader extends AutoLoader<BuildingModuleModel, BuildingModule> {
     public BuildingModuleLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

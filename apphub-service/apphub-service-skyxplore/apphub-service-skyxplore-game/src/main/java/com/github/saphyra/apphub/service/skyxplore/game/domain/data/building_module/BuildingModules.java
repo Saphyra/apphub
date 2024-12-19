@@ -2,16 +2,24 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_mo
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.annotations.VisibleForTesting;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-//TODO unit test
+@NoArgsConstructor
 public class BuildingModules extends Vector<BuildingModule> {
+    @VisibleForTesting
+    public BuildingModules(BuildingModule... modules) {
+        super(Arrays.asList(modules));
+    }
+
     public List<BuildingModule> getByLocation(UUID location) {
         return stream()
             .filter(buildingModule -> buildingModule.getLocation().equals(location))

@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CancelDeconstructionOfBuildingModuleService {
     private final GameDao gameDao;
 
@@ -28,7 +27,7 @@ public class CancelDeconstructionOfBuildingModuleService {
             .findByDeconstructionIdValidated(deconstructionId);
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(deconstruction.getLocation()).getOwner())) {
-            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel deconstruction of constructionArea on planet " + deconstruction.getDeconstructionId());
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel deconstruction of constructionArea on planet " + deconstructionId);
         }
 
         UUID constructionAreaId = gameData.getBuildingModules()
@@ -37,17 +36,15 @@ public class CancelDeconstructionOfBuildingModuleService {
 
         game.getEventLoop()
             .processWithWait(() -> {
-                game.getData()
-                    .getProcesses()
-                    .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_BUILDING_MODULE)
+                gameData.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(deconstructionId, ProcessType.DECONSTRUCT_BUILDING_MODULE)
                     .cleanup();
 
-                game.getData()
-                    .getDeconstructions()
+                gameData.getDeconstructions()
                     .remove(deconstruction);
 
                 game.getProgressDiff()
-                    .delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
+                    .delete(deconstructionId, GameItemType.DECONSTRUCTION);
             })
             .getOrThrow();
 

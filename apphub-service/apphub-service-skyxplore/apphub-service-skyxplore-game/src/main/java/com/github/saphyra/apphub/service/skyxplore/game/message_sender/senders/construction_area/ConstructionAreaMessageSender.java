@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConstructionAreaMessageSender implements MessageSender {
     private final SkyXploreGameConstructionAreaWebSocketHandler constructionAreaWebSocketHandler;
     private final List<ConstructionAreaMessageProvider> messageProviders;

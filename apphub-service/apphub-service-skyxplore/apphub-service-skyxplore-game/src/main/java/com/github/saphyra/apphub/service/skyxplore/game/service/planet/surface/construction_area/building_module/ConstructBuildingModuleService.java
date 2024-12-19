@@ -20,7 +20,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcessFactory;
@@ -33,7 +32,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructBuildingModuleService {
     private final GameDao gameDao;
     private final BuildingModuleDataService buildingModuleDataService;
@@ -47,28 +45,28 @@ class ConstructBuildingModuleService {
 
     void constructBuildingModule(UUID userId, UUID constructionAreaId, String buildingModuleDataId) {
         ValidationUtil.notNull(buildingModuleDataId, "buildingModuleDataId");
+        BuildingModuleData buildingModuleData = buildingModuleDataService.get(buildingModuleDataId);
+        ValidationUtil.notNull(buildingModuleData, "buildingModuleData");
 
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();
 
-        BuildingModuleData buildingModuleData = buildingModuleDataService.getValidated(buildingModuleDataId, "buildingModule");
-        ConstructionRequirements constructionRequirements = buildingModuleData.getConstructionRequirements();
         ConstructionArea constructionArea = gameData.getConstructionAreas()
             .findByConstructionAreaIdValidated(constructionAreaId);
-        ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionArea.getDataId());
-        Surface surface = gameData.getSurfaces()
-            .findBySurfaceIdValidated(constructionArea.getSurfaceId());
-        UUID planetId = surface.getPlanetId();
+        UUID planetId = constructionArea.getLocation();
 
         //Construction must happen on own planet
-        if (!gameData.getPlanets().findByIdValidated(planetId).getOwner().equals(userId)) {
+        if (!userId.equals(gameData.getPlanets().findByIdValidated(planetId).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot construct constructionArea on planet " + planetId);
         }
 
+        ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionArea.getDataId());
         //ConstructionArea must available place on supported slot
         if (constructionAreaData.getSlots().getOrDefault(buildingModuleData.getCategory(), 0) <= getBuildingModuleCount(gameData, constructionAreaId, buildingModuleData.getCategory())) {
             throw ExceptionFactory.forbiddenOperation("%s has no more empty %s slots.".formatted(constructionAreaId, buildingModuleData.getCategory()));
         }
+
+        ConstructionRequirements constructionRequirements = buildingModuleData.getConstructionRequirements();
 
         BuildingModule buildingModule = buildingModuleFactory.create(planetId, constructionAreaId, buildingModuleDataId);
         log.info("{} created.", buildingModule);

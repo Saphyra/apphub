@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructBuildingModuleQueueService implements QueueService {
     private final GameProperties gameProperties;
     private final GameDao gameDao;

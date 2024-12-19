@@ -2,14 +2,22 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.annotations.VisibleForTesting;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
+@NoArgsConstructor
 public class ConstructionAreas extends Vector<ConstructionArea> {
+    @VisibleForTesting
+    public ConstructionAreas(ConstructionArea... areas) {
+        super(Arrays.asList(areas));
+    }
+
     public Optional<ConstructionArea> findBySurfaceId(UUID surfaceId) {
         return stream()
             .filter(constructionArea -> constructionArea.getSurfaceId().equals(surfaceId))

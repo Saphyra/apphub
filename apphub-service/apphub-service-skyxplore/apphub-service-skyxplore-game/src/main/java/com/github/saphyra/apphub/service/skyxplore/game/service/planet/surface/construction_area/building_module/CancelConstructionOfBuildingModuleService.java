@@ -18,12 +18,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CancelConstructionOfBuildingModuleService {
     private final GameDao gameDao;
     private final AllocationRemovalService allocationRemovalService;
 
-    public UUID cancelConstructionOfBuildingModule(UUID userId, UUID constructionId) {
+    public UUID cancelConstruction(UUID userId, UUID constructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
         GameData gameData = game.getData();
 
@@ -34,24 +33,22 @@ public class CancelConstructionOfBuildingModuleService {
             .findByBuildingModuleIdValidated(construction.getExternalReference());
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(construction.getLocation()).getOwner())) {
-            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of constructionArea on planet " + construction.getConstructionId());
+            throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of constructionArea on planet " + constructionId);
         }
 
         game.getEventLoop()
             .processWithWait(() -> {
-                game.getData()
-                    .getProcesses()
-                    .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCT_CONSTRUCTION_AREA)
+                gameData.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(constructionId, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)
                     .cleanup();
 
-                game.getData()
-                    .getConstructions()
+                gameData.getConstructions()
                     .remove(construction);
 
-                allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), game.getData(), construction.getConstructionId());
+                allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), gameData, constructionId);
 
                 game.getProgressDiff()
-                    .delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+                    .delete(constructionId, GameItemType.CONSTRUCTION);
 
                 gameData.getBuildingModules()
                     .remove(buildingModule);

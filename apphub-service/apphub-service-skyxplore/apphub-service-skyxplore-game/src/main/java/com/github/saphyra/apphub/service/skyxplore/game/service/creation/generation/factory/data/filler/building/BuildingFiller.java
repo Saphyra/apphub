@@ -20,9 +20,8 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingFiller {
-    private static final Collection<String> HQ_MODULES = List.of(
+    static final Collection<String> HQ_MODULES = List.of(
         "sawmill",
         "foundry",
         "hamster_wheel",

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BuildingModuleOverviewQueryService {
     private final ConstructionAreaDataService constructionAreaDataService;
 
@@ -25,7 +24,9 @@ public class BuildingModuleOverviewQueryService {
             .getSlots()
             .entrySet()
             .stream()
+            //Collecting building module overview for each category
             .collect(Collectors.toMap(entry -> entry.getKey().name(), entry -> {
+                //Calculate how many of each buildingModule is present
                 Map<String, Integer> modules = constructionAreas.stream()
                     .flatMap(constructionArea -> gameData.getBuildingModules().getByConstructionAreaId(constructionArea.getConstructionAreaId()).stream())
                     .collect(Collectors.groupingBy(BuildingModule::getDataId))

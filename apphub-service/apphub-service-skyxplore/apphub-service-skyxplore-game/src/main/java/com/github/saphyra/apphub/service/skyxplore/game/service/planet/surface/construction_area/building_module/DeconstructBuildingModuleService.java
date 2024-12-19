@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeconstructBuildingModuleService {
     private final GameDao gameDao;
     private final DeconstructionFactory deconstructionFactory;
@@ -35,7 +34,7 @@ public class DeconstructBuildingModuleService {
             .findByBuildingModuleIdValidated(buildingModuleId);
         UUID planetId = buildingModule.getLocation();
 
-        if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {
+        if (!userId.equals(gameData.getPlanets().findByIdValidated(planetId).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot deconstruct buildingModule on planet " + planetId);
         }
 

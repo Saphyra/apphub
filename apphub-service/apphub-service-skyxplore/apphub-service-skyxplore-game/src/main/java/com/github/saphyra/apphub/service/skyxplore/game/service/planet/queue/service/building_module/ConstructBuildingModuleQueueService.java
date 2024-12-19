@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructBuildingModuleQueueService implements QueueService {
     private final GameDao gameDao;
     private final ConstructionConverter constructionConverter;
@@ -68,6 +67,6 @@ class ConstructBuildingModuleQueueService implements QueueService {
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelConstructionOfBuildingModuleService.cancelConstructionOfBuildingModule(userId, itemId);
+        cancelConstructionOfBuildingModuleService.cancelConstruction(userId, itemId);
     }
 }

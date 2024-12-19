@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class BuildingModuleFactory {
     private final IdGenerator idGenerator;
 

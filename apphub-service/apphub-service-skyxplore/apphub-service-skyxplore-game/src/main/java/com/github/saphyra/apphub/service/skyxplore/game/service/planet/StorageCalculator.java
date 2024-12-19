@@ -23,7 +23,7 @@ public class StorageCalculator {
             .getByLocation(location)
             .stream()
             .filter(buildingModule -> storageBuildingModuleService.containsKey(buildingModule.getDataId())) //Filter for storage building module
-            //TODO filter out buildings under deconstruction
+            .filter(buildingModule -> gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()).isEmpty())
             .map(buildingModule -> storageBuildingModuleService.get(buildingModule.getDataId()).getStores())
             .filter(stores -> stores.containsKey(storageType)) //Check if storage building module can store the specific type
             .mapToInt(stores -> stores.get(storageType))
@@ -35,7 +35,7 @@ public class StorageCalculator {
             .getByLocation(location)
             .stream()
             .filter(buildingModule -> dwellingBuildingService.containsKey(buildingModule.getDataId()))
-            //TODO filter out buildings under deconstruction
+            .filter(buildingModule -> gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()).isEmpty())
             .mapToInt(buildingModule -> dwellingBuildingService.get(buildingModule.getDataId()).getCapacity())
             .sum();
     }

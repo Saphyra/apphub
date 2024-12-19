@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class BuildingModuleConverter implements GameDataToModelConverter {
     @Override
     public List<BuildingModuleModel> convert(UUID gameId, GameData gameData) {

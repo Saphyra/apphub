@@ -31,7 +31,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructConstructionAreaService {
     private final ConstructionAreaDataService constructionAreaDataService;
     private final GameDao gameDao;
@@ -51,11 +50,9 @@ class ConstructConstructionAreaService {
         Surface surface = gameData.getSurfaces()
             .findBySurfaceIdValidated(surfaceId);
         UUID planetId = surface.getPlanetId();
-        ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionAreaDataId);
-        ConstructionRequirements constructionRequirements = constructionAreaData.getConstructionRequirements();
 
         //Construction must happen on own planet
-        if (!gameData.getPlanets().findByIdValidated(planetId).getOwner().equals(userId)) {
+        if (!userId.equals(gameData.getPlanets().findByIdValidated(planetId).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot construct constructionArea on planet " + planetId);
         }
 
@@ -69,11 +66,13 @@ class ConstructConstructionAreaService {
             throw ExceptionFactory.forbiddenOperation("There is already a constructionArea on surface " + surfaceId);
         }
 
+        ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionAreaDataId);
         //Surface must be supported type
         if (!constructionAreaData.getSupportedSurfaces().contains(surface.getSurfaceType())) {
             throw ExceptionFactory.forbiddenOperation(constructionAreaDataId + " cannot built on surfaceType " + surface.getSurfaceType());
         }
 
+        ConstructionRequirements constructionRequirements = constructionAreaData.getConstructionRequirements();
         ConstructionArea constructionArea = constructionAreaFactory.create(planetId, surfaceId, constructionAreaDataId);
         log.info("{} created.", constructionArea);
 

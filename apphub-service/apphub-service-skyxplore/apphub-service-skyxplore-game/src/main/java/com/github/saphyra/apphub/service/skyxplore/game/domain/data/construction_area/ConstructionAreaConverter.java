@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class ConstructionAreaConverter implements GameDataToModelConverter {
     private final ConstructionConverter constructionConverter;
     private final DeconstructionConverter deconstructionConverter;

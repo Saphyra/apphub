@@ -14,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImpl implements SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleController {
     private final BuildingModuleQueryService buildingModuleQueryService;
     private final ConstructBuildingModuleService constructBuildingModuleService;
@@ -41,7 +40,7 @@ public class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerI
     public List<BuildingModuleResponse> cancelConstructionOfBuildingModule(UUID constructionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel construction {} of buildingModule", accessTokenHeader.getUserId(), constructionId);
 
-        UUID constructionAreaId = cancelConstructionOfBuildingModuleService.cancelConstructionOfBuildingModule(accessTokenHeader.getUserId(), constructionId);
+        UUID constructionAreaId = cancelConstructionOfBuildingModuleService.cancelConstruction(accessTokenHeader.getUserId(), constructionId);
 
         return getBuildingModules(constructionAreaId, accessTokenHeader);
     }

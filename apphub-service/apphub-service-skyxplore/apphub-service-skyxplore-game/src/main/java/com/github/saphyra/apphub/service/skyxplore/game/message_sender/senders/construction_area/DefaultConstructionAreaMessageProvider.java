@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessa
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.util.MessageSenderUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionConstructionAreaIdMapping;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -17,10 +17,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
-@RequiredArgsConstructor
 @Slf4j
 @Builder
-//TODO unit test
+@AllArgsConstructor
 public class DefaultConstructionAreaMessageProvider<T> implements ConstructionAreaMessageProvider {
     @NonNull
     private final MessageSenderUtil messageSenderUtil;
@@ -37,6 +36,7 @@ public class DefaultConstructionAreaMessageProvider<T> implements ConstructionAr
     @NonNull
     private final Long pollingInterval;
 
+    @Builder.Default
     private final Map<String, LastMessage<T>> lastMessages = new ConcurrentHashMap<>();
 
     @Override
