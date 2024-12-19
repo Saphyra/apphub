@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.StorageDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
@@ -25,7 +25,7 @@ class PlanetStorageDetailQueryService {
 
     StorageDetailsResponse getStorageDetails(GameData gameData, UUID location, StorageType storageType) {
         return StorageDetailsResponse.builder()
-            .capacity(storageCalculator.calculateCapacity(gameData, location, storageType))
+            .capacity(storageCalculator.calculateStorageCapacity(gameData, location, storageType))
             .reservedStorageAmount(reservedStorageQueryService.getReservedAmount(gameData, location, storageType))
             .actualResourceAmount(storedResourceAmountQueryService.getActualAmount(gameData, location, storageType))
             .allocatedResourceAmount(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, location, storageType))

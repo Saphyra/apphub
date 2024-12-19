@@ -1,38 +1,3 @@
 {
-    "excavator": {
-        "en": "Produces raw minerals from the planet surface.",
-        "hu": "Nyersanyagokat bányászik a bolygó felszínéről."
-    },
-    "farm": {
-        "en": "Produces leather and meat from livestock, and crops from agriculture.",
-        "hu": "Az állatállomány bőrt éés húst, míg a szántóföldek gabonát biztosítanak."
-    },
-    "solar_panel": {
-        "en": "Converts the ligth of the sun to electricity.",
-        "hu": "Elektromos energiává alakítja a napsugárzást."
-    },
-    "camp": {
-        "en": "Hideout for hunters who provide food and leather of wild animals.",
-        "hu": "Rejtekhely a vadászoknak, akik ételt és bőrt szereznek a vadállatoktól."
-    },
-    "sawmill": {
-        "en": "Produces logs, and cuts them to planks.",
-        "hu": "Farönköket termel, amiket deszkává aprít."
-    },
-    "water_pump": {
-        "en": "Provides water from lakes.",
-        "hu": "Vizet szolgáltat a tóból."
-    },
-    "battery": {
-        "en": "Stores energy.",
-        "hu": "Energiát tárol."
-    },
-    "oil_rig": {
-        "en": "Extracts oil.",
-        "hu": "Olajat termel."
-    },
-    "headquarters": {
-        "en": "Center of the colony. Provides basic needs of citizens, and initial construction.",
-        "hu": "A kolónia központja. Kiszolgálja a telepesek, és az elsődleges építkezések alapvető szükségleteit."
-    }
+
 }

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import org.junit.jupiter.api.Test;
@@ -26,10 +26,10 @@ class WorkProcessConditionsTest {
     private GameData gameData;
 
     @Mock
-    private BuildingAllocations buildingAllocations;
+    private BuildingModuleAllocations buildingModuleAllocations;
 
     @Mock
-    private BuildingAllocation buildingAllocation;
+    private BuildingModuleAllocation buildingModuleAllocation;
 
     @Mock
     private CitizenAllocations citizenAllocations;
@@ -39,8 +39,8 @@ class WorkProcessConditionsTest {
 
     @Test
     void buildingAllocated() {
-        given(gameData.getBuildingAllocations()).willReturn(buildingAllocations);
-        given(buildingAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingAllocation));
+        given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
+        given(buildingModuleAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingModuleAllocation));
 
         assertThat(underTest.hasBuildingAllocated(gameData, PROCESS_ID)).isTrue();
     }

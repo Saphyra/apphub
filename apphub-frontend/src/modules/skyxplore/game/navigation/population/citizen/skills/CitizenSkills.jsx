@@ -1,12 +1,12 @@
 import React from "react";
 import CitizenStatusBar from "../status_bar/CitizenStatusBar";
 import MapStream from "../../../../../../../common/js/collection/MapStream";
-import citizenLocalizationData from "../../../../common/localization/citizen_localization.json";
+import skillTypeLocalizationData from "../../../../common/localization/skill_type_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import localizationData from "./citizen_skill_localization.json";
 
 const CitizenSkills = ({ skills, hiddenProperties }) => {
-    const citizenLocalizationHandler = new LocalizationHandler(citizenLocalizationData);
+    const citizenLocalizationHandler = new LocalizationHandler(skillTypeLocalizationData);
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {

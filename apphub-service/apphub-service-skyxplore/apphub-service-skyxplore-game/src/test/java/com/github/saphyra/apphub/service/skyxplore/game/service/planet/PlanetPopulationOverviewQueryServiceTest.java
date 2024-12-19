@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetPopulationOverviewResponse;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -54,7 +53,7 @@ public class PlanetPopulationOverviewQueryServiceTest {
         given(gameData.getCitizens()).willReturn(citizens);
         given(citizens.getByLocation(PLANET_ID)).willReturn(List.of(citizen));
 
-        given(storageCalculator.calculateCapacity(gameData, PLANET_ID, StorageType.CITIZEN)).willReturn(CAPACITY);
+        given(storageCalculator.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(CAPACITY);
 
         PlanetPopulationOverviewResponse result = underTest.getPopulationOverview(USER_ID, PLANET_ID);
 

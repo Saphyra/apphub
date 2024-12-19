@@ -15,6 +15,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class DeconstructionProcessHelper {
     private final WorkProcessFactory workProcessFactory;
 

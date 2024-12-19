@@ -7,10 +7,8 @@ import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area.ConstructionAreaDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilities;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
@@ -23,11 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -36,8 +30,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class GameDataControllerImplTest {
     private static final String DATA_ID = "data-id";
-    private static final String BUILDING_DATA_ID = "building-data-id";
-    private static final String MISC_BUILDING_DATA_ID = "misc-building-data-id";
     private static final String RESOURCE_DATA_ID = "resource-data-id";
 
     private final AbstractDataService<String, GameDataItem> dataService = new DummyDataService();
@@ -48,6 +40,9 @@ public class GameDataControllerImplTest {
     @Mock
     private ResourceDataService resourceDataService;
 
+    @Mock
+    private ConstructionAreaDataService constructionAreaDataService;
+
     private GameDataControllerImpl underTest;
 
     @Mock
@@ -56,13 +51,19 @@ public class GameDataControllerImplTest {
     @Mock
     private TerraformingPossibility terraformingPossibility;
 
+    @Mock
+    private ConstructionAreaData constructionAreaData1;
+
+    @Mock
+    private ConstructionAreaData constructionAreaData2;
+
     @BeforeEach
     public void setUp() {
         given(gameDataItem.getId()).willReturn(DATA_ID);
         dataService.put(DATA_ID, gameDataItem);
         given(resourceDataService.keySet()).willReturn(Set.of(RESOURCE_DATA_ID));
 
-        underTest = new GameDataControllerImpl(Arrays.asList(dataService), terraformingPossibilitiesService, resourceDataService);
+        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService, resourceDataService, constructionAreaDataService);
     }
 
     @Test
@@ -77,35 +78,6 @@ public class GameDataControllerImplTest {
         Object result = underTest.getGameData(DATA_ID);
 
         assertThat(result).isEqualTo(gameDataItem);
-    }
-
-    @Test
-    public void availableBuildings_invalidSurfaceType() {
-        Throwable ex = catchThrowable(() -> underTest.getAvailableBuildings("asd"));
-
-        ExceptionValidator.validateInvalidParam(ex, "surfaceType", "invalid value");
-    }
-
-    @Test
-    public void availableBuildings() {
-        BuildingData buildingData = new StorageBuildingData();
-        buildingData.setId(BUILDING_DATA_ID);
-
-        MiscellaneousBuilding miscellaneousBuilding = new MiscellaneousBuilding();
-        miscellaneousBuilding.setId(MISC_BUILDING_DATA_ID);
-        miscellaneousBuilding.setPlaceableSurfaceTypes(List.of(SurfaceType.LAKE));
-
-        GameDataItem gameDataItem = new ResourceData();
-
-        dataService.put(BUILDING_DATA_ID, buildingData);
-        dataService.put(MISC_BUILDING_DATA_ID, miscellaneousBuilding);
-        dataService.put(DATA_ID, gameDataItem);
-
-        underTest = new GameDataControllerImpl(List.of(dataService), terraformingPossibilitiesService, resourceDataService);
-
-        List<String> result = underTest.getAvailableBuildings(SurfaceType.CONCRETE.name());
-
-        assertThat(result).containsExactly(BUILDING_DATA_ID);
     }
 
     @Test
@@ -137,6 +109,21 @@ public class GameDataControllerImplTest {
     @Test
     void getResourceDataIds() {
         assertThat(underTest.getResourceDataIds()).containsExactly(RESOURCE_DATA_ID);
+    }
+
+    @Test
+    void getAvailableConstructionAreas_invalidSurfaceType() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableConstructionAreas("asd"), "surfaceType", "invalid value");
+    }
+
+    @Test
+    void getAvailableConstructionAreas() {
+        given(constructionAreaDataService.values()).willReturn(List.of(constructionAreaData1, constructionAreaData2));
+        given(constructionAreaData1.getSupportedSurfaces()).willReturn(List.of(SurfaceType.CONCRETE));
+        given(constructionAreaData2.getSupportedSurfaces()).willReturn(List.of(SurfaceType.DESERT, SurfaceType.FIELD));
+
+        assertThat(underTest.getAvailableConstructionAreas(SurfaceType.DESERT.name()))
+            .containsExactly(constructionAreaData2);
     }
 
     private static class DummyDataService extends AbstractDataService<String, GameDataItem> {

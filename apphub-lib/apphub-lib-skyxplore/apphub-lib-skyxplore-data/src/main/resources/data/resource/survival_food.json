@@ -1,0 +1,5 @@
+{
+  "id": "survival_food",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

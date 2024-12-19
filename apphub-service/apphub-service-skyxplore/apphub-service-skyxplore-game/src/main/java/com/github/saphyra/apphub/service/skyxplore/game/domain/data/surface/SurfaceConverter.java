@@ -2,14 +2,14 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceBuildingResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreaConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class SurfaceConverter implements GameDataToModelConverter {
-    private final BuildingConverter buildingConverter;
+    private final ConstructionAreaConverter constructionAreaConverter;
     private final ConstructionConverter constructionConverter;
 
     public List<SurfaceModel> toModel(UUID gameId, Collection<Surface> surfaces) {
@@ -53,9 +53,9 @@ public class SurfaceConverter implements GameDataToModelConverter {
         Coordinate coordinate = gameData.getCoordinates()
             .findByReferenceId(surface.getSurfaceId());
 
-        SurfaceBuildingResponse buildingResponse = gameData.getBuildings()
+        SurfaceConstructionAreaResponse buildingResponse = gameData.getConstructionAreas()
             .findBySurfaceId(surface.getSurfaceId())
-            .map(building -> buildingConverter.toResponse(gameData, building))
+            .map(constructionArea -> constructionAreaConverter.toResponse(gameData, constructionArea))
             .orElse(null);
 
         ConstructionResponse terraformation = gameData.getConstructions()
@@ -67,7 +67,7 @@ public class SurfaceConverter implements GameDataToModelConverter {
             .surfaceId(surface.getSurfaceId())
             .coordinate(coordinate)
             .surfaceType(surface.getSurfaceType().name())
-            .building(buildingResponse)
+            .constructionArea(buildingResponse)
             .terraformation(terraformation)
             .build();
     }

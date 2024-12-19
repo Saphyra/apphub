@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ class PlanetMessageSenderTest {
         given(planetIdMapping.getUserId()).willReturn(USER_ID);
         given(planetIdMapping.getPlanetId()).willReturn(PLANET_ID);
 
-        given(messageProvider.getMessage(SESSION_ID, USER_ID, PLANET_ID)).willReturn(Optional.of(new PlanetUpdateItem(UPDATE_ITEM_KEY, UPDATE_ITEM_VALUE)));
+        given(messageProvider.getMessage(SESSION_ID, USER_ID, PLANET_ID)).willReturn(Optional.of(new UpdateItem(UPDATE_ITEM_KEY, UPDATE_ITEM_VALUE)));
 
         List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
 

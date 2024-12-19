@@ -129,7 +129,7 @@ public class WebElementUtils {
     }
 
     public static List<String> getClasses(WebElement element) {
-        return Arrays.asList(element.getAttribute("class").split(" "));
+        return Arrays.asList(element.getDomAttribute("class").split(" "));
     }
 
     public static boolean isPresent(Supplier<WebElement> search) {

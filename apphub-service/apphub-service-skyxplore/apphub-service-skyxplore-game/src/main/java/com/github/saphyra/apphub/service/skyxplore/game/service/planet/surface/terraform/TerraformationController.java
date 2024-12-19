@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreSurfaceTerraformationController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.planet.surface.SkyXploreSurfaceTerraformationController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;

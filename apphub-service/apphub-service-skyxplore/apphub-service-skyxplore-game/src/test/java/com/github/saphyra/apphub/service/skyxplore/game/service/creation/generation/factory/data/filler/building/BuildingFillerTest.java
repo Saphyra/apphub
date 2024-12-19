@@ -1,118 +1,100 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuilding;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.miscellaneous.MiscellaneousBuildingService;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.BuildingFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModuleFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreaFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building.BuildingFiller.HQ_MODULES;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class BuildingFillerTest {
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
-    private static final String DEFAULT_BUILDING_DATA_ID = "default-building-data-id";
-    private static final UUID CONCRETE_SURFACE_ID = UUID.randomUUID();
-
-    @Mock
-    private MiscellaneousBuildingService miscellaneousBuildingService;
-
-    @Mock
-    private BuildingFactory buildingFactory;
+    private static final UUID SURFACE_ID = UUID.randomUUID();
+    private static final UUID CONSTRUCTION_AREA_ID = UUID.randomUUID();
 
     @Mock
     private EmptySurfaceProvider emptySurfaceProvider;
 
+    @Mock
+    private ConstructionAreaFactory constructionAreaFactory;
+
+    @Mock
+    private BuildingModuleFactory buildingModuleFactory;
+
+    @InjectMocks
     private BuildingFiller underTest;
-
-    @Mock
-    private MiscellaneousBuilding defaultBuilding;
-
-    @Mock
-    private MiscellaneousBuilding otherBuilding;
 
     @Mock
     private GameData gameData;
 
     @Mock
-    private Planet occupiedPlanet;
+    private Planets planets;
 
     @Mock
-    private Planet emptyPlanet;
+    private Planet planet;
 
     @Mock
     private Surfaces surfaces;
 
     @Mock
-    private Surface mountainSurface;
+    private Surface surface;
 
     @Mock
-    private Surface oreFieldSurface;
+    private ConstructionAreas constructionAreas;
 
     @Mock
-    private Surface concreteSurface;
+    private ConstructionArea constructionArea;
 
     @Mock
-    private Building concreteBuilding;
+    private BuildingModules buildingModules;
 
     @Mock
-    private Buildings buildings;
-
-    @BeforeEach
-    void setUp() {
-        given(miscellaneousBuildingService.values()).willReturn(List.of(defaultBuilding, otherBuilding));
-        given(defaultBuilding.isDefaultBuilding()).willReturn(true);
-        given(otherBuilding.isDefaultBuilding()).willReturn(false);
-
-        underTest = BuildingFiller.builder()
-            .buildingDataServices(List.of(miscellaneousBuildingService))
-            .buildingFactory(buildingFactory)
-            .emptySurfaceProvider(emptySurfaceProvider)
-            .build();
-    }
+    private BuildingModule buildingModule;
 
     @Test
     void fillBuildings() {
-        given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(
-            new Planets(),
-            new BiWrapper<>(UUID.randomUUID(), emptyPlanet),
-            new BiWrapper<>(UUID.randomUUID(), occupiedPlanet)
-        ));
-
-        given(emptyPlanet.getOwner()).willReturn(null);
-        given(occupiedPlanet.getOwner()).willReturn(UUID.randomUUID());
-
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.values()).willReturn(List.of(planet));
+        given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(occupiedPlanet.getPlanetId()).willReturn(PLANET_ID);
-        List<Surface> surfaceList = List.of(mountainSurface, oreFieldSurface, concreteSurface);
-        given(surfaces.getByPlanetId(PLANET_ID)).willReturn(surfaceList);
-
-        given(defaultBuilding.getPrimarySurfaceType()).willReturn(SurfaceType.CONCRETE);
-        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.CONCRETE, surfaceList, gameData)).willReturn(concreteSurface);
-        given(defaultBuilding.getId()).willReturn(DEFAULT_BUILDING_DATA_ID);
-        given(concreteSurface.getSurfaceId()).willReturn(CONCRETE_SURFACE_ID);
-        given(buildingFactory.create(DEFAULT_BUILDING_DATA_ID, PLANET_ID, CONCRETE_SURFACE_ID)).willReturn(concreteBuilding);
-        given(gameData.getBuildings()).willReturn(buildings);
+        given(planet.getPlanetId()).willReturn(PLANET_ID);
+        given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));
+        given(emptySurfaceProvider.getEmptySurfaceForType(SurfaceType.DESERT, List.of(surface), gameData)).willReturn(surface);
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(constructionAreaFactory.create(PLANET_ID, SURFACE_ID, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(constructionArea);
+        given(constructionArea.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
+        given(buildingModuleFactory.create(eq(PLANET_ID), eq(CONSTRUCTION_AREA_ID), anyString())).willReturn(buildingModule);
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
 
         underTest.fillBuildings(gameData);
 
-        verify(buildings).add(concreteBuilding);
+        then(constructionAreas).should().add(constructionArea);
+        then(buildingModules).should(times(HQ_MODULES.size())).add(buildingModule);
+        HQ_MODULES.forEach(dataId -> then(buildingModuleFactory).should().create(PLANET_ID, CONSTRUCTION_AREA_ID, dataId));
     }
 }

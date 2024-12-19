@@ -1,0 +1,24 @@
+{
+  "id": "extractor",
+  "supportedSurfaces": [
+    "COAL_FIELD",
+    "DESERT",
+    "FOREST",
+    "LAKE",
+    "MOUNTAIN",
+    "OIL_FIELD",
+    "ORE_FIELD"
+  ],
+  "slots": {
+    "SMALL_STORAGE": 4,
+    "BASIC_POWER_SUPPLY": 1,
+    "EXTRACTION_SITE": 3,
+    "SMALL_MILITARY": 1
+  },
+  "constructionRequirements": {
+    "requiredWorkPoints": 10000,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  }
+}

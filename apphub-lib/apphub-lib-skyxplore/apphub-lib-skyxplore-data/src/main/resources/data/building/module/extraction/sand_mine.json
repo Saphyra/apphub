@@ -1,0 +1,25 @@
+{
+  "id": "sand_mine",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "DESERT"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "sand",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

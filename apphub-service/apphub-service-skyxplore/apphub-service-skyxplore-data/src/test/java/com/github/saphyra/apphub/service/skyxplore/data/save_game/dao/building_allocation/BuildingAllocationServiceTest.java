@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class BuildingAllocationServiceTest {
     private BuildingAllocationService underTest;
 
     @Mock
-    private BuildingAllocationModel model;
+    private BuildingModuleAllocationModel model;
 
     @Test
     public void getType() {

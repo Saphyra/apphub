@@ -2,12 +2,10 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +26,7 @@ class PopulationFillerServiceTest {
     private CitizenFactory citizenFactory;
 
     @Mock
-    private StorageBuildingService storageBuildingService;
+    private StorageCalculator storageCalculator;
 
     @InjectMocks
     private PopulationFillerService underTest;
@@ -42,9 +40,6 @@ class PopulationFillerServiceTest {
     @Mock
     private Planet emptyPlanet;
 
-    @Mock
-    private StorageBuildingData storageBuildingData;
-
     @Test
     void fillPopulation() {
         given(gameData.getPlanets()).willReturn(CollectionUtils.toMap(
@@ -56,8 +51,7 @@ class PopulationFillerServiceTest {
         given(planet.hasOwner()).willReturn(true);
         given(emptyPlanet.hasOwner()).willReturn(false);
 
-        given(storageBuildingService.findByStorageType(StorageType.CITIZEN)).willReturn(storageBuildingData);
-        given(storageBuildingData.getCapacity()).willReturn(2);
+        given(storageCalculator.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(2);
 
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 

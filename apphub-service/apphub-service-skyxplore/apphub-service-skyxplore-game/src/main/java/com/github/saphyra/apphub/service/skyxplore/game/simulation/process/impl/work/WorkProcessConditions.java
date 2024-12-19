@@ -12,7 +12,7 @@ import java.util.UUID;
 @Slf4j
 class WorkProcessConditions {
     boolean hasBuildingAllocated(GameData gameData, UUID processId) {
-        return gameData.getBuildingAllocations()
+        return gameData.getBuildingModuleAllocations()
             .findByProcessId(processId)
             .isPresent();
     }

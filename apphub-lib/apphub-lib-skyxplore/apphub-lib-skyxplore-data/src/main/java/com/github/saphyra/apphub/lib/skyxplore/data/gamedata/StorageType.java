@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Arrays;
 
 public enum StorageType {
-    CITIZEN, BULK, LIQUID, ENERGY;
+    CONTAINER, LIQUID, ENERGY, AMMUNITION, SPACESHIP, VEHICLE;
 
     @JsonCreator
     public static StorageType fromValue(String value) {

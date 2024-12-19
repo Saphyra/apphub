@@ -68,13 +68,13 @@ public class ReservedStorageQueryServiceTest {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.getByLocation(LOCATION)).willReturn(List.of(reservedStorage1, reservedStorage2, reservedStorage3));
         given(resourceData.getId()).willReturn(DATA_ID_1);
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData));
         given(reservedStorage1.getDataId()).willReturn(DATA_ID_1);
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
         given(reservedStorage2.getDataId()).willReturn(DATA_ID_2);
         given(reservedStorage3.getDataId()).willReturn(DATA_ID_1);
 
-        int result = underTest.getReservedAmount(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getReservedAmount(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).isEqualTo(AMOUNT);
     }
@@ -86,11 +86,11 @@ public class ReservedStorageQueryServiceTest {
         given(reservedStorage1.getDataId()).willReturn(DATA_ID_1);
         given(reservedStorage2.getDataId()).willReturn(DATA_ID_2);
         given(reservedStorage1.getAmount()).willReturn(AMOUNT);
-        given(resourceDataService.getByStorageType(StorageType.BULK)).willReturn(Arrays.asList(resourceData));
+        given(resourceDataService.getByStorageType(StorageType.CONTAINER)).willReturn(Arrays.asList(resourceData));
         given(resourceData.getId()).willReturn(DATA_ID_1);
         given(reservedStorage3.getDataId()).willReturn(DATA_ID_1);
 
-        int result = underTest.getReservedStorageCapacity(gameData, LOCATION, StorageType.BULK);
+        int result = underTest.getReservedStorageCapacity(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result).isEqualTo(AMOUNT);
     }

@@ -1,0 +1,13 @@
+{
+  "id": "hangar",
+  "category": "LARGE_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "SPACESHIP": 10
+  }
+}
