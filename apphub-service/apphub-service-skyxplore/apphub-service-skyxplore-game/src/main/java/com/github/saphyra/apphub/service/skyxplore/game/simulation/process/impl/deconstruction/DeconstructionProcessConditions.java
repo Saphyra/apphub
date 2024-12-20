@@ -12,14 +12,15 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class DeconstructionProcessConditions {
     boolean buildingUtilized(GameData gameData, UUID deconstructionId) {
         UUID buildingId = gameData.getDeconstructions()
             .findByDeconstructionIdValidated(deconstructionId)
             .getExternalReference();
 
-        return !gameData.getBuildingAllocations()
-            .getByBuildingId(buildingId)
+        return !gameData.getBuildingModuleAllocations()
+            .getByBuildingModuleId(buildingId)
             .isEmpty();
     }
 

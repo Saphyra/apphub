@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-interface BuildingAllocationRepository extends CrudRepository<BuildingAllocationEntity, String> {
+interface BuildingAllocationRepository extends CrudRepository<BuildingModuleAllocationEntity, String> {
     @Modifying
-    @Query("DELETE FROM BuildingAllocationEntity e WHERE e.gameId = :gameId")
+    @Query("DELETE FROM BuildingModuleAllocationEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    List<BuildingAllocationEntity> getByGameId(String gameId, PageRequest page);
+    List<BuildingModuleAllocationEntity> getByGameId(String gameId, PageRequest page);
 }

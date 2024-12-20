@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.PlanetBuildingOverviewDetailedResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetBuildingOverviewDetailedResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
 import lombok.RequiredArgsConstructor;

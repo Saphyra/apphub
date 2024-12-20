@@ -5,6 +5,6 @@
     <logger name="liquibase" level="off"/>
     <logger name="org.springframework" level="off"/>
     <logger name="root" level="error"/>
-    <logger name="com.github.saphyra" level="warn"/>
+    <logger name="com.github.saphyra" level="info"/>
     <logger name="com.github.saphyra.apphub.lib.error_handler" level="warn"/>
 </configuration>

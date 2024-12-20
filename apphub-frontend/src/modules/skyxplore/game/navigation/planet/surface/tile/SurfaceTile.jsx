@@ -12,7 +12,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const isEmpty = () => {
-        return !hasValue(surface.building) && !hasValue(surface.terraformation);
+        return !hasValue(surface.constructionArea) && !hasValue(surface.terraformation);
     }
 
     const getContent = () => {

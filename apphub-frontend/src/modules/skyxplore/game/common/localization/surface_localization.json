@@ -35,8 +35,8 @@
         "en": "Forest",
         "hu": "Erdőség"
     },
-    "MILITARY": {
-        "en": "Military",
-        "hu": "Hadügy"
+    "FIELD": {
+        "en": "Field",
+        "hu": "Mező"
     }
 }

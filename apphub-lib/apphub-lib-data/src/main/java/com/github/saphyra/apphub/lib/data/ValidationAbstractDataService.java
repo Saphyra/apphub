@@ -7,6 +7,10 @@ import java.util.Map;
 public abstract class ValidationAbstractDataService<K, V> extends AbstractDataService<K, V> {
     private final DataValidator<Map<K, V>> validator;
 
+    public ValidationAbstractDataService(){
+        this.validator = null;
+    }
+
     public ValidationAbstractDataService(String path, ContentLoaderFactory contentLoaderFactory, DataValidator<Map<K, V>> validator) {
         super(path, contentLoaderFactory);
         this.validator = validator;

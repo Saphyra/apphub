@@ -1,0 +1,20 @@
+{
+  "id": "transformer",
+  "category": "BASIC_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "productions": [
+    {
+      "id": "transform",
+      "energyPerBatch": 1,
+      "batchTicks": 1,
+      "fuelLastsForTicks": 1,
+      "fuelStorage": 0,
+      "fuel": null
+    }
+  ]
+}

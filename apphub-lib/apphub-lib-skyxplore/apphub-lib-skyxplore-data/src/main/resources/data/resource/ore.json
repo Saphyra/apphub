@@ -1,5 +1,5 @@
 {
   "id": "ore",
-  "storageType": "bulk",
+  "storageType": "container",
   "maxProductionBatchSize": 50
 }

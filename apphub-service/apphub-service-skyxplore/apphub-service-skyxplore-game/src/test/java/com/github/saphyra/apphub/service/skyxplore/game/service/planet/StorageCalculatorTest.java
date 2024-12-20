@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.storage.StorageBuildingService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingModuleData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,38 +26,39 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class StorageCalculatorTest {
-    private static final Integer HQ_CAPACITY = 32;
+    private static final int CAPACITY = 32;
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String STORAGE_BUILDING_DATA_ID = "storage-building-data-id";
-    private static final UUID STORAGE_BUILDING_ID = UUID.randomUUID();
-    private static final UUID HQ_BUILDING_ID = UUID.randomUUID();
-    private static final Integer HQ_BUILDING_LEVEL = 4;
-    private static final Integer STORAGE_BUILDING_LEVEL = 2;
-    private static final Integer STORAGE_BUILDING_CAPACITY = 56;
+    private static final String NOT_STORAGE_DATA_ID = "not-storage-data-id";
+    private static final String DATA_ID = "data-id";
+    private static final UUID DECONSTRUCTED_BUILDING_MODULE_ID = UUID.randomUUID();
+    private static final String INCOMPATIBLE_DATA_ID = "incompatible-data-id";
 
     @Mock
-    private StorageBuildingService storageBuildingService;
+    private StorageBuildingModuleService storageBuildingModuleService;
 
     @Mock
-    private HeadquartersUtil headquartersUtil;
+    private DwellingBuildingService dwellingBuildingService;
 
     @InjectMocks
     private StorageCalculator underTest;
 
     @Mock
-    private StorageBuildingData storageBuildingData;
-
-    @Mock
     private GameData gameData;
 
     @Mock
-    private Buildings buildings;
+    private BuildingModules buildingModules;
 
     @Mock
-    private Building storageBuilding;
+    private BuildingModule notStorageModule;
 
     @Mock
-    private Building hqBuilding;
+    private BuildingModule deconstructedModule;
+
+    @Mock
+    private BuildingModule incompatibleModule;
+
+    @Mock
+    private BuildingModule matchingModule;
 
     @Mock
     private Deconstructions deconstructions;
@@ -66,49 +66,52 @@ class StorageCalculatorTest {
     @Mock
     private Deconstruction deconstruction;
 
-    @BeforeEach
-    void setUp() {
-        given(storageBuildingService.findByStorageType(StorageType.BULK)).willReturn(storageBuildingData);
-        given(headquartersUtil.getStores()).willReturn(Map.of(StorageType.BULK, HQ_CAPACITY));
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(storageBuildingData.getId()).willReturn(STORAGE_BUILDING_DATA_ID);
-        given(buildings.getByLocationAndDataId(LOCATION, STORAGE_BUILDING_DATA_ID)).willReturn(List.of(storageBuilding));
-        given(buildings.getByLocationAndDataId(LOCATION, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(List.of(hqBuilding));
-        given(storageBuilding.getBuildingId()).willReturn(STORAGE_BUILDING_ID);
+    @Mock
+    private StorageBuildingModuleData incompatibleStorageBuildingModuleData;
+
+    @Mock
+    private StorageBuildingModuleData storageBuildingModuleData;
+
+    @Mock
+    private DwellingBuildingModuleData dwellingBuildingModuleData;
+
+    @Test
+    void calculateStorageCapacity() {
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(buildingModules.getByLocation(LOCATION)).willReturn(List.of(notStorageModule, deconstructedModule, incompatibleModule, matchingModule, matchingModule));
+        given(notStorageModule.getDataId()).willReturn(NOT_STORAGE_DATA_ID);
+        given(deconstructedModule.getDataId()).willReturn(DATA_ID);
+        given(incompatibleModule.getDataId()).willReturn(INCOMPATIBLE_DATA_ID);
+        given(matchingModule.getDataId()).willReturn(DATA_ID);
+        given(storageBuildingModuleService.containsKey(NOT_STORAGE_DATA_ID)).willReturn(false);
+        given(storageBuildingModuleService.containsKey(DATA_ID)).willReturn(true);
+        given(storageBuildingModuleService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(true);
+        given(deconstructedModule.getBuildingModuleId()).willReturn(DECONSTRUCTED_BUILDING_MODULE_ID);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(hqBuilding.getBuildingId()).willReturn(HQ_BUILDING_ID);
+        given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
+        given(storageBuildingModuleService.get(INCOMPATIBLE_DATA_ID)).willReturn(incompatibleStorageBuildingModuleData);
+        given(storageBuildingModuleService.get(DATA_ID)).willReturn(storageBuildingModuleData);
+        given(incompatibleStorageBuildingModuleData.getStores()).willReturn(Map.of());
+        given(storageBuildingModuleData.getStores()).willReturn(Map.of(StorageType.CONTAINER, CAPACITY));
+
+        assertThat(underTest.calculateStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(CAPACITY * 2);
     }
 
     @Test
-    void productionBuildingUnderDeconstruction() {
-        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.of(deconstruction));
-        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.empty());
-        given(hqBuilding.getLevel()).willReturn(HQ_BUILDING_LEVEL);
+    void calculateDwellingCapacity() {
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(buildingModules.getByLocation(LOCATION)).willReturn(List.of(incompatibleModule, deconstructedModule, matchingModule, matchingModule));
+        given(incompatibleModule.getDataId()).willReturn(INCOMPATIBLE_DATA_ID);
+        given(deconstructedModule.getDataId()).willReturn(DATA_ID);
+        given(matchingModule.getDataId()).willReturn(DATA_ID);
+        given(dwellingBuildingService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(false);
+        given(dwellingBuildingService.containsKey(DATA_ID)).willReturn(true);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructedModule.getBuildingModuleId()).willReturn(DECONSTRUCTED_BUILDING_MODULE_ID);
+        given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
+        given(dwellingBuildingService.get(DATA_ID)).willReturn(dwellingBuildingModuleData);
+        given(dwellingBuildingModuleData.getCapacity()).willReturn(CAPACITY);
 
-
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY);
-    }
-
-    @Test
-    void hqUnderDeconstruction() {
-        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.empty());
-        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.of(deconstruction));
-        given(storageBuilding.getLevel()).willReturn(STORAGE_BUILDING_LEVEL);
-        given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
-
-
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
-    }
-
-    @Test
-    void noDeconstruction() {
-        given(deconstructions.findByExternalReference(STORAGE_BUILDING_ID)).willReturn(Optional.empty());
-        given(deconstructions.findByExternalReference(HQ_BUILDING_ID)).willReturn(Optional.empty());
-        given(storageBuilding.getLevel()).willReturn(STORAGE_BUILDING_LEVEL);
-        given(hqBuilding.getLevel()).willReturn(HQ_BUILDING_LEVEL);
-        given(storageBuildingData.getCapacity()).willReturn(STORAGE_BUILDING_CAPACITY);
-
-
-        assertThat(underTest.calculateCapacity(gameData, LOCATION, StorageType.BULK)).isEqualTo(HQ_BUILDING_LEVEL * HQ_CAPACITY + STORAGE_BUILDING_LEVEL * STORAGE_BUILDING_CAPACITY);
+        assertThat(underTest.calculateDwellingCapacity(gameData, LOCATION)).isEqualTo(CAPACITY * 2);
     }
 }

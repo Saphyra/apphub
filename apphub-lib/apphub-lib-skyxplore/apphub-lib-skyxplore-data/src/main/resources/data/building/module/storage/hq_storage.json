@@ -1,0 +1,16 @@
+{
+  "id": "hq_storage",
+  "category": "HQ_STORAGE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "stores": {
+    "ENERGY": 200,
+    "CONTAINER": 200,
+    "LIQUID": 200,
+    "AMMUNITION": 200
+  }
+}

@@ -1,0 +1,74 @@
+{
+    "BASIC_POWER_SUPPLY": {
+        "en": "Basic power supply",
+        "hu": "Egyszerű energiaellátás"
+    },
+    "SMALL_STORAGE": {
+        "en": "Small storage",
+        "hu": "Kis raktár"
+    },
+    "EXTRACTION_SITE": {
+        "en": "Extraction site",
+        "hu": "Kitermelő"
+    },
+    "SMALL_MILITARY": {
+        "en": "Small military",
+        "hu": "Kis harcászat"
+    },
+    "LARGE_MILITARY": {
+        "en": "Large military",
+        "hu": "Nagy harcászat"
+    },
+    "HQ_STORAGE": {
+        "en": "Headquarters storage",
+        "hu": "Parancsnokság raktár"
+    },
+    "HQ_EXTRACTION": {
+        "en": "Headquarters extraction",
+        "hu": "Parancsnokság kitermelés"
+    },
+    "PRODUCTION": {
+        "en": "Production",
+        "hu": "Termelés"
+    },
+    "HQ_BARRACKS": {
+        "en": "Barracks",
+        "hu": "Laktanya"
+    },
+    "HQ_CANTEEN": {
+        "en": "Canteen",
+        "hu": "Kantin"
+    },
+    "FARM": {
+        "en": "Farm",
+        "hu": "Farm"
+    },
+    "LARGE_STORAGE": {
+        "en": "Large storage",
+        "hu": "Nagy raktár"
+    },
+    "LARGE_POWER_SUPPLY": {
+        "en": "Advanced power supply",
+        "hu": "Fejlett energiaellátás"
+    },
+    "EDUCATION": {
+        "en": "Education",
+        "hu": "Oktatás"
+    },
+    "DWELLING": {
+        "en": "Dwelling",
+        "hu": "Lakóépület"
+    },
+    "CULTURAL": {
+        "en": "Cultural",
+        "hu": "Kultúra"
+    },
+    "DOCK": {
+        "en": "Dock",
+        "hu": "Dokk"
+    },
+    "HOSPITAL_BED": {
+        "en": "Hospital bed",
+        "hu": "Kórházi ágy"
+    }
+}

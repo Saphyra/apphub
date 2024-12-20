@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.StorageDetailsResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.ResourceDetailsResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.StorageDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
@@ -58,13 +58,13 @@ public class PlanetStorageDetailQueryServiceTest {
 
     @Test
     public void getStorageDetails() {
-        given(storageCalculator.calculateCapacity(gameData, LOCATION, StorageType.BULK)).willReturn(CAPACITY);
-        given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.BULK)).willReturn(RESERVED_STORAGE_AMOUNT);
-        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ACTUAL_AMOUNT);
-        given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.BULK)).willReturn(ALLOCATED_AMOUNT);
-        given(resourceDetailsQueryService.getResourceDetails(gameData, LOCATION, StorageType.BULK)).willReturn(Arrays.asList(resourceDetailsResponse));
+        given(storageCalculator.calculateStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
+        given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(RESERVED_STORAGE_AMOUNT);
+        given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ACTUAL_AMOUNT);
+        given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ALLOCATED_AMOUNT);
+        given(resourceDetailsQueryService.getResourceDetails(gameData, LOCATION, StorageType.CONTAINER)).willReturn(Arrays.asList(resourceDetailsResponse));
 
-        StorageDetailsResponse result = underTest.getStorageDetails(gameData, LOCATION, StorageType.BULK);
+        StorageDetailsResponse result = underTest.getStorageDetails(gameData, LOCATION, StorageType.CONTAINER);
 
         assertThat(result.getCapacity()).isEqualTo(CAPACITY);
         assertThat(result.getReservedStorageAmount()).isEqualTo(RESERVED_STORAGE_AMOUNT);

@@ -1,0 +1,5 @@
+{
+  "id": "crop",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

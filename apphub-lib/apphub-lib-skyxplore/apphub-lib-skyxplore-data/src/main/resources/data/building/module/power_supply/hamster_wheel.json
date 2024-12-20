@@ -1,0 +1,21 @@
+{
+  "id": "hamster_wheel",
+  "category": "BASIC_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 10000,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "productions": [
+    {
+      "id": "human",
+      "energyPerBatch": 1,
+      "batchTicks": 10,
+      "fuelLastsForTicks": 100,
+      "humanPowered": true,
+      "fuelStorage": 0,
+      "fuel": null
+    }
+  ]
+}

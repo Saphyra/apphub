@@ -4,7 +4,7 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
 import { hasValue } from "../../../../../../common/js/Utils";
 import { SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);
@@ -46,6 +46,10 @@ const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage
                 terraformCallback={() => terraform(terraformingPossibility.surfaceType)}
             />)
             .toList();
+    }
+
+    if (terraformingPossibilities.length === 0) {
+        return;
     }
 
     return (

@@ -15,6 +15,7 @@ game:
     planetPopulation: 5000
     planetBuilding: 1000
     population: 1000
+    constructionAreaBuildingModules: 100
   deconstruction:
     requiredWorkPoints: 20000
   itemSaverMaxChunkSize: 500
@@ -42,7 +43,7 @@ game:
       - surfaceName: FOREST
         spawnRate: 2
       - surfaceName: LAKE
-        spawnRate: 1
+        spawnRate: 2
       - surfaceName: MOUNTAIN
         spawnRate: 2
         optional: false
@@ -51,8 +52,10 @@ game:
       - surfaceName: ORE_FIELD
         spawnRate: 1
       - surfaceName: VOLCANO
-        spawnRate: 2
+        spawnRate: 1
         optional: true
+      - surfaceName: FIELD
+        spawnRate: 2
   citizen:
     workPointsPerTick: 100
     maxWorkPointsBatch: 1000

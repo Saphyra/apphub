@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
+import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.util.MessageSenderUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -88,9 +89,9 @@ class DefaultPlanetMessageProviderTest {
         given(messageSenderUtil.lastMessageValid(SESSION_ID, lastMessages, POLLING_INTERVAL)).willReturn(false);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
-        Optional<PlanetUpdateItem> result = underTest.getMessage(SESSION_ID, USER_ID, PLANET_ID);
+        Optional<UpdateItem> result = underTest.getMessage(SESSION_ID, USER_ID, PLANET_ID);
 
-        assertThat(result).contains(new PlanetUpdateItem(ITEM_KEY, RESPONSE));
+        assertThat(result).contains(new UpdateItem(ITEM_KEY, RESPONSE));
 
         //noinspection unchecked
         assertThat((Map<String, LastMessage<Object>>) FieldUtils.readField(underTest, FIELD_LAST_MESSAGES, true)).containsEntry(SESSION_ID, new LastMessage<>(RESPONSE, CURRENT_TIME));

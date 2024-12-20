@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
+import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.util.MessageSenderUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
     private final DateTimeUtil dateTimeUtil;
 
     @NonNull
-    private final long pollingInterval;
+    private final Long pollingInterval;
 
     private final Map<String, LastMessage<T>> lastMessages = new ConcurrentHashMap<>();
 
@@ -43,7 +44,7 @@ public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
     }
 
     @Override
-    public Optional<PlanetUpdateItem> getMessage(String sessionId, UUID userId, UUID planetId) {
+    public Optional<UpdateItem> getMessage(String sessionId, UUID userId, UUID planetId) {
         if (messageSenderUtil.lastMessageValid(sessionId, lastMessages, pollingInterval)) {
             log.debug("Last Planet {} status is still valid for user {} on planet {}", itemKey, userId, planetId);
             return Optional.empty();
@@ -65,6 +66,6 @@ public class DefaultPlanetMessageProvider<T> implements PlanetMessageProvider {
             .build();
         lastMessages.put(sessionId, latest);
 
-        return Optional.of(new PlanetUpdateItem(itemKey, actualPayload));
+        return Optional.of(new UpdateItem(itemKey, actualPayload));
     }
 }

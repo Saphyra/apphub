@@ -2,38 +2,38 @@
   {
     "surfaceType": "CONCRETE",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
+      "requiredEnergy": 0,
       "requiredResources": {
         "stone": 100,
-        "water": 100,
-        "energy": 100
+        "water": 100
       }
     }
   },
   {
     "surfaceType": "FOREST",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
+      "requiredEnergy": 0,
       "requiredResources": {
-        "energy": 1
       }
     }
   },
   {
     "surfaceType": "LAKE",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
+      "requiredEnergy": 0,
       "requiredResources": {
-        "energy": 1
       }
     }
   },
   {
-    "surfaceType": "MILITARY",
+    "surfaceType": "FIELD",
     "constructionRequirements": {
-      "requiredWorkPoints": 1,
+      "requiredWorkPoints": 10000,
+      "requiredEnergy": 0,
       "requiredResources": {
-        "energy": 1
       }
     }
   }

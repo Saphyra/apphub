@@ -16,4 +16,5 @@ public class MessageDelay {
     private Long planetPopulation;
     private Long planetBuilding;
     private Long population;
+    private Long constructionAreaBuildingModules;
 }

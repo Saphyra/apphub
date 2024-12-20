@@ -1,0 +1,39 @@
+{
+  "id": "fossil_fuel_generator",
+  "category": "LARGE_POWER_SUPPLY",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "CONCRETE"
+  ],
+  "productions": [
+    {
+      "id": "burn_coal",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsForTicks": 600,
+      "fuelStorage": "10",
+      "fuel": "coal"
+    },
+    {
+      "id": "burn_logs",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsForTicks": 300,
+      "fuelStorage": "10",
+      "fuel": "log"
+    },
+    {
+      "id": "burn_oil",
+      "energyPerBatch": 10,
+      "batchTicks": 10,
+      "fuelLastsForTicks": 600,
+      "fuelStorage": "10",
+      "fuel": "oil"
+    }
+  ]
+}

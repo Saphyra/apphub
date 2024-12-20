@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXplorePlanetQueueController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.planet.SkyXplorePlanetQueueController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;

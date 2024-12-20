@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.chat;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameChatActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;

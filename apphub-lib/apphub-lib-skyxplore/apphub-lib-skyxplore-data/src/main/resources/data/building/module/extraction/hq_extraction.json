@@ -1,0 +1,52 @@
+{
+  "id": "hq_extraction",
+  "category": "HQ_EXTRACTION",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "produces": [
+    {
+      "resourceDataId": "log",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    },
+    {
+      "resourceDataId": "stone",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    },
+    {
+      "resourceDataId": "water",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    },
+    {
+      "resourceDataId": "ore",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 10,
+        "requiredEnergy": 10,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

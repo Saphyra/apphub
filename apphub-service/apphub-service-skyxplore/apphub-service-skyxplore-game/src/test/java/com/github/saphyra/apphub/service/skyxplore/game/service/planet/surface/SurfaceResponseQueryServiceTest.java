@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.SurfaceResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

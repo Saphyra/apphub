@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameCreationController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.platform.SkyXploreGameCreationController;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;

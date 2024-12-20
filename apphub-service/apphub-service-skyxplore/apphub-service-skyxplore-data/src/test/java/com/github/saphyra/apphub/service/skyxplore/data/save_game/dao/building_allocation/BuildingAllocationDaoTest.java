@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +38,10 @@ class BuildingAllocationDaoTest {
     private BuildingAllocationDao underTest;
 
     @Mock
-    private BuildingAllocationEntity entity;
+    private BuildingModuleAllocationEntity entity;
 
     @Mock
-    private BuildingAllocationModel model;
+    private BuildingModuleAllocationModel model;
 
     @Test
     void deleteByGameId() {

@@ -19,6 +19,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class ConstructionProcessHelper {
     private final UseAllocatedResourceService useAllocatedResourceService;
     private final WorkProcessFactory workProcessFactory;

@@ -1,0 +1,12 @@
+{
+  "id": "house",
+  "category": "DWELLING",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 2,
+  "moraleRecovery": 10
+}

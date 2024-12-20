@@ -1,0 +1,12 @@
+{
+  "id": "apartment",
+  "category": "DWELLING",
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 0,
+    "requiredResources": {
+    }
+  },
+  "capacity": 5,
+  "moraleRecovery": 7
+}

@@ -42,6 +42,7 @@ platform:
     name: integration-server
     port: 8072
     location: "./apphub-integration-server/target/application.jar"
+    moduleName: apphub-integration-server
 
   productionProxy:
     name: production-proxy

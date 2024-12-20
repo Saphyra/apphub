@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingData;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProducerBuildingModule;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.BuildingCapacityCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,13 +28,12 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class ProducerBuildingFinderServiceTest {
     private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID DECONSTRUCTED_BUILDING_MODULE_ID = UUID.randomUUID();
+    private static final UUID CONSTRUCTED_BUILDING_MODULE_ID = UUID.randomUUID();
+    private static final String INCOMPATIBLE_DATA_ID = "incompatible-data-id";
+    private static final String DATA_ID = "data-id";
+    private static final String NOT_PRODUCER_DATA_ID = "not-producer-data-id";
     private static final String RESOURCE_DATA_ID = "resource-data-id";
-    private static final String PRODUCER_BUILDING_DATA_ID = "producer-building-data-id";
-    private static final String IRRELEVANT_BUILDING_DATA_ID = "irrelevant-building-data-id";
-    private static final String OCCUPIED_BUILDING_DATA_ID = "occupied-building-data-id";
-    private static final String NOT_PRODUCTION_BUILDING_DATA_ID = "not-production-building-data-id";
-    private static final UUID SURFACE_ID = UUID.randomUUID();
-    private static final UUID DECONSTRUCTED_BUILDING_ID = UUID.randomUUID();
 
     @Mock
     private ProductionBuildingService productionBuildingService;
@@ -48,43 +45,28 @@ class ProducerBuildingFinderServiceTest {
     private ProducerBuildingFinderService underTest;
 
     @Mock
+    private BuildingModules buildingModules;
+
+    @Mock
+    private BuildingModule deconstructedModule;
+
+    @Mock
+    private BuildingModule constructedModule;
+
+    @Mock
+    private BuildingModule notProducerBuildingModule;
+
+    @Mock
+    private BuildingModule incompatibleModule;
+
+    @Mock
+    private BuildingModule occupiedModule;
+
+    @Mock
+    private BuildingModule matchingModule;
+
+    @Mock
     private GameData gameData;
-
-    @Mock
-    private Buildings buildings;
-
-    @Mock
-    private Building producerBuilding;
-
-    @Mock
-    private Building notProductionBuilding;
-
-    @Mock
-    private Building irrelevantBuilding;
-
-    @Mock
-    private Building occupiedBuilding;
-
-    @Mock
-    private Building deconstructedBuilding;
-
-    @Mock
-    private ProductionBuildingData producerBuildingData;
-
-    @Mock
-    private ProductionBuildingData irrelevantBuildingData;
-
-    @Mock
-    private ProductionBuildingData occupiedBuildingData;
-
-    @Mock
-    private ProductionData producerProductionData;
-
-    @Mock
-    private Surfaces surfaces;
-
-    @Mock
-    private Surface surface;
 
     @Mock
     private Deconstructions deconstructions;
@@ -92,41 +74,44 @@ class ProducerBuildingFinderServiceTest {
     @Mock
     private Deconstruction deconstruction;
 
+    @Mock
+    private ProducerBuildingModule incompatibleProducerModule;
+
+    @Mock
+    private ProducerBuildingModule producerBuildingModule;
+
+    @Mock
+    private Production production;
+
+    @Mock
+    private Constructions constructions;
+
+    @Mock
+    private Construction construction;
+
     @Test
     void findProducerBuildingDataId() {
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocation(LOCATION)).willReturn(List.of(deconstructedBuilding, irrelevantBuilding, occupiedBuilding, notProductionBuilding, producerBuilding));
-
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(buildingModules.getByLocation(LOCATION)).willReturn(List.of(deconstructedModule, constructedModule, incompatibleModule, occupiedModule, notProducerBuildingModule, matchingModule));
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_ID)).willReturn(Optional.of(deconstruction));
+        given(deconstructedModule.getBuildingModuleId()).willReturn(DECONSTRUCTED_BUILDING_MODULE_ID);
+        given(constructedModule.getBuildingModuleId()).willReturn(CONSTRUCTED_BUILDING_MODULE_ID);
+        given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(CONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(construction));
+        given(incompatibleModule.getDataId()).willReturn(INCOMPATIBLE_DATA_ID);
+        given(notProducerBuildingModule.getDataId()).willReturn(NOT_PRODUCER_DATA_ID);
+        given(occupiedModule.getDataId()).willReturn(DATA_ID);
+        given(matchingModule.getDataId()).willReturn(DATA_ID);
+        given(productionBuildingService.get(NOT_PRODUCER_DATA_ID)).willReturn(null);
+        given(productionBuildingService.get(INCOMPATIBLE_DATA_ID)).willReturn(incompatibleProducerModule);
+        given(productionBuildingService.get(DATA_ID)).willReturn(producerBuildingModule);
+        given(incompatibleProducerModule.getProduces()).willReturn(Collections.emptyList());
+        given(producerBuildingModule.getProduces()).willReturn(List.of(production));
+        given(production.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
+        given(buildingCapacityCalculator.isAvailable(gameData, occupiedModule)).willReturn(false);
+        given(buildingCapacityCalculator.isAvailable(gameData, matchingModule)).willReturn(true);
 
-        given(deconstructedBuilding.getBuildingId()).willReturn(DECONSTRUCTED_BUILDING_ID);
-        given(producerBuilding.getDataId()).willReturn(PRODUCER_BUILDING_DATA_ID);
-        given(irrelevantBuilding.getDataId()).willReturn(IRRELEVANT_BUILDING_DATA_ID);
-        given(occupiedBuilding.getDataId()).willReturn(OCCUPIED_BUILDING_DATA_ID);
-        given(notProductionBuilding.getDataId()).willReturn(NOT_PRODUCTION_BUILDING_DATA_ID);
-
-        given(productionBuildingService.get(PRODUCER_BUILDING_DATA_ID)).willReturn(producerBuildingData);
-        given(productionBuildingService.get(IRRELEVANT_BUILDING_DATA_ID)).willReturn(irrelevantBuildingData);
-        given(productionBuildingService.get(OCCUPIED_BUILDING_DATA_ID)).willReturn(occupiedBuildingData);
-        given(productionBuildingService.get(NOT_PRODUCTION_BUILDING_DATA_ID)).willReturn(null);
-
-        given(producerBuildingData.getGives()).willReturn(Map.of(RESOURCE_DATA_ID, producerProductionData));
-        given(occupiedBuildingData.getGives()).willReturn(Map.of(RESOURCE_DATA_ID, producerProductionData));
-        given(irrelevantBuildingData.getGives()).willReturn(Collections.emptyMap());
-
-        given(gameData.getSurfaces()).willReturn(surfaces);
-        given(producerBuilding.getSurfaceId()).willReturn(SURFACE_ID);
-        given(occupiedBuilding.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
-        given(surface.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
-        given(producerProductionData.getPlaced()).willReturn(List.of(SurfaceType.CONCRETE));
-
-        given(buildingCapacityCalculator.calculateCapacity(gameData, occupiedBuilding)).willReturn(0);
-        given(buildingCapacityCalculator.calculateCapacity(gameData, producerBuilding)).willReturn(1);
-
-        Optional<String> result = underTest.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID);
-
-        assertThat(result).contains(PRODUCER_BUILDING_DATA_ID);
+        assertThat(underTest.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).contains(DATA_ID);
     }
 }
