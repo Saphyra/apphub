@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CancelDeconstructConstructionAreaService {
     private final GameDao gameDao;
 
@@ -33,17 +32,15 @@ public class CancelDeconstructConstructionAreaService {
 
         game.getEventLoop()
             .processWithWait(() -> {
-                game.getData()
-                    .getProcesses()
-                    .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_CONSTRUCTION_AREA)
+                gameData.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(deconstructionId, ProcessType.DECONSTRUCT_CONSTRUCTION_AREA)
                     .cleanup();
 
-                game.getData()
-                    .getDeconstructions()
+                gameData.getDeconstructions()
                     .remove(deconstruction);
 
                 game.getProgressDiff()
-                    .delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
+                    .delete(deconstructionId, GameItemType.DECONSTRUCTION);
             })
             .getOrThrow();
     }

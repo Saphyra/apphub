@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CancelConstructionAreaConstructionService {
     private final GameDao gameDao;
     private final AllocationRemovalService allocationRemovalService;
@@ -30,33 +29,32 @@ public class CancelConstructionAreaConstructionService {
         Construction construction = gameData.getConstructions()
             .findByConstructionIdValidated(constructionId);
 
-        ConstructionArea constructionArea = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(construction.getExternalReference());
-
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(construction.getLocation()).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of constructionArea on planet " + construction.getConstructionId());
         }
 
+        UUID constructionAreaId = construction.getExternalReference();
+        ConstructionArea constructionArea = gameData.getConstructionAreas()
+            .findByConstructionAreaIdValidated(constructionAreaId);
+
         game.getEventLoop()
             .processWithWait(() -> {
-                game.getData()
-                    .getProcesses()
-                    .findByExternalReferenceAndTypeValidated(construction.getConstructionId(), ProcessType.CONSTRUCT_CONSTRUCTION_AREA)
+                gameData.getProcesses()
+                    .findByExternalReferenceAndTypeValidated(constructionId, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)
                     .cleanup();
 
-                game.getData()
-                    .getConstructions()
+                gameData.getConstructions()
                     .remove(construction);
 
-                allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), game.getData(), construction.getConstructionId());
+                allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), gameData, constructionId);
 
                 game.getProgressDiff()
-                    .delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+                    .delete(constructionId, GameItemType.CONSTRUCTION);
 
                 gameData.getConstructionAreas()
                     .remove(constructionArea);
                 game.getProgressDiff()
-                    .delete(constructionArea.getConstructionAreaId(), GameItemType.CONSTRUCTION_AREA);
+                    .delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA);
             })
             .getOrThrow();
     }

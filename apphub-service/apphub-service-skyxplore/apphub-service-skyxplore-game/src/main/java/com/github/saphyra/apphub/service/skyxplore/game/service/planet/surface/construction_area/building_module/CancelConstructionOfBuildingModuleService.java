@@ -39,7 +39,7 @@ public class CancelConstructionOfBuildingModuleService {
         game.getEventLoop()
             .processWithWait(() -> {
                 gameData.getProcesses()
-                    .findByExternalReferenceAndTypeValidated(constructionId, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)
+                    .findByExternalReferenceAndTypeValidated(constructionId, ProcessType.CONSTRUCT_BUILDING_MODULE)
                     .cleanup();
 
                 gameData.getConstructions()

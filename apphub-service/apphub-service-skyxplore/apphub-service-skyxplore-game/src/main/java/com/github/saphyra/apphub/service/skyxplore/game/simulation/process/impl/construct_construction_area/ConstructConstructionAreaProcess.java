@@ -24,7 +24,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConstructConstructionAreaProcess implements Process {
     //Own fields
     @Getter
@@ -96,7 +95,7 @@ public class ConstructConstructionAreaProcess implements Process {
         }
 
         helper.finishConstruction(progressDiff, gameData, constructionId);
-        status = ProcessStatus.READY_TO_DELETE;
+        status = ProcessStatus.DONE;
     }
 
     @Override

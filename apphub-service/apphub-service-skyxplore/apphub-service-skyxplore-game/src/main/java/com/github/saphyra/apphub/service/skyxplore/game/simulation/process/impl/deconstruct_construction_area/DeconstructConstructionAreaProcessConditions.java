@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructConstructionAreaProcessConditions {
     boolean modulesDeconstructed(GameData gameData, UUID constructionAreaId) {
         return gameData.getBuildingModules()
@@ -20,7 +19,7 @@ class DeconstructConstructionAreaProcessConditions {
             .isEmpty();
     }
 
-    boolean hasWorkProcess(GameData gameData, UUID processId) {
+    boolean hasWorkProcesses(GameData gameData, UUID processId) {
         return !gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .isEmpty();

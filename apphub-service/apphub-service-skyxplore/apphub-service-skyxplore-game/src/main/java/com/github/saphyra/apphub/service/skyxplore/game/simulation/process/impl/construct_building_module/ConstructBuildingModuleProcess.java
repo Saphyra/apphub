@@ -24,7 +24,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConstructBuildingModuleProcess implements Process {
     //Own fields
     @Getter
@@ -53,7 +52,7 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public ProcessType getType() {
-        return ProcessType.CONSTRUCT_CONSTRUCTION_AREA;
+        return ProcessType.CONSTRUCT_BUILDING_MODULE;
     }
 
     @Override
@@ -96,7 +95,7 @@ public class ConstructBuildingModuleProcess implements Process {
         }
 
         helper.finishConstruction(progressDiff, gameData, constructionId);
-        status = ProcessStatus.READY_TO_DELETE;
+        status = ProcessStatus.DONE;
     }
 
     @Override
@@ -133,6 +132,6 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public String toString() {
-        return String.format("%s(processId=%s, status=%s)", getClass().getSimpleName(), processId, status);
+        return String.format("%s(processId=%s, externalReference=%S, status=%s)", getClass().getSimpleName(), processId, getExternalReference(), status);
     }
 }

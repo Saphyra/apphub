@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructConstructionAreaProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final DeconstructBuildingModuleService deconstructBuildingModuleService;
@@ -29,9 +28,7 @@ class DeconstructConstructionAreaProcessHelper {
         Deconstruction deconstruction = gameData.getDeconstructions()
             .findByDeconstructionIdValidated(deconstructionId);
 
-        UUID constructionAreaId = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(deconstruction.getExternalReference())
-            .getConstructionAreaId();
+        UUID constructionAreaId = deconstruction.getExternalReference();
 
         gameData.getBuildingModules()
             .getByConstructionAreaId(constructionAreaId)
@@ -62,12 +59,13 @@ class DeconstructConstructionAreaProcessHelper {
         Deconstruction deconstruction = gameData.getDeconstructions()
             .findByDeconstructionIdValidated(deconstructionId);
 
+        UUID constructionAreaId = deconstruction.getExternalReference();
         ConstructionArea constructionArea = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(deconstruction.getExternalReference());
+            .findByConstructionAreaIdValidated(constructionAreaId);
 
         gameData.getConstructionAreas()
             .remove(constructionArea);
-        progressDiff.delete(constructionArea.getConstructionAreaId(), GameItemType.CONSTRUCTION_AREA);
+        progressDiff.delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA);
 
         gameData.getDeconstructions()
             .remove(deconstruction);

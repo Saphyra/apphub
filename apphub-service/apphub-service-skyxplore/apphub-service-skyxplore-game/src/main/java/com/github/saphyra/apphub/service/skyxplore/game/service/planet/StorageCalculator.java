@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StorageCalculator {
     private final StorageBuildingModuleService storageBuildingModuleService;
     private final DwellingBuildingService dwellingBuildingService;
@@ -30,7 +29,7 @@ public class StorageCalculator {
             .sum();
     }
 
-    public int calculateDwellingCapacity(GameData gameData, UUID location){
+    public int calculateDwellingCapacity(GameData gameData, UUID location) {
         return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()

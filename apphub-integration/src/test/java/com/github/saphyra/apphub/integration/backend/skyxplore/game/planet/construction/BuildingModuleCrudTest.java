@@ -126,7 +126,6 @@ public class BuildingModuleCrudTest extends BackEndTest {
             .extracting(BuildingModuleResponse::getConstruction)
             .isNotNull();
 
-
         return modules.get(0)
             .getConstruction()
             .getConstructionId();

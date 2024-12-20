@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
-//TODO unit test
 public class SkyXploreGameConstructionAreaWebSocketHandler extends AbstractWebSocketHandler {
     private final UuidConverter uuidConverter;
     private final GameDao gameDao;

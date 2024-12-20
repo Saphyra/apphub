@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConstructBuildingModuleProcessHelper {
     private final ProductionOrderService productionOrderService;
     private final UseAllocatedResourceService useAllocatedResourceService;
@@ -62,6 +61,6 @@ class ConstructBuildingModuleProcessHelper {
         gameData.getConstructions()
             .remove(construction);
 
-        progressDiff.delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+        progressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
     }
 }

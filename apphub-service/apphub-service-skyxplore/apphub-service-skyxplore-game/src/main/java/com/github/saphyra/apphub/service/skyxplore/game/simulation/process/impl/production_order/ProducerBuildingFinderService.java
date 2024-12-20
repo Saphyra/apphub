@@ -17,7 +17,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProducerBuildingFinderService {
     private final ProductionBuildingService productionBuildingService;
     private final BuildingCapacityCalculator buildingCapacityCalculator;
@@ -27,13 +26,15 @@ class ProducerBuildingFinderService {
             .getByLocation(location)
             .stream()
             .filter(module -> gameData.getDeconstructions().findByExternalReference(module.getBuildingModuleId()).isEmpty())
-            .filter(buildingModule -> canProduce(gameData, resourceDataId, buildingModule))
+            .filter(module -> gameData.getConstructions().findByExternalReference(module.getBuildingModuleId()).isEmpty())
+            .filter(buildingModule -> canProduce(resourceDataId, buildingModule))
             .filter(buildingModule -> buildingCapacityCalculator.isAvailable(gameData, buildingModule))
             .map(BuildingModule::getDataId)
+            .distinct()
             .findAny();
     }
 
-    private boolean canProduce(GameData gameData, String resourceDataId, BuildingModule buildingModule) {
+    private boolean canProduce(String resourceDataId, BuildingModule buildingModule) {
         String buildingDataId = buildingModule.getDataId();
         log.debug("Checking if {} can produce {}", buildingDataId, resourceDataId);
         ProducerBuildingModule producerBuildingModule = productionBuildingService.get(buildingDataId);

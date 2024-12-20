@@ -24,7 +24,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class DeconstructConstructionAreaProcess implements Process {
     //Own fields
     @Getter
@@ -90,7 +89,7 @@ public class DeconstructConstructionAreaProcess implements Process {
             return;
         }
 
-        if (!conditions.hasWorkProcess(gameData, processId)) {
+        if (!conditions.hasWorkProcesses(gameData, processId)) {
             helper.startWork(game.getProgressDiff(), gameData, processId, deconstructionId, location);
         }
 
@@ -100,7 +99,7 @@ public class DeconstructConstructionAreaProcess implements Process {
         }
 
         helper.finishDeconstruction(progressDiff, gameData, deconstructionId);
-        status = ProcessStatus.READY_TO_DELETE;
+        status = ProcessStatus.DONE;
     }
 
     @Override

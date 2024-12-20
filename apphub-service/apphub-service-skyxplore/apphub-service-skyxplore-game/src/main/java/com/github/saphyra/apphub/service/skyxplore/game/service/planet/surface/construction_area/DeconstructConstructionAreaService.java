@@ -19,7 +19,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class DeconstructConstructionAreaService {
     private final GameDao gameDao;
     private final DeconstructionFactory deconstructionFactory;
