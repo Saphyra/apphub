@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,8 +28,8 @@ class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "4";
+    public MenuOrder getOrder() {
+        return MenuOrderEnum.SETTINGS_MAX_SERVICE_STARTUP_COUNT;
     }
 
     @Override

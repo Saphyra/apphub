@@ -5,12 +5,13 @@ import PageName from "./PageName";
 import Map from "./map/Map";
 import SolarSystem from "./solar_system/SolarSystem";
 import Planet from "./planet/Planet";
-import UpgradeBuilding from "./upgrade_building/UpgradeBuilding";
 import "./navigation.css";
 import ModifySurface from "./modify_surface/ModifySurface";
 import Population from "./population/Population";
 import Storage from "./storage/Storage";
 import { addAndSet, removeAndSet, throwException } from "../../../../common/js/Utils";
+import ConstructionArea from "./construction_area/ConstructionArea";
+import ConstructBuildingModule from "./construct_building_module/ConstructBuildingModule";
 
 const Navigation = ({ footer, setConfirmationDialogData }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
@@ -55,16 +56,6 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 openPage={openPage}
                 setConfirmationDialogData={setConfirmationDialogData}
             />
-        case PageName.UPGRADE_BUILDING:
-            return <UpgradeBuilding
-                closePage={closePage}
-                footer={footer}
-                dataId={data.dataId}
-                currentLevel={data.currentLevel}
-                surfaceType={data.surfaceType}
-                planetId={data.planetId}
-                buildingId={data.buildingId}
-            />
         case PageName.MODIFY_SURFACE:
             return <ModifySurface
                 closePage={closePage}
@@ -85,6 +76,21 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 footer={footer}
                 planetId={data}
                 setConfirmationDialogData={setConfirmationDialogData}
+            />
+        case PageName.CONSTRUCTION_AREA:
+            return <ConstructionArea
+                openPage={openPage}
+                closePage={closePage}
+                footer={footer}
+                constructionArea={data.constructionArea}
+                setConfirmationDialogData={setConfirmationDialogData}
+            />
+        case PageName.CONSTRUCT_BUILDING_MODULE:
+            return <ConstructBuildingModule
+                closePage={closePage}
+                footer={footer}
+                constructionAreaId={data.constructionAreaId}
+                buildingModuleCategory={data.buildingModuleCategory}
             />
         default:
             throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

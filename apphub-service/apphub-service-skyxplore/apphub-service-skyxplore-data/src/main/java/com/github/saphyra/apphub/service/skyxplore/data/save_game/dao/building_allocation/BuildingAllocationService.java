@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
@@ -30,9 +30,9 @@ public class BuildingAllocationService implements GameItemService {
 
     @Override
     public void save(List<GameItem> gameItems) {
-        List<BuildingAllocationModel> models = gameItems.stream()
-            .filter(gameItem -> gameItem instanceof BuildingAllocationModel)
-            .map(gameItem -> (BuildingAllocationModel) gameItem)
+        List<BuildingModuleAllocationModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof BuildingModuleAllocationModel)
+            .map(gameItem -> (BuildingModuleAllocationModel) gameItem)
             .collect(Collectors.toList());
 
         dao.saveAll(models);
@@ -44,7 +44,7 @@ public class BuildingAllocationService implements GameItemService {
     }
 
     @Override
-    public List<BuildingAllocationModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+    public List<BuildingModuleAllocationModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
         return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

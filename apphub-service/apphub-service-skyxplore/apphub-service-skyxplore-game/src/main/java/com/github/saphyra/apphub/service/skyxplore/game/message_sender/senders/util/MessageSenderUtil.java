@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionIdProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,9 @@ import static java.util.Objects.isNull;
 public class MessageSenderUtil {
     private final DateTimeUtil dateTimeUtil;
 
-    public <T> void clearDisconnectedUserData(List<WsSessionPlanetIdMapping> connectedUsers, Map<String, LastMessage<T>> lastMessages) {
+    public <T> void clearDisconnectedUserData(List<? extends WsSessionIdProvider> connectedUsers, Map<String, LastMessage<T>> lastMessages) {
         List<String> connectedSessions = connectedUsers.stream()
-            .map(WsSessionPlanetIdMapping::getSessionId)
+            .map(WsSessionIdProvider::getSessionId)
             .toList();
 
         List<String> entriesToRemove = lastMessages.keySet()

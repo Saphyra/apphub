@@ -7,9 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,14 +55,12 @@ public abstract class MenuBase {
     }
 
     private MenuOption getOption() {
+        Map<Integer, MenuOption> options = mapOptions();
         while (true) {
             printOptions();
 
-            String input = getInput();
-
-            Optional<MenuOption> maybeResult = getOptionsWithExitOption()
-                .filter(option -> option.getCommand().equals(input))
-                .findFirst();
+            Optional<MenuOption> maybeResult = getInput()
+                .map(options::get);
 
             if (maybeResult.isPresent()) {
                 return maybeResult.get();
@@ -79,11 +82,15 @@ public abstract class MenuBase {
 
     protected abstract LocalizationProvider getName();
 
-    private String getInput() {
-        localizationService.writeMessage(LocalizedText.WHAT_WOULD_YOU_LIKE_TO_DO);
+    private Optional<Integer> getInput() {
+        try {
+            localizationService.writeMessage(LocalizedText.WHAT_WOULD_YOU_LIKE_TO_DO);
 
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+            Scanner scanner = new Scanner(System.in);
+            return Optional.of(Integer.parseInt(scanner.nextLine()));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     private void printOptions() {
@@ -91,11 +98,50 @@ public abstract class MenuBase {
         log.info("");
         localizationService.writeMessage(getName());
 
-        getOptionsWithExitOption()
-            .map(option -> option.getLabel(getOptionsWithExitOption()))
+        Map<Integer, MenuOption> options = mapOptions();
+
+        options.entrySet()
+            .stream()
+            .map(entry -> entry.getValue().getLabel(entry.getKey(), options.values()))
             .map(localizationService::getMessage)
             .sorted(String::compareTo)
             .forEach(log::info);
+    }
+
+    private Map<Integer, MenuOption> mapOptions() {
+        getDuplicatedOrder()
+            .ifPresent(order -> {
+                throw new IllegalStateException("Duplicated order: " + order);
+            });
+
+        List<MenuOption> options = getOptionsWithExitOption()
+            .sorted(Comparator.comparingInt(o -> o.getOrder().getOrder()))
+            .toList();
+
+        Map<Integer, MenuOption> result = new HashMap<>();
+        for (int i = 0; i < options.size(); i++) {
+            result.put(i, options.get(i));
+        }
+
+        return result;
+    }
+
+    private Optional<MenuOrder> getDuplicatedOrder() {
+        Set<Integer> orders = new HashSet<>();
+
+        List<MenuOption> options = getOptionsWithExitOption()
+            .toList();
+        for (MenuOption option : options) {
+            MenuOrder order = option
+                .getOrder();
+            if (orders.contains(order.getOrder())) {
+                return Optional.of(order);
+            }
+
+            orders.add(order.getOrder());
+        }
+
+        return Optional.empty();
     }
 
     @RequiredArgsConstructor
@@ -108,8 +154,8 @@ public abstract class MenuBase {
         }
 
         @Override
-        public String getCommand() {
-            return "0";
+        public MenuOrderEnum getOrder() {
+            return MenuOrderEnum.EXIT_OPTION;
         }
 
         @Override

@@ -1,0 +1,5 @@
+{
+  "id": "meat",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

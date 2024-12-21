@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.QueueResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

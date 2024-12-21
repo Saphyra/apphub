@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ResourceDetailsResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.ResourceDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAmountQueryService;

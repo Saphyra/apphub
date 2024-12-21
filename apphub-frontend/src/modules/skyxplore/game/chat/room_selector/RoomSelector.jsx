@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./room_selector.css";
 import Stream from "../../../../../common/js/collection/Stream";
 import ChatRoom from "./room/ChatRoom";
-import WebSocketEventName from "../../../../../common/hook/ws/WebSocketEventName";
-import { addAndSet, hasValue, removeAndSet } from "../../../../../common/js/Utils";
+import { removeAndSet } from "../../../../../common/js/Utils";
 import { SKYXPLORE_GAME_GET_CHAT_ROOMS, SKYXPLORE_GAME_LEAVE_CHAT_ROOM } from "../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
-const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, lastEvent }) => {
-    const [chatRooms, setChatRooms] = useState([]);
+const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, chatRooms, setChatRooms }) => {
     useEffect(() => loadChatRooms(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
-
-    const handleEvent = () => {
-        if (!hasValue(lastEvent)) {
-            return;
-        }
-
-        if (lastEvent.eventName == WebSocketEventName.SKYXPLORE_GAME_CHAT_ROOM_CREATED) {
-            addAndSet(chatRooms, lastEvent.payload, setChatRooms);
-        }
-    }
 
     const loadChatRooms = () => {
         const fetch = async () => {

@@ -4,14 +4,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
@@ -23,14 +20,12 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resou
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.util.HeadquartersUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,9 +69,6 @@ class ProductionOrderProcessHelperTest {
 
     @Mock
     private ReservedStorageConverter reservedStorageConverter;
-
-    @Mock
-    private HeadquartersUtil headquartersUtil;
 
     @InjectMocks
     private ProductionOrderProcessHelper underTest;
@@ -126,46 +118,11 @@ class ProductionOrderProcessHelperTest {
     @Mock
     private ReservedStorageModel reservedStorageModel;
 
-    @Mock
-    private Buildings buildings;
-
-    @Mock
-    private Building building;
-
     @Test
     void findProductionBuilding() {
         given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.of(BUILDING_DATA_ID));
 
         assertThat(underTest.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).isEqualTo(BUILDING_DATA_ID);
-    }
-
-    @Test
-    void findProductionBuilding_hq_notPresent() {
-        given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocationAndDataId(LOCATION, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(Collections.emptyList());
-
-        assertThat(underTest.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).isNull();
-    }
-
-    @Test
-    void findProductionBuilding_hq_cannotProduce() {
-        given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocationAndDataId(LOCATION, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(List.of(building));
-        given(headquartersUtil.getGives()).willReturn(Collections.emptyList());
-
-        assertThat(underTest.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).isNull();
-    }
-
-    @Test
-    void findProductionBuilding_hq() {
-        given(producerBuildingFinderService.findProducerBuildingDataId(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.getByLocationAndDataId(LOCATION, GameConstants.DATA_ID_HEADQUARTERS)).willReturn(List.of(building));
-        given(headquartersUtil.getGives()).willReturn(List.of(RESOURCE_DATA_ID));
-
-        assertThat(underTest.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).isEqualTo(GameConstants.DATA_ID_HEADQUARTERS);
     }
 
     @Test

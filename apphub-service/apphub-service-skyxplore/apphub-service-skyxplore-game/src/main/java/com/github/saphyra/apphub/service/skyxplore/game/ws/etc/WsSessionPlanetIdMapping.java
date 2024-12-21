@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-public class WsSessionPlanetIdMapping {
+public class WsSessionPlanetIdMapping implements WsSessionIdProvider {
     private final String sessionId;
     private final UUID planetId;
     private final UUID userId;

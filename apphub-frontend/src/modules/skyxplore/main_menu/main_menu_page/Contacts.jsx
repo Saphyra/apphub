@@ -7,8 +7,10 @@ import ContactsListItem from "./contacts/ContactsListItem";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import { SKYXPLORE_ACCEPT_FRIEND_REQUEST, SKYXPLORE_ADD_FRIEND, SKYXPLORE_CANCEL_FRIEND_REQUEST, SKYXPLORE_GET_FRIENDS, SKYXPLORE_GET_INCOMING_FRIEND_REQUEST, SKYXPLORE_GET_SENT_FRIEND_REQUEST, SKYXPLORE_REMOVE_FRIEND, SKYXPLORE_SEARCH_FOR_FRIENDS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import useConnectToWebSocket from "../../../../common/hook/ws/WebSocketFacade";
+import WebSocketEndpoint from "../../../../common/hook/ws/WebSocketEndpoint";
 
-const Contacts = ({ localizationHandler, lastEvent }) => {
+const Contacts = ({ localizationHandler }) => {
     const [friendQuery, setFriendQuery] = useState("");
     const [shouldDisplaySearchResult, setShouldDisplaySearchResult] = useState(false);
     const [friendCandidates, setFriendCandidates] = useState(null);
@@ -17,35 +19,37 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
     const [friendships, setFriendships] = useState([]);
     const [removeFriendConfirmationDialogSettings, setRemoveFriendConfirmationDialogSettings] = useState({ shouldDisplay: false });
 
+    useConnectToWebSocket(
+        WebSocketEndpoint.SKYXPLORE_MAIN_MENU,
+        event => processEvent(event)
+    )
+
     useEffect(() => setShouldDisplaySearchResult(friendQuery.length > 2), [friendQuery]);
     useEffect(() => loadFriendCandidates(), [shouldDisplaySearchResult, friendQuery]);
     useEffect(() => loadIncomingFriendRequests(), []);
     useEffect(() => loadSentFriendRequests(), []);
     useEffect(() => loadFriendships(), []);
-    useEffect(() => processEvent(), [lastEvent]);
 
-    const processEvent = () => {
-        if (lastEvent !== null) {
-            let list = null;
-            switch (lastEvent.eventName) {
-                case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT:
-                    list = incomingFriendRequests.splice();
-                    list.push(lastEvent.payload);
-                    setIncomingFriendRequests(list);
-                    break;
-                case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED:
-                    removeFriendRequest(lastEvent.payload);
-                    break;
-                case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED:
-                    removeFriendRequest(lastEvent.payload.friendRequestId);
-                    list = friendships.splice();
-                    list.push(lastEvent.payload.friendship);
-                    setFriendships(list);
-                    break;
-                case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED: {
-                    removeFriendship(lastEvent.payload);
-                    break;
-                }
+    const processEvent = (event) => {
+        let list = null;
+        switch (event.eventName) {
+            case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_SENT:
+                list = incomingFriendRequests.splice();
+                list.push(event.payload);
+                setIncomingFriendRequests(list);
+                break;
+            case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_DELETED:
+                removeFriendRequest(event.payload);
+                break;
+            case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIEND_REQUEST_ACCEPTED:
+                removeFriendRequest(event.payload.friendRequestId);
+                list = friendships.splice();
+                list.push(event.payload.friendship);
+                setFriendships(list);
+                break;
+            case WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED: {
+                removeFriendship(event.payload);
+                break;
             }
         }
     }
@@ -159,7 +163,7 @@ const Contacts = ({ localizationHandler, lastEvent }) => {
 
     //Processing
     const getSearchResult = () => {
-        if(friendCandidates === null){
+        if (friendCandidates === null) {
             return (
                 <div id="skyxplore-character-searching">
                     {localizationHandler.get("searching")}

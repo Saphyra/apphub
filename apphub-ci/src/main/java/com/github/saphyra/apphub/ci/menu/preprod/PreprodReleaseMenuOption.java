@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodReleaseProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,8 @@ class PreprodReleaseMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "2";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.DEPLOY;
     }
 
     @Override

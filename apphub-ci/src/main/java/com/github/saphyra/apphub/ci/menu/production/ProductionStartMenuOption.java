@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrder;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.minikube.production.ProductionStartProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,8 +21,8 @@ class ProductionStartMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "1";
+    public MenuOrder getOrder() {
+        return MenuOrderEnum.START_VM;
     }
 
     @Override

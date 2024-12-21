@@ -1,0 +1,5 @@
+{
+  "id": "energy_cell",
+  "storageType": "container",
+  "maxProductionBatchSize": 50
+}

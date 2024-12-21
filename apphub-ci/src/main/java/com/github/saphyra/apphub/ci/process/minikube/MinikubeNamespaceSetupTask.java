@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
 public class MinikubeNamespaceSetupTask {
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
 
-    @SneakyThrows
     public void setupNamespace(String namespaceName) {
         createNamespace(namespaceName);
         deployPostgres(namespaceName);
@@ -26,7 +23,8 @@ public class MinikubeNamespaceSetupTask {
             .waitFor();
     }
 
-    private static void deployPostgres(String namespaceName) throws InterruptedException, IOException {
+    @SneakyThrows
+    public void deployPostgres(String namespaceName) {
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/persistent-volume.yaml")
             .inheritIO()
             .start()

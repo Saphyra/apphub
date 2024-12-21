@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.citi
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePopulationActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePopulationActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./queue_item.css";
-import buildingLocalizationData from "../../../../common/localization/building_localization.json";
-import surfaceLocalizationData from "../../../../common/localization/surface_localization.json";
 import LocalizationHandler from "../../../../../../../common/js/LocalizationHandler";
 import localizationData from "./queue_item_localization.json";
 import LabelWrappedInputField from "../../../../../../../common/component/input/LabelWrappedInputField";
@@ -9,12 +7,10 @@ import NumberInput from "../../../../../../../common/component/input/NumberInput
 import Button from "../../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import QueueItemHeader from "./header/QueueItemHeader";
-import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 
 const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
-    const buildingLocalizationHandler = new LocalizationHandler(buildingLocalizationData);
     const localizationHandler = new LocalizationHandler(localizationData);
-    const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);
     const [priority, setPriority] = useState(5);
 
     useEffect(() => setPriority(queueItem.ownPriority), [queueItem]);

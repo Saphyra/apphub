@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.MessageSender;
+import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
 import lombok.Builder;
@@ -48,7 +49,7 @@ class PlanetMessageSender implements MessageSender {
                     .map(planetMessageProvider -> planetMessageProvider.getMessage(sessionId, userId, planetId))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .collect(Collectors.toMap(PlanetUpdateItem::getKey, PlanetUpdateItem::getValue));
+                    .collect(Collectors.toMap(UpdateItem::getKey, UpdateItem::getValue));
 
                 if (payload.isEmpty()) {
                     log.debug("No messages to send to user {} for planet {}", userId, planetId);

@@ -1,17 +1,18 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.game;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreBuildingActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreGameChatActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreMapActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePlanetQueueActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePopulationActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXplorePriorityActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreStorageSettingActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSurfaceActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreBuildingModuleActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreConstructionAreaActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreMapActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetQueueActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePopulationActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePriorityActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreStorageSettingActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -81,12 +82,19 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId, ""));
         CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getChatRoomsResponse(getServerPort(), accessTokenId));
 
-        //Building
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingActions.getConstructNewBuildingResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingActions.getUpgradeBuildingResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingActions.getCancelConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingActions.getDeconstructBuildingResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingActions.getCancelDeconstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        //Building module
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getBuildingModulesResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getDeconstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelDeconstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+
+        //Construction area
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelConstructionAreaConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelDeconstructionOfConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
     }
 
     @DataProvider(parallel = true)

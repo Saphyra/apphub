@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.menu.minikube.edit_configuration_menu;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
+import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.menu.thread_count_editer.EditThreadCountMenu;
 import com.github.saphyra.apphub.ci.utils.ApplicationContextProxy;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ class MinikubeEditBuildThreadCountMenuOption implements MenuOption {
     }
 
     @Override
-    public String getCommand() {
-        return "1";
+    public MenuOrderEnum getOrder() {
+        return MenuOrderEnum.SETTINGS_BUILD_THREAD_COUNT;
     }
 
     @Override

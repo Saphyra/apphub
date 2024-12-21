@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingAllocationModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
@@ -33,10 +33,10 @@ class BuildingAllocationConverterTest {
 
     @Test
     void convertDomain() {
-        BuildingAllocationModel model = new BuildingAllocationModel();
+        BuildingModuleAllocationModel model = new BuildingModuleAllocationModel();
         model.setId(BUILDING_ALLOCATION_ID);
         model.setGameId(GAME_ID);
-        model.setBuildingId(BUILDING_ID);
+        model.setBuildingModuleId(BUILDING_ID);
         model.setProcessId(PROCESS_ID);
 
         given(uuidConverter.convertDomain(BUILDING_ALLOCATION_ID)).willReturn(BUILDING_ALLOCATION_ID_STRING);
@@ -44,20 +44,20 @@ class BuildingAllocationConverterTest {
         given(uuidConverter.convertDomain(BUILDING_ID)).willReturn(BUILDING_ID_ID_STRING);
         given(uuidConverter.convertDomain(PROCESS_ID)).willReturn(PROCESS_ID_ID_STRING);
 
-        BuildingAllocationEntity result = underTest.convertDomain(model);
+        BuildingModuleAllocationEntity result = underTest.convertDomain(model);
 
         assertThat(result.getBuildingAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_ID_STRING);
-        assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID_ID_STRING);
+        assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID_ID_STRING);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID_ID_STRING);
     }
 
     @Test
     void convertEntity() {
-        BuildingAllocationEntity entity = BuildingAllocationEntity.builder()
+        BuildingModuleAllocationEntity entity = BuildingModuleAllocationEntity.builder()
             .buildingAllocationId(BUILDING_ALLOCATION_ID_STRING)
             .gameId(GAME_ID_ID_STRING)
-            .buildingId(BUILDING_ID_ID_STRING)
+            .buildingModuleId(BUILDING_ID_ID_STRING)
             .processId(PROCESS_ID_ID_STRING)
             .build();
 
@@ -66,12 +66,12 @@ class BuildingAllocationConverterTest {
         given(uuidConverter.convertEntity(BUILDING_ID_ID_STRING)).willReturn(BUILDING_ID);
         given(uuidConverter.convertEntity(PROCESS_ID_ID_STRING)).willReturn(PROCESS_ID);
 
-        BuildingAllocationModel result = underTest.convertEntity(entity);
+        BuildingModuleAllocationModel result = underTest.convertEntity(entity);
 
         assertThat(result.getId()).isEqualTo(BUILDING_ALLOCATION_ID);
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getType()).isEqualTo(GameItemType.CITIZEN_ALLOCATION);
-        assertThat(result.getBuildingId()).isEqualTo(BUILDING_ID);
+        assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
     }
 }

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
@@ -19,9 +18,6 @@ class TerraformationQueueItemPriorityUpdateService {
     private final ConstructionConverter constructionConverter;
 
     public void updatePriority(UUID userId, UUID constructionId, Integer priority) {
-        ValidationUtil.atLeast(priority, 1, "priority");
-        ValidationUtil.maximum(priority, 10, "priority");
-
         Game game = gameDao.findByUserIdValidated(userId);
 
         Construction terraformation = game.getData()

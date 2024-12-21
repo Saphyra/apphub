@@ -56,6 +56,7 @@ public enum LocalizedText implements LocalizationProvider {
     DOCKER_HUB_PASSWORD("DockerHub jelszo:", "DockerHub password:"),
     MUST_NOT_BE_BLANK("Nem lehet ures!", "Must not be blank."),
     PRODUCTION_PROXY("ProdProxy inditasa", "Start Production Proxy"),
+    PREPROD_PROXY("PreprodProxy inditasa", "Start Preprod Proxy"),
     SERVICE_STARTUP_COUNT_LIMIT("Szerver inditas limit (%s)", "Service startup count limit (%s)"),
     STARTUP_LIMIT_SAVED("Limit elmentve.", "Limit saved."),
     ENABLE_SERVICES("Servicek ki / bekapcsolasa ", "Enable / Disable services"),
@@ -71,6 +72,7 @@ public enum LocalizedText implements LocalizationProvider {
     BROWSER_STARTUP_LIMIT_MENU_OPTION_LABEL("Bongeszo inditas limit (%s)", "Browser startup limit (%s)"),
     BROWSER_STARTUP_LIMIT("Hany bongeszo induljon egyszerre?", "How many browsers can be started at once?"),
     PREPROD("Preprod szerver", "Preprod server"),
+    SCALE_DOWN("Leállítás", "Scale down"),
     ;
 
     private final String hu;

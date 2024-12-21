@@ -82,7 +82,7 @@
             xhr.setRequestHeader("Content-Type", contentType);
         }
         
-        xhr.setRequestHeader("Request-Type", "rest");
+        xhr.setRequestHeader("Accept", "application/json");
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader(HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
     }

@@ -36,8 +36,7 @@ public class RequestFactory {
                     )
             )
             .contentType(ContentType.JSON)
-            .header("Connection", "close")
-            .header("Request-Type", "rest");
+            .header("Connection", "close");
         if (!isNull(locale)) {
             requestSpecification.cookie(Constants.LOCALE_COOKIE, locale.getLocale());
         }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat;
 
-import com.github.saphyra.apphub.api.skyxplore.game.server.SkyXploreGameChatController;
+import com.github.saphyra.apphub.api.skyxplore.game.server.platform.SkyXploreGameChatController;
 import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;

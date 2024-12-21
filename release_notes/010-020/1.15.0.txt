@@ -1,0 +1,30 @@
+===FEATURES===
+    ApphubCI
+        Preproduction proxy
+        Scale down preprod
+    Modules
+        Collapse module categories
+    Notebook
+        Save checklist item modification when pressing enter
+        Add new checklist item when saving new one
+        Bulk operations
+    SkyXplore
+        ConstructionAreas and BuildingModules
+
+===BUGFIXES===
+    UserSettings record was not deleted with the user
+    Use icons in English for VillanyAtesz
+
+===PLATFORM CHANGES===
+    Use Accept header instead of Request-Type
+    Use HTTPS
+
+===TECHNICAL DEBTS===
+    ApphubCI
+        Automatic command assignment based on order
+        Preprod release automatically disables roles
+        Check if frontend is running before starting integration tests
+    Notebook
+        Delete deprecated tables
+
+===ETC===

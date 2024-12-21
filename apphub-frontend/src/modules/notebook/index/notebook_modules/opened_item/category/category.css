@@ -20,12 +20,6 @@
     margin: 5px;
 }
 
-#notebook-content-category-content-up-button {
-    display: block;
-    margin: 5px auto;
-    width: 90%;
-}
-
 #notebook-content-category-content-empty {
     text-align: center;
     font-size: 24px;

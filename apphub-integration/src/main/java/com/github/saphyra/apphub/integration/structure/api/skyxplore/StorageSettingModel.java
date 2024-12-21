@@ -23,7 +23,7 @@ public class StorageSettingModel {
 
     public static StorageSettingModel valid() {
         return StorageSettingModel.builder()
-            .dataId(Constants.DATA_ID_ORE)
+            .dataId(Constants.DATA_ID_STEEL_INGOT)
             .targetAmount(TARGET_AMOUNT)
             .priority(PRIORITY)
             .build();

@@ -1,0 +1,46 @@
+{
+    "headquarters": {
+        "en": "Headquarters",
+        "hu": "Parancsnokság"
+    },
+    "extractor": {
+        "en": "Extractor",
+        "hu": "Kiterlmelés"
+    },
+    "power_plant": {
+        "en": "Power plant",
+        "hu": "Erőmű"
+    },
+    "agricultural": {
+        "en": "Agricultural",
+        "hu": "Mezőgazdaság"
+    },
+    "fortress": {
+        "en": "Fortress",
+        "hu": "Erőd"
+    },
+    "industrial": {
+        "en": "Industrial",
+        "hu": "Iparnegyed"
+    },
+    "education": {
+        "en": "Education",
+        "hu": "Oktatás"
+    },
+    "residential": {
+        "en": "Residential",
+        "hu": "Lakópark"
+    },
+    "depot": {
+        "en": "Depot",
+        "hu": "Depó"
+    },
+    "spaceport": {
+        "en": "Spaceport",
+        "hu": "Űrkikötő"
+    },
+    "hospital": {
+        "en": "Hospital",
+        "hu": "Kórház"
+    }
+}

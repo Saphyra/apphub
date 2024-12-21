@@ -94,7 +94,6 @@ public class ProductionOrderProcess implements Process {
             if (!isNull(producerBuildingDataId)) {
                 log.info("Creating ResourceRequirementProcesses for {}", this);
 
-
                 helper.processResourceRequirements(progressDiff, gameData, processId, location, dataId, amount, producerBuildingDataId);
                 status = ProcessStatus.IN_PROGRESS;
             } else {

@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Construction area - {constructionArea}",
+        "hu": "Építési terület - {constructionArea}"
+    },
+    "deconstruct-construction-area": {
+        "en": "Deconstruct {name} construction area",
+        "hu": "{name} építési terület lerombolása"
+    },
+    "deconstruct-construction-area-confirmation-title": {
+        "en": "Deconstruct construction area?",
+        "hu": "Építési terület lerombolása?"
+    },
+    "deconstruct-construction-area-confirmation-detail": {
+        "en": "Are you sure you want to deconstruct construction area {name}? It will deconstruct all its building modules, and new construction will be blocked until the debris is cleared.",
+        "hu": "Biztosan le szeretnéd rombolni a(z) {name} építési területet? Az összes, ráépített modul is le lesz rombolva, és addig nem lehet új építkezést indítani, amíg a törmelék el nincs takarítva."
+    },
+    "deconstruct": {
+        "en": "Deconstruct",
+        "hu": "Lerombol"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

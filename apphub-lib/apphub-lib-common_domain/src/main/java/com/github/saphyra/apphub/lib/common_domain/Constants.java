@@ -14,7 +14,6 @@ public class Constants {
     public final String RESOURCE_PATH_PATTERN = "/res/**";
     public final String WEB_PATH_PATTERN = "/web/**";
     public final String SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST = "blocking_request";
-    public final String REQUEST_TYPE_HEADER = "Request-Type";
     public final String REQUEST_TYPE_VALUE = "rest";
     public final String AUTHORIZATION_HEADER = "auth";
 

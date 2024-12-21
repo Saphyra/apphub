@@ -29,7 +29,7 @@ public class ChangeLanguageMenu extends MenuBase {
         List<MenuOption> result = new ArrayList<>();
         for (int i = 0; i < languages.length; i++) {
             ChangeLanguageMenuOption option = ChangeLanguageMenuOption.builder()
-                .command(String.valueOf(i + 1))
+                .order(i)
                 .language(languages[i])
                 .propertyDao(propertyDao)
                 .build();

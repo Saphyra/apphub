@@ -1,0 +1,27 @@
+{
+  "id": "water_pump",
+  "category": "EXTRACTION_SITE",
+  "constructionRequirements": {
+    "requiredWorkPoints": 10000,
+    "requiredEnergy": 0,
+    "requiredResources": {
+      "energy_cell": 1,
+      "plank": 50
+    }
+  },
+  "supportedSurfacesRestriction": [
+    "LAKE"
+  ],
+  "produces": [
+    {
+      "resourceDataId": "water",
+      "requiredSkill": "MINING",
+      "constructionRequirements": {
+        "requiredWorkPoints": 1,
+        "requiredEnergy": 1,
+        "requiredResources": {
+        }
+      }
+    }
+  ]
+}

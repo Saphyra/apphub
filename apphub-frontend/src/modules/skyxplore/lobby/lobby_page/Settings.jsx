@@ -4,10 +4,9 @@ import PanelTitle from "./PanelTitle";
 import Setting from "./settings/Setting";
 import Constants from "../../../../common/js/Constants";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
-import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
-import { SKYXPLORE_LOBBY_EDIT_SETTINGS, SKYXPLORE_LOBBY_GET_SETTINGS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_LOBBY_EDIT_SETTINGS } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 
-const Settings = ({ localizationHandler, isHost, lastEvent }) => {
+const Settings = ({ localizationHandler, isHost, settings }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);
     const [additionalSolarSystemsMin, setAdditionalSolarSystemsMin] = useState(0);
     const [additionalSolarSystemsMax, setAdditionalSolarSystemsMax] = useState(0);
@@ -17,32 +16,10 @@ const Settings = ({ localizationHandler, isHost, lastEvent }) => {
     const [planetSizeMax, setPlanetSizeMax] = useState(0);
     const [shouldSendToServer, setShouldSendToServer] = useState(false);
 
-    useEffect(() => loadSettings(), []);
-    useEffect(() => handleEvent(), [lastEvent]);
     useEffect(() => sendSettingsToServer(), [shouldSendToServer]);
+    useEffect(() => updateAll(), [settings]);
 
-    //Loader
-    const loadSettings = () => {
-        const fetch = async () => {
-            const settings = await SKYXPLORE_LOBBY_GET_SETTINGS.createRequest()
-                .send();
-
-            updateAll(settings);
-        }
-        fetch();
-    }
-
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_SETTINGS_MODIFIED) {
-            updateAll(lastEvent.payload);
-        }
-    }
-
-    const updateAll = (settings) => {
+    const updateAll = () => {
         setMaxPlayersPerSolarSystem(settings.maxPlayersPerSolarSystem);
         setAdditionalSolarSystemsMin(settings.additionalSolarSystems.min);
         setAdditionalSolarSystemsMax(settings.additionalSolarSystems.max);

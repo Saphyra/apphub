@@ -1,7 +1,7 @@
 import React from "react";
 import localizationData from "./surface_tile_content_footer_localization.json";
 import LocalizationHandler from "../../../../../../../../../common/js/LocalizationHandler";
-import BuildingFooter from "./content/BuildingFooter";
+import ConstructionAreaFooter from "./content/ConstructionAreaFooter";
 import TerraformationFooter from "./content/TerraformationFooter";
 import { hasValue, throwException } from "../../../../../../../../../common/js/Utils";
 
@@ -9,12 +9,11 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
-        if (hasValue(surface.building)) {
-            return <BuildingFooter
+        if (hasValue(surface.constructionArea)) {
+            return <ConstructionAreaFooter
                 surface={surface}
                 localizationHandler={localizationHandler}
                 setConfirmationDialogData={setConfirmationDialogData}
-                planetId={planetId}
                 openPage={openPage}
             />
         } else if (hasValue(surface.terraformation)) {

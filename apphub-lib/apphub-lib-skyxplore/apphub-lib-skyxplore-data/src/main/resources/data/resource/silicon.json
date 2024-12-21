@@ -1,5 +1,5 @@
 {
   "id": "silicon",
-  "storageType": "bulk",
+  "storageType": "container",
   "maxProductionBatchSize": 50
 }

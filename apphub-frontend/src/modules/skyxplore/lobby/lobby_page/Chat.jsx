@@ -9,79 +9,19 @@ import WebSocketEventName from "../../../../common/hook/ws/WebSocketEventName";
 import Constants from "../../../../common/js/Constants";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 
-const Chat = ({ localizationHandler, ownUserId, lastEvent, sendWsMessage }) => {
-    const [messages, setMessages] = useState([]);
+const Chat = ({ localizationHandler, sendWsMessage, messages, sendMessages }) => {
     const [message, setMessage] = useState("");
-
-    useEffect(() => handleEvent(), [lastEvent]);
-
-    const handleEvent = () => {
-        if (lastEvent === null) {
-            return;
-        }
-
-        if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE) {
-            const message = lastEvent.payload;
-            message.type = message.senderId === ownUserId ? MessageType.OWN_MESSAGE : MessageType.INCOMING_MESSAGE;
-
-            const copy = new Stream(messages)
-                .add(message)
-                .toList();
-
-            setMessages(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_EXIT) {
-            if (lastEvent.payload.onlyInvited) {
-                return;
-            }
-
-            const message = {
-                type: MessageType.SYSTEM_MESSAGE,
-                message: localizationHandler.get("player-left-lobby", { name: lastEvent.payload.characterName }),
-                createdAt: lastEvent.payload.createdAt
-            }
-
-            const copy = new Stream(messages)
-                .add(message)
-                .toList();
-
-            setMessages(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_CONNECTED) {
-            const message = {
-                type: MessageType.SYSTEM_MESSAGE,
-                message: localizationHandler.get("player-connected", { name: lastEvent.payload.characterName }),
-                createdAt: lastEvent.payload.createdAt
-            }
-
-            const copy = new Stream(messages)
-                .add(message)
-                .toList();
-
-            setMessages(copy);
-        } else if (lastEvent.eventName === WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_DISCONNECTED) {
-            const message = {
-                type: MessageType.SYSTEM_MESSAGE,
-                message: localizationHandler.get("player-disconnected", { name: lastEvent.payload.characterName }),
-                createdAt: lastEvent.payload.createdAt
-            }
-
-            const copy = new Stream(messages)
-                .add(message)
-                .toList();
-
-            setMessages(copy);
-        }
-    }
 
     const onkeyup = (event) => {
         if (event.which === 13) {
-            if(sendMessage(message)){
+            if (sendMessage(message)) {
                 setMessage("");
             }
         }
     }
 
     const sendMessage = (message) => {
-        if(message.length > Constants.SKYXPLORE_MAX_CHAT_MESSAGE_SIZE){
+        if (message.length > Constants.SKYXPLORE_MAX_CHAT_MESSAGE_SIZE) {
             NotificationService.showError(localizationHandler.get("chat-message-too-long"));
             return false;
         }

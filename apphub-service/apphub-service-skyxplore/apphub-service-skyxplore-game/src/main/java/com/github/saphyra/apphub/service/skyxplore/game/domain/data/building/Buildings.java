@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
+@Deprecated(forRemoval = true)
 public class Buildings extends Vector<Building> {
     public Optional<Building> findBySurfaceId(UUID surfaceId) {
         return stream()

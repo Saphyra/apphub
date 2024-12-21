@@ -14,18 +14,23 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.UUID;
 
 public interface SkyXploreGameBuildingController {
+    @Deprecated(forRemoval = true)
     @PutMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CONSTRUCT_NEW)
     void constructNewBuilding(@RequestBody OneParamRequest<String> dataId, @PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @Deprecated(forRemoval = true)
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_UPGRADE)
     void upgradeBuilding(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @Deprecated(forRemoval = true)
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION)
     void cancelConstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_DECONSTRUCT)
+    @Deprecated(forRemoval = true)
     void deconstructBuilding(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @Deprecated(forRemoval = true)
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION)
     void cancelDeconstruction(@PathVariable("planetId") UUID planetId, @PathVariable("buildingId") UUID buildingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

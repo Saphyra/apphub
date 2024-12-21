@@ -12,23 +12,23 @@
         "hu": "Megnevezés"
     },
     "in-car": {
-        "en": "In car",
+        "en": "🚗",
         "hu": "🚗"
     },
     "in-cart": {
-        "en": "In cart",
+        "en": "🧺",
         "hu": "🧺"
     },
     "in-storage": {
-        "en": "In storage",
+        "en": "📦",
         "hu": "📦"
     },
     "price": {
-        "en": "Price",
+        "en": "💵",
         "hu": "💵"
     },
     "stock-value": {
-        "en": "Stock price",
+        "en": "💰",
         "hu": "💰"
     },
     "serial-number": {
@@ -40,7 +40,7 @@
         "hu": "Mennyiség"
     },
     "add-to-cart": {
-        "en": "Add to cart",
+        "en": "🧺",
         "hu": "🧺"
     },
     "move-to-car": {

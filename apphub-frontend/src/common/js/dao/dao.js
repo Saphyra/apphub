@@ -115,7 +115,7 @@ const Request = class {
 
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
-        xhr.setRequestHeader(Constants.HEADER_REQUEST_TYPE_NAME, Constants.HEADER_REQUEST_TYPE_VALUE);
+        xhr.setRequestHeader("accept", "application/json");
 
         return new Promise((resolve, reject) => {
             xhr.onload = () => {

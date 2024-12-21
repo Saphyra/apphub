@@ -64,7 +64,7 @@ class ServiceStarter {
 
         try {
             Map<Service, FutureWrapper<Void>> executionResults = groupMembers.stream()
-                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(new LocalStartTask(servicePinger, service))));
+                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(LocalStartTask.builder().servicePinger(servicePinger).service(service).build())));
 
             executionResults.forEach((service, voidFutureWrapper) -> {
                 try {

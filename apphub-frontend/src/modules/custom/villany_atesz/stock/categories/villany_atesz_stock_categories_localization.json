@@ -12,11 +12,11 @@
         "hu": "Mentés"
     },
     "delete": {
-        "en": "Delete",
+        "en": "🗑️",
         "hu": "🗑️"
     },
     "edit": {
-        "en": "Edit",
+        "en": "📝",
         "hu": "📝"
     },
     "discard": {

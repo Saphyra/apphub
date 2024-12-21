@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.genera
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,13 +38,13 @@ public class RandomEmptySurfaceProviderTest {
     public Surface emptyDesert;
 
     @Mock
-    private Building building;
+    private ConstructionArea constructionArea;
 
     @Mock
     private GameData gameData;
 
     @Mock
-    private Buildings buildings;
+    private ConstructionAreas constructionAreas;
 
     @Test
     public void getRandomEmptySurface() {
@@ -52,17 +52,17 @@ public class RandomEmptySurfaceProviderTest {
         given(occupiedSurface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(emptyDesert.getSurfaceType()).willReturn(SurfaceType.DESERT);
 
-        given(gameData.getBuildings()).willReturn(buildings);
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(occupiedSurface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));
 
-        Surface result = underTest.getRandomEmptySurface(Arrays.asList(surfaceWithDifferentType, occupiedSurface, emptyDesert), gameData);
+        Surface result = underTest.getEmptyDesertSurface(Arrays.asList(surfaceWithDifferentType, occupiedSurface, emptyDesert), gameData);
 
         assertThat(result).isEqualTo(emptyDesert);
     }
 
     @Test
     public void surfaceNotFound() {
-        assertThat(catchThrowable(() -> underTest.getRandomEmptySurface(Collections.emptyList(), gameData))).isInstanceOf(IllegalStateException.class);
+        assertThat(catchThrowable(() -> underTest.getEmptyDesertSurface(Collections.emptyList(), gameData))).isInstanceOf(IllegalStateException.class);
     }
 }
