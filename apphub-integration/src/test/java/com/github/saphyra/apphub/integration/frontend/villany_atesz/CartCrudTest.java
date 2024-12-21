@@ -79,7 +79,7 @@ public class CartCrudTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(
             () -> VillanyAteszStockOverviewPageActions.getCartDetails(driver),
             cart -> assertThat(cart.orElseThrow())
-                .returns((int) ((double) AMOUNT * PRICE * Constants.CART_DEFAULT_MARGIN), Cart::getTotalValue)
+                .returns(((double) AMOUNT * PRICE * Constants.CART_DEFAULT_MARGIN), Cart::getTotalValue)
                 .extracting(Cart::getItems)
                 .extracting(cartItems -> cartItems.get(0))
                 .returns(AMOUNT, CartItem::getAmount)
@@ -95,12 +95,11 @@ public class CartCrudTest extends SeleniumTest {
         Cart cart = VillanyAteszStockOverviewPageActions.getCartDetails(driver)
             .orElseThrow();
 
-        cart.setMargin(MARGIN);
+        cart.increaseMargin();
 
-        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getCartDetails(driver).orElseThrow(), c -> assertThat(c.getTotalValue()).isEqualTo(AMOUNT * PRICE * MARGIN));
+        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getCartDetails(driver).orElseThrow(), c -> assertThat(c.getTotalValue()).isEqualTo(AMOUNT * PRICE * 1.3));
 
         //Remove
-
         cart.getItems()
             .stream()
             .findFirst()

@@ -4,6 +4,8 @@
     Admin panel
         Memory monitoring
             Proper page title
+    VillanyAtesz
+        Buttons for changing margin instead of input
 
 ===PLATFORM CHANGES===
     Integration server

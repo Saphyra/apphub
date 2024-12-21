@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import localizationData from "./villany_atesz_stock_overview_cart_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import "./villany_atesz_stock_overview_cart.css";
@@ -10,7 +10,7 @@ import ConfirmationDialogData from "../../../../../../common/component/confirmat
 import CartItem from "./CartItem";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
 import MapStream from "../../../../../../common/js/collection/MapStream";
-import { hasValue } from "../../../../../../common/js/Utils";
+import { hasValue, roundPercent } from "../../../../../../common/js/Utils";
 import { VILLANY_ATESZ_CART_EDIT_MARGIN, VILLANY_ATESZ_DELETE_CART, VILLANY_ATESZ_FINALIZE_CART } from "../../../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 
 const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts, setCarts, setCart, setItems, setConfirmationDialogData }) => {
@@ -182,20 +182,49 @@ const VillanyAteszStockOverviewCart = ({ activeCart, setActiveCart, cart, carts,
                     </fieldset>
 
                     <fieldset>
+                        <legend>{localizationHandler.get("margin")}</legend>
+                        <div>
+                            <span id="villany-atesz-stock-overview-cart-details-margin">{Math.round(cart.margin * 100)}</span>
+                            <span>%</span>
+                        </div>
+
+                        <div>
+                            <Button
+                                id="villany-atesz-stock-overview-cart-details-decrease-margin-10percent-button"
+                                label="-10%"
+                                onclick={() => updateMargin(cart.margin - 0.1)}
+                            />
+
+                            <Button
+                                id="villany-atesz-stock-overview-cart-details-decrease-margin-1percent-button"
+                                label="-1%"
+                                onclick={() => updateMargin(cart.margin - 0.01)}
+                            />
+
+                            <Button
+                                id="villany-atesz-stock-overview-cart-details-reset-margin-button"
+                                label="100%"
+                                onclick={() => updateMargin(1)}
+                            />
+
+                            <Button
+                                id="villany-atesz-stock-overview-cart-details-increase-margin-1percent-button"
+                                label="+1%"
+                                onclick={() => updateMargin(cart.margin + 0.01)}
+                            />
+
+                            <Button
+                                id="villany-atesz-stock-overview-cart-details-increase-margin-10percent-button"
+                                label="+10%"
+                                onclick={() => updateMargin(cart.margin + 0.1)}
+                            />
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
                         <legend>{localizationHandler.get("total-price")}</legend>
 
                         <div>
-                            <PreLabeledInputField
-                                label={localizationHandler.get("margin")}
-                                input={<NumberInput
-                                    id="villany-atesz-stock-overview-cart-details-margin"
-                                    placeholder={localizationHandler.get("margin")}
-                                    onchangeCallback={updateMargin}
-                                    value={cart.margin}
-                                    min="0"
-                                    step=".01"
-                                />}
-                            />
                             <span id="villany-atesz-stock-overview-cart-details-total-price">{Math.round(cart.totalPrice * cart.margin)}</span>
                             <span> Ft</span>
                         </div>

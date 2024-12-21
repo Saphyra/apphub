@@ -147,3 +147,7 @@ export const isJsonString = (input) => {
 export const numberOfDigits = (input) => {
     return Math.floor(Math.log(Math.abs(input)) * Math.LOG10E + 1 | 0);
 }
+
+export const roundPercent = (input) => {
+    return Math.round(input * 100) / 100;
+}
