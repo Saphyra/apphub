@@ -22,6 +22,7 @@ import { hasValue } from "../../../common/js/Utils.js";
 
 const MemoryMonitoring = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
+    document.title = localizationHandler.get("title");
 
     const [reports, setReports] = useState([]);
     const [duration, setDuration] = useState(30);

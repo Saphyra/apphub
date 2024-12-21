@@ -116,10 +116,8 @@
 
     <modules>
         <module>apphub-service</module>
-        <module>apphub-proxy</module>
         <module>apphub-api</module>
         <module>apphub-lib</module>
         <module>apphub-test</module>
-        <module>apphub-integration-server</module>
     </modules>
 </project>

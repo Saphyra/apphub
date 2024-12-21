@@ -25,7 +25,6 @@ public class LocalStopProcess {
         log.info("Stopping local server...");
 
         stop(testProperties.getIntegrationServer());
-        stop(testProperties.getProductionProxy());
 
         List<FutureWrapper<Void>> executionResults = services.getServices()
             .stream()

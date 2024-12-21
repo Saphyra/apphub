@@ -5,18 +5,27 @@
     <artifactId>apphub-integration-server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <parent>
-        <artifactId>apphub</artifactId>
-        <groupId>com.github.saphyra</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
     <name>apphub-integration-server</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.0.1</version>
+        <relativePath/>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
+
+        <versions.spring-boot>3.0.1</versions.spring-boot>
+        <versions.liquibase-core>4.18.0</versions.liquibase-core>
+        <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
+        <versions.h2>2.1.214</versions.h2>
+        <versions.maven-compiler-plugin>3.10.1</versions.maven-compiler-plugin>
+        <versions.lombok>1.18.24</versions.lombok>
+        <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
     </properties>
 
     <dependencies>
@@ -30,6 +39,19 @@
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-common_util</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${versions.lombok}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven</artifactId>
+            <version>${versions.lombok-maven}</version>
+            <type>pom</type>
         </dependency>
 
         <dependency>
