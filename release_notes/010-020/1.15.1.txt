@@ -6,6 +6,11 @@
             Proper page title
 
 ===PLATFORM CHANGES===
+    Integration server
+        Rename database to apphub-integration
+        Separated from main project
+    Proxy
+        Separated from main project
 
 ===TECHNICAL DEBTS===
 
