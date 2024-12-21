@@ -15,5 +15,7 @@
         Separated from main project
 
 ===TECHNICAL DEBTS===
+    Notebook
+        Delete deprecated changesets
 
 ===ETC===
