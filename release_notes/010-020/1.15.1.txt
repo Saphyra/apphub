@@ -1,6 +1,9 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    Admin panel
+        Memory monitoring
+            Proper page title
 
 ===PLATFORM CHANGES===
 
