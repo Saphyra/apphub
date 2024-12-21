@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    VillanyAtesz
+        Margin cannot be set to decimal value
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

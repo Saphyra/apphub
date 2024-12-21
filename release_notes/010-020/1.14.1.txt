@@ -1,4 +1,7 @@
 ===FEATURES===
+    VillanyAtesz
+        Redesign
+        Separate input for last inventoried car/storage
 
 ===BUGFIXES===
 

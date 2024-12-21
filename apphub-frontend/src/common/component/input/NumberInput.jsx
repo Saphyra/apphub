@@ -2,12 +2,12 @@ import React from "react";
 
 const NumberInput = ({
     id,
-    type="number",
+    type = "number",
     className,
     placeholder,
-    onchangeCallback,
+    onchangeCallback = () => { },
     value,
-    onkeyupCallback,
+    onkeyupCallback = () => { },
     min,
     max,
     step = 1,
@@ -16,7 +16,10 @@ const NumberInput = ({
 }) => {
     const onchange = (e) => {
         if (onchangeCallback) {
-            onchangeCallback(Number(e.target.value));
+            if (!isNaN(e.target.value)) {
+                const number = Number(e.target.value);
+                onchangeCallback(number);
+            }
         }
     }
 
