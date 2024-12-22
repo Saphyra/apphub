@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-message" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="message"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="message">
+            <column name="message_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="text"/>
+            <column name="status" type="text"/>
+            <column name="schema_ref" type="text"/>
+            <column name="header" type="text"/>
+            <column name="message" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="message" columnNames="message_id" constraintName="message-pk"/>
+    </changeSet>
+</databaseChangeLog>

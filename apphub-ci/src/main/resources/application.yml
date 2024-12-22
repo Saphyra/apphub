@@ -184,3 +184,9 @@ services:
   moduleName: apphub-service-calendar
   group: 1
   optional: true
+- name: elite-base
+  port: 8087
+  location: "./apphub-service/apphub-service-elite_base/target/application.jar"
+  moduleName: apphub-service-elite_base
+  group: 1
+  optional: true

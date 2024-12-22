@@ -1,4 +1,6 @@
 ===FEATURES===
+    EliteBase
+        Collect and store messages
 
 ===BUGFIXES===
     Admin panel

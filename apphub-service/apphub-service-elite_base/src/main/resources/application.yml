@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: elite-base
+
+liquibase:
+  schema: elite_base
