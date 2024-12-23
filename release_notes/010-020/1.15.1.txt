@@ -1,0 +1,23 @@
+===FEATURES===
+    EliteBase
+        Collect and store messages
+
+===BUGFIXES===
+    Admin panel
+        Memory monitoring
+            Proper page title
+    VillanyAtesz
+        Buttons for changing margin instead of input
+
+===PLATFORM CHANGES===
+    Integration server
+        Rename database to apphub-integration
+        Separated from main project
+    Proxy
+        Separated from main project
+
+===TECHNICAL DEBTS===
+    Notebook
+        Delete deprecated changesets
+
+===ETC===

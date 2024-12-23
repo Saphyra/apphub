@@ -99,7 +99,8 @@ public class Constants {
         "calendar",
         "encryption",
         "storage",
-        "villany-atesz"
+        "villany-atesz",
+        "elite-base"
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.ci.process.local.start;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.value.DeployMode;
-import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +19,6 @@ import java.util.stream.Stream;
 public class LocalBuildTask {
     private final PropertyDao propertyDao;
     private final Services services;
-    private final PlatformProperties platformProperties;
 
     public boolean buildServices() {
         List<String> disabledServices = propertyDao.getDisabledServices();
@@ -29,8 +26,7 @@ public class LocalBuildTask {
         List<String> moduleNames = services.getServices().stream()
             .filter(service -> !disabledServices.contains(service.getName())).map(Service::getModuleName)
             .toList();
-        List<String> withIntegrationServer = Stream.concat(moduleNames.stream(), Stream.of(platformProperties.getIntegrationServer().getModuleName())).collect(Collectors.toList());
-        return buildServices(withIntegrationServer);
+        return buildServices(moduleNames);
     }
 
     public boolean buildServices(String[] serviceNames) {

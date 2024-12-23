@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.structure.view.villany_atesz;
 
-import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,8 +12,8 @@ import java.util.stream.Collectors;
 public class Cart {
     private final WebElement webElement;
 
-    public Integer getTotalValue() {
-        return Integer.parseInt(webElement.findElement(By.id("villany-atesz-stock-overview-cart-details-total-price")).getText());
+    public double getTotalValue() {
+        return Double.parseDouble(webElement.findElement(By.id("villany-atesz-stock-overview-cart-details-total-price")).getText());
     }
 
     public List<CartItem> getItems() {
@@ -40,7 +39,8 @@ public class Cart {
             .click();
     }
 
-    public void setMargin(int margin) {
-        WebElementUtils.clearAndFill(webElement.findElement(By.id("villany-atesz-stock-overview-cart-details-margin")), margin);
+    public void increaseMargin() {
+        webElement.findElement(By.id("villany-atesz-stock-overview-cart-details-increase-margin-10percent-button"))
+            .click();
     }
 }

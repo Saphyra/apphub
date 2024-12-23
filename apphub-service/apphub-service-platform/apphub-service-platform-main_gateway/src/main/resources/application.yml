@@ -122,6 +122,10 @@ spring:
         uri: http://villany-atesz:8080
         predicates:
         - Path=/api/villany-atesz/**
+      - id: elite-base
+        uri: http://elite-base:8080
+        predicates:
+        - Path=/api/elite-base/**
 
       #WS
       - id: web-socket-admin-panel
