@@ -32,12 +32,5 @@
             <artifactId>jakarta.validation-api</artifactId>
             <version>${versions.jakartaValidationApi}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${versions.jackson-core}</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 </project>

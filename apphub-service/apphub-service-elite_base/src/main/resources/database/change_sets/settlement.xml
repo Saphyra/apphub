@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-settlement" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="settlement"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="settlement">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="star_system_id" type="varchar(37)"/>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="market_id" type="bigint"/>
+            <column name="settlement_name" type="text"/>
+            <column name="longitude" type="numeric"/>
+            <column name="latitude" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="settlement" columnNames="id" constraintName="settlement-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="settlement" indexName="index-settlement-star_system_id-settlement_name">
+            <column name="star_system_id"/>
+            <column name="settlement_name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,34 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-star_system" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="star_system"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="star_system">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="star_id" type="bigint">
+                <constraints unique="true"/>
+            </column>
+            <column name="star_name" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="position" type="text"/>
+            <column name="star_type" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="star_system" columnNames="id" constraintName="star_system-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="star_system-star_id">
+            <column name="star_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="star_system-star_name">
+            <column name="star_name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

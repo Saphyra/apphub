@@ -1,0 +1,36 @@
+package com.github.saphyra.apphub.service.elite_base.message_processing.structure.fss_body_signals;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.saphyra.apphub.service.elite_base.message_processing.structure.Signal;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@NoArgsConstructor
+@Data
+public class FssBodySignalsMessage {
+    private String event;
+    private LocalDateTime timestamp;
+
+    @JsonProperty("SystemAddress")
+    private Long starId;
+
+    @JsonProperty("StarSystem")
+    private String starName;
+
+    @JsonProperty("StarPos")
+    private Double[] starPosition;
+
+    @JsonProperty("BodyID")
+    private Long bodyId;
+
+    @JsonProperty("BodyName")
+    private String bodyName;
+
+    @JsonProperty("Signals")
+    private Signal[] signals;
+
+    private Boolean horizons;
+    private Boolean odyssey;
+}

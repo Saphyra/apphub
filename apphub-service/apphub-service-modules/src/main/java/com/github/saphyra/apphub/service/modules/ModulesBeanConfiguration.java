@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.modules;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -45,5 +47,10 @@ class ModulesBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

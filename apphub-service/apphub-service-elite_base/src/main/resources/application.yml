@@ -4,3 +4,8 @@ spring:
 
 liquibase:
   schema: elite_base
+
+elite-base:
+  messageExpiration: P30D
+  messageProcessorBatchSize: 500
+  messageProcessorSublistSize: 50

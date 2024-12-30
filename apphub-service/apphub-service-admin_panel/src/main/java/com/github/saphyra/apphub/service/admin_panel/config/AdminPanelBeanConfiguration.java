@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.admin_panel.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -39,5 +41,10 @@ public class AdminPanelBeanConfiguration {
     @Bean
     MemoryStatusModelFactory memoryStatusModelFactory(DateTimeUtil dateTimeUtil) {
         return new MemoryStatusModelFactory(dateTimeUtil);
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

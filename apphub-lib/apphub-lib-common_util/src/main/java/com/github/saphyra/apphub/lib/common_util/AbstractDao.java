@@ -24,6 +24,10 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     }
 
     public void deleteAll(List<DOMAIN> domains) {
+        if (domains.isEmpty()) {
+            return;
+        }
+
         repository.deleteAll(converter.convertDomain(domains));
     }
 
@@ -58,6 +62,10 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     }
 
     public void saveAll(List<DOMAIN> iterable) {
+        if (iterable.isEmpty()) {
+            return;
+        }
+
         repository.saveAll(converter.convertDomain(iterable));
     }
 }

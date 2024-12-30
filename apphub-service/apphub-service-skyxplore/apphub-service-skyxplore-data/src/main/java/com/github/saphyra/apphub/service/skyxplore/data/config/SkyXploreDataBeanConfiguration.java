@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -43,5 +45,10 @@ public class SkyXploreDataBeanConfiguration {
     @Bean
     TaskScheduler taskScheduler() {
         return new ThreadPoolTaskScheduler();
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.encryption.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -48,5 +49,10 @@ class EncryptionBeanConfiguration {
     @Bean
     Base64Encoder base64Encoder() {
         return new Base64Encoder();
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }
