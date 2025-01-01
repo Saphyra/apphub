@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.elite_base.dao.body.BodyType;
 import com.github.saphyra.apphub.service.elite_base.dao.minor_faction.FactionState;
 import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodySaver;
@@ -72,7 +71,7 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
                 starSystem.getId(),
                 body.getId(),
                 approachSettlementMessage.getSettlementName(),
-                StationType.SETTLEMENT, //TODO consider setting null, since no exact station type known
+                null,
                 approachSettlementMessage.getMarketId(),
                 Allegiance.parse(approachSettlementMessage.getAllegiance()),
                 StationEconomyEnum.parse(approachSettlementMessage.getEconomy()),

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.elite_base.message_processing.structure.docking_denied.docking_granted;
+package com.github.saphyra.apphub.service.elite_base.message_processing.structure.docking_denied;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

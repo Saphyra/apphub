@@ -20,4 +20,8 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
     public Optional<Station> findByStarSystemIdAndStationName(UUID starSystemId, String stationName) {
         return converter.convertEntity(repository.findByStarSystemIdAndStationName(uuidConverter.convertDomain(starSystemId), stationName));
     }
+
+    public Optional<Station> findByMarketId(Long marketId) {
+        return converter.convertEntity(repository.findByMarketId(marketId));
+    }
 }

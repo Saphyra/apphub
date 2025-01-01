@@ -19,6 +19,8 @@ public enum StationType {
     OUTPOST("Outpost"),
     ASTEROID_BASE("AsteroidBase"),
     MEGA_SHIP("MegaShip"),
+    OCELLUS("Ocellus"),
+    SURFACE_STATION("SurfaceStation"),
     ;
 
     private final String value;
@@ -30,7 +32,7 @@ public enum StationType {
         }
 
         return Arrays.stream(values())
-            .filter(e -> e.value.equalsIgnoreCase(in))
+            .filter(e -> e.value.equalsIgnoreCase(in.replace(" ", "")))
             .findAny()
             .orElseThrow(() -> new RuntimeException(in + " cannot be parsed to " + StationType.class.getSimpleName()));
     }

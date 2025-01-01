@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.processo
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
 import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.dao.station.StationDao;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.FleetCarrierSaver;
@@ -15,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +32,8 @@ class CommodityMessageProcessor implements MessageProcessor {
     private final StationSaver stationSaver;
     private final CommoditySaver commoditySaver;
     private final FleetCarrierSaver fleetCarrierSaver;
+    private final StationDao stationDao;
+    private final FleetCarrierDao fleetCarrierDao;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -43,7 +50,9 @@ class CommodityMessageProcessor implements MessageProcessor {
         );
 
         StationType stationType = StationType.parse(commodityMessage.getStationType());
-        CommodityLocation commodityLocation = stationType == StationType.FLEET_CARRIER ? CommodityLocation.FLEET_CARRIER : CommodityLocation.STATION;
+        CommodityLocation commodityLocation = Optional.ofNullable(stationType)
+            .map(st -> st == StationType.FLEET_CARRIER ? CommodityLocation.FLEET_CARRIER : CommodityLocation.STATION)
+            .orElseGet(() -> fetchStationTypeByMarketId(commodityMessage.getMarketId()));
 
         UUID externalReference = switch (commodityLocation) {
             case FLEET_CARRIER -> fleetCarrierSaver.save(
@@ -62,9 +71,27 @@ class CommodityMessageProcessor implements MessageProcessor {
                 commodityMessage.getMarketId(),
                 commodityMessage.getEconomies()
             ).getId();
+            case UNKNOWN -> null;
             default -> throw new IllegalStateException("Unhandled " + CommodityLocation.class.getSimpleName() + ": " + commodityLocation);
         };
 
+        if (isNull(externalReference)) {
+            log.warn("Could not determine stationType for marketId {}", commodityMessage.getMarketId());
+            return;
+        }
+
         commoditySaver.saveAll(commodityMessage.getTimestamp(), commodityLocation, externalReference, commodityMessage.getMarketId(), commodityMessage.getCommodities());
+    }
+
+    private CommodityLocation fetchStationTypeByMarketId(Long marketId) {
+        if (stationDao.findByMarketId(marketId).isPresent()) {
+            return CommodityLocation.STATION;
+        }
+
+        if (fleetCarrierDao.findByMarketId(marketId).isPresent()) {
+            return CommodityLocation.FLEET_CARRIER;
+        }
+
+        return CommodityLocation.UNKNOWN;
     }
 }

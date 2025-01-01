@@ -34,6 +34,11 @@ public class StationSaver {
     private final StationEconomyFactory stationEconomyFactory;
     private final IdGenerator idGenerator;
 
+    public synchronized void save(LocalDateTime timestamp, Long marketId, StationType stationType) {
+        stationDao.findByMarketId(marketId)
+            .ifPresent(station -> updateFields(timestamp, station, null, null, null, null, null, stationType));
+    }
+
     public Station save(LocalDateTime timestamp, UUID starSystemId, String stationName, StationType stationType, Long marketId, Economy[] economies) {
         return save(timestamp, starSystemId, null, stationName, stationType, marketId, null, null, new String[0], economies);
     }
@@ -70,12 +75,21 @@ public class StationSaver {
                 return created;
             });
 
-        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies);
+        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType);
 
         return station;
     }
 
-    private void updateFields(LocalDateTime timestamp, Station station, UUID bodyId, Allegiance allegiance, StationEconomyEnum economy, List<StationServiceEnum> stationServices, List<StationEconomy> economies) {
+    private void updateFields(
+        LocalDateTime timestamp,
+        Station station,
+        UUID bodyId,
+        Allegiance allegiance,
+        StationEconomyEnum economy,
+        List<StationServiceEnum> stationServices,
+        List<StationEconomy> economies,
+        StationType stationType
+    ) {
         if (timestamp.isBefore(station.getLastUpdate())) {
             log.debug("Station {} has newer data than {}", station.getId(), timestamp);
             return;
@@ -87,7 +101,8 @@ public class StationSaver {
                 new UpdateHelper(allegiance, station::getAllegiance, () -> station.setAllegiance(allegiance)),
                 new UpdateHelper(economy, station::getEconomy, () -> station.setEconomy(economy)),
                 new UpdateHelper(stationServices, station::getServices, () -> station.setServices(LazyLoadedField.loaded(stationServices))),
-                new UpdateHelper(economies, station::getEconomies, () -> station.setEconomies(LazyLoadedField.loaded(economies)))
+                new UpdateHelper(economies, station::getEconomies, () -> station.setEconomies(LazyLoadedField.loaded(economies))),
+                new UpdateHelper(stationType, station::getType, () -> station.setType(stationType))
             )
             .forEach(UpdateHelper::modify);
 

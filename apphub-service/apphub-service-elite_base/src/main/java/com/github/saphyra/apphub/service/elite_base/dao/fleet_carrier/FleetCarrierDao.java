@@ -17,4 +17,8 @@ public class FleetCarrierDao extends AbstractDao<FleetCarrierEntity, FleetCarrie
     public Optional<FleetCarrier> findByCarrierId(String carrierId) {
         return converter.convertEntity(repository.findByCarrierId(carrierId));
     }
+
+    public Optional<FleetCarrier> findByMarketId(Long marketId) {
+        return converter.convertEntity(repository.findByMarketId(marketId));
+    }
 }
