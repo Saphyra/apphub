@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util;
 
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
 public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> {
     protected final Converter<ENTITY, DOMAIN> converter;
@@ -61,11 +62,11 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
         repository.save(converter.convertDomain(domain));
     }
 
-    public void saveAll(List<DOMAIN> iterable) {
-        if (iterable.isEmpty()) {
+    public void saveAll(List<DOMAIN> domains) {
+        if (domains.isEmpty()) {
             return;
         }
 
-        repository.saveAll(converter.convertDomain(iterable));
+        repository.saveAll(converter.convertDomain(domains));
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.elite_base.common;
 
 import com.github.saphyra.apphub.api.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.elite_base.config.EliteBaseProperties;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.processor.EdMessageProcessor;
@@ -20,11 +21,12 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     private final DateTimeUtil dateTimeUtil;
     private final EliteBaseProperties properties;
     private final EdMessageProcessor edMessageProcessor;
+    private final ExecutorServiceBean executorServiceBean;
 
     @Override
     public void processMessages() {
         log.info("processMessages event arrived");
-        edMessageProcessor.processMessages();
+        executorServiceBean.execute(edMessageProcessor::processMessages);
     }
 
     @Override

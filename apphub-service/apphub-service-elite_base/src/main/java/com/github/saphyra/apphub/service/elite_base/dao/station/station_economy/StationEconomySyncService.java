@@ -20,9 +20,9 @@ public class StationEconomySyncService {
     public void sync(UUID stationId, List<StationEconomy> economies) {
         List<StationEconomy> existingEconomies = stationEconomyDao.getByStationId(stationId);
         Map<StationEconomyEnum, Double> existingEconomyMapping = existingEconomies.stream()
-            .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion));
+            .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion, Double::sum));
         Map<StationEconomyEnum, Double> newEconomyMapping = economies.stream()
-            .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion));
+            .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion, Double::sum));
 
         List<StationEconomy> toSave = economies.stream()
             .filter(stationEconomy -> !Objects.equals(existingEconomyMapping.get(stationEconomy.getEconomy()), stationEconomy.getProportion()))

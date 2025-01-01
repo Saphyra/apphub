@@ -17,4 +17,8 @@
     <include file="database/change_sets/station_economy.xml"/>
     <include file="database/change_sets/station_service.xml"/>
     <include file="database/change_sets/settlement.xml"/>
+    <include file="database/change_sets/fleet_carrier.xml"/>
+    <include file="database/change_sets/commodity.xml"/>
+    <include file="database/change_sets/commodity_average_price.xml"/>
+    <include file="database/change_sets/commodity_last_update.xml"/>
 </databaseChangeLog>

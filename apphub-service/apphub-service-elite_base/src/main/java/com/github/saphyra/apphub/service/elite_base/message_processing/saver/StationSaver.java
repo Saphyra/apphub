@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.elite_base.dao.station.StationDao;
 import com.github.saphyra.apphub.service.elite_base.dao.station.StationFactory;
-import com.github.saphyra.apphub.service.elite_base.dao.station.StationType;
+import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyFactory;
@@ -34,14 +34,18 @@ public class StationSaver {
     private final StationEconomyFactory stationEconomyFactory;
     private final IdGenerator idGenerator;
 
+    public Station save(LocalDateTime timestamp, UUID starSystemId, String stationName, StationType stationType, Long marketId, Economy[] economies) {
+        return save(timestamp, starSystemId, null, stationName, stationType, marketId, null, null, new String[0], economies);
+    }
+
     public synchronized Station save(
         LocalDateTime timestamp,
         UUID starSystemId,
         UUID bodyId,
         String stationName,
         StationType stationType,
-        Long marketId, Allegiance
-            allegiance,
+        Long marketId,
+        Allegiance allegiance,
         StationEconomyEnum economy,
         String[] stationServices,
         Economy[] economies
@@ -66,19 +70,20 @@ public class StationSaver {
                 return created;
             });
 
-        updateFields(timestamp, station, allegiance, economy, parsedServices, parsedEconomies);
+        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies);
 
         return station;
     }
 
-    private void updateFields(LocalDateTime timestamp, Station station, Allegiance allegiance, StationEconomyEnum economy, List<StationServiceEnum> stationServices, List<StationEconomy> economies) {
+    private void updateFields(LocalDateTime timestamp, Station station, UUID bodyId, Allegiance allegiance, StationEconomyEnum economy, List<StationServiceEnum> stationServices, List<StationEconomy> economies) {
         if (timestamp.isBefore(station.getLastUpdate())) {
-            log.info("Station {} has newer data than {}", station.getId(), timestamp);
+            log.debug("Station {} has newer data than {}", station.getId(), timestamp);
             return;
         }
 
         List.of(
                 new UpdateHelper(timestamp, station::getLastUpdate, () -> station.setLastUpdate(timestamp)),
+                new UpdateHelper(bodyId, station::getBodyId, () -> station.setBodyId(bodyId)),
                 new UpdateHelper(allegiance, station::getAllegiance, () -> station.setAllegiance(allegiance)),
                 new UpdateHelper(economy, station::getEconomy, () -> station.setEconomy(economy)),
                 new UpdateHelper(stationServices, station::getServices, () -> station.setServices(LazyLoadedField.loaded(stationServices))),

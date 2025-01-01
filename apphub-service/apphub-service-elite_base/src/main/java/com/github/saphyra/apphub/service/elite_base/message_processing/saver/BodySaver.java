@@ -37,7 +37,7 @@ public class BodySaver {
             .map(SearchHelper::search)
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .peek(ss -> log.info("Found: {}", ss))
+            .peek(ss -> log.debug("Found: {}", ss))
             .findAny()
             .orElseGet(() -> {
                 Body created = bodyFactory.create(timestamp, starSystemId, bodyType, bodyId, bodyName);
@@ -53,7 +53,7 @@ public class BodySaver {
 
     private void updateFields(LocalDateTime timestamp, Body body, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
         if (timestamp.isBefore(body.getLastUpdate())) {
-            log.info("Body {} has newer data than {}", body.getId(), timestamp);
+            log.debug("Body {} has newer data than {}", body.getId(), timestamp);
             return;
         }
 

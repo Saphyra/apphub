@@ -20,6 +20,10 @@ public class ExecutorServiceBeanFactory {
         return create(defaultExecutor());
     }
 
+    public FixedExecutorServiceBean createFixed(int threadCount) {
+        return new FixedExecutorServiceBean(threadCount, errorReporterService);
+    }
+
     public ExecutorServiceBean create(ExecutorService executorService) {
         return ExecutorServiceBean.builder()
             .executor(executorService)

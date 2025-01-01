@@ -14,6 +14,7 @@ public enum Allegiance {
     INDEPENDENT("Independent"),
     THARGOID("Thargoid"),
     PILOTS_FEDERATION("PilotsFederation"),
+    NONE(""),
     ;
 
     private final String value;
@@ -21,7 +22,7 @@ public enum Allegiance {
     //TODO unit test
     public static Allegiance parse(String in) {
         if (isBlank(in)) {
-            return null;
+            return Allegiance.NONE;
         }
 
         return Arrays.stream(values())

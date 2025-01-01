@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.elite_base.dao.station;
 
 import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

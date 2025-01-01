@@ -29,7 +29,7 @@ public class MinorFactionSaver {
 
         MinorFaction minorFaction = minorFactionDao.findByFactionName(factionName)
             .stream()
-            .peek(ss -> log.info("Found: {}", ss))
+            .peek(ss -> log.debug("Found: {}", ss))
             .findAny()
             .orElseGet(() -> {
                 MinorFaction created = minorFactionFactory.create(timestamp, factionName, economicState);
@@ -45,7 +45,7 @@ public class MinorFactionSaver {
 
     private void updateFields(LocalDateTime timestamp, MinorFaction minorFaction, FactionState economicState) {
         if (timestamp.isBefore(minorFaction.getLastUpdate())) {
-            log.info("MinorFaction {} has newer data than {}", minorFaction.getId(), timestamp);
+            log.debug("MinorFaction {} has newer data than {}", minorFaction.getId(), timestamp);
             return;
         }
 

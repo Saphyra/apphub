@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-commodity_average_price" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="commodity_average_price"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="commodity_average_price">
+            <column name="commodity_name" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="average_price" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="commodity_average_price" columnNames="commodity_name" constraintName="commodity_average_price-pk"/>
+    </changeSet>
+</databaseChangeLog>

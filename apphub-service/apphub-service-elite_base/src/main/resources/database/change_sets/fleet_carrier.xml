@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-fleet_carrier" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="fleet_carrier"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="fleet_carrier">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="carrier_id" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="carrier_name" type="text"/>
+            <column name="star_system_id" type="varchar(37)"/>
+            <column name="docking_access" type="varchar(255)"/>
+            <column name="market_id" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="fleet_carrier" columnNames="id" constraintName="fleet_carrier-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="fleet_carrier" indexName="index-fleet_carrier-carrier_name">
+            <column name="carrier_name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

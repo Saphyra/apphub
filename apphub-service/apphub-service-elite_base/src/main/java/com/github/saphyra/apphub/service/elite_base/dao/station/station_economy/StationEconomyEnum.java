@@ -18,6 +18,12 @@ public enum StationEconomyEnum {
     EXTRACTION("Extraction"),
     TOURISM("Tourism"),
     REPAIR("Repair"),
+    TERRAFORMING("Terraforming"),
+    CARRIER("Carrier"),
+    SERVICE("Service"),
+    PRISON("Prison"),
+    RESCUE("Rescue"),
+    MEGA_SHIP("MegaShip"),
     ;
 
     private final String value;
@@ -28,8 +34,7 @@ public enum StationEconomyEnum {
             return null;
         }
 
-        String parsed = in.split("_")[1]
-            .split(";")[0];
+        String parsed = in.contains("_") ? in.split("_")[1].split(";")[0] : in;
 
         return Arrays.stream(values())
             .filter(allegiance -> allegiance.value.equalsIgnoreCase(parsed))

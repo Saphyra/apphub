@@ -6,13 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class Commodity {
+public class EdCommodity {
     private String name;
     private Integer buyPrice;
     private Integer sellPrice;
     private Integer demand;
     private Integer stock;
-
 
     @JsonProperty("meanPrice")
     private Integer averagePrice;
@@ -22,4 +21,8 @@ public class Commodity {
     private Integer stockBracket;
 
     private String[] statusFlags;
+
+    public String getName() {
+        return name.toLowerCase();
+    }
 }

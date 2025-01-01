@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.elite_base.dao.station;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_service.StationServiceEnum;

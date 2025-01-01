@@ -42,7 +42,7 @@ public class SettlementSaver {
 
     private void updateFields(LocalDateTime timestamp, Settlement settlement, UUID bodyId, Long marketId, Double longitude, Double latitude) {
         if (timestamp.isBefore(settlement.getLastUpdate())) {
-            log.info("Settlement {} has newer data than {}", settlement.getId(), timestamp);
+            log.debug("Settlement {} has newer data than {}", settlement.getId(), timestamp);
             return;
         }
 

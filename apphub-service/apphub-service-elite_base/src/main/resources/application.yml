@@ -1,6 +1,9 @@
 spring:
   application:
     name: elite-base
+  datasource:
+    hikari:
+      maximumPoolSize: 20
 
 liquibase:
   schema: elite_base
@@ -9,3 +12,5 @@ elite-base:
   messageExpiration: P30D
   messageProcessorBatchSize: 500
   messageProcessorSublistSize: 50
+  executor:
+    threadCount: 10

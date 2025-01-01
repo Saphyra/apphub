@@ -10,17 +10,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class CommodityMessage {
-    @JsonProperty("timestamp")
-    private LocalDateTime createdAt;
-
+    private LocalDateTime timestamp;
     private Long marketId;
-    private Commodity[] commodities;
-    private Economy[] economies;
+    private EdCommodity[] commodities;
+    private Economy[] economies = new Economy[0];
     private String[] prohibited;
     private String stationName;
     private String stationType;
     private String systemName;
-    private String carrierDockingAccess;
 
     //Unused
     @JsonProperty("horizons")
@@ -28,4 +25,6 @@ public class CommodityMessage {
 
     @JsonProperty("odyssey")
     private Boolean odyssey;
+
+    private String carrierDockingAccess;
 }

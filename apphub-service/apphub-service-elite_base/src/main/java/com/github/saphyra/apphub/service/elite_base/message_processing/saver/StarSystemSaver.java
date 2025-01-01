@@ -23,6 +23,10 @@ public class StarSystemSaver {
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
 
+    public StarSystem save(LocalDateTime timestamp, String systemName) {
+        return save(timestamp, null, systemName, null);
+    }
+
     public synchronized StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
         if (isNull(starId) && isNull(starName)) {
             throw new IllegalArgumentException("Both starId and starName are null.");
@@ -35,7 +39,7 @@ public class StarSystemSaver {
             .map(SearchHelper::search)
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .peek(ss -> log.info("Found: {}", ss))
+            .peek(ss -> log.debug("Found: {}", ss))
             .findAny()
             .orElseGet(() -> {
                 StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition);
@@ -51,7 +55,7 @@ public class StarSystemSaver {
 
     private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition) {
         if (timestamp.isBefore(starSystem.getLastUpdate())) {
-            log.info("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
+            log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;
         }
 
