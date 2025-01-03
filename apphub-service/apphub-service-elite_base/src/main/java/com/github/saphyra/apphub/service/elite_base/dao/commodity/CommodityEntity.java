@@ -20,6 +20,8 @@ class CommodityEntity {
     @Id
     private String id;
     @Enumerated(EnumType.STRING)
+    private CommodityType type;
+    @Enumerated(EnumType.STRING)
     private CommodityLocation commodityLocation;
     private String externalReference;
     private Long marketId;

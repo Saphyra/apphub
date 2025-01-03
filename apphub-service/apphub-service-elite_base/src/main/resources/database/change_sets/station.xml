@@ -29,9 +29,9 @@
     </changeSet>
 
     <changeSet id="create-index-market_id-to-station" author="Saphyra">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists schemaName="elite_base" tableName="table_name" columnNames="market_id" />
+                <indexExists schemaName="elite_base" tableName="station" columnNames="market_id" />
             </not>
         </preConditions>
 

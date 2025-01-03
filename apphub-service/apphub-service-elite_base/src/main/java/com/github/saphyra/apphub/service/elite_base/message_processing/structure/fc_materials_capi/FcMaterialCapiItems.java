@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FcMaterialCapiItems {
-    private FcMaterialCapiItem[] purchases;
+    private Object purchases; //Array if empty, List<FcMaterialCapiItem> if filled
     private Object sales; //Array if empty, Map<Long, FcMaterialCapiItem> if filled
 }

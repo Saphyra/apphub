@@ -17,5 +17,5 @@ public class Waypoint {
     private Double[] starPosition;
 
     @JsonProperty("StarClass")
-    private String starClass;
+    private String starType;
 }

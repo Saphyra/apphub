@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.elite_base.dao.commodity.avg_price.Comm
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.avg_price.CommodityAveragePriceFactory;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdate;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateDao;
+import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
 
         return CommodityEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
+            .type(domain.getType())
             .commodityLocation(domain.getCommodityLocation())
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .marketId(domain.getMarketId())
@@ -47,7 +49,13 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
         UUID externalReference = uuidConverter.convertEntity(entity.getExternalReference());
         return Commodity.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
-            .lastUpdate(commodityLastUpdateDao.findById(entity.getExternalReference()).map(CommodityLastUpdate::getLastUpdate).orElse(null))
+            .lastUpdate(commodityLastUpdateDao.findById(CommodityLastUpdateId.builder()
+                    .externalReference(entity.getExternalReference())
+                    .commodityType(entity.getType())
+                    .build())
+                .map(CommodityLastUpdate::getLastUpdate)
+                .orElse(null))
+            .type(entity.getType())
             .commodityLocation(entity.getCommodityLocation())
             .externalReference(externalReference)
             .marketId(entity.getMarketId())

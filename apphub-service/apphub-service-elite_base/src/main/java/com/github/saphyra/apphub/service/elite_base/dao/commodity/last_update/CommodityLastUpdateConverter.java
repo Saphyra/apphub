@@ -18,7 +18,10 @@ class CommodityLastUpdateConverter extends ConverterBase<CommodityLastUpdateEnti
     @Override
     protected CommodityLastUpdateEntity processDomainConversion(CommodityLastUpdate domain) {
         return CommodityLastUpdateEntity.builder()
-            .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+            .id(CommodityLastUpdateId.builder()
+                .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+                .commodityType(domain.getCommodityType())
+                .build())
             .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .build();
     }
@@ -26,7 +29,8 @@ class CommodityLastUpdateConverter extends ConverterBase<CommodityLastUpdateEnti
     @Override
     protected CommodityLastUpdate processEntityConversion(CommodityLastUpdateEntity entity) {
         return CommodityLastUpdate.builder()
-            .externalReference(uuidConverter.convertEntity(entity.getExternalReference()))
+            .externalReference(uuidConverter.convertEntity(entity.getId().getExternalReference()))
+            .commodityType(entity.getId().getCommodityType())
             .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .build();
     }

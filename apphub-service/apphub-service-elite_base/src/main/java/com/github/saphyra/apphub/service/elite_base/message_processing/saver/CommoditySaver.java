@@ -4,9 +4,14 @@ import com.github.saphyra.apphub.service.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityFactory;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateDao;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.commodity.EdCommodity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -32,24 +37,39 @@ public class CommoditySaver {
     private final CommodityLastUpdateDao commodityLastUpdateDao;
     private final CommodityLastUpdateFactory commodityLastUpdateFactory;
 
-    public synchronized void saveAll(LocalDateTime timestamp, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity[] commodities) {
+    public synchronized void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity[] commodities) {
+        List<CommodityData> commodityDataList = Arrays.stream(commodities)
+            .map(edCommodity -> CommodityData.builder()
+                .name(edCommodity.getName())
+                .buyPrice(edCommodity.getBuyPrice())
+                .sellPrice(edCommodity.getSellPrice())
+                .stock(edCommodity.getStock())
+                .demand(edCommodity.getDemand())
+                .averagePrice(edCommodity.getAveragePrice())
+                .build())
+            .toList();
+
+        saveAll(timestamp, type, commodityLocation, externalReference, marketId, commodityDataList);
+    }
+
+    public synchronized void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<CommodityData> commodities) {
         if ((isNull(commodityLocation) || isNull(externalReference)) && isNull(marketId)) {
             throw new IllegalStateException("Both commodityLocation or externalReference and marketId is null");
         }
 
-        commodityLastUpdateDao.save(commodityLastUpdateFactory.create(externalReference, timestamp));
+        commodityLastUpdateDao.save(commodityLastUpdateFactory.create(externalReference, type, timestamp));
 
         Map<String, Commodity> existingCommodities = commodityDao.getByExternalReferenceOrMarketId(externalReference, marketId)
             .stream()
             .collect(Collectors.toMap(Commodity::getCommodityName, Function.identity()));
 
-        List<Commodity> modifiedCommodities = Arrays.stream(commodities)
-            .map(edCommodity -> create(existingCommodities.get(edCommodity.getName()), timestamp, commodityLocation, externalReference, marketId, edCommodity))
+        List<Commodity> modifiedCommodities = commodities.stream()
+            .map(edCommodity -> create(existingCommodities.get(edCommodity.getName()), timestamp, type, commodityLocation, externalReference, marketId, edCommodity))
             .flatMap(Optional::stream)
             .toList();
 
-        List<String> newCommodityNames = Arrays.stream(commodities)
-            .map(EdCommodity::getName)
+        List<String> newCommodityNames = commodities.stream()
+            .map(CommodityData::getName)
             .toList();
         List<Commodity> deletedCommodities = existingCommodities.values()
             .stream()
@@ -60,18 +80,19 @@ public class CommoditySaver {
         commodityDao.saveAll(modifiedCommodities);
     }
 
-    private Optional<Commodity> create(Commodity maybeStoredCommodity, LocalDateTime timestamp, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity edCommodity) {
+    private Optional<Commodity> create(Commodity maybeStoredCommodity, LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, CommodityData commodityData) {
         Commodity created = commodityFactory.create(
             timestamp,
+            type,
             commodityLocation,
             externalReference,
             marketId,
-            edCommodity.getName(),
-            edCommodity.getBuyPrice(),
-            edCommodity.getSellPrice(),
-            edCommodity.getDemand(),
-            edCommodity.getStock(),
-            edCommodity.getAveragePrice()
+            commodityData.getName(),
+            commodityData.getBuyPrice(),
+            commodityData.getSellPrice(),
+            commodityData.getDemand(),
+            commodityData.getStock(),
+            commodityData.getAveragePrice()
         );
 
         if (isNull(maybeStoredCommodity)) {
@@ -94,11 +115,11 @@ public class CommoditySaver {
                 commodityLocation,
                 externalReference,
                 marketId,
-                edCommodity.getBuyPrice(),
-                edCommodity.getSellPrice(),
-                edCommodity.getDemand(),
-                edCommodity.getStock(),
-                edCommodity.getAveragePrice()
+                commodityData.getBuyPrice(),
+                commodityData.getSellPrice(),
+                commodityData.getDemand(),
+                commodityData.getStock(),
+                commodityData.getAveragePrice()
             );
 
             return Optional.of(maybeStoredCommodity);
@@ -127,5 +148,27 @@ public class CommoditySaver {
                 new UpdateHelper(averagePrice, commodity::getAveragePrice, () -> commodity.setAveragePrice(averagePrice))
             )
             .forEach(UpdateHelper::modify);
+    }
+
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder
+    @Data
+    public static class CommodityData {
+        private final String name;
+
+        @Builder.Default
+        private final Integer buyPrice = 0;
+
+        @Builder.Default
+        private final Integer sellPrice = 0;
+
+        @Builder.Default
+        private final Integer stock = 0;
+
+        @Builder.Default
+        private final Integer demand = 0;
+
+        @Builder.Default
+        private final Integer averagePrice = 0;
     }
 }

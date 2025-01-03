@@ -16,6 +16,7 @@ import java.util.UUID;
 public class Commodity {
     private final UUID id;
     private LocalDateTime lastUpdate;
+    private CommodityType type;
     private CommodityLocation commodityLocation;
     private UUID externalReference; //CarrierId/StationId
     private Long marketId; //Storing it, because it might not be guaranteed the station with the given marketId already exists

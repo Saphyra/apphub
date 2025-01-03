@@ -17,6 +17,7 @@ public class CommodityFactory {
 
     public Commodity create(
         LocalDateTime timestamp,
+        CommodityType type,
         CommodityLocation commodityLocation,
         UUID externalReference,
         Long marketId,
@@ -30,6 +31,7 @@ public class CommodityFactory {
         return Commodity.builder()
             .id(idGenerator.randomUuid())
             .lastUpdate(timestamp)
+            .type(type)
             .commodityLocation(commodityLocation)
             .externalReference(externalReference)
             .marketId(marketId)

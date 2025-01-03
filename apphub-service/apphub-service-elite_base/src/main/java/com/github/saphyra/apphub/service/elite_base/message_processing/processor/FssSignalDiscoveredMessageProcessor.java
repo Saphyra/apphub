@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.processo
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.fss_signal_discovered.FssSignalDiscoveredMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 //TODO unit test
 class FssSignalDiscoveredMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final StarSystemSaver starSystemSaver;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -21,8 +23,13 @@ class FssSignalDiscoveredMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        FssSignalDiscoveredMessage fssDiscoveryScanMessage = objectMapperWrapper.readValue(message.getMessage(), FssSignalDiscoveredMessage.class);
+        FssSignalDiscoveredMessage fssSignalDiscoveredMessage = objectMapperWrapper.readValue(message.getMessage(), FssSignalDiscoveredMessage.class);
 
-        //TODO implement
+        starSystemSaver.save(
+            fssSignalDiscoveredMessage.getTimestamp(),
+            fssSignalDiscoveredMessage.getStarId(),
+            fssSignalDiscoveredMessage.getStarName(),
+            fssSignalDiscoveredMessage.getStarPosition()
+        );
     }
 }

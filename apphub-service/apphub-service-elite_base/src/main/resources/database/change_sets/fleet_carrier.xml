@@ -28,7 +28,7 @@
     </changeSet>
 
     <changeSet id="create-index-market_id-to-fleet_carrier" author="Saphyra">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists schemaName="elite_base" tableName="fleet_carrier" columnNames="market_id" />
             </not>

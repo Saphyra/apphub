@@ -27,7 +27,11 @@ public class StarSystemSaver {
         return save(timestamp, null, systemName, null);
     }
 
-    public synchronized StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
+    public  StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
+        return save(timestamp, starId, starName, starPosition, null);
+    }
+
+    public synchronized StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition, String starType) {
         if (isNull(starId) && isNull(starName)) {
             throw new IllegalArgumentException("Both starId and starName are null.");
         }
@@ -48,12 +52,12 @@ public class StarSystemSaver {
                 return created;
             });
 
-        updateMissingFields(timestamp, starSystem, starId, starName, starPosition);
+        updateMissingFields(timestamp, starSystem, starId, starName, starPosition, starType);
 
         return starSystem;
     }
 
-    private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition) {
+    private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, String starType) {
         if (timestamp.isBefore(starSystem.getLastUpdate())) {
             log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;
@@ -65,7 +69,8 @@ public class StarSystemSaver {
                 new UpdateHelper(new Checker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
                 new UpdateHelper(new Checker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
                 new UpdateHelper(new Checker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
-                new UpdateHelper(new Checker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition))
+                new UpdateHelper(new Checker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
+                new UpdateHelper(new Checker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
             )
             .forEach(UpdateHelper::modify);
 

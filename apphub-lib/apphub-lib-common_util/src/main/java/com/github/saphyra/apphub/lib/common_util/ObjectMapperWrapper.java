@@ -84,6 +84,10 @@ public class ObjectMapperWrapper {
         return objectMapper.convertValue(o, clazz);
     }
 
+    public <T> T convertValue(Object o, TypeReference<T> typeReference) {
+        return objectMapper.convertValue(o, typeReference);
+    }
+
     @SneakyThrows
     public JsonNode readTree(String message) {
         return objectMapper.readTree(message);

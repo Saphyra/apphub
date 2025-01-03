@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class CommodityLastUpdateDao extends StaticCachedDao<CommodityLastUpdateEntity, CommodityLastUpdate, String, CommodityLastUpdateRepository> {
+public class CommodityLastUpdateDao extends StaticCachedDao<CommodityLastUpdateEntity, CommodityLastUpdate, CommodityLastUpdateId, CommodityLastUpdateRepository> {
     private final UuidConverter uuidConverter;
 
     CommodityLastUpdateDao(Converter<CommodityLastUpdateEntity, CommodityLastUpdate> converter, CommodityLastUpdateRepository repository, UuidConverter uuidConverter) {
@@ -17,8 +17,11 @@ public class CommodityLastUpdateDao extends StaticCachedDao<CommodityLastUpdateE
     }
 
     @Override
-    protected String idExtractor(CommodityLastUpdate commodityLastUpdate) {
-        return uuidConverter.convertDomain(commodityLastUpdate.getExternalReference());
+    protected CommodityLastUpdateId idExtractor(CommodityLastUpdate commodityLastUpdate) {
+        return CommodityLastUpdateId.builder()
+            .externalReference(uuidConverter.convertDomain(commodityLastUpdate.getExternalReference()))
+            .commodityType(commodityLastUpdate.getCommodityType())
+            .build();
     }
 
     @Override

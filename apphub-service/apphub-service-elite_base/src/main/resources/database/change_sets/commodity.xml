@@ -10,6 +10,7 @@
             <column name="id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
+            <column name="type" type="varchar(255)"/>
             <column name="commodity_location" type="varchar(255)"/>
             <column name="external_reference" type="varchar(37)"/>
             <column name="market_id" type="bigint"/>

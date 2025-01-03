@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.processo
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
 import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
@@ -80,7 +81,7 @@ class CommodityMessageProcessor implements MessageProcessor {
             return;
         }
 
-        commoditySaver.saveAll(commodityMessage.getTimestamp(), commodityLocation, externalReference, commodityMessage.getMarketId(), commodityMessage.getCommodities());
+        commoditySaver.saveAll(commodityMessage.getTimestamp(), CommodityType.COMMODITY, commodityLocation, externalReference, commodityMessage.getMarketId(), commodityMessage.getCommodities());
     }
 
     private CommodityLocation fetchStationTypeByMarketId(Long marketId) {

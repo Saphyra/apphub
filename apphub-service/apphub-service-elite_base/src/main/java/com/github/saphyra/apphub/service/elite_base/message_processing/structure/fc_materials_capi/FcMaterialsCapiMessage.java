@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class FcMaterialsCapiMessage {
-    private String event;
     private LocalDateTime timestamp;
 
     @JsonProperty("CarrierID")
@@ -22,6 +21,7 @@ public class FcMaterialsCapiMessage {
     private Long marketId;
 
     //Unused
+    private String event;
     private Boolean horizons;
     private Boolean odyssey;
 }

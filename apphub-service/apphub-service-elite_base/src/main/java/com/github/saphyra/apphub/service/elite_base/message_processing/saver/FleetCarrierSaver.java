@@ -22,7 +22,15 @@ public class FleetCarrierSaver {
     private final FleetCarrierDao fleetCarrierDao;
     private final FleetCarrierFactory fleetCarrierFactory;
 
-    public FleetCarrier save(LocalDateTime timestamp, UUID starSystemId, String carrierId, String carrierName, FleetCarrierDockingAccess dockingAccess, Long marketId) {
+    public FleetCarrier save(LocalDateTime timestamp, String carrierId, String carrierName, Long marketId) {
+        return save(timestamp, null, carrierId, carrierName, null, marketId);
+    }
+
+    public FleetCarrier save(LocalDateTime timestamp, String carrierId, Long marketId) {
+        return save(timestamp, null, carrierId, null, null, marketId);
+    }
+
+    public synchronized FleetCarrier save(LocalDateTime timestamp, UUID starSystemId, String carrierId, String carrierName, FleetCarrierDockingAccess dockingAccess, Long marketId) {
         if (isBlank(carrierId)) {
             throw new IllegalArgumentException("CarrierId must not be blank");
         }
