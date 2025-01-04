@@ -13,12 +13,12 @@
             <column name="type" type="varchar(255)"/>
             <column name="commodity_location" type="varchar(255)"/>
             <column name="external_reference" type="varchar(37)"/>
-            <column name="market_id" type="bigint"/>
+            <column name="market_id" type="numeric"/>
             <column name="commodity_name" type="text" />
-            <column name="buy_price" type="integer"/>
-            <column name="sell_price" type="integer"/>
-            <column name="demand" type="integer"/>
-            <column name="stock" type="integer"/>
+            <column name="buy_price" type="numeric"/>
+            <column name="sell_price" type="numeric"/>
+            <column name="demand" type="numeric"/>
+            <column name="stock" type="numeric"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity" columnNames="id" constraintName="commodity-pk"/>

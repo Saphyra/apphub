@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.dao.station.station_economy;
 
+import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,9 @@ public class StationEconomySyncService {
 
     public void sync(UUID stationId, List<StationEconomy> economies) {
         List<StationEconomy> existingEconomies = stationEconomyDao.getByStationId(stationId);
-        Map<StationEconomyEnum, Double> existingEconomyMapping = existingEconomies.stream()
+        Map<EconomyEnum, Double> existingEconomyMapping = existingEconomies.stream()
             .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion, Double::sum));
-        Map<StationEconomyEnum, Double> newEconomyMapping = economies.stream()
+        Map<EconomyEnum, Double> newEconomyMapping = economies.stream()
             .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion, Double::sum));
 
         List<StationEconomy> toSave = economies.stream()

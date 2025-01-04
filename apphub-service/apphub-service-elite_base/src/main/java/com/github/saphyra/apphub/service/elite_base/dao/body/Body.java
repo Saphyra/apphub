@@ -18,4 +18,5 @@ public class Body {
     private BodyType type;
     private Long bodyId;
     private String bodyName;
+    private Double distanceFromStar;
 }

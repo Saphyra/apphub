@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.elite_base.dao.station.StationDao;
 import com.github.saphyra.apphub.service.elite_base.dao.station.StationFactory;
 import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomy;
-import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyFactory;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_service.StationServiceEnum;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.Economy;
@@ -51,7 +51,7 @@ public class StationSaver {
         StationType stationType,
         Long marketId,
         Allegiance allegiance,
-        StationEconomyEnum economy,
+        EconomyEnum economy,
         String[] stationServices,
         Economy[] economies
     ) {
@@ -70,7 +70,7 @@ public class StationSaver {
         Station station = stationDao.findByStarSystemIdAndStationName(starSystemId, stationName)
             .orElseGet(() -> {
                 Station created = stationFactory.create(stationId, timestamp, starSystemId, bodyId, stationName, stationType, marketId, allegiance, economy, parsedServices, parsedEconomies);
-                log.info("Saving new {}", created);
+                log.debug("Saving new {}", created);
                 stationDao.save(created);
                 return created;
             });
@@ -85,7 +85,7 @@ public class StationSaver {
         Station station,
         UUID bodyId,
         Allegiance allegiance,
-        StationEconomyEnum economy,
+        EconomyEnum economy,
         List<StationServiceEnum> stationServices,
         List<StationEconomy> economies,
         StationType stationType

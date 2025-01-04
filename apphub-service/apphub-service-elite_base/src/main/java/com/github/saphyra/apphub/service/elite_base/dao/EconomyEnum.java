@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.elite_base.dao.station.station_economy;
+package com.github.saphyra.apphub.service.elite_base.dao;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @RequiredArgsConstructor
-public enum StationEconomyEnum {
+public enum EconomyEnum {
     REFINERY("Refinery"),
     INDUSTRIAL("Industrial"),
     AGRICULTURE("Agri"),
@@ -24,12 +24,13 @@ public enum StationEconomyEnum {
     PRISON("Prison"),
     RESCUE("Rescue"),
     MEGA_SHIP("MegaShip"),
+    NONE("None"),
     ;
 
     private final String value;
 
     //TODO unit test
-    public static StationEconomyEnum parse(String in) {
+    public static EconomyEnum parse(String in) {
         if (isBlank(in)) {
             return null;
         }
@@ -39,6 +40,6 @@ public enum StationEconomyEnum {
         return Arrays.stream(values())
             .filter(allegiance -> allegiance.value.equalsIgnoreCase(parsed))
             .findAny()
-            .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + StationEconomyEnum.class.getSimpleName() + ". Parsed: " + parsed));
+            .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + EconomyEnum.class.getSimpleName() + ". Parsed: " + parsed));
     }
 }

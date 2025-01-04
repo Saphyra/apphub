@@ -17,7 +17,7 @@
             <column name="carrier_name" type="text"/>
             <column name="star_system_id" type="varchar(37)"/>
             <column name="docking_access" type="varchar(255)"/>
-            <column name="market_id" type="bigint"/>
+            <column name="market_id" type="numeric"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="fleet_carrier" columnNames="id" constraintName="fleet_carrier-pk"/>
@@ -25,14 +25,6 @@
         <createIndex schemaName="elite_base" tableName="fleet_carrier" indexName="index-fleet_carrier-carrier_name">
             <column name="carrier_name"/>
         </createIndex>
-    </changeSet>
-
-    <changeSet id="create-index-market_id-to-fleet_carrier" author="Saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="fleet_carrier" columnNames="market_id" />
-            </not>
-        </preConditions>
 
         <createIndex schemaName="elite_base" tableName="fleet_carrier" indexName="index-fleet_carrier-market_id">
             <column name="market_id"/>

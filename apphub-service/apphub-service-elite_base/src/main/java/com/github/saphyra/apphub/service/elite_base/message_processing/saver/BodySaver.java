@@ -25,7 +25,11 @@ public class BodySaver {
     private final BodyDao bodyDao;
     private final BodyFactory bodyFactory;
 
-    public synchronized Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
+    public Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
+        return save(timestamp, starSystemId, bodyType, bodyId, bodyName, null);
+    }
+
+    public synchronized Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         if ((isNull(starSystemId) || isNull(bodyId)) && isNull(bodyName)) {
             throw new IllegalArgumentException("StartSystemId or bodyId and bodyName are null. Cannot identify body location.");
         }
@@ -40,18 +44,18 @@ public class BodySaver {
             .peek(ss -> log.debug("Found: {}", ss))
             .findAny()
             .orElseGet(() -> {
-                Body created = bodyFactory.create(timestamp, starSystemId, bodyType, bodyId, bodyName);
-                log.info("Saving new {}", created);
+                Body created = bodyFactory.create(timestamp, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
+                log.debug("Saving new {}", created);
                 bodyDao.save(created);
                 return created;
             });
 
-        updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName);
+        updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
 
         return body;
     }
 
-    private void updateFields(LocalDateTime timestamp, Body body, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
+    private void updateFields(LocalDateTime timestamp, Body body, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         if (timestamp.isBefore(body.getLastUpdate())) {
             log.debug("Body {} has newer data than {}", body.getId(), timestamp);
             return;
@@ -62,7 +66,8 @@ public class BodySaver {
                 new UpdateHelper(starSystemId, body::getStarSystemId, () -> body.setStarSystemId(starSystemId)),
                 new UpdateHelper(bodyType, body::getType, () -> body.setType(bodyType)),
                 new UpdateHelper(bodyId, body::getBodyId, () -> body.setBodyId(bodyId)),
-                new UpdateHelper(bodyName, body::getBodyName, () -> body.setBodyName(bodyName))
+                new UpdateHelper(bodyName, body::getBodyName, () -> body.setBodyName(bodyName)),
+                new UpdateHelper(distanceFromStar, body::getDistanceFromStar, () -> body.setDistanceFromStar(distanceFromStar))
             )
             .forEach(UpdateHelper::modify);
 

@@ -25,4 +25,5 @@ class BodyEntity {
     private BodyType type;
     private Long bodyId;
     private String bodyName;
+    private Double distanceFromStar;
 }

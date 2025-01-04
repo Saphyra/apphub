@@ -9,4 +9,4 @@ interval:
       gameCleanup: 30000 #30 sec
       deletion: 10000 #10 sec
   eliteBase:
-    processMessages: PT1S
+    processMessages: PT5S

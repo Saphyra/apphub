@@ -47,7 +47,7 @@ public class StarSystemSaver {
             .findAny()
             .orElseGet(() -> {
                 StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition);
-                log.info("Saving new {}", created);
+                log.debug("Saving new {}", created);
                 starSystemDao.save(created);
                 return created;
             });
@@ -66,11 +66,11 @@ public class StarSystemSaver {
         StarSystemPosition starSystemPosition = StarSystemPosition.parse(starPosition);
 
         List.of(
-                new UpdateHelper(new Checker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
-                new UpdateHelper(new Checker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
-                new UpdateHelper(new Checker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
-                new UpdateHelper(new Checker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
-                new UpdateHelper(new Checker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
+                new UpdateHelper(new DefaultChecker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
+                new UpdateHelper(new DefaultChecker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
+                new UpdateHelper(new DefaultChecker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
+                new UpdateHelper(new DefaultChecker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
+                new UpdateHelper(new DefaultChecker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
             )
             .forEach(UpdateHelper::modify);
 

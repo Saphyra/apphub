@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.elite_base.dao.minor_faction;
+package com.github.saphyra.apphub.service.elite_base.dao;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,8 +7,8 @@ import java.util.Arrays;
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @RequiredArgsConstructor
-public enum FactionState {
-    NONE(""),
+public enum FactionStateEnum {
+    NONE("None"),
     PIRATE_ATTACK("PirateAttack"),
     EXPANSION("Expansion"),
     INVESTMENT("Investment"),
@@ -25,12 +25,16 @@ public enum FactionState {
     DROUGHT("Drought"),
     LOCKDOWN("Lockdown"),
     RETREAT("Retreat"),
+    CIVIL_LIBERTY("CivilLiberty"),
+    BLIGHT("Blight"),
+    NATURAL_DISASTER("NaturalDisaster"),
+    TERRORISM("Terrorism"),
     ;
 
     private final String value;
 
     //TODO unit test
-    public static FactionState parse(String in) {
+    public static FactionStateEnum parse(String in) {
         if (isBlank(in)) {
             return NONE;
         }
@@ -38,6 +42,6 @@ public enum FactionState {
         return Arrays.stream(values())
             .filter(factionState -> factionState.value.equalsIgnoreCase(in))
             .findAny()
-            .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + FactionState.class.getSimpleName()));
+            .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + FactionStateEnum.class.getSimpleName()));
     }
 }

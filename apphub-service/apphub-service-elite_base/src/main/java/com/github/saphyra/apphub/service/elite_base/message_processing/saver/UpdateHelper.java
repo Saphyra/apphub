@@ -10,7 +10,7 @@ class UpdateHelper {
     private final Runnable updater;
 
     UpdateHelper(Object newValue, Supplier<Object> currentValueProvider, Runnable updater) {
-        this.checker = new Checker(newValue, currentValueProvider);
+        this.checker = new DefaultChecker(newValue, currentValueProvider);
         this.updater = updater;
     }
 

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomy;
-import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.dao.station.station_service.StationServiceEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class Station {
     private StationType type;
     private Long marketId;
     private Allegiance allegiance;
-    private StationEconomyEnum economy;
+    private EconomyEnum economy;
     private LazyLoadedField<List<StationServiceEnum>> services;
     private LazyLoadedField<List<StationEconomy>> economies;
 

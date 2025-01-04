@@ -14,6 +14,7 @@ public enum Allegiance {
     INDEPENDENT("Independent"),
     THARGOID("Thargoid"),
     PILOTS_FEDERATION("PilotsFederation"),
+    GUARDIAN("Guardian"),
     NONE(""),
     ;
 

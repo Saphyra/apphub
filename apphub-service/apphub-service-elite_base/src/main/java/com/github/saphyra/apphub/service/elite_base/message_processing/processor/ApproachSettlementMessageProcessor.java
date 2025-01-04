@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.elite_base.dao.body.BodyType;
-import com.github.saphyra.apphub.service.elite_base.dao.minor_faction.FactionState;
+import com.github.saphyra.apphub.service.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.elite_base.dao.station.station_economy.StationEconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.MinorFactionSaver;
@@ -59,10 +59,10 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
         );
 
         Optional.ofNullable(approachSettlementMessage.getControllingFaction())
-            .flatMap(controllingFaction -> minorFactionSaver.save(
+            .ifPresent(controllingFaction -> minorFactionSaver.save(
                 approachSettlementMessage.getTimestamp(),
                 approachSettlementMessage.getControllingFaction().getFactionName(),
-                FactionState.parse(approachSettlementMessage.getControllingFaction().getEconomicState())
+                FactionStateEnum.parse(approachSettlementMessage.getControllingFaction().getEconomicState())
             ));
 
         if (nonNull(approachSettlementMessage.getStationServices())) {
@@ -74,7 +74,7 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
                 null,
                 approachSettlementMessage.getMarketId(),
                 Allegiance.parse(approachSettlementMessage.getAllegiance()),
-                StationEconomyEnum.parse(approachSettlementMessage.getEconomy()),
+                EconomyEnum.parse(approachSettlementMessage.getEconomy()),
                 approachSettlementMessage.getStationServices(),
                 approachSettlementMessage.getEconomies()
             );

@@ -13,7 +13,7 @@
             <column name="last_update" type="text"/>
             <column name="star_system_id" type="varchar(37)"/>
             <column name="body_id" type="varchar(37)"/>
-            <column name="market_id" type="bigint"/>
+            <column name="market_id" type="numeric"/>
             <column name="settlement_name" type="text"/>
             <column name="longitude" type="numeric"/>
             <column name="latitude" type="numeric"/>

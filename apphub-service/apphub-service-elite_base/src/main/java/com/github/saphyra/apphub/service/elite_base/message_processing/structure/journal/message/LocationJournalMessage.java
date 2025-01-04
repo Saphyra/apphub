@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.structur
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.Economy;
-import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.Conflict;
+import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ThargoidWar;
@@ -24,7 +24,7 @@ public class LocationJournalMessage extends JournalMessage {
     private Faction[] factions;
 
     @JsonProperty("Conflicts")
-    private Conflict[] conflicts;
+    private EdConflict[] conflicts;
 
     @JsonProperty("Population")
     private Long population;

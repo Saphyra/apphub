@@ -11,7 +11,7 @@ public class Ring {
     private String ringName;
 
     @JsonProperty("RingClass")
-    private String ringClass;
+    private String ringType;
 
     @JsonProperty("InnerRad")
     private Double innerRadius;

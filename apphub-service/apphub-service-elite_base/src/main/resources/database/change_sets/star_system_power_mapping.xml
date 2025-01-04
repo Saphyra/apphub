@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-star_system_power_mapping" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="star_system_power_mapping"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="star_system_power_mapping">
+            <column name="star_system_id" type="varchar(37)"/>
+            <column name="power" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="star_system_power_mapping" columnNames="star_system_id,power" constraintName="star_system_power_mapping-pk"/>
+    </changeSet>
+</databaseChangeLog>

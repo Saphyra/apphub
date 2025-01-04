@@ -19,6 +19,22 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class CollectionUtils {
+    public static <T> int size(T[] array) {
+        if (isNull(array)) {
+            return 0;
+        }
+
+        return array.length;
+    }
+
+    public static int size(Collection<?> collection) {
+        if (isNull(collection)) {
+            return 0;
+        }
+
+        return collection.size();
+    }
+
     @SafeVarargs
     public static <T> Set<T> toSet(T... elements) {
         Set<T> result = new HashSet<>();
@@ -28,6 +44,10 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <T> List<T> toList(T... elements) {
+        if (isNull(elements)) {
+            return Collections.emptyList();
+        }
+
         List<T> list = new ArrayList<>();
         return toList(list, elements);
     }

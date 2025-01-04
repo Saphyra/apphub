@@ -11,7 +11,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_update" type="text"/>
-            <column name="average_price" type="integer"/>
+            <column name="average_price" type="numeric"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity_average_price" columnNames="commodity_name" constraintName="commodity_average_price-pk"/>

@@ -5,7 +5,7 @@ elite-base:
   messageHandler:
     enabled: false
   messageExpiration: P30D
-  messageProcessorBatchSize: 500
+  messageProcessorBatchSize: 1000
   messageProcessorSublistSize: 50
   executor:
     threadCount: 10

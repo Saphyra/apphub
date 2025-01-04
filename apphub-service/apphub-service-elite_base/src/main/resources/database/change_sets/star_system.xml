@@ -11,7 +11,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_update" type="text"/>
-            <column name="star_id" type="bigint">
+            <column name="star_id" type="numeric">
                 <constraints unique="true"/>
             </column>
             <column name="star_name" type="text">

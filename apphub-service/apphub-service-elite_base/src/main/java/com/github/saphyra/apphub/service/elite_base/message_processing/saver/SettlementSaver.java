@@ -30,7 +30,7 @@ public class SettlementSaver {
         Settlement settlement = settlementDao.findByStarSystemIdAndSettlementName(starSystemId, settlementName)
             .orElseGet(() -> {
                 Settlement created = settlementFactory.create(timestamp, starSystemId, bodyId, settlementName, marketId, longitude, latitude);
-                log.info("Saving new {}", created);
+                log.debug("Saving new {}", created);
                 settlementDao.save(created);
                 return created;
             });

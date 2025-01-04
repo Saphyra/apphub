@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.Conflict;
+import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ThargoidWar;
@@ -17,7 +17,7 @@ public class FsdJumpJournalMessage extends JournalMessage {
     private String bodyType;
 
     @JsonProperty("Conflicts")
-    private Conflict[] conflicts;
+    private EdConflict[] conflicts;
 
     @JsonProperty("ControllingPower")
     private String controllingPower;
@@ -47,7 +47,7 @@ public class FsdJumpJournalMessage extends JournalMessage {
     private ControllingFaction controllingFaction;
 
     @JsonProperty("SystemSecurity")
-    private String systemSecurity;
+    private String securityLevel;
 
     //Unused
     @JsonProperty("SystemGovernment")

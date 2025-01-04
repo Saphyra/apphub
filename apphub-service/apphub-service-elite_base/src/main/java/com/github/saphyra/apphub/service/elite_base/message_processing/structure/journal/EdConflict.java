@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class Conflict {
+public class EdConflict {
     @JsonProperty("Status")
     private String status;
 

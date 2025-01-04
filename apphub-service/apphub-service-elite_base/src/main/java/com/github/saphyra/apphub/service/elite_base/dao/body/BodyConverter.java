@@ -24,6 +24,7 @@ class BodyConverter extends ConverterBase<BodyEntity, Body> {
             .type(domain.getType())
             .bodyId(domain.getBodyId())
             .bodyName(domain.getBodyName())
+            .distanceFromStar(domain.getDistanceFromStar())
             .build();
     }
 
@@ -36,6 +37,7 @@ class BodyConverter extends ConverterBase<BodyEntity, Body> {
             .type(entity.getType())
             .bodyId(entity.getBodyId())
             .bodyName(entity.getBodyName())
+            .distanceFromStar(entity.getDistanceFromStar())
             .build();
     }
 }

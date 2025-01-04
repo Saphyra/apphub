@@ -15,7 +15,7 @@ import java.util.UUID;
 public class BodyFactory {
     private final IdGenerator idGenerator;
 
-    public Body create(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
+    public Body create(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         return Body.builder()
             .id(idGenerator.randomUuid())
             .lastUpdate(timestamp)
@@ -23,6 +23,7 @@ public class BodyFactory {
             .type(bodyType)
             .bodyId(bodyId)
             .bodyName(bodyName)
+            .distanceFromStar(distanceFromStar)
             .build();
     }
 }

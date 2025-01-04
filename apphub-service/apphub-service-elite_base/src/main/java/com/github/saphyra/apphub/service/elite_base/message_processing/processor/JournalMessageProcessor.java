@@ -1,7 +1,22 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.dao.SecurityLevel;
+import com.github.saphyra.apphub.service.elite_base.dao.body.Body;
+import com.github.saphyra.apphub.service.elite_base.dao.body.BodyType;
+import com.github.saphyra.apphub.service.elite_base.dao.body_data.ReserveLevel;
+import com.github.saphyra.apphub.service.elite_base.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.Power;
+import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodyDataSaver;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodySaver;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.MinorFactionSaver;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StarSystemDataSaver;
+import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.FsdJumpJournalMessage;
@@ -12,12 +27,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.Objects.nonNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
 class JournalMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final StarSystemSaver starSystemSaver;
+    private final BodySaver bodySaver;
+    private final BodyDataSaver bodyDataSaver;
+    private final StarSystemDataSaver starSystemDataSaver;
+    private final MinorFactionSaver minorFactionSaver;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -35,9 +62,11 @@ class JournalMessageProcessor implements MessageProcessor {
         switch (event) {
             case "Scan":
                 ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
+                processScanJournalMessage(scanJournalMessage);
                 break;
             case "FSDJump":
                 FsdJumpJournalMessage fsdJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
+                processFsdJumpJournalMessage(fsdJumpJournalMessage);
                 break;
             case "Docked":
                 DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
@@ -54,5 +83,70 @@ class JournalMessageProcessor implements MessageProcessor {
             default:
                 throw new RuntimeException("Unhandled event: " + event);
         }
+    }
+
+    private void processFsdJumpJournalMessage(FsdJumpJournalMessage message) {
+        StarSystem starSystem = starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
+        );
+
+        bodySaver.save(
+            message.getTimestamp(),
+            starSystem.getId(),
+            BodyType.STAR,
+            message.getBodyId(),
+            message.getBodyName()
+        );
+
+        List<MinorFaction> minorFactions = minorFactionSaver.save(message.getTimestamp(), message.getFactions());
+
+        starSystemDataSaver.save(
+            starSystem.getId(),
+            message.getTimestamp(),
+            message.getPopulation(),
+            Allegiance.parse(message.getAllegiance()),
+            EconomyEnum.parse(message.getEconomy()),
+            EconomyEnum.parse(message.getSecondEconomy()),
+            SecurityLevel.parse(message.getSecurityLevel()),
+            Power.parse(message.getControllingPower()),
+            PowerplayState.parse(message.getPowerplayState()),
+            minorFactions,
+            message.getControllingFaction(),
+            Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(Collections.emptyList()),
+            message.getConflicts()
+        );
+    }
+
+    private void processScanJournalMessage(ScanJournalMessage message) {
+        StarSystem starSystem = starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition(),
+            message.getStarType()
+        );
+
+        Body body = bodySaver.save(
+            message.getTimestamp(),
+            starSystem.getId(),
+            BodyType.WORLD,
+            message.getBodyId(),
+            message.getBodyName(),
+            message.getDistanceFromStar()
+        );
+
+        bodyDataSaver.save(
+            body.getId(),
+            message.getTimestamp(),
+            message.getLandable(),
+            message.getSurfaceGravity(),
+            ReserveLevel.parse(message.getReserveLevel()),
+            nonNull(message.getRings()) && message.getRings().length > 0,
+            message.getMaterials(),
+            message.getRings()
+        );
     }
 }

@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.elite_base.dao.minor_faction;
 
+import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.dao.FactionStateEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,5 +24,8 @@ class MinorFactionEntity {
     private String lastUpdate;
     private String factionName;
     @Enumerated(EnumType.STRING)
-    private FactionState state;
+    private FactionStateEnum state;
+    private Double influence;
+    @Enumerated(EnumType.STRING)
+    private Allegiance allegiance;
 }

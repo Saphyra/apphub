@@ -13,23 +13,17 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class ScanJournalMessage extends JournalMessage {
-    @JsonProperty("ScanType")
-    private String scanType;
+    @JsonProperty("StarType")
+    private String starType;
 
     @JsonProperty("DistanceFromArrivalLS")
     private Double distanceFromStar;
 
     @JsonProperty("Landable")
-    private Boolean landable;
+    private Boolean landable = false;
 
     @JsonProperty("Materials")
     private NamePercentPair[] materials;
-
-    @JsonProperty("Parents")
-    private Map<String, Integer>[] parents;
-
-    @JsonProperty("PlanetClass")
-    private String planetClass;
 
     @JsonProperty("SurfaceGravity")
     private Double surfaceGravity;
@@ -40,10 +34,16 @@ public class ScanJournalMessage extends JournalMessage {
     @JsonProperty("Rings")
     private Ring[] rings;
 
-    @JsonProperty("StarType")
-    private String startType;
-
     //Unused
+    @JsonProperty("ScanType")
+    private String scanType;
+
+    @JsonProperty("PlanetClass")
+    private String planetClass;
+
+    @JsonProperty("Parents")
+    private Map<String, Integer>[] parents;
+
     @JsonProperty("Atmosphere")
     private String atmosphere;
 

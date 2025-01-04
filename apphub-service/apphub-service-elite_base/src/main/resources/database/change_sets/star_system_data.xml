@@ -1,0 +1,27 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-star_system_data_data" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="star_system_data"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="star_system_data">
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="population" type="numeric" />
+            <column name="allegiance" type="varchar(255)" />
+            <column name="economy" type="varchar(255)" />
+            <column name="secondary_economy" type="varchar(255)" />
+            <column name="security_level" type="varchar(255)" />
+            <column name="controlling_power" type="varchar(255)" />
+            <column name="powerplay_state" type="varchar(255)" />
+            <column name="controlling_faction_id" type="varchar(37)"/>
+            <column name="controlling_faction_state" type="varchar(255)" />
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="star_system_data" columnNames="star_system_id" constraintName="star_system_data-pk"/>
+    </changeSet>
+</databaseChangeLog>

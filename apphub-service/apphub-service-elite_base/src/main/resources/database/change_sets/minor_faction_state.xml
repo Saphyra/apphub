@@ -1,0 +1,27 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-minor_faction_state" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="minor_faction_state"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="minor_faction_state">
+            <column name="minor_faction_id" type="varchar(37)"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="trend" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="minor_faction_state" columnNames="minor_faction_id,status,state" constraintName="minor_faction_state-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="minor_faction_state" indexName="index-minor_faction_id-status-minor_faction_state">
+            <column name="minor_faction_id" />
+            <column name="status" />
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="minor_faction_state" indexName="index-minor_faction_id-minor_faction_state">
+            <column name="minor_faction_id" />
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
