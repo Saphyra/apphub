@@ -31,41 +31,4 @@
             <column name="exception_id" type="varchar(37)"/>
         </addColumn>
     </changeSet>
-
-    <changeSet id="create-index-created_at-message" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="message" columnNames="created_at"/>
-            </not>
-        </preConditions>
-
-        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-created_at">
-            <column name="created_at"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="create-index-status-message" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="message" columnNames="status"/>
-            </not>
-        </preConditions>
-
-        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-status">
-            <column name="status"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="create-index-status-created_at-message" author="saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="message" columnNames="status,created_at"/>
-            </not>
-        </preConditions>
-
-        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-status-created_at">
-            <column name="status"/>
-            <column name="created_at"/>
-        </createIndex>
-    </changeSet>
 </databaseChangeLog>

@@ -7,8 +7,12 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="star_system_minor_faction_mapping">
-            <column name="star_system_id" type="varchar(37)"/>
-            <column name="minor_faction_id" type="varchar(37)"/>
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="minor_faction_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="star_system_minor_faction_mapping" columnNames="star_system_id,minor_faction_id" constraintName="star_system_minor_faction_mapping-pk"/>

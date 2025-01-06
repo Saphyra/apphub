@@ -1,6 +1,5 @@
-package com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update;
+package com.github.saphyra.apphub.service.elite_base.dao.last_update;
 
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,8 +15,8 @@ import java.io.Serializable;
 @Data
 @Builder
 @Embeddable
-public class CommodityLastUpdateId implements Serializable {
+public class LastUpdateId implements Serializable {
     private String externalReference;
     @Enumerated(EnumType.STRING)
-    private CommodityType commodityType;
+    private EntityType type;
 }

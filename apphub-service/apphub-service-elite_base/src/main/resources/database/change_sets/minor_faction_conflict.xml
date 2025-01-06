@@ -16,9 +16,5 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="minor_faction_conflict" columnNames="id" constraintName="minor_faction_conflict-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="minor_faction_conflict" indexName="index-star_system_id-minor_faction_conflict">
-            <column name="star_system_id"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

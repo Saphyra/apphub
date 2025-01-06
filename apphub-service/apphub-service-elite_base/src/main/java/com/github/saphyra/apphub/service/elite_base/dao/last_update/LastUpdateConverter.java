@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update;
+package com.github.saphyra.apphub.service.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
@@ -11,26 +11,26 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 //TODO unit test
-class CommodityLastUpdateConverter extends ConverterBase<CommodityLastUpdateEntity, CommodityLastUpdate> {
+class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;
 
     @Override
-    protected CommodityLastUpdateEntity processDomainConversion(CommodityLastUpdate domain) {
-        return CommodityLastUpdateEntity.builder()
-            .id(CommodityLastUpdateId.builder()
+    protected LastUpdateEntity processDomainConversion(LastUpdate domain) {
+        return LastUpdateEntity.builder()
+            .id(LastUpdateId.builder()
                 .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-                .commodityType(domain.getCommodityType())
+                .type(domain.getType())
                 .build())
             .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .build();
     }
 
     @Override
-    protected CommodityLastUpdate processEntityConversion(CommodityLastUpdateEntity entity) {
-        return CommodityLastUpdate.builder()
+    protected LastUpdate processEntityConversion(LastUpdateEntity entity) {
+        return LastUpdate.builder()
             .externalReference(uuidConverter.convertEntity(entity.getId().getExternalReference()))
-            .commodityType(entity.getId().getCommodityType())
+            .type(entity.getId().getType())
             .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .build();
     }

@@ -20,6 +20,7 @@ public enum Power {
     NAKATO_KAINE("Nakato Kaine"),
     PRANAV_ANTAL("Pranav Antal"),
     ZEMINA_TORVAL("Zemina Torval"),
+    ZACHARY_HUDSON("Zachary Hudson"),
     ;
     private final String value;
 

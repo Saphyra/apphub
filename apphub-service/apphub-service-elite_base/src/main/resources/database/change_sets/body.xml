@@ -19,14 +19,5 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="body" columnNames="id" constraintName="body-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="body" indexName="index-body-star_system_id-body_id">
-            <column name="star_system_id"/>
-            <column name="body_id"/>
-        </createIndex>
-
-        <createIndex schemaName="elite_base" tableName="body" indexName="index-body-body_name">
-            <column name="body_name"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

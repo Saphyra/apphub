@@ -12,6 +12,7 @@ public enum PowerplayState {
     EXPLOITED("Exploited"),
     FORTIFIED("Fortified"),
     STRONGHOLD("Stronghold"),
+    CONTESTED("Contested"),
     ;
     private final String value;
 

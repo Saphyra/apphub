@@ -27,17 +27,9 @@ class DockingDeniedMessageProcessor implements MessageProcessor {
 
         stationSaverUtil.saveStationOrFleetCarrier(
             dockingDeniedMessage.getTimestamp(),
-            null,
-            null,
             dockingDeniedMessage.getStationType(),
             dockingDeniedMessage.getMarketId(),
-            dockingDeniedMessage.getStationName(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            dockingDeniedMessage.getStationName()
         );
     }
 }

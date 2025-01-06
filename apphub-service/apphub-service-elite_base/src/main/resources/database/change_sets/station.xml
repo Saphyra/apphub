@@ -22,14 +22,5 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="station" columnNames="id" constraintName="station-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="station" indexName="index-station-star_system_id-station_name">
-            <column name="star_system_id"/>
-            <column name="station_name"/>
-        </createIndex>
-
-        <createIndex schemaName="elite_base" tableName="station" indexName="index-station-market_id">
-            <column name="market_id"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

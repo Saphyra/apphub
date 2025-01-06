@@ -1,13 +1,13 @@
-package com.github.saphyra.apphub.service.elite_base.dao.commodity;
+package com.github.saphyra.apphub.service.elite_base.dao.loadout;
 
 import com.github.saphyra.apphub.service.elite_base.dao.last_update.EntityType;
 import com.github.saphyra.apphub.service.elite_base.dao.last_update.EntityTypeProvider;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum CommodityType implements EntityTypeProvider {
-    COMMODITY(EntityType.COMMODITY),
-    FC_MATERIAL(EntityType.FC_MATERIAL),
+public enum LoadoutType implements EntityTypeProvider {
+    OUTFITTING(EntityType.SHIP_MODULE),
+    SHIPYARD(EntityType.SHIP),
     ;
 
     private final EntityType entityType;

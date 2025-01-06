@@ -7,8 +7,12 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="star_system_power_mapping">
-            <column name="star_system_id" type="varchar(37)"/>
-            <column name="power" type="varchar(255)"/>
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="power" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="star_system_power_mapping" columnNames="star_system_id,power" constraintName="star_system_power_mapping-pk"/>

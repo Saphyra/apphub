@@ -60,32 +60,31 @@ class JournalMessageProcessor implements MessageProcessor {
             .asText();
 
         switch (event) {
-            case "Scan":
+            case "Scan" -> {
                 ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
                 processScanJournalMessage(scanJournalMessage);
-                break;
-            case "FSDJump":
+            }
+            case "FSDJump" -> {
                 FsdJumpJournalMessage fsdJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
                 processFsdJumpJournalMessage(fsdJumpJournalMessage);
-                break;
-            case "Docked":
+            }
+            case "Docked" -> {
                 DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
                 processDockedJournalMessage(dockedJournalMessage);
-                break;
-            case "CarrierJump":
+            }
+            case "CarrierJump" -> {
                 CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
                 processCarrierJumpJournalMessage(carrierJumpJournalMessage);
-                break;
-            case "Location":
+            }
+            case "Location" -> {
                 LocationJournalMessage locationJournalMessage = objectMapperWrapper.readValue(message.getMessage(), LocationJournalMessage.class);
                 processLocationJournalMessage(locationJournalMessage);
-                break;
-            case "SAASignalsFound":
+            }
+            case "SAASignalsFound" -> {
                 SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
                 processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
-                break;
-            default:
-                throw new RuntimeException("Unhandled event: " + event);
+            }
+            default -> throw new RuntimeException("Unhandled event: " + event);
         }
     }
 
@@ -133,7 +132,7 @@ class JournalMessageProcessor implements MessageProcessor {
             message.getConflicts()
         );
 
-        if(!isNull(message.getMarketId())){
+        if (!isNull(message.getMarketId())) {
             stationSaverUtil.saveStationOrFleetCarrier(
                 message.getTimestamp(),
                 starSystem.getId(),

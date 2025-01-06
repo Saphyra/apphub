@@ -27,17 +27,9 @@ class DockingGrantedMessageProcessor implements MessageProcessor {
 
         stationSaverUtil.saveStationOrFleetCarrier(
             dockingGrantedMessage.getTimestamp(),
-            null,
-            null,
             dockingGrantedMessage.getStationType(),
             dockingGrantedMessage.getMarketId(),
-            dockingGrantedMessage.getStationName(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            dockingGrantedMessage.getStationName()
         );
     }
 }

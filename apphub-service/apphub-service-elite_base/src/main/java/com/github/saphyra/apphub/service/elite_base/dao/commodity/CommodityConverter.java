@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.avg_price.CommodityAveragePriceFactory;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdate;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateDao;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateId;
+import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
     private final DateTimeConverter dateTimeConverter;
     private final CommodityAveragePriceDao commodityAveragePriceDao;
     private final CommodityAveragePriceFactory commodityAveragePriceFactory;
-    private final CommodityLastUpdateDao commodityLastUpdateDao;
+    private final LastUpdateDao lastUpdateDao;
 
     @Override
     protected CommodityEntity processDomainConversion(Commodity domain) {
@@ -49,11 +49,11 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
         UUID externalReference = uuidConverter.convertEntity(entity.getExternalReference());
         return Commodity.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
-            .lastUpdate(commodityLastUpdateDao.findById(CommodityLastUpdateId.builder()
+            .lastUpdate(lastUpdateDao.findById(LastUpdateId.builder()
                     .externalReference(entity.getExternalReference())
-                    .commodityType(entity.getType())
+                    .type(entity.getType().get())
                     .build())
-                .map(CommodityLastUpdate::getLastUpdate)
+                .map(LastUpdate::getLastUpdate)
                 .orElse(null))
             .type(entity.getType())
             .commodityLocation(entity.getCommodityLocation())

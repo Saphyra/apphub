@@ -16,9 +16,5 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="body_material" columnNames="id" constraintName="body_material-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="body_material" indexName="index-body_id-body_material">
-            <column name="body_id"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

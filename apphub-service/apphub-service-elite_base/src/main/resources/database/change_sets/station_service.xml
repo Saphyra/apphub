@@ -15,9 +15,5 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="station_service" columnNames="id" constraintName="station_service-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="station_service" indexName="index-station_service-station_id">
-            <column name="station_id"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

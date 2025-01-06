@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update;
+package com.github.saphyra.apphub.service.elite_base.dao.last_update;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "commodity_last_update")
-class CommodityLastUpdateEntity {
+@Table(schema = "elite_base", name = "last_update")
+class LastUpdateEntity {
     @EmbeddedId
-    private CommodityLastUpdateId id;
+    private LastUpdateId id;
     private String lastUpdate;
 }

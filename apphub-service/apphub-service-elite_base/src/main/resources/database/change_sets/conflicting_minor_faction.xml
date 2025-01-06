@@ -7,16 +7,16 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="conflicting_minor_faction">
-            <column name="conflict_id" type="varchar(37)"/>
-            <column name="faction_id" type="varchar(37)"/>
+            <column name="conflict_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="faction_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
             <column name="won_days" type="numeric"/>
             <column name="stake" type="text"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="conflicting_minor_faction" columnNames="conflict_id,faction_id" constraintName="conflicting_minor_faction-pk"/>
-
-        <createIndex schemaName="elite_base" tableName="conflicting_minor_faction" indexName="index-conflict_id-conflicting_minor_faction">
-            <column name="conflict_id"/>
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

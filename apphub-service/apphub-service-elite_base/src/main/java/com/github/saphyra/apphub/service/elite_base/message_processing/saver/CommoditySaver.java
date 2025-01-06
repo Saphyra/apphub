@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityFactory;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateDao;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.last_update.CommodityLastUpdateFactory;
+import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.commodity.EdCommodity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,8 +34,8 @@ import static java.util.Objects.isNull;
 public class CommoditySaver {
     private final CommodityDao commodityDao;
     private final CommodityFactory commodityFactory;
-    private final CommodityLastUpdateDao commodityLastUpdateDao;
-    private final CommodityLastUpdateFactory commodityLastUpdateFactory;
+    private final LastUpdateDao lastUpdateDao;
+    private final LastUpdateFactory lastUpdateFactory;
 
     public synchronized void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity[] commodities) {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
@@ -57,7 +57,7 @@ public class CommoditySaver {
             throw new IllegalStateException("Both commodityLocation or externalReference and marketId is null");
         }
 
-        commodityLastUpdateDao.save(commodityLastUpdateFactory.create(externalReference, type, timestamp));
+        lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
         Map<String, Commodity> existingCommodities = commodityDao.getByExternalReferenceOrMarketId(externalReference, marketId)
             .stream()

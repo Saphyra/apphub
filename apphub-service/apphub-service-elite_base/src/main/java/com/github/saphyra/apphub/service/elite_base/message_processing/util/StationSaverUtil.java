@@ -31,6 +31,40 @@ public class StationSaverUtil {
     private final FleetCarrierSaver fleetCarrierSaver;
     private final StationSaver stationSaver;
 
+    public void saveStationOrFleetCarrier(LocalDateTime timestamp, String stationType, Long marketId, String stationName) {
+        saveStationOrFleetCarrier(
+            timestamp,
+            null,
+            null,
+            stationType,
+            marketId,
+            stationName,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
+    public StationSaveResult saveStationOrFleetCarrier(LocalDateTime timestamp, UUID starSystemId, Long marketId, String stationName) {
+        return saveStationOrFleetCarrier(
+            timestamp,
+            starSystemId,
+            null,
+            null,
+            marketId,
+            stationName,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
     public StationSaveResult saveStationOrFleetCarrier(
         LocalDateTime timestamp,
         UUID starSystemId,
