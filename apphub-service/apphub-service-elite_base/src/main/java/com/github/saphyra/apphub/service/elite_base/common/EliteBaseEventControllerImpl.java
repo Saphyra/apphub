@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.elite_base.common;
 import com.github.saphyra.apphub.api.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.elite_base.config.EliteBaseProperties;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.processor.EdMessageProcessor;
 import lombok.RequiredArgsConstructor;

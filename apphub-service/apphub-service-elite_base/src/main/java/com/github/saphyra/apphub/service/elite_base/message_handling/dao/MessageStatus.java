@@ -4,5 +4,6 @@ public enum MessageStatus {
     ARRIVED,
     UNHANDLED,
     PROCESSED,
-    ERROR
+    ERROR,
+    PROCESSING_ERROR
 }

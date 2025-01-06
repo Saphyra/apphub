@@ -18,5 +18,5 @@ interface MessageRepository extends CrudRepository<MessageEntity, String> {
     @Transactional
     void deleteByCreatedAtBefore(String expiration);
 
-    List<MessageEntity> findByStatusOrderByCreatedAtAsc(MessageStatus status, Pageable page);
+    List<MessageEntity> findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(String createdAt, MessageStatus status, Pageable page);
 }

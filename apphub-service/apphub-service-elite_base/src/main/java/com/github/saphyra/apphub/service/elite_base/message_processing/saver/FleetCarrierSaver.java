@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
-import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierDao;
-import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrierFactory;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.fleet_carrier.FleetCarrierDockingAccess;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.fleet_carrier.FleetCarrier;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.fleet_carrier.FleetCarrierDao;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.fleet_carrier.FleetCarrierFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -26,4 +26,5 @@ class MessageEntity {
     private String header;
     private String message;
     private String exceptionId;
+    private Integer retryCount;
 }

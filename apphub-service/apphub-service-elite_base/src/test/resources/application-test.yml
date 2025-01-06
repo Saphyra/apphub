@@ -1,0 +1,3 @@
+elite-base:
+  messageHandler:
+    enabled: false

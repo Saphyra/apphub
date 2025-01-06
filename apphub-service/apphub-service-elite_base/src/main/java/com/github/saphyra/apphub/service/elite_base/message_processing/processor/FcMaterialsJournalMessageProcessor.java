@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
-import com.github.saphyra.apphub.service.elite_base.dao.fleet_carrier.FleetCarrier;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.FleetCarrierSaver;

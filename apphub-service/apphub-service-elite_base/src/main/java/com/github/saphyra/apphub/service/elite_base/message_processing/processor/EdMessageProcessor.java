@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.service.elite_base.config.EliteBaseProperties;
+import com.github.saphyra.apphub.service.elite_base.common.EliteBaseProperties;
+import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageStatus;
@@ -31,11 +33,12 @@ public class EdMessageProcessor {
     private final IdGenerator idGenerator;
     private final ErrorReporterService errorReporterService;
     private final List<MessageProcessor> messageProcessors;
+    private final DateTimeUtil dateTimeUtil;
 
     @SneakyThrows
     public synchronized void processMessages() {
         StopWatch stopWatch = StopWatch.createStarted();
-        List<EdMessage> messages = messageDao.getMessages(properties.getMessageProcessorBatchSize());
+        List<EdMessage> messages = messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize());
         log.info("Processing {} messages.", messages.size());
 
         List<List<EdMessage>> partitions = ListUtils.partition(messages, properties.getMessageProcessorSublistSize());
@@ -76,13 +79,28 @@ public class EdMessageProcessor {
                         messageDao.save(edMessage);
                     }
                 );
+        } catch (MessageProcessingDelayedException e) {
+            if (edMessage.getRetryCount() < properties.getMaxRetryCount()) {
+                edMessage.setRetryCount(edMessage.getRetryCount() + 1);
+                log.warn("Processing of message {} is delayed: {}", edMessage, e.getMessage());
+                edMessage.setStatus(MessageStatus.ARRIVED);
+                edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getRetryDelay()));
+                messageDao.save(edMessage);
+            } else {
+                log.warn("Retry count limit of message {} is reached.", edMessage);
+                handleException(MessageStatus.PROCESSING_ERROR, edMessage, e);
+            }
         } catch (Exception e) {
-            UUID exceptionId = idGenerator.randomUuid();
-            log.error("Failed processing message. ExceptionId: {}", exceptionId, e);
-            errorReporterService.report("Failed processing message. ExceptionId: " + exceptionId, e);
-            edMessage.setStatus(MessageStatus.ERROR);
-            edMessage.setExceptionId(exceptionId);
-            messageDao.save(edMessage);
+            handleException(MessageStatus.ERROR, edMessage, e);
         }
+    }
+
+    private void handleException(MessageStatus status, EdMessage edMessage, Exception e) {
+        UUID exceptionId = idGenerator.randomUuid();
+        log.error("Failed processing message. ExceptionId: {}", exceptionId, e);
+        errorReporterService.report("Failed processing message. ExceptionId: " + exceptionId, e);
+        edMessage.setStatus(status);
+        edMessage.setExceptionId(exceptionId);
+        messageDao.save(edMessage);
     }
 }

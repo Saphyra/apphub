@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.elite_base.dao.SecurityLevel;
-import com.github.saphyra.apphub.service.elite_base.dao.body.Body;
-import com.github.saphyra.apphub.service.elite_base.dao.body.BodyType;
-import com.github.saphyra.apphub.service.elite_base.dao.body_data.ReserveLevel;
-import com.github.saphyra.apphub.service.elite_base.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.SecurityLevel;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body.Body;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body.BodyType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body_data.ReserveLevel;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.Power;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodyDataSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodySaver;

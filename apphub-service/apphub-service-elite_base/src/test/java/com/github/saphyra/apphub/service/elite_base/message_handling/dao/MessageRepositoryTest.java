@@ -72,7 +72,7 @@ class MessageRepositoryTest {
     }
 
     @Test
-    void findByStatusOrderByCreatedAtAsc(){
+    void findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc() {
         MessageEntity entity1 = MessageEntity.builder()
             .messageId(MESSAGE_ID_1)
             .createdAt(CURRENT_TIME.minusMinutes(1).toString())
@@ -101,7 +101,40 @@ class MessageRepositoryTest {
             .build();
         underTest.save(entity4);
 
-        assertThat(underTest.findByStatusOrderByCreatedAtAsc(MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2, entity3);
-        assertThat(underTest.findByStatusOrderByCreatedAtAsc(MessageStatus.ARRIVED, PageRequest.of(1, 2))).containsExactly(entity4);
+        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2, entity3);
+        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(1, 2))).containsExactly(entity4);
+    }
+
+    @Test
+    void findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc_checkTimeLimit() {
+        MessageEntity entity1 = MessageEntity.builder()
+            .messageId(MESSAGE_ID_1)
+            .createdAt(CURRENT_TIME.minusMinutes(1).toString())
+            .status(MessageStatus.PROCESSED)
+            .build();
+        underTest.save(entity1);
+
+        MessageEntity entity2 = MessageEntity.builder()
+            .messageId(MESSAGE_ID_2)
+            .createdAt(CURRENT_TIME.minusSeconds(3).toString())
+            .status(MessageStatus.ARRIVED)
+            .build();
+        underTest.save(entity2);
+
+        MessageEntity entity3 = MessageEntity.builder()
+            .messageId(MESSAGE_ID_3)
+            .createdAt(CURRENT_TIME.minusSeconds(2).toString())
+            .status(MessageStatus.ARRIVED)
+            .build();
+        underTest.save(entity3);
+
+        MessageEntity entity4 = MessageEntity.builder()
+            .messageId(MESSAGE_ID_4)
+            .createdAt(CURRENT_TIME.minusSeconds(1).toString())
+            .status(MessageStatus.ARRIVED)
+            .build();
+        underTest.save(entity4);
+
+        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.minusSeconds(2).toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2);
     }
 }

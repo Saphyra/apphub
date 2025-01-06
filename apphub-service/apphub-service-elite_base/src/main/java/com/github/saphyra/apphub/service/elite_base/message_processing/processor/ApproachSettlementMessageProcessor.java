@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.elite_base.dao.body.Body;
-import com.github.saphyra.apphub.service.elite_base.dao.body.BodyType;
-import com.github.saphyra.apphub.service.elite_base.dao.FactionStateEnum;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Allegiance;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body.Body;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body.BodyType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.MinorFactionSaver;

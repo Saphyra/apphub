@@ -24,6 +24,7 @@ class MessageConverter extends ConverterBase<MessageEntity, EdMessage> {
             .header(domain.getHeader())
             .message(domain.getMessage())
             .exceptionId(uuidConverter.convertDomain(domain.getExceptionId()))
+            .retryCount(domain.getRetryCount())
             .build();
     }
 
@@ -37,6 +38,7 @@ class MessageConverter extends ConverterBase<MessageEntity, EdMessage> {
             .header(entity.getHeader())
             .message(entity.getMessage())
             .exceptionId(uuidConverter.convertEntity(entity.getExceptionId()))
+            .retryCount(entity.getRetryCount())
             .build();
     }
 }

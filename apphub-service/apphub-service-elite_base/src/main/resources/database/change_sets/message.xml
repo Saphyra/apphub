@@ -31,4 +31,16 @@
             <column name="exception_id" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-retry_count-to-message" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="elite_base" tableName="message" columnName="retry_count"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="elite_base" tableName="message">
+            <column name="retry_count" type="numeric" defaultValueNumeric="0"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

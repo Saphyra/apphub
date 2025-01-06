@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityFactory;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
-import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateDao;
-import com.github.saphyra.apphub.service.elite_base.dao.last_update.LastUpdateFactory;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.Commodity;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityDao;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityFactory;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.commodity.EdCommodity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

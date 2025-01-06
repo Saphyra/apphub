@@ -1,2 +1,1 @@
-TODO Track commodity messages where stationType is not available, try again processing them later when station might be available
 TODO add indexes

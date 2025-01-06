@@ -2,8 +2,9 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.processo
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.elite_base.dao.loadout.LoadoutType;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.loadout.LoadoutType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.LoadoutSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StarSystemSaver;
@@ -45,7 +46,7 @@ class ShipyardMessageProcessor implements MessageProcessor {
         );
 
         if (isNull(saveResult.getExternalReference())) {
-            return;
+            throw new MessageProcessingDelayedException("ExternalReference is null.");
         }
 
         loadoutSaver.save(

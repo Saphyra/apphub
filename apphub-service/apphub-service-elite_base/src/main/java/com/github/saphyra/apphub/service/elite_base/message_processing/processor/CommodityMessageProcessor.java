@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.elite_base.dao.commodity.CommodityType;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StarSystemSaver;
@@ -55,7 +56,7 @@ class CommodityMessageProcessor implements MessageProcessor {
         );
 
         if (isNull(saveResult.getExternalReference())) {
-            return;
+            throw new MessageProcessingDelayedException("ExternalReference is null.");
         }
 
         commoditySaver.saveAll(

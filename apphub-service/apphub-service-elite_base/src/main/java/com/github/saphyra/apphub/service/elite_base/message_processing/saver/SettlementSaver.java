@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.elite_base.dao.settlement.Settlement;
-import com.github.saphyra.apphub.service.elite_base.dao.settlement.SettlementDao;
-import com.github.saphyra.apphub.service.elite_base.dao.settlement.SettlementFactory;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.settlement.Settlement;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.settlement.SettlementDao;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.settlement.SettlementFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

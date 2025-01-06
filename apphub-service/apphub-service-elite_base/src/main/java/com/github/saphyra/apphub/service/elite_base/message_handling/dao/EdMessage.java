@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(of = {"messageId", "createdAt", "status", "schemaRef", "exceptionId"})
+@ToString(of = {"messageId", "createdAt", "status", "schemaRef", "exceptionId", "retryCount"})
 public class EdMessage {
     private UUID messageId;
     private LocalDateTime createdAt;
@@ -22,4 +22,6 @@ public class EdMessage {
     private String header;
     private String message;
     private UUID exceptionId;
+    @Builder.Default
+    private Integer retryCount = 0;
 }
