@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -49,6 +50,9 @@ public class SkyXploreDataBeanConfiguration {
 
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.findAndRegisterModules();
+        return new ObjectMapperWrapper(objectMapper);
     }
 }

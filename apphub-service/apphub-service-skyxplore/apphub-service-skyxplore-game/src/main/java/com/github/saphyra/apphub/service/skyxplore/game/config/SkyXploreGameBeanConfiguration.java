@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -88,6 +89,8 @@ public class SkyXploreGameBeanConfiguration {
 
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return new ObjectMapperWrapper(objectMapper);
     }
 }
