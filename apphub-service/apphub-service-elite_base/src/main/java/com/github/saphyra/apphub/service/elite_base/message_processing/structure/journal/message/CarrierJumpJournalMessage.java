@@ -30,7 +30,7 @@ public class CarrierJumpJournalMessage extends JournalMessage {
     private String secondEconomy;
 
     @JsonProperty("SystemSecurity")
-    private String systemSecurity;
+    private String securityLevel;
 
     @JsonProperty("MarketID")
     private Long marketId;

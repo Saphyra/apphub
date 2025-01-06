@@ -51,7 +51,7 @@ public class LocationJournalMessage extends JournalMessage {
     private ControllingFaction controllingFaction;
 
     @JsonProperty("SystemSecurity")
-    private String systemSecurity;
+    private String securityLevel;
 
     @JsonProperty("MarketID")
     private Long marketId;

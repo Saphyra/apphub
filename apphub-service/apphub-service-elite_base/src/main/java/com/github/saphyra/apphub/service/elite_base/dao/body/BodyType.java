@@ -8,7 +8,9 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 
 public enum BodyType {
     WORLD(List.of("Planet")), //Planet or moon
-    STAR(List.of()),
+    STAR(List.of("Star")),
+    STATION(List.of("Station")),
+    PLANETARY_RING(List.of("PlanetaryRing")),
     ;
 
     private final List<String> values;
@@ -22,6 +24,10 @@ public enum BodyType {
     //TODO unit test
     public static BodyType parse(String in) {
         if (isBlank(in)) {
+            return null;
+        }
+
+        if ("Null".equalsIgnoreCase(in)) {
             return null;
         }
 

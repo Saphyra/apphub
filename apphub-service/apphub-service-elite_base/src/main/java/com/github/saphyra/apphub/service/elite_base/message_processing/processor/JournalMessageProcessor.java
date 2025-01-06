@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -73,16 +74,116 @@ class JournalMessageProcessor implements MessageProcessor {
                 break;
             case "CarrierJump":
                 CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
+                processCarrierJumpJournalMessage(carrierJumpJournalMessage);
                 break;
             case "Location":
                 LocationJournalMessage locationJournalMessage = objectMapperWrapper.readValue(message.getMessage(), LocationJournalMessage.class);
+                processLocationJournalMessage(locationJournalMessage);
                 break;
             case "SAASignalsFound":
                 SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
+                processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
                 break;
             default:
                 throw new RuntimeException("Unhandled event: " + event);
         }
+    }
+
+    private void processSaaSignalFoundJournalMessage(SaaSignalFoundJournalMessage message) {
+        starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
+        );
+    }
+
+    private void processLocationJournalMessage(LocationJournalMessage message) {
+        StarSystem starSystem = starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
+        );
+
+        Body body = bodySaver.save(
+            message.getTimestamp(),
+            starSystem.getId(),
+            BodyType.parse(message.getBodyType()),
+            message.getBodyId(),
+            message.getBodyName(),
+            message.getDistanceFromStar()
+        );
+
+        List<MinorFaction> minorFactions = minorFactionSaver.save(message.getTimestamp(), message.getFactions());
+
+        starSystemDataSaver.save(
+            starSystem.getId(),
+            message.getTimestamp(),
+            message.getPopulation(),
+            Allegiance.parse(message.getAllegiance()),
+            EconomyEnum.parse(message.getEconomy()),
+            EconomyEnum.parse(message.getSecondEconomy()),
+            SecurityLevel.parse(message.getSecurityLevel()),
+            Power.parse(message.getControllingPower()),
+            PowerplayState.parse(message.getPowerplayState()),
+            minorFactions,
+            message.getControllingFaction(),
+            Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
+            message.getConflicts()
+        );
+
+        if(!isNull(message.getMarketId())){
+            stationSaverUtil.saveStationOrFleetCarrier(
+                message.getTimestamp(),
+                starSystem.getId(),
+                body.getId(),
+                message.getStationType(),
+                message.getMarketId(),
+                message.getStationName(),
+                Allegiance.parse(message.getAllegiance()),
+                EconomyEnum.parse(message.getEconomy()),
+                message.getStationServices(),
+                message.getStationEconomies(),
+                null,
+                message.getControllingFaction()
+            );
+        }
+    }
+
+    private void processCarrierJumpJournalMessage(CarrierJumpJournalMessage message) {
+        StarSystem starSystem = starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
+        );
+
+        bodySaver.save(
+            message.getTimestamp(),
+            starSystem.getId(),
+            BodyType.parse(message.getBodyType()),
+            message.getBodyId(),
+            message.getBodyName()
+        );
+
+        List<MinorFaction> minorFactions = minorFactionSaver.save(message.getTimestamp(), message.getFactions());
+
+        starSystemDataSaver.save(
+            starSystem.getId(),
+            message.getTimestamp(),
+            message.getPopulation(),
+            Allegiance.parse(message.getAllegiance()),
+            EconomyEnum.parse(message.getEconomy()),
+            EconomyEnum.parse(message.getSecondEconomy()),
+            SecurityLevel.parse(message.getSecurityLevel()),
+            Power.parse(message.getControllingPower()),
+            PowerplayState.parse(message.getPowerplayState()),
+            minorFactions,
+            message.getControllingFaction(),
+            Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
+            message.getConflicts()
+        );
     }
 
     private void processDockedJournalMessage(DockedJournalMessage message) {
