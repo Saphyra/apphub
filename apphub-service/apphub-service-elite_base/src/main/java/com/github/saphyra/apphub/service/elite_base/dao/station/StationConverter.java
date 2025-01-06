@@ -42,6 +42,7 @@ class StationConverter extends ConverterBase<StationEntity, Station> {
             .marketId(domain.getMarketId())
             .allegiance(domain.getAllegiance())
             .economy(domain.getEconomy())
+            .controllingFactionId(uuidConverter.convertDomain(domain.getControllingFactionId()))
             .build();
     }
 
@@ -60,6 +61,7 @@ class StationConverter extends ConverterBase<StationEntity, Station> {
             .economy(entity.getEconomy())
             .services(new LazyLoadedField<>(() -> stationServiceDao.getByStationId(stationId).stream().map(StationService::getService).toList()))
             .economies(new LazyLoadedField<>(() -> stationEconomyDao.getByStationId(stationId)))
+            .controllingFactionId(uuidConverter.convertEntity(entity.getControllingFactionId()))
             .build();
     }
 }

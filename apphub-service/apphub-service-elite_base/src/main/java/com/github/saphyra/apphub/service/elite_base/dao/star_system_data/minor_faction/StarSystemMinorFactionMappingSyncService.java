@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -16,6 +18,10 @@ public class StarSystemMinorFactionMappingSyncService {
     private final StarSystemMinorFactionMappingDao starSystemMinorFactionMappingDao;
 
     public void sync(UUID starSystemId, List<UUID> minorFactionIds) {
+        if (isNull(minorFactionIds)) {
+            return;
+        }
+
         List<StarSystemMinorFactionMapping> newMappings = minorFactionIds.stream()
             .map(minorFactionId -> starSystemMinorFactionMappingFactory.create(starSystemId, minorFactionId))
             .toList();

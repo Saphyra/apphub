@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -19,6 +21,10 @@ public class MinorFactionConflictSyncService {
 
     @Transactional
     public void sync(UUID starSystemId, List<MinorFactionConflict> newConflicts) {
+        if (isNull(newConflicts)) {
+            return;
+        }
+
         List<MinorFactionConflict> existingConflicts = minorFactionConflictDao.getByStarSystemId(starSystemId);
 
         List<UUID> newConflictIds = newConflicts.stream()

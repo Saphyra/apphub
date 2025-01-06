@@ -34,7 +34,7 @@ public class MinorFactionSaver {
 
     public List<MinorFaction> save(LocalDateTime timestamp, Faction[] factions) {
         if (isNull(factions)) {
-            return Collections.emptyList();
+            return null;
         }
 
         return Arrays.stream(factions)

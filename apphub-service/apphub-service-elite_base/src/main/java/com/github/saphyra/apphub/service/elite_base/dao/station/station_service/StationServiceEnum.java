@@ -41,6 +41,11 @@ public enum StationServiceEnum {
     FRONTLINE_SOLUTIONS("frontlinesolutions"),
     TECH_BROKER("techBroker"),
     MATERIAL_TRADER("materialtrader"),
+    CARRIER_MANAGEMENT("carriermanagement"),
+    MODULE_PACKS("modulepacks"),
+    CARRIER_FUEL("carrierfuel"),
+    VOUCHER_REDEMPTION("voucherredemption"),
+    CARRIER_VENDOR("carriervendor"),
     ;
 
     private final String value;

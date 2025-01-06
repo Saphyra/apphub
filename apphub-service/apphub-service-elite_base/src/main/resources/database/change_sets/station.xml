@@ -18,6 +18,7 @@
             <column name="station_name" type="text"/>
             <column name="allegiance" type="varchar(255)"/>
             <column name="economy" type="varchar(255)"/>
+            <column name="controlling_faction_id" type="varchar(37)"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="station" columnNames="id" constraintName="station-pk"/>

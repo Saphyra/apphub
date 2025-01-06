@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -18,6 +20,10 @@ public class StationServiceSyncService {
 
     @Transactional
     public void sync(UUID stationId, List<StationServiceEnum> services) {
+        if (isNull(services)) {
+            return;
+        }
+
         List<StationService> existingServices = stationServiceDao.getByStationId(stationId);
         List<StationServiceEnum> existingServicesEnum = existingServices.stream()
             .map(StationService::getService)

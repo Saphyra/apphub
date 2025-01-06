@@ -23,12 +23,12 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.structure
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +45,7 @@ class JournalMessageProcessor implements MessageProcessor {
     private final BodyDataSaver bodyDataSaver;
     private final StarSystemDataSaver starSystemDataSaver;
     private final MinorFactionSaver minorFactionSaver;
+    private final StationSaverUtil stationSaverUtil;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -57,8 +58,6 @@ class JournalMessageProcessor implements MessageProcessor {
             .get("event")
             .asText();
 
-        //TODO implement processing
-
         switch (event) {
             case "Scan":
                 ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
@@ -70,6 +69,7 @@ class JournalMessageProcessor implements MessageProcessor {
                 break;
             case "Docked":
                 DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
+                processDockedJournalMessage(dockedJournalMessage);
                 break;
             case "CarrierJump":
                 CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
@@ -83,6 +83,39 @@ class JournalMessageProcessor implements MessageProcessor {
             default:
                 throw new RuntimeException("Unhandled event: " + event);
         }
+    }
+
+    private void processDockedJournalMessage(DockedJournalMessage message) {
+        StarSystem starSystem = starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
+        );
+
+        Optional<Body> body = bodySaver.saveOptional(
+            message.getTimestamp(),
+            starSystem.getId(),
+            BodyType.parse(message.getBodyType()),
+            message.getBodyId(),
+            message.getBodyName(),
+            message.getDistanceFromStar()
+        );
+
+        stationSaverUtil.saveStationOrFleetCarrier(
+            message.getTimestamp(),
+            starSystem.getId(),
+            body.map(Body::getId).orElse(null),
+            message.getStationType(),
+            message.getMarketId(),
+            message.getStationName(),
+            Allegiance.parse(message.getAllegiance()),
+            EconomyEnum.parse(message.getEconomy()),
+            message.getStationServices(),
+            message.getEconomies(),
+            null,
+            message.getControllingFaction()
+        );
     }
 
     private void processFsdJumpJournalMessage(FsdJumpJournalMessage message) {
@@ -115,7 +148,7 @@ class JournalMessageProcessor implements MessageProcessor {
             PowerplayState.parse(message.getPowerplayState()),
             minorFactions,
             message.getControllingFaction(),
-            Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(Collections.emptyList()),
+            Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
             message.getConflicts()
         );
     }

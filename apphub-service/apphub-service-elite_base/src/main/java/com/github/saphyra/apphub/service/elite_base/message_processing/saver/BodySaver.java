@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 
 @Component
@@ -29,13 +30,21 @@ public class BodySaver {
         return save(timestamp, starSystemId, bodyType, bodyId, bodyName, null);
     }
 
+    public synchronized Optional<Body> saveOptional(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
+        if ((isNull(starSystemId) || isNull(bodyId)) && isNull(bodyName)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(save(timestamp, starSystemId, bodyType, bodyId, bodyName, distanceFromStar));
+    }
+
     public synchronized Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         if ((isNull(starSystemId) || isNull(bodyId)) && isNull(bodyName)) {
             throw new IllegalArgumentException("StartSystemId or bodyId and bodyName are null. Cannot identify body location.");
         }
 
         Body body = Stream.of(
-                new SearchHelper<>(() -> isNull(starSystemId) || isNull(bodyId), () -> bodyDao.findByStarSystemIdAndBodyId(starSystemId, bodyId)),
+                new SearchHelper<>(() -> nonNull(starSystemId) && nonNull(bodyId), () -> bodyDao.findByStarSystemIdAndBodyId(starSystemId, bodyId)),
                 new SearchHelper<>(bodyName, () -> bodyDao.findByBodyName(bodyName))
             )
             .map(SearchHelper::search)

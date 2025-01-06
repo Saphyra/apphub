@@ -71,7 +71,6 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
                 starSystem.getId(),
                 body.getId(),
                 approachSettlementMessage.getSettlementName(),
-                null,
                 approachSettlementMessage.getMarketId(),
                 Allegiance.parse(approachSettlementMessage.getAllegiance()),
                 EconomyEnum.parse(approachSettlementMessage.getEconomy()),

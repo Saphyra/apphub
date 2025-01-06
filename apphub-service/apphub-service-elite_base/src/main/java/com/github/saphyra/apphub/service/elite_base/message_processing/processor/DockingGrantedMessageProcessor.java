@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
-import com.github.saphyra.apphub.service.elite_base.message_processing.saver.StationSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.docking_granted.DockingGrantedMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 //TODO unit test
 class DockingGrantedMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
-    private final StationSaver stationSaver;
+    private final StationSaverUtil stationSaverUtil;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -26,6 +25,19 @@ class DockingGrantedMessageProcessor implements MessageProcessor {
     public void processMessage(EdMessage message) {
         DockingGrantedMessage dockingGrantedMessage = objectMapperWrapper.readValue(message.getMessage(), DockingGrantedMessage.class);
 
-        stationSaver.save(dockingGrantedMessage.getTimestamp(), dockingGrantedMessage.getMarketId(), StationType.parse(dockingGrantedMessage.getStationType()));
+        stationSaverUtil.saveStationOrFleetCarrier(
+            dockingGrantedMessage.getTimestamp(),
+            null,
+            null,
+            dockingGrantedMessage.getStationType(),
+            dockingGrantedMessage.getMarketId(),
+            dockingGrantedMessage.getStationName(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
     }
 }

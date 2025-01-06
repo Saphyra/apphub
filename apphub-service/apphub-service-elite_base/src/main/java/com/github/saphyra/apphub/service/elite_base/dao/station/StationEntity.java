@@ -33,4 +33,5 @@ class StationEntity {
     private Allegiance allegiance;
     @Enumerated(EnumType.STRING)
     private EconomyEnum economy;
+    private String controllingFactionId;
 }

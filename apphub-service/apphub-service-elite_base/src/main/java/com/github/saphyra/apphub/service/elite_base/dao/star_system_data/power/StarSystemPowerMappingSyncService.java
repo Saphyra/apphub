@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.elite_base.dao.star_system_data.power;
 
 import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.elite_base.dao.star_system_data.minor_faction.StarSystemMinorFactionMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +19,10 @@ public class StarSystemPowerMappingSyncService {
     private final StarSystemPowerMappingFactory starSystemPowerMappingFactory;
 
     public void sync(UUID starSystemId, List<Power> powers) {
+        if (isNull(powers)) {
+            return;
+        }
+
         List<StarSystemPowerMapping> newMappings = powers.stream()
             .map(minorFactionId -> starSystemPowerMappingFactory.create(starSystemId, minorFactionId))
             .toList();

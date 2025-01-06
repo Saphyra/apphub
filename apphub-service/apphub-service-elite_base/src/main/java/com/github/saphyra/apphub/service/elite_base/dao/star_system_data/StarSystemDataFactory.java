@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,7 +55,7 @@ public class StarSystemDataFactory {
             .powerplayState(powerplayState)
             .controllingFactionId(getControllingFaction(timestamp, controllingFaction, minorFactions))
             .controllingFactionState(Optional.ofNullable(controllingFaction).map(cf -> FactionStateEnum.parse(cf.getEconomicState())).orElse(null))
-            .minorFactions(LazyLoadedField.loaded(minorFactions.stream().map(MinorFaction::getId).toList()))
+            .minorFactions(LazyLoadedField.loaded(Optional.ofNullable(minorFactions).map(factions -> factions.stream().map(MinorFaction::getId).toList()).orElse(null)))
             .powers(LazyLoadedField.loaded(powers))
             .conflicts(LazyLoadedField.loaded(conflicts))
             .build();
@@ -69,6 +70,8 @@ public class StarSystemDataFactory {
     }
 
     private UUID findMinorFactionId(LocalDateTime timestamp, ControllingFaction controllingFaction, List<MinorFaction> minorFactions) {
+        minorFactions = isNull(minorFactions) ? Collections.emptyList() : minorFactions;
+
         return minorFactions.stream()
             .filter(minorFaction -> minorFaction.getFactionName().equalsIgnoreCase(controllingFaction.getFactionName()))
             .findAny()

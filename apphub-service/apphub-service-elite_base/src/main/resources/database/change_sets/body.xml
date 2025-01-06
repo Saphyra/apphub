@@ -14,9 +14,7 @@
             <column name="star_system_id" type="varchar(37)"/>
             <column name="type" type="varchar(255)"/>
             <column name="body_id" type="numeric"/>
-            <column name="body_name" type="text">
-                <constraints unique="true"/>
-            </column>
+            <column name="body_name" type="text" />
             <column name="distance_from_star" type="numeric"/>
         </createTable>
 

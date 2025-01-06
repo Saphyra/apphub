@@ -139,7 +139,7 @@ public class StarSystemDataSaver {
 
     private List<MinorFactionConflict> mapConflicts(LocalDateTime timestamp, UUID starSystemId, EdConflict[] conflictsArr, List<MinorFaction> minorFactions) {
         if (isNull(conflictsArr)) {
-            return Collections.emptyList();
+            return null;
         }
 
         return Arrays.stream(conflictsArr)
@@ -171,6 +171,8 @@ public class StarSystemDataSaver {
     }
 
     private UUID getMinorFactionId(LocalDateTime timestamp, String factionName, List<MinorFaction> minorFactions) {
+        minorFactions = isNull(minorFactions) ? Collections.emptyList() : minorFactions;
+
         return minorFactions.stream()
             .filter(minorFaction -> minorFaction.getFactionName().equalsIgnoreCase(factionName))
             .findAny()

@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -19,6 +21,10 @@ public class StationEconomySyncService {
     private final StationEconomyDao stationEconomyDao;
 
     public void sync(UUID stationId, List<StationEconomy> economies) {
+        if (isNull(economies)) {
+            return;
+        }
+
         List<StationEconomy> existingEconomies = stationEconomyDao.getByStationId(stationId);
         Map<EconomyEnum, Double> existingEconomyMapping = existingEconomies.stream()
             .collect(Collectors.toMap(StationEconomy::getEconomy, StationEconomy::getProportion, Double::sum));

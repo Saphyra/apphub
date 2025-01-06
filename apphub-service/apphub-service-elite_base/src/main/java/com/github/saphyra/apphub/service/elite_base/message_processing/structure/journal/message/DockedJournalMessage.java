@@ -16,14 +16,14 @@ public class DockedJournalMessage extends JournalMessage {
     @JsonProperty("BodyType")
     private String bodyType;
 
+    @JsonProperty("DistFromStarLS")
+    private Double distanceFromStar;
+
     @JsonProperty("StationType")
     private String stationType;
 
     @JsonProperty("StationName")
     private String stationName;
-
-    @JsonProperty("DistFromStarLS")
-    private Double distanceFromStar;
 
     @JsonProperty("LandingPads")
     private Map<String, Integer> landingPads;

@@ -30,7 +30,8 @@ public class StationFactory {
         Allegiance allegiance,
         EconomyEnum economy,
         List<StationServiceEnum> services,
-        List<StationEconomy> economies
+        List<StationEconomy> economies,
+        UUID controllingFactionId
     ) {
         return Station.builder()
             .id(stationId)
@@ -42,6 +43,7 @@ public class StationFactory {
             .marketId(marketId)
             .allegiance(allegiance)
             .economy(economy)
+            .controllingFactionId(controllingFactionId)
             .services(LazyLoadedField.loaded(services))
             .economies(LazyLoadedField.loaded(economies))
             .build();

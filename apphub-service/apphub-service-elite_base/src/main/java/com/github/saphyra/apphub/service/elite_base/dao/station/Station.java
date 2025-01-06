@@ -28,6 +28,7 @@ public class Station {
     private Long marketId;
     private Allegiance allegiance;
     private EconomyEnum economy;
+    private UUID controllingFactionId;
     private LazyLoadedField<List<StationServiceEnum>> services;
     private LazyLoadedField<List<StationEconomy>> economies;
 
