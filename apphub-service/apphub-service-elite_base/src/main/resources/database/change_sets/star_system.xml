@@ -13,7 +13,9 @@
             <column name="last_update" type="text"/>
             <column name="star_id" type="numeric"/>
             <column name="star_name" type="text"/>
-            <column name="position" type="text"/>
+            <column name="x_pos" type="numeric" />
+            <column name="y_pos" type="numeric" />
+            <column name="z_pos" type="numeric" />
             <column name="star_type" type="text"/>
         </createTable>
 

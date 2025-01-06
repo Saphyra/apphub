@@ -20,6 +20,8 @@ class StarSystemEntity {
     private String lastUpdate;
     private Long starId;
     private String starName;
-    private String position;
+    private Double xPos;
+    private Double yPos;
+    private Double zPos;
     private String starType;
 }

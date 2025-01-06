@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.elite_base.dao.star_system;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 class StarSystemConverter extends ConverterBase<StarSystemEntity, StarSystem> {
-    private final ObjectMapperWrapper objectMapperWrapper;
     private final UuidConverter uuidConverter;
 
     @Override
@@ -25,7 +23,9 @@ class StarSystemConverter extends ConverterBase<StarSystemEntity, StarSystem> {
             .lastUpdate(Optional.ofNullable(domain.getLastUpdate()).map(Object::toString).orElse(null))
             .starId(domain.getStarId())
             .starName(domain.getStarName())
-            .position(objectMapperWrapper.writeValueAsString(domain.getPosition()))
+            .xPos(Optional.ofNullable(domain.getPosition()).map(StarSystemPosition::getX).orElse(null))
+            .yPos(Optional.ofNullable(domain.getPosition()).map(StarSystemPosition::getY).orElse(null))
+            .zPos(Optional.ofNullable(domain.getPosition()).map(StarSystemPosition::getZ).orElse(null))
             .starType(domain.getStarType())
             .build();
     }
@@ -37,7 +37,11 @@ class StarSystemConverter extends ConverterBase<StarSystemEntity, StarSystem> {
             .lastUpdate(LocalDateTime.parse(entity.getLastUpdate()))
             .starId(entity.getStarId())
             .starName(entity.getStarName())
-            .position(objectMapperWrapper.readValue(entity.getPosition(), StarSystemPosition.class))
+            .position(StarSystemPosition.builder()
+                .x(entity.getXPos())
+                .y(entity.getYPos())
+                .z(entity.getZPos())
+                .build())
             .starType(entity.getStarType())
             .build();
     }
