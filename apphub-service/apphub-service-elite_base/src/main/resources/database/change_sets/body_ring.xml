@@ -19,5 +19,9 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="body_ring" columnNames="id" constraintName="body_ring-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="body_ring" indexName="index-body_ring-body_id">
+            <column name="body_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

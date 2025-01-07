@@ -14,11 +14,16 @@
             <column name="star_system_id" type="varchar(37)"/>
             <column name="body_id" type="varchar(37)"/>
             <column name="market_id" type="numeric"/>
-            <column name="settlement_name" type="text"/>
+            <column name="settlement_name" type="varchar(255)"/>
             <column name="longitude" type="numeric"/>
             <column name="latitude" type="numeric"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="settlement" columnNames="id" constraintName="settlement-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="settlement" indexName="index-settlement-star_system_id-settlement_name">
+            <column name="star_system_id"/>
+            <column name="settlement_name"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

@@ -1,1 +1,1 @@
-TODO add indexes
+Store LocalDateTime as object not as string

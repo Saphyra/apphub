@@ -43,4 +43,41 @@
             <column name="retry_count" type="numeric" defaultValueNumeric="0"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="create-index-status-to-message" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="message" columnNames="status"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-status">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-index-created_at-to-message" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="message" columnNames="created_at"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-created_at">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-index-created_at-status-to-message" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="message" columnNames="created_at,status"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-created_at-status">
+            <column name="created_at"/>
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

@@ -27,6 +27,6 @@ public class MessageDao extends AbstractDao<MessageEntity, EdMessage, String, Me
     }
 
     public List<EdMessage> getMessages(LocalDateTime timeLimit, Integer messageProcessorBatchSize) {
-        return converter.convertEntity(repository.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(dateTimeConverter.convertDomain(timeLimit), MessageStatus.ARRIVED, PageRequest.of(0, messageProcessorBatchSize)));
+        return converter.convertEntity(repository.getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(dateTimeConverter.convertDomain(timeLimit), MessageStatus.ARRIVED, PageRequest.of(0, messageProcessorBatchSize)));
     }
 }

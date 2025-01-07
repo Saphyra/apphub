@@ -16,5 +16,9 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="star_system_power_mapping" columnNames="star_system_id,power" constraintName="star_system_power_mapping-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="star_system_power_mapping" indexName="index-star_system_power_mapping-star_system_id">
+            <column name="star_system_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

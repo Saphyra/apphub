@@ -12,13 +12,21 @@
             </column>
             <column name="last_update" type="text"/>
             <column name="star_id" type="numeric"/>
-            <column name="star_name" type="text"/>
-            <column name="x_pos" type="numeric" />
-            <column name="y_pos" type="numeric" />
-            <column name="z_pos" type="numeric" />
+            <column name="star_name" type="varchar(255)"/>
+            <column name="x_pos" type="numeric"/>
+            <column name="y_pos" type="numeric"/>
+            <column name="z_pos" type="numeric"/>
             <column name="star_type" type="text"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="star_system" columnNames="id" constraintName="star_system-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_id">
+            <column name="star_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_name">
+            <column name="star_name"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

@@ -14,10 +14,19 @@
             <column name="star_system_id" type="varchar(37)"/>
             <column name="type" type="varchar(255)"/>
             <column name="body_id" type="numeric"/>
-            <column name="body_name" type="text" />
+            <column name="body_name" type="varchar(255)"/>
             <column name="distance_from_star" type="numeric"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="body" columnNames="id" constraintName="body-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="body" indexName="index-body-star_system_id-body_id">
+            <column name="star_system_id"/>
+            <column name="body_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="body" indexName="index-body-body_name">
+            <column name="body_name"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

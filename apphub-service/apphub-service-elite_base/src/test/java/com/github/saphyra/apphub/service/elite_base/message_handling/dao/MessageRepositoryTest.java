@@ -101,8 +101,8 @@ class MessageRepositoryTest {
             .build();
         underTest.save(entity4);
 
-        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2, entity3);
-        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(1, 2))).containsExactly(entity4);
+        assertThat(underTest.getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2, entity3);
+        assertThat(underTest.getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.toString(), MessageStatus.ARRIVED, PageRequest.of(1, 2))).containsExactly(entity4);
     }
 
     @Test
@@ -135,6 +135,6 @@ class MessageRepositoryTest {
             .build();
         underTest.save(entity4);
 
-        assertThat(underTest.findByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.minusSeconds(2).toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2);
+        assertThat(underTest.getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(CURRENT_TIME.minusSeconds(2).toString(), MessageStatus.ARRIVED, PageRequest.of(0, 2))).containsExactly(entity2);
     }
 }

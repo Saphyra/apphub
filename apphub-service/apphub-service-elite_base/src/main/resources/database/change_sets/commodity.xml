@@ -14,7 +14,7 @@
             <column name="commodity_location" type="varchar(255)"/>
             <column name="external_reference" type="varchar(37)"/>
             <column name="market_id" type="numeric"/>
-            <column name="commodity_name" type="text" />
+            <column name="commodity_name" type="varchar(255)"/>
             <column name="buy_price" type="numeric"/>
             <column name="sell_price" type="numeric"/>
             <column name="demand" type="numeric"/>
@@ -22,5 +22,20 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity" columnNames="id" constraintName="commodity-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-commodity_name-external_reference">
+            <column name="commodity_name"/>
+            <column name="external_reference"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-commodity_name-market_id">
+            <column name="commodity_name"/>
+            <column name="market_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-external_reference-market_id">
+            <column name="external_reference"/>
+            <column name="market_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

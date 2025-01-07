@@ -21,5 +21,10 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="loadout" columnNames="external_reference,type,name" constraintName="loadout-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="loadout" indexName="index-loadout-external_reference-market_id">
+            <column name="external_reference"/>
+            <column name="market_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

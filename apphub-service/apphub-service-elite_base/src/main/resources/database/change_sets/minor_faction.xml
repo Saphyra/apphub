@@ -11,12 +11,16 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_update" type="text"/>
-            <column name="faction_name" type="text" />
+            <column name="faction_name" type="varchar(255)"/>
             <column name="state" type="varchar(255)"/>
             <column name="influence" type="numeric"/>
             <column name="allegiance" type="varchar(255)"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="minor_faction" columnNames="id" constraintName="minor_faction-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="minor_faction" indexName="index-minor_faction-faction_name">
+            <column name="faction_name"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

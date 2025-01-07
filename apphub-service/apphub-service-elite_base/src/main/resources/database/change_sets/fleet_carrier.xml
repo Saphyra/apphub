@@ -21,5 +21,13 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="fleet_carrier" columnNames="id" constraintName="fleet_carrier-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="fleet_carrier" indexName="index-fleet_carrier-carrier_id">
+            <column name="carrier_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="fleet_carrier" indexName="index-fleet_carrier-market_id">
+            <column name="market_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
