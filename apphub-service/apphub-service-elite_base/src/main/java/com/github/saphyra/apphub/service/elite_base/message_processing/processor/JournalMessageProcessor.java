@@ -265,7 +265,7 @@ class JournalMessageProcessor implements MessageProcessor {
         Body body = bodySaver.save(
             message.getTimestamp(),
             starSystem.getId(),
-            BodyType.WORLD,
+            BodyType.PLANET,
             message.getBodyId(),
             message.getBodyName(),
             message.getDistanceFromStar()

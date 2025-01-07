@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class BodyRingConverter extends ConverterBase<BodyRingEntity, BodyRing> {
     private final UuidConverter uuidConverter;
 

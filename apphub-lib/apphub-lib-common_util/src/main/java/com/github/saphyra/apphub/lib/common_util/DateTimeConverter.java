@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import static java.util.Objects.isNull;
 
-//TODO unit test
 public class DateTimeConverter {
     public String convertDomain(LocalDateTime dateTime) {
         if (isNull(dateTime)) {

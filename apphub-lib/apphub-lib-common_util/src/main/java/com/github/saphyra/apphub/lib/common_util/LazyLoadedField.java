@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 @Slf4j
 @ToString(exclude = "supplier")
-//TODO unit test
 public class LazyLoadedField<T> {
     private final Supplier<T> supplier;
     private volatile T value;

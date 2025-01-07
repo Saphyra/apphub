@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-//TODO unit test
 interface BodyRepository extends CrudRepository<BodyEntity, String> {
     Optional<BodyEntity> findByStarSystemIdAndBodyId(String starSystemId, Long bodyId);
 

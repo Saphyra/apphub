@@ -53,7 +53,7 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
         Body body = bodySaver.save(
             approachSettlementMessage.getTimestamp(),
             starSystem.getId(),
-            BodyType.WORLD,
+            BodyType.PLANET,
             approachSettlementMessage.getBodyId(),
             approachSettlementMessage.getBodyName()
         );

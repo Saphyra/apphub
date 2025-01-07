@@ -15,7 +15,6 @@ public enum RingType {
     ;
     private final String value;
 
-    //TODO unit test
     public static RingType parse(String in) {
         if (isNull(in)) {
             return null;

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-//TODO unit test
 public class MessageDao extends AbstractDao<MessageEntity, EdMessage, String, MessageRepository> {
     private final DateTimeConverter dateTimeConverter;
 
@@ -22,8 +21,8 @@ public class MessageDao extends AbstractDao<MessageEntity, EdMessage, String, Me
         repository.resetUnhandled(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
     }
 
-    public void deleteExpired(LocalDateTime expiration) {
-        repository.deleteByCreatedAtBefore(expiration.toString());
+    public void deleteExpired(LocalDateTime expiration, List<MessageStatus> statuses) {
+        repository.deleteByCreatedAtBeforeAndStatusIn(dateTimeConverter.convertDomain(expiration), statuses);
     }
 
     public List<EdMessage> getMessages(LocalDateTime timeLimit, Integer messageProcessorBatchSize) {

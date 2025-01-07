@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class BodyMaterialDao extends AbstractDao<BodyMaterialEntity, BodyMaterial, String, BodyMaterialRepository> {
     private final UuidConverter uuidConverter;
 

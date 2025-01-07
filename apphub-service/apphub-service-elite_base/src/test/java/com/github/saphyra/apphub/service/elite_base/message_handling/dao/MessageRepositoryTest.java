@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,10 +54,11 @@ class MessageRepositoryTest {
     }
 
     @Test
-    void deleteByCreatedAtBefore() {
+    void deleteByCreatedAtBeforeAndStatusIn() {
         MessageEntity entity1 = MessageEntity.builder()
             .messageId(MESSAGE_ID_1)
             .createdAt(CURRENT_TIME.minusSeconds(1).toString())
+            .status(MessageStatus.ARRIVED)
             .build();
         underTest.save(entity1);
 
@@ -66,9 +68,16 @@ class MessageRepositoryTest {
             .build();
         underTest.save(entity2);
 
-        underTest.deleteByCreatedAtBefore(CURRENT_TIME.toString());
+        MessageEntity entity3 = MessageEntity.builder()
+            .messageId(MESSAGE_ID_3)
+            .createdAt(CURRENT_TIME.minusSeconds(1).toString())
+            .status(MessageStatus.PROCESSED)
+            .build();
+        underTest.save(entity3);
 
-        assertThat(underTest.findAll()).containsExactly(entity2);
+        underTest.deleteByCreatedAtBeforeAndStatusIn(CURRENT_TIME.toString(), List.of(MessageStatus.ARRIVED));
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2, entity3);
     }
 
     @Test

@@ -4,17 +4,19 @@ import com.github.saphyra.apphub.api.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
+import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageStatus;
 import com.github.saphyra.apphub.service.elite_base.message_processing.processor.EdMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class EliteBaseEventControllerImpl implements EliteBaseEventController {
     private final MessageDao messageDao;
     private final DateTimeUtil dateTimeUtil;
@@ -37,8 +39,13 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     @Override
     public void deleteExpiredMessages() {
         log.info("deleteExpiredMessages event arrived");
+        LocalDateTime processedExpiration = dateTimeUtil.getCurrentDateTime()
+            .minus(properties.getProcessedMessageExpiration());
+
+        messageDao.deleteExpired(processedExpiration, List.of(MessageStatus.PROCESSED));
+
         LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minus(properties.getMessageExpiration());
-        messageDao.deleteExpired(expiration);
+        messageDao.deleteExpired(expiration, Arrays.asList(MessageStatus.values()));
     }
 }

@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepository> {
     private final UuidConverter uuidConverter;
 

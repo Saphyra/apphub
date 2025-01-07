@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class BodyRingDao extends AbstractDao<BodyRingEntity, BodyRing, String, BodyRingRepository> {
     private final UuidConverter uuidConverter;
 

@@ -11,6 +11,7 @@ import java.time.Duration;
 @Data
 public class EliteBaseProperties {
     private Duration messageExpiration;
+    private Duration processedMessageExpiration;
     private Integer messageProcessorBatchSize;
     private Integer messageProcessorSublistSize;
     private Duration retryDelay;

@@ -3,7 +3,7 @@ server:
 
 elite-base:
   messageHandler:
-    enabled: false
+    enabled: true
   messageExpiration: P30D
   messageProcessorBatchSize: 1000
   messageProcessorSublistSize: 50
