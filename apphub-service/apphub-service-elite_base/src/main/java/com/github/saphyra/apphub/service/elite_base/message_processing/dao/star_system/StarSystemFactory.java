@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemFactory {
     private final IdGenerator idGenerator;
 

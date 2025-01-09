@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class LoadoutDao extends AbstractDao<LoadoutEntity, Loadout, LoadoutEntityId, LoadoutRepository> {
     private final UuidConverter uuidConverter;
 

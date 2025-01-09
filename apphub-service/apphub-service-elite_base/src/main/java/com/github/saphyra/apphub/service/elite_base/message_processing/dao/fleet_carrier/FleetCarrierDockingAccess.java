@@ -16,7 +16,6 @@ public enum FleetCarrierDockingAccess {
 
     private final String value;
 
-    //TODO unit test
     public static FleetCarrierDockingAccess parse(String in) {
         if (isNull(in)) {
             return null;
@@ -25,6 +24,6 @@ public enum FleetCarrierDockingAccess {
         return Arrays.stream(values())
             .filter(e -> e.value.equalsIgnoreCase(in))
             .findAny()
-            .orElseThrow(() -> new RuntimeException(in + " cannot be parsed to " + FleetCarrierDockingAccess.class.getSimpleName()));
+            .orElseThrow(() -> new IllegalArgumentException(in + " cannot be parsed to " + FleetCarrierDockingAccess.class.getSimpleName()));
     }
 }

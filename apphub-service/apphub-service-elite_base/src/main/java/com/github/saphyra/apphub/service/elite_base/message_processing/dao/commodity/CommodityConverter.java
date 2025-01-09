@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.avg_price.CommodityAveragePrice;
@@ -18,10 +17,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
     private final CommodityAveragePriceDao commodityAveragePriceDao;
     private final CommodityAveragePriceFactory commodityAveragePriceFactory;
     private final LastUpdateDao lastUpdateDao;

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityAveragePriceConverter extends ConverterBase<CommodityAveragePriceEntity, CommodityAveragePrice> {
     private final DateTimeConverter dateTimeConverter;
 

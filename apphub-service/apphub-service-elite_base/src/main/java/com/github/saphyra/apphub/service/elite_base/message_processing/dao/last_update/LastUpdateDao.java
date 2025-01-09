@@ -17,7 +17,7 @@ public class LastUpdateDao extends StaticCachedDao<LastUpdateEntity, LastUpdate,
     }
 
     @Override
-    protected LastUpdateId idExtractor(LastUpdate lastUpdate) {
+    protected LastUpdateId extractId(LastUpdate lastUpdate) {
         return LastUpdateId.builder()
             .externalReference(uuidConverter.convertDomain(lastUpdate.getExternalReference()))
             .type(lastUpdate.getType())
@@ -26,7 +26,7 @@ public class LastUpdateDao extends StaticCachedDao<LastUpdateEntity, LastUpdate,
 
     @Override
     protected boolean shouldSave(LastUpdate lastUpdate) {
-        Optional<LastUpdate> maybeLastUpdate = findById(idExtractor(lastUpdate));
+        Optional<LastUpdate> maybeLastUpdate = findById(extractId(lastUpdate));
 
         return maybeLastUpdate.isEmpty() || !maybeLastUpdate.get().getLastUpdate().equals(lastUpdate.getLastUpdate());
     }

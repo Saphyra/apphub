@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class SettlementConverter extends ConverterBase<SettlementEntity, Settlement> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

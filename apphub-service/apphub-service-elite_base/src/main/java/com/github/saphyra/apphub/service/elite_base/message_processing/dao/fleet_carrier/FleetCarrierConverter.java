@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FleetCarrierConverter extends ConverterBase<FleetCarrierEntity, FleetCarrier> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;
@@ -32,7 +31,7 @@ class FleetCarrierConverter extends ConverterBase<FleetCarrierEntity, FleetCarri
     protected FleetCarrier processEntityConversion(FleetCarrierEntity entity) {
         return FleetCarrier.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
-            .carrierId(entity.getId())
+            .carrierId(entity.getCarrierId())
             .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .carrierName(entity.getCarrierName())
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))

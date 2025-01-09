@@ -6,9 +6,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-//TODO unit test
 public class MinorFactionDao extends AbstractDao<MinorFactionEntity, MinorFaction, String, MinorFactionRepository> {
-    public MinorFactionDao(MinorFactionConverter converter, MinorFactionRepository repository) {
+    MinorFactionDao(MinorFactionConverter converter, MinorFactionRepository repository) {
         super(converter, repository);
     }
 

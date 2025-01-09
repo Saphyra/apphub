@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MinorFactionStateFactory {
     public List<MinorFactionState> create(UUID minorFactorId, StateStatus status, List<FactionState> states) {
         return states.stream()

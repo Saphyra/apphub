@@ -6,9 +6,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-//TODO unit test
 public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, String, StarSystemRepository> {
-    public StarSystemDao(StarSystemConverter converter, StarSystemRepository repository) {
+    StarSystemDao(StarSystemConverter converter, StarSystemRepository repository) {
         super(converter, repository);
     }
 

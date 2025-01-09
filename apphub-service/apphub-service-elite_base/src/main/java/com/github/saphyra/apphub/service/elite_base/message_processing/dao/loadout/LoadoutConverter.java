@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class LoadoutConverter extends ConverterBase<LoadoutEntity, Loadout> {
     private final UuidConverter uuidConverter;
     private final LastUpdateDao lastUpdateDao;

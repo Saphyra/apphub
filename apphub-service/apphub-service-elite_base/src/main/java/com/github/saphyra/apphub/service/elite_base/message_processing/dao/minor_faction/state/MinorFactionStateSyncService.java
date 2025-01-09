@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MinorFactionStateSyncService {
     private final MinorFactionStateDao minorFactionStateDao;
 

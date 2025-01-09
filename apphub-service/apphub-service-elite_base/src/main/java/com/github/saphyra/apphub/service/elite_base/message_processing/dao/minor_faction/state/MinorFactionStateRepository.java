@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface MinorFactionStateRepository extends CrudRepository<MinorFactionStateEntity, MinorFactionStateEntityId> {
     List<MinorFactionStateEntity> getByMinorFactionIdAndStatus(String minorFactionId, StateStatus status);
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MinorFactionStateConverter extends ConverterBase<MinorFactionStateEntity, MinorFactionState> {
     private final UuidConverter uuidConverter;
 

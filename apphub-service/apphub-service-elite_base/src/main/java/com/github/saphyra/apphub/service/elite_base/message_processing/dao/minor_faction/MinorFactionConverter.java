@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MinorFactionConverter extends ConverterBase<MinorFactionEntity, MinorFaction> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

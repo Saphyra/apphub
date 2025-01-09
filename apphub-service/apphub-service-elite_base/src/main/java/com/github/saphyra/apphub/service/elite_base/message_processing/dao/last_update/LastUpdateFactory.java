@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LastUpdateFactory {
     public LastUpdate create(UUID externalReference, EntityTypeProvider type, LocalDateTime timestamp) {
         return LastUpdate.builder()

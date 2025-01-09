@@ -16,7 +16,6 @@ public class StarSystemPosition {
     private Double y;
     private Double z;
 
-    //TODO unit test
     public static StarSystemPosition parse(Double[] starPosition) {
         if (isNull(starPosition) || starPosition.length != 3) {
             return null;

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

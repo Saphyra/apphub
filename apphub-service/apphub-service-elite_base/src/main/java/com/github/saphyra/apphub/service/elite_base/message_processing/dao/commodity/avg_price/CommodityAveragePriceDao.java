@@ -1,30 +1,42 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.avg_price;
 
 import com.github.saphyra.apphub.lib.common_util.StaticCachedDao;
-import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @Component
 @Slf4j
-//TODO unit test
 public class CommodityAveragePriceDao extends StaticCachedDao<CommodityAveragePriceEntity, CommodityAveragePrice, String, CommodityAveragePriceRepository> {
-    CommodityAveragePriceDao(Converter<CommodityAveragePriceEntity, CommodityAveragePrice> converter, CommodityAveragePriceRepository repository) {
+    CommodityAveragePriceDao(CommodityAveragePriceConverter converter, CommodityAveragePriceRepository repository) {
         super(converter, repository, true);
     }
 
     @Override
-    protected String idExtractor(CommodityAveragePrice commodityAveragePrice) {
+    protected String extractId(CommodityAveragePrice commodityAveragePrice) {
         return commodityAveragePrice.getCommodityName();
     }
 
     @Override
     protected boolean shouldSave(CommodityAveragePrice commodityAveragePrice) {
-        Optional<CommodityAveragePrice> maybeCached = findById(idExtractor(commodityAveragePrice));
+        if (isNull(commodityAveragePrice.getAveragePrice())) {
+            return false;
+        }
 
-        return maybeCached.isEmpty() || !Objects.equals(maybeCached.get().getAveragePrice(), commodityAveragePrice.getAveragePrice());
+        Optional<CommodityAveragePrice> maybeStored = findById(extractId(commodityAveragePrice));
+        if (maybeStored.isEmpty()) {
+            return true;
+        }
+
+        CommodityAveragePrice stored = maybeStored.get();
+        if (commodityAveragePrice.getLastUpdate().isBefore(stored.getLastUpdate())) {
+            return false;
+        }
+
+        return !Objects.equals(maybeStored.get().getAveragePrice(), commodityAveragePrice.getAveragePrice());
     }
 }

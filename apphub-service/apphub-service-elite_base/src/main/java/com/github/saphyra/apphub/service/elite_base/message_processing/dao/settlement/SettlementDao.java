@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class SettlementDao extends AbstractDao<SettlementEntity, Settlement, String, SettlementRepository> {
     private final UuidConverter uuidConverter;
 

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystemFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystemPosition;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class StarSystemSaver {
         return save(timestamp, starId, starName, starPosition, null);
     }
 
-    public synchronized StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition, String starType) {
+    public synchronized StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition, StarType starType) {
         if (isNull(starId) && isNull(starName)) {
             throw new IllegalArgumentException("Both starId and starName are null.");
         }
@@ -57,7 +58,7 @@ public class StarSystemSaver {
         return starSystem;
     }
 
-    private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, String starType) {
+    private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, StarType starType) {
         if (timestamp.isBefore(starSystem.getLastUpdate())) {
             log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;

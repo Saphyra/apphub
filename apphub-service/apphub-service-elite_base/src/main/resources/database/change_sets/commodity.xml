@@ -23,16 +23,6 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity" columnNames="id" constraintName="commodity-pk"/>
 
-        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-commodity_name-external_reference">
-            <column name="commodity_name"/>
-            <column name="external_reference"/>
-        </createIndex>
-
-        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-commodity_name-market_id">
-            <column name="commodity_name"/>
-            <column name="market_id"/>
-        </createIndex>
-
         <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-external_reference-market_id">
             <column name="external_reference"/>
             <column name="market_id"/>

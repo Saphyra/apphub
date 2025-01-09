@@ -18,7 +18,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BodyDataFactory {
     private final BodyMaterialFactory bodyMaterialFactory;
     private final BodyRingFactory bodyRingFactory;

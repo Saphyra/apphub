@@ -17,5 +17,5 @@ public class StarSystem {
     private Long starId;
     private String starName;
     private StarSystemPosition position;
-    private String starType;
+    private StarType starType;
 }

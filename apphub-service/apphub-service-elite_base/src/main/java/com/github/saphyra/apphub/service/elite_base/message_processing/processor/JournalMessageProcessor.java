@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body.
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.body_data.ReserveLevel;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarType;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.Power;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
@@ -259,7 +260,7 @@ class JournalMessageProcessor implements MessageProcessor {
             message.getStarId(),
             message.getStarName(),
             message.getStarPosition(),
-            message.getStarType()
+            StarType.parse(message.getStarType())
         );
 
         Body body = bodySaver.save(

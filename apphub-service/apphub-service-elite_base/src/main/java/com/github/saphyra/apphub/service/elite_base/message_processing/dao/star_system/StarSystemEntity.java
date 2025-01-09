@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -23,5 +25,6 @@ class StarSystemEntity {
     private Double xPos;
     private Double yPos;
     private Double zPos;
-    private String starType;
+    @Enumerated(EnumType.ORDINAL)
+    private StarType starType;
 }

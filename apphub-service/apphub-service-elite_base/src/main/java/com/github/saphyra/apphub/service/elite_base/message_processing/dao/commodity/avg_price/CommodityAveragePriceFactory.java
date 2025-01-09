@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommodityAveragePriceFactory {
     public CommodityAveragePrice create(LocalDateTime lastUpdate, String commodityName, Integer averagePrice) {
         return CommodityAveragePrice.builder()

@@ -20,7 +20,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class BodyDataConverter extends ConverterBase<BodyDataEntity, BodyData> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

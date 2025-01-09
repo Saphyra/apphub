@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-//TODO unit test
 public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
     protected Map<ID, DOMAIN> cache = new ConcurrentHashMap<>();
 
@@ -22,7 +21,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
     @Override
     public void delete(DOMAIN domain) {
-        cache.remove(idExtractor(domain));
+        cache.remove(extractId(domain));
         super.delete(domain);
     }
 
@@ -34,7 +33,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
     @Override
     public void deleteAll(List<DOMAIN> domains) {
-        domains.forEach(domain -> cache.remove(idExtractor(domain)));
+        domains.forEach(domain -> cache.remove(extractId(domain)));
 
         super.deleteAll(domains);
     }
@@ -49,7 +48,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
     public List<DOMAIN> findAll() {
         return super.findAll()
             .stream()
-            .peek(domain -> cache.put(idExtractor(domain), domain))
+            .peek(domain -> cache.put(extractId(domain), domain))
             .toList();
     }
 
@@ -58,14 +57,18 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
         List<DOMAIN> result = new ArrayList<>();
         List<ID> missing = new ArrayList<>();
 
-        ids.forEach(id -> findById(id)
+        ids.forEach(id -> Optional.ofNullable(cache.get(id))
             .ifPresentOrElse(
                 result::add,
                 () -> missing.add(id)
             ));
 
         if (!missing.isEmpty()) {
-            result.addAll(super.findAllById(missing));
+            List<DOMAIN> allById = super.findAllById(missing);
+            allById.forEach(domain -> {
+                cache.put(extractId(domain), domain);
+                result.add(domain);
+            });
         }
 
         return result;
@@ -77,7 +80,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
         if (result.isEmpty()) {
             result = super.findById(id);
-            result.ifPresent(domain -> cache.put(idExtractor(domain), domain));
+            result.ifPresent(domain -> cache.put(extractId(domain), domain));
         }
 
         return result;
@@ -86,7 +89,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
     @Override
     public void save(DOMAIN domain) {
         if (shouldSave(domain)) {
-            cache.put(idExtractor(domain), domain);
+            cache.put(extractId(domain), domain);
             super.save(domain);
         }
     }
@@ -97,11 +100,11 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
             .filter(this::shouldSave)
             .toList();
 
-        toSave.forEach(domain -> cache.put(idExtractor(domain), domain));
+        toSave.forEach(domain -> cache.put(extractId(domain), domain));
         super.saveAll(toSave);
     }
 
-    protected abstract ID idExtractor(DOMAIN domain);
+    protected abstract ID extractId(DOMAIN domain);
 
     protected abstract boolean shouldSave(DOMAIN domain);
 }
