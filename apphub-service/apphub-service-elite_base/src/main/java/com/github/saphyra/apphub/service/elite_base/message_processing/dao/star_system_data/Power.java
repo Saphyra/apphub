@@ -24,7 +24,6 @@ public enum Power {
     ;
     private final String value;
 
-    //TODO unit test
     public static Power parse(String in) {
         if (isBlank(in)) {
             return null;

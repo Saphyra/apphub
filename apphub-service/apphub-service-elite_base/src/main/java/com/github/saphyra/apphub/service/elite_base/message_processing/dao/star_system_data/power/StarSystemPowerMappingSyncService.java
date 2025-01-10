@@ -13,7 +13,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemPowerMappingSyncService {
     private final StarSystemPowerMappingDao starSystemPowerMappingDao;
     private final StarSystemPowerMappingFactory starSystemPowerMappingFactory;

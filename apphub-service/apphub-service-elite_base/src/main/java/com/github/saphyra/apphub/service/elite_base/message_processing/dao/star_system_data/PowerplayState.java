@@ -16,7 +16,6 @@ public enum PowerplayState {
     ;
     private final String value;
 
-    //TODO unit test
     public static PowerplayState parse(String in) {
         if (isBlank(in)) {
             return null;

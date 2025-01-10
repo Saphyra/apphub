@@ -10,7 +10,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemPowerMappingFactory {
     public StarSystemPowerMapping create(UUID starSystemId, Power power) {
         return StarSystemPowerMapping.builder()

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ConflictingMinorFactionDao extends AbstractDao<ConflictingMinorFactionEntity, ConflictingMinorFaction, ConflictingMinorFactionEntityId, ConflictingMinorFactionRepository> {
     private final UuidConverter uuidConverter;
 

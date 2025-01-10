@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class MinorFactionConflictDao extends AbstractDao<MinorFactionConflictEntity, MinorFactionConflict, String, MinorFactionConflictRepository> {
     private final UuidConverter uuidConverter;
 
@@ -21,7 +20,7 @@ public class MinorFactionConflictDao extends AbstractDao<MinorFactionConflictEnt
         return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
     }
 
-    public void deleteById(UUID conflictId) {
-        deleteById(uuidConverter.convertDomain(conflictId));
+    public void deleteById(UUID id) {
+        deleteById(uuidConverter.convertDomain(id));
     }
 }

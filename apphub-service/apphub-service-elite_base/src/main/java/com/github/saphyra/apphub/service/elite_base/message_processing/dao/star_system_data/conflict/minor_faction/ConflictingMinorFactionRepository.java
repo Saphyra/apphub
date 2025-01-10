@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface ConflictingMinorFactionRepository extends CrudRepository<ConflictingMinorFactionEntity, ConflictingMinorFactionEntityId> {
     List<ConflictingMinorFactionEntity> getByConflictId(String conflictId);
 

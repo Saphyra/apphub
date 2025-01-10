@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MinorFactionConflictConverter extends ConverterBase<MinorFactionConflictEntity, MinorFactionConflict> {
     private final UuidConverter uuidConverter;
     private final ConflictingMinorFactionDao conflictingMinorFactionDao;

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StarSystemPowerMappingDao extends AbstractDao<StarSystemPowerMappingEntity, StarSystemPowerMapping, StarSystemPowerMappingEntity, StarSystemPowerMappingRepository> {
     private final UuidConverter uuidConverter;
 

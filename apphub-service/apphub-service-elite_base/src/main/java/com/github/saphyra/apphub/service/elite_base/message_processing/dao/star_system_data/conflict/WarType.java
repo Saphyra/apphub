@@ -15,7 +15,6 @@ public enum WarType {
 
     private final String value;
 
-    //TODO unit test
     public static WarType parse(String in) {
         if (isBlank(in)) {
             return null;

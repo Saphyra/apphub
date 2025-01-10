@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConflictingMinorFactionConverter extends ConverterBase<ConflictingMinorFactionEntity, ConflictingMinorFaction> {
     private final UuidConverter uuidConverter;
 

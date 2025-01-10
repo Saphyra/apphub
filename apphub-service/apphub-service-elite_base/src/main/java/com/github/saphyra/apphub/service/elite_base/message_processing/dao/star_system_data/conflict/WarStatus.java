@@ -14,7 +14,6 @@ public enum WarStatus {
 
     private final String value;
 
-    //TODO unit test
     public static WarStatus parse(String in) {
         if (isBlank(in)) {
             return null;

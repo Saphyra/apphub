@@ -9,7 +9,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemMinorFactionMappingFactory {
     public StarSystemMinorFactionMapping create(UUID starSystemId, UUID minorFactionId) {
         return StarSystemMinorFactionMapping.builder()
