@@ -12,7 +12,6 @@ import java.util.UUID;
 @Builder
 @Data
 public class StationEconomy {
-    private UUID id;
     private UUID stationId;
     private EconomyEnum economy;
     private Double proportion;

@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
-public class StationEconomyDao extends AbstractDao<StationEconomyEntity, StationEconomy, String, StationEconomyRepository> {
+public class StationEconomyDao extends AbstractDao<StationEconomyEntity, StationEconomy, StationEconomyEntityId, StationEconomyRepository> {
     private final UuidConverter uuidConverter;
 
      StationEconomyDao(StationEconomyConverter converter, StationEconomyRepository repository, UuidConverter uuidConverter) {
@@ -18,6 +17,6 @@ public class StationEconomyDao extends AbstractDao<StationEconomyEntity, Station
      }
 
     public List<StationEconomy> getByStationId(UUID stationId) {
-         return converter.convertEntity(repository.getByStationId(uuidConverter.convertDomain(stationId)));
+         return converter.convertEntity(repository.getByIdStationId(uuidConverter.convertDomain(stationId)));
     }
 }

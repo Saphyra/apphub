@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
-public class StationServiceDao extends AbstractDao<StationServiceEntity, StationService, String, StationServiceRepository> {
+public class StationServiceDao extends AbstractDao<StationServiceEntity, StationService, StationServiceEntity, StationServiceRepository> {
     private final UuidConverter uuidConverter;
 
     StationServiceDao(StationServiceConverter converter, StationServiceRepository repository, UuidConverter uuidConverter) {

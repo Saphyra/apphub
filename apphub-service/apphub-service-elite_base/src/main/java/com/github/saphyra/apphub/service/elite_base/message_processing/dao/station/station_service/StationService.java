@@ -11,7 +11,6 @@ import java.util.UUID;
 @Builder
 @Data
 public class StationService {
-    private final UUID id;
     private final UUID stationId;
     private StationServiceEnum service;
 }

@@ -7,14 +7,15 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="station_service">
-            <column name="id" type="varchar(37)">
+            <column name="station_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
-            <column name="station_id" type="varchar(37)"/>
-            <column name="service" type="varchar(255)"/>
+            <column name="service" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
-        <addPrimaryKey schemaName="elite_base" tableName="station_service" columnNames="id" constraintName="station_service-pk"/>
+        <addPrimaryKey schemaName="elite_base" tableName="station_service" columnNames="station_id,service" constraintName="station_service-pk"/>
 
         <createIndex schemaName="elite_base" tableName="station_service" indexName="index-station_service-station_id">
             <column name="station_id"/>

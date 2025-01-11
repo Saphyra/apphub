@@ -29,7 +29,6 @@ public enum EconomyEnum {
 
     private final String value;
 
-    //TODO unit test
     public static EconomyEnum parse(String in) {
         if (isBlank(in)) {
             return null;

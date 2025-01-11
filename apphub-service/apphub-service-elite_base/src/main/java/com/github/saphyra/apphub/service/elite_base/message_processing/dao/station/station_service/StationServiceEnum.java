@@ -50,7 +50,6 @@ public enum StationServiceEnum {
 
     private final String value;
 
-    //TODO unit test
     public static StationServiceEnum parse(String in) {
         if (isBlank(in)) {
             return null;

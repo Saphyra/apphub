@@ -20,7 +20,6 @@ public enum Allegiance {
 
     private final String value;
 
-    //TODO unit test
     public static Allegiance parse(String in) {
         if (isBlank(in)) {
             return Allegiance.NONE;

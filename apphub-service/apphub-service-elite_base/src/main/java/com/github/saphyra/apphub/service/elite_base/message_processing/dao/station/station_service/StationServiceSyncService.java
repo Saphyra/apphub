@@ -13,7 +13,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StationServiceSyncService {
     private final StationServiceDao stationServiceDao;
     private final StationServiceFactory stationServiceFactory;
@@ -24,17 +23,16 @@ public class StationServiceSyncService {
             return;
         }
 
-        List<StationService> existingServices = stationServiceDao.getByStationId(stationId);
-        List<StationServiceEnum> existingServicesEnum = existingServices.stream()
-            .map(StationService::getService)
-            .toList();
-
-        List<StationService> toCreate = services.stream()
-            .filter(stationServiceEnum -> !existingServicesEnum.contains(stationServiceEnum))
+        List<StationService> newServices = services.stream()
             .map(stationServiceEnum -> stationServiceFactory.create(stationId, stationServiceEnum))
             .toList();
+        List<StationService> existingServices = stationServiceDao.getByStationId(stationId);
+
+        List<StationService> toCreate = newServices.stream()
+            .filter(stationService -> !existingServices.contains(stationService))
+            .toList();
         List<StationService> toDelete = existingServices.stream()
-            .filter(stationService -> !services.contains(stationService.getService()))
+            .filter(stationService -> !newServices.contains(stationService))
             .toList();
 
         stationServiceDao.saveAll(toCreate);

@@ -16,7 +16,6 @@ public enum SecurityLevel {
 
     private final String value;
 
-    //TODO unit test
     public static SecurityLevel parse(String in) {
         if (isBlank(in)) {
             return null;

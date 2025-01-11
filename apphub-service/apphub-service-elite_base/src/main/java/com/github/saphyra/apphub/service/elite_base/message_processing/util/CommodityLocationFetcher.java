@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommodityLocationFetcher {
     private final StationDao stationDao;
     private final FleetCarrierDao fleetCarrierDao;

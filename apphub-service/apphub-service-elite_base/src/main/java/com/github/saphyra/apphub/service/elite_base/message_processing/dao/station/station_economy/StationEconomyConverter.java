@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 class StationEconomyConverter extends ConverterBase<StationEconomyEntity, StationEconomy> {
     private final UuidConverter uuidConverter;
 
     @Override
     protected StationEconomyEntity processDomainConversion(StationEconomy domain) {
         return StationEconomyEntity.builder()
-            .id(uuidConverter.convertDomain(domain.getId()))
-            .stationId(uuidConverter.convertDomain(domain.getStationId()))
-            .economy(domain.getEconomy())
+            .id(StationEconomyEntityId.builder()
+                .stationId(uuidConverter.convertDomain(domain.getStationId()))
+                .economy(domain.getEconomy())
+                .build())
             .proportion(domain.getProportion())
             .build();
     }
@@ -26,9 +26,8 @@ class StationEconomyConverter extends ConverterBase<StationEconomyEntity, Statio
     @Override
     protected StationEconomy processEntityConversion(StationEconomyEntity entity) {
         return StationEconomy.builder()
-            .id(uuidConverter.convertEntity(entity.getId()))
-            .stationId(uuidConverter.convertEntity(entity.getStationId()))
-            .economy(entity.getEconomy())
+            .stationId(uuidConverter.convertEntity(entity.getId().getStationId()))
+            .economy(entity.getId().getEconomy())
             .proportion(entity.getProportion())
             .build();
     }

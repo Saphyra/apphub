@@ -7,15 +7,16 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="station_economy">
-            <column name="id" type="varchar(37)">
+            <column name="station_id" type="varchar(37)">
                 <constraints nullable="false"/>
             </column>
-            <column name="station_id" type="varchar(37)"/>
-            <column name="economy" type="varchar(255)"/>
+            <column name="economy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="proportion" type="numeric"/>
         </createTable>
 
-        <addPrimaryKey schemaName="elite_base" tableName="station_economy" columnNames="id" constraintName="station_economy-pk"/>
+        <addPrimaryKey schemaName="elite_base" tableName="station_economy" columnNames="station_id,economy" constraintName="station_economy-pk"/>
 
         <createIndex schemaName="elite_base" tableName="station_economy" indexName="index-station_economy-station_id">
             <column name="station_id"/>

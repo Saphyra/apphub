@@ -33,7 +33,6 @@ public enum FactionStateEnum {
 
     private final String value;
 
-    //TODO unit test
     public static FactionStateEnum parse(String in) {
         if (isBlank(in)) {
             return NONE;

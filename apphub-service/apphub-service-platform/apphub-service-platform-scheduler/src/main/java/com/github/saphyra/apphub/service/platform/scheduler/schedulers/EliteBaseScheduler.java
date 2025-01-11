@@ -12,13 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EliteBaseScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.eliteBase.processMessages}")
-    void processMessages(){
+    void processMessages() {
         String eventName = EmptyEvent.ELITE_BASE_PROCESS_MESSAGES;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
@@ -30,7 +29,7 @@ public class EliteBaseScheduler {
     }
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.eliteBase.resetUnhandledMessages}")
-    void resetUnhandledMessages(){
+    void resetUnhandledMessages() {
         String eventName = EmptyEvent.ELITE_BASE_RESET_UNHANDLED_MESSAGES;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
@@ -42,7 +41,7 @@ public class EliteBaseScheduler {
     }
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.eliteBase.deleteExpiredMessages}")
-    void deleteExpiredMessages(){
+    void deleteExpiredMessages() {
         String eventName = EmptyEvent.ELITE_BASE_DELETE_EXPIRED_MESSAGES;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(

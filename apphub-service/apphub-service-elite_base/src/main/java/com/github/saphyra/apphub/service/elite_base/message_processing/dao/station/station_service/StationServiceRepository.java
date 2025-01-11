@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
-interface StationServiceRepository extends CrudRepository<StationServiceEntity, String> {
+interface StationServiceRepository extends CrudRepository<StationServiceEntity, StationServiceEntity> {
     List<StationServiceEntity> getByStationId(String stationId);
 }

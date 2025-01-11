@@ -8,11 +8,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class StationDao extends AbstractDao<StationEntity, Station, String, StationRepository> {
     private final UuidConverter uuidConverter;
 
-    public StationDao(StationConverter converter, StationRepository repository, UuidConverter uuidConverter) {
+    StationDao(StationConverter converter, StationRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

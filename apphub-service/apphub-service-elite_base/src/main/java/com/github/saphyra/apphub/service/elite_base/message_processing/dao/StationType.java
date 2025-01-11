@@ -25,7 +25,6 @@ public enum StationType {
 
     private final String value;
 
-    //TODO unit test
     public static StationType parse(String in) {
         if (isNull(in)) {
             return null;
@@ -34,6 +33,6 @@ public enum StationType {
         return Arrays.stream(values())
             .filter(e -> e.value.equalsIgnoreCase(in.replace(" ", "")))
             .findAny()
-            .orElseThrow(() -> new RuntimeException(in + " cannot be parsed to " + StationType.class.getSimpleName()));
+            .orElseThrow(() -> new IllegalArgumentException(in + " cannot be parsed to " + StationType.class.getSimpleName()));
     }
 }
